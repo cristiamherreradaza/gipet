@@ -27,21 +27,21 @@ class CreateUsuariosTable extends Migration
             $table->date('fec_incor');
             $table->enum('vig', ['N', 'S'])->default('S');
             $table->text('rol');
-            
-            // $table->date('fec_nac');
-            // $table->string('lug_nac', 60);
-            // $table->enum('sexo', ['O', 'F', 'M']);
-            // $table->enum('est_civil', ['O', 'B', 'D', 'C', 'S'])->default('S');
-            // $table->string('nom_cony', 50);
-            // $table->string('nom_hijo', 100);
-            // $table->string('direcc_doc', 150);
-            // $table->string('zona', 30);
-            // $table->string('num_cel', 25);
-            // $table->string('num_fijo', 30);
-            // $table->string('email_d', 50);
-            // $table->string('foto', 200);
-            // $table->string('p_referencia', 60);
-            // $table->string('f_referencia', 30);
+                        
+            $table->date('fec_nac');
+            $table->string('lug_nac', 60);
+            $table->enum('sexo', ['O', 'F', 'M']);
+            $table->enum('est_civil', ['O', 'B', 'D', 'C', 'S'])->default('S');
+            $table->string('nom_cony', 50);
+            $table->string('nom_hijo', 100);
+            $table->string('direcc', 150);
+            $table->string('zona', 30);
+            $table->string('num_cel', 25);
+            $table->string('num_fijo', 30);
+            $table->string('email_d', 50);
+            $table->string('foto', 200);
+            $table->string('p_referencia', 60);
+            $table->string('f_referencia', 30);
             $table->timestamps();
         });
     }

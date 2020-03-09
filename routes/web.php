@@ -24,3 +24,6 @@ Route::get('users/{id}', function ($id) {
 });
 
 Route::get('prueba/inicia', 'PruebaController@inicia'); 
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

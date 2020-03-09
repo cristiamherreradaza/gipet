@@ -42,11 +42,11 @@ class CreatePersonasTable extends Migration
             $table->string('tel_esp', 10);
             //$table->integer('carreraID');
             //$table->integer('turnoID');
-            $table->date('fec_ins');
-            $table->string('insc', 2);
-            $table->integer('gest_al');
-            $table->string('raz_cli', 100);
-            $table->string('nit', 50);
+            // $table->date('fec_ins');
+            // $table->string('insc', 2);
+            // $table->integer('gest_al');
+            // $table->string('raz_cli', 100);
+            // $table->string('nit', 50);
             $table->string('estado', 1);
             $table->timestamps();
         });
