@@ -32,3 +32,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('prueba/tabla', 'CarreraController@tabla'); 
 
 Route::post('carrera/store', 'CarreraController@store'); 
+
+Route::get('alumno/nuevo', 'AlumnoController@nuevo'); 
