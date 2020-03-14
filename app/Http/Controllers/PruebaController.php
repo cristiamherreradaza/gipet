@@ -12,4 +12,11 @@ class PruebaController extends Controller
         // $this->layout = '';
         return view('template');    
     }
+
+    public function tabla()
+    {
+        // echo 'Holas desde prueba';
+        // $this->layout = '';
+        return view('tabla');    
+    }
 }
