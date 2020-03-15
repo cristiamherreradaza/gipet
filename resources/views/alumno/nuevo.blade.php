@@ -16,7 +16,10 @@
                     <div class="card-header">
                         <h4 class="mb-0 text-white">NUEVO ALUMNO</h4>
                     </div>
+                    <form action="/alumno/guarda" method="post">
+                        @csrf
                     <div class="card-body">
+
                         {{-- datos personales --}}
                         <div class="row">
                             <div class="col-lg-12">
@@ -26,14 +29,13 @@
                                     </div>
                                     <div class="card-body">
 
-                                        <form>
                                             <div class="form-body">
                                                 <div class="row">
                                                     <div class="col">
                                                         <div class="form-group">
                                                             <label>Apellido Materno </label>
                                                             <input type="text" class="form-control"
-                                                                name="data[Persona][apellido_paterno]" id="nombre">
+                                                                name="apellido_paterno" id="nombre">
                                                         </div>
                                                     </div>
 
@@ -41,7 +43,7 @@
                                                         <div class="form-group">
                                                             <label>Apellido Paterno </label>
                                                             <input type="text" class="form-control"
-                                                                name="data[Persona][apellido_materno]" id="nombre">
+                                                                name="apellido_materno" id="nombre">
                                                         </div>
                                                     </div>
 
@@ -49,7 +51,7 @@
                                                         <div class="form-group">
                                                             <label>Nombres </label>
                                                             <input type="text" class="form-control"
-                                                                name="data[Persona][nombres]" id="nombre">
+                                                                name="nombres" id="nombre">
                                                         </div>
                                                     </div>
 
@@ -57,7 +59,7 @@
                                                         <div class="form-group">
                                                             <label>Carnet </label>
                                                             <input type="text" class="form-control"
-                                                                name="data[Persona][carnet]" id="nombre">
+                                                                name="carnet" id="nombre">
                                                         </div>
                                                     </div>
 
@@ -65,7 +67,7 @@
                                                         <div class="form-group">
                                                             <label>Expedido </label>
                                                             <input type="text" class="form-control"
-                                                                name="data[Persona][expedido]" id="nivel">
+                                                                name="expedido" id="nivel">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -101,7 +103,7 @@
                                                 </div>
 
                                             </div>
-                                        </form>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -261,8 +263,17 @@
                         </div>
                         {{-- fin Carrera --}}
 
+                        <div class="row">
+                            <div class="col-md-6">
+                            <button type="submit" class="btn waves-effect waves-light btn-block btn-success">Guardar Trabajo</button>
+                            </div>
+                            <div class="col-md-6">
+                            <button type="button" class="btn waves-effect waves-light btn-block btn-inverse">Cancelar</button>
+                            </div>
+                        </div>
 
                     </div>
+                    </form>
                     
                 </div>
             </div>

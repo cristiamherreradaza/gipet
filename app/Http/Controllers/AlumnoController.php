@@ -10,4 +10,9 @@ class AlumnoController extends Controller
     {
         return view('alumno/nuevo');
     }
+
+    public function guarda(Request $request)
+    {
+        dd($request->all());
+    }
 }
