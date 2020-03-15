@@ -40,13 +40,6 @@ class CreatePersonasTable extends Migration
             $table->string('telefono_tutor', 10)->nullable();
             $table->string('nombre_esposo', 150)->nullable();
             $table->string('telefono_esposo', 10)->nullable();
-            //$table->integer('carreraID');
-            //$table->integer('turnoID');
-            // $table->date('fec_ins');
-            // $table->string('insc', 2);
-            // $table->integer('gest_al');
-            // $table->string('raz_cli', 100);
-            // $table->string('nit', 50);
             $table->string('estado', 15)->nullable();
             $table->timestamps();
         });

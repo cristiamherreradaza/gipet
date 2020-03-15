@@ -15,33 +15,32 @@ class CreateUsuariosTable extends Migration
     {
         Schema::create('usuarios', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('a_paterno', 10);
-            $table->string('a_materno', 10);
+            $table->string('apellido_paterno', 10)->nullable();
+            $table->string('apellido_materno', 10)->nullable();
             $table->string('nombres', 120);
-            $table->string('nomi', 5);
+            $table->string('nomina', 5)->nullable();
             $table->string('codID', 12);
-            $table->integer('carnet');
-            $table->string('ciu_d', 2);
-            $table->string('tipo_usu', 10);
-            $table->string('nom_usua', 30);
-            $table->date('fec_incor');
-            $table->enum('vig', ['N', 'S'])->default('S');
+            $table->integer('cedula');
+            $table->string('expedido', 4)->nullable();
+            $table->string('tipo_usuario', 10)->nullable();
+            $table->string('nombre_usuario', 30);
+            $table->date('fecha_incorporacion');
+            $table->string('vigente', 10);
             $table->text('rol');
-                        
-            $table->date('fec_nac');
-            $table->string('lug_nac', 60);
-            $table->enum('sexo', ['O', 'F', 'M']);
-            $table->enum('est_civil', ['O', 'B', 'D', 'C', 'S'])->default('S');
-            $table->string('nom_cony', 50);
-            $table->string('nom_hijo', 100);
-            $table->string('direcc', 150);
+            $table->date('fecha_nacimiento');
+            $table->string('lugar_nacimiento', 60);
+            $table->enum('sexo', ['Femenino', 'Masculino']);
+            $table->string('estado_civil', 20);
+            $table->string('nombre_conyugue', 50)->nullable();
+            $table->string('nombre_hijo', 100)->nullable();
+            $table->string('direccion', 150)->nullable();
             $table->string('zona', 30);
-            $table->string('num_cel', 25);
-            $table->string('num_fijo', 30);
-            $table->string('email_d', 50);
-            $table->string('foto', 200);
-            $table->string('p_referencia', 60);
-            $table->string('f_referencia', 30);
+            $table->string('numero_celular', 25);
+            $table->string('numero_fijo', 30);
+            $table->string('email', 50);
+            $table->string('foto', 200)->nullable();
+            $table->string('persona_referencia', 60)->nullable();
+            $table->string('numero_referencia', 30)->nullable();
             $table->timestamps();
         });
     }
