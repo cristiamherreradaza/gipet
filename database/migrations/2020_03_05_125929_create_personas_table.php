@@ -22,7 +22,7 @@ class CreatePersonasTable extends Migration
             $table->string('expedido', 4)->nullable();
             $table->date('fecha_nacimiento');
             $table->string('sexo', 15)->nullable();
-            $table->text('direcion')->nullable();
+            $table->text('direccion')->nullable();
             $table->string('telefono_fijo', 8)->nullable();
             $table->string('telefono_celular', 8)->nullable();
             $table->string('email', 30)->nullable();

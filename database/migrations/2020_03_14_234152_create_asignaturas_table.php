@@ -28,7 +28,7 @@ class CreateAsignaturasTable extends Migration
             $table->string('periodo', 20);
             $table->integer('anio_vigente');
             $table->integer('orden_impresion');
-            $table->string('compat', 2);
+            $table->string('compat', 10);
             $table->timestamps();
         });
     }
