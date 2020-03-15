@@ -15,4 +15,8 @@ class AlumnoController extends Controller
     {
         dd($request->all());
     }
+    public function ariel()
+    {
+        dd('prueba');
+    }
 }
