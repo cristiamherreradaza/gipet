@@ -7,6 +7,19 @@ use Illuminate\Database\Eloquent\Model;
 class Carrera extends Model
 {
     protected $fillable = [
-        'nom_carrera', 'desc_niv', 'semes',
+        'nombre',
+        'nivel',
+        'semes',
+        'gestion',
     ];
+
+    public function asignaturas()
+    {
+        return $this->hasMany('App\Asignatura');
+    }
+
+    public function kardex()
+    {
+        return $this->hasMany('App\Kardex');
+    }
 }
