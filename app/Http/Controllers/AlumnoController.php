@@ -22,5 +22,9 @@ class AlumnoController extends Controller
     public function fernandez()
     {
         dd('prueba2');
+    }   
+    public function herrera()
+    {
+        
     }
 }
