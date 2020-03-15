@@ -49,6 +49,8 @@
         var nivel = $('#nivel').val();
         var semestre = $('#semestre').val();
 
+        //formserialize para crear muchas variables
+
         $.ajax({
             type:'POST',
             url:"{{ url('carrera/store') }}",
