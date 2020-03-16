@@ -15,6 +15,7 @@ class CreateNotasTable extends Migration
     {
         Schema::create('notas', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('codigo_anterior')->nullable();
             $table->unsignedBigInteger('asignatura_id');
             $table->foreign('asignatura_id')->references('id')->on('asignaturas');
             $table->unsignedBigInteger('turno_id');
@@ -23,9 +24,9 @@ class CreateNotasTable extends Migration
             $table->foreign('usuario_id')->references('id')->on('usuarios');
             $table->unsignedBigInteger('persona_id');
             $table->foreign('persona_id')->references('id')->on('personas');
-            $table->string('convalidado', 10);
-            $table->string('paralelo', 10);
-            $table->string('gestion', 30);
+            $table->string('convalidado', 10)->nullable();
+            $table->string('paralelo', 10)->nullable();
+            $table->string('gestion', 30)->nullable();
             $table->decimal('nota_asistencia', 8, 2);
             $table->decimal('nota_practicas', 8, 2);
             $table->decimal('nota_puntos_ganados', 8, 2);
@@ -33,8 +34,8 @@ class CreateNotasTable extends Migration
             $table->decimal('nota_examen_final', 8, 2);
             $table->decimal('nota_segundo_turno', 8, 2);
             $table->decimal('nota_total', 8, 2);
-            $table->string('validado', 10);
-            $table->string('registrado', 10);
+            $table->string('validado', 10)->nullable();
+            $table->string('registrado', 10)->nullable();
             $table->timestamps();
         });
     }

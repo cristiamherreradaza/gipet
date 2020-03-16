@@ -15,20 +15,20 @@ class CreateAsignaturasTable extends Migration
     {
         Schema::create('asignaturas', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('codigo_anterior');
             $table->unsignedBigInteger('carrera_id');
             $table->foreign('carrera_id')->references('id')->on('carreras');
-            $table->integer('gestion');
-            $table->string('codigo_asignatura', 10);
-            $table->string('nombre_asignatura', 150);
+            $table->string('gestion', 30)->nullable();
+            $table->string('codigo_asignatura', 10)->nullable();
+            $table->string('nombre_asignatura', 150)->nullable();
             $table->integer('carga_horaria');
             $table->integer('teorico');
             $table->integer('practico');
             $table->integer('nivel');
             $table->integer('semestre');
-            $table->string('periodo', 20);
+            $table->string('periodo', 20)->nullable();
             $table->integer('anio_vigente');
             $table->integer('orden_impresion');
-            $table->string('compat', 10);
             $table->timestamps();
         });
     }
