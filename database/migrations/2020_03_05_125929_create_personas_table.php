@@ -26,7 +26,7 @@ class CreatePersonasTable extends Migration
             $table->text('direccion')->nullable();
             $table->string('telefono_fijo', 8)->nullable();
             $table->string('telefono_celular', 8)->nullable();
-            $table->string('email', 30)->nullable();
+            $table->string('email', 50)->nullable();
             $table->string('trabaja', 2)->default('No')->nullable();
             $table->string('empresa', 80)->nullable();
             $table->text('direccion_empresa')->nullable();

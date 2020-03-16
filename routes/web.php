@@ -34,4 +34,6 @@ Route::get('prueba/tabla', 'CarreraController@tabla');
 Route::post('carrera/store', 'CarreraController@store'); 
 
 Route::get('alumno/nuevo', 'AlumnoController@nuevo'); 
-Route::post('alumno/guarda', 'AlumnoController@guarda'); 
+Route::post('alumno/guarda', 'AlumnoController@guarda');
+
+Route::get('Migracion/inicia', 'MigracionController@inicia'); 
