@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTurnosTable extends Migration
+class CreateDescuentosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,15 @@ class CreateTurnosTable extends Migration
      */
     public function up()
     {
-        Schema::create('turnos', function (Blueprint $table) {
+        Schema::create('descuentos', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('codigo_anterior')->nullable();
-            $table->string('descripcion', 10)->nullable();
+            $table->unsignedBigInteger('servicio_id');
+            $table->foreign('servicio_id')->references('id')->on('servicios');
+            $table->string('nombre', 30)->nullable();
+            $table->integer('porcentaje')->nullable();
+            $table->integer('monto')->nullable();
+            $table->integer('a_pagar')->nullable();
             $table->string('estado', 15)->nullable();
             $table->datetime('borrado', 0)->nullable();
             $table->timestamps();
@@ -30,6 +35,6 @@ class CreateTurnosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('turnos');
+        Schema::dropIfExists('descuentos');
     }
 }

@@ -41,6 +41,8 @@ class CreatePersonasTable extends Migration
             $table->string('telefono_tutor', 10)->nullable();
             $table->string('nombre_esposo', 150)->nullable();
             $table->string('telefono_esposo', 10)->nullable();
+            $table->string('razon_social_cliente', 100)->nullable();
+            $table->string('nit', 20)->nullable();
             $table->string('estado', 15)->nullable();
             $table->datetime('borrado', 0)->nullable();
             $table->timestamps();

@@ -29,6 +29,7 @@ class CreateAsignaturasTable extends Migration
             $table->string('periodo', 20)->nullable();
             $table->integer('anio_vigente');
             $table->integer('orden_impresion');
+            $table->string('estado', 15)->nullable();
             $table->datetime('borrado', 0)->nullable();
             $table->timestamps();
         });

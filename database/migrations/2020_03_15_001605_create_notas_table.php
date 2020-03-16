@@ -36,6 +36,7 @@ class CreateNotasTable extends Migration
             $table->decimal('nota_total', 8, 2);
             $table->string('validado', 10)->nullable();
             $table->string('registrado', 10)->nullable();
+            $table->string('estado', 15)->nullable();
             $table->datetime('borrado', 0)->nullable();
             $table->timestamps();
         });

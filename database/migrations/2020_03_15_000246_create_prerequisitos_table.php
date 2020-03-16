@@ -19,6 +19,7 @@ class CreatePrerequisitosTable extends Migration
             $table->foreign('asignatura_id')->references('id')->on('asignaturas');
             $table->unsignedBigInteger('prerequisito_id');
             $table->foreign('prerequisito_id')->references('id')->on('asignaturas');
+            $table->string('estado', 15)->nullable();
             $table->datetime('borrado', 0)->nullable();
             $table->timestamps();
         });

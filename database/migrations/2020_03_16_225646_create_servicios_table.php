@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTurnosTable extends Migration
+class CreateServiciosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateTurnosTable extends Migration
      */
     public function up()
     {
-        Schema::create('turnos', function (Blueprint $table) {
+        Schema::create('servicios', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('codigo_anterior')->nullable();
-            $table->string('descripcion', 10)->nullable();
+            $table->string('sigla', 10)->nullable();
+            $table->string('nombre', 30)->nullable();
+            $table->integer('precio')->nullable();
+            $table->string('gestion', 30)->nullable();
             $table->string('estado', 15)->nullable();
             $table->datetime('borrado', 0)->nullable();
             $table->timestamps();
@@ -30,6 +33,6 @@ class CreateTurnosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('turnos');
+        Schema::dropIfExists('servicios');
     }
 }
