@@ -20,7 +20,7 @@ class CreateCarrerasTable extends Migration
             $table->string('nivel', 30)->nullable();
             $table->integer('semestre')->nullable();
             $table->string('gestion', 30)->nullable();
-            $tabla->datetime('borrado', 0)->nullable();
+            $table->datetime('borrado', 0)->nullable();
             $table->timestamps();
         });
     }

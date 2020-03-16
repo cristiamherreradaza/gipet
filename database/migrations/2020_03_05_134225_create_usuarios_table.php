@@ -42,7 +42,7 @@ class CreateUsuariosTable extends Migration
             $table->string('foto', 200)->nullable();
             $table->string('persona_referencia', 60)->nullable();
             $table->string('numero_referencia', 30)->nullable();
-            $tabla->datetime('borrado', 0)->nullable();
+            $table->datetime('borrado', 0)->nullable();
             $table->timestamps();
         });
     }

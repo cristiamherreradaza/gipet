@@ -42,7 +42,7 @@ class CreatePersonasTable extends Migration
             $table->string('nombre_esposo', 150)->nullable();
             $table->string('telefono_esposo', 10)->nullable();
             $table->string('estado', 15)->nullable();
-            $tabla->datetime('borrado', 0)->nullable();
+            $table->datetime('borrado', 0)->nullable();
             $table->timestamps();
         });
     }
