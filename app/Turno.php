@@ -8,6 +8,7 @@ class Turno extends Model
 {
     protected $fillable = [
         'descripcion',
+        'borrado',
     ];
 
     public function kardex()

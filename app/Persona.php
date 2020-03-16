@@ -33,6 +33,7 @@ class Persona extends Model
         'nombre_esposo',
         'telefono_esposo',
         'estado',
+        'borrado',
     ];
 
     public function kardex()

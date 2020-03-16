@@ -23,6 +23,7 @@ class Nota extends Model
         'nota_total',
         'validado',
         'registrado',
+        'borrado',
     ];
 
     public function asignatura()

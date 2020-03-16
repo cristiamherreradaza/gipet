@@ -14,6 +14,7 @@ class Kardex extends Model
         'paralelo',
         'gestion',
         'aprobado',
+        'borrado',
     ];
 
     public function persona()
