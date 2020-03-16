@@ -27,6 +27,7 @@ class CreateKardexTable extends Migration
             $table->string('paralelo', 10)->nullable();
             $table->string('gestion', 30)->nullable();
             $table->string('aprobado', 10)->nullable();
+            $tabla->datetime('borrado', 0)->nullable();
             $table->timestamps();
         });
     }

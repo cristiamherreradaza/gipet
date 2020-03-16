@@ -15,7 +15,7 @@ class CreatePersonasTable extends Migration
     {
         Schema::create('personas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('codigo_anterior');
+            $table->integer('codigo_anterior')->nullable();
             $table->string('apellido_paterno', 150)->nullable();
             $table->string('apellido_materno', 150)->nullable();
             $table->string('nombres', 100)->nullable();
@@ -42,6 +42,7 @@ class CreatePersonasTable extends Migration
             $table->string('nombre_esposo', 150)->nullable();
             $table->string('telefono_esposo', 10)->nullable();
             $table->string('estado', 15)->nullable();
+            $tabla->datetime('borrado', 0)->nullable();
             $table->timestamps();
         });
     }

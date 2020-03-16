@@ -15,11 +15,12 @@ class CreateCarrerasTable extends Migration
     {
         Schema::create('carreras', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('codigo_anterior');
+            $table->integer('codigo_anterior')->nullable();
             $table->string('nombre', 50);
-            $table->string('nivel', 30);
-            $table->integer('semestre');
+            $table->string('nivel', 30)->nullable();
+            $table->integer('semestre')->nullable();
             $table->string('gestion', 30)->nullable();
+            $tabla->datetime('borrado', 0)->nullable();
             $table->timestamps();
         });
     }

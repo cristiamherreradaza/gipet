@@ -15,7 +15,7 @@ class CreateAsignaturasTable extends Migration
     {
         Schema::create('asignaturas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('codigo_anterior');
+            $table->integer('codigo_anterior')->nullable();
             $table->unsignedBigInteger('carrera_id');
             $table->foreign('carrera_id')->references('id')->on('carreras');
             $table->string('gestion', 30)->nullable();
@@ -29,6 +29,7 @@ class CreateAsignaturasTable extends Migration
             $table->string('periodo', 20)->nullable();
             $table->integer('anio_vigente');
             $table->integer('orden_impresion');
+            $tabla->datetime('borrado', 0)->nullable();
             $table->timestamps();
         });
     }

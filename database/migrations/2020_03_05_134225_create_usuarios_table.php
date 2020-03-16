@@ -15,7 +15,7 @@ class CreateUsuariosTable extends Migration
     {
         Schema::create('usuarios', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('codigo_anterior');
+            $table->integer('codigo_anterior')->nullable();
             $table->string('apellido_paterno', 20)->nullable();
             $table->string('apellido_materno', 20)->nullable();
             $table->string('nombres', 120)->nullable();
@@ -42,6 +42,7 @@ class CreateUsuariosTable extends Migration
             $table->string('foto', 200)->nullable();
             $table->string('persona_referencia', 60)->nullable();
             $table->string('numero_referencia', 30)->nullable();
+            $tabla->datetime('borrado', 0)->nullable();
             $table->timestamps();
         });
     }
