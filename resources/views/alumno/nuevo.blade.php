@@ -27,7 +27,7 @@
                                     <div class="card-header">
                                         <h4 class="mb-0 text-white">DATOS PERSONALES</h4>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body" style="background-color: #fff6d4;">
 
                                             <div class="form-body">
                                                 <div class="row">
@@ -66,10 +66,13 @@
                                                     <div class="col">
                                                         <div class="form-group">
                                                             <label>Expedido </label>
-                                                            <input type="text" class="form-control"
-                                                                name="expedido" id="nivel">
+                                                            <select class="form-control">
+                                                                <option value="No">No</option>
+                                                                <option value="Si">Si</option>
+                                                            </select>
                                                         </div>
                                                     </div>
+
                                                 </div>
                                                 <div class="row">
                                                     <div class="col">
@@ -117,7 +120,7 @@
                                     <div class="card-header">
                                         <h4 class="mb-0 text-white">DATOS PROFESIONALES</h4>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body" style="background-color: #ededed;">
 
                                             <div class="form-body">
                                                 <div class="row">
@@ -170,7 +173,7 @@
                                     <div class="card-header">
                                         <h4 class="mb-0 text-white">REFERENCIAS PERSONALES</h4>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body" style="background-color: #e3ffe3;">
 
                                             <div class="form-body">
                                                 <div class="row">
@@ -220,7 +223,7 @@
                                     <div class="card-header">
                                         <h4 class="mb-0 text-white">REFERENCIAS PERSONALES</h4>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body" style="background-color: #e6f4fa;">
 
                                             <div class="form-body">
                                                 <div class="row">
