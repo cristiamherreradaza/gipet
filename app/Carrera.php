@@ -11,6 +11,7 @@ class Carrera extends Model
         'nivel',
         'semes',
         'gestion',
+        'estado',
         'borrado',
     ];
 

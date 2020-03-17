@@ -14,6 +14,7 @@ class Kardex extends Model
         'paralelo',
         'gestion',
         'aprobado',
+        'estado',
         'borrado',
     ];
 

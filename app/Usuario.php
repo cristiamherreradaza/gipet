@@ -33,6 +33,7 @@ class Usuario extends Model
         'foto',
         'persona_referencia',
         'numero_referencia',
+        'estado',
         'borrado',
     ];
 
