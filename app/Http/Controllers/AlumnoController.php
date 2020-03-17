@@ -45,6 +45,7 @@ class AlumnoController extends Controller
         $persona->nombre_esposo    = $request->nombre_esposo;
         $persona->telefono_esposo  = $request->telefono_esposo;
         $persona->save();
+        // se guardo a la persona
     }
     public function ariel()
     {
