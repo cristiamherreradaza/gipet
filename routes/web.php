@@ -41,4 +41,9 @@ Route::get('persona/ajax_datos', 'PersonaController@ajax_datos');
     // return datatables()->query(DB::table('personas'))->toJson();
 // });
 
+//MIGRACIONES
 Route::get('Migracion/inicia', 'MigracionController@inicia'); 
+
+Route::get('Migracion/usuario', 'MigracionController@usuario'); 
+
+Route::get('Migracion/asignatura', 'MigracionController@asignatura'); 
