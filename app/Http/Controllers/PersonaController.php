@@ -48,16 +48,14 @@ class PersonaController extends Controller
         return redirect('persona/nuevo');
         // se guardo a la persona
     }
-    public function ariel()
+
+    public function listado()
     {
-        dd('prueba');
+        return view('persona.listado');
     }
-    public function fernandez()
+
+    public function ajax_datos()
     {
-        dd('prueba2');
-    }   
-    public function herrera()
-    {
-        
+        return datatables()->eloquent(Persona::query())->toJson();
     }
 }
