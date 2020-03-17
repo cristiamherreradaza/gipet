@@ -16,7 +16,7 @@ class CreateCarrerasTable extends Migration
         Schema::create('carreras', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('codigo_anterior')->nullable();
-            $table->string('nombre', 50);
+            $table->string('nombre', 50)->nullable();
             $table->string('nivel', 30)->nullable();
             $table->integer('semestre')->nullable();
             $table->string('gestion', 30)->nullable();

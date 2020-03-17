@@ -15,9 +15,9 @@ class CreatePrerequisitosTable extends Migration
     {
         Schema::create('prerequisitos', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('asignatura_id');
+            $table->unsignedBigInteger('asignatura_id')->nullable();
             $table->foreign('asignatura_id')->references('id')->on('asignaturas');
-            $table->unsignedBigInteger('prerequisito_id');
+            $table->unsignedBigInteger('prerequisito_id')->nullable();
             $table->foreign('prerequisito_id')->references('id')->on('asignaturas');
             $table->string('estado', 15)->nullable();
             $table->datetime('borrado', 0)->nullable();

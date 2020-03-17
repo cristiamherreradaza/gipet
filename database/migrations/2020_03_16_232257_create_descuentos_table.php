@@ -16,7 +16,7 @@ class CreateDescuentosTable extends Migration
         Schema::create('descuentos', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('codigo_anterior')->nullable();
-            $table->unsignedBigInteger('servicio_id');
+            $table->unsignedBigInteger('servicio_id')->nullable();
             $table->foreign('servicio_id')->references('id')->on('servicios');
             $table->string('nombre', 30)->nullable();
             $table->integer('porcentaje')->nullable();

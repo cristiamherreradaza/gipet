@@ -16,13 +16,13 @@ class CreateDescuentosPersonasTable extends Migration
         Schema::create('descuentos_personas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('codigo_anterior')->nullable();
-            $table->unsignedBigInteger('servicio_id');
+            $table->unsignedBigInteger('servicio_id')->nullable();
             $table->foreign('servicio_id')->references('id')->on('servicios');
-            $table->unsignedBigInteger('descuento_id');
+            $table->unsignedBigInteger('descuento_id')->nullable();
             $table->foreign('descuento_id')->references('id')->on('descuentos');
-            $table->unsignedBigInteger('persona_id');
+            $table->unsignedBigInteger('persona_id')->nullable();
             $table->foreign('persona_id')->references('id')->on('personas');
-            $table->unsignedBigInteger('kardex_id');
+            $table->unsignedBigInteger('kardex_id')->nullable();
             $table->foreign('kardex_id')->references('id')->on('kardex');
             $table->integer('numero_mensualidad')->nullable();
             $table->integer('a_pagar')->nullable();
