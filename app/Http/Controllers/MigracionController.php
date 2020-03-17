@@ -51,7 +51,7 @@ class MigracionController extends Controller
         $docente = DB::select('SELECT doc.*, com.*
 								FROM docentes doc, docentes_complemento com
 								WHERE doc.docenID = com.docenID');
-        dd($docente);
+        //dd($docente);
         foreach ($docente as $valor) {
         	 DB::table('usuarios')->insert([
             'codigo_anterior' => $valor->docenID,
@@ -93,9 +93,9 @@ class MigracionController extends Controller
 								FROM asignaturas_copy');
         //dd($docente);
         foreach ($asignatura as $valor) {
-        	 DB::table('personas')->insert([
+        	 DB::table('asignaturas')->insert([
             'codigo_anterior' => $valor->asignaturaID,
-			'carrera_id' => $valor->carreraID,
+			//'carrera_id' => $valor->carreraID,
 			'gestion' => $valor->gestion,
 			'codigo_asignatura' => $valor->cod_asig,
 			'nombre_asignatura' => $valor->asignatura,
