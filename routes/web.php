@@ -33,7 +33,7 @@ Route::get('prueba/tabla', 'CarreraController@tabla');
 
 Route::post('carrera/store', 'CarreraController@store'); 
 
-Route::get('alumno/nuevo', 'AlumnoController@nuevo'); 
-Route::post('alumno/guarda', 'AlumnoController@guarda');
+Route::get('persona/nuevo', 'PersonaController@nuevo'); 
+Route::post('persona/guarda', 'PersonaController@guarda');
 
 Route::get('Migracion/inicia', 'MigracionController@inicia'); 
