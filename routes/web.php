@@ -36,4 +36,9 @@ Route::post('carrera/store', 'CarreraController@store');
 Route::get('persona/nuevo', 'PersonaController@nuevo'); 
 Route::post('persona/guarda', 'PersonaController@guarda');
 
+//MIGRACIONES
 Route::get('Migracion/inicia', 'MigracionController@inicia'); 
+
+Route::get('Migracion/usuario', 'MigracionController@usuario'); 
+
+Route::get('Migracion/asignatura', 'MigracionController@asignatura'); 
