@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNotasTable extends Migration
+class CreateNotasPropuestasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateNotasTable extends Migration
      */
     public function up()
     {
-        Schema::create('notas', function (Blueprint $table) {
+        Schema::create('notas_propuestas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('codigo_anterior')->nullable();
             $table->unsignedBigInteger('asignatura_id')->nullable();
@@ -22,23 +22,16 @@ class CreateNotasTable extends Migration
             $table->foreign('turno_id')->references('id')->on('turnos');
             $table->unsignedBigInteger('usuario_id')->nullable();
             $table->foreign('usuario_id')->references('id')->on('usuarios');
-            $table->unsignedBigInteger('persona_id')->nullable();
-            $table->foreign('persona_id')->references('id')->on('personas');
-            $table->string('convalidado', 10)->nullable();
             $table->string('paralelo', 10)->nullable();
             $table->string('gestion', 30)->nullable();
-            $table->integer('semestre')->nullable();
-            $table->integer('trimestre')->nullable();
-            $table->dateTime('fecha_registro', 0)->nullable();
+            $table->dateTime('fecha', 0)->nullable();
             $table->decimal('nota_asistencia', 8, 2)->nullable();
             $table->decimal('nota_practicas', 8, 2)->nullable();
             $table->decimal('nota_puntos_ganados', 8, 2)->nullable();
             $table->decimal('nota_primer_parcial', 8, 2)->nullable();
             $table->decimal('nota_examen_final', 8, 2)->nullable();
-            $table->decimal('nota_total', 8, 2)->nullable();
-            $table->string('segundo_turno', 10)->nullable();
             $table->string('validado', 10)->nullable();
-            $table->string('registrado', 10)->nullable();
+            $table->string('vigente', 10)->nullable();
             $table->string('estado', 15)->nullable();
             $table->datetime('borrado', 0)->nullable();
             $table->timestamps();
@@ -52,6 +45,6 @@ class CreateNotasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notas');
+        Schema::dropIfExists('notas_propuestas');
     }
 }
