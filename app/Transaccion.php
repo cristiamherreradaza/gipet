@@ -27,4 +27,9 @@ class Transaccion extends Model
     {
         return $this->belongsTo('App/Persona');
     }
+
+    public function kardex()
+    {
+        return $this->belongsTo('App/Kardex');
+    }
 }

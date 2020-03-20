@@ -37,4 +37,14 @@ class Kardex extends Model
     {
         return $this->belongsTo('App\Turno');
     }
+
+    public function transacciones()
+    {
+        return $this->hasMany('App/Transaccion');
+    }
+    
+    public function descuentopersonas()
+    {
+        return $this->hasMany('App/DescuentoPersona');
+    }
 }
