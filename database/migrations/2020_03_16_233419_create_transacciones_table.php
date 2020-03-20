@@ -22,6 +22,7 @@ class CreateTransaccionesTable extends Migration
             $table->foreign('persona_id')->references('id')->on('personas');
             $table->unsignedBigInteger('kardex_id')->nullable();
             $table->foreign('kardex_id')->references('id')->on('kardex');
+            $table->integer('numero_mensualidad')->nullable();
             $table->dateTime('fecha', 0)->nullable();
             $table->integer('monto')->nullable();
             $table->integer('saldo')->nullable();
