@@ -25,6 +25,8 @@ class CreateInscripcionesTable extends Migration
             $table->string('paralelo', 10)->nullable();
             $table->string('gestion', 30)->nullable();
             $table->dateTime('fecha_inscripcion', 0)->nullable();
+            $table->string('estado', 15)->nullable();
+            $table->datetime('borrado', 0)->nullable();
             $table->timestamps();
         });
     }
