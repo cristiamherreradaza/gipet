@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDescuentosTable extends Migration
+class CreateDetalleFacturasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,15 @@ class CreateDescuentosTable extends Migration
      */
     public function up()
     {
-        Schema::create('descuentos', function (Blueprint $table) {
+        Schema::create('detalle_facturas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('codigo_anterior')->nullable();
+            $table->unsignedBigInteger('factura_id')->nullable();
+            $table->foreign('factura_id')->references('id')->on('facturas');
             $table->unsignedBigInteger('servicio_id')->nullable();
             $table->foreign('servicio_id')->references('id')->on('servicios');
-            $table->string('nombre', 30)->nullable();
-            $table->integer('porcentaje')->nullable();
-            $table->integer('monto')->nullable();
-            $table->integer('a_pagar')->nullable();
+            $table->integer('cantidad')->nullable();
+            $table->decimal('pago', 8, 2)->nullable();
             $table->string('estado', 15)->nullable();
             $table->datetime('borrado', 0)->nullable();
             $table->timestamps();
@@ -35,6 +35,6 @@ class CreateDescuentosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('descuentos');
+        Schema::dropIfExists('detalle_facturas');
     }
 }

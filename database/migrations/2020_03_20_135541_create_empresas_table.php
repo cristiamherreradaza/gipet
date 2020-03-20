@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePrerequisitosTable extends Migration
+class CreateEmpresasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,15 @@ class CreatePrerequisitosTable extends Migration
      */
     public function up()
     {
-        Schema::create('prerequisitos', function (Blueprint $table) {
+        Schema::create('empresas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('asignatura_id')->nullable();
-            $table->foreign('asignatura_id')->references('id')->on('asignaturas');
-            $table->unsignedBigInteger('prerequisito_id')->nullable();
-            $table->foreign('prerequisito_id')->references('id')->on('asignaturas');
-            $table->string('sigla', 15)->nullable();
+            $table->string('nombre', 100)->nullable();
+            $table->string('direccion', 200)->nullable();
+            $table->integer('nit')->nullable();
+            $table->string('telefonos', 50)->nullable();
+            $table->string('razon_social', 100)->nullable();
+            $table->integer('numero_autorizacion')->nullable();
+            $table->integer('anio')->nullable();
             $table->string('estado', 15)->nullable();
             $table->datetime('borrado', 0)->nullable();
             $table->timestamps();
@@ -33,6 +35,6 @@ class CreatePrerequisitosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('prerequisitos');
+        Schema::dropIfExists('empresas');
     }
 }

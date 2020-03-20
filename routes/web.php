@@ -33,7 +33,17 @@ Route::get('prueba/tabla', 'CarreraController@tabla');
 
 Route::post('carrera/store', 'CarreraController@store'); 
 
-Route::get('alumno/nuevo', 'AlumnoController@nuevo'); 
-Route::post('alumno/guarda', 'AlumnoController@guarda');
+Route::get('persona/nuevo', 'PersonaController@nuevo'); 
+Route::post('persona/guarda', 'PersonaController@guarda');
+Route::get('persona/listado', 'PersonaController@listado');
+Route::get('persona/ajax_datos', 'PersonaController@ajax_datos');
+// Route::get('persona/ajax_datos', function () {
+    // return datatables()->query(DB::table('personas'))->toJson();
+// });
 
+//MIGRACIONES
 Route::get('Migracion/inicia', 'MigracionController@inicia'); 
+
+Route::get('Migracion/usuario', 'MigracionController@usuario'); 
+
+Route::get('Migracion/asignatura', 'MigracionController@asignatura'); 

@@ -20,4 +20,9 @@ class Descuento extends Model
     {
         return $this->belongsTo('App/Servicio');
     }
+
+    public function descuentopersonas()
+    {
+        return $this->hasMany('App/DescuentoPersona');
+    }
 }

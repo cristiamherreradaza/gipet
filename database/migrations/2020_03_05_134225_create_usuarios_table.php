@@ -25,12 +25,12 @@ class CreateUsuariosTable extends Migration
             $table->string('expedido', 20)->nullable();
             $table->string('tipo_usuario', 10)->nullable();
             $table->string('nombre_usuario', 30)->nullable();
-            $table->date('fecha_incorporacion');
+            $table->date('fecha_incorporacion')->nullable();
             $table->string('vigente', 10)->nullable();
-            $table->text('rol');
-            $table->date('fecha_nacimiento');
+            $table->text('rol')->nullable();
+            $table->date('fecha_nacimiento')->nullable();
             $table->string('lugar_nacimiento', 60)->nullable();
-            $table->enum('sexo', ['Femenino', 'Masculino'])->nullable();
+            $table->string('sexo',20)->nullable();
             $table->string('estado_civil', 20)->nullable();
             $table->string('nombre_conyugue', 50)->nullable();
             $table->string('nombre_hijo', 100)->nullable();

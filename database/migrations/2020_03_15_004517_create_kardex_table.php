@@ -16,18 +16,19 @@ class CreateKardexTable extends Migration
         Schema::create('kardex', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('codigo_anterior')->nullable();
-            $table->unsignedBigInteger('persona_id');
+            $table->unsignedBigInteger('persona_id')->nullable();
             $table->foreign('persona_id')->references('id')->on('personas');
-            $table->unsignedBigInteger('asignatura_id');
+            $table->unsignedBigInteger('asignatura_id')->nullable();
             $table->foreign('asignatura_id')->references('id')->on('asignaturas');
-            $table->unsignedBigInteger('carrera_id');
+            $table->unsignedBigInteger('carrera_id')->nullable();
             $table->foreign('carrera_id')->references('id')->on('carreras');
-            $table->unsignedBigInteger('turno_id');
+            $table->unsignedBigInteger('turno_id')->nullable();
             $table->foreign('turno_id')->references('id')->on('turnos');
             $table->string('paralelo', 10)->nullable();
             $table->string('gestion', 30)->nullable();
             $table->string('aprobado', 10)->nullable();
             $table->string('curricular', 10)->nullable();
+            $table->dateTime('fecha_registro', 0)->nullable();
             $table->string('estado', 15)->nullable();
             $table->datetime('borrado', 0)->nullable();
             $table->timestamps();

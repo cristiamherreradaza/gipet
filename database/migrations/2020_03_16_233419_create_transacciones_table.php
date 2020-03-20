@@ -16,12 +16,13 @@ class CreateTransaccionesTable extends Migration
         Schema::create('transacciones', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('codigo_anterior')->nullable();
-            $table->unsignedBigInteger('servicio_id');
+            $table->unsignedBigInteger('servicio_id')->nullable();
             $table->foreign('servicio_id')->references('id')->on('servicios');
-            $table->unsignedBigInteger('persona_id');
+            $table->unsignedBigInteger('persona_id')->nullable();
             $table->foreign('persona_id')->references('id')->on('personas');
-            $table->unsignedBigInteger('kardex_id');
+            $table->unsignedBigInteger('kardex_id')->nullable();
             $table->foreign('kardex_id')->references('id')->on('kardex');
+            $table->integer('numero_mensualidad')->nullable();
             $table->dateTime('fecha', 0)->nullable();
             $table->integer('monto')->nullable();
             $table->integer('saldo')->nullable();

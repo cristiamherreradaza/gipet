@@ -16,7 +16,7 @@
                     <div class="card-header">
                         <h4 class="mb-0 text-white">NUEVO ALUMNO</h4>
                     </div>
-                    <form action="/alumno/guarda" method="post">
+                    <form action="/persona/guarda" method="post">
                         @csrf
                     <div class="card-body">
 
