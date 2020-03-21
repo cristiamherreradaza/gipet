@@ -40,10 +40,13 @@ Route::get('persona/ajax_datos', 'PersonaController@ajax_datos');
 // Route::get('persona/ajax_datos', function () {
     // return datatables()->query(DB::table('personas'))->toJson();
 // });
+Route::get('persona/exportarexcel', 'PersonaController@exportarExcel')->name('personas.exportarexcel');
+
+Route::get('nota/listado', 'NotaController@listado');
 
 //MIGRACIONES
-Route::get('Migracion/inicia', 'MigracionController@inicia'); 
+Route::get('Migracion/inicia', 'MigracionController@inicia');
 
-Route::get('Migracion/usuario', 'MigracionController@usuario'); 
+Route::get('Migracion/usuario', 'MigracionController@usuario');
 
-Route::get('Migracion/asignatura', 'MigracionController@asignatura'); 
+Route::get('Migracion/asignatura', 'MigracionController@asignatura');

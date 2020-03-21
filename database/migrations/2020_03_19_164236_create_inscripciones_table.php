@@ -20,8 +20,8 @@ class CreateInscripcionesTable extends Migration
             $table->foreign('asignatura_id')->references('id')->on('asignaturas');
             $table->unsignedBigInteger('turno_id')->nullable();
             $table->foreign('turno_id')->references('id')->on('turnos');
-            $table->unsignedBigInteger('usuario_id')->nullable();
-            $table->foreign('usuario_id')->references('id')->on('usuarios');
+            $table->unsignedBigInteger('persona_id')->nullable();
+            $table->foreign('persona_id')->references('id')->on('personas');
             $table->string('paralelo', 10)->nullable();
             $table->string('gestion', 30)->nullable();
             $table->dateTime('fecha_inscripcion', 0)->nullable();

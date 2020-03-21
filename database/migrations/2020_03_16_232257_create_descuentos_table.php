@@ -20,8 +20,8 @@ class CreateDescuentosTable extends Migration
             $table->foreign('servicio_id')->references('id')->on('servicios');
             $table->string('nombre', 30)->nullable();
             $table->integer('porcentaje')->nullable();
-            $table->integer('monto')->nullable();
-            $table->integer('a_pagar')->nullable();
+            $table->decimal('monto', 8, 2)->nullable();
+            $table->decimal('a_pagar', 8, 2)->nullable();
             $table->string('estado', 15)->nullable();
             $table->datetime('borrado', 0)->nullable();
             $table->timestamps();

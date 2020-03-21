@@ -24,8 +24,8 @@ class CreateTransaccionesTable extends Migration
             $table->foreign('kardex_id')->references('id')->on('kardex');
             $table->integer('numero_mensualidad')->nullable();
             $table->dateTime('fecha', 0)->nullable();
-            $table->integer('monto')->nullable();
-            $table->integer('saldo')->nullable();
+            $table->decimal('monto', 8, 2)->nullable();
+            $table->decimal('saldo', 8, 2)->nullable();
             $table->string('pendiente', 20)->nullable();
             $table->string('estado', 15)->nullable();
             $table->datetime('borrado', 0)->nullable();

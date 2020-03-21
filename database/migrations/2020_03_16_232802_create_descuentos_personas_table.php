@@ -25,7 +25,7 @@ class CreateDescuentosPersonasTable extends Migration
             $table->unsignedBigInteger('kardex_id')->nullable();
             $table->foreign('kardex_id')->references('id')->on('kardex');
             $table->integer('numero_mensualidad')->nullable();
-            $table->integer('a_pagar')->nullable();
+            $table->decimal('a_pagar', 8, 2)->nullable();
             $table->string('estado', 15)->nullable();
             $table->datetime('borrado', 0)->nullable();
             $table->timestamps();
