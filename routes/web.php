@@ -11,9 +11,16 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('logueo', function () {
+    return view('layouts.index');
 });
+
+Route::get('/', 'Auth\LoginController@inicio');
 
 Route::get('user/{id}', function($id){
     return 'Bienvenido '.$id_demo;
@@ -43,6 +50,8 @@ Route::get('persona/ajax_datos', 'PersonaController@ajax_datos');
 Route::get('persona/exportarexcel', 'PersonaController@exportarExcel')->name('personas.exportarexcel');
 
 Route::get('nota/listado', 'NotaController@listado');
+Route::get('nota/index', 'NotaController@index');
+Route::get('nota/asignaturas', 'NotaController@asignaturas');
 
 //MIGRACIONES
 Route::get('Migracion/inicia', 'MigracionController@inicia');

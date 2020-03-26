@@ -16,7 +16,35 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'apellido_paterno',
+        'apellido_materno',
+        'nombres',
+        'nomina',
+        'password',
+        'cedula',
+        'expedido',
+        'tipo_usuario',
+        'nombre_usuario',
+        'fecha_incorporacion',
+        'vigente',
+        'rol',
+        'fecha_nacimiento',
+        'lugar_nacimiento',
+        'sexo',
+        'estado_civil',
+        'nombre_conyugue',
+        'nombre_hijo',
+        'direccion',
+        'zona',
+        'numero_celular',
+        'numero_fijo',
+        'email',
+        'foto',
+        'persona_referencia',
+        'numero_referencia',
+        'name',
+        'estado',
+        'borrado',
     ];
 
     /**
@@ -36,4 +64,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function notas()
+    {
+        return $this->hasMany('App\Nota');
+    }
+
+    public function notaspropuestas()
+    {
+        return $this->hasMany('App\NotaPropuesta');
+    }
 }
