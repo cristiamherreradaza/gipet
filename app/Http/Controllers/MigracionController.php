@@ -111,4 +111,14 @@ class MigracionController extends Controller
         }
 
     }
+
+    public function notas_propuestas()
+    {
+        for ($i=0; $i < 166 ; $i++) { 
+        	DB::table('notas_propuestas')->insert([
+            'codigo_anterior' => 1,
+        	]);
+        }
+
+    }
 }

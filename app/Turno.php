@@ -26,4 +26,8 @@ class Turno extends Model
     {
         return $this->hasMany('App\NotasPropuesta');
     }
+    public function inscripcion()
+    {
+        return $this->hasMany('App\Inscripcion');
+    }
 }

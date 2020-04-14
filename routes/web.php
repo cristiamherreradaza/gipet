@@ -53,27 +53,17 @@ Route::get('persona/exportarexcel', 'PersonaController@exportarExcel')->name('pe
 
 Route::get('nota/listado', 'NotaController@listado');
 Route::get('nota/detalle/{id}', 'NotaController@detalle');
-
-
-
-
-
+Route::post('nota/ajax_importar', 'NotaController@ajax_importar');
+Route::post('nota/importarexcel', 'NotaController@importarexcel');
 Route::get('user/asignar', 'UserController@asignar');
-//Route::get('nota/listado', 'NotaController@listado');
 Route::get('nota/actualizar', 'NotaController@actualizar');
 Route::get('nota/exportarexcel/{id}', 'NotaController@exportarexcel');
-Route::post('nota/importarexcel', 'NotaController@importarexcel');
 Route::get('nota/index', 'NotaController@index');
-Route::post('nota/ajax_importar', 'NotaController@ajax_importar');
 Route::get('nota/asignatura/{id}', 'NotaController@asignatura');
-//Route::get('nota/exportarexcel/{id}', 'NotaController@exportarexcel');
-
 Route::get('nota/show', 'NotaController@show');
 Route::get('nota/detalle', 'NotaController@detalle');
-
 Route::get('nota/show2', 'NotaController@show2');
 Route::get('nota/detalle2', 'NotaController@detalle2');
-
 Route::get('notaspropuesta/listado', 'NotasPropuestaController@listado');
 
 //MIGRACIONES
@@ -82,3 +72,22 @@ Route::get('Migracion/inicia', 'MigracionController@inicia');
 Route::get('Migracion/usuario', 'MigracionController@usuario');
 
 Route::get('Migracion/asignatura', 'MigracionController@asignatura');
+
+Route::get('Migracion/notas_propuestas', 'MigracionController@notas_propuestas');
+
+//INSCRIPCIONES
+Route::get('Inscripcion/inscripcion', 'InscripcionController@inscripcion');
+
+Route::get('Inscripcion/contabilidad', 'InscripcionController@contabilidad');
+
+Route::get('Inscripcion/secretariado', 'InscripcionController@secretariado');
+
+Route::get('Inscripcion/auxiliar', 'InscripcionController@auxiliar');
+
+Route::get('Inscripcion/busca_asignatura', 'InscripcionController@busca_asignatura');
+
+Route::get('Inscripcion/busca_carrera', 'InscripcionController@busca_carrera');
+
+Route::get('Inscripcion/re_inscripcion/{id}', 'InscripcionController@re_inscripcion');
+
+Route::get('Inscripcion/asignaturas_a_tomar', 'InscripcionController@asignaturas_a_tomar');
