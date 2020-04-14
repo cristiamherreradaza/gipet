@@ -576,8 +576,8 @@
 
         var asig = $('#carrera_id').val();
         $("#mostrar_asig1").val();
-    	$("#mostrar_asig2").val();
-    	$("#mostrar_asig3").val();  
+        $("#mostrar_asig2").val();
+        $("#mostrar_asig3").val();  
 
         if (asig == '1') {
             $('#mostrar_asig1').show('slow');//para visualizar las asignaturas
@@ -639,7 +639,7 @@
                                     '<td>' + data[index].codigo_asignatura + '</td>' +
                                     '<td>' + data[index].nombre_asignatura +'</td>' +
                                     '</tr>');
-                    	});
+                        });
                     $("#nom_asig3").html('Auxiliar Administrativo Financiero');
                     $("#gest3").html('Gestion ' + data[0].anio_vigente);
                     }
@@ -657,17 +657,17 @@
                     asignatura : asig
                 },
                 success:function(data){
-                	$.ajax({
-			                type:'GET',
-			                url:"{{ url('Inscripcion/busca_carrera') }}",
-			                data: {
-			                    id : asig
-			                },
-			                success:function(data){
-			                        $("#nom_asig1").html(data[0].nombre);
-                    				$("#gest1").html('Gestion ' + data[0].gestion);
-			                }
-			            });
+                    $.ajax({
+                            type:'GET',
+                            url:"{{ url('Inscripcion/busca_carrera') }}",
+                            data: {
+                                id : asig
+                            },
+                            success:function(data){
+                                    $("#nom_asig1").html(data[0].nombre);
+                                    $("#gest1").html('Gestion ' + data[0].gestion);
+                            }
+                        });
 
                     $.each(data, function(index, value) {
                         $("#valor1").append('<tr>' +

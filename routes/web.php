@@ -59,3 +59,22 @@ Route::get('Migracion/inicia', 'MigracionController@inicia');
 Route::get('Migracion/usuario', 'MigracionController@usuario');
 
 Route::get('Migracion/asignatura', 'MigracionController@asignatura');
+
+Route::get('Migracion/notas_propuestas', 'MigracionController@notas_propuestas');
+
+//INSCRIPCIONES
+Route::get('Inscripcion/inscripcion', 'InscripcionController@inscripcion');
+
+Route::get('Inscripcion/contabilidad', 'InscripcionController@contabilidad');
+
+Route::get('Inscripcion/secretariado', 'InscripcionController@secretariado');
+
+Route::get('Inscripcion/auxiliar', 'InscripcionController@auxiliar');
+
+Route::get('Inscripcion/busca_asignatura', 'InscripcionController@busca_asignatura');
+
+Route::get('Inscripcion/busca_carrera', 'InscripcionController@busca_carrera');
+
+Route::get('Inscripcion/re_inscripcion/{id}', 'InscripcionController@re_inscripcion');
+
+Route::get('Inscripcion/asignaturas_a_tomar', 'InscripcionController@asignaturas_a_tomar');
