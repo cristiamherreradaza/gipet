@@ -35,7 +35,7 @@
                                 <td>{{ $asignatura->asignatura->carrera->nombre }}</td>
                                 <td>{{ $asignatura->turno->descripcion }}</td>
                                 <td>{{ $asignatura->paralelo }}</td>
-                                <td><a href="{{ url('nota/detalle/'.$asignatura->id) }}" class="btn btn-info btn-rounded btn-sm"><i class="mdi mdi-note-text"></i> Notas</a></td>
+                                <td><button type="button" class="btn btn-success btn-view-contrato" value="{{ $asignatura->id }}" data-toggle="modal" data-target="#modal_contrato"><span class="fa fa-file-text-o"></span></button></td>
                             </tr>
                         @endif
                     @endforeach
@@ -43,6 +43,17 @@
             </table>
         </div>
     </div>
+</div>
+
+
+<div class="modal bs-example-modal-lg" id="modal_contrato">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-body">
+
+      </div>
+    </div>
+  </div>
 </div>
 
 @stop
@@ -102,4 +113,21 @@
     });
 
 </script>
+
+<script >
+     $(document).on("click",".btn-view-contrato", function(){
+        valor_IDcontrato = $(this).val();
+        //alert(valor_IDcontrato);
+        $.ajax({
+            url:"{{ url('nota/detalle2') }}",
+            type:"GET",
+            dataType:"html",
+            data:{id:valor_IDcontrato},
+            success:function(data){
+                $("#modal_contrato .modal-body").html(data);
+            }
+        });
+    });
+</script>
+
 @endsection

@@ -72,6 +72,6 @@ class User extends Authenticatable
 
     public function notaspropuestas()
     {
-        return $this->hasMany('App\NotaPropuesta');
+        return $this->hasMany('App\NotasPropuesta');
     }
 }

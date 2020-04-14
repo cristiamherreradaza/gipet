@@ -35,7 +35,7 @@
                                 <td>{{ $asignatura->asignatura->carrera->nombre }}</td>
                                 <td>{{ $asignatura->turno->descripcion }}</td>
                                 <td>{{ $asignatura->paralelo }}</td>
-                                <td><a href="{{ url('nota/detalle/'.$asignatura->id) }}" class="btn btn-info btn-rounded btn-sm"><i class="mdi mdi-note-text"></i> Notas</a></td>
+                                <td><button type="button" class="btn btn-info" onclick="editar('{{ $asignatura->id }}')"><i class="fas fa-edit"></i> Notas</button></td>
                             </tr>
                         @endif
                     @endforeach
@@ -44,6 +44,43 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal bs-example-modal-lg" id="modal_contrato">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-body">
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- inicio modal content -->
+<div id="myModal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+
+				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel">FORMULARIO DE ABERTURA</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<input type="hidden" name="ida" id="ida" value="">
+				</div>
+				<div class="modal-body">
+
+                    <table><td id="valor"></td></table>
+
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn waves-effect waves-light btn-block btn-success">GUARDA ABERTURA</button>
+				</div>
+
+		</div>
+		<!-- /.modal-content -->
+	</div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- fin modal -->
 
 @stop
 
@@ -102,4 +139,43 @@
     });
 
 </script>
+
+<script >
+    function editar(id)
+	{
+        //alert(gestion);
+        $.ajax({
+            url:"{{ url('nota/detalle') }}",
+            type:"GET",
+            dataType:"html",
+            data:{id:id},
+            success:function(data){
+                // $("#myModal").modal('show');
+                // $.each(data, function(index, value){
+                //     $('#valor').append(data[index].asignatura_id);
+                // });
+                alert(data);
+                console.log(data);
+                //$("#myModal").modal('show');
+            }
+        });
+        
+		//$("#myModal").modal('show');
+	}
+
+     $(document).on("click",".btn-view-contrato", function(){
+        valor_IDcontrato = $(this).val();
+        //alert(valor_IDcontrato);
+        $.ajax({
+            url:"{{ url('nota/detalle') }}",
+            type:"GET",
+            dataType:"html",
+            data:{id:valor_IDcontrato},
+            success:function(data){
+                $("#modal_contrato .modal-body").html(data);
+            }
+        });
+    });
+</script>
+
 @endsection

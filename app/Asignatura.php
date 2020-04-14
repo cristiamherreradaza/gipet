@@ -38,6 +38,11 @@ class Asignatura extends Model
         return $this->hasMany('App\Nota');
     }
 
+    public function notaspropuestas()
+    {
+        return $this->hasMany('App\NotasPropuesta');
+    }
+
     // public function prerequisitos()
     // {
     //     return $this->hasMany('App\Prerequisito');

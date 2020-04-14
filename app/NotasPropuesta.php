@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class NotaPropuesta extends Model
+class NotasPropuesta extends Model
 {
     protected $fillable = [
         'asignatura_id',
@@ -23,6 +23,16 @@ class NotaPropuesta extends Model
         'estado',
         'borrado',
     ];
+
+    public function asignatura()
+    {
+        return $this->belongsTo('App\Asignatura');
+    }
+
+    public function turno()
+    {
+        return $this->belongsTo('App\Turno');
+    }
 
     public function user()
     {
