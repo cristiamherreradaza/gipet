@@ -50,7 +50,7 @@ Route::get('persona/ajax_datos', 'PersonaController@ajax_datos');
 Route::get('persona/exportarexcel', 'PersonaController@exportarExcel')->name('personas.exportarexcel');
 
 
-
+//NOTAS
 Route::get('nota/listado', 'NotaController@listado');
 Route::get('nota/detalle/{id}', 'NotaController@detalle');
 Route::post('nota/ajax_importar', 'NotaController@ajax_importar');
@@ -64,7 +64,13 @@ Route::get('nota/show', 'NotaController@show');
 Route::get('nota/detalle', 'NotaController@detalle');
 Route::get('nota/show2', 'NotaController@show2');
 Route::get('nota/detalle2', 'NotaController@detalle2');
+//Route::get('notaspropuesta/listado', 'NotasPropuestaController@listado');
+
+//NOTAS PROPUESTA
 Route::get('notaspropuesta/listado', 'NotasPropuestaController@listado');
+Route::get('notaspropuesta/actualizar', 'NotasPropuestaController@actualizar');
+Route::get('notaspropuesta/exportarexcel/{id}', 'NotasPropuestaController@exportarexcel');
+Route::post('notaspropuesta/ajax_importar', 'NotasPropuestaController@ajax_importar');
 
 //MIGRACIONES
 Route::get('Migracion/inicia', 'MigracionController@inicia');

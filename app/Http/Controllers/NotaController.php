@@ -123,17 +123,7 @@ class NotaController extends Controller
 
     public function exportarexcel(Request $request)
     {
-        /*
-        $headings = [
-            'id_persona',
-            'asistencia',
-            'practicas',
-            'puntos ganados',
-            'primer parcial',
-            'examen final'
-        ];*/
         return Excel::download(new NotasExport($request->id), 'notas-list.xlsx');
-        
         //$date = date('Y-m-d H:i:s');
         //return (new NotasExport($request->id))->download($date.'notas-list.xlsx'); 
     }
@@ -174,7 +164,7 @@ class NotaController extends Controller
             $file = $request->file('select_file');
             Excel::import(new NotasImport, $file);
             //todo el proceso de excel
-            alert('bien');
+            //alert('bien');
             return response()->json([
                 //1
                 'message' => 'Importacion realizada con exito',
@@ -184,7 +174,7 @@ class NotaController extends Controller
         }
         else
         {
-            alert('mal');
+            //alert('mal');
             return response()->json([
                 //0
                 'message' => $validation->errors()->all(),
