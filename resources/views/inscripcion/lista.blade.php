@@ -14,24 +14,32 @@
             <div class="col-lg-12">
                 <div class="card card-outline-info">
                     <div class="card-header">
-                        <h4 class="mb-0 text-white">NUEVO ALUMNO</h4>
+                        <h4 class="mb-0 text-white">LISTA DE ALUMNOS DIFERENTES GESTIONES </h4>
                     </div>
 
                     <div class="card-body">
-                        <h4 class="card-title">Table Responsive </h4>
-                        <h6 class="card-subtitle">Data table example</h6>
-                        <div class="table-responsive m-t-40">
-                            <table id="tabla-personas" class="table display table-bordered table-striped no-wrap">
-                                <thead>
-                                    <tr>
-                                        <th>Apellido Paterno</th>
-                                        <th>Apellido Materno</th>
-                                        <th>Nombres</th>
-                                    </tr>
-                                </thead>
-                                
-                            </table>
-                        </div>
+
+                                <h4 class="card-title">Alumnos </h4>
+                                <div class="table-responsive m-t-40">
+                                    <table id="tabla-personas" class="table display table-bordered table-striped no-wrap">
+                                        <thead>
+                                            <tr>
+                                                <th>No. Carnet</th>
+                                                <th>Apellido Paterno</th>
+                                                <th>Apellido Materno</th>
+                                                <th>Nombres</th>
+                                                <th>Numero de Celular</th>
+                                                <th>Razon Social</th>
+                                                <th>Nit</th>
+                                                <th>Fecha de Ingreso</th>
+                                                <th>Sueldo</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        
+                                    </table>
+                                </div>
+                            
                     </div>
                     
                 </div>
@@ -42,23 +50,14 @@
     </div>
     <!-- Column -->
 </div>
+
+
 @stop
 @section('js')
 <script src="{{ asset('/assets/plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('/assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js')}}"></script>
-<script>
-    // $(function () {
-    //     $('#config-table').DataTable({
-    //         responsive: true,
-    //         "order": [
-    //             [0, 'asc']
-    //         ],
-    //         "language": {
-    //             "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
-    //         }
-    //     });
 
-    // });
+<script>
 
 $(document).ready(function() {
     //  console.log('testOne');     para debug, ayuda a ver hasta donde se ejecuta la funcion
@@ -74,11 +73,18 @@ $(document).ready(function() {
         "processing": true,
         "scrollX": true,
         "serverSide": true,
-        "ajax": "{{ url('persona/ajax_datos') }}",
+        "ajax": "{{ url('Inscripcion/ajax_datos') }}",
         "columns": [
-            {data: 'apellido_paterno'},
-            {data: 'apellido_materno'},
-            {data: 'nombres'},
+            {data: 'persona_id'},
+            {data: 'asignatura_id'},
+            {data: 'carrera_id'},
+            {data: 'turno_id'},
+            {data: 'paralelo'},
+            {data: 'gestion'},
+            {data: 'persona_id'},
+            {data: 'asignatura_id'},
+            {data: 'carrera_id'},
+            {data: 'carrera_id'},
         ]
     } );
 

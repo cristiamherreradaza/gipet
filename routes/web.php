@@ -88,6 +88,10 @@ Route::get('Inscripcion/busca_asignatura', 'InscripcionController@busca_asignatu
 
 Route::get('Inscripcion/busca_carrera', 'InscripcionController@busca_carrera');
 
+Route::get('Inscripcion/lista', 'InscripcionController@lista');
+
+Route::get('Inscripcion/ajax_datos', 'InscripcionController@ajax_datos');
+
 Route::get('Inscripcion/re_inscripcion/{id}', 'InscripcionController@re_inscripcion');
 
 Route::get('Inscripcion/asignaturas_a_tomar', 'InscripcionController@asignaturas_a_tomar');

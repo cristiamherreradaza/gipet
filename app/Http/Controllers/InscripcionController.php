@@ -8,6 +8,7 @@ use App\Carrera;
 use App\Asignatura;
 use App\Turno;
 use App\Persona;
+use App\Kardex;
 use DB;
 
 class InscripcionController extends Controller
@@ -104,6 +105,17 @@ class InscripcionController extends Controller
 					    ->get();
     	return response()->json($carre);
     }
+
+    public function lista()
+    {
+        return view('inscripcion.lista');
+    }
+
+    public function ajax_datos()
+    {
+        return datatables()->eloquent(Kardex::query())->toJson();
+    }
+
 
     public function re_inscripcion(Request $request){
 
