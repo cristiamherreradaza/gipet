@@ -25,4 +25,11 @@ class CarreraController extends Controller
         
         return response()->json(['mensaje'=>'Registrado Correctamente']);
     }
+
+    public function listado()
+    {
+        $carreras = Carrera::where("borrado", NULL)->get();
+        // dd($carreras[0]->nombre);
+        return view('carrera.listado', compact('carreras'));
+    }
 }

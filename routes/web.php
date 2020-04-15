@@ -91,3 +91,7 @@ Route::get('Inscripcion/busca_carrera', 'InscripcionController@busca_carrera');
 Route::get('Inscripcion/re_inscripcion/{id}', 'InscripcionController@re_inscripcion');
 
 Route::get('Inscripcion/asignaturas_a_tomar', 'InscripcionController@asignaturas_a_tomar');
+
+// ADMINISTRACION
+Route::get('Carrera/listado', 'CarreraController@listado');
+Route::get('Asignatura/listado_malla/{carrera_id}', 'AsignaturaController@listado_malla');
