@@ -29,7 +29,11 @@
                             <td>{{ $a->codigo_asignatura }}</td>
                             <td>{{ $a->nombre_asignatura }}</td>
                             <td>{{ $a->semestre }}</td>
-                            <td><a href="{{ url('nota/detalle/'.$a->id) }}" class="btn btn-info btn-rounded btn-sm"><i class="mdi mdi-note-text"></i> Notas</a></td>
+                            <td>
+                                <a href="{{ url('Asignatura/listado_malla/'.$c->id) }}">
+                                    <button type="button" class="btn btn-info"><i class="fas fa-eye"></i></button>
+                                </a>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

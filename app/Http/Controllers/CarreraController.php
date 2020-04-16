@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Carrera;
+use App\Asignatura;
 use DataTables;
 
 class CarreraController extends Controller
 {
+    protected $gestion_actual = 'a';
+
     public function tabla()
     {
         // $carreras = Carrera::all();
@@ -26,10 +29,39 @@ class CarreraController extends Controller
         return response()->json(['mensaje'=>'Registrado Correctamente']);
     }
 
-    public function listado()
+    public function listado(Request $request)
     {
-        $carreras = Carrera::where("borrado", NULL)->get();
-        // dd($carreras[0]->nombre);
-        return view('carrera.listado', compact('carreras'));
+        if($request->has(['carrera_id', 'gestion']))
+        {
+            $gestion = $request->gestion;
+            $carreras = Carrera::where("borrado", NULL)->get();
+            $datos_carrera = Carrera::where("borrado", NULL)
+                        ->where('id', $request->carrera_id)
+                        ->first();
+            $nombre_carrera = $datos_carrera->nombre;
+
+            $asignaturas = Asignatura::where("borrado", NULL)
+                        ->where('carrera_id', $datos_carrera->id)
+                        ->where('anio_vigente', $request->gestion)
+                        ->get();
+        } else {
+            $gestion = date('Y');
+            $datos_carrera = Carrera::where("id", 1)->first();
+            $nombre_carrera = $datos_carrera->nombre;
+
+            $carreras = Carrera::where("borrado", NULL)->get();
+            $asignaturas = Asignatura::where("borrado", NULL)
+                        ->where('carrera_id', 1)
+                        ->where('anio_vigente', $gestion)
+                        ->get();
+        }
+        // dd($nombre_carrera);
+
+        return view('carrera.listado', compact('carreras', 'asignaturas', 'gestion', 'nombre_carrera'));
+    }
+
+    public function ajax_lista_asignaturas(Request $request)
+    {
+        dd($request->input());
     }
 }
