@@ -45,6 +45,7 @@ class CarreraController extends Controller
                         ->where('anio_vigente', $request->gestion)
                         ->get();
         } else {
+            // dd($request->session()->all());
             $gestion = date('Y');
             $datos_carrera = Carrera::where("id", 1)->first();
             $nombre_carrera = $datos_carrera->nombre;
@@ -62,6 +63,20 @@ class CarreraController extends Controller
 
     public function ajax_lista_asignaturas(Request $request)
     {
-        dd($request->input());
+        // dd($request->carrera_id);
+        $gestion = $request->gestion;
+        $carreras = Carrera::where("borrado", NULL)->get();
+        $datos_carrera = Carrera::where("borrado", NULL)
+                    ->where('id', $request->carrera_id)
+                    ->first();
+        $nombre_carrera = $datos_carrera->nombre;
+
+        $asignaturas = Asignatura::where("borrado", NULL)
+                    ->where('carrera_id', $datos_carrera->id)
+                    ->where('anio_vigente', $request->gestion)
+                    ->get();
+        // dd($request->input());
+        return view('carrera.ajax_lista_asignaturas', compact('asignaturas', 'nombre_carrera'));
+        // return response()->json(['mensaje'=>'Holas desde Ajax']);
     }
 }

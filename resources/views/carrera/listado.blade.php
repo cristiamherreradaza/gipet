@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('metadatos')
+<meta name="csrf-token" content="{{ csrf_token() }}"/>
 @endsection
 
 @section('css')
@@ -22,7 +23,7 @@
                         <h4 class="mb-0 text-white">CARRERAS</h4>
                     </div>
                     <br />
-                    <form action="/Carrera/listado" method="post" id="formulario_carreras">
+                    <form action="#" method="GET" id="formulario_carreras">
                         @csrf
                         
                         <div class="row">
@@ -53,7 +54,8 @@
                     </form>
                 </div>
             </div>
-            <div class="col-md-8">
+            <div class="col-md-8" id="carga_ajax_lista_asignaturas">
+
                 <div class="card card-outline-info">                                
                     <div class="card-header">
                         <h4 class="mb-0 text-white">ASIGNATURAS - ({{ $nombre_carrera }})</h4>
@@ -111,23 +113,26 @@
     });
 
     $('#formulario_carreras').on('submit', function(event) {
+        event.preventDefault();
+        // alert('Entro');
         var datos_formulario = $(this).serializeArray();
         // var otro = new FormData(this);
-        // console.log(otro);
-        event.preventDefault();
+        var carrera_id = $("#carrera_id").val();
+        // console.log(datos_formulario);
 
         $.ajax({
             url: "{{ url('Carrera/ajax_lista_asignaturas') }}",
-            method: "POST",
+            method: "GET",
             data: datos_formulario,
-            dataType: 'JSON',
-            contentType: false,
-            cache: false,
-            processData: false,
+            // dataType: 'JSON',
+            // contentType: false,
+            // cache: false,
+            // processData: false,
             success: function(data)
             {
+                $("#carga_ajax_lista_asignaturas").html(data);
                 //if(pregunto si es 1 o 0) 1->swwetalert
-                console.log(data);
+                // console.log(data);
 /*                $('#message').css('display', 'block');
                 $('#message').html(data.message);
                 $('#message').addClass(data.class_name);
