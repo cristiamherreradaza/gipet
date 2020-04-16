@@ -84,6 +84,8 @@ Route::get('Migracion/notas_propuestas', 'MigracionController@notas_propuestas')
 //INSCRIPCIONES
 Route::get('Inscripcion/inscripcion', 'InscripcionController@inscripcion');
 
+Route::get('Inscripcion/busca_ci', 'InscripcionController@busca_ci');
+
 Route::get('Inscripcion/contabilidad', 'InscripcionController@contabilidad');
 
 Route::get('Inscripcion/secretariado', 'InscripcionController@secretariado');
@@ -93,6 +95,8 @@ Route::get('Inscripcion/auxiliar', 'InscripcionController@auxiliar');
 Route::get('Inscripcion/busca_asignatura', 'InscripcionController@busca_asignatura');
 
 Route::get('Inscripcion/busca_carrera', 'InscripcionController@busca_carrera');
+
+Route::post('Inscripcion/store', 'InscripcionController@store');
 
 Route::get('Inscripcion/lista', 'InscripcionController@lista');
 

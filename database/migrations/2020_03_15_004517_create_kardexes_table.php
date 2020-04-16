@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateKardexTable extends Migration
+class CreateKardexesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateKardexTable extends Migration
      */
     public function up()
     {
-        Schema::create('kardex', function (Blueprint $table) {
+        Schema::create('kardexes', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('codigo_anterior')->nullable();
             $table->unsignedBigInteger('persona_id')->nullable();
@@ -42,6 +42,6 @@ class CreateKardexTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kardex');
+        Schema::dropIfExists('kardexes');
     }
 }

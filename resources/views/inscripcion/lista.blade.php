@@ -6,105 +6,74 @@
 
 @section('content')
 <div id="divmsg" style="display:none" class="alert alert-primary" role="alert"></div>
-<div class="row">
-    <!-- Column -->
-    <div class="col-md-12">
-        <!-- Row -->
+<!-- ============================================================== -->
         <div class="row">
-            <div class="col-lg-12">
-                <div class="card card-outline-info">
-                    <div class="card-header">
-                        <h4 class="mb-0 text-white">LISTA DE ALUMNOS DIFERENTES GESTIONES </h4>
-                    </div>
-
+            <div class="col-12">
+                <!-- table responsive -->
+                <div class="card">
                     <div class="card-body">
-
-                                <h4 class="card-title">Alumnos </h4>
-                                <div class="table-responsive m-t-40">
-                                    <table id="tabla-personas" class="table display table-bordered table-striped no-wrap">
-                                        <thead>
-                                            <tr>
-                                                <th>No. Carnet</th>
-                                                <th>Apellido Paterno</th>
-                                                <th>Apellido Materno</th>
-                                                <th>Nombres</th>
-                                                <th>Numero de Celular</th>
-                                                <th>Razon Social</th>
-                                                <th>Nit</th>
-                                                <th>Fecha de Ingreso</th>
-                                                <th>Sueldo</th>
-                                                <th>Acciones</th>
-                                            </tr>
-                                        </thead>
-                                        
-                                    </table>
-                                </div>
-                            
+                        <?php $n=1; //vdebug($trabajos, true, false, true)  ?>
+                        <h4 class="card-title">ALUMNOS INSCRITOS TODAS LAS GESTIONES</h4>
+                        <div class="table-responsive m-t-40">
+                            <table id="config-table" class="table display table-bordered table-striped no-wrap">
+                                <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th>Carnet</th>
+                                        <th>Apellido Paterno</th>
+                                        <th>Apellido Materno</th>
+                                        <th>Nombres</th>
+                                        <th>Celular</th>
+                                        <th>Razon Social</th>
+                                        <th>NIT</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($personas as $per)
+                                    <tr>
+                                        <td>{{ $n++ }}</td>
+                                        <td>{{ $per->carnet }}</td>
+                                        <td>{{ $per->apellido_paterno }}</td>
+                                        <td>{{ $per->apellido_materno }}</td>
+                                        <td>{{ $per->nombres }}</td>
+                                        <td>{{ $per->telefono_celular }}</td>
+                                        <td>{{ $per->razon_social_cliente}}</td>
+                                        <td>{{ $per->nit }}</td>
+                                        <td>
+                                           <button type="button" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    
                 </div>
             </div>
         </div>
-        
-        <!-- Row -->
-    </div>
-    <!-- Column -->
-</div>
+        <!-- ============================================================== -->
 
 
 @stop
 @section('js')
 <script src="{{ asset('/assets/plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('/assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js')}}"></script>
-
 <script>
-
-$(document).ready(function() {
-    //  console.log('testOne');     para debug, ayuda a ver hasta donde se ejecuta la funcion
-    // Setup - add a text input to each footer cell
-    // $('#example tfoot th').each( function () {
-    //     var title = $(this).text();
-    //     $(this).html( '<input type="text" placeholder="Buscar '+title+'" />' );
-    // } );
-
-    // DataTable
-    var table = $('#tabla-personas').DataTable( {
-        "iDisplayLength": 10,
-        "processing": true,
-        "scrollX": true,
-        "serverSide": true,
-        "ajax": "{{ url('Inscripcion/ajax_datos') }}",
-        "columns": [
-            {data: 'persona_id'},
-            {data: 'asignatura_id'},
-            {data: 'carrera_id'},
-            {data: 'turno_id'},
-            {data: 'paralelo'},
-            {data: 'gestion'},
-            {data: 'persona_id'},
-            {data: 'asignatura_id'},
-            {data: 'carrera_id'},
-            {data: 'carrera_id'},
-        ]
-    } );
-
-    // Apply the search
-    // table.columns().every( function () {
-    //     var that = this;
-
-    //     $( 'input', this.footer() ).on( 'keyup change clear', function () {
-    //         if ( that.search() !== this.value ) {
-    //             that
-    //                 .search( this.value )
-    //                 .draw();
-    //         }
-    //     } );
-    // } );
-
-} );
-
+  $(function () {
+        $('#myTable').DataTable();
+        // responsive table
+        $('#config-table').DataTable({
+            responsive: true,
+            "order": [
+                [0, 'desc']
+            ],
+            "language": {
+                "url": "http://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+            }
+        });
+    });
 </script>
-
 <script type="text/javascript">
 
 
