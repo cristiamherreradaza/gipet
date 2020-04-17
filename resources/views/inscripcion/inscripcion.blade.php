@@ -16,7 +16,7 @@
                     <div class="card-header">
                         <h4 class="mb-0 text-white">NUEVO ALUMNO</h4>
                     </div>
-                    <form action="/persona/guarda" method="post">
+                    <form action="/Inscripcion/store" method="POST">
                         @csrf
                     <div class="card-body">
 
@@ -33,48 +33,15 @@
                                                 <div class="row">
                                                     <div class="col">
                                                         <div class="form-group">
-                                                            <label>Apellido Materno </label>
-                                                            <input type="text" class="form-control"
-                                                                name="apellido_paterno" id="nombre">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col">
-                                                        <div class="form-group">
-                                                            <label>Apellido Paterno </label>
-                                                            <input type="text" class="form-control"
-                                                                name="apellido_materno" id="nombre">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col">
-                                                        <div class="form-group">
-                                                            <label>Nombres </label>
-                                                            <input type="text" class="form-control"
-                                                                name="nombres" id="nombre">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col">
-                                                        <div class="form-group">
                                                             <label>Carnet </label>
                                                             <input type="text" class="form-control"
-                                                                name="carnet" id="nombre">
+                                                                name="carnet" id="carnet">
                                                         </div>
                                                     </div>
-
-                                                    <div class="col">
-                                                        <div class="form-group">
-                                                            <label>Fecha Nacimiento </label>
-                                                            <input type="date" class="form-control"
-                                                                name="fecha_nacimiento" id="nombre">
-                                                        </div>
-                                                    </div>
-
                                                     <div class="col">
                                                         <div class="form-group">
                                                             <label>Expedido </label>
-                                                            <select name="expedido" class="form-control">
+                                                            <select name="expedido" id="expedido" class="form-control">
                                                                 <option value="La Paz">La Paz</option>
                                                                 <option value="Cochabamba">Cochabamba</option>
                                                                 <option value="Santa Cruz">Santa Cruz</option>
@@ -87,7 +54,36 @@
                                                             </select>
                                                         </div>
                                                     </div>
+                                                    <div class="col">
+                                                        <div class="form-group">
+                                                            <label>Apellido Paterno </label>
+                                                            <input type="text" class="form-control"
+                                                                name="apellido_paterno" id="apellido_paterno">
+                                                        </div>
+                                                    </div>
 
+                                                    <div class="col">
+                                                        <div class="form-group">
+                                                            <label>Apellido Materno </label>
+                                                            <input type="text" class="form-control"
+                                                                name="apellido_materno" id="apellido_materno">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <div class="form-group">
+                                                            <label>Nombres </label>
+                                                            <input type="text" class="form-control"
+                                                                name="nombres" id="nombres">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="form-group">
+                                                            <label>Fecha Nacimiento </label>
+                                                            <input type="date" class="form-control"
+                                                                name="fecha_nacimiento" id="fecha_nacimiento">
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="row">
 
@@ -95,7 +91,7 @@
                                                         <div class="form-group">
                                                             <label>Email </label>
                                                             <input type="text" class="form-control"
-                                                                name="email" id="nivel">
+                                                                name="email" id="email">
                                                         </div>
                                                     </div>
 
@@ -103,7 +99,7 @@
                                                         <div class="form-group">
                                                             <label>Direccion </label>
                                                             <input type="text" class="form-control"
-                                                                name="direccion" id="nivel">
+                                                                name="direccion" id="direccion">
                                                         </div>
                                                     </div>
 
@@ -111,16 +107,16 @@
                                                         <div class="form-group">
                                                             <label>Celular </label>
                                                             <input type="text" class="form-control"
-                                                                name="telefono_celular" id="nivel">
+                                                                name="telefono_celular" id="telefono_celular">
                                                         </div>
                                                     </div>
 
                                                     <div class="col-3">
                                                         <div class="form-group">
                                                             <label>Genero </label>
-                                                            <select name="sexo" class="form-control">
+                                                            <select name="sexo" id="sexo" class="form-control">
                                                                 <option value="Masculino">Masculino</option>
-                                                                <option value="Femenino">Femenino</option>
+                                                                <option value="Femenina">Femenina</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -152,7 +148,7 @@
                                                         <div class="form-group has-success">
                                                             <label class="control-label">Trabaja</label>
                                                             <select class="form-control custom-select" id="trabaja" name="trabaja">
-                                                                <option value="No">Seleccionar</option>
+                                                                <option value="">Seleccionar</option>
                                                                 <option value="Si">Si</option>
                                                                 <option value="No">No</option>
                                                             </select>
@@ -217,28 +213,28 @@
                                                     <div class="col-3">
                                                         <div class="form-group">
                                                             <label>Nombre Padre </label>
-                                                            <input type="text" class="form-control" name="nombre_padre" id="nombre">
+                                                            <input type="text" class="form-control" name="nombre_padre" id="nombre_padre">
                                                         </div>
                                                     </div>
 
                                                     <div class="col-3">
                                                         <div class="form-group">
                                                             <label>Celular Padre </label>
-                                                            <input type="text" class="form-control" name="celular_padre" id="nombre">
+                                                            <input type="text" class="form-control" name="celular_padre" id="celular_padre">
                                                         </div>
                                                     </div>
 
                                                     <div class="col-3">
                                                         <div class="form-group">
                                                             <label>Nombre Madre </label>
-                                                            <input type="text" class="form-control" name="nombre_madre" id="nombre">
+                                                            <input type="text" class="form-control" name="nombre_madre" id="nombre_madre">
                                                         </div>
                                                     </div>
 
                                                     <div class="col-3">
                                                         <div class="form-group">
                                                             <label>Celular Madre </label>
-                                                            <input type="text" class="form-control" name="celular_madre" id="nombre">
+                                                            <input type="text" class="form-control" name="celular_madre" id="celular_madre">
                                                         </div>
                                                     </div>
                                                     
@@ -248,28 +244,28 @@
                                                     <div class="col-3">
                                                         <div class="form-group">
                                                             <label>Nombre Tutor </label>
-                                                            <input type="text" class="form-control" name="nombre_tutor" id="nombre">
+                                                            <input type="text" class="form-control" name="nombre_tutor" id="nombre_tutor">
                                                         </div>
                                                     </div>
 
                                                     <div class="col-3">
                                                         <div class="form-group">
                                                             <label>Celular Tutor </label>
-                                                            <input type="text" class="form-control" name="telefono_tutor" id="nombre">
+                                                            <input type="text" class="form-control" name="telefono_tutor" id="telefono_tutor">
                                                         </div>
                                                     </div>
 
                                                     <div class="col-3">
                                                         <div class="form-group">
                                                             <label>Nombre Esposo </label>
-                                                            <input type="text" class="form-control" name="nombre_esposo" id="nombre">
+                                                            <input type="text" class="form-control" name="nombre_esposo" id="nombre_esposo">
                                                         </div>
                                                     </div>
 
                                                     <div class="col-3">
                                                         <div class="form-group">
                                                             <label>Celular Esposo </label>
-                                                            <input type="text" class="form-control" name="telefono_esposo" id="nombre">
+                                                            <input type="text" class="form-control" name="telefono_esposo" id="telefono_esposo">
                                                         </div>
                                                     </div>
                                                     
@@ -342,9 +338,109 @@
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-5">Gesti&oacute;n</label>
                                                             <div class="col-md-7">
-                                                                <input type="text" class="form-control" id="gestion" name="gestion">
+                                                                <input type="text" class="form-control" id="gestion" name="gestion" value="{{ $year }}">
                                                             </div>
                                                         </div>
+                                                    </div>
+                                                </div>
+                                                <!--/row-->
+                                                <!--/row-->
+                                                <div class="row" id="secre" style="display:none;">
+                                                    <div class="col-lg-3 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-3">Carrera</label>
+                                                            <div class="col-md-9">
+                                                                <input type="text" class="form-control" id="carrera_id_secre" name="carrera_id_secre" value="Secretariado Administrativo">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-3">Turno</label>
+                                                            <div class="col-md-7">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="turno_id_secre" name="turno_id_secre">
+                                                                    <option value="">Seleccionar</option>
+                                                                    @foreach($turnos as $tur)
+                                                                    <option value="{{ $tur->id }}">{{ $tur->descripcion }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-3">Paralelo</label>
+                                                            <div class="col-md-6">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="paralelo_secre" name="paralelo_secre">
+                                                                    <option value="">Seleccionar</option>
+                                                                <option value="A">A</option>
+                                                                <option value="B">B</option>
+                                                                <option value="C">C</option>
+                                                                <option value="D">D</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-5">Gesti&oacute;n</label>
+                                                            <div class="col-md-7">
+                                                                <input type="text" class="form-control" id="gestion_secre" name="gestion_secre" value="">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-1 col-md-12">
+                                                        <button type="button" class="btn btn-danger" onclick="cerrar_secre();">X</button>
+                                                    </div>
+                                                </div>
+                                                <!--/row-->
+                                                <!--/row-->
+                                                <div class="row" id="auxiliar" style="display:none;">
+                                                    <div class="col-lg-3 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-3">Carrera</label>
+                                                            <div class="col-md-9">
+                                                                <input type="text" class="form-control" id="carrera_id_auxi" name="carrera_id_auxi" value="Auxiliar Administrativo Financiero">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-3">Turno</label>
+                                                            <div class="col-md-7">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="turno_id_auxi" name="turno_id_auxi">
+                                                                    <option value="">Seleccionar</option>
+                                                                    @foreach($turnos as $tur)
+                                                                    <option value="{{ $tur->id }}">{{ $tur->descripcion }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-3">Paralelo</label>
+                                                            <div class="col-md-6">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="paralelo_auxi" name="paralelo_auxi">
+                                                                    <option value="">Seleccionar</option>
+                                                                <option value="A">A</option>
+                                                                <option value="B">B</option>
+                                                                <option value="C">C</option>
+                                                                <option value="D">D</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-5">Gesti&oacute;n</label>
+                                                            <div class="col-md-7">
+                                                                <input type="text" class="form-control" id="gestion_auxi" name="gestion_auxi" value="">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-1 col-md-12">
+                                                        <button type="button" class="btn btn-danger" onclick="cerrar_auxi();">X</button>
                                                     </div>
                                                 </div>
                                                 <!--/row-->
@@ -388,7 +484,7 @@
                                                 <div class="card">
                                                     <div class="card-body">
                                                         <div class="table-responsive">
-                                                            <table class="table no-wrap">
+                                                            <table class="table no-wrap" id="valor1_1">
                                                                 <thead>
                                                                     <tr>
                                                                         <th>#</th>
@@ -426,7 +522,7 @@
                                                 <div class="card">
                                                     <div class="card-body">
                                                         <div class="table-responsive">
-                                                            <table class="table no-wrap">
+                                                            <table class="table no-wrap" id="valor2_2">
                                                                 <thead>
                                                                     <tr>
                                                                         <th>#</th>
@@ -464,7 +560,7 @@
                                                 <div class="card">
                                                     <div class="card-body">
                                                         <div class="table-responsive">
-                                                            <table class="table no-wrap">
+                                                            <table class="table no-wrap" id="valor3_3">
                                                                 <thead>
                                                                     <tr>
                                                                         <th>#</th>
@@ -494,9 +590,9 @@
                             <div class="col-md-6">
                             <button type="submit" class="btn waves-effect waves-light btn-block btn-success">Guardar</button>
                             </div>
-                            <!-- <div class="col-md-6">
+                            <div class="col-md-6">
                             <button type="button" class="btn waves-effect waves-light btn-block btn-inverse">Cancelar</button>
-                            </div> -->
+                            </div>
                         </div>
 
                     </div>
@@ -520,6 +616,64 @@
                 $('#mostrar_ocultar').hide('slow');
             }
     });
+</script>
+<script>
+    $('#carnet').on('change', function(e){
+            var carnet = e.target.value;
+            $.ajax({
+            type:'GET',
+            url:"{{ url('Inscripcion/busca_ci') }}",
+            data: {
+                ci : carnet
+            },
+            success:function(data){
+                $('#expedido').val(data.expedido);
+                $('#apellido_paterno').val(data.apellido_paterno);
+                $('#apellido_materno').val(data.apellido_materno);
+                $('#nombres').val(data.nombres);
+                $('#fecha_nacimiento').val(data.fecha_nacimiento);
+                $('#email').val(data.email);
+                $('#direccion').val(data.direccion);
+                $('#telefono_celular').val(data.telefono_celular);
+                $('#sexo').val(data.sexo);
+                $('#trabaja').val(data.trabaja);
+                $('#empresa').val(data.empresa);
+                $('#direccion_empresa').val(data.direccion_empresa);
+                $('#telefono_empresa').val(data.telefono_empresa);
+                $('#fax').val(data.fax);
+                $('#email_empresa').val(data.email_empresa);
+                $('#nombre_padre').val(data.nombre_padre);
+                $('#celular_padre').val(data.celular_padre);
+                $('#nombre_madre').val(data.nombre_madre);
+                $('#celular_madre').val(data.celular_madre);
+                $('#nombre_tutor').val(data.nombre_tutor);
+                $('#telefono_tutor').val(data.telefono_tutor);
+                $('#nombre_esposo').val(data.nombre_esposo);
+                $('#telefono_esposo').val(data.telefono_esposo);
+            }
+        });
+           
+    });
+</script>
+
+<script>
+    $('#carrera_id').on('change', function(e){
+            var carrera = e.target.value;
+            if (carrera == '1') {
+                $('#secre').show('slow');//para visualizar las asignaturas
+                $('#auxiliar').show('slow');//para visualizar las asignaturas
+            }
+    });
+
+    function cerrar_secre(){
+        $('#secre').hide('slow');//para visualizar las asignaturas
+        $("#gestion_secre").attr('value', '');
+    }
+
+    function cerrar_auxi(){
+        $('#auxiliar').hide('slow');//para visualizar las asignaturas
+        $("#gestion_auxi").attr('value', '');
+    }
 </script>
 
 <script type="text/javascript">
@@ -564,20 +718,20 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-
-    function limpiarCampos1(){
-        $("#mostrar_asig1").val('');
-        $("#mostrar_asig2").val('');
-    }
  
     // al elegir una Carrera, se ira a consultar por las Asignaturas que tiene que tomar en ese "SEMESTRE O AÑO".
     // en caso que sea "Contaduría General", se retorna las asignaturas de "Secretariado Administrativo" y de "Auxiliar Administrativo Financiero"
     function ver(){
 
         var asig = $('#carrera_id').val();
-        $("#mostrar_asig1").val();
-        $("#mostrar_asig2").val();
-        $("#mostrar_asig3").val();  
+        var table1 = document.getElementById('valor1');
+        table1.innerHTML = '';
+
+        var table2 = document.getElementById('valor2');
+        table2.innerHTML = '';
+
+        var table3 = document.getElementById('valor3');
+        table3.innerHTML = '';
 
         if (asig == '1') {
             $('#mostrar_asig1').show('slow');//para visualizar las asignaturas
@@ -647,6 +801,8 @@
                 }
             });
         }else{
+            cerrar_secre();
+            cerrar_auxi();
             $('#mostrar_asig1').show('slow');//para visualizar las asignaturas
             $('#mostrar_asig2').hide('slow');//para no mostrar las asignaturas
             $('#mostrar_asig3').hide('slow');//para no mostrar las asignaturas

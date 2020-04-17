@@ -8,7 +8,7 @@ use App\Carrera;
 use App\Asignatura;
 use App\Turno;
 use App\Persona;
-use App\Kardex;
+use App\Kardexes;
 use DB;
 
 class InscripcionController extends Controller
@@ -17,8 +17,20 @@ class InscripcionController extends Controller
     {
         $carreras = Carrera::where('estado',1)->get();
         $turnos = Turno::where('borrado', NULL)->get();
+        $fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
+		$year = $fecha->format('Y');//obtenes solo el año actual
         // dd($turnos);
-        return view('inscripcion.inscripcion', compact('carreras', 'turnos'));    
+        return view('inscripcion.inscripcion', compact('carreras', 'turnos', 'year'));    
+    }
+
+    public function busca_ci(Request $request)
+    {
+    	$carnet = $request->ci;//buscar el carnet de identidad de una persona
+    	$persona_id = Persona::where("borrado", NULL)
+                    ->where('carnet', $carnet)
+                    ->get();
+    	$per = Persona::find($persona_id[0]->id);
+        return response()->json($per);
     }
 
     public function busca_asignatura1(Request $request){
@@ -106,14 +118,56 @@ class InscripcionController extends Controller
     	return response()->json($carre);
     }
 
+    public function store(Request $request)
+    {
+    	$carnet = $request->carnet;
+    	$persona_id = Persona::where("borrado", NULL)
+                    ->where('carnet', $carnet)
+                    ->get();
+        if ($persona_id[0]->nombres) {
+        	echo 'si';
+        } else {
+        	// INGRESAR AL ALUMNO NUEVO SI NO SE ENCUENTRA REGISTRADO
+        	$persona = new Persona();
+	        $persona->apellido_paterno  = $request->apellido_paterno;
+	        $persona->apellido_materno  = $request->apellido_materno;
+	        $persona->nombres           = $request->nombres;
+	        $persona->carnet            = $request->carnet;
+	        $persona->expedido          = $request->expedido;
+	        $persona->fecha_nacimiento  = $request->fecha_nacimiento;
+	        $persona->sexo              = $request->sexo;
+	        $persona->telefono_celular  = $request->telefono_celular;
+	        $persona->email             = $request->email;
+	        $persona->trabaja           = $request->trabaja;
+	        $persona->empresa           = $request->empresa;
+	        $persona->direccion_empresa = $request->direccion_empresa;
+	        $persona->telefono_empresa  = $request->telefono_empresa;
+	        $persona->nombre_padre      = $request->nombre_padre;
+	        $persona->celular_padre     = $request->celular_padre;
+	        $persona->nombre_madre      = $request->nombre_madre;
+	        $persona->celular_madre     = $request->celular_madre;
+	        $persona->nombre_tutor      = $request->nombre_tutor;
+	        $persona->telefono_tutor    = $request->telefono_tutor;
+	        $persona->nombre_esposo     = $request->nombre_esposo;
+	        $persona->telefono_esposo   = $request->telefono_esposo;
+	        $persona->save();
+
+	        // INGRESAR LOS DATOS A KARDEX
+	        $persona = new kardexes();
+
+        }
+       
+    }
+
     public function lista()
     {
-        return view('inscripcion.lista');
+    	$personas = Persona::all();
+        return view('inscripcion.lista' , compact('personas'));
     }
 
     public function ajax_datos()
     {
-        return datatables()->eloquent(Kardex::query())->toJson();
+        return datatables()->eloquent(Persona::query())->toJson();
     }
 
 
@@ -125,13 +179,13 @@ class InscripcionController extends Controller
     	$id = $request->id;//obtenes el id de la asignatura seleccioanda en la vista
     	$persona = Persona::find($id);
     	// $carreras = Carrera::where('estado',1)->get();
-    	$carreras = DB::table('kardex')
+    	$carreras = DB::table('kardexes')
 				      ->select(
 				        'kardex.carrera_id',
 				        'carreras.nombre',
 				        'carreras.gestion'
 				      )
-				      ->join('carreras', 'kardex.carrera_id','=','carreras.id')
+				      ->join('carreras', 'kardexes.carrera_id','=','carreras.id')
 				      ->where('carreras.gestion',$year)
 				      ->distinct()->get();
         $turnos = Turno::where('borrado', NULL)->get();
@@ -147,7 +201,7 @@ class InscripcionController extends Controller
 		$carr = $request->id_asignatu;//obtenes el id de la carrera seleccioanda en la vista
 		
 		//obtenemos todas las asignaturas que no estan aprobadas segun la carrera seleccionada
-    	$asignaturas = DB::table('kardex')
+    	$asignaturas = DB::table('kardexes')
 				      ->select('*')
 				      ->where('carrera_id','=',$carr)
 				      ->where('persona_id','=',$per)
@@ -171,7 +225,7 @@ class InscripcionController extends Controller
 				if (!empty($pre_asig[$key1]->prerequisito_id)){
 					$id2 = $pre_asig[$key1]->prerequisito_id;
 
-					$asigna = DB::table('kardex')
+					$asigna = DB::table('kardexes')
 				      ->select('*')
 				      ->where('asignatura_id',$id2)
 				      ->where('persona_id','=',$per)
