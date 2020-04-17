@@ -20,7 +20,6 @@
             {{ $asignatura->asignatura->codigo_asignatura }}
             {{ $asignatura->asignatura->nombre_asignatura }}
         </div>
-        <hr>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover">
@@ -47,13 +46,13 @@
                                 <td><input size="10" min="0" max="{{ $asignatura->nota_primer_parcial }}" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-parcial="{{ $nota->nota_primer_parcial }}" type="number" id="parcial-{{ $nota->id }}" name="parcial-{{ $nota->id }}" value="{{ $nota->nota_primer_parcial }}" step="any"></td>
                                 <td><input size="10" min="0" max="{{ $asignatura->nota_examen_final }}" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-final="{{ $nota->nota_examen_final }}" type="number" id="final-{{ $nota->id }}" name="final-{{ $nota->id }}" value="{{ $nota->nota_examen_final }}" step="any"></td>
                                 <td id="totalsuma{{ $nota->id }}">{{ $nota->nota_total }}</td>
+                                                                
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
-        <hr>
         <div class="alert" id="message" style="display: none"></div>
         
     </div>
@@ -66,6 +65,7 @@
         <input type="submit" name="upload" id="upload" class="btn btn-rounded btn-success float-lg-right" value="Importar">
     </form>
     <a class="btn btn-rounded btn-success float-lg-left" href="{{ url('nota/exportarexcel/'.$asignatura->id) }}">Exportar</a> 
+    <a class="btn btn-rounded btn-danger float-lg-right" href="{{ url('nota/segundoTurno/'.$asignatura->id) }}">Segundo Turno</a> 
 </div>
 
 @endsection
