@@ -153,6 +153,21 @@ class InscripcionController extends Controller
 				$kardex->aprobado = 'No';
 				$kardex->fecha_registro = $fecha_registro;
 				$kardex->save();
+
+				//INSERTAR A LA TABLA DE INSCRIPCIONES TODAS LAS ASIGNATURAS QUE NO TIENEN PREREQUISITOS
+				$pre_requisitos = Prerequisito::where("sigla", NULL)
+	                       ->where('asignatura_id', $asignaturas[$key]->id)
+	                       ->get();
+	            if (!empty($pre_requisitos[0]->id)) {
+	            	$inscripcion = new Inscripcion();
+					$inscripcion->asignatura_id = $asignaturas[$key]->id;
+					$inscripcion->turno_id = $request->turno_id;
+					$inscripcion->persona_id = $persona_id1;
+					$inscripcion->paralelo = $request->paralelo;
+					$inscripcion->gestion = $asignaturas[$key]->gestion;
+					$inscripcion->fecha_inscripcion = $fecha_registro;
+					$inscripcion->save();
+	            }
 	        }
 
 	        // INGRESAR LOS DATOS A KARDEX DE LA CARRERA QUE SECRETARIADO
