@@ -13,10 +13,12 @@ class Prerequisito extends Model
         'borrado',
     ];
 
-    // public function asignatura()
-    // {
-    //     return $this->belongsTo('App\Asignatura');
-    // }
+    public function asignatura()
+    {
+        return $this->belongsTo('App\Asignatura');
+    }
+    
+    
 
 
 }

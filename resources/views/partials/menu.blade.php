@@ -36,6 +36,9 @@
                 <li>
                     <a href="{{ url('nota/listado') }}"><i class="mdi mdi-note-text"></i><span class="hide-menu">Asignatura</span></a>
                 </li>
+                <li>
+                    <a href="{{ url('Inscripcion/inscripcion') }}"><i class="mdi mdi-note-text"></i><span class="hide-menu">Inscripciones</span></a>
+                </li>
             </ul>
         </nav>
         <!-- End Sidebar navigation -->
