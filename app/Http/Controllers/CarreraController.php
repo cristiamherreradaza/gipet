@@ -76,7 +76,12 @@ class CarreraController extends Controller
                     ->where('anio_vigente', $request->gestion)
                     ->get();
         // dd($request->input());
-        return view('carrera.ajax_lista_asignaturas', compact('asignaturas', 'nombre_carrera'));
+        return view('carrera.ajax_lista_asignaturas', compact('asignaturas', 'nombre_carrera', 'carreras'));
         // return response()->json(['mensaje'=>'Holas desde Ajax']);
+    }
+
+    public function guarda(Request $request)
+    {
+        
     }
 }

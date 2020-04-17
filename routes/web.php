@@ -105,6 +105,7 @@ Route::get('Inscripcion/asignaturas_a_tomar', 'InscripcionController@asignaturas
 // ADMINISTRACION
 Route::get('Carrera/listado', 'CarreraController@listado');
 Route::get('Carrera/ajax_lista_asignaturas', 'CarreraController@ajax_lista_asignaturas');
+Route::post('Carrera/guarda', 'CarreraController@guarda');
 // Route::get('Carrera/ajax_lista_asignaturas', 'CarreraController@ajax_lista_asignaturas');
 // Route::post('Carrera/listado', 'CarreraController@listado');
 Route::get('Asignatura/listado_malla/{carrera_id}', 'AsignaturaController@listado_malla');
