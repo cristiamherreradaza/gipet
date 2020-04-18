@@ -15,4 +15,30 @@ class AsignaturaController extends Controller
         // dd($carreras[0]->nombre);
         return view('asignatura.listado_malla', compact('asignaturas'));
     }
+
+    public function guarda(Request $request)
+    {
+        // $input = $request->all();
+        // dd($request->codigo_asignatura);
+        $asignatura = Asignatura::find($request->asignatura_id);
+        $asignatura->codigo_asignatura = $request->codigo_asignatura;
+        $asignatura->nombre_asignatura = $request->nombre_asignatura;
+        $asignatura->orden_impresion   = $request->orden_impresion;
+        $asignatura->semestre          = $request->semestre;
+        $asignatura->nivel             = $request->nivel;
+        $asignatura->carrera_id        = $request->carrera_id;
+        $asignatura->gestion           = $request->gestion;
+        $asignatura->carga_horaria     = $request->carga_horaria;
+        $asignatura->teorico           = $request->teorico;
+        $asignatura->practico          = $request->practico;
+        if ($asignatura->save()) {
+            return response()->json([
+                'sw' => 1,
+            ]);
+        } else {
+            return response()->json([
+                'sw' => 0,
+            ]);
+        }
+    }
 }

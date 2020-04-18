@@ -50,6 +50,7 @@
         $.each(asignaturas, function(key, element){
             if(element['id']==asignatura_id)
             {
+                $("#asignatura_id").val(element['id']);
                 $("#codigo_asignatura").val(element['codigo_asignatura']);
                 $("#nombre_asignatura").val(element['nombre_asignatura']);
                 $("#orden_impresion").val(element['orden_impresion']);
@@ -60,6 +61,7 @@
                 $("#carga_horaria").val(element['carga_horaria']);
                 $("#teorico").val(element['teorico']);
                 $("#practico").val(element['practico']);
+                $("#anio_vigente").val(element['anio_vigente']);
                 // console.log(element['nombre_asignatura']);
             }
         });

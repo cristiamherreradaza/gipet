@@ -64,24 +64,20 @@ class CarreraController extends Controller
     public function ajax_lista_asignaturas(Request $request)
     {
         // dd($request->carrera_id);
-        $gestion = $request->gestion;
+        $gestion = $request->c_gestion;
         $carreras = Carrera::where("borrado", NULL)->get();
         $datos_carrera = Carrera::where("borrado", NULL)
-                    ->where('id', $request->carrera_id)
+                    ->where('id', $request->c_carrera_id)
                     ->first();
         $nombre_carrera = $datos_carrera->nombre;
 
         $asignaturas = Asignatura::where("borrado", NULL)
                     ->where('carrera_id', $datos_carrera->id)
-                    ->where('anio_vigente', $request->gestion)
+                    ->where('anio_vigente', $request->c_gestion)
                     ->get();
         // dd($request->input());
         return view('carrera.ajax_lista_asignaturas', compact('asignaturas', 'nombre_carrera', 'carreras'));
         // return response()->json(['mensaje'=>'Holas desde Ajax']);
     }
 
-    public function guarda(Request $request)
-    {
-        
-    }
 }
