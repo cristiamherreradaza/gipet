@@ -1,6 +1,6 @@
 <div class="card card-outline-info">                                
     <div class="card-header">
-        <h4 class="mb-0 text-white">ASIGNATURAS - ({{ $nombre_carrera }})</h4>
+        <h4 class="mb-0 text-white">ASIGNATURAS - ({{ $nombre_carrera }}) &nbsp;&nbsp;<button type="button" class="btn waves-effect waves-light btn-sm btn-warning" onclick="nuevo_modal()"><i class="fas fa-plus"></i> &nbsp; NUEVA MATERIA</button></h4>
     </div>
     <div class="table-responsive m-t-40">
         @if ($asignaturas)
@@ -43,6 +43,22 @@
     $(function () {
         $('#tabla-ajax_asignaturas').DataTable();
     });
+
+    function nuevo_modal()
+    {
+        $("#modal_asignaturas").modal('show');        
+        $("#asignatura_id").val("");
+        $("#codigo_asignatura").val("");
+        $("#nombre_asignatura").val("");
+        $("#orden_impresion").val("");
+        $("#semestre").val("");
+        $("#nivel").val("");
+        $("#gestion").val("");
+        $("#carga_horaria").val("");
+        $("#teorico").val("");
+        $("#practico").val("");
+        $("#anio_vigente").val("");
+    }
 
     function muestra_modal(asignatura_id)
     {

@@ -18,9 +18,11 @@ class AsignaturaController extends Controller
 
     public function guarda(Request $request)
     {
-        // $input = $request->all();
-        // dd($request->codigo_asignatura);
-        $asignatura = Asignatura::find($request->asignatura_id);
+        if ($request->asignatura_id != "") {
+            $asignatura = Asignatura::find($request->asignatura_id);
+        } else {
+        	$asignatura = new Asignatura();
+        }
         $asignatura->codigo_asignatura = $request->codigo_asignatura;
         $asignatura->nombre_asignatura = $request->nombre_asignatura;
         $asignatura->orden_impresion   = $request->orden_impresion;
