@@ -350,7 +350,7 @@
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-3">Carrera</label>
                                                             <div class="col-md-9">
-                                                                <input type="text" class="form-control" id="carrera_id_secre" name="carrera_id_secre" value="Secretariado Administrativo">
+                                                                <input type="text" class="form-control" id="carrera_id_secre" name="carrera_id_secre" readonly value="Secretariado Administrativo">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -400,7 +400,7 @@
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-3">Carrera</label>
                                                             <div class="col-md-9">
-                                                                <input type="text" class="form-control" id="carrera_id_auxi" name="carrera_id_auxi" value="Auxiliar Administrativo Financiero">
+                                                                <input type="text" class="form-control" id="carrera_id_auxi" name="carrera_id_auxi" readonly value="Auxiliar Administrativo Financiero">
                                                             </div>
                                                         </div>
                                                     </div>

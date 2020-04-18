@@ -8,7 +8,8 @@ use App\Carrera;
 use App\Asignatura;
 use App\Turno;
 use App\Persona;
-use App\Kardexes;
+use App\Kardex;
+use App\Prerequisito;
 use DB;
 
 class InscripcionController extends Controller
@@ -33,7 +34,8 @@ class InscripcionController extends Controller
         return response()->json($per);
     }
 
-    public function busca_asignatura1(Request $request){
+    public function busca_asignatura1(Request $request)
+    {
     	$fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
 		$hoy = $fecha->format('Y');//obtenes solo el año actual
     	$asig = $request->asignatura;//obtenes el id de la asignatura seleccioanda en la vista
@@ -60,7 +62,8 @@ class InscripcionController extends Controller
     	return response()->json($contabilidad);
     }
 
-    public function contabilidad(Request $request){
+    public function contabilidad(Request $request)
+    {
     	$fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
 		$hoy = $fecha->format('Y');//obtenes solo el año actual
     	$asig = $request->asignatura;//obtenes el id de la asignatura seleccioanda en la vista
@@ -73,7 +76,8 @@ class InscripcionController extends Controller
     	return response()->json($contabilidad);
     }
 
-    public function secretariado(Request $request){
+    public function secretariado(Request $request)
+    {
     	$fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
 		$hoy = $fecha->format('Y');//obtenes solo el año actual
 		$secretariado = Asignatura::where("borrado",NULL)
@@ -85,7 +89,8 @@ class InscripcionController extends Controller
     	return response()->json($secretariado);
     }
 
-    public function auxiliar(Request $request){
+    public function auxiliar(Request $request)
+    {
     	$fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
 		$hoy = $fecha->format('Y');//obtenes solo el año actual
 		$auxiliar 	  = Asignatura::where("borrado",NULL)
@@ -97,7 +102,8 @@ class InscripcionController extends Controller
     	return response()->json($auxiliar);
     }
 
-    public function busca_asignatura(Request $request){
+    public function busca_asignatura(Request $request)
+    {
     	$fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
 		$hoy = $fecha->format('Y');//obtenes solo el año actual
     	$asig = $request->asignatura;//obtenes el id de la asignatura seleccioanda en la vista
@@ -110,7 +116,8 @@ class InscripcionController extends Controller
     	return response()->json($asignad);
     }
 
-    public function busca_carrera(Request $request){
+    public function busca_carrera(Request $request)
+    {
     	$asig = $request->id;//obtenes el id de la asignatura seleccioanda en la vista
 		$carre = Carrera::where("borrado",NULL)
 					    ->where('id',$asig)
@@ -120,14 +127,98 @@ class InscripcionController extends Controller
 
     public function store(Request $request)
     {
+    	$fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
+    	$fecha_registro = $fecha->format('Y-m-d H:i:s');
+		$year = $fecha->format('Y');//obtenes solo el año actual
     	$carnet = $request->carnet;
     	$persona_id = Persona::where("borrado", NULL)
                     ->where('carnet', $carnet)
                     ->get();
-        if ($persona_id[0]->nombres) {
-        	echo 'si';
+        if (!empty($persona_id[0]->nombres)) {
+
+        	// INGRESAR LOS DATOS A KARDEX DE LA CARRERA QUE TOMARA
+	        $persona_id1 = $persona_id[0]->id;
+	        $asignaturas = Asignatura::where("borrado", NULL)
+	                       ->where('carrera_id', $request->carrera_id)
+	                       ->where('anio_vigente', $year)
+	                       ->get();
+	        foreach ($asignaturas as $key => $valor1) {
+	        	$kardex = new kardex();
+		        $kardex->persona_id = $persona_id1;
+				$kardex->asignatura_id = $asignaturas[$key]->id;
+				$kardex->carrera_id = $request->carrera_id;
+				$kardex->turno_id = $request->turno_id;
+				$kardex->paralelo = $request->paralelo;
+				$kardex->gestion = $asignaturas[$key]->gestion;
+				$kardex->aprobado = 'No';
+				$kardex->fecha_registro = $fecha_registro;
+				$kardex->save();
+
+				//INSERTAR A LA TABLA DE INSCRIPCIONES TODAS LAS ASIGNATURAS QUE NO TIENEN PREREQUISITOS
+				$pre_requisitos = Prerequisito::where("sigla", NULL)
+	                       ->where('asignatura_id', $asignaturas[$key]->id)
+	                       ->get();
+	            if (!empty($pre_requisitos[0]->id)) {
+	            	$inscripcion = new Inscripcion();
+					$inscripcion->asignatura_id = $asignaturas[$key]->id;
+					$inscripcion->turno_id = $request->turno_id;
+					$inscripcion->persona_id = $persona_id1;
+					$inscripcion->paralelo = $request->paralelo;
+					$inscripcion->gestion = $asignaturas[$key]->gestion;
+					$inscripcion->fecha_inscripcion = $fecha_registro;
+					$inscripcion->save();
+	            }
+	        }
+
+	        // INGRESAR LOS DATOS A KARDEX DE LA CARRERA QUE SECRETARIADO
+	        if (!empty($request->gestion_secre)) {
+	        	$asignaturas_secre = Asignatura::where("borrado", NULL)
+	                       ->where('carrera_id', '2')
+	                       ->where('anio_vigente', $year)
+	                       ->get();
+	            if (!empty($asignaturas_secre)) {
+	            	foreach ($asignaturas_secre as $keys => $valors) {
+		        	$kardex = new kardex();
+			        $kardex->persona_id = $persona_id1;
+					$kardex->asignatura_id = $asignaturas_secre[$keys]->id;
+					$kardex->carrera_id = '2';
+					$kardex->turno_id = $request->turno_id_secre;
+					$kardex->paralelo = $request->paralelo_secre;
+					$kardex->gestion = $asignaturas_secre[$keys]->gestion;
+					$kardex->aprobado = 'No';
+					$kardex->fecha_registro = $fecha_registro;
+					$kardex->save();
+		        	}
+	            }
+	            
+	        }
+
+	        // INGRESAR LOS DATOS A KARDEX DE LA CARRERA QUE AUXILIAR
+	        if (!empty($request->gestion_auxi)) {
+	        	$asignaturas_auxi = Asignatura::where("borrado", NULL)
+	                       ->where('carrera_id', '3')
+	                       ->where('anio_vigente', $year)
+	                       ->get();
+	            if (!empty($asignaturas_auxi)) {
+	            	foreach ($asignaturas_auxi as $keya => $valora) {
+		        	$kardex = new kardex();
+			        $kardex->persona_id = $persona_id1;
+					$kardex->asignatura_id = $asignaturas_auxi[$keya]->id;
+					$kardex->carrera_id = '3';
+					$kardex->turno_id = $request->turno_id_auxi;
+					$kardex->paralelo = $request->paralelo_auxi;
+					$kardex->gestion = $asignaturas_auxi[$keya]->gestion;
+					$kardex->aprobado = 'No';
+					$kardex->fecha_registro = $fecha_registro;
+					$kardex->save();
+		        	}
+	            }
+	            
+	        }
+
         } else {
-        	// INGRESAR AL ALUMNO NUEVO SI NO SE ENCUENTRA REGISTRADO
+        	// echo 'no';
+        	//INGRESAR AL ALUMNO NUEVO SI NO SE ENCUENTRA REGISTRADO
         	$persona = new Persona();
 	        $persona->apellido_paterno  = $request->apellido_paterno;
 	        $persona->apellido_materno  = $request->apellido_materno;
@@ -138,10 +229,12 @@ class InscripcionController extends Controller
 	        $persona->sexo              = $request->sexo;
 	        $persona->telefono_celular  = $request->telefono_celular;
 	        $persona->email             = $request->email;
+	        $persona->direccion         = $request->direccion;
 	        $persona->trabaja           = $request->trabaja;
 	        $persona->empresa           = $request->empresa;
 	        $persona->direccion_empresa = $request->direccion_empresa;
 	        $persona->telefono_empresa  = $request->telefono_empresa;
+	        $persona->email_empresa     = $request->email_empresa;
 	        $persona->nombre_padre      = $request->nombre_padre;
 	        $persona->celular_padre     = $request->celular_padre;
 	        $persona->nombre_madre      = $request->nombre_madre;
@@ -151,11 +244,74 @@ class InscripcionController extends Controller
 	        $persona->nombre_esposo     = $request->nombre_esposo;
 	        $persona->telefono_esposo   = $request->telefono_esposo;
 	        $persona->save();
+	        
 
 	        // INGRESAR LOS DATOS A KARDEX
-	        $persona = new kardexes();
+	        $persona_id2 = $persona->id;
+	        $asignaturas = Asignatura::where("borrado", NULL)
+	                       ->where('carrera_id', $request->carrera_id)
+	                       ->where('anio_vigente', $year)
+	                       ->get();
+	        foreach ($asignaturas as $key => $valor) {
+	        	$kardex = new kardex();
+		        $kardex->persona_id = $persona_id2;
+				$kardex->asignatura_id = $asignaturas[$key]->id;
+				$kardex->carrera_id = $request->carrera_id;
+				$kardex->turno_id = $request->turno_id;
+				$kardex->paralelo = $request->paralelo;
+				$kardex->gestion = $asignaturas[$key]->gestion;
+				$kardex->aprobado = 'No';
+				$kardex->fecha_registro = $fecha_registro;
+				$kardex->save();
+	        }
+
+	         // INGRESAR LOS DATOS A KARDEX DE LA CARRERA QUE SECRETARIADO
+	        if (!empty($request->gestion_secre)) {
+	        	$asignaturas_secre = Asignatura::where("borrado", NULL)
+	                       ->where('carrera_id', '2')
+	                       ->where('anio_vigente', $year)
+	                       ->get();
+	            if (!empty($asignaturas_secre)) {
+		            foreach ($asignaturas_secre as $keys => $valors) {
+		        	$kardex = new kardex();
+			        $kardex->persona_id = $persona_id2;
+					$kardex->asignatura_id = $asignaturas_secre[$keys]->id;
+					$kardex->carrera_id = '2';
+					$kardex->turno_id = $request->turno_id_secre;
+					$kardex->paralelo = $request->paralelo_secre;
+					$kardex->gestion = $asignaturas_secre[$keys]->gestion;
+					$kardex->aprobado = 'No';
+					$kardex->fecha_registro = $fecha_registro;
+					$kardex->save();
+		        	}
+		       	}
+	        }
+
+	        // INGRESAR LOS DATOS A KARDEX DE LA CARRERA QUE AUXILIAR
+	        if (!empty($request->gestion_auxi)) {
+	        	$asignaturas_auxi = Asignatura::where("borrado", NULL)
+	                       ->where('carrera_id', '3')
+	                       ->where('anio_vigente', $year)
+	                       ->get();
+	            if (!empty($asignaturas_auxi)) {
+		            foreach ($asignaturas_auxi as $keya => $valora) {
+		        	$kardex = new kardex();
+			        $kardex->persona_id = $persona_id2;
+					$kardex->asignatura_id = $asignaturas_auxi[$keya]->id;
+					$kardex->carrera_id = '3';
+					$kardex->turno_id = $request->turno_id_auxi;
+					$kardex->paralelo = $request->paralelo_auxi;
+					$kardex->gestion = $asignaturas_auxi[$keya]->gestion;
+					$kardex->aprobado = 'No';
+					$kardex->fecha_registro = $fecha_registro;
+					$kardex->save();
+		        	}
+		        }
+	        }
 
         }
+
+        return redirect('Inscripcion/lista');
        
     }
 
@@ -171,7 +327,8 @@ class InscripcionController extends Controller
     }
 
 
-    public function re_inscripcion(Request $request){
+    public function re_inscripcion(Request $request)
+    {
 
     	$fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
 		$year = $fecha->format('Y');//obtenes solo el año actual
@@ -195,7 +352,8 @@ class InscripcionController extends Controller
     }
 
 
-    public function asignaturas_a_tomar(Request $request){
+    public function asignaturas_a_tomar(Request $request)
+    {
 
 		$per = $request->id_persona;//obtenes el id de la persona seleccioanda en la vista
 		$carr = $request->id_asignatu;//obtenes el id de la carrera seleccioanda en la vista

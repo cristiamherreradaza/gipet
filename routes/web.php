@@ -64,7 +64,9 @@ Route::get('nota/show', 'NotaController@show');
 Route::get('nota/detalle', 'NotaController@detalle');
 Route::get('nota/show2', 'NotaController@show2');
 Route::get('nota/detalle2', 'NotaController@detalle2');
-//Route::get('notaspropuesta/listado', 'NotasPropuestaController@listado');
+
+Route::get('nota/segundoTurno/{id}', 'NotaController@segundoTurno');
+Route::get('nota/segundoTurnoActualizar', 'NotaController@segundoTurnoActualizar');
 
 //NOTAS PROPUESTA
 Route::get('notaspropuesta/listado', 'NotasPropuestaController@listado');
