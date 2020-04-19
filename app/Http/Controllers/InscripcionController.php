@@ -188,6 +188,21 @@ class InscripcionController extends Controller
 					$kardex->aprobado = 'No';
 					$kardex->fecha_registro = $fecha_registro;
 					$kardex->save();
+
+						//INSERTAR A LA TABLA DE INSCRIPCIONES TODAS LAS ASIGNATURAS QUE NO TIENEN PREREQUISITOS
+						$pre_requisitos_se = Prerequisito::where("sigla", NULL)
+			                       ->where('asignatura_id', $asignaturas_secre[$keys]->id)
+			                       ->get();
+			            if (!empty($pre_requisitos_se[0]->id)) {
+			            	$inscripcion_se = new Inscripcion();
+							$inscripcion_se->asignatura_id = $asignaturas_secre[$keys]->id;
+							$inscripcion_se->turno_id = $request->turno_id_secre;
+							$inscripcion_se->persona_id = $persona_id1;
+							$inscripcion_se->paralelo = $request->paralelo_secre;
+							$inscripcion_se->gestion = $asignaturas_secre[$keys]->gestion;
+							$inscripcion_se->fecha_inscripcion = $fecha_registro;
+							$inscripcion_se->save();
+			            }
 		        	}
 	            }
 	            
@@ -211,6 +226,21 @@ class InscripcionController extends Controller
 					$kardex->aprobado = 'No';
 					$kardex->fecha_registro = $fecha_registro;
 					$kardex->save();
+
+						//INSERTAR A LA TABLA DE INSCRIPCIONES TODAS LAS ASIGNATURAS QUE NO TIENEN PREREQUISITOS
+						$pre_requisitos_au = Prerequisito::where("sigla", NULL)
+			                       ->where('asignatura_id', $asignaturas_auxi[$keya]->id)
+			                       ->get();
+			            if (!empty($pre_requisitos_au[0]->id)) {
+			            	$inscripcion_au = new Inscripcion();
+							$inscripcion_au->asignatura_id = $asignaturas_auxi[$keya]->id;
+							$inscripcion_au->turno_id = $request->turno_id_auxi;
+							$inscripcion_au->persona_id = $persona_id1;
+							$inscripcion_au->paralelo = $request->paralelo_auxi;
+							$inscripcion_au->gestion = $asignaturas_auxi[$keya]->gestion;
+							$inscripcion_au->fecha_inscripcion = $fecha_registro;
+							$inscripcion_au->save();
+			            }
 		        	}
 	            }
 	            
@@ -263,6 +293,21 @@ class InscripcionController extends Controller
 				$kardex->aprobado = 'No';
 				$kardex->fecha_registro = $fecha_registro;
 				$kardex->save();
+
+				//INSERTAR A LA TABLA DE INSCRIPCIONES TODAS LAS ASIGNATURAS QUE NO TIENEN PREREQUISITOS
+				$pre_requisitos = Prerequisito::where("sigla", NULL)
+	                       ->where('asignatura_id', $asignaturas[$key]->id)
+	                       ->get();
+	            if (!empty($pre_requisitos[0]->id)) {
+	            	$inscripcion = new Inscripcion();
+					$inscripcion->asignatura_id = $asignaturas[$key]->id;
+					$inscripcion->turno_id = $request->turno_id;
+					$inscripcion->persona_id = $persona_id2;
+					$inscripcion->paralelo = $request->paralelo;
+					$inscripcion->gestion = $asignaturas[$key]->gestion;
+					$inscripcion->fecha_inscripcion = $fecha_registro;
+					$inscripcion->save();
+	            }
 	        }
 
 	         // INGRESAR LOS DATOS A KARDEX DE LA CARRERA QUE SECRETARIADO
@@ -283,6 +328,21 @@ class InscripcionController extends Controller
 					$kardex->aprobado = 'No';
 					$kardex->fecha_registro = $fecha_registro;
 					$kardex->save();
+
+						//INSERTAR A LA TABLA DE INSCRIPCIONES TODAS LAS ASIGNATURAS QUE NO TIENEN PREREQUISITOS
+						$pre_requisitos_se = Prerequisito::where("sigla", NULL)
+			                       ->where('asignatura_id', $asignaturas_secre[$keys]->id)
+			                       ->get();
+			            if (!empty($pre_requisitos_se[0]->id)) {
+			            	$inscripcion_se = new Inscripcion();
+							$inscripcion_se->asignatura_id = $asignaturas_secre[$keys]->id;
+							$inscripcion_se->turno_id = $request->turno_id_secre;
+							$inscripcion_se->persona_id = $persona_id2;
+							$inscripcion_se->paralelo = $request->paralelo_secre;
+							$inscripcion_se->gestion = $asignaturas_secre[$keys]->gestion;
+							$inscripcion_se->fecha_inscripcion = $fecha_registro;
+							$inscripcion_se->save();
+			            }
 		        	}
 		       	}
 	        }
@@ -305,6 +365,21 @@ class InscripcionController extends Controller
 					$kardex->aprobado = 'No';
 					$kardex->fecha_registro = $fecha_registro;
 					$kardex->save();
+
+					//INSERTAR A LA TABLA DE INSCRIPCIONES TODAS LAS ASIGNATURAS QUE NO TIENEN PREREQUISITOS
+						$pre_requisitos_au = Prerequisito::where("sigla", NULL)
+			                       ->where('asignatura_id', $asignaturas_auxi[$keya]->id)
+			                       ->get();
+			            if (!empty($pre_requisitos_au[0]->id)) {
+			            	$inscripcion_au = new Inscripcion();
+							$inscripcion_au->asignatura_id = $asignaturas_auxi[$keya]->id;
+							$inscripcion_au->turno_id = $request->turno_id_auxi;
+							$inscripcion_au->persona_id = $persona_id2;
+							$inscripcion_au->paralelo = $request->paralelo_auxi;
+							$inscripcion_au->gestion = $asignaturas_auxi[$keya]->gestion;
+							$inscripcion_au->fecha_inscripcion = $fecha_registro;
+							$inscripcion_au->save();
+			            }
 		        	}
 		        }
 	        }
@@ -338,7 +413,7 @@ class InscripcionController extends Controller
     	// $carreras = Carrera::where('estado',1)->get();
     	$carreras = DB::table('kardexes')
 				      ->select(
-				        'kardex.carrera_id',
+				        'kardexes.carrera_id',
 				        'carreras.nombre',
 				        'carreras.gestion'
 				      )
@@ -356,7 +431,7 @@ class InscripcionController extends Controller
     {
 
 		$per = $request->id_persona;//obtenes el id de la persona seleccioanda en la vista
-		$carr = $request->id_asignatu;//obtenes el id de la carrera seleccioanda en la vista
+		$carr = $request->id_carre;//obtenes el id de la carrera seleccioanda en la vista
 		
 		//obtenemos todas las asignaturas que no estan aprobadas segun la carrera seleccionada
     	$asignaturas = DB::table('kardexes')
@@ -365,7 +440,7 @@ class InscripcionController extends Controller
 				      ->where('persona_id','=',$per)
 				      ->where('aprobado','No')
 				      ->distinct()->get();
-		// dd($asignaturas[0]->asignatura_id);
+		// dd($asignaturas);
 		//este foreach nos ayuda a recorrer todas las asignaturas  
 		foreach ($asignaturas as $key => $value) {
 			$id = $asignaturas[$key]->asignatura_id;
@@ -380,13 +455,13 @@ class InscripcionController extends Controller
 				//verificamos si tienen prerequisitos
 				$datos_asig = Asignatura::find($pre_asig[$key1]->asignatura_id);
 
-				if (!empty($pre_asig[$key1]->prerequisito_id)){
+				if (!empty($pre_asig[$key1]->sigla)){
 					$id2 = $pre_asig[$key1]->prerequisito_id;
 
 					$asigna = DB::table('kardexes')
 				      ->select('*')
 				      ->where('asignatura_id',$id2)
-				      ->where('persona_id','=',$per)
+				      ->where('persona_id',$per)
 				      ->distinct()->get();
 				    
 				    $datos= $asigna[0]->aprobado;

@@ -298,13 +298,13 @@ jQuery(document).ready(function() {
     function ver($id){
         $('#mostrar_asig1').show('slow');
         var id = $id;
-        var id_asignatura = $('#carrera_id').val();
+        var id_carrera = $('#carrera_id').val();
         $.ajax({
             type:'GET',
             url:"{{ url('Inscripcion/asignaturas_a_tomar') }}",
             data: {
                 id_persona : id,
-                id_asignatu : id_asignatura
+                id_carre : id_carrera
             },
             success:function(data){
 
