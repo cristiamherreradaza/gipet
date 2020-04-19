@@ -39,6 +39,26 @@ class NotaController extends Controller
         return view('nota.detalle')->with(compact('asignatura', 'notas'));
     }
 
+    public function segundoTurno($id)
+    {
+        $asignatura = NotasPropuesta::find($id);
+        $segundoTurno = Nota::where('asignatura_id', $asignatura->asignatura_id)
+                    ->where('turno_id', $asignatura->turno_id)
+                    ->where('user_id', $asignatura->user_id)
+                    ->where('paralelo', $asignatura->paralelo)
+                    ->where('gestion', $asignatura->gestion)
+                    ->whereBetween('nota_total', [30,50])
+                    ->get();
+        return view('nota.segundoTurno')->with(compact('asignatura', 'segundoTurno'));
+    }
+
+    public function segundoTurnoActualizar(Request $request)
+    {
+        $nota = Nota::find($request->id);
+        $nota->segundo_turno = $request->segundo_turno;
+        $nota->nota_total = $request->segundo_turno;
+        $nota->save();
+    }
 
 
 
