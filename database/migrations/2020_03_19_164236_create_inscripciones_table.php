@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateInscripcionsTable extends Migration
+class CreateInscripcionesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateInscripcionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('inscripcions', function (Blueprint $table) {
+        Schema::create('inscripciones', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('codigo_anterior')->nullable();
             $table->unsignedBigInteger('asignatura_id')->nullable();
@@ -38,6 +38,6 @@ class CreateInscripcionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('inscripcions');
+        Schema::dropIfExists('inscripciones');
     }
 }

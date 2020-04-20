@@ -411,13 +411,13 @@ class InscripcionController extends Controller
     	$id = $request->id;//obtenes el id de la asignatura seleccioanda en la vista
     	$persona = Persona::find($id);
     	// $carreras = Carrera::where('estado',1)->get();
-    	$carreras = DB::table('kardexes')
+    	$carreras = DB::table('kardex')
 				      ->select(
-				        'kardexes.carrera_id',
+				        'kardex.carrera_id',
 				        'carreras.nombre',
 				        'carreras.gestion'
 				      )
-				      ->join('carreras', 'kardexes.carrera_id','=','carreras.id')
+				      ->join('carreras', 'kardex.carrera_id','=','carreras.id')
 				      ->where('carreras.gestion',$year)
 				      ->distinct()->get();
         $turnos = Turno::where('borrado', NULL)->get();
@@ -434,7 +434,7 @@ class InscripcionController extends Controller
 		$carr = $request->id_carre;//obtenes el id de la carrera seleccioanda en la vista
 		
 		//obtenemos todas las asignaturas que no estan aprobadas segun la carrera seleccionada
-    	$asignaturas = DB::table('kardexes')
+    	$asignaturas = DB::table('kardex')
 				      ->select('*')
 				      ->where('carrera_id','=',$carr)
 				      ->where('persona_id','=',$per)
@@ -458,7 +458,7 @@ class InscripcionController extends Controller
 				if (!empty($pre_asig[$key1]->sigla)){
 					$id2 = $pre_asig[$key1]->prerequisito_id;
 
-					$asigna = DB::table('kardexes')
+					$asigna = DB::table('kardex')
 				      ->select('*')
 				      ->where('asignatura_id',$id2)
 				      ->where('persona_id',$per)
