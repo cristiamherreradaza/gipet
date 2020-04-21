@@ -13,7 +13,7 @@ class Nota extends Model
         'persona_id',      
         'convalidado',
         'paralelo',
-        'gestion',
+        'anio_vigente',
         'nota_asistencia',
         'nota_practicas',
         'nota_puntos_ganados',

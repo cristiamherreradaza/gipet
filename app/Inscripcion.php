@@ -17,6 +17,8 @@ class Inscripcion extends Model
         'fecha_inscripcion',
     ];
 
+
+
     public function asignatura()
     {
         return $this->belongsTo('App\Asignatura');
