@@ -256,5 +256,47 @@
         // alert('entro');
     }
 
+    function elimina_asignatura(asignatura_id, nombre)
+    {
+        Swal.fire({
+            title: 'Quieres borrar ' + nombre + '?',
+            text: "Luego no podras recuperarlo!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, estoy seguro!',
+            cancelButtonText: "Cancelar",
+        }).then((result) => {
+            if (result.value) {
+
+                $.ajax({
+                    url: "{{ url('Asignatura/eliminar') }}/"+asignatura_id,
+                    method: "GET",
+                    cache: false,
+                    success: function (data) {
+
+                        $.ajax({
+                            url: "{{ url('Carrera/ajax_lista_asignaturas') }}",
+                            method: "GET",
+                            data: {c_carrera_id: data.carrera_id, c_gestion: data.anio_vigente},
+                            cache: false,
+                            success: function (data) {
+                                $("#carga_ajax_lista_asignaturas").html(data);
+                            }
+                        });
+
+                        Swal.fire(
+                            'Excelente!',
+                            'La materia fue eliminada',
+                            'success'
+                        );
+                    }
+                });
+
+            }
+        })
+
+    }
 </script>
 @endsection

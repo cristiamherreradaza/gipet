@@ -1,6 +1,6 @@
 <div class="card card-outline-info">                                
     <div class="card-header">
-        <h4 class="mb-0 text-white">ASIGNATURAS - ({{ $nombre_carrera }}) &nbsp;&nbsp;<button type="button" class="btn waves-effect waves-light btn-sm btn-warning" onclick="nuevo_modal()"><i class="fas fa-plus"></i> &nbsp; NUEVA MATERIA</button></h4>
+        <h4 class="mb-0 text-white">ASIGNATURAS - ({{ $nombre_carrera }}) &nbsp;&nbsp;<button type="button" class="btn waves-effect waves-light btn-sm btn-warning" onclick="nuevo_modal('{{ $asignaturas[0]->carrera_id }}', '{{ $asignaturas[0]->anio_vigente }}')"><i class="fas fa-plus"></i> &nbsp; NUEVA MATERIA</button></h4>
     </div>
     <div class="table-responsive m-t-40">
         @if ($asignaturas)
@@ -20,7 +20,8 @@
                             <td>{{ $a->nombre_asignatura }}</td>
                             <td>{{ $a->semestre }}</td>
                             <td>
-                                <button type="button" class="btn btn-info" onclick="muestra_modal({{ $a->id }})"><i class="fas fa-eye"></i></button>
+                                <button type="button" class="btn btn-warning" onclick="muestra_modal({{ $a->id }})"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-danger" onclick="elimina_asignatura('{{ $a->id }}', '{{ $a->nombre_asignatura }}')"><i class="fas fa-trash"></i></button>
                             </td>
                         </tr>
                     @endforeach
@@ -44,20 +45,23 @@
         $('#tabla-ajax_asignaturas').DataTable();
     });
 
-    function nuevo_modal()
+    function nuevo_modal(carrera_id, anio_vigente)
     {
         $("#modal_asignaturas").modal('show');        
+        $("#carrera_id").val(carrera_id);
+        $("#anio_vigente").val(anio_vigente);
         $("#asignatura_id").val("");
         $("#codigo_asignatura").val("");
         $("#nombre_asignatura").val("");
         $("#orden_impresion").val("");
         $("#semestre").val("");
         $("#nivel").val("");
-        $("#gestion").val("");
+        // $("#carrera_id").val("");
+        // $("#gestion").val("");
         $("#carga_horaria").val("");
         $("#teorico").val("");
         $("#practico").val("");
-        $("#anio_vigente").val("");
+        // $("#anio_vigente").val("");
     }
 
     function muestra_modal(asignatura_id)
@@ -83,4 +87,5 @@
         });
         // console.log(asignaturas);
     }
+
 </script>

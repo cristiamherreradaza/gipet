@@ -33,14 +33,47 @@ class AsignaturaController extends Controller
         $asignatura->carga_horaria     = $request->carga_horaria;
         $asignatura->teorico           = $request->teorico;
         $asignatura->practico          = $request->practico;
+        $asignatura->anio_vigente      = $request->anio_vigente;
+
+        $sw = 0;
+
         if ($asignatura->save()) {
-            return response()->json([
-                'sw' => 1,
-            ]);
+            $sw = 1;
         } else {
-            return response()->json([
-                'sw' => 0,
-            ]);
+            $sw = 0;
         }
+
+        return response()->json([
+            'sw' => $sw,
+        ]);
+
+    }
+
+    public function eliminar(Request $request, $asignatura_id)
+    {
+        // dd($asignatura_id);
+        $hoy = date("Y-m-d H:i:s");
+
+        $asignatura = Asignatura::where("borrado", NULL)
+                    ->where('id', $asignatura_id)
+                    ->first();
+
+        $elim_asignatura = Asignatura::find($asignatura_id);
+        $elim_asignatura->borrado = $hoy;
+
+        $sw = 0;
+
+        if ($elim_asignatura->save()) {
+            $sw = 1;
+        } else {
+            $sw = 0;
+        }
+
+        return response()->json([
+            'sw' => $sw,
+            'anio_vigente' => $asignatura->anio_vigente,
+            'carrera_id' => $asignatura->carrera_id,
+        ]);
+        
     }
 }
