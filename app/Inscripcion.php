@@ -14,7 +14,10 @@ class Inscripcion extends Model
         'persona_id',
         'paralelo',
         'gestion',
-        'fecha_inscripcion',
+        'anio_vigente',
+        'nota',
+        'estado',
+        'borrado',
     ];
 
 

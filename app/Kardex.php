@@ -16,6 +16,9 @@ class Kardex extends Model
         'paralelo',
         'gestion',
         'aprobado',
+        'anio_aprobado',
+        'curricular',
+        'anio_registro',
         'estado',
         'borrado',
     ];

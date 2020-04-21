@@ -11,7 +11,7 @@ class NotasPropuesta extends Model
         'turno_id',
         'user_id',
         'paralelo',
-        'gestion',
+        'anio_vigente',
         'fecha',
         'nota_asistencia',
         'nota_practicas',
@@ -19,7 +19,7 @@ class NotasPropuesta extends Model
         'nota_primer_parcial',
         'nota_examen_final',
         'validado',
-        'registrado',
+        'vigente',
         'estado',
         'borrado',
     ];
