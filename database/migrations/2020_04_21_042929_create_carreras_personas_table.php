@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateInscripcionsTable extends Migration
+class CreateCarrerasPersonasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,16 @@ class CreateInscripcionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('inscripcions', function (Blueprint $table) {
+        Schema::create('carreras_personas', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('codigo_anterior')->nullable();
-            $table->unsignedBigInteger('asignatura_id')->nullable();
-            $table->foreign('asignatura_id')->references('id')->on('asignaturas');
-            $table->unsignedBigInteger('turno_id')->nullable();
-            $table->foreign('turno_id')->references('id')->on('turnos');
+            $table->unsignedBigInteger('carrera_id')->nullable();
+            $table->foreign('carrera_id')->references('id')->on('carreras');
             $table->unsignedBigInteger('persona_id')->nullable();
             $table->foreign('persona_id')->references('id')->on('personas');
-            $table->string('paralelo', 10)->nullable();
-            $table->string('gestion', 30)->nullable();
-            $table->dateTime('fecha_inscripcion', 0)->nullable();
+            $table->unsignedBigInteger('turno_id')->nullable();
+            $table->foreign('turno_id')->references('id')->on('turnos');
+            $table->integer('anio_vigente')->nullable();
+            $table->string('sexo', 15)->nullable();
             $table->string('estado', 15)->nullable();
             $table->datetime('borrado', 0)->nullable();
             $table->timestamps();
@@ -38,6 +36,6 @@ class CreateInscripcionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('inscripcions');
+        Schema::dropIfExists('carreras_personas');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateKardexesTable extends Migration
+class CreateInscripcionesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,22 +13,18 @@ class CreateKardexesTable extends Migration
      */
     public function up()
     {
-        Schema::create('kardexes', function (Blueprint $table) {
+        Schema::create('inscripciones', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('codigo_anterior')->nullable();
-            $table->unsignedBigInteger('persona_id')->nullable();
-            $table->foreign('persona_id')->references('id')->on('personas');
             $table->unsignedBigInteger('asignatura_id')->nullable();
             $table->foreign('asignatura_id')->references('id')->on('asignaturas');
-            $table->unsignedBigInteger('carrera_id')->nullable();
-            $table->foreign('carrera_id')->references('id')->on('carreras');
             $table->unsignedBigInteger('turno_id')->nullable();
             $table->foreign('turno_id')->references('id')->on('turnos');
+            $table->unsignedBigInteger('persona_id')->nullable();
+            $table->foreign('persona_id')->references('id')->on('personas');
             $table->string('paralelo', 10)->nullable();
             $table->string('gestion', 30)->nullable();
-            $table->string('aprobado', 10)->nullable();
-            $table->string('curricular', 10)->nullable();
-            $table->dateTime('fecha_registro', 0)->nullable();
+            $table->dateTime('fecha_inscripcion', 0)->nullable();
             $table->string('estado', 15)->nullable();
             $table->datetime('borrado', 0)->nullable();
             $table->timestamps();
@@ -42,6 +38,6 @@ class CreateKardexesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kardexes');
+        Schema::dropIfExists('inscripciones');
     }
 }

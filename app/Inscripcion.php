@@ -6,14 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Inscripcion extends Model
 {
+    protected $table = 'inscripciones';
+
     protected $fillable = [
         'asignatura_id',
         'turno_id',
         'persona_id',
         'paralelo',
         'gestion',
-        'fecha_inscripcion',
+        'anio_vigente',
+        'nota',
+        'estado',
+        'borrado',
     ];
+
+
 
     public function asignatura()
     {

@@ -62,9 +62,24 @@ class NotasPropuestaController extends Controller
         }
         else
         {
+            /*
+            switch ($validation->errors()->all()) {
+                case "The select file must be a file of type: xlsx.":
+                    $mensaje = "El archivo debe ser del tipo: xlsx.";
+                    break;
+                case "The select file field is required.":
+                    $mensaje = "Es necesario agregar un archivo excel.";
+                    break;
+                case "":
+                    $mensaje = "";
+                    break;
+            }
+            */
             //alert('mal');
+            //dd($validation->errors()->all());
             return response()->json([
                 //0
+                
                 'message' => $validation->errors()->all(),
                 'sw' => 0,
                 'class_name' => 'alert-danger'

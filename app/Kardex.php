@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Kardex extends Model
 {
+    protected $table = 'kardex';
+
     protected $fillable = [
         'persona_id',
         'asignatura_id',
@@ -14,6 +16,9 @@ class Kardex extends Model
         'paralelo',
         'gestion',
         'aprobado',
+        'anio_aprobado',
+        'curricular',
+        'anio_registro',
         'estado',
         'borrado',
     ];
