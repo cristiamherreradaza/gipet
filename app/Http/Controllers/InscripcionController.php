@@ -34,6 +34,16 @@ class InscripcionController extends Controller
         return response()->json($per);
     }
 
+    public function selecciona_asignatura()
+    {
+        $carreras = Carrera::where('estado',1)->get();
+        $turnos = Turno::where('borrado', NULL)->get();
+        $fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
+		$year = $fecha->format('Y');//obtenes solo el año actual
+        // dd($turnos);
+        return view('inscripcion.selecciona_asignatura', compact('carreras', 'turnos', 'year'));    
+    }
+
     public function busca_asignatura1(Request $request)
     {
     	$fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
