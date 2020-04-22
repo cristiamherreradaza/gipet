@@ -23,36 +23,45 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
-                            Materia: <span></span>
+                            <h5><b>Sigla: </b><span id="modal_sigla_materia"></span> &nbsp;&nbsp;&nbsp;&nbsp;<b>Nombre: </b><span id="modal_nombre_materia"></span></h5>
+                            <h5><b>Carrera: </b><span id="modal_carrera_materia"></span></h5>
                         </div>
                     </div>
-                    <form action="#" method="POST" id="formulario_modal_asignatura">
+                    <form action="#" method="POST" id="formulario_modal_asignacion">
                         @csrf
-                        <input type="hidden" name="asignatura_id" id="asignatura_id" value="">
-                        <input type="hidden" name="anio_vigente" id="anio_vigente" value="">
+                        <input type="hidden" name="asignatura_id" id="fm_asignatura_id" value="">
+                        <input type="hidden" name="user_id" id="fm_user_id" value="{{ $datos_persona->id }}">
+                        
                         <div class="row">
 
-                            <div class="col-md-5">
+                            <div class="col-md-4">
 
                                 <div class="form-group">
-                                    <label class="control-label">Carrera</label>
-                                    <select name="carrera_id" id="carrera_id" class="form-control custom-select" required>
-                                        <option value="">Seleccione</option>
-                                        {{-- @foreach ($carreras as $c) --}}
-                                            {{-- <option value="{{ $c->id }}">{{ $c->nombre }}</option> --}}
-                                        {{-- @endforeach --}}
+                                    <label class="control-label">Turno</label>
+                                    <select name="turno_id" id="turno_id" class="form-control custom-select" required>
+                                        @foreach ($turnos as $t)
+                                            <option value="{{ $t->id }}">{{ $t->descripcion }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group">
-                                    <label class="control-label">Curso</label>
-                                    <select name="gestion" id="gestion" class="form-control custom-select" >
-                                        <option value="1">Primero</option>
-                                        <option value="2">Segundo</option>
-                                        <option value="3">Tercero</option>
+                                    <label class="control-label">Paralelo</label>
+                                    <select name="paralelo" id="paralelo" class="form-control custom-select" >
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
                                     </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                            
+                                <div class="form-group">
+                                    <label class="control-label">A&ntilde;o</label>
+                                    <input type="number" name="anio_vigente" id="anio_vigente" class="form-control" value="{{ date('Y') }}">
                                 </div>
                             </div>
 
@@ -62,7 +71,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="guarda_asignatura()">GUARDA ASIGNATURA</button>
+                    <button class="btn waves-effect waves-light btn-block btn-success" onclick="guarda_asignacion()">ASIGNAR</button>
                 </div>
             </form>
 
@@ -117,7 +126,7 @@
                                         <td>{{ $a->nombre_asignatura }}</td>
                                         <td class="text-center">{{ $a->gestion }}</td>
                                         <td>
-                                            <button type="button" class="btn btn-success" onclick="asigna_materia('{{ $a->id }}', '{{ $a->nombre_asignatura }}', '{{ $a->codigo_asignatura }}')"><i
+                                            <button type="button" class="btn btn-success" onclick="asigna_materia('{{ $a->id }}', '{{ $a->nombre_asignatura }}', '{{ $a->codigo_asignatura }}', '{{ $a->carrera->nombre }}')"><i
                                                     class="fas fa-arrow-right"></i></button>
                                         </td>
                                     </tr>
@@ -154,7 +163,7 @@
                                     <td>{{ $ad->gestion }}</td>
                                     <td>
                                         <button type="button" class="btn btn-danger"
-                                            onclick="elimina_asignatura('{{ $ad->id }}', '{{ $ad->nombre_asignatura }}')"><i
+                                            onclick="elimina_asignacion('{{ $ad->id }}', '{{ $ad->asignatura->nombre_asignatura }}')"><i
                                                 class="fas fa-trash"></i></button>
                                     </td>
                                 </tr>
@@ -197,79 +206,47 @@
         $('#tabla-asignaturas-docente').DataTable();
     });
 
-    function asigna_materia(asignatura_id, nombre_asignatura, codigo_asignatura)
+    function asigna_materia(asignatura_id, nombre_asignatura, codigo_asignatura, nombre_carrera)
     {
-        console.log(nombre_asignatura);
+        $("#modal_sigla_materia").html(codigo_asignatura);
+        $("#modal_nombre_materia").html(nombre_asignatura);
+        $("#modal_carrera_materia").html(nombre_carrera);
+        $("#fm_asignatura_id").val(asignatura_id);
+        $("#modal_asigna").modal('show');
+        // console.log(nombre_asignatura);
     }
 
-
-
-
-
-
-
-
-    $('#formulario_carreras').on('submit', function (event) {
-        event.preventDefault();
-        var datos_formulario = $(this).serializeArray();
-        var carrera_id = $("#carrera_id").val();
-
+    function guarda_asignacion() {
+        formulario_asignacion = $("#formulario_modal_asignacion").serializeArray();
         $.ajax({
-            url: "{{ url('Carrera/ajax_lista_asignaturas') }}",
-            method: "GET",
-            data: datos_formulario,
-            cache: false,
-            success: function (data) {
-                $("#carga_ajax_lista_asignaturas").html(data);
-            }
-        })
-    });
-
-    function guarda_asignatura() {
-        formulario_asignatura = $("#formulario_modal_asignatura").serializeArray();
-        carrera_id            = $("#carrera_id").val();
-        gestion               = $("#anio_vigente").val();
-        console.log(gestion);
-        $.ajax({
-            url: "{{ url('Asignatura/guarda') }}",
+            url: "{{ url('User/guarda_asignacion') }}",
             method: "POST",
-            data: formulario_asignatura,
+            data: formulario_asignacion,
             cache: false,
             success: function(data)
             {
-                if (data.sw == 1) 
+                if (data.error_duplicado == 1) 
                 {
-                    $.ajax({
-                        url: "{{ url('Carrera/ajax_lista_asignaturas') }}",
-                        method: "GET",
-                        data: {c_carrera_id: carrera_id, c_gestion: gestion},
-                        cache: false,
-                        success: function (data) {
-                            $("#carga_ajax_lista_asignaturas").html(data);
-                        }
-                    });
-
                     Swal.fire(
-                        'Excelente!',
-                        'Los datos fueron guadados',
-                        'success'
+                        'Alerta!',
+                        'La materia ya esta asignada al docente',
+                        'warning'
                     ).then(function() {
-                        $("#modal_asignaturas").modal('hide');
+                        $("#modal_asigna").modal('hide');
                     });
                 } else {
-
+                    Swal.fire(
+                        'Bien!',
+                        'La materia esta asignada al docente',
+                        'success'
+                    );
+                    window.location.href = "{{ url('User/asigna_materias') }}/" + {{ $datos_persona->id }};
                 }
-                // respuesta = JSON.parse(data);
-                // console.log(data.sw);
-
-                // $("#carga_ajax_lista_asignaturas").html(data);
             }
         })
-        // console.log(formulario_asignatura);
-        // alert('entro');
     }
 
-    function elimina_asignatura(asignatura_id, nombre)
+    function elimina_asignacion(np_id, nombre)
     {
         Swal.fire({
             title: 'Quieres borrar ' + nombre + '?',
@@ -284,26 +261,17 @@
             if (result.value) {
 
                 $.ajax({
-                    url: "{{ url('Asignatura/eliminar') }}/"+asignatura_id,
+                    url: "{{ url('User/eliminaAsignacion') }}/"+np_id,
                     method: "GET",
                     cache: false,
                     success: function (data) {
-
-                        $.ajax({
-                            url: "{{ url('Carrera/ajax_lista_asignaturas') }}",
-                            method: "GET",
-                            data: {c_carrera_id: data.carrera_id, c_gestion: data.anio_vigente},
-                            cache: false,
-                            success: function (data) {
-                                $("#carga_ajax_lista_asignaturas").html(data);
-                            }
-                        });
 
                         Swal.fire(
                             'Excelente!',
                             'La materia fue eliminada',
                             'success'
                         );
+                        window.location.href = "{{ url('User/asigna_materias') }}/" + data.usuario;
                     }
                 });
 

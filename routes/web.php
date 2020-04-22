@@ -115,6 +115,8 @@ Route::get('Carrera/ajax_lista_asignaturas', 'CarreraController@ajax_lista_asign
 Route::get('Asignatura/listado_malla/{carrera_id}', 'AsignaturaController@listado_malla');
 Route::get('Asignatura/eliminar/{asignatura_id}', 'AsignaturaController@eliminar');
 
+Route::post('User/guarda_asignacion', 'UserController@guarda_asignacion');
 Route::get('User/listado', 'UserController@listado');
 Route::get('User/ajax_listado', 'UserController@ajax_listado');
 Route::get('User/asigna_materias/{user_id}', 'UserController@asigna_materias');
+Route::get('User/eliminaAsignacion/{np_id}', 'UserController@eliminaAsignacion');
