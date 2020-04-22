@@ -108,9 +108,13 @@ Route::get('Inscripcion/re_inscripcion/{id}', 'InscripcionController@re_inscripc
 
 Route::get('Inscripcion/asignaturas_a_tomar', 'InscripcionController@asignaturas_a_tomar');
 
-// MALLA CURRICULAR
+// ADMINISTRACION
 Route::post('Asignatura/guarda', 'AsignaturaController@guarda');
 Route::get('Carrera/listado', 'CarreraController@listado');
 Route::get('Carrera/ajax_lista_asignaturas', 'CarreraController@ajax_lista_asignaturas');
 Route::get('Asignatura/listado_malla/{carrera_id}', 'AsignaturaController@listado_malla');
 Route::get('Asignatura/eliminar/{asignatura_id}', 'AsignaturaController@eliminar');
+
+Route::get('User/listado', 'UserController@listado');
+Route::get('User/ajax_listado', 'UserController@ajax_listado');
+Route::get('User/asigna_materias/{user_id}', 'UserController@asigna_materias');
