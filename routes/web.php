@@ -90,6 +90,8 @@ Route::get('Inscripcion/inscripcion', 'InscripcionController@inscripcion');
 
 Route::get('Inscripcion/busca_ci', 'InscripcionController@busca_ci');
 
+Route::get('Inscripcion/selecciona_asignatura', 'InscripcionController@selecciona_asignatura');
+
 Route::get('Inscripcion/contabilidad', 'InscripcionController@contabilidad');
 
 Route::get('Inscripcion/secretariado', 'InscripcionController@secretariado');
@@ -111,9 +113,14 @@ Route::get('Inscripcion/re_inscripcion/{id}', 'InscripcionController@re_inscripc
 Route::get('Inscripcion/asignaturas_a_tomar', 'InscripcionController@asignaturas_a_tomar');
 
 // ADMINISTRACION
+Route::post('Asignatura/guarda', 'AsignaturaController@guarda');
 Route::get('Carrera/listado', 'CarreraController@listado');
 Route::get('Carrera/ajax_lista_asignaturas', 'CarreraController@ajax_lista_asignaturas');
-Route::post('Carrera/guarda', 'CarreraController@guarda');
-// Route::get('Carrera/ajax_lista_asignaturas', 'CarreraController@ajax_lista_asignaturas');
-// Route::post('Carrera/listado', 'CarreraController@listado');
 Route::get('Asignatura/listado_malla/{carrera_id}', 'AsignaturaController@listado_malla');
+Route::get('Asignatura/eliminar/{asignatura_id}', 'AsignaturaController@eliminar');
+
+Route::post('User/guarda_asignacion', 'UserController@guarda_asignacion');
+Route::get('User/listado', 'UserController@listado');
+Route::get('User/ajax_listado', 'UserController@ajax_listado');
+Route::get('User/asigna_materias/{user_id}', 'UserController@asigna_materias');
+Route::get('User/eliminaAsignacion/{np_id}', 'UserController@eliminaAsignacion');

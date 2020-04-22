@@ -7,6 +7,7 @@
 @section('css')
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/dataTables.bootstrap4.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/responsive.dataTables.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.min.css') }}">
 @endsection
 
 @section('content')
@@ -18,11 +19,12 @@
                 <div class="modal-header">
                     <h4 class="modal-title" id="myModalLabel">FORMULARIO DE ASIGNATURAS</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <input type="hidden" name="asignatura_id" id="asignatura_id" value="">
                 </div>
                 <div class="modal-body">
-                    <form action="#" method="GET" id="formulario_modal_asignatura">
-
+                    <form action="#" method="POST" id="formulario_modal_asignatura">
+                        @csrf
+                        <input type="hidden" name="asignatura_id" id="asignatura_id" value="">
+                        <input type="hidden" name="anio_vigente" id="anio_vigente" value="">
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
@@ -113,7 +115,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success">GUARDA ASIGNATURA</button>
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="guarda_asignatura()">GUARDA ASIGNATURA</button>
                 </div>
             </form>
 
@@ -135,14 +137,13 @@
                     </div>
                     <br />  
                     <form action="#" method="GET" id="formulario_carreras">
-                        @csrf
                         
                         <div class="row">
                             <div class="col-md-9">
                                 <div class="form-group">
                                     <label class="control-label">Carreras </label>
                                     
-                                    <select name="carrera_id" id="carrera_id" class="form-control custom-select" required>
+                                    <select name="c_carrera_id" id="c_carrera_id" class="form-control custom-select" required>
                                         <option value="">Seleccione</option>
                                         @foreach ($carreras as $c)
                                             <option value="{{ $c->id }}">{{ $c->nombre }}</option>
@@ -154,7 +155,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="control-label">Gestion </label>
-                                    <input type="number" name="gestion" id="gestion" class="form-control" value="{{ $gestion }}" min="2011" max="{{ $gestion }}">
+                                    <input type="number" name="c_gestion" id="c_gestion" class="form-control" value="{{ $gestion }}" min="2011" max="{{ $gestion }}">
                                 </div>
                             </div>
                         </div>
@@ -179,10 +180,13 @@
 @section('js')
 <script src="{{ asset('assets/plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js') }}"></script>
+<!-- Sweet-Alert  -->
+<script src="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
 
 <script>
     $.ajaxSetup({
-    // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
+        // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
@@ -192,7 +196,7 @@
         $('#myTable').DataTable();
     });
 
-    $('#formulario_carreras').on('submit', function(event) {
+    $('#formulario_carreras').on('submit', function (event) {
         event.preventDefault();
         var datos_formulario = $(this).serializeArray();
         var carrera_id = $("#carrera_id").val();
@@ -201,36 +205,98 @@
             url: "{{ url('Carrera/ajax_lista_asignaturas') }}",
             method: "GET",
             data: datos_formulario,
-            // dataType: 'JSON',
-            // contentType: false,
             cache: false,
-            // processData: false,
-            success: function(data)
-            {
+            success: function (data) {
                 $("#carga_ajax_lista_asignaturas").html(data);
             }
         })
     });
 
-    $('#formulario_modal_asignatura').on('submit', function(event) {
-        event.preventDefault();
-        var datos_formulario = $(this).serializeArray();
-        var carrera_id = $("#carrera_id").val();
-
+    function guarda_asignatura() {
+        formulario_asignatura = $("#formulario_modal_asignatura").serializeArray();
+        carrera_id            = $("#carrera_id").val();
+        gestion               = $("#anio_vigente").val();
+        console.log(gestion);
         $.ajax({
-            url: "{{ url('Carrera/ajax_lista_asignaturas') }}",
-            method: "GET",
-            data: datos_formulario,
-            // dataType: 'JSON',
-            // contentType: false,
+            url: "{{ url('Asignatura/guarda') }}",
+            method: "POST",
+            data: formulario_asignatura,
             cache: false,
-            // processData: false,
             success: function(data)
             {
-                $("#carga_ajax_lista_asignaturas").html(data);
+                if (data.sw == 1) 
+                {
+                    $.ajax({
+                        url: "{{ url('Carrera/ajax_lista_asignaturas') }}",
+                        method: "GET",
+                        data: {c_carrera_id: carrera_id, c_gestion: gestion},
+                        cache: false,
+                        success: function (data) {
+                            $("#carga_ajax_lista_asignaturas").html(data);
+                        }
+                    });
+
+                    Swal.fire(
+                        'Excelente!',
+                        'Los datos fueron guadados',
+                        'success'
+                    ).then(function() {
+                        $("#modal_asignaturas").modal('hide');
+                    });
+                } else {
+
+                }
+                // respuesta = JSON.parse(data);
+                // console.log(data.sw);
+
+                // $("#carga_ajax_lista_asignaturas").html(data);
             }
         })
-    });
+        // console.log(formulario_asignatura);
+        // alert('entro');
+    }
 
+    function elimina_asignatura(asignatura_id, nombre)
+    {
+        Swal.fire({
+            title: 'Quieres borrar ' + nombre + '?',
+            text: "Luego no podras recuperarlo!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, estoy seguro!',
+            cancelButtonText: "Cancelar",
+        }).then((result) => {
+            if (result.value) {
+
+                $.ajax({
+                    url: "{{ url('Asignatura/eliminar') }}/"+asignatura_id,
+                    method: "GET",
+                    cache: false,
+                    success: function (data) {
+
+                        $.ajax({
+                            url: "{{ url('Carrera/ajax_lista_asignaturas') }}",
+                            method: "GET",
+                            data: {c_carrera_id: data.carrera_id, c_gestion: data.anio_vigente},
+                            cache: false,
+                            success: function (data) {
+                                $("#carga_ajax_lista_asignaturas").html(data);
+                            }
+                        });
+
+                        Swal.fire(
+                            'Excelente!',
+                            'La materia fue eliminada',
+                            'success'
+                        );
+                    }
+                });
+
+            }
+        })
+
+    }
 </script>
 @endsection

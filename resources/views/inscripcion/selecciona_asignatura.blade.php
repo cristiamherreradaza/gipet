@@ -463,192 +463,129 @@
                         </div>
                         <!-- Row -->
                         {{-- fin Carrera --}}
-
-                         {{-- OTRAS ASIGNATURAS --}}
+                        
+                        {{-- asignaturas por tomar --}}
                         <!-- Row -->
                         <div class="row">
-                            <div class="col-lg-12">
-                                <div class="card card-outline-primary">
-                                    <div class="card-header">
-                                        <h4 class="mb-0 text-white">Asignaturas Adicionales</h4>
-                                    </div>
+                            <!-- Column -->
+                            <div class="col-lg-4 col-md-6" id="mostrar_asig1" style="display:none;">
+                                <div class="card card-inverse card-dark">
                                     <div class="card-body">
-                                        <form action="#" class="form-horizontal">
-                                            <div class="form-body">
-                                                <!--/row-->
-                                                <!-- <h3 class="box-title">Address</h3> -->
-                                                <!--/row-->
-                                                <div class="row">
-                                                    <div class="col-lg-4 col-md-12">
-                                                        <div class="form-group row">
-                                                            <label class="control-label text-right col-md-3">Carrera</label>
-                                                            <div class="col-md-9">
-                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="carrera_id" name="carrera_id">
-                                                                    <option value="">Seleccionar</option>
-                                                                    @foreach($carreras as $carre)
-                                                                    <option value="{{ $carre->id }}">{{ $carre->nombre }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-3 col-md-12">
-                                                        <div class="form-group row">
-                                                            <label class="control-label text-right col-md-3">Turno</label>
-                                                            <div class="col-md-7">
-                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="turno_id" name="turno_id">
-                                                                    <option value="">Seleccionar</option>
-                                                                    @foreach($turnos as $tur)
-                                                                    <option value="{{ $tur->id }}">{{ $tur->descripcion }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-3 col-md-12">
-                                                        <div class="form-group row">
-                                                            <label class="control-label text-right col-md-3">Paralelo</label>
-                                                            <div class="col-md-6">
-                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="paralelo" name="paralelo">
-                                                                    <option value="">Seleccionar</option>
-                                                                <option value="A">A</option>
-                                                                <option value="B">B</option>
-                                                                <option value="C">C</option>
-                                                                <option value="D">D</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-2 col-md-12">
-                                                        <div class="form-group row">
-                                                            <label class="control-label text-right col-md-5">Gesti&oacute;n</label>
-                                                            <div class="col-md-7">
-                                                                <input type="text" class="form-control" id="gestion" name="gestion" value="{{ $year }}">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!--/row-->
-                                                <!--/row-->
-                                                <div class="row" id="secre" style="display:none;">
-                                                    <div class="col-lg-3 col-md-12">
-                                                        <div class="form-group row">
-                                                            <label class="control-label text-right col-md-3">Carrera</label>
-                                                            <div class="col-md-9">
-                                                                <input type="text" class="form-control" id="carrera_id_secre" name="carrera_id_secre" readonly value="Secretariado Administrativo">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-3 col-md-12">
-                                                        <div class="form-group row">
-                                                            <label class="control-label text-right col-md-3">Turno</label>
-                                                            <div class="col-md-7">
-                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="turno_id_secre" name="turno_id_secre">
-                                                                    <option value="">Seleccionar</option>
-                                                                    @foreach($turnos as $tur)
-                                                                    <option value="{{ $tur->id }}">{{ $tur->descripcion }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-3 col-md-12">
-                                                        <div class="form-group row">
-                                                            <label class="control-label text-right col-md-3">Paralelo</label>
-                                                            <div class="col-md-6">
-                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="paralelo_secre" name="paralelo_secre">
-                                                                    <option value="">Seleccionar</option>
-                                                                <option value="A">A</option>
-                                                                <option value="B">B</option>
-                                                                <option value="C">C</option>
-                                                                <option value="D">D</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-2 col-md-12">
-                                                        <div class="form-group row">
-                                                            <label class="control-label text-right col-md-5">Gesti&oacute;n</label>
-                                                            <div class="col-md-7">
-                                                                <input type="text" class="form-control" id="gestion_secre" name="gestion_secre" value="">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-1 col-md-12">
-                                                        <button type="button" class="btn btn-danger" onclick="cerrar_secre();">X</button>
-                                                    </div>
-                                                </div>
-                                                <!--/row-->
-                                                <!--/row-->
-                                                <div class="row" id="auxiliar" style="display:none;">
-                                                    <div class="col-lg-3 col-md-12">
-                                                        <div class="form-group row">
-                                                            <label class="control-label text-right col-md-3">Carrera</label>
-                                                            <div class="col-md-9">
-                                                                <input type="text" class="form-control" id="carrera_id_auxi" name="carrera_id_auxi" readonly value="Auxiliar Administrativo Financiero">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-3 col-md-12">
-                                                        <div class="form-group row">
-                                                            <label class="control-label text-right col-md-3">Turno</label>
-                                                            <div class="col-md-7">
-                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="turno_id_auxi" name="turno_id_auxi">
-                                                                    <option value="">Seleccionar</option>
-                                                                    @foreach($turnos as $tur)
-                                                                    <option value="{{ $tur->id }}">{{ $tur->descripcion }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-3 col-md-12">
-                                                        <div class="form-group row">
-                                                            <label class="control-label text-right col-md-3">Paralelo</label>
-                                                            <div class="col-md-6">
-                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="paralelo_auxi" name="paralelo_auxi">
-                                                                    <option value="">Seleccionar</option>
-                                                                <option value="A">A</option>
-                                                                <option value="B">B</option>
-                                                                <option value="C">C</option>
-                                                                <option value="D">D</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-2 col-md-12">
-                                                        <div class="form-group row">
-                                                            <label class="control-label text-right col-md-5">Gesti&oacute;n</label>
-                                                            <div class="col-md-7">
-                                                                <input type="text" class="form-control" id="gestion_auxi" name="gestion_auxi" value="">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-1 col-md-12">
-                                                        <button type="button" class="btn btn-danger" onclick="cerrar_auxi();">X</button>
-                                                    </div>
-                                                </div>
-                                                <!--/row-->
-                                            </div>
-                                            <div class="form-actions">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="row">
-                                                            <div class="col-md-offset-3 col-md-9">
-                                                                <button type="button" class="btn btn-info" onclick="ver();">Ver Asignaturas por Tomar</button>
-                                                            </div>
+                                        <div class="d-flex">
+                                            <div class="mr-3 align-self-center">
+                                                <h1 class="text-white"><i class="icon-graduation"></i></h1></div>
+                                            <div>
+                                                <h3 class="card-title" id="nom_asig1"> </h3>
+                                                <h6 class="card-subtitle" id="gest1"> </h6> </div>
+                                        </div>
+                                        <div class="row">
+                                            <!-- column -->
+                                            <div class="col-lg-12">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table no-wrap" id="valor1_1">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>C&oacute;digo</th>
+                                                                        <th>Asignatura</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="valor1">
+
+                                                                </tbody>
+                                                            </table>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <!-- Column -->
+                            <!-- Column -->
+                            <div class="col-lg-4 col-md-6" id="mostrar_asig2" style="display:none;">
+                                <div class="card card-inverse card-primary">
+                                    <div class="card-body">
+                                        <div class="d-flex">
+                                            <div class="mr-3 align-self-center">
+                                                <h1 class="text-white"><i class="icon-notebook"></i></h1></div>
+                                            <div>
+                                                <h3 class="card-title" id="nom_asig2">Secretariado Administrativo</h3>
+                                                <h6 class="card-subtitle" id="gest2"></h6> </div>
+                                        </div>
+                                        <div class="row">
+                                            <!-- column -->
+                                            <div class="col-lg-12">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table no-wrap" id="valor2_2">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>C&oacute;digo</th>
+                                                                        <th>Asignatura</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="valor2">
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Column -->
+                            <!-- Column -->
+                            <div class="col-lg-4 col-md-6" id="mostrar_asig3" style="display:none;">
+                                <div class="card card-inverse card-success">
+                                    <div class="card-body">
+                                        <div class="d-flex">
+                                            <div class="mr-3 align-self-center">
+                                                <h1 class="text-white"><i class="icon-layers"></i></h1></div>
+                                            <div>
+                                                <h3 class="card-title" id="nom_asig3">Auxiliar Administrativo Financiero</h3>
+                                                <h6 class="card-subtitle" id="gest3"> </h6> </div>
+                                        </div>
+                                        <div class="row">
+                                            <!-- column -->
+                                            <div class="col-lg-12">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table no-wrap" id="valor3_3">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>#</th>
+                                                                        <th>C&oacute;digo</th>
+                                                                        <th>Asignatura</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="valor3">
+                                                                    
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Column -->
                         </div>
                         <!-- Row -->
-                        {{-- fin OTRAS ASIGNATURAS --}}
-                        
+
+                        {{-- fin de asignaturas --}}
+
                         <div class="row">
                             <div class="col-md-6">
                             <button type="submit" class="btn waves-effect waves-light btn-block btn-success">Guardar</button>
@@ -725,10 +662,6 @@
             if (carrera == '1') {
                 $('#secre').show('slow');//para visualizar las asignaturas
                 $('#auxiliar').show('slow');//para visualizar las asignaturas
-            }
-            else{
-                 $('#secre').hide('slow');//para visualizar las asignaturas
-                $('#auxiliar').hide('slow');//para visualizar las asignaturas
             }
     });
 
