@@ -13,7 +13,7 @@
 <div class="card">
     <div class="card-body">
         <h4 class="card-title">Lista de asignaturas</h4>
-        <h6 class="card-subtitle">Gestión {{ date('Y') }}</h6>
+        <h6 class="card-subtitle">Año {{ date('Y') }}</h6>
         <div class="table-responsive m-t-40">
             <table id="myTable" class="table table-bordered table-striped">
                 <thead>
@@ -28,16 +28,14 @@
                 </thead>
                 <tbody>
                     @foreach($asignaturas as $asignatura)
-                        @if($asignatura->gestion == date('Y'))
-                            <tr>
-                                <td>{{ $asignatura->asignatura->codigo_asignatura }}</td>
-                                <td>{{ $asignatura->asignatura->nombre_asignatura }}</td>
-                                <td>{{ $asignatura->asignatura->carrera->nombre }}</td>
-                                <td>{{ $asignatura->turno->descripcion }}</td>
-                                <td>{{ $asignatura->paralelo }}</td>
-                                <td><a href="{{ url('nota/detalle/'.$asignatura->id) }}" class="btn btn-info btn-rounded btn-sm"><i class="mdi mdi-note-text"></i> Notas</a></td>
-                            </tr>
-                        @endif
+                        <tr>
+                            <td>{{ $asignatura->asignatura->codigo_asignatura }}</td>
+                            <td>{{ $asignatura->asignatura->nombre_asignatura }}</td>
+                            <td>{{ $asignatura->asignatura->carrera->nombre }}</td>
+                            <td>{{ $asignatura->turno->descripcion }}</td>
+                            <td>{{ $asignatura->paralelo }}</td>
+                            <td><a href="{{ url('nota/detalle/'.$asignatura->id) }}" class="btn btn-info btn-rounded btn-sm"><i class="mdi mdi-note-text"></i> Notas</a></td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>

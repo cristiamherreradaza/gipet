@@ -78,7 +78,7 @@
         segundo_turno = checkCampos(segundo_turno);
 
         $.ajax({
-            type:'get',
+            type:'POST',
             url:"{{ url('nota/segundoTurnoActualizar') }}",
             data: {
                 id : identificador,

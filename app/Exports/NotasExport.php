@@ -35,7 +35,7 @@ class NotasExport implements FromCollection, WithMapping, WithHeadings, ShouldAu
                     ->where('turno_id', $notapropuesta->turno_id)
                     ->where('user_id', $notapropuesta->user_id)
                     ->where('paralelo', $notapropuesta->paralelo)
-                    ->where('gestion', $notapropuesta->gestion)
+                    ->where('anio_vigente', $notapropuesta->anio_vigente)
                     ->get();                
     }
 

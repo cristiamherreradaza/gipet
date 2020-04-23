@@ -20,7 +20,9 @@ class NotasPropuestaController extends Controller
     public function listado()
     {
         $usuario = Auth::user();
-        $asignaturas = $usuario->notaspropuestas;
+        $asignaturas = NotasPropuesta::where('user_id', Auth::user()->id)
+                                    ->where('anio_vigente', date('Y'))
+                                    ->get();
         return view('notaspropuesta.listado')->with(compact('usuario', 'asignaturas'));
     }
 
@@ -38,7 +40,7 @@ class NotasPropuestaController extends Controller
 
     public function exportarexcel(Request $request)
     {
-        return Excel::download(new NotasPropuestasExport($request->id), 'notas-propuestas-list.xlsx');
+        return Excel::download(new NotasPropuestasExport($request->id), date('Y-m-d').'-ListadoPonderaciones.xlsx');
     }
 
     public function ajax_importar(Request $request)
@@ -51,38 +53,27 @@ class NotasPropuestaController extends Controller
         {
             $file = $request->file('select_file');
             Excel::import(new NotasPropuestasImport, $file);
-            //todo el proceso de excel
-            //alert('bien');
             return response()->json([
-                //1
-                'message' => 'Importacion realizada con exito',
-                'sw' => 1,
-                'class_name' => 'alert-success'
+                'message' => 'Importación realizada con exito.',
+                'sw' => 1
             ]);
         }
         else
         {
-            /*
-            switch ($validation->errors()->all()) {
-                case "The select file must be a file of type: xlsx.":
-                    $mensaje = "El archivo debe ser del tipo: xlsx.";
-                    break;
+            switch ($validation->errors()->first()) {
                 case "The select file field is required.":
                     $mensaje = "Es necesario agregar un archivo excel.";
                     break;
-                case "":
-                    $mensaje = "";
+                case "The select file must be a file of type: xlsx.":
+                    $mensaje = "El archivo debe ser del tipo: xlsx.";
+                    break;
+                default:
+                    $mensaje = "Fallo al importar el archivo seleccionado.";
                     break;
             }
-            */
-            //alert('mal');
-            //dd($validation->errors()->all());
             return response()->json([
-                //0
-                
-                'message' => $validation->errors()->all(),
-                'sw' => 0,
-                'class_name' => 'alert-danger'
+                'message' => $mensaje,
+                'sw' => 0
             ]);
         }
     }

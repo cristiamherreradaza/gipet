@@ -27,7 +27,7 @@ class NotasPropuestasExport implements FromCollection, WithMapping, WithHeadings
     public function collection()
     {
         return NotasPropuesta::where('user_id', $this->id)
-                            ->where('gestion', date('Y'))
+                            ->where('anio_vigente', date('Y'))
                             ->get();                
     }
 

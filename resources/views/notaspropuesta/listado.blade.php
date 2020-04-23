@@ -10,13 +10,15 @@
         text-align: center; 
     }
 </style>
+<!--alerts CSS -->
+<link href="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
 <div class="card">
     <div class="card-body">
         <h4 class="card-title">Lista de ponderaciones de asignaturas</h4>
-        <h6 class="card-subtitle">Gestión {{ date('Y') }}</h6>
+        <h6 class="card-subtitle">Año {{ date('Y') }}</h6>
         <div class="table-responsive m-t-40">
             <table class="table table-bordered table-striped">
                 <thead>
@@ -34,28 +36,25 @@
                 </thead>
                 <tbody>
                     @foreach($asignaturas as $asignatura)
-                        @if($asignatura->gestion == date('Y'))
-                            <tr>
-                                <td>
-                                    {{ $asignatura->asignatura->codigo_asignatura }}
-                                </td>
-                                <td>
-                                    {{ $asignatura->asignatura->nombre_asignatura }}
-                                </td>
-                                <td><input size="10" min="0" max="100" pattern="^[0-9]+" onchange="calcula( {{ $asignatura->id }} )" data-asistencia="{{ $asignatura->nota_asistencia }}" type="number" id="asistencia-{{ $asignatura->id }}" name="asistencia-{{ $asignatura->id }}" value="{{ $asignatura->nota_asistencia }}" step="any"></td>
-                                <td><input size="10" min="0" max="100" pattern="^[0-9]+" onchange="calcula( {{ $asignatura->id }} )" data-practicas="{{ $asignatura->nota_practicas }}" type="number" id="practicas-{{ $asignatura->id }}" name="practicas-{{ $asignatura->id }}" value="{{ $asignatura->nota_practicas }}" step="any"></td>
-                                <td><input size="10" min="0" max="100" pattern="^[0-9]+" onchange="calcula( {{ $asignatura->id }} )" data-puntos="{{ $asignatura->nota_puntos_ganados }}" type="number" id="puntos-{{ $asignatura->id }}" name="puntos-{{ $asignatura->id }}" value="{{ $asignatura->nota_puntos_ganados }}" step="any"></td>
-                                <td><input size="10" min="0" max="100" pattern="^[0-9]+" onchange="calcula( {{ $asignatura->id }} )" data-parcial="{{ $asignatura->nota_primer_parcial }}" type="number" id="parcial-{{ $asignatura->id }}" name="parcial-{{ $asignatura->id }}" value="{{ $asignatura->nota_primer_parcial }}" step="any"></td>
-                                <td><input size="10" min="0" max="100" pattern="^[0-9]+" onchange="calcula( {{ $asignatura->id }} )" data-final="{{ $asignatura->nota_examen_final }}" type="number" id="final-{{ $asignatura->id }}" name="final-{{ $asignatura->id }}" value="{{ $asignatura->nota_examen_final }}" step="any"></td>
-                                <td id="totalsuma{{ $asignatura->id }}"></td>
-                                <td>{{ $asignatura->validado }}</td>
-                            </tr>
-                        @endif
+                        <tr>
+                            <td>
+                                {{ $asignatura->asignatura->codigo_asignatura }}
+                            </td>
+                            <td>
+                                {{ $asignatura->asignatura->nombre_asignatura }}
+                            </td>
+                            <td><input size="10" min="0" max="100" pattern="^[0-9]+" onchange="calcula( {{ $asignatura->id }} )" data-asistencia="{{ $asignatura->nota_asistencia }}" type="number" id="asistencia-{{ $asignatura->id }}" name="asistencia-{{ $asignatura->id }}" value="{{ $asignatura->nota_asistencia }}" step="any"></td>
+                            <td><input size="10" min="0" max="100" pattern="^[0-9]+" onchange="calcula( {{ $asignatura->id }} )" data-practicas="{{ $asignatura->nota_practicas }}" type="number" id="practicas-{{ $asignatura->id }}" name="practicas-{{ $asignatura->id }}" value="{{ $asignatura->nota_practicas }}" step="any"></td>
+                            <td><input size="10" min="0" max="100" pattern="^[0-9]+" onchange="calcula( {{ $asignatura->id }} )" data-puntos="{{ $asignatura->nota_puntos_ganados }}" type="number" id="puntos-{{ $asignatura->id }}" name="puntos-{{ $asignatura->id }}" value="{{ $asignatura->nota_puntos_ganados }}" step="any"></td>
+                            <td><input size="10" min="0" max="100" pattern="^[0-9]+" onchange="calcula( {{ $asignatura->id }} )" data-parcial="{{ $asignatura->nota_primer_parcial }}" type="number" id="parcial-{{ $asignatura->id }}" name="parcial-{{ $asignatura->id }}" value="{{ $asignatura->nota_primer_parcial }}" step="any"></td>
+                            <td><input size="10" min="0" max="100" pattern="^[0-9]+" onchange="calcula( {{ $asignatura->id }} )" data-final="{{ $asignatura->nota_examen_final }}" type="number" id="final-{{ $asignatura->id }}" name="final-{{ $asignatura->id }}" value="{{ $asignatura->nota_examen_final }}" step="any"></td>
+                            <td id="totalsuma{{ $asignatura->id }}"></td>
+                            <td>{{ $asignatura->validado }}</td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-        <div class="alert" id="message" style="display: none"></div>
         <form method="post" id="upload_form" enctype="multipart/form-data" class="upload_form float-left">
             @csrf
             <input type="file" name="select_file" id="select_file">
@@ -67,6 +66,10 @@
 @stop
 
 @section('js')
+<!-- Sweet-Alert  -->
+<script src="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
+
 <script type="text/javascript">
     // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
     $.ajaxSetup({
@@ -105,7 +108,7 @@
         $('#totalsuma'+id).empty();
         $('#totalsuma'+id).append(resultado);
         $.ajax({
-            type:'get',
+            type:'POST',
             url:"{{ url('notaspropuesta/actualizar') }}",
             data: {
                 id : identificador,
@@ -134,11 +137,19 @@
                 processData: false,
                 success: function(data)
                 {
-                    //if(pregunto si es 1 o 0) 1->swwetalert
-                    console.log(data.sw);
-                    $('#message').css('display', 'block');
-                    $('#message').html(data.message);
-                    $('#message').addClass(data.class_name);
+                    if(data.sw == 1){
+                        Swal.fire(
+                        'Hecho',
+                        data.message,
+                        'success'
+                        )// aqui recargar la pagina
+                    }else{
+                        Swal.fire(
+                        'Oops...',
+                        data.message,
+                        'error'
+                        )
+                    }
                 }
             })
         });

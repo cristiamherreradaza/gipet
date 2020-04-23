@@ -10,6 +10,8 @@
         text-align: center; 
     }
 </style>
+<!--alerts CSS -->
+<link href="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -32,6 +34,7 @@
                             <th>Primer Parcial</th>
                             <th>Examen Final</th>
                             <th>Total</th>
+                            <th>Segundo Turno</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -46,21 +49,23 @@
                                 <td><input size="10" min="0" max="{{ $asignatura->nota_primer_parcial }}" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-parcial="{{ $nota->nota_primer_parcial }}" type="number" id="parcial-{{ $nota->id }}" name="parcial-{{ $nota->id }}" value="{{ $nota->nota_primer_parcial }}" step="any"></td>
                                 <td><input size="10" min="0" max="{{ $asignatura->nota_examen_final }}" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-final="{{ $nota->nota_examen_final }}" type="number" id="final-{{ $nota->id }}" name="final-{{ $nota->id }}" value="{{ $nota->nota_examen_final }}" step="any"></td>
                                 <td id="totalsuma{{ $nota->id }}">{{ $nota->nota_total }}</td>
-                                                                
+                                <td>
+                                    @if($nota->segundo_turno)
+                                        {{ $nota->segundo_turno }}
+                                    @else
+                                        -
+                                    @endif
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
-        <div class="alert" id="message" style="display: none"></div>
-        
     </div>
             
     <form method="post" id="upload_form" enctype="multipart/form-data" class="upload_form float-left">
         @csrf
-        <!-- <input type="file" name="file"> -->
-        <!-- <button class="btn btn-rounded btn-success float-lg-right">Importar</button> -->
         <input type="file" name="select_file" id="select_file">
         <input type="submit" name="upload" id="upload" class="btn btn-rounded btn-success float-lg-right" value="Importar">
     </form>
@@ -72,7 +77,9 @@
 
 
 @section('js')
-
+<!-- Sweet-Alert  -->
+<script src="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
 <script>
 $(document).ready(function() {
     $('.upload_form').on('submit', function(event) {
@@ -87,11 +94,19 @@ $(document).ready(function() {
             processData: false,
             success: function(data)
             {
-                //if(pregunto si es 1 o 0) 1->swwetalert
-                console.log(data.sw);
-                $('#message').css('display', 'block');
-                $('#message').html(data.message);
-                $('#message').addClass(data.class_name);
+                if(data.sw == 1){
+                    Swal.fire(
+                    'Hecho',
+                    data.message,
+                    'success'
+                    )// aqui recargar la pagina
+                }else{
+                    Swal.fire(
+                    'Oops...',
+                    data.message,
+                    'error'
+                    )
+                }
             }
         })
     });
@@ -142,7 +157,7 @@ $(document).ready(function() {
         // alert(nombre);
         //alert(asistencia +" - "+ practicas +" - "+ puntos +" - "+ parcial +" - "+ final +" id: "+ id);
         $.ajax({
-            type:'get',
+            type:'POST',
             url:"{{ url('nota/actualizar') }}",
             data: {
                 id : identificador,
