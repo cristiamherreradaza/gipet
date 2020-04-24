@@ -287,19 +287,10 @@
                                             <td>{{ $cp->turno->descripcion }}</td>
                                             <td>{{ $cp->anio_vigente }}</td>
                                             <td>
-<<<<<<< Updated upstream
 
                                                 <button type="button" class="btn btn-warning" onclick="muestra_materias({{ $cp->carrera_id }}, {{ $cp->persona_id }}, {{ $cp->anio_vigente }})"><i class="fas fa-edit"></i></button>
-
                                                 
-                                                <button type="button" class="btn btn-dark" onclick="ver_asignaturas({{ $i->id }}, '{{ $i->carrera->nombre }}', '{{ $i->anio_vigente }}')"><i class=" fas fa-address-book"></i></button>
-                                                <button type="button" class="btn btn-success" onclick="re_inscripcion({{ $i->id }}, '{{ $i->carrera->nombre }}', '{{ $i->anio_vigente }}')"><i class=" fas fa-desktop"></i></button>
 
-=======
-                                                <button type="button" class="btn btn-warning" onclick="muestra_modal(445)"><i class="fas fa-edit"></i></button>
-                                                <button type="button" class="btn btn-dark" onclick="ver_asignaturas({{ $i->id }}, '{{ $i->carrera->nombre }}', '{{ $i->anio_vigente }}')"><i class=" fas fa-address-book"></i></button>
-                                                <button type="button" class="btn btn-success" onclick="re_inscripcion({{ $i->id }}, '{{ $i->carrera->nombre }}', '{{ $i->anio_vigente }}')"><i class=" fas fa-desktop"></i></button>
->>>>>>> Stashed changes
                                             </td>
                                         </tr>
                                     @endforeach

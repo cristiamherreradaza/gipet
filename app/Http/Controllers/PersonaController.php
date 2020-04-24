@@ -9,7 +9,6 @@ use App\Persona;
 use App\Inscripcion;
 use App\Kardex;
 use App\CarrerasPersona;
-use App\Inscripcion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -147,34 +146,5 @@ class PersonaController extends Controller
         
     }
 
-    public function verifica(Request $request)
-    {
-        $id = $request->id;
-        $carrera_persona = CarrerasPersona::where("borrado", NULL)
-                    ->where('id', $id)
-                    ->get();
-        $carreras = DB::table('inscripciones')
-                      ->select(
-                        'inscripciones.id',
-                        'asignaturas.codigo_asignatura',
-                        'asignaturas.nombre_asignatura'
-                      )
-                      ->where('inscripciones.borrado', NULL)
-                      ->where('inscripciones.persona_id',$carrera_persona[0]->persona_id)
-                      ->where('inscripciones.gestion', $carrera_persona[0]->anio_vigente)
-                      ->join('kardex', 'inscripciones.asignatura_id','=','kardex.asignatura_id')
-                      ->where('kardex.persona_id',$carrera_persona[0]->persona_id)
-                      ->where('kardex.carrera_id',$carrera_persona[0]->carrera_id)
-                      ->join('asignaturas', 'inscripciones.asignatura_id','=','asignaturas.id')
-                      ->where('asignaturas.borrado', NULL)
-                      ->distinct()->get();
-        // foreach ($carreras as $key => $value) {
-        //    echo $carreras[$key]->id;
-        //    echo ' ';
-        //    echo $carreras[$key]->codigo_asignatura;
-        //    echo ' ';
-        // }
-        return response()->json($carreras);
-        
-    }
+   
 }
