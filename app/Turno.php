@@ -31,4 +31,9 @@ class Turno extends Model
     {
         return $this->hasMany('App\Inscripcion');
     }
+
+    public function carreraspersona()
+    {
+        return $this->hasMany('App\CarrerasPersona');
+    }
 }

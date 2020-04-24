@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Turno;
 use App\Carrera;
 use App\Persona;
+use App\CarrerasPersona;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -57,5 +58,25 @@ class PersonaController extends Controller
     public function ajax_datos()
     {
         return datatables()->eloquent(Persona::query())->toJson();
+    }
+
+    public function detalle(Request $request, $persona_id)
+    {
+        $datosPersonales = Persona::where('borrado', NULL)
+                        ->where('id', $persona_id)
+                        ->first();
+
+        $inscripciones = CarrerasPersona::where('borrado', NULL)
+                        ->where('persona_id', $persona_id)
+                        ->get();
+
+        // dd($inscripciones);
+
+        return view('persona.detalle')->with(compact('datosPersonales', 'inscripciones'));
+    }
+
+    public function ajax_materias()
+    {
+        
     }
 }

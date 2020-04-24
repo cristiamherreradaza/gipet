@@ -55,4 +55,9 @@ class Persona extends Model
     {
         return $this->hasMany('App/DescuentoPersona');
     }
+
+    public function carreraspersona()
+    {
+        return $this->hasMany('App\CarrerasPersona');
+    }
 }
