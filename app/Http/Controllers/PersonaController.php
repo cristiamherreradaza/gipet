@@ -68,6 +68,7 @@ class PersonaController extends Controller
             })
             ->editColumn('id', 'ID: {{$id}}')
             ->make(true);
+
     }
 
     public function ver_persona($persona_id = null)
@@ -79,26 +80,14 @@ class PersonaController extends Controller
         $carrerasPersona = CarrerasPersona::where('borrado', NULL)
                         ->where('persona_id', $persona_id)
                         ->get();
-        // $gestion_vigente = date('Y');
+        $inscripciones = CarrerasPersona::where('borrado', NULL)
+                        ->where('persona_id', $persona_id)
+                        ->get();
 
-        // $datos_persona = Persona::find($usuario_id);
+        return view('persona.detalle')->with(compact('datosPersonales', 'carrerasPersona', 'inscripciones'));
 
-        // $turnos = Turno::where('borrado', NULL)->get();
-
-<<<<<<< Updated upstream
-        // dd($carrerasPersona);
-=======
-        // $asignaturas = Asignatura::where('borrado', NULL)
-        //             ->where('anio_vigente', $gestion_vigente)
-        //             ->get();
-
-        // $asignaturas_docente = NotasPropuesta::where('borrado', NULL)
-        //                     ->where('user_id', $usuario_id)
-        //                     ->where('anio_vigente', $gestion_vigente)
-        //                     ->get();
-
-        return view('persona.detalle')->with(compact('datosPersonales', 'inscripciones'));
     }
+
 
     public function detalle(Request $request, $persona_id)
     {
@@ -108,13 +97,11 @@ class PersonaController extends Controller
                         ->where('id', $persona_id)
                         ->first();
 
-        $inscripciones = CarrerasPersona::where('borrado', NULL)
+        $carrerasPersona = CarrerasPersona::where('borrado', NULL)
                         ->where('persona_id', $persona_id)
                         ->get();
         // $turnos = Turno::where('borrado', NULL)->get();
         // dd($turnos);
->>>>>>> Stashed changes
-
         return view('persona.detalle')->with(compact('datosPersonales', 'carrerasPersona'));
     }
 
@@ -127,6 +114,37 @@ class PersonaController extends Controller
                             ->get();
 
         return view('persona.ajax_materias')->with(compact('materiasCarrera'));
+    }
+
+    public function verifica(Request $request)
+    {
+        $id = $request->id;
+        $carrera_persona = CarrerasPersona::where("borrado", NULL)
+                    ->where('id', $id)
+                    ->get();
+        $carreras = DB::table('inscripciones')
+                      ->select(
+                        'inscripciones.id',
+                        'asignaturas.codigo_asignatura',
+                        'asignaturas.nombre_asignatura'
+                      )
+                      ->where('inscripciones.borrado', NULL)
+                      ->where('inscripciones.persona_id',$carrera_persona[0]->persona_id)
+                      ->where('inscripciones.gestion', $carrera_persona[0]->anio_vigente)
+                      ->join('kardex', 'inscripciones.asignatura_id','=','kardex.asignatura_id')
+                      ->where('kardex.persona_id',$carrera_persona[0]->persona_id)
+                      ->where('kardex.carrera_id',$carrera_persona[0]->carrera_id)
+                      ->join('asignaturas', 'inscripciones.asignatura_id','=','asignaturas.id')
+                      ->where('asignaturas.borrado', NULL)
+                      ->distinct()->get();
+        // foreach ($carreras as $key => $value) {
+        //    echo $carreras[$key]->id;
+        //    echo ' ';
+        //    echo $carreras[$key]->codigo_asignatura;
+        //    echo ' ';
+        // }
+        return response()->json($carreras);
+        
     }
 
     public function verifica(Request $request)
