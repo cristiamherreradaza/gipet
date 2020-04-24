@@ -4,6 +4,10 @@
 <meta name="csrf-token" content="{{ csrf_token() }}"/>
 @endsection
 
+@section('css')
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.min.css') }}">
+@endsection
+
 @section('content')
 <div id="divmsg" style="display:none" class="alert alert-primary" role="alert"></div>
 <div class="row">
@@ -28,7 +32,6 @@
                                         <h4 class="mb-0 text-white">DATOS PERSONALES</h4>
                                     </div>
                                     <div class="card-body" style="background-color: #fff6d4;">
-
                                             <div class="form-body">
                                                 <div class="row">
                                                     <div class="col">
@@ -38,6 +41,7 @@
                                                                 name="carnet" id="carnet">
                                                         </div>
                                                     </div>
+                                                    <input type="text" class="form-control" hidden name="persona_id" id="persona_id">
                                                     <div class="col">
                                                         <div class="form-group">
                                                             <label>Expedido </label>
@@ -288,7 +292,6 @@
                                         <h4 class="mb-0 text-white">Datos de la Carrera</h4>
                                     </div>
                                     <div class="card-body">
-                                        <form action="#" class="form-horizontal">
                                             <div class="form-body">
                                                 <!--/row-->
                                                 <!-- <h3 class="box-title">Address</h3> -->
@@ -298,7 +301,7 @@
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-3">Carrera</label>
                                                             <div class="col-md-9">
-                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="carrera_id" name="carrera_id">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="carrera_id_1" name="carrera_id_1">
                                                                     <option value="">Seleccionar</option>
                                                                     @foreach($carreras as $carre)
                                                                     <option value="{{ $carre->id }}">{{ $carre->nombre }}</option>
@@ -311,7 +314,7 @@
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-3">Turno</label>
                                                             <div class="col-md-7">
-                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="turno_id" name="turno_id">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="turno_id_1" name="turno_id_1">
                                                                     <option value="">Seleccionar</option>
                                                                     @foreach($turnos as $tur)
                                                                     <option value="{{ $tur->id }}">{{ $tur->descripcion }}</option>
@@ -324,7 +327,7 @@
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-3">Paralelo</label>
                                                             <div class="col-md-6">
-                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="paralelo" name="paralelo">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="paralelo_1" name="paralelo_1">
                                                                     <option value="">Seleccionar</option>
                                                                 <option value="A">A</option>
                                                                 <option value="B">B</option>
@@ -338,7 +341,7 @@
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-5">Gesti&oacute;n</label>
                                                             <div class="col-md-7">
-                                                                <input type="text" class="form-control" id="gestion" name="gestion" value="{{ $year }}">
+                                                                <input type="text" class="form-control" id="gestion_1" name="gestion_1" value="{{ $year }}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -350,7 +353,7 @@
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-3">Carrera</label>
                                                             <div class="col-md-9">
-                                                                <input type="text" class="form-control" id="carrera_id_secre" name="carrera_id_secre" readonly value="Secretariado Administrativo">
+                                                                <input type="text" class="form-control" id="carrera_id_2" name="carrera_id_2" readonly value="Secretariado Administrativo">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -358,7 +361,7 @@
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-3">Turno</label>
                                                             <div class="col-md-7">
-                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="turno_id_secre" name="turno_id_secre">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="turno_id_2" name="turno_id_2">
                                                                     <option value="">Seleccionar</option>
                                                                     @foreach($turnos as $tur)
                                                                     <option value="{{ $tur->id }}">{{ $tur->descripcion }}</option>
@@ -371,7 +374,7 @@
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-3">Paralelo</label>
                                                             <div class="col-md-6">
-                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="paralelo_secre" name="paralelo_secre">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="paralelo_2" name="paralelo_2">
                                                                     <option value="">Seleccionar</option>
                                                                 <option value="A">A</option>
                                                                 <option value="B">B</option>
@@ -385,7 +388,7 @@
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-5">Gesti&oacute;n</label>
                                                             <div class="col-md-7">
-                                                                <input type="text" class="form-control" id="gestion_secre" name="gestion_secre" value="">
+                                                                <input type="text" class="form-control" id="gestion_2" name="gestion_2" value="">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -400,7 +403,7 @@
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-3">Carrera</label>
                                                             <div class="col-md-9">
-                                                                <input type="text" class="form-control" id="carrera_id_auxi" name="carrera_id_auxi" readonly value="Auxiliar Administrativo Financiero">
+                                                                <input type="text" class="form-control" id="carrera_id_3" name="carrera_id_3" readonly value="Auxiliar Administrativo Financiero">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -408,7 +411,7 @@
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-3">Turno</label>
                                                             <div class="col-md-7">
-                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="turno_id_auxi" name="turno_id_auxi">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="turno_id_3" name="turno_id_3">
                                                                     <option value="">Seleccionar</option>
                                                                     @foreach($turnos as $tur)
                                                                     <option value="{{ $tur->id }}">{{ $tur->descripcion }}</option>
@@ -421,7 +424,7 @@
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-3">Paralelo</label>
                                                             <div class="col-md-6">
-                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="paralelo_auxi" name="paralelo_auxi">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="paralelo_3" name="paralelo_3">
                                                                     <option value="">Seleccionar</option>
                                                                 <option value="A">A</option>
                                                                 <option value="B">B</option>
@@ -435,12 +438,232 @@
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-5">Gesti&oacute;n</label>
                                                             <div class="col-md-7">
-                                                                <input type="text" class="form-control" id="gestion_auxi" name="gestion_auxi" value="">
+                                                                <input type="text" class="form-control" id="gestion_3" name="gestion_3" value="">
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-1 col-md-12">
                                                         <button type="button" class="btn btn-danger" onclick="cerrar_auxi();">X</button>
+                                                    </div>
+                                                </div>
+                                                <!--/row-->
+                                                <!--row CARRERA_4-->
+                                                <div class="row" id="carrera_4" style="display:none;">
+                                                    <div class="col-lg-3 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-3">Carrera</label>
+                                                            <div class="col-md-9">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="carrera_id_4" name="carrera_id_4">
+                                                                    <option value="">Seleccionar</option>
+                                                                    @foreach($carreras as $carre)
+                                                                    <option value="{{ $carre->id }}">{{ $carre->nombre }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-3">Turno</label>
+                                                            <div class="col-md-7">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="turno_id_4" name="turno_id_4">
+                                                                    <option value="">Seleccionar</option>
+                                                                    @foreach($turnos as $tur)
+                                                                    <option value="{{ $tur->id }}">{{ $tur->descripcion }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-3">Paralelo</label>
+                                                            <div class="col-md-6">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="paralelo_4" name="paralelo_4">
+                                                                    <option value="">Seleccionar</option>
+                                                                <option value="A">A</option>
+                                                                <option value="B">B</option>
+                                                                <option value="C">C</option>
+                                                                <option value="D">D</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-5">Gesti&oacute;n</label>
+                                                            <div class="col-md-7">
+                                                                <input type="text" class="form-control" id="gestion_4" name="gestion_4" value="">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-1 col-md-12">
+                                                        <button type="button" class="btn btn-danger" onclick="cerrar_carrera_4();">X</button>
+                                                    </div>
+                                                </div>
+                                                <!--/row-->
+                                                <!--row CARRERA_5-->
+                                                <div class="row" id="carrera_5" style="display:none;">
+                                                    <div class="col-lg-3 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-3">Carrera</label>
+                                                            <div class="col-md-9">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="carrera_id_5" name="carrera_id_5">
+                                                                    <option value="">Seleccionar</option>
+                                                                    @foreach($carreras as $carre)
+                                                                    <option value="{{ $carre->id }}">{{ $carre->nombre }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-3">Turno</label>
+                                                            <div class="col-md-7">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="turno_id_5" name="turno_id_5">
+                                                                    <option value="">Seleccionar</option>
+                                                                    @foreach($turnos as $tur)
+                                                                    <option value="{{ $tur->id }}">{{ $tur->descripcion }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-3">Paralelo</label>
+                                                            <div class="col-md-6">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="paralelo_5" name="paralelo_5">
+                                                                    <option value="">Seleccionar</option>
+                                                                <option value="A">A</option>
+                                                                <option value="B">B</option>
+                                                                <option value="C">C</option>
+                                                                <option value="D">D</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-5">Gesti&oacute;n</label>
+                                                            <div class="col-md-7">
+                                                                <input type="text" class="form-control" id="gestion_5" name="gestion_5" value="">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-1 col-md-12">
+                                                        <button type="button" class="btn btn-danger" onclick="cerrar_carrera_5();">X</button>
+                                                    </div>
+                                                </div>
+                                                <!--/row-->
+                                                <!--row CARRERA_6-->
+                                                <div class="row" id="carrera_6" style="display:none;">
+                                                    <div class="col-lg-3 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-3">Carrera</label>
+                                                            <div class="col-md-9">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="carrera_id_6" name="carrera_id_6">
+                                                                    <option value="">Seleccionar</option>
+                                                                    @foreach($carreras as $carre)
+                                                                    <option value="{{ $carre->id }}">{{ $carre->nombre }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-3">Turno</label>
+                                                            <div class="col-md-7">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="turno_id_6" name="turno_id_6">
+                                                                    <option value="">Seleccionar</option>
+                                                                    @foreach($turnos as $tur)
+                                                                    <option value="{{ $tur->id }}">{{ $tur->descripcion }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-3">Paralelo</label>
+                                                            <div class="col-md-6">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="paralelo_6" name="paralelo_6">
+                                                                    <option value="">Seleccionar</option>
+                                                                <option value="A">A</option>
+                                                                <option value="B">B</option>
+                                                                <option value="C">C</option>
+                                                                <option value="D">D</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-5">Gesti&oacute;n</label>
+                                                            <div class="col-md-7">
+                                                                <input type="text" class="form-control" id="gestion_6" name="gestion_6" value="">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-1 col-md-12">
+                                                        <button type="button" class="btn btn-danger" onclick="cerrar_carrera_6();">X</button>
+                                                    </div>
+                                                </div>
+                                                <!--/row-->
+                                                <!--row CARRERA_7-->
+                                                <div class="row" id="carrera_7" style="display:none;">
+                                                    <div class="col-lg-3 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-3">Carrera</label>
+                                                            <div class="col-md-9">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="carrera_id_7" name="carrera_id_7">
+                                                                    <option value="">Seleccionar</option>
+                                                                    @foreach($carreras as $carre)
+                                                                    <option value="{{ $carre->id }}">{{ $carre->nombre }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-3">Turno</label>
+                                                            <div class="col-md-7">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="turno_id_7" name="turno_id_7">
+                                                                    <option value="">Seleccionar</option>
+                                                                    @foreach($turnos as $tur)
+                                                                    <option value="{{ $tur->id }}">{{ $tur->descripcion }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-3">Paralelo</label>
+                                                            <div class="col-md-6">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="paralelo_7" name="paralelo_7">
+                                                                    <option value="">Seleccionar</option>
+                                                                <option value="A">A</option>
+                                                                <option value="B">B</option>
+                                                                <option value="C">C</option>
+                                                                <option value="D">D</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-5">Gesti&oacute;n</label>
+                                                            <div class="col-md-7">
+                                                                <input type="text" class="form-control" id="gestion_7" name="gestion_7" value="">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-1 col-md-12">
+                                                        <button type="button" class="btn btn-danger" onclick="cerrar_carrera_7();">X</button>
                                                     </div>
                                                 </div>
                                                 <!--/row-->
@@ -450,13 +673,15 @@
                                                     <div class="col-md-12">
                                                         <div class="row">
                                                             <div class="col-md-offset-3 col-md-9">
-                                                                <button type="button" class="btn btn-info" onclick="ver();">Ver Asignaturas por Tomar</button>
+                                                                <button type="button" class="btn btn-info" id="b_carrera_4" onclick="abre_carrera_4();">Adicionar Otra Carrera </button>
+                                                                <button type="button" class="btn btn-info" id="b_carrera_5" style="display: none;" onclick="abre_carrera_5();">Adicionar Otra Carrera </button>
+                                                                <button type="button" class="btn btn-info" id="b_carrera_6" style="display: none;" onclick="abre_carrera_6();">Adicionar Otra Carrera </button>
+                                                                <button type="button" class="btn btn-info" id="b_carrera_7" style="display: none;" onclick="abre_carrera_7();">Adicionar Otra Carrera </button>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -473,7 +698,6 @@
                                         <h4 class="mb-0 text-white">Asignaturas Adicionales</h4>
                                     </div>
                                     <div class="card-body">
-                                        <form action="#" class="form-horizontal">
                                             <div class="form-body">
                                                 <!--/row-->
                                                 <!-- <h3 class="box-title">Address</h3> -->
@@ -481,12 +705,12 @@
                                                 <div class="row">
                                                     <div class="col-lg-4 col-md-12">
                                                         <div class="form-group row">
-                                                            <label class="control-label text-right col-md-3">Carrera</label>
+                                                            <label class="control-label text-right col-md-3">Asignaturas</label>
                                                             <div class="col-md-9">
-                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="carrera_id" name="carrera_id">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="asignatura_id_1" name="asignatura_id_1">
                                                                     <option value="">Seleccionar</option>
-                                                                    @foreach($carreras as $carre)
-                                                                    <option value="{{ $carre->id }}">{{ $carre->nombre }}</option>
+                                                                    @foreach($asignaturas as $asig)
+                                                                    <option value="{{ $asig->id }}">{{ $asig->nombre_asignatura }}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>
@@ -496,7 +720,7 @@
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-3">Turno</label>
                                                             <div class="col-md-7">
-                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="turno_id" name="turno_id">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="asignatura_turno_id_1" name="asignatura_turno_id_1">
                                                                     <option value="">Seleccionar</option>
                                                                     @foreach($turnos as $tur)
                                                                     <option value="{{ $tur->id }}">{{ $tur->descripcion }}</option>
@@ -509,7 +733,7 @@
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-3">Paralelo</label>
                                                             <div class="col-md-6">
-                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="paralelo" name="paralelo">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="asignatura_paralelo_1" name="asignatura_paralelo_1">
                                                                     <option value="">Seleccionar</option>
                                                                 <option value="A">A</option>
                                                                 <option value="B">B</option>
@@ -523,19 +747,23 @@
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-5">Gesti&oacute;n</label>
                                                             <div class="col-md-7">
-                                                                <input type="text" class="form-control" id="gestion" name="gestion" value="{{ $year }}">
+                                                                <input type="text" class="form-control" id="asignatura_gestion_1" name="asignatura_gestion_1" value="{{ $year }}">
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <!--/row-->
-                                                <!--/row-->
-                                                <div class="row" id="secre" style="display:none;">
+                                                 <!--row ASIGNATURA_2-->
+                                                <div class="row" id="asignatura_2" style="display:none;">
                                                     <div class="col-lg-3 col-md-12">
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-3">Carrera</label>
                                                             <div class="col-md-9">
-                                                                <input type="text" class="form-control" id="carrera_id_secre" name="carrera_id_secre" readonly value="Secretariado Administrativo">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="asignatura_id_2" name="asignatura_id_2">
+                                                                    <option value="">Seleccionar</option>
+                                                                    @foreach($asignaturas as $asig)
+                                                                    <option value="{{ $asig->id }}">{{ $asig->nombre_asignatura }}</option>
+                                                                    @endforeach
+                                                                </select>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -543,7 +771,7 @@
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-3">Turno</label>
                                                             <div class="col-md-7">
-                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="turno_id_secre" name="turno_id_secre">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="asignatura_turno_id_2" name="asignatura_turno_id_2">
                                                                     <option value="">Seleccionar</option>
                                                                     @foreach($turnos as $tur)
                                                                     <option value="{{ $tur->id }}">{{ $tur->descripcion }}</option>
@@ -556,7 +784,7 @@
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-3">Paralelo</label>
                                                             <div class="col-md-6">
-                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="paralelo_secre" name="paralelo_secre">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="asignatura_paralelo_2" name="asignatura_paralelo_2">
                                                                     <option value="">Seleccionar</option>
                                                                 <option value="A">A</option>
                                                                 <option value="B">B</option>
@@ -570,22 +798,27 @@
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-5">Gesti&oacute;n</label>
                                                             <div class="col-md-7">
-                                                                <input type="text" class="form-control" id="gestion_secre" name="gestion_secre" value="">
+                                                                <input type="text" class="form-control" id="asignatura_gestion_2" name="asignatura_gestion_2" value="">
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-1 col-md-12">
-                                                        <button type="button" class="btn btn-danger" onclick="cerrar_secre();">X</button>
+                                                        <button type="button" class="btn btn-danger" onclick="cerrar_asignatura_2();">X</button>
                                                     </div>
                                                 </div>
                                                 <!--/row-->
-                                                <!--/row-->
-                                                <div class="row" id="auxiliar" style="display:none;">
+                                                 <!--row ASIGNATURA_3-->
+                                                <div class="row" id="asignatura_3" style="display:none;">
                                                     <div class="col-lg-3 col-md-12">
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-3">Carrera</label>
                                                             <div class="col-md-9">
-                                                                <input type="text" class="form-control" id="carrera_id_auxi" name="carrera_id_auxi" readonly value="Auxiliar Administrativo Financiero">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="asignatura_id_3" name="asignatura_id_3">
+                                                                    <option value="">Seleccionar</option>
+                                                                    @foreach($asignaturas as $asig)
+                                                                    <option value="{{ $asig->id }}">{{ $asig->nombre_asignatura }}</option>
+                                                                    @endforeach
+                                                                </select>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -593,7 +826,7 @@
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-3">Turno</label>
                                                             <div class="col-md-7">
-                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="turno_id_auxi" name="turno_id_auxi">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="asignatura_turno_id_3" name="asignatura_turno_id_3">
                                                                     <option value="">Seleccionar</option>
                                                                     @foreach($turnos as $tur)
                                                                     <option value="{{ $tur->id }}">{{ $tur->descripcion }}</option>
@@ -606,7 +839,7 @@
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-3">Paralelo</label>
                                                             <div class="col-md-6">
-                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="paralelo_auxi" name="paralelo_auxi">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="asignatura_paralelo_3" name="asignatura_paralelo_3">
                                                                     <option value="">Seleccionar</option>
                                                                 <option value="A">A</option>
                                                                 <option value="B">B</option>
@@ -620,12 +853,122 @@
                                                         <div class="form-group row">
                                                             <label class="control-label text-right col-md-5">Gesti&oacute;n</label>
                                                             <div class="col-md-7">
-                                                                <input type="text" class="form-control" id="gestion_auxi" name="gestion_auxi" value="">
+                                                                <input type="text" class="form-control" id="asignatura_gestion_3" name="asignatura_gestion_3" value="">
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-1 col-md-12">
-                                                        <button type="button" class="btn btn-danger" onclick="cerrar_auxi();">X</button>
+                                                        <button type="button" class="btn btn-danger" onclick="cerrar_asignatura_3();">X</button>
+                                                    </div>
+                                                </div>
+                                                <!--/row-->
+                                                 <!--row ASIGNATURA_4-->
+                                                <div class="row" id="asignatura_4" style="display:none;">
+                                                    <div class="col-lg-3 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-3">Carrera</label>
+                                                            <div class="col-md-9">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="asignatura_id_4" name="asignatura_id_4">
+                                                                    <option value="">Seleccionar</option>
+                                                                    @foreach($asignaturas as $asig)
+                                                                    <option value="{{ $asig->id }}">{{ $asig->nombre_asignatura }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-3">Turno</label>
+                                                            <div class="col-md-7">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="asignatura_turno_id_4" name="asignatura_turno_id_4">
+                                                                    <option value="">Seleccionar</option>
+                                                                    @foreach($turnos as $tur)
+                                                                    <option value="{{ $tur->id }}">{{ $tur->descripcion }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-3">Paralelo</label>
+                                                            <div class="col-md-6">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="asignatura_paralelo_4" name="asignatura_paralelo_4">
+                                                                    <option value="">Seleccionar</option>
+                                                                <option value="A">A</option>
+                                                                <option value="B">B</option>
+                                                                <option value="C">C</option>
+                                                                <option value="D">D</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-5">Gesti&oacute;n</label>
+                                                            <div class="col-md-7">
+                                                                <input type="text" class="form-control" id="asignatura_gestion_4" name="asignatura_gestion_4" value="">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-1 col-md-12">
+                                                        <button type="button" class="btn btn-danger" onclick="cerrar_asignatura_4();">X</button>
+                                                    </div>
+                                                </div>
+                                                <!--/row-->
+                                                 <!--row ASIGNATURA_5-->
+                                                <div class="row" id="asignatura_5" style="display:none;">
+                                                    <div class="col-lg-3 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-3">Carrera</label>
+                                                            <div class="col-md-9">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="asignatura_id_5" name="asignatura_id_5">
+                                                                    <option value="">Seleccionar</option>
+                                                                    @foreach($asignaturas as $asig)
+                                                                    <option value="{{ $asig->id }}">{{ $asig->nombre_asignatura }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-3">Turno</label>
+                                                            <div class="col-md-7">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="asignatura_turno_id_5" name="asignatura_turno_id_5">
+                                                                    <option value="">Seleccionar</option>
+                                                                    @foreach($turnos as $tur)
+                                                                    <option value="{{ $tur->id }}">{{ $tur->descripcion }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-3">Paralelo</label>
+                                                            <div class="col-md-6">
+                                                                <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="asignatura_paralelo_5" name="asignatura_paralelo_5">
+                                                                    <option value="">Seleccionar</option>
+                                                                <option value="A">A</option>
+                                                                <option value="B">B</option>
+                                                                <option value="C">C</option>
+                                                                <option value="D">D</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2 col-md-12">
+                                                        <div class="form-group row">
+                                                            <label class="control-label text-right col-md-5">Gesti&oacute;n</label>
+                                                            <div class="col-md-7">
+                                                                <input type="text" class="form-control" id="asignatura_gestion_5" name="asignatura_gestion_5" value="">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-1 col-md-12">
+                                                        <button type="button" class="btn btn-danger" onclick="cerrar_asignatura_5();">X</button>
                                                     </div>
                                                 </div>
                                                 <!--/row-->
@@ -635,13 +978,15 @@
                                                     <div class="col-md-12">
                                                         <div class="row">
                                                             <div class="col-md-offset-3 col-md-9">
-                                                                <button type="button" class="btn btn-info" onclick="ver();">Ver Asignaturas por Tomar</button>
+                                                                <button type="button" class="btn btn-info" id="b_asignatura_2" onclick="abre_asignatura_2();">Adicionar Otra Asignatura </button>
+                                                                <button type="button" class="btn btn-info" id="b_asignatura_3" style="display: none;" onclick="abre_asignatura_3();">Adicionar Otra Asignatura </button>
+                                                                <button type="button" class="btn btn-info" id="b_asignatura_4" style="display: none;" onclick="abre_asignatura_4();">Adicionar Otra Asignatura </button>
+                                                                <button type="button" class="btn btn-info" id="b_asignatura_5" style="display: none;" onclick="abre_asignatura_5();">Adicionar Otra Asignatura </button>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -651,7 +996,7 @@
                         
                         <div class="row">
                             <div class="col-md-6">
-                            <button type="submit" class="btn waves-effect waves-light btn-block btn-success">Guardar</button>
+                            <button type="submit" id="boton" onclick="guarda();" class="btn waves-effect waves-light btn-block btn-success">Guardar</button>
                             </div>
                             <div class="col-md-6">
                             <button type="button" class="btn waves-effect waves-light btn-block btn-inverse">Cancelar</button>
@@ -670,6 +1015,8 @@
 </div>
 @stop
 @section('js')
+<script src="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
 <script>
     $('#trabaja').on('change', function(e){
             var trabaja = e.target.value;
@@ -690,6 +1037,7 @@
                 ci : carnet
             },
             success:function(data){
+                $('#persona_id').val(data.id);
                 $('#expedido').val(data.expedido);
                 $('#apellido_paterno').val(data.apellido_paterno);
                 $('#apellido_materno').val(data.apellido_materno);
@@ -720,7 +1068,7 @@
 </script>
 
 <script>
-    $('#carrera_id').on('change', function(e){
+    $('#carrera_id_1').on('change', function(e){
             var carrera = e.target.value;
             if (carrera == '1') {
                 $('#secre').show('slow');//para visualizar las asignaturas
@@ -734,14 +1082,117 @@
 
     function cerrar_secre(){
         $('#secre').hide('slow');//para visualizar las asignaturas
-        $("#gestion_secre").attr('value', '');
+        $("#gestion_2").val('');
     }
 
     function cerrar_auxi(){
         $('#auxiliar').hide('slow');//para visualizar las asignaturas
-        $("#gestion_auxi").attr('value', '');
+        $("#gestion_3").val('');
     }
 </script>
+
+<script>
+    function abre_carrera_4(){
+        $('#carrera_4').show('slow');//para visualizar las asignaturas
+        $('#b_carrera_4').hide('slow');//para visualizar las asignaturas
+        $('#b_carrera_5').show('slow');//para visualizar las asignaturas
+    }
+
+    function cerrar_carrera_4(){
+        $('#carrera_4').hide('slow');//para visualizar las asignaturas
+        $("#carrera_id_4").val('');
+    }
+
+    function abre_carrera_5(){
+        $('#carrera_5').show('slow');//para visualizar las asignaturas
+        $('#b_carrera_5').hide('slow');//para visualizar las asignaturas
+        $('#b_carrera_6').show('slow');//para visualizar las asignaturas
+    }
+
+    function cerrar_carrera_5(){
+        $('#carrera_5').hide('slow');//para visualizar las asignaturas
+        $("#carrera_id_5").val('');
+    }
+
+    function abre_carrera_6(){
+        $('#carrera_6').show('slow');//para visualizar las asignaturas
+        $('#b_carrera_6').hide('slow');//para visualizar las asignaturas
+        $('#b_carrera_7').show('slow');//para visualizar las asignaturas
+    }
+
+    function cerrar_carrera_6(){
+        $('#carrera_6').hide('slow');//para visualizar las asignaturas
+        $("#carrera_id_6").val('');
+    }
+
+    function abre_carrera_7(){
+        $('#carrera_7').show('slow');//para visualizar las asignaturas
+        $('#b_carrera_7').hide('slow');//para visualizar las asignaturas
+        // $('#b_carrera_4').show('slow');//para visualizar las asignaturas
+    }
+
+    function cerrar_carrera_7(){
+        $('#carrera_7').hide('slow');//para visualizar las asignaturas
+        $("#carrera_id_7").val('');
+    }
+</script>
+
+<script>
+    function abre_asignatura_2(){
+        $('#asignatura_2').show('slow');//para visualizar las asignaturas
+        $('#b_asignatura_2').hide('slow');//para visualizar las asignaturas
+        $('#b_asignatura_3').show('slow');//para visualizar las asignaturas
+    }
+
+    function cerrar_asignatura_2(){
+        $('#asignatura_2').hide('slow');//para visualizar las asignaturas
+        $("#asignatura_id_2").val('');
+    }
+
+    function abre_asignatura_3(){
+        $('#asignatura_3').show('slow');//para visualizar las asignaturas
+        $('#b_asignatura_3').hide('slow');//para visualizar las asignaturas
+        $('#b_asignatura_4').show('slow');//para visualizar las asignaturas
+    }
+
+    function cerrar_asignatura_3(){
+        $('#asignatura_3').hide('slow');//para visualizar las asignaturas
+        $("#asignatura_id_3").val('');
+    }
+
+    function abre_asignatura_4(){
+        $('#asignatura_4').show('slow');//para visualizar las asignaturas
+        $('#b_asignatura_4').hide('slow');//para visualizar las asignaturas
+        $('#b_asignatura_5').show('slow');//para visualizar las asignaturas
+    }
+
+    function cerrar_asignatura_4(){
+        $('#asignatura_4').hide('slow');//para visualizar las asignaturas
+        $("#asignatura_id_4").val('');
+    }
+
+    function abre_asignatura_5(){
+        $('#asignatura_5').show('slow');//para visualizar las asignaturas
+        $('#b_asignatura_5').hide('slow');//para visualizar las asignaturas
+        // $('#b_carrera_4').show('slow');//para visualizar las asignaturas
+    }
+
+    function cerrar_asignatura_5(){
+        $('#asignatura_5').hide('slow');//para visualizar las asignaturas
+        $("#asignatura_id_5").val('');
+    }
+
+
+</script>
+{{-- <script>
+    function guarda(){
+        setInterval(Swal.fire(
+                    'Excelente!',
+                    'Los datos fueron guadados',
+                    'success'
+                ), 3000);
+    }
+</script> --}}
 
 <script type="text/javascript">
     function mostrarMensaje(mensaje){

@@ -112,6 +112,10 @@ Route::get('Inscripcion/re_inscripcion/{id}', 'InscripcionController@re_inscripc
 
 Route::get('Inscripcion/asignaturas_a_tomar', 'InscripcionController@asignaturas_a_tomar');
 
+Route::get('Inscripcion/tomar_asignaturas/{persona_id}', 'InscripcionController@tomar_asignaturas');
+
+
+
 // ADMINISTRACION
 Route::post('Asignatura/guarda', 'AsignaturaController@guarda');
 Route::get('Carrera/listado', 'CarreraController@listado');
