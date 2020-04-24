@@ -27,6 +27,7 @@ class NotaController extends Controller
         $usuario = Auth::user();
         $asignaturas = NotasPropuesta::where('user_id', Auth::user()->id)
                                     ->where('anio_vigente', date('Y'))
+                                    ->where('borrado', NULL)
                                     ->get();
         return view('nota.listado')->with(compact('asignaturas'));
     }
@@ -39,6 +40,7 @@ class NotaController extends Controller
                     ->where('user_id', $asignatura->user_id)
                     ->where('paralelo', $asignatura->paralelo)
                     ->where('anio_vigente', $asignatura->anio_vigente)
+                    ->where('borrado', NULL)
                     ->get();
         return view('nota.detalle')->with(compact('asignatura', 'notas'));
     }
@@ -57,6 +59,7 @@ class NotaController extends Controller
                     ->where('paralelo', $asignatura->paralelo)
                     ->where('anio_vigente', $asignatura->anio_vigente)
                     ->whereBetween('nota_total', [30,60])
+                    ->where('borrado', NULL)
                     ->get();
         return view('nota.segundoTurno')->with(compact('asignatura', 'segundoTurno'));
     }
@@ -78,6 +81,7 @@ class NotaController extends Controller
                                 ->where('persona_id', $nota->persona_id)
                                 ->where('paralelo', $nota->paralelo) 
                                 ->where('anio_vigente', $nota->anio_vigente)
+                                ->where('borrado', NULL)
                                 ->firstOrFail();
 
         if($nota->segundo_turno && $nota->segundo_turno >= 61){
@@ -94,6 +98,7 @@ class NotaController extends Controller
             //Actualización en Kardex
             $kardex = Kardex::where('persona_id', $nota->persona_id)
                             ->where('asignatura_id', $nota->asignatura_id)
+                            ->where('borrado', NULL)
                             ->firstOrFail();
             $kardex->aprobado = 'Si';
             $kardex->anio_aprobado = date('Y');
@@ -155,6 +160,7 @@ class NotaController extends Controller
                                     ->where('persona_id', $nota->persona_id)
                                     ->where('paralelo', $nota->paralelo) 
                                     ->where('anio_vigente', $nota->anio_vigente)
+                                    ->where('borrado', NULL)
                                     ->firstOrFail();
             $inscripcion->nota = $nota->segundo_turno;
             $inscripcion->save();

@@ -81,6 +81,7 @@
 <script src="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
 <script>
+// Script de importacion de excel
 $(document).ready(function() {
     $('.upload_form').on('submit', function(event) {
         event.preventDefault();
@@ -99,7 +100,10 @@ $(document).ready(function() {
                     'Hecho',
                     data.message,
                     'success'
-                    )// aqui recargar la pagina
+                    ).then(function() {
+                        location.reload();
+                        $('#select_file').val('');
+                    });
                 }else{
                     Swal.fire(
                     'Oops...',
