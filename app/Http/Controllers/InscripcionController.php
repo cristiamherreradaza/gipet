@@ -818,10 +818,10 @@ class InscripcionController extends Controller
 	    }
     }
 
-
     public function tomar_asignaturas($persona_id)
     {
     	$fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
+    	$fecha_registro = $fecha->format('Y-m-d H:i:s');
 		$anio = $fecha->format('Y');//obtenes solo el año actual
 
 		$per = $persona_id;//obtenes el id de la persona seleccioanda en la vista
@@ -830,8 +830,8 @@ class InscripcionController extends Controller
 	                       ->where('anio_vigente', $anio)
 	                       ->get();
 
-	    foreach ($carreras as $key => $value) {
-	    	$carr = $carreras[$key]->carrera_id;//obtenes el id de la carrera seleccioanda en la vista
+	    foreach ($carreras as $keyca => $value) {
+	    	$carr = $carreras[$keyca]->carrera_id;//obtenes el id de la carrera seleccioanda en la vista
 		
 			//obtenemos todas las asignaturas que no estan aprobadas segun la carrera seleccionada
 	    	$asignaturas = DB::table('kardex')
@@ -839,11 +839,12 @@ class InscripcionController extends Controller
 					      ->where('carrera_id','=',$carr)
 					      ->where('persona_id','=',$per)
 					      ->where('aprobado','No')
-					      ->distinct()->get();
+					      ->get();
 			// dd($asignaturas);
-			//este foreach nos ayuda a recorrer todas las asignaturas  
-			foreach ($asignaturas as $key => $value) {
-				$id = $asignaturas[$key]->asignatura_id;
+			//este foreach nos ayuda a recorrer todas las asignaturas
+			// $numero = sizeof($asignaturas);  
+			foreach ($asignaturas as $key123 => $valor123) {
+				$id = $valor123[$key123]->asignatura_id;
 				//obtenemos los prerequisitos de las materias seleccionadas
 				$pre_asig = DB::table('prerequisitos')
 					      ->select('*')
@@ -871,7 +872,7 @@ class InscripcionController extends Controller
 
 
 					    if ($datos == 'Si') {
-					    	echo $datos;
+					    	// echo $datos;
 					    	DB::table('materias')->insert([
 						          'asignatura_id' => $id,
 								  'codigo_asignatura' => $datos_asig->codigo_asignatura,
@@ -879,8 +880,7 @@ class InscripcionController extends Controller
 						          'estado' => 1,
 						        ]);
 					    }
-					}
-					else{
+					} else{
 						//En esta parte se insertara momentaneamente el id de las asignaturas que no tienen ningun requisito a la tabla de MATERIAS
 						DB::table('materias')->insert([
 						          'asignatura_id' => $pre_asig[0]->asignatura_id,
@@ -898,9 +898,9 @@ class InscripcionController extends Controller
 	             ->groupBy('asignatura_id')
 	             ->get();
 	        // dd($materias);
-	        foreach ($materias as $key => $value) {
-	        	$id_asig = $materias[$key]->asignatura_id;
-	        	$valor = $materias[$key]->nro;
+	        foreach ($materias as $keyma => $value) {
+	        	$id_asig = $materias[$keyma]->asignatura_id;
+	        	$valor = $materias[$keyma]->nro;
 
 	        	$prerequisitos = DB::table('prerequisitos')
 	             ->select('asignatura_id', DB::raw('count(asignatura_id) as nro'))
@@ -918,11 +918,44 @@ class InscripcionController extends Controller
 
 	        $asig_tomar = DB::select("SELECT DISTINCT asignatura_id, codigo_asignatura, nombre_asignatura
 									FROM materias");
+	        foreach ($asig_tomar as $asig1 => $asig_tomar1) {
+
+	        		$inscripcion = new Inscripcion();
+					$inscripcion->asignatura_id = $asig_tomar[$asig1]->asignatura_id;
+					$inscripcion->turno_id = $carreras[0]->turno_id;
+					$inscripcion->persona_id = $per;
+					$inscripcion->paralelo = 'A';
+					$inscripcion->gestion = $anio;
+					$inscripcion->anio_vigente = $fecha_registro;
+					$inscripcion->save();
+	        }
+
+	        DB::table('materias')->truncate();
+	        
 	    }
-		
+		return redirect('Persona/listado');
+    	// return response()->json($asig_tomar);
+    	    
 
-    	return response()->json($asig_tomar);       
+    }
 
+    public function vista()
+    {
+    	$id = 3185;//obtenes el id de la asignatura seleccioanda en la vista
+    	$persona = Persona::find($id);
+    	$carreras = Carrera::where('borrado',NULL)->get();
+        $turnos = Turno::where('borrado', NULL)->get();
+        $fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
+		$year = $fecha->format('Y');//obtenes solo el año actual
+		$asignaturas = DB::table('asignaturas')
+			    ->join('prerequisitos', 'asignaturas.id', '=', 'prerequisitos.asignatura_id')
+			    ->where('asignaturas.anio_vigente', '=', $year)
+			    ->where('prerequisitos.sigla', '=', NULL)
+			    ->select('asignaturas.*')
+			    ->get();
+        // dd($asignaturas);
+    	return view('inscripcion.selecciona_asignatura', compact('carreras', 'turnos', 'year', 'asignaturas', 'persona')); 
+    	
     }
 
 }

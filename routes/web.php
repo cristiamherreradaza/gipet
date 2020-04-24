@@ -42,8 +42,10 @@ Route::post('carrera/store', 'CarreraController@store');
 
 Route::get('persona/nuevo', 'PersonaController@nuevo'); 
 Route::post('persona/guarda', 'PersonaController@guarda');
-Route::get('persona/listado', 'PersonaController@listado');
-Route::get('persona/ajax_datos', 'PersonaController@ajax_datos');
+Route::get('Persona/listado', 'PersonaController@listado');
+Route::get('Persona/ajax_listado', 'PersonaController@ajax_listado');
+Route::get('Persona/ver_persona/{persona_id}', 'PersonaController@ver_persona');
+Route::get('Persona/verifica', 'PersonaController@verifica');
 // Route::get('persona/ajax_datos', function () {
     // return datatables()->query(DB::table('personas'))->toJson();
 // });
@@ -113,6 +115,8 @@ Route::get('Inscripcion/re_inscripcion/{id}', 'InscripcionController@re_inscripc
 Route::get('Inscripcion/asignaturas_a_tomar', 'InscripcionController@asignaturas_a_tomar');
 
 Route::get('Inscripcion/tomar_asignaturas/{persona_id}', 'InscripcionController@tomar_asignaturas');
+
+Route::get('Inscripcion/vista', 'InscripcionController@vista');
 
 
 

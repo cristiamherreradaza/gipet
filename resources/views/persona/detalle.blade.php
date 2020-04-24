@@ -87,6 +87,141 @@
 </div>
 <!-- fin modal -->
 
+<!-- inicio modal content -->
+<div id="modal_asignatura" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        {{-- <div class="modal-content"> --}}
+            <!-- Column -->
+            <div class="col-lg-12 col-md-12" id="mostrar_asig1">
+                <div class="card card-inverse card-dark">
+                    <div class="card-body">
+                        <div class="d-flex">
+                            <div class="mr-3 align-self-center">
+                                <h1 class="text-white"><i class="icon-graduation"></i></h1></div>
+                            <div>
+                                <h3 class="card-title" id="nom_asig1"></h3>
+                                <h6 class="card-subtitle" id="gest1"> </h6> </div>
+                        </div>
+                        <div class="row">
+                            <!-- column -->
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table no-wrap" id="valor1_1">
+                                                <thead>
+                                                    <tr>
+                                                        <th data-field="state" data-checkbox="true"></th>
+                                                        <th data-field="name">Sigla</th>
+                                                        <th data-field="price">Asignatura</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="valor1">
+                                                    
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Column -->
+        {{-- </div> --}}
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- fin modal -->
+
+<!-- inicio modal content -->
+<div id="modal_reinscripcion" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Column -->
+            <!-- Row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card card-outline-info">
+                        <div class="card-header">
+                            <h4 class="mb-0 text-white">Datos de la Carrera</h4>
+                        </div>
+                        <div class="card-body">
+                                <div class="form-body">
+                                    <!--/row-->
+                                    <!-- <h3 class="box-title">Address</h3> -->
+                                    <!--/row-->
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12">
+                                            <div class="form-group row">
+                                                <label class="control-label text-right col-md-3">Turno</label>
+                                                <div class="col-md-7">
+                                                    <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="turno_id_1" name="turno_id_1">
+                                                        <option value="">Seleccionar</option>
+                                                        {{-- @foreach($turnos as $tur)
+                                                        <option value="{{ $tur->id }}">{{ $tur->descripcion }}</option>
+                                                        @endforeach --}}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12">
+                                            <div class="form-group row">
+                                                <label class="control-label text-right col-md-3">Paralelo</label>
+                                                <div class="col-md-6">
+                                                    <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="paralelo_1" name="paralelo_1">
+                                                        <option value="">Seleccionar</option>
+                                                    <option value="A">A</option>
+                                                    <option value="B">B</option>
+                                                    <option value="C">C</option>
+                                                    <option value="D">D</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12">
+                                            <div class="form-group row">
+                                                <label class="control-label text-right col-md-3">Gesti&oacute;n</label>
+                                                <div class="col-md-7">
+                                                    <input type="text" class="form-control" id="gestion_1" name="gestion_1" value="{{ 2020 }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--/row-->
+                                    
+                                </div>
+                                <div class="form-actions">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="row">
+                                                <div class="col-md-offset-3 col-md-9">
+                                                    <button type="button" class="btn btn-info" id="b_carrera_4" onclick="abre_carrera_4();">Guardar </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Row -->
+            <!-- Column -->
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- fin modal -->
+
 <div class="card">
     <div class="card-body">
 
@@ -152,7 +287,13 @@
                                             <td>{{ $cp->turno->descripcion }}</td>
                                             <td>{{ $cp->anio_vigente }}</td>
                                             <td>
+
                                                 <button type="button" class="btn btn-warning" onclick="muestra_materias({{ $cp->carrera_id }}, {{ $cp->persona_id }}, {{ $cp->anio_vigente }})"><i class="fas fa-edit"></i></button>
+
+                                                
+                                                <button type="button" class="btn btn-dark" onclick="ver_asignaturas({{ $i->id }}, '{{ $i->carrera->nombre }}', '{{ $i->anio_vigente }}')"><i class=" fas fa-address-book"></i></button>
+                                                <button type="button" class="btn btn-success" onclick="re_inscripcion({{ $i->id }}, '{{ $i->carrera->nombre }}', '{{ $i->anio_vigente }}')"><i class=" fas fa-desktop"></i></button>
+
                                             </td>
                                         </tr>
                                     @endforeach
@@ -258,6 +399,49 @@
         $("#fm_asignatura_id").val(asignatura_id);
         $("#modal_asigna").modal('show');
         // console.log(nombre_asignatura);
+    }
+
+    function ver_asignaturas(id, nombre, anio)
+    {
+        var carrera_persona_id = id;
+        var nombre_carrera = nombre;
+        var anio_actual = anio;
+        var table1 = document.getElementById('valor1');
+        table1.innerHTML = '';
+        $.ajax({
+            type:'GET',
+            url:"{{ url('Persona/verifica') }}",
+            data: {
+                id : carrera_persona_id
+            },
+            success:function(data){
+                var num = 1;
+                 $.each(data, function(index, value) {
+                        $("#valor1").append('<tr>'+
+                                                '<td>' + 
+                                                    num +
+                                                '</td>' + 
+                                                '<td>' + data[index].codigo_asignatura + '</td>' +
+                                                '<td>' + data[index].nombre_asignatura + '</td>' +
+                                            '</tr>');
+                        num ++;
+                    });
+                    $("#nom_asig1").html(nombre_carrera);
+                    $("#gest1").html('Gestion ' + anio_actual);
+                $('#modal_asignatura').modal('show');
+            }
+        });
+        // $("#modal_sigla_materia").html(codigo_asignatura);
+        // $("#modal_nombre_materia").html(nombre_asignatura);
+        // $("#modal_carrera_materia").html(nombre_carrera);
+        // $("#fm_asignatura_id").val(asignatura_id);
+        // $('#modal_asignatura').modal('show');
+        // console.log(nombre_asignatura);
+    }
+
+    function re_inscripcion(id, nombre, anio)
+    {
+        $('#modal_reinscripcion').modal('show');
     }
 
     function guarda_asignacion() {

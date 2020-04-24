@@ -8,38 +8,31 @@
 <div id="divmsg" style="display:none" class="alert alert-primary" role="alert"></div>
 <div class="row">
     <!-- Column -->
+    
     <div class="col-md-12">
-        <!-- Row -->
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card card-outline-info">
-                    <div class="card-header">
-                        <h4 class="mb-0 text-white">NUEVO ALUMNO</h4>
-                    </div>
-
-                    <div class="card-body">
-                        <h4 class="card-title">Table Responsive </h4>
-                        <h6 class="card-subtitle">Data table example</h6>
-                        <div class="table-responsive m-t-40">
-                            <table id="tabla-personas" class="table display table-bordered table-striped no-wrap">
-                                <thead>
-                                    <tr>
-                                        <th>Apellido Paterno</th>
-                                        <th>Apellido Materno</th>
-                                        <th>Nombres</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                                
-                            </table>
-                        </div>
-                    </div>
-                    
-                </div>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">LISTADO DE ALUMNOS </h4>
+                {{-- <div class="table-responsive m-t-40"> --}}
+                    <table id="tabla-personas" class="table table-bordered table-striped no-wrap">
+                        <thead>
+                            <tr>
+                                <th>Ap Paterno</th>
+                                <th>Ap Materno</th>
+                                <th>Nombres</th>
+                                <th>N° Carnet</th>
+                                <th>N° Celular</th>
+                                <th>Razon Social</th>
+                                <th>Nit</th>
+                                <th>Accion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                {{-- </div> --}}
             </div>
         </div>
-        
-        <!-- Row -->
     </div>
     <!-- Column -->
 </div>
@@ -73,13 +66,18 @@ $(document).ready(function() {
     var table = $('#tabla-personas').DataTable( {
         "iDisplayLength": 10,
         "processing": true,
-        "scrollX": true,
+        // "scrollX": true,
         "serverSide": true,
-        "ajax": "{{ url('persona/ajax_datos') }}",
+        "ajax": "{{ url('Persona/ajax_listado') }}",
         "columns": [
             {data: 'apellido_paterno'},
             {data: 'apellido_materno'},
             {data: 'nombres'},
+            {data: 'carnet'},
+            {data: 'telefono_celular'},
+            {data: 'razon_social_cliente'},
+            {data: 'nit'},
+            {data: 'action'},
         ]
     } );
 
@@ -97,6 +95,12 @@ $(document).ready(function() {
     // } );
 
 } );
+
+function ver_persona(persona_id)
+{
+    // console.log(user_id);
+    window.location.href = "{{ url('Persona/ver_persona') }}/" + persona_id;
+}
 
 </script>
 
