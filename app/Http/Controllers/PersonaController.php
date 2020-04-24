@@ -60,7 +60,7 @@ class PersonaController extends Controller
 
     public function ajax_listado()
     {
-        $lista_persona = Persona::all();
+        $lista_persona = Persona::select('id', 'apellido_paterno', 'apellido_materno', 'nombres', 'carnet', 'telefono_celular', 'razon_social_cliente', 'nit');
         return Datatables::of($lista_persona)
             ->addColumn('action', function ($lista_persona) {
                 return '<button onclick="ver_persona('.$lista_persona->id.')" class="btn btn-info"><i class="fas fa-eye"></i></a>';
