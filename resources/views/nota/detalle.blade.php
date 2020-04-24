@@ -70,7 +70,9 @@
         <input type="submit" name="upload" id="upload" class="btn btn-rounded btn-success float-lg-right" value="Importar">
     </form>
     <a class="btn btn-rounded btn-success float-lg-left" href="{{ url('nota/exportarexcel/'.$asignatura->id) }}">Exportar</a> 
+    <a class="btn btn-rounded btn-info float-lg-right" href="{{ url('nota/listado') }}">Volver</a> 
     <a class="btn btn-rounded btn-danger float-lg-right" href="{{ url('nota/segundoTurno/'.$asignatura->id) }}">Segundo Turno</a> 
+    
 </div>
 
 @endsection
