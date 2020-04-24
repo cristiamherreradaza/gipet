@@ -123,36 +123,39 @@
 </script>
 
 <script>
-    // Script de importacion de excel
-    $(document).ready(function() {
-        $('.upload_form').on('submit', function(event) {
-            event.preventDefault();
-            $.ajax({
-                url: "{{ url('notaspropuesta/ajax_importar') }}",
-                method: "POST",
-                data: new FormData(this),
-                dataType: 'JSON',
-                contentType: false,
-                cache: false,
-                processData: false,
-                success: function(data)
-                {
-                    if(data.sw == 1){
-                        Swal.fire(
-                        'Hecho',
-                        data.message,
-                        'success'
-                        )// aqui recargar la pagina
-                    }else{
-                        Swal.fire(
-                        'Oops...',
-                        data.message,
-                        'error'
-                        )
-                    }
+// Script de importacion de excel
+$(document).ready(function() {
+    $('.upload_form').on('submit', function(event) {
+        event.preventDefault();
+        $.ajax({
+            url: "{{ url('notaspropuesta/ajax_importar') }}",
+            method: "POST",
+            data: new FormData(this),
+            dataType: 'JSON',
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function(data)
+            {
+                if(data.sw == 1){
+                    Swal.fire(
+                    'Hecho',
+                    data.message,
+                    'success'
+                    ).then(function() {
+                        location.reload();
+                        $('#select_file').val('');
+                    });
+                }else{
+                    Swal.fire(
+                    'Oops...',
+                    data.message,
+                    'error'
+                    )
                 }
-            })
-        });
+            }
+        })
     });
+});
 </script>
 @endsection

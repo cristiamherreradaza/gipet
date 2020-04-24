@@ -27,6 +27,7 @@ class NotaController extends Controller
         $usuario = Auth::user();
         $asignaturas = NotasPropuesta::where('user_id', Auth::user()->id)
                                     ->where('anio_vigente', date('Y'))
+                                    ->where('borrado', NULL)
                                     ->get();
         return view('nota.listado')->with(compact('asignaturas'));
     }
@@ -34,11 +35,48 @@ class NotaController extends Controller
     public function detalle($id)
     {
         $asignatura = NotasPropuesta::find($id);
+        
+        //En tabla Inscripcion leer filas que contengan valores similares a los de la NotaPropuesta
+        $inscripciones = Inscripcion::where('asignatura_id', $asignatura->asignatura_id)
+                                ->where('turno_id', $asignatura->turno_id)
+                                ->where('paralelo', $asignatura->paralelo)
+                                ->where('anio_vigente', $asignatura->anio_vigente)
+                                ->where('borrado', NULL)
+                                ->get();
+        // Capturamos X registros de Inscripcion, ahora debemos colocarlos en Notas
+        // Haremos el recorrido de cada registro de $inscripciones, verificando si este valor existe
+        // si existe, no se hara nada, si no existe, se creara un nuevo registro en la tabla
+        foreach($inscripciones as $inscripcion){
+            //Capturamos en $nota al primer registro que contenga estos datos
+            $nota = Nota::where('asignatura_id', $inscripcion->asignatura_id)
+                        ->where('turno_id', $inscripcion->turno_id)
+                        ->where('user_id', $asignatura->user_id)
+                        ->where('persona_id', $inscripcion->persona_id)
+                        ->where('paralelo', $inscripcion->paralelo)
+                        ->where('anio_vigente', $inscripcion->anio_vigente)
+                        ->where('borrado', NULL)
+                        ->first();
+            //Si $nota no tiene ningun registro nos devolvera NULL, por tanto preguntamos si $nota es NULL
+            if(!$nota){
+                //Como $nota es NULL creara un nuevo registro que tenga estos valores
+                $nueva_nota = new Nota;
+                $nueva_nota->asignatura_id = $inscripcion->asignatura_id;
+                $nueva_nota->turno_id = $inscripcion->turno_id;
+                $nueva_nota->user_id = $asignatura->user_id;
+                $nueva_nota->persona_id = $inscripcion->persona_id;
+                $nueva_nota->paralelo = $inscripcion->paralelo;
+                $nueva_nota->anio_vigente = $inscripcion->anio_vigente;
+                $nueva_nota->save();
+            }
+        }
+
+        //Tomamos todas las notas que coincidan con estos valores y las devolveremos a la vista
         $notas = Nota::where('asignatura_id', $asignatura->asignatura_id)
                     ->where('turno_id', $asignatura->turno_id)
                     ->where('user_id', $asignatura->user_id)
                     ->where('paralelo', $asignatura->paralelo)
                     ->where('anio_vigente', $asignatura->anio_vigente)
+                    ->where('borrado', NULL)
                     ->get();
         return view('nota.detalle')->with(compact('asignatura', 'notas'));
     }
@@ -57,6 +95,7 @@ class NotaController extends Controller
                     ->where('paralelo', $asignatura->paralelo)
                     ->where('anio_vigente', $asignatura->anio_vigente)
                     ->whereBetween('nota_total', [30,60])
+                    ->where('borrado', NULL)
                     ->get();
         return view('nota.segundoTurno')->with(compact('asignatura', 'segundoTurno'));
     }
@@ -78,6 +117,7 @@ class NotaController extends Controller
                                 ->where('persona_id', $nota->persona_id)
                                 ->where('paralelo', $nota->paralelo) 
                                 ->where('anio_vigente', $nota->anio_vigente)
+                                ->where('borrado', NULL)
                                 ->firstOrFail();
 
         if($nota->segundo_turno && $nota->segundo_turno >= 61){
@@ -94,6 +134,7 @@ class NotaController extends Controller
             //Actualización en Kardex
             $kardex = Kardex::where('persona_id', $nota->persona_id)
                             ->where('asignatura_id', $nota->asignatura_id)
+                            ->where('borrado', NULL)
                             ->firstOrFail();
             $kardex->aprobado = 'Si';
             $kardex->anio_aprobado = date('Y');
@@ -155,6 +196,7 @@ class NotaController extends Controller
                                     ->where('persona_id', $nota->persona_id)
                                     ->where('paralelo', $nota->paralelo) 
                                     ->where('anio_vigente', $nota->anio_vigente)
+                                    ->where('borrado', NULL)
                                     ->firstOrFail();
             $inscripcion->nota = $nota->segundo_turno;
             $inscripcion->save();

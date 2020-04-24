@@ -70,7 +70,9 @@
         <input type="submit" name="upload" id="upload" class="btn btn-rounded btn-success float-lg-right" value="Importar">
     </form>
     <a class="btn btn-rounded btn-success float-lg-left" href="{{ url('nota/exportarexcel/'.$asignatura->id) }}">Exportar</a> 
+    <a class="btn btn-rounded btn-info float-lg-right" href="{{ url('nota/listado') }}">Volver</a> 
     <a class="btn btn-rounded btn-danger float-lg-right" href="{{ url('nota/segundoTurno/'.$asignatura->id) }}">Segundo Turno</a> 
+    
 </div>
 
 @endsection
@@ -81,6 +83,7 @@
 <script src="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
 <script>
+// Script de importacion de excel
 $(document).ready(function() {
     $('.upload_form').on('submit', function(event) {
         event.preventDefault();
@@ -99,7 +102,10 @@ $(document).ready(function() {
                     'Hecho',
                     data.message,
                     'success'
-                    )// aqui recargar la pagina
+                    ).then(function() {
+                        location.reload();
+                        $('#select_file').val('');
+                    });
                 }else{
                     Swal.fire(
                     'Oops...',
