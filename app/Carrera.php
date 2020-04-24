@@ -29,4 +29,9 @@ class Carrera extends Model
     {
         return $this->hasMany('App\CarrerasPersona');
     }
+
+    public function inscripcion()
+    {
+        return $this->hasMany('App\Inscripcion');
+    }
 }

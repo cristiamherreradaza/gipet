@@ -125,3 +125,4 @@ Route::get('User/ajax_listado', 'UserController@ajax_listado');
 Route::get('User/asigna_materias/{user_id}', 'UserController@asigna_materias');
 Route::get('User/eliminaAsignacion/{np_id}', 'UserController@eliminaAsignacion');
 Route::get('Persona/detalle/{persona_id}', 'PersonaController@detalle');
+Route::get('Persona/ajax_materias/{carrera_id}/{persona_id}/{anio_vigente}', 'PersonaController@ajax_materias');

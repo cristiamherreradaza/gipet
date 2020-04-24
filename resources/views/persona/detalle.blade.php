@@ -131,7 +131,7 @@
                     <div class="card-header">
                         <h4 class="mb-0 text-white">CARRERA</h4>
                     </div>
-                    @if (!($inscripciones->isEmpty()))
+                    @if (!($carrerasPersona->isEmpty()))
 
                         <div class="table-responsive m-t-40">
                             <table class="table no-wrap">
@@ -146,13 +146,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($inscripciones as $i)
+                                    @foreach ($carrerasPersona as $cp)
                                         <tr>
-                                            <td>{{ $i->carrera->nombre }}</td>
-                                            <td>{{ $i->turno->descripcion }}</td>
-                                            <td>{{ $i->anio_vigente }}</td>
+                                            <td>{{ $cp->carrera->nombre }}</td>
+                                            <td>{{ $cp->turno->descripcion }}</td>
+                                            <td>{{ $cp->anio_vigente }}</td>
                                             <td>
-                                                <button type="button" class="btn btn-warning" onclick="muestra_modal(445)"><i class="fas fa-edit"></i></button>
+                                                <button type="button" class="btn btn-warning" onclick="muestra_materias({{ $cp->carrera_id }}, {{ $cp->persona_id }}, {{ $cp->anio_vigente }})"><i class="fas fa-edit"></i></button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -183,44 +183,10 @@
 
         <div class="row">
 
-            <div class="col-md-6">
-
-                <div class="card card-outline-primary">
-                    <div class="card-header">
-                        <h4 class="mb-0 text-white">CARRERA</h4>
-                    </div>
-
-                    <div class="table-responsive m-t-40">
-                        <table class="table no-wrap">
-                            <thead>
-                                <tr>
-                                    <th>CARRERA</th>
-                                    <th>TURNO</th>
-                                    <th>GESTION</th>
-                                    <th>
-
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($inscripciones as $i)
-                                    <tr>
-                                        <td>{{ $i->carrera->nombre }}</td>
-                                        <td>{{ $i->turno->descripcion }}</td>
-                                        <td>{{ $i->anio_vigente }}</td>
-                                        <td>
-                                            <button type="button" class="btn btn-warning" onclick="muestra_modal(445)"><i class="fas fa-edit"></i></button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-
-                            </tbody>
-                        </table>
-                        
-                    </div>
-
-                </div>
+            <div class="col-md-6" id="ajax_listado_materias">
+                
             </div>
+
             <div class="col-md-6">
                 <div class="card card-outline-info">
                     <div class="card-header">
@@ -255,6 +221,26 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    function muestra_materias(carrera_id, persona_id, anio_vigente) {
+        formulario_asignacion = $("#formulario_modal_asignacion").serializeArray();
+        $.ajax({
+            url: "{{ url('Persona/ajax_materias') }}/"+carrera_id+"/"+persona_id+"/"+anio_vigente,
+            method: "GET",
+            data: formulario_asignacion,
+            cache: false,
+            success: function(data)
+            {
+                $("#ajax_listado_materias").html(data);
+            }
+        })
+    }
+
+
+
+
+
+
 
     $(function () {
         tabla_asignaturas = $('#tabla-asignaturas').DataTable();

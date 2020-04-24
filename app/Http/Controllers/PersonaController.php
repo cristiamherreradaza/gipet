@@ -6,6 +6,7 @@ use App\Turno;
 use App\Carrera;
 use App\Persona;
 use App\CarrerasPersona;
+use App\Inscripcion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -66,17 +67,23 @@ class PersonaController extends Controller
                         ->where('id', $persona_id)
                         ->first();
 
-        $inscripciones = CarrerasPersona::where('borrado', NULL)
+        $carrerasPersona = CarrerasPersona::where('borrado', NULL)
                         ->where('persona_id', $persona_id)
                         ->get();
 
-        // dd($inscripciones);
+        // dd($carrerasPersona);
 
-        return view('persona.detalle')->with(compact('datosPersonales', 'inscripciones'));
+        return view('persona.detalle')->with(compact('datosPersonales', 'carrerasPersona'));
     }
 
-    public function ajax_materias()
+    public function ajax_materias(Request $request, $carrera_id, $persona_id, $anio_vigente)
     {
-        
+        $materiasCarrera = Inscripcion::where('borrado', NULL)
+                            ->where('carrera_id', $carrera_id)    
+                            ->where('persona_id', $persona_id)    
+                            ->where('anio_vigente', $anio_vigente)
+                            ->get();
+
+        return view('persona.ajax_materias')->with(compact('materiasCarrera'));
     }
 }
