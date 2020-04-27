@@ -99,9 +99,14 @@ class PersonaController extends Controller
         $carrerasPersona = CarrerasPersona::where('borrado', NULL)
                         ->where('persona_id', $persona_id)
                         ->get();
+        
+        $notas = Nota::where('borrado', NULL)
+                ->where('persona_id', $persona_id)
+                ->get();
+        
         // $turnos = Turno::where('borrado', NULL)->get();
         // dd($turnos);
-        return view('persona.detalle')->with(compact('datosPersonales', 'carrerasPersona'));
+        return view('persona.detalle')->with(compact('datosPersonales', 'carrerasPersona', 'notas'));
     }
 
     public function ajax_materias(Request $request, $carrera_id, $persona_id, $anio_vigente)

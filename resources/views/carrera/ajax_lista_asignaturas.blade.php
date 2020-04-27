@@ -37,3 +37,55 @@
 
 <script src="{{ asset('assets/plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js') }}"></script>
+
+<script>
+    var asignaturas = @json($asignaturas); 
+    // var obj_asignaturas = JSON.parse(asignaturas);
+    $(function () {
+        $('#tabla-ajax_asignaturas').DataTable();
+    });
+
+    function nuevo_modal(carrera_id, anio_vigente)
+    {
+        $("#modal_asignaturas").modal('show');        
+        $("#carrera_id").val(carrera_id);
+        $("#anio_vigente").val(anio_vigente);
+        $("#asignatura_id").val("");
+        $("#codigo_asignatura").val("");
+        $("#nombre_asignatura").val("");
+        $("#orden_impresion").val("");
+        $("#semestre").val("");
+        $("#nivel").val("");
+        // $("#carrera_id").val("");
+        // $("#gestion").val("");
+        $("#carga_horaria").val("");
+        $("#teorico").val("");
+        $("#practico").val("");
+        // $("#anio_vigente").val("");
+    }
+
+    function muestra_modal(asignatura_id)
+    {
+        $("#modal_asignaturas").modal('show');
+        $.each(asignaturas, function(key, element){
+            if(element['id']==asignatura_id)
+            {
+                $("#asignatura_id").val(element['id']);
+                $("#codigo_asignatura").val(element['codigo_asignatura']);
+                $("#nombre_asignatura").val(element['nombre_asignatura']);
+                $("#orden_impresion").val(element['orden_impresion']);
+                $("#semestre").val(element['semestre']);
+                $("#nivel").val(element['nivel']);
+                $("#carrera_id").val(element['carrera_id']);
+                $("#gestion").val(element['gestion']);
+                $("#carga_horaria").val(element['carga_horaria']);
+                $("#teorico").val(element['teorico']);
+                $("#practico").val(element['practico']);
+                $("#anio_vigente").val(element['anio_vigente']);
+                // console.log(element['nombre_asignatura']);
+            }
+        });
+        // console.log(asignaturas);
+    }
+
+</script>
