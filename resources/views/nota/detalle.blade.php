@@ -173,6 +173,16 @@ $(document).ready(function() {
                 parcial : parcial,
                 final : final,
                 resultado : resultado
+            },
+            success: function(data)
+            {
+                if(data.sw == 0){
+                    Swal.fire(
+                    'Oops...',
+                    data.message,
+                    'error'
+                    )
+                }
             }
         });
     }

@@ -102,43 +102,108 @@ class NotaController extends Controller
 
     public function actualizar(Request $request)
     {
+        $val = 1;
+        // Encuentra la nota con el registro/id
         $nota = Nota::find($request->id);
-        $nota->nota_asistencia = $request->asistencia;
-        $nota->nota_practicas = $request->practicas;
-        $nota->nota_puntos_ganados = $request->puntos;
-        $nota->nota_primer_parcial = $request->parcial;
-        $nota->nota_examen_final = $request->final;
-        $nota->nota_total = $request->resultado;
+        // Encuentra la NotaPropuesta correspondiente a la Nota
+        $ponderacion = NotasPropuesta::where('asignatura_id', $nota->asignatura_id)
+                                    ->where('turno_id', $nota->turno_id)
+                                    ->where('user_id', $nota->user_id)
+                                    ->where('paralelo', $nota->paralelo)
+                                    ->where('anio_vigente', $nota->anio_vigente)
+                                    ->where('borrado', NULL)
+                                    ->first();
+
+        if($request->asistencia <= $ponderacion->nota_asistencia && $request->asistencia >= 0){
+            $nota->nota_asistencia = $request->asistencia;    
+        }else{
+            return response()->json([
+                //0
+                'message' => 'La nota de asistencia no se encuentra en el rango establecido en ponderacion. Valor Máximo('.$ponderacion->nota_asistencia.')',
+                'sw' => 0
+            ]);
+            $val = 0;
+        }
+
+        if($request->practicas <= $ponderacion->nota_practicas && $request->practicas >= 0){
+            $nota->nota_practicas = $request->practicas;    
+        }else{
+            return response()->json([
+                //0
+                'message' => 'La nota de practicas no se encuentra en el rango establecido en ponderacion. Valor Máximo('.$ponderacion->nota_practicas.')',
+                'sw' => 0
+            ]);
+            $val = 0;
+        }
+
+        if($request->puntos <= $ponderacion->nota_puntos_ganados && $request->puntos >= 0){
+            $nota->nota_puntos_ganados = $request->puntos;    
+        }else{
+            return response()->json([
+                //0
+                'message' => 'La nota de puntos no se encuentra en el rango establecido en ponderacion. Valor Máximo('.$ponderacion->nota_puntos_ganados.')',
+                'sw' => 0
+            ]);
+            $val = 0;
+        }
+
+        if($request->parcial <= $ponderacion->nota_primer_parcial && $request->nota_primer_parcial >= 0){
+            $nota->nota_primer_parcial = $request->parcial;    
+        }else{
+            return response()->json([
+                //0
+                'message' => 'La nota del primer parcial no se encuentra en el rango establecido en ponderacion. Valor Máximo('.$ponderacion->nota_primer_parcial.')',
+                'sw' => 0
+            ]);
+            $val = 0;
+        }
+
+        if($request->final <= $ponderacion->nota_examen_final && $request->final >= 0){
+            $nota->nota_examen_final = $request->final;    
+        }else{
+            return response()->json([
+                //0
+                'message' => 'La nota del examen final es mayor a la establecida en ponderacion. Valor Máximo('.$ponderacion->nota_examen_final.')',
+                'sw' => 0
+            ]);
+            $val = 0;
+        }
+
+        if($val == 1){
+            $nota->nota_total = $request->resultado;
+        }
         $nota->fecha_registro = date('Y-m-d H:i:s');
         $nota->save();
 
-        $inscripcion = Inscripcion::where('asignatura_id', $nota->asignatura_id)
-                                ->where('turno_id', $nota->turno_id)
-                                ->where('persona_id', $nota->persona_id)
-                                ->where('paralelo', $nota->paralelo) 
-                                ->where('anio_vigente', $nota->anio_vigente)
-                                ->where('borrado', NULL)
-                                ->firstOrFail();
+        if($val == 1){
+            $inscripcion = Inscripcion::where('asignatura_id', $nota->asignatura_id)
+                        ->where('turno_id', $nota->turno_id)
+                        ->where('persona_id', $nota->persona_id)
+                        ->where('paralelo', $nota->paralelo) 
+                        ->where('anio_vigente', $nota->anio_vigente)
+                        ->where('borrado', NULL)
+                        ->firstOrFail();
 
-        if($nota->segundo_turno && $nota->segundo_turno >= 61){
-            // si segundo turno esta definido y es mayor o igual a 61, entonces colocar en inscripciones la nota de segundo turno  
-            $inscripcion->nota = $nota->segundo_turno;
-            $inscripcion->save();
-        }else{
-            // segundo turno no esta definido o no es mayor o igual a 61, entonces colocar en inscripciones la nota de nota_total
-            $inscripcion->nota = $nota->nota_total;
-            $inscripcion->save();
-        }
+            if($nota->segundo_turno && $nota->segundo_turno >= 61){
+                // si segundo turno esta definido y es mayor o igual a 61, entonces colocar en inscripciones la nota de segundo turno  
+                $inscripcion->nota = $nota->segundo_turno;
+                $inscripcion->save();
+                }else{
+                // segundo turno no esta definido o no es mayor o igual a 61, entonces colocar en inscripciones la nota de nota_total
+                $inscripcion->nota = $nota->nota_total;
+                $inscripcion->save();
+            }
 
-        if($nota->nota_total >= 61){
-            //Actualización en Kardex
-            $kardex = Kardex::where('persona_id', $nota->persona_id)
-                            ->where('asignatura_id', $nota->asignatura_id)
-                            ->where('borrado', NULL)
-                            ->firstOrFail();
-            $kardex->aprobado = 'Si';
-            $kardex->anio_aprobado = date('Y');
-            $kardex->save();
+            if($nota->nota_total >= 61){
+                //Actualización en Kardex
+                $kardex = Kardex::where('persona_id', $nota->persona_id)
+                        ->where('asignatura_id', $nota->asignatura_id)
+                        ->where('borrado', NULL)
+                        ->firstOrFail();
+                $kardex->aprobado = 'Si';
+                $kardex->anio_aprobado = date('Y');
+                $kardex->save();
+            }
         }
     }
 
