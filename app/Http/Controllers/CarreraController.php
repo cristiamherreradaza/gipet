@@ -31,53 +31,33 @@ class CarreraController extends Controller
 
     public function listado(Request $request)
     {
-        if($request->has(['carrera_id', 'gestion']))
-        {
-            $gestion = $request->gestion;
-            $carreras = Carrera::where("borrado", NULL)->get();
-            $datos_carrera = Carrera::where("borrado", NULL)
-                        ->where('id', $request->carrera_id)
-                        ->first();
-            $nombre_carrera = $datos_carrera->nombre;
+        $gestion = date('Y');
 
-            $asignaturas = Asignatura::where("borrado", NULL)
-                        ->where('carrera_id', $datos_carrera->id)
-                        ->where('anio_vigente', $request->gestion)
-                        ->get();
-        } else {
-            // dd($request->session()->all());
-            $gestion = date('Y');
-            $datos_carrera = Carrera::where("id", 1)->first();
-            $nombre_carrera = $datos_carrera->nombre;
+        $carreras = Carrera::where("borrado", NULL)
+                    ->where('anio_vigente', $gestion)
+                    ->get();
 
-            $carreras = Carrera::where("borrado", NULL)->get();
-            $asignaturas = Asignatura::where("borrado", NULL)
-                        ->where('carrera_id', 1)
-                        ->where('anio_vigente', $gestion)
-                        ->get();
-        }
-        // dd($nombre_carrera);
-
-        return view('carrera.listado', compact('carreras', 'asignaturas', 'gestion', 'nombre_carrera'));
+        return view('carrera.listado', compact('carreras', 'gestion'));
     }
 
     public function ajax_lista_asignaturas(Request $request)
     {
-        // dd($request->carrera_id);
         $gestion = $request->c_gestion;
-        $carreras = Carrera::where("borrado", NULL)->get();
+
         $datos_carrera = Carrera::where("borrado", NULL)
                     ->where('id', $request->c_carrera_id)
+                    ->where('anio_vigente', $gestion)
                     ->first();
-        $nombre_carrera = $datos_carrera->nombre;
 
-        $asignaturas = Asignatura::where("borrado", NULL)
-                    ->where('carrera_id', $datos_carrera->id)
-                    ->where('anio_vigente', $request->c_gestion)
-                    ->get();
-        // dd($request->input());
-        return view('carrera.ajax_lista_asignaturas', compact('asignaturas', 'nombre_carrera', 'carreras'));
-        // return response()->json(['mensaje'=>'Holas desde Ajax']);
+        if ($datos_carrera != null) {
+            $asignaturas = Asignatura::where("borrado", NULL)
+                ->where('carrera_id', $datos_carrera->id)
+                ->where('anio_vigente', $request->c_gestion)
+                ->get();
+   
+        }
+
+        return view('carrera.ajax_lista_asignaturas', compact('asignaturas', 'datos_carrera'));
     }
 
 }

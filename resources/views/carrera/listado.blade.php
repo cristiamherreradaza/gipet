@@ -24,7 +24,6 @@
                     <form action="#" method="POST" id="formulario_modal_asignatura">
                         @csrf
                         <input type="hidden" name="asignatura_id" id="asignatura_id" value="">
-                        <input type="hidden" name="anio_vigente" id="anio_vigente" value="">
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
@@ -33,7 +32,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="control-label">Nombre</label>
                                     <input name="nombre_asignatura" type="text" id="nombre_asignatura" class="form-control" required>
@@ -58,6 +57,13 @@
                                 <div class="form-group">
                                     <label class="control-label">Nivel</label>
                                     <input name="nivel" type="number" id="nivel" class="form-control" >
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">Gestion</label>
+                                    <input name="anio_vigente" type="number" id="anio_vigente" class="form-control">
                                 </div>
                             </div>
 

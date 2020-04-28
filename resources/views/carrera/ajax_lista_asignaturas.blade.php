@@ -1,9 +1,17 @@
-<div class="card card-outline-info">                                
-    <div class="card-header">
-        <h4 class="mb-0 text-white">ASIGNATURAS - ({{ $nombre_carrera }}) &nbsp;&nbsp;<button type="button" class="btn waves-effect waves-light btn-sm btn-warning" onclick="nuevo_modal('{{ $asignaturas[0]->carrera_id }}', '{{ $asignaturas[0]->anio_vigente }}')"><i class="fas fa-plus"></i> &nbsp; NUEVA MATERIA</button></h4>
-    </div>
+{{-- {{ dd($datos_carrera->id) }} --}}
+<div class="card card-outline-info">
+    @if ($datos_carrera)
+        <div class="card-header">
+            <h4 class="mb-0 text-white">ASIGNATURAS - ({{ $datos_carrera->nombre }}) &nbsp;&nbsp;<button type="button" class="btn waves-effect waves-light btn-sm btn-warning" onclick="nuevo_modal('{{ $datos_carrera->id }}', '{{ $datos_carrera->anio_vigente }}')"><i class="fas fa-plus"></i> &nbsp; NUEVA MATERIA</button></h4>
+        </div>
+    @else
+        <div class="card-header">
+            <h4 class="mb-0 text-white">NO EXISTE LA CARRERA EN ESA GESTION &nbsp;&nbsp;</h4>
+        </div>
+    @endif                                
+
     <div class="table-responsive m-t-40">
-        @if ($asignaturas)
+        @if (!empty($asignaturas))
             <table id="tabla-ajax_asignaturas" class="table table-bordered table-striped">
                 <thead>
                     <tr>
@@ -29,7 +37,7 @@
             </table>
         @else
         <p></p>
-            <h2>La carrera no tiene asignaturas</h2>
+            <h3>La carrera no tiene asignaturas</h3>
         @endif
         
     </div>
@@ -39,7 +47,9 @@
 <script src="{{ asset('assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js') }}"></script>
 
 <script>
-    var asignaturas = @json($asignaturas); 
+    @if (!empty($asignatuas))
+        var asignaturas = @json($asignaturas); 
+    @endif
     // var obj_asignaturas = JSON.parse(asignaturas);
     $(function () {
         $('#tabla-ajax_asignaturas').DataTable();
