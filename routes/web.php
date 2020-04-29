@@ -134,3 +134,7 @@ Route::get('User/asigna_materias/{user_id}', 'UserController@asigna_materias');
 Route::get('User/eliminaAsignacion/{np_id}', 'UserController@eliminaAsignacion');
 Route::get('Persona/detalle/{persona_id}', 'PersonaController@detalle');
 Route::get('Persona/ajax_materias/{carrera_id}/{persona_id}/{anio_vigente}', 'PersonaController@ajax_materias');
+
+Route::get('Asignatura/ajax_muestra_prerequisitos/{asignatura_id}', 'AsignaturaController@ajax_muestra_prerequisitos');
+Route::get('Carrera/ajax_combo_materias/{carrera_id}/{anio_vigente}', 'CarreraController@ajax_combo_materias');
+Route::post('Asignatura/guarda_prerequisito', 'AsignaturaController@guarda_prerequisito');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Asignatura;
+use App\Prerequisito;
 use Illuminate\Http\Request;
 
 class AsignaturaController extends Controller
@@ -75,5 +76,28 @@ class AsignaturaController extends Controller
             'carrera_id' => $asignatura->carrera_id,
         ]);
         
+    }
+
+    public function ajax_muestra_prerequisitos(Request $request, $asignatura_id)
+    {
+        $prerequisitos = Prerequisito::where('asignatura_id', $asignatura_id)
+                        ->get();
+
+        return view('asignatura.ajax_muestra_prerequisitos', compact('prerequisitos'));
+    }
+
+    public function guarda_prerequisito(Request $request)
+    {
+        $asignatura = Asignatura::find($request->fp_materia);
+
+        $nPrerequisito                  = new Prerequisito();
+        $nPrerequisito->asignatura_id   = $request->fp_asignatura_id;
+        $nPrerequisito->prerequisito_id = $request->fp_materia;
+        $nPrerequisito->sigla           = $asignatura->codigo_asignatura;
+        $nPrerequisito->save();
+
+        return response()->json([
+            'asignatura_id' => $request->fp_asignatura_id
+        ]);
     }
 }

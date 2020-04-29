@@ -17,8 +17,10 @@ class Prerequisito extends Model
     {
         return $this->belongsTo('App\Asignatura');
     }
-    
-    
 
+    public function materia()
+    {
+        return $this->belongsTo('App\Asignatura', 'prerequisito_id');
+    }
 
 }

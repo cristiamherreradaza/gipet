@@ -29,6 +29,7 @@
                             <td>{{ $a->semestre }}</td>
                             <td>
                                 <button type="button" class="btn btn-warning" onclick="muestra_modal({{ $a->id }})"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-info" onclick="prerequisitos('{{ $a->id }}', '{{ $a->carrera_id }}', '{{ $a->anio_vigente }}')"><i class="fas fa-eye"></i></button>
                                 <button type="button" class="btn btn-danger" onclick="elimina_asignatura('{{ $a->id }}', '{{ $a->nombre_asignatura }}')"><i class="fas fa-trash"></i></button>
                             </td>
                         </tr>
@@ -47,10 +48,7 @@
 <script src="{{ asset('assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js') }}"></script>
 
 <script>
-    @if (!empty($asignatuas))
-        var asignaturas = @json($asignaturas); 
-    @endif
-    // var obj_asignaturas = JSON.parse(asignaturas);
+    var asignaturas = @json($asignaturas); 
     $(function () {
         $('#tabla-ajax_asignaturas').DataTable();
     });
@@ -96,6 +94,14 @@
             }
         });
         // console.log(asignaturas);
+    }
+
+    function prerequisitos(asignatura_id, carrera_id, anio_vigente)
+    {
+        $("#modal_prerequisitos").modal('show');
+        $("#ca_prerequisitos").load('{{ url('Asignatura/ajax_muestra_prerequisitos') }}/'+asignatura_id);
+        $("#select_ajax_materias").load('{{ url('Carrera/ajax_combo_materias') }}/'+carrera_id+'/'+anio_vigente);
+        $("#fp_asignatura_id").val(asignatura_id);
     }
 
 </script>

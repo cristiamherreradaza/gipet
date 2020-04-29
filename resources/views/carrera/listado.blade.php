@@ -12,7 +12,7 @@
 
 @section('content')
 
-<!-- inicio modal content -->
+<!-- inicio modal asignaturas -->
 <div id="modal_asignaturas" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
@@ -121,8 +121,56 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="guarda_asignatura()">GUARDA ASIGNATURA</button>
+                    <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="guarda_asignatura()">GUARDA ASIGNATURA</button>
                 </div>
+            </form>
+
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- fin modal asignaturas -->
+
+<!-- inicio modal prerequisitos -->
+<div id="modal_prerequisitos" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">REGISTRO PREREQUISITOS</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <div class="modal-body">
+                    <form action="#" method="POST" id="formulario_modal_prerequisito">
+                        @csrf
+                        <input type="hidden" name="fp_asignatura_id" id="fp_asignatura_id" value="">
+                        <div class="row">
+                            
+                            <div class="col-md-9">
+                                <div class="form-group">
+                                    <label class="control-label">Nombre</label>
+                                    <div id="select_ajax_materias">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">&nbsp;</label>
+                                    <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="guarda_prerequisito()">GUARDAR</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </form>
+                    <div id="ca_prerequisitos">
+                        
+                    </div>
+
+                </div>
+                
             </form>
 
         </div>
@@ -252,14 +300,8 @@
                 } else {
 
                 }
-                // respuesta = JSON.parse(data);
-                // console.log(data.sw);
-
-                // $("#carga_ajax_lista_asignaturas").html(data);
             }
         })
-        // console.log(formulario_asignatura);
-        // alert('entro');
     }
 
     function elimina_asignatura(asignatura_id, nombre)
@@ -304,5 +346,31 @@
         })
 
     }
+
+    function guarda_prerequisito() 
+    {
+        formulario_prerequisito = $("#formulario_modal_prerequisito").serializeArray();
+        gestion                 = $("#anio_vigente").val();
+        // console.log(gestion);
+        $.ajax({
+            url: "{{ url('Asignatura/guarda_prerequisito') }}",
+            method: "POST",
+            data: formulario_prerequisito,
+            cache: false,
+            success: function(data)
+            {
+                $("#ca_prerequisitos").load('{{ url('Asignatura/ajax_muestra_prerequisitos') }}/'+data.asignatura_id);
+                Swal.fire(
+                    'Excelente!',
+                    'Los datos fueron guadados',
+                    'success'
+                ).then(function() {
+                    // $("#modal_asignaturas").modal('hide');
+                });
+            }
+        })
+    }
+
+
 </script>
 @endsection
