@@ -136,5 +136,6 @@ Route::get('Persona/detalle/{persona_id}', 'PersonaController@detalle');
 Route::get('Persona/ajax_materias/{carrera_id}/{persona_id}/{anio_vigente}', 'PersonaController@ajax_materias');
 
 Route::get('Asignatura/ajax_muestra_prerequisitos/{asignatura_id}', 'AsignaturaController@ajax_muestra_prerequisitos');
+Route::get('Asignatura/elimina_prerequisito/{prerequisito_id}', 'AsignaturaController@elimina_prerequisito');
 Route::get('Carrera/ajax_combo_materias/{carrera_id}/{anio_vigente}', 'CarreraController@ajax_combo_materias');
 Route::post('Asignatura/guarda_prerequisito', 'AsignaturaController@guarda_prerequisito');

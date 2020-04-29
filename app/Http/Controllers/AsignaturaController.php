@@ -81,6 +81,7 @@ class AsignaturaController extends Controller
     public function ajax_muestra_prerequisitos(Request $request, $asignatura_id)
     {
         $prerequisitos = Prerequisito::where('asignatura_id', $asignatura_id)
+                        ->where('borrado', NULL)
                         ->get();
 
         return view('asignatura.ajax_muestra_prerequisitos', compact('prerequisitos'));
@@ -99,5 +100,17 @@ class AsignaturaController extends Controller
         return response()->json([
             'asignatura_id' => $request->fp_asignatura_id
         ]);
+    }
+
+    public function elimina_prerequisito(Request $request, $prerequisito_id)
+    {
+        $eliminaPrerequisito          = Prerequisito::find($prerequisito_id);
+        $eliminaPrerequisito->borrado = date("Y-m-d H:i:s");
+        $eliminaPrerequisito->save();
+
+        return response()->json([
+            'asignatura_id' => $prerequisito_id
+        ]);
+
     }
 }

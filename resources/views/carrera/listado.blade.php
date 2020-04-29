@@ -362,11 +362,45 @@
                 $("#ca_prerequisitos").load('{{ url('Asignatura/ajax_muestra_prerequisitos') }}/'+data.asignatura_id);
                 Swal.fire(
                     'Excelente!',
-                    'Los datos fueron guadados',
+                    'El prerequisito fue adicionado',
                     'success'
                 ).then(function() {
                     // $("#modal_asignaturas").modal('hide');
                 });
+            }
+        })
+    }
+
+    function elimina_prerequisito(prerequisito_id, asignatura_id, nombre)
+    {
+        Swal.fire({
+            title: 'Quieres borrar ' + nombre + '?',
+            text: "Luego no podras recuperarlo!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, estoy seguro!',
+            cancelButtonText: "Cancelar",
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: "{{ url('Asignatura/elimina_prerequisito') }}/"+prerequisito_id,
+                    method: "GET",
+                    // data: formulario_prerequisito,
+                    cache: false,
+                    success: function(data)
+                    {
+                        $("#ca_prerequisitos").load('{{ url('Asignatura/ajax_muestra_prerequisitos') }}/'+asignatura_id);
+                        Swal.fire(
+                            'Excelente!',
+                            'El prerequisito fue eliminado',
+                            'success'
+                        ).then(function() {
+                            // $("#modal_asignaturas").modal('hide');
+                        });
+                    }
+                })
             }
         })
     }
