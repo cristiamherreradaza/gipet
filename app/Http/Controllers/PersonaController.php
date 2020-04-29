@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Nota;
 use App\Turno;
-use App\Carrera;
+use App\Kardex;
 use DataTables;
+use App\Carrera;
 use App\Persona;
 use App\Inscripcion;
-use App\Kardex;
 use App\CarrerasPersona;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

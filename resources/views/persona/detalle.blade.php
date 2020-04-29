@@ -309,11 +309,30 @@
             <div class="col-md-6">
                 <div class="card card-outline-info">
                     <div class="card-header">
-                        <h4 class="mb-0 text-white">MESUALIDADES</h4>
+                        <h4 class="mb-0 text-white">NOTAS</h4>
                     </div>
 
                     <div class="table-responsive m-t-40">
+                        <div class="table-responsive m-t-40">
+                            <table class="table no-wrap">
+                                <thead>
+                                    <tr>
+                                        <th>MATERIA</th>
+                                        <th>NOTAL</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($notas as $n)
+                                    <tr>
+                                        <td>{{ $n->asignatura->nombre_asignatura }}</td>
+                                        <td>{{ $n->nota_total }}</td>
+                                    </tr>
+                                    @endforeach
                         
+                                </tbody>
+                            </table>
+                        
+                        </div>
                     </div>
                 </div>
             </div>
