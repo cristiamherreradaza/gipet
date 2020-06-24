@@ -44,7 +44,8 @@ Route::get('persona/nuevo', 'PersonaController@nuevo');
 Route::post('persona/guarda', 'PersonaController@guarda');
 Route::get('Persona/listado', 'PersonaController@listado');
 Route::get('Persona/ajax_listado', 'PersonaController@ajax_listado');
-Route::get('Persona/ver_persona/{persona_id}', 'PersonaController@ver_persona');
+Route::get('Persona/ver_persona', 'PersonaController@ver_persona');
+Route::get('Persona/ajax_asignaturas_adicionales/{persona_id}', 'PersonaController@ajax_asignaturas_adicionales');
 Route::get('Persona/verifica', 'PersonaController@verifica');
 // Route::get('persona/ajax_datos', function () {
     // return datatables()->query(DB::table('personas'))->toJson();
@@ -94,29 +95,21 @@ Route::get('Inscripcion/busca_ci', 'InscripcionController@busca_ci');
 
 Route::get('Inscripcion/selecciona_asignatura', 'InscripcionController@selecciona_asignatura');
 
-Route::get('Inscripcion/contabilidad', 'InscripcionController@contabilidad');
-
-Route::get('Inscripcion/secretariado', 'InscripcionController@secretariado');
-
-Route::get('Inscripcion/auxiliar', 'InscripcionController@auxiliar');
-
-Route::get('Inscripcion/busca_asignatura', 'InscripcionController@busca_asignatura');
-
-Route::get('Inscripcion/busca_carrera', 'InscripcionController@busca_carrera');
-
 Route::post('Inscripcion/store', 'InscripcionController@store');
 
 Route::get('Inscripcion/lista', 'InscripcionController@lista');
 
 Route::get('Inscripcion/ajax_datos', 'InscripcionController@ajax_datos');
 
-Route::get('Inscripcion/re_inscripcion/{id}', 'InscripcionController@re_inscripcion');
+Route::post('Inscripcion/re_inscripcion', 'InscripcionController@re_inscripcion');
 
 Route::get('Inscripcion/asignaturas_a_tomar', 'InscripcionController@asignaturas_a_tomar');
 
 Route::get('Inscripcion/tomar_asignaturas/{persona_id}', 'InscripcionController@tomar_asignaturas');
 
 Route::get('Inscripcion/vista', 'InscripcionController@vista');
+
+Route::get('Inscripcion/ver_persona/{persona_id}', 'InscripcionController@ver_persona');
 
 
 

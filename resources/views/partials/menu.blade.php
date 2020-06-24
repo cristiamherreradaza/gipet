@@ -1,46 +1,76 @@
+
 <aside class="left-sidebar">
     <!-- Sidebar scroll-->
     <div class="scroll-sidebar">
-        <!-- User profile -->
-        <div class="user-profile">
-            <!-- User profile image -->
-            <div class="profile-img"> <img src="{{ asset('assets/images/users/1.jpg') }}" alt="user" /> </div>
-            <!-- User profile text-->
-            <div class="profile-text"> <a href="#" class="dropdown-toggle link u-dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">Markarn Doe <span class="caret"></span></a>
-                <div class="dropdown-menu animated flipInY">
-                    <a href="#" class="dropdown-item"><i class="ti-user"></i> My Profile</a>
-                    <a href="#" class="dropdown-item"><i class="ti-wallet"></i> My Balance</a>
-                    <a href="#" class="dropdown-item"><i class="ti-email"></i> Inbox</a>
-                    <div class="dropdown-divider"></div> <a href="#" class="dropdown-item"><i class="ti-settings"></i> Account Setting</a>
-                    <div class="dropdown-divider"></div> 
-                    <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        {{ __('Logout') }}
-                    </a>
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        @csrf
-                    </form>
-                </div>
-            </div>
-        </div>
-        <!-- End User profile text-->
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav">
             <ul id="sidebarnav">
-                <li class="nav-small-cap">PERSONAL</li>
+                <!-- User Profile-->
                 <li>
-                    <a href="{{ url('Carrera/listado') }}"><i class="mdi mdi-note-text"></i><span class="hide-menu">Malla Curricular</span></a>
+                    <!-- User profile -->
+                    <div class="user-profile text-center position-relative pt-4 mt-1">
+                        <!-- User profile image -->
+                        <div class="profile-img m-auto">
+                            @if(auth()->user()->image)
+                                <img src="{{ auth()->user()->image }}" alt="user" class="w-100 rounded-circle">
+                            @else
+                                <img src="{{ asset('assets/images/users/usuario.png') }}" alt="user" class="w-100 rounded-circle">
+                            @endif
+                        </div>
+                        <!-- User profile text-->
+                        <div class="profile-text py-1 text-white">
+                            {{ auth()->user()->name }}  
+                        </div>
+                    </div>
+                    <!-- End User profile text-->
                 </li>
-                <li>
-                    <a href="{{ url('User/listado') }}"><i class="mdi mdi-note-text"></i><span class="hide-menu">Personal</span></a>
+                <!-- User Profile-->
+                <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">ADMINISTRACION</span></li>
+
+
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="{{ url('Carrera/listado') }}" aria-expanded="false">
+                        <i data-feather="pie-chart" class="feather-icon"></i><span class="hide-menu"> Malla Curricular </span>
+                    </a>
                 </li>
-                <li>
-                    <a href="{{ url('notaspropuesta/listado') }}"><i class="mdi mdi-note-text"></i><span class="hide-menu">Ponderacion</span></a>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="{{ url('User/listado') }}" aria-expanded="false">
+                        <i data-feather="user" class="feather-icon"></i><span class="hide-menu"> Personal </span>
+                    </a>
                 </li>
-                <li>
-                    <a href="{{ url('nota/listado') }}"><i class="mdi mdi-note-text"></i><span class="hide-menu">Asignatura</span></a>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="{{ url('notaspropuesta/listado') }}" aria-expanded="false">
+                        <i data-feather="trending-up" class="feather-icon"></i><span class="hide-menu"> Ponderacion </span>
+                    </a>
                 </li>
-                <li>
-                    <a href="{{ url('Inscripcion/inscripcion') }}"><i class="mdi mdi-note-text"></i><span class="hide-menu">Inscripciones</span></a>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="{{ url('nota/listado') }}" aria-expanded="false">
+                        <i data-feather="book" class="feather-icon"></i><span class="hide-menu"> Asignatura </span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="{{ url('Inscripcion/inscripcion') }}" aria-expanded="false">
+                        <i data-feather="file-text" class="feather-icon"></i><span class="hide-menu"> Inscripciones </span>
+                    </a>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="sidebar-link" href="{{ url('Persona/listado') }}" aria-expanded="false">
+                        <i data-feather="users" class="feather-icon"></i><span class="hide-menu"> Alumnos </span>
+                    </a>
+                </li>
+                
+                <li class="nav-devider"></li>
+                <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">Otros</span>
+                </li>
+                <li class="sidebar-item"> 
+                    <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ url('Producto/info') }}" aria-expanded="false">
+                        <i data-feather="codepen" class="feather-icon"></i><span class="hide-menu">Informacion</span>
+                    </a>
                 </li>
             </ul>
         </nav>
@@ -54,7 +84,7 @@
         <!-- item-->
         <a href="" class="link" data-toggle="tooltip" title="Email"><i class="mdi mdi-gmail"></i></a>
         <!-- item-->
-        <a href="" class="link" data-toggle="tooltip" title="Logout"><i class="mdi mdi-power"></i></a>
+        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="link" data-toggle="tooltip" title="Cerrar Sesión"><i class="mdi mdi-power"></i></a>
     </div>
     <!-- End Bottom points-->
 </aside>

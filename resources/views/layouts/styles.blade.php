@@ -12,7 +12,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon.png">
     @yield('metadatos')
     <title>@yield('title')</title>
-	<link rel="canonical" href="https://www.wrappixel.com/templates/monsteradmin/" />
+    <link rel="canonical" href="https://www.wrappixel.com/templates/monsteradmin/" />
     <!-- Bootstrap Core CSS -->
     <link href="{{ asset('assets/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
     <!-- Custom CSS -->

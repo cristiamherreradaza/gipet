@@ -4,8 +4,8 @@
 <meta name="csrf-token" content="{{ csrf_token() }}"/>
 @endsection
 
+
 @section('css')
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.min.css') }}">
 @endsection
 
 @section('content')
@@ -16,10 +16,10 @@
         <!-- Row -->
         <div class="row">
             <div class="col-lg-12">
-                <div class="card card-outline-info">
-                    <div class="card-header">
-                        <h4 class="mb-0 text-white">NUEVO ALUMNO</h4>
-                    </div>
+                <div class="card border-info">
+                <div class="card-header bg-info">
+                    <h4 class="mb-0 text-white">NUEVO ALUMNO</h4>
+                </div>
                     <form action="/Inscripcion/store" method="POST">
                         @csrf
                     <div class="card-body">
@@ -27,8 +27,8 @@
                         {{-- datos personales --}}
                         <div class="row">
                             <div class="col-lg-12">
-                                <div class="card card-outline-warning">
-                                    <div class="card-header">
+                                <div class="card border-warning">
+                                    <div class="card-header bg-warning">
                                         <h4 class="mb-0 text-white">DATOS PERSONALES</h4>
                                     </div>
                                     <div class="card-body" style="background-color: #fff6d4;">
@@ -138,8 +138,8 @@
                         {{-- datos profesionales --}}
                         <div class="row">
                             <div class="col-lg-12">
-                                <div class="card card-outline-inverse">
-                                    <div class="card-header">
+                                <div class="card border-inverse">
+                                    <div class="card-header bg-inverse">
                                         <h4 class="mb-0 text-white">DATOS PROFESIONALES</h4>
                                     </div>
                                     <div class="card-body" style="background-color: #ededed;">
@@ -149,9 +149,9 @@
                                                 <!-- NOMBRE DEL ATRIBUTO ENCIMA -->
                                                 <div class="row pt-3">
                                                     <div class="col-md-3">
-                                                        <div class="form-group has-success">
+                                                        <div class="form-group">
                                                             <label class="control-label">Trabaja</label>
-                                                            <select class="form-control custom-select" id="trabaja" name="trabaja">
+                                                            <select class="form-control" id="trabaja" name="trabaja">
                                                                 <option value="">Seleccionar</option>
                                                                 <option value="Si">Si</option>
                                                                 <option value="No">No</option>
@@ -205,8 +205,8 @@
                         {{-- referencias personales --}}
                         <div class="row">
                             <div class="col-lg-12">
-                                <div class="card card-outline-success">
-                                    <div class="card-header">
+                                <div class="card border-success">
+                                    <div class="card-header bg-success">
                                         <h4 class="mb-0 text-white">REFERENCIAS PERSONALES</h4>
                                     </div>
                                     <div class="card-body" style="background-color: #e3ffe3;">
@@ -287,8 +287,8 @@
                         <!-- Row -->
                         <div class="row">
                             <div class="col-lg-12">
-                                <div class="card card-outline-info">
-                                    <div class="card-header">
+                                <div class="card border-info">
+                                    <div class="card-header bg-info">
                                         <h4 class="mb-0 text-white">Datos de la Carrera</h4>
                                     </div>
                                     <div class="card-body">
@@ -693,8 +693,8 @@
                         <!-- Row -->
                         <div class="row">
                             <div class="col-lg-12">
-                                <div class="card card-outline-primary">
-                                    <div class="card-header">
+                                <div class="card border-primary">
+                                    <div class="card-header bg-primary">
                                         <h4 class="mb-0 text-white">Asignaturas Adicionales</h4>
                                     </div>
                                     <div class="card-body">
@@ -1015,18 +1015,6 @@
 </div>
 @stop
 @section('js')
-<script src="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
-<script>
-    $('#trabaja').on('change', function(e){
-            var trabaja = e.target.value;
-            if (trabaja == 'Si') {
-                $('#mostrar_ocultar').show('slow');
-            }else{
-                $('#mostrar_ocultar').hide('slow');
-            }
-    });
-</script>
 <script>
     $('#carnet').on('change', function(e){
             var carnet = e.target.value;
@@ -1066,10 +1054,21 @@
            
     });
 </script>
+<script>
+    $('#trabaja').on('change', function(e){
+            var trabaja = e.target.value;
+            if (trabaja == 'Si') {
+                $('#mostrar_ocultar').show('slow');
+            }else{
+                $('#mostrar_ocultar').hide('slow');
+            }
+    });
+</script>
 
 <script>
     $('#carrera_id_1').on('change', function(e){
             var carrera = e.target.value;
+            verifica_carrera(carrera);
             if (carrera == '1') {
                 $('#secre').show('slow');//para visualizar las asignaturas
                 $('#auxiliar').show('slow');//para visualizar las asignaturas
@@ -1079,6 +1078,11 @@
                 $('#auxiliar').hide('slow');//para visualizar las asignaturas
             }
     });
+
+    function verifica_carrera(carrera){
+        var carrera_id = carrera;
+        // alert(carrera_id);
+    }
 
     function cerrar_secre(){
         $('#secre').hide('slow');//para visualizar las asignaturas
@@ -1184,7 +1188,7 @@
 
 
 </script>
-{{-- <script>
+<script>
     function guarda(){
         setInterval(Swal.fire(
                     'Excelente!',
@@ -1192,43 +1196,8 @@
                     'success'
                 ), 3000);
     }
-</script> --}}
-
-<script type="text/javascript">
-    function mostrarMensaje(mensaje){
-        $("#divmsg").empty();
-        $("#divmsg").append("<p>"+mensaje+"</p>");
-        $("#divmsg").show(500);
-        $("#divmsg").hide(5000);
-    }
-    // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-    // al hacer clic en el boton GUARDAR, se procedera a la ejecucion de la funcion
-    $(".btnenviar").click(function(e){
-        e.preventDefault();     // Evita que la página se recargue
-        var nombre = $('#nombre').val();    
-        var nivel = $('#nivel').val();
-        var semestre = $('#semestre').val();
-
-        $.ajax({
-            type:'POST',
-            url:"{{ url('carrera/store') }}",
-            data: {
-                nom_carrera : nombre,
-                desc_niv : nivel,
-                semes : semestre
-            },
-            success:function(data){
-                mostrarMensaje(data.mensaje);
-                limpiarCampos();
-            }
-        });
-    });
 </script>
+
 <script>
     // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
     $.ajaxSetup({
@@ -1236,131 +1205,6 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
- 
-    // al elegir una Carrera, se ira a consultar por las Asignaturas que tiene que tomar en ese "SEMESTRE O AÑO".
-    // en caso que sea "Contaduría General", se retorna las asignaturas de "Secretariado Administrativo" y de "Auxiliar Administrativo Financiero"
-    function ver(){
-
-        var asig = $('#carrera_id').val();
-        var table1 = document.getElementById('valor1');
-        table1.innerHTML = '';
-
-        var table2 = document.getElementById('valor2');
-        table2.innerHTML = '';
-
-        var table3 = document.getElementById('valor3');
-        table3.innerHTML = '';
-
-        if (asig == '1') {
-            $('#mostrar_asig1').show('slow');//para visualizar las asignaturas
-            $('#mostrar_asig2').show('slow');//para visualizar las asignaturas
-            $('#mostrar_asig3').show('slow');//para visualizar las asignaturas
-            $.ajax({
-                type:'GET',
-                url:"{{ url('Inscripcion/contabilidad') }}",
-                data: {
-                    asignatura : asig
-                },
-                success:function(data){
-                    $.each(data, function(index, value) {
-                        $("#valor1").append('<tr>' +
-                                    '<td>' + data[index].orden_impresion +'</td>' +
-                                    '<td>' + data[index].codigo_asignatura + '</td>' +
-                                    '<td>' + data[index].nombre_asignatura +'</td>' +
-                                    '</tr>');
-                    });
-                    $("#nom_asig1").html('Contaduría General');
-                    $("#gest1").html('Gestion ' + data[0].anio_vigente);
-
-                }
-            });
-
-            $.ajax({
-                type:'GET',
-                url:"{{ url('Inscripcion/secretariado') }}",
-                data: {
-                    asignatura : asig
-                },
-                success:function(data){
-                    $.each(data, function(index, value) {
-                        $("#valor2").append('<tr>' +
-                                    '<td>' + data[index].orden_impresion +'</td>' +
-                                    '<td>' + data[index].codigo_asignatura + '</td>' +
-                                    '<td>' + data[index].nombre_asignatura +'</td>' +
-                                    '</tr>');
-                    });
-                    $("#nom_asig2").html('Secretariado Administrativo');
-                    $("#gest2").html('Gestion ' + data[0].anio_vigente);
-                }
-            });
-
-            $.ajax({
-                type:'GET',
-                url:"{{ url('Inscripcion/auxiliar') }}",
-                data: {
-                    asignatura : asig
-                },
-                success:function(data){
-                   if(data == ''){
-                    var mensaje = 'No tiene Asignaturas por Tomar'
-                    $("#valor3").html(mensaje);
-                   }else{
-                    $.each(data, function(index, value) {
-                        $("#valor3").append('<tr>' +
-                                    '<td>' + data[index].orden_impresion +'</td>' +
-                                    '<td>' + data[index].codigo_asignatura + '</td>' +
-                                    '<td>' + data[index].nombre_asignatura +'</td>' +
-                                    '</tr>');
-                        });
-                    $("#nom_asig3").html('Auxiliar Administrativo Financiero');
-                    $("#gest3").html('Gestion ' + data[0].anio_vigente);
-                    }
-                   
-                }
-            });
-        }else{
-            cerrar_secre();
-            cerrar_auxi();
-            $('#mostrar_asig1').show('slow');//para visualizar las asignaturas
-            $('#mostrar_asig2').hide('slow');//para no mostrar las asignaturas
-            $('#mostrar_asig3').hide('slow');//para no mostrar las asignaturas
-            $.ajax({
-                type:'GET',
-                url:"{{ url('Inscripcion/busca_asignatura') }}",
-                data: {
-                    asignatura : asig
-                },
-                success:function(data){
-                    $.ajax({
-                            type:'GET',
-                            url:"{{ url('Inscripcion/busca_carrera') }}",
-                            data: {
-                                id : asig
-                            },
-                            success:function(data){
-                                    $("#nom_asig1").html(data[0].nombre);
-                                    $("#gest1").html('Gestion ' + data[0].gestion);
-                            }
-                        });
-
-                    $.each(data, function(index, value) {
-                        $("#valor1").append('<tr>' +
-                                    '<td>' + data[index].orden_impresion +'</td>' +
-                                    '<td>' + data[index].codigo_asignatura + '</td>' +
-                                    '<td>' + data[index].nombre_asignatura +'</td>' +
-                                    '</tr>');
-                    });
-                }
-            });
-        }
-
-        limpiarCampos1();
-        // $('#valor1').replaceAll();//para limpiar los datos cada vez que se precione el boton asignaturas 
-        // $('#valor2').replaceAll();//para limpiar los datos cada vez que se precione el boton asignaturas 
-        // $('#valor3').replaceAll();//para limpiar los datos cada vez que se precione el boton asignaturas 
-
-       
-    } 
     
 </script>
 @endsection

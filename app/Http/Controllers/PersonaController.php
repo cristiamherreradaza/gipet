@@ -121,6 +121,22 @@ class PersonaController extends Controller
         return view('persona.ajax_materias')->with(compact('materiasCarrera'));
     }
 
+    public function ajax_asignaturas_adicionales(Request $request)
+    {
+        $persona_id = $request->persona_id;
+        $asignaturas_adicionales = DB::select("SELECT insc.id, insc.asignatura_id, insc.carrera_id, carre.nombre, asig.codigo_asignatura, asig.nombre_asignatura
+                                                FROM inscripciones insc, carreras carre, asignaturas asig 
+                                                WHERE insc.persona_id = '$persona_id'
+                                                AND insc.carrera_id = carre.id
+                                                AND insc.asignatura_id = asig.id
+                                                AND insc.carrera_id NOT IN (SELECT carrera_id
+                                                                                                FROM carreras_personas
+                                                                                                WHERE persona_id = '$persona_id')");
+
+        // dd($asignaturas_adicionales);
+        return view('persona.ajax_asignaturas_adicionales')->with(compact('asignaturas_adicionales'));
+    }
+
     public function verifica(Request $request)
     {
         $id = $request->id;
