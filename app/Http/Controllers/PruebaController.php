@@ -47,23 +47,102 @@ class PruebaController extends Controller
 
     public function guardar(Request $request)
     {
-        $datos = $request->all();
-        dd($datos);
-        // for ($i=0; $i < $request->cantidad ; $i++) { 
-        //     echo $i;
-        //     echo ', ';
-        // }
-        foreach ($request->numero as $value) {
-            // $dato = '$req'
-            echo $request->carrera_.$value;
-            echo ', ';
+        // $datos = $request->all();
+        // dd($datos);
+        // EN ESTE IF AGREGAREMOS O ACTUALIZAREMOS LOS DATOS DE UN ESTUDIANTE
+        if (!empty($request->persona_id)) {
+                $persona = Persona::find($request->persona_id);
+                $persona->apellido_paterno  = $request->apellido_paterno;
+                $persona->apellido_materno  = $request->apellido_materno;
+                $persona->nombres           = $request->nombres;
+                $persona->carnet            = $request->carnet;
+                $persona->expedido          = $request->expedido;
+                $persona->fecha_nacimiento  = $request->fecha_nacimiento;
+                $persona->sexo              = $request->sexo;
+                $persona->telefono_celular  = $request->telefono_celular;
+                $persona->email             = $request->email;
+                $persona->direccion         = $request->direccion;
+                $persona->trabaja           = $request->trabaja;
+                $persona->empresa           = $request->empresa;
+                $persona->direccion_empresa = $request->direccion_empresa;
+                $persona->telefono_empresa  = $request->telefono_empresa;
+                $persona->email_empresa     = $request->email_empresa;
+                $persona->nombre_padre      = $request->nombre_padre;
+                $persona->celular_padre     = $request->celular_padre;
+                $persona->nombre_madre      = $request->nombre_madre;
+                $persona->celular_madre     = $request->celular_madre;
+                $persona->nombre_tutor      = $request->nombre_tutor;
+                $persona->telefono_tutor    = $request->telefono_tutor;
+                $persona->nombre_esposo     = $request->nombre_esposo;
+                $persona->telefono_esposo   = $request->telefono_esposo;
+                $persona->save();
+        } else {
+                $persona = new Persona();
+                $persona->apellido_paterno  = $request->apellido_paterno;
+                $persona->apellido_materno  = $request->apellido_materno;
+                $persona->nombres           = $request->nombres;
+                $persona->carnet            = $request->carnet;
+                $persona->expedido          = $request->expedido;
+                $persona->fecha_nacimiento  = $request->fecha_nacimiento;
+                $persona->sexo              = $request->sexo;
+                $persona->telefono_celular  = $request->telefono_celular;
+                $persona->email             = $request->email;
+                $persona->direccion         = $request->direccion;
+                $persona->trabaja           = $request->trabaja;
+                $persona->empresa           = $request->empresa;
+                $persona->direccion_empresa = $request->direccion_empresa;
+                $persona->telefono_empresa  = $request->telefono_empresa;
+                $persona->email_empresa     = $request->email_empresa;
+                $persona->nombre_padre      = $request->nombre_padre;
+                $persona->celular_padre     = $request->celular_padre;
+                $persona->nombre_madre      = $request->nombre_madre;
+                $persona->celular_madre     = $request->celular_madre;
+                $persona->nombre_tutor      = $request->nombre_tutor;
+                $persona->telefono_tutor    = $request->telefono_tutor;
+                $persona->nombre_esposo     = $request->nombre_esposo;
+                $persona->telefono_esposo   = $request->telefono_esposo;
+                $persona->save();
         }
 
-        // $datos1 = $request->Age;
-        // foreach ($datos1 as $value1) {
-        //     echo $value1;
-        //     echo ', ';
-        // }
+        $id_persona = Persona::where("borrado", NULL)
+                    ->where('carnet', $request->carnet)
+                    ->get();
+        $persona_id = $id_persona[0]->id;
+
+        // REGISTRA LAS CARRERAS INSCRITAS
+        foreach ($request->numero as $carr) {
+            $datos_carrera = 'carrera_'.$carr;
+            $datos_turno = 'turno_'.$carr;
+            $datos_paralelo = 'paralelo_'.$carr;
+            $datos_gestion = 'gestion_'.$carr;
+
+            $carrera_1 = new CarreraPersona();
+            $carrera_1->carrera_id   = $request->$datos_carrera;
+            $carrera_1->persona_id   = $persona_id;
+            $carrera_1->turno_id     = $request->$datos_turno;
+            $carrera_1->paralelo     = $request->$datos_paralelo;
+            $carrera_1->anio_vigente = $request->$datos_gestion;
+            $carrera_1->sexo         = $request->sexo;
+            $carrera_1->save();
+        }
+
+        // REGISTRA LAS ASIGNATURAS SUELTAS INSCRITAS
+        foreach ($request->numero_asig as $asig) {
+            $datos_asig = 'asignatura_'.$asig;
+            $datos_turno_asig = 'turno_asig_'.$asig;
+            $datos_paralelo_asig = 'paralelo_asig_'.$asig;
+            $datos_gestion_asig = 'gestion_asig_'.$asig;
+
+            $inscripcion_1 = new Inscripcion();
+            $inscripcion_1->asignatura_id = $request->$datos_asig;
+            $inscripcion_1->turno_id = $request->$datos_turno_asig;
+            $inscripcion_1->persona_id = $persona_id;
+            $inscripcion_1->paralelo = $request->$datos_paralelo_asig;
+            $inscripcion_1->anio_vigente = $request->$datos_gestion_asig;
+            $inscripcion_1->save();
+        }
+
+        return redirect('Persona/listado');
     }
 
     public function store(Request $request)

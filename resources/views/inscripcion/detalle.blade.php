@@ -5,11 +5,7 @@
 @endsection
 
 @section('css')
-<link rel="stylesheet" type="text/css"
-    href="{{ asset('assets/plugins/datatables.net-bs4/css/dataTables.bootstrap4.css') }}">
-<link rel="stylesheet" type="text/css"
-    href="{{ asset('assets/plugins/datatables.net-bs4/css/responsive.dataTables.min.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.min.css') }}">
+<link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -467,11 +463,8 @@
 @stop
 
 @section('js')
-<script src="{{ asset('assets/plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js') }}"></script>
-<!-- Sweet-Alert  -->
-<script src="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
+<script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script>
 $(document).ready(function() {
     ver_asignaturas_adicionales();
@@ -517,11 +510,19 @@ $(document).ready(function() {
     }
 
     $(function () {
-        tabla_asignaturas = $('#tabla-asignaturas').DataTable();
+        tabla_asignaturas = $('#tabla-asignaturas').DataTable({
+            language: {
+                url: '{{ asset('datatableEs.json') }}'
+            },
+        });
     });
 
     $(function () {
-        $('#tabla-asignaturas-docente').DataTable();
+        $('#tabla-asignaturas-docente').DataTable({
+            language: {
+                url: '{{ asset('datatableEs.json') }}'
+            },
+        });
     });
 
     function asigna_materia(asignatura_id, nombre_asignatura, codigo_asignatura, nombre_carrera)
