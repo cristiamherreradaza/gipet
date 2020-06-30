@@ -5,13 +5,7 @@
 @endsection
 
 @section('css')
-<<<<<<< HEAD
-<!-- <link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/dataTables.bootstrap4.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/responsive.dataTables.min.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.min.css') }}"> -->
-=======
 <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
->>>>>>> 1f064aa5320019f47de4de8846745e725a9ff4f6
 @endsection
 
 @section('content')
