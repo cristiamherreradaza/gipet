@@ -10,8 +10,6 @@
         text-align: center; 
     }
 </style>
-<!--alerts CSS -->
-<link href="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -66,10 +64,6 @@
 @stop
 
 @section('js')
-<!-- Sweet-Alert  -->
-<script src="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
-
 <script type="text/javascript">
     // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
     $.ajaxSetup({

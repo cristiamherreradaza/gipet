@@ -9,6 +9,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\NotasPropuestasExport;
 use App\Imports\NotasPropuestasImport;
 use Validator;
+use DB;
 
 class NotasPropuestaController extends Controller
 {
@@ -20,10 +21,7 @@ class NotasPropuestaController extends Controller
     public function listado()
     {
         $usuario = Auth::user();
-        $asignaturas = NotasPropuesta::where('user_id', Auth::user()->id)
-                                    ->where('anio_vigente', date('Y'))
-                                    ->where('borrado', NULL)
-                                    ->get();
+        $asignaturas = NotasPropuesta::all();                                
         return view('notaspropuesta.listado')->with(compact('usuario', 'asignaturas'));
     }
 

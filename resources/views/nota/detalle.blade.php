@@ -11,7 +11,7 @@
     }
 </style>
 <!--alerts CSS -->
-<link href="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet">
+<!-- <link href="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet"> -->
 @endsection
 
 @section('content')
@@ -80,8 +80,8 @@
 
 @section('js')
 <!-- Sweet-Alert  -->
-<script src="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
+<!-- <script src="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script> -->
 <script>
 // Script de importacion de excel
 $(document).ready(function() {
