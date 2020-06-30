@@ -5,9 +5,7 @@
 @endsection
 
 @section('css')
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/dataTables.bootstrap4.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/responsive.dataTables.min.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.min.css') }}">
+<link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -185,31 +183,32 @@
 
         <div class="row">
             <div class="col-md-4">
-                <div class="card card-outline-primary">                                
-                    <div class="card-header">
-                        <h4 class="mb-0 text-white">CARRERAS</h4>
-                    </div>
+                <div class="card border-info">
+                <div class="card-header bg-info">
+                    <h4 class="mb-0 text-white">CARRERAS</h4>
+                </div>
                     <br />  
                     <form action="#" method="GET" id="formulario_carreras">
-                        
-                        <div class="row">
-                            <div class="col-md-9">
-                                <div class="form-group">
-                                    <label class="control-label">Carreras </label>
-                                    
-                                    <select name="c_carrera_id" id="c_carrera_id" class="form-control custom-select" required>
-                                        <option value="">Seleccione</option>
-                                        @foreach ($carreras as $c)
-                                            <option value="{{ $c->id }}">{{ $c->nombre }}</option>
-                                        @endforeach
-                                    </select>
-                                    
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <label class="control-label">Carreras </label>
+                                        
+                                        <select name="c_carrera_id" id="c_carrera_id" class="form-control" required>
+                                            <option value="">Seleccione</option>
+                                            @foreach ($carreras as $c)
+                                                <option value="{{ $c->id }}">{{ $c->nombre }}</option>
+                                            @endforeach
+                                        </select>
+                                        
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label">Gestion </label>
-                                    <input type="number" name="c_gestion" id="c_gestion" class="form-control" value="{{ $gestion }}" min="2011" max="{{ $gestion }}">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Gestion </label>
+                                        <input type="number" name="c_gestion" id="c_gestion" class="form-control" value="{{ $gestion }}" min="2011" max="{{ $gestion }}">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -232,11 +231,8 @@
 @stop
 
 @section('js')
-<script src="{{ asset('assets/plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js') }}"></script>
-<!-- Sweet-Alert  -->
-<script src="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
+<script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 
 <script>
     $.ajaxSetup({

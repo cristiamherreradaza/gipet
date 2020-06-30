@@ -5,9 +5,8 @@
 @endsection
 
 @section('css')
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/dataTables.bootstrap4.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/datatables.net-bs4/css/responsive.dataTables.min.css') }}">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.min.css') }}">
+<link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
+<link href="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
@@ -102,74 +101,75 @@
             
             <div class="col-md-6">
                 
-                <div class="card card-outline-primary">                                
-                    <div class="card-header">
+                <div class="card border-primary">
+                    <div class="card-header bg-primary">
                         <h4 class="mb-0 text-white">ASIGNATURAS</h4>
                     </div>
-
-                    <div class="table-responsive m-t-40">
-                        <table id="tabla-asignaturas" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Sigla</th>
-                                    <th>Carrera</th>
-                                    <th>Nombre</th>
-                                    <th>A&ntilde;o</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($asignaturas as $a)
+                    <div class="card-body">
+                        <div class="table-responsive m-t-40">
+                            <table id="tabla-asignaturas" class="table table-bordered table-striped">
+                                <thead>
                                     <tr>
-                                        <td>{{ $a->codigo_asignatura }}</td>
-                                        <td>{{ $a->carrera->nombre }}</td>
-                                        <td>{{ $a->nombre_asignatura }}</td>
-                                        <td class="text-center">{{ $a->gestion }}</td>
-                                        <td>
-                                            <button type="button" class="btn btn-success" onclick="asigna_materia('{{ $a->id }}', '{{ $a->nombre_asignatura }}', '{{ $a->codigo_asignatura }}', '{{ $a->carrera->nombre }}')"><i
-                                                    class="fas fa-arrow-right"></i></button>
-                                        </td>
+                                        <th>Sigla</th>
+                                        <th>Carrera</th>
+                                        <th>Nombre</th>
+                                        <th>A&ntilde;o</th>
+                                        <th></th>
                                     </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach($asignaturas as $a)
+                                        <tr>
+                                            <td>{{ $a->codigo_asignatura }}</td>
+                                            <td>{{ $a->carrera->nombre }}</td>
+                                            <td>{{ $a->nombre_asignatura }}</td>
+                                            <td class="text-center">{{ $a->gestion }}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-success" onclick="asigna_materia('{{ $a->id }}', '{{ $a->nombre_asignatura }}', '{{ $a->codigo_asignatura }}', '{{ $a->carrera->nombre }}')"><i
+                                                        class="fas fa-arrow-right"></i></button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="card card-outline-info">
-                    <div class="card-header">
+                <div class="card border-info">
+                    <div class="card-header bg-info">
                         <h4 class="mb-0 text-white">ASIGNATURAS DEL DOCENTE</h4>
                     </div>
-                
-                    <div class="table-responsive m-t-40">
-                        <table id="tabla-asignaturas-docente" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Sigla</th>
-                                    <th>Carrera</th>
-                                    <th>Nombre</th>
-                                    <th>Curso</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($asignaturas_docente as $ad)
-                                <tr>
-                                    <td>{{ $ad->asignatura->codigo_asignatura }}</td>
-                                    <td>{{ $ad->asignatura->carrera->nombre }}</td>
-                                    <td>{{ $ad->asignatura->nombre_asignatura }}</td>
-                                    <td>{{ $ad->gestion }}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger"
-                                            onclick="elimina_asignacion('{{ $ad->id }}', '{{ $ad->asignatura->nombre_asignatura }}')"><i
-                                                class="fas fa-trash"></i></button>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                    <div class="card-body">
+                        <div class="table-responsive m-t-40">
+                            <table id="tabla-asignaturas-docente" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Sigla</th>
+                                        <th>Carrera</th>
+                                        <th>Nombre</th>
+                                        <th>Curso</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($asignaturas_docente as $ad)
+                                    <tr>
+                                        <td>{{ $ad->asignatura->codigo_asignatura }}</td>
+                                        <td>{{ $ad->asignatura->carrera->nombre }}</td>
+                                        <td>{{ $ad->asignatura->nombre_asignatura }}</td>
+                                        <td>{{ $ad->gestion }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-danger"
+                                                onclick="elimina_asignacion('{{ $ad->id }}', '{{ $ad->asignatura->nombre_asignatura }}')"><i
+                                                    class="fas fa-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -181,11 +181,8 @@
 @stop
 
 @section('js')
-<script src="{{ asset('assets/plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js') }}"></script>
-<!-- Sweet-Alert  -->
-<script src="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script>
+<script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 
 <script>
 
@@ -199,11 +196,19 @@
     });
 
     $(function () {
-        tabla_asignaturas = $('#tabla-asignaturas').DataTable();
+        tabla_asignaturas = $('#tabla-asignaturas').DataTable({
+            language: {
+                url: '{{ asset('datatableEs.json') }}'
+            },
+        });
     });
 
     $(function () {
-        $('#tabla-asignaturas-docente').DataTable();
+        $('#tabla-asignaturas-docente').DataTable({
+            language: {
+                url: '{{ asset('datatableEs.json') }}'
+            },
+        });
     });
 
     function asigna_materia(asignatura_id, nombre_asignatura, codigo_asignatura, nombre_carrera)
