@@ -1,5 +1,11 @@
 @extends('layouts.app')
 
+@section('css')
+<link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
+<link href="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.css') }}" rel="stylesheet">
+@endsection
+
+
 @section('metadatos')
 <meta name="csrf-token" content="{{ csrf_token() }}"/>
 @endsection
@@ -38,8 +44,8 @@
 </div>
 @stop
 @section('js')
-<script src="{{ asset('/assets/plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('/assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js')}}"></script>
+<script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script>
     // $(function () {
     //     $('#config-table').DataTable({
@@ -78,7 +84,10 @@ $(document).ready(function() {
             {data: 'razon_social_cliente'},
             {data: 'nit'},
             {data: 'action'},
-        ]
+        ],
+            language: {
+                url: '{{ asset('datatableEs.json') }}'
+            },
     } );
 
     // Apply the search

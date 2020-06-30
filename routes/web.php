@@ -32,6 +32,10 @@ Route::get('/', 'Auth\LoginController@inicio');
 
 Route::get('prueba/inicia', 'PruebaController@inicia'); 
 
+Route::get('listado', 'PruebaController@listado'); 
+
+Route::get('Prueba/guardar', 'PruebaController@guardar'); 
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

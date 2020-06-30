@@ -1,51 +1,53 @@
 {{-- {{ dd($datos_carrera->id) }} --}}
-<div class="card card-outline-info">
+{{-- <div class="card card-outline-info"> --}}
+<div class="card border-primary">
     @if ($datos_carrera)
-        <div class="card-header">
+        <div class="card-header bg-primary">
             <h4 class="mb-0 text-white">ASIGNATURAS - ({{ $datos_carrera->nombre }}) &nbsp;&nbsp;<button type="button" class="btn waves-effect waves-light btn-sm btn-warning" onclick="nuevo_modal('{{ $datos_carrera->id }}', '{{ $datos_carrera->anio_vigente }}')"><i class="fas fa-plus"></i> &nbsp; NUEVA MATERIA</button></h4>
         </div>
     @else
-        <div class="card-header">
+        <div class="card-header bg-primary">
             <h4 class="mb-0 text-white">NO EXISTE LA CARRERA EN ESA GESTION &nbsp;&nbsp;</h4>
         </div>
     @endif                                
-
-    <div class="table-responsive m-t-40">
-        @if (!empty($asignaturas))
-            <table id="tabla-ajax_asignaturas" class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>Sigla</th>
-                        <th>Nombre</th>
-                        <th>Curso</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($asignaturas as $a)
+    <div class="card-body">
+        <div class="table-responsive m-t-40">
+            @if (!empty($asignaturas))
+                <table id="tabla-ajax_asignaturas" class="table table-bordered table-striped">
+                    <thead>
                         <tr>
-                            <td>{{ $a->codigo_asignatura }}</td>
-                            <td>{{ $a->nombre_asignatura }}</td>
-                            <td>{{ $a->semestre }}</td>
-                            <td>
-                                <button type="button" class="btn btn-warning" onclick="muestra_modal({{ $a->id }})"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-info" onclick="prerequisitos('{{ $a->id }}', '{{ $a->carrera_id }}', '{{ $a->anio_vigente }}')"><i class="fas fa-eye"></i></button>
-                                <button type="button" class="btn btn-danger" onclick="elimina_asignatura('{{ $a->id }}', '{{ $a->nombre_asignatura }}')"><i class="fas fa-trash"></i></button>
-                            </td>
+                            <th>Sigla</th>
+                            <th>Nombre</th>
+                            <th>Curso</th>
+                            <th>Acciones</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        @else
-        <p></p>
-            <h3>La carrera no tiene asignaturas</h3>
-        @endif
-        
+                    </thead>
+                    <tbody>
+                        @foreach($asignaturas as $a)
+                            <tr>
+                                <td>{{ $a->codigo_asignatura }}</td>
+                                <td>{{ $a->nombre_asignatura }}</td>
+                                <td>{{ $a->semestre }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-warning" onclick="muestra_modal({{ $a->id }})"><i class="fas fa-edit"></i></button>
+                                    <button type="button" class="btn btn-info" onclick="prerequisitos('{{ $a->id }}', '{{ $a->carrera_id }}', '{{ $a->anio_vigente }}')"><i class="fas fa-eye"></i></button>
+                                    <button type="button" class="btn btn-danger" onclick="elimina_asignatura('{{ $a->id }}', '{{ $a->nombre_asignatura }}')"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            @else
+            <p></p>
+                <h3>La carrera no tiene asignaturas</h3>
+            @endif
+            
+        </div>
     </div>
 </div>
 
-<script src="{{ asset('assets/plugins/datatables.net/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/datatables.net-bs4/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 
 <script>
     var asignaturas = @json($asignaturas); 
