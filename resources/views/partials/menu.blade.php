@@ -35,11 +35,7 @@
                     </a>
                 </li>
 
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ url('User/listado') }}" aria-expanded="false">
-                        <i data-feather="user" class="feather-icon"></i><span class="hide-menu"> Personal </span>
-                    </a>
-                </li>
+                
 
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="{{ url('notaspropuesta/listado') }}" aria-expanded="false">
@@ -62,6 +58,24 @@
                     <a class="sidebar-link" href="{{ url('Persona/listado') }}" aria-expanded="false">
                         <i data-feather="users" class="feather-icon"></i><span class="hide-menu"> Alumnos </span>
                     </a>
+                </li>
+
+                <li class="sidebar-item"> 
+                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                        <i data-feather="user" class="feather-icon"></i><span class="hide-menu"> PERSONAL </span>
+                    </a>
+                    <ul aria-expanded="false" class="collapse  first-level">
+                        <li class="sidebar-item">
+                            <a href="{{ url('User/nuevo') }}" class="sidebar-link">
+                                <i data-feather="plus-circle" class="feather-icon"></i><span class="hide-menu"> Nuevo </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url('User/listado') }}" class="sidebar-link">
+                                <i data-feather="list" class="feather-icon"></i><span class="hide-menu"> Listado </span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 
                 <li class="nav-devider"></li>

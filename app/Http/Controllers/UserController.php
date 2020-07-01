@@ -9,9 +9,53 @@ use App\Asignatura;
 use App\NotasPropuesta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    public function nuevo()
+    {
+        return view('user.nuevo');
+    }
+
+    public function guarda(Request $request)
+    {
+        $user = new User();
+        $user->apellido_paterno = $request->apellido_paterno;
+        $user->apellido_materno = $request->apellido_materno;
+        $user->nombres = $request->nombres;
+        $user->nomina = $request->nomina;
+        $user->password = Hash::make($request->username);
+        $user->cedula = $request->ci;
+        $user->expedido = $request->expedido;
+        $user->tipo_usuario = $request->tipo;
+        $user->nombre_usuario = $request->username;
+        $user->fecha_incorporacion = date('Y-m-d');
+
+        $user->vigente = 'Si';
+        $user->rol = $request->rol;
+        $user->fecha_nacimiento = $request->fecha_nacimiento;
+        $user->lugar_nacimiento = $request->lugar_nacimiento;
+        $user->sexo = $request->sexo;
+        $user->estado_civil = $request->estado_civil;
+        $user->nombre_conyugue = $request->nombre_conyugue;
+        $user->nombre_hijo = $request->nombre_hijo;
+        $user->direccion = $request->direccion;
+        $user->zona = $request->zona;
+        
+        $user->numero_celular = $request->numero_celular;
+        $user->numero_fijo = $request->numero_fijo;
+        $user->email = $request->email;
+        //$user->foto = $request->foto;
+        $user->persona_referencia = $request->persona_referencia;
+        $user->numero_referencia = $request->numero_referencia;
+        $user->name = $request->name;
+
+        $user->save();
+        return redirect('User/listado');
+
+    }
+
     public function asignar()
     {
         $users = User::where('vigente', 'si')->get();
