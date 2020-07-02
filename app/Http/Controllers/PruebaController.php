@@ -9,7 +9,9 @@ use App\Asignatura;
 use App\Turno;
 use App\Persona;
 use App\Kardex;
+use App\Nota;
 use App\CarreraPersona;
+use App\NotasPropuesta;
 use App\Prerequisito;
 use DB;
 
@@ -494,7 +496,7 @@ class PruebaController extends Controller
 
     public function asignaturas_inscripcion($carrera_id, $turno_id, $persona_id, $paralelo, $anio_vigente)
     {
-         $asignaturas = DB::select("SELECT asig.id, asig.codigo_asignatura, asig.nombre_asignatura, prer.sigla, prer.prerequisito_id
+        $asignaturas = DB::select("SELECT asig.id, asig.codigo_asignatura, asig.nombre_asignatura, prer.sigla, prer.prerequisito_id
                                     FROM asignaturas asig, prerequisitos prer
                                     WHERE asig.carrera_id = '$carrera_id'
                                     AND asig.anio_vigente = '$anio_vigente'
@@ -587,6 +589,26 @@ class PruebaController extends Controller
                     $inscripcion->gestion = $asignatu[0]->gestion;
                     $inscripcion->anio_vigente = $anio_vigente;
                     $inscripcion->save();
+
+                    // en esta parte registramos la nota del alumno inscrito
+                    $notas_pro = NotasPropuesta::where('asignatura_id', $asig_tomar1->asignatura_id)
+                                                ->where('turno_id', $turno_id)
+                                                ->where('paralelo', $paralelo)
+                                                ->where('anio_vigente', $anio_vigente)
+                                                ->select('user_id')
+                                                ->get();
+                    // dd($notas_pro[0]->user_id);
+                    if (!empty($notas_pro[0]->user_id)) {
+                        $nueva_nota = new Nota;
+                        $nueva_nota->asignatura_id = $asig_tomar1->asignatura_id;
+                        $nueva_nota->turno_id = $turno_id;
+                        $nueva_nota->user_id = $notas_pro[0]->user_id;
+                        $nueva_nota->persona_id = $persona_id;
+                        $nueva_nota->paralelo = $paralelo;
+                        $nueva_nota->anio_vigente = $anio_vigente;
+                        $nueva_nota->save();
+                    }
+                    
             }
 
             
