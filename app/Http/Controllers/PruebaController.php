@@ -608,10 +608,6 @@ class PruebaController extends Controller
                         $nueva_nota->anio_vigente = $anio_vigente;
                         $nueva_nota->save();
                     }
-                    
             }
-
-            
-
     }
 }
