@@ -334,7 +334,7 @@
                                                             </span>
                                                         </label>
                                                         <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="carrera_1" name="carrera_1">
-                                                            <option value="">Seleccionar</option>
+                                                            <option value="0">Seleccionar</option>
                                                             @foreach($carreras as $carre)
                                                             <option value="{{ $carre->id }}">{{ $carre->nombre }}</option>
                                                             @endforeach
@@ -406,7 +406,7 @@
                                                             </span>
                                                         </label>
                                                         <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="asignatura_1" name="asignatura_1">
-                                                            <option value="">Seleccionar</option>
+                                                            <option value="0">Seleccionar</option>
                                                             @foreach($asignaturas as $asig)
                                                             <option value="{{ $asig->id }}">{{ $asig->nombre_asignatura }}</option>
                                                             @endforeach

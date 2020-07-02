@@ -116,14 +116,22 @@ class PruebaController extends Controller
             $datos_paralelo = 'paralelo_'.$carr;
             $datos_gestion = 'gestion_'.$carr;
 
-            $carrera_1 = new CarreraPersona();
-            $carrera_1->carrera_id   = $request->$datos_carrera;
-            $carrera_1->persona_id   = $persona_id;
-            $carrera_1->turno_id     = $request->$datos_turno;
-            $carrera_1->paralelo     = $request->$datos_paralelo;
-            $carrera_1->anio_vigente = $request->$datos_gestion;
-            $carrera_1->sexo         = $request->sexo;
-            $carrera_1->save();
+            if ($request->$datos_carrera != 0) {
+                $carrera_1 = new CarreraPersona();
+                $carrera_1->carrera_id   = $request->$datos_carrera;
+                $carrera_1->persona_id   = $persona_id;
+                $carrera_1->turno_id     = $request->$datos_turno;
+                $carrera_1->paralelo     = $request->$datos_paralelo;
+                $carrera_1->anio_vigente = $request->$datos_gestion;
+                $carrera_1->sexo         = $request->sexo;
+                $carrera_1->save();
+
+                $this->asignaturas_inscripcion($request->$datos_carrera, $request->$datos_turno, $persona_id, $request->$datos_paralelo, $request->$datos_gestion);
+
+                DB::table('materias')->truncate();
+            }
+
+            
         }
 
         // REGISTRA LAS ASIGNATURAS SUELTAS INSCRITAS
@@ -133,6 +141,8 @@ class PruebaController extends Controller
             $datos_paralelo_asig = 'paralelo_asig_'.$asig;
             $datos_gestion_asig = 'gestion_asig_'.$asig;
 
+            if ($request->$datos_asig != 0) {
+
             $inscripcion_1 = new Inscripcion();
             $inscripcion_1->asignatura_id = $request->$datos_asig;
             $inscripcion_1->turno_id = $request->$datos_turno_asig;
@@ -140,8 +150,9 @@ class PruebaController extends Controller
             $inscripcion_1->paralelo = $request->$datos_paralelo_asig;
             $inscripcion_1->anio_vigente = $request->$datos_gestion_asig;
             $inscripcion_1->save();
-        }
 
+            }
+        }
         return redirect('Persona/listado');
     }
 
@@ -479,6 +490,105 @@ class PruebaController extends Controller
         }
 
         return redirect('Inscripcion/tomar_asignaturas/'.$persona_id);
+    }
+
+    public function asignaturas_inscripcion($carrera_id, $turno_id, $persona_id, $paralelo, $anio_vigente)
+    {
+         $asignaturas = DB::select("SELECT asig.id, asig.codigo_asignatura, asig.nombre_asignatura, prer.sigla, prer.prerequisito_id
+                                    FROM asignaturas asig, prerequisitos prer
+                                    WHERE asig.carrera_id = '$carrera_id'
+                                    AND asig.anio_vigente = '$anio_vigente'
+                                    AND asig.id = prer.asignatura_id
+                                    ORDER BY asig.gestion, asig.orden_impresion");
+        foreach ($asignaturas as $asig) {
+            $inscripciones = DB::select("SELECT MAX(nota) as nota
+                                            FROM inscripciones
+                                            WHERE asignatura_id = '$asig->id'
+                                            AND persona_id = '$persona_id'
+                                            AND carrera_id = '$carrera_id'");
+
+            if(!empty($inscripciones[0]->nota)){
+               if ($inscripciones[0]->nota < 71) {
+                   DB::table('materias')->insert([
+                              'asignatura_id' => $asig->id,
+                              'codigo_asignatura' => $asig->codigo_asignatura,
+                              'nombre_asignatura' => $asig->nombre_asignatura,                              
+                              'estado' => 1,
+                            ]);
+               }
+
+            } else {
+
+                if (!empty($asig->prerequisito_id)) {
+                    $prerequisito = DB::select("SELECT MAX(nota) as nota
+                                        FROM inscripciones
+                                        WHERE asignatura_id = '$asig->prerequisito_id'
+                                        AND persona_id = '$persona_id'
+                                        AND carrera_id = '$carrera_id'");
+                    if ($prerequisito[0]->nota > 70) {
+                        DB::table('materias')->insert([
+                              'asignatura_id' => $asig->id,
+                              'codigo_asignatura' => $asig->codigo_asignatura,
+                              'nombre_asignatura' => $asig->nombre_asignatura,                              
+                              'estado' => 1,
+                            ]);
+                    }
+
+                } else {
+                    DB::table('materias')->insert([
+                              'asignatura_id' => $asig->id,
+                              'codigo_asignatura' => $asig->codigo_asignatura,
+                              'nombre_asignatura' => $asig->nombre_asignatura,                              
+                              'estado' => 1,
+                            ]);
+                }
+            }
+        }
+
+        // en toda esta seccion verificamos si tienen mas de un prerequisitos y si los puede tomar
+            $materia = DB::table('materias')
+                 ->select('asignatura_id', DB::raw('count(asignatura_id) as nro'))
+                 ->groupBy('asignatura_id')
+                 ->get();
+            foreach ($materia as $mate) {
+                $id_asig = $mate->asignatura_id;
+                $valor_mate = $mate->nro;
+
+                $pre_requisitos = DB::table('prerequisitos')
+                 ->select('asignatura_id', DB::raw('count(asignatura_id) as nro'))
+                 ->where('asignatura_id','=',$id_asig)
+                 ->groupBy('asignatura_id')
+                 ->get();
+
+                $valor_prer = $pre_requisitos[0]->nro;
+                if ($valor_mate != $valor_prer) {
+                    DB::table('materias')
+                    ->where('asignatura_id','=',$id_asig)
+                    ->delete();
+                }
+            }
+        // aqui inscribimos las asignaturas que les corresponde
+        $asig_tomar = DB::select("SELECT DISTINCT asignatura_id, codigo_asignatura, nombre_asignatura
+                                    FROM materias");
+            foreach ($asig_tomar as $asig_tomar1) {
+
+                    $asignatu = DB::table('asignaturas')
+                    ->select('id', 'gestion')
+                    ->where('id','=',$asig_tomar1->asignatura_id)
+                    ->where('anio_vigente','=',$anio_vigente)
+                    ->get();
+
+                    $inscripcion = new Inscripcion();
+                    $inscripcion->asignatura_id = $asig_tomar1->asignatura_id;
+                    $inscripcion->turno_id = $turno_id;
+                    $inscripcion->persona_id = $persona_id;
+                    $inscripcion->carrera_id = $carrera_id;
+                    $inscripcion->paralelo = $paralelo;
+                    $inscripcion->gestion = $asignatu[0]->gestion;
+                    $inscripcion->anio_vigente = $anio_vigente;
+                    $inscripcion->save();
+            }
+
             
 
     }
