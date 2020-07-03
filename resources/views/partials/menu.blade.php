@@ -34,20 +34,6 @@
                         <i data-feather="pie-chart" class="feather-icon"></i><span class="hide-menu"> Malla Curricular </span>
                     </a>
                 </li>
-
-                
-
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ url('notaspropuesta/listado') }}" aria-expanded="false">
-                        <i data-feather="trending-up" class="feather-icon"></i><span class="hide-menu"> Ponderacion </span>
-                    </a>
-                </li>
-
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ url('nota/listado') }}" aria-expanded="false">
-                        <i data-feather="book" class="feather-icon"></i><span class="hide-menu"> Asignatura </span>
-                    </a>
-                </li>
                 <li class="sidebar-item">
                     <a class="sidebar-link" href="{{ url('Inscripcion/inscripcion') }}" aria-expanded="false">
                         <i data-feather="file-text" class="feather-icon"></i><span class="hide-menu"> Inscripciones </span>
@@ -73,6 +59,24 @@
                         <li class="sidebar-item">
                             <a href="{{ url('User/listado') }}" class="sidebar-link">
                                 <i data-feather="list" class="feather-icon"></i><span class="hide-menu"> Listado </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-item"> 
+                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                        <i data-feather="book-open" class="feather-icon"></i><span class="hide-menu"> ASIGNATURAS </span>
+                    </a>
+                    <ul aria-expanded="false" class="collapse  first-level">
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="{{ url('notaspropuesta/listado') }}">
+                                <i data-feather="file-plus" class="feather-icon"></i><span class="hide-menu"> Ponderacion </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="{{ url('nota/listado') }}">
+                                <i data-feather="file-minus" class="feather-icon"></i><span class="hide-menu"> Notas </span>
                             </a>
                         </li>
                     </ul>
