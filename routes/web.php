@@ -128,6 +128,7 @@ Route::get('User/nuevo', 'UserController@nuevo');
 Route::post('User/guarda', 'UserController@guarda');
 Route::get('User/editar/{user_id}', 'UserController@editar');
 Route::post('User/actualizar', 'UserController@actualizar');
+Route::get('User/eliminar/{user_id}', 'UserController@eliminar');
 Route::post('User/guarda_asignacion', 'UserController@guarda_asignacion');
 Route::get('User/listado', 'UserController@listado');
 Route::get('User/ajax_listado', 'UserController@ajax_listado');

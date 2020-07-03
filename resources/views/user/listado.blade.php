@@ -114,6 +114,30 @@ function editar(user_id)
     window.location.href = "{{ url('User/editar') }}/" + user_id;
 }
 
+function eliminar(id, nombre)
+    {
+        Swal.fire({
+            title: 'Quieres borrar ' + nombre + '?',
+            text: "Luego no podras recuperarlo!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, estoy seguro!',
+            cancelButtonText: "Cancelar",
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire(
+                    'Excelente!',
+                    'El usuario fue eliminado',
+                    'success'
+                ).then(function() {
+                    window.location.href = "{{ url('User/eliminar') }}/"+id;
+                });
+            }
+        })
+    }
+
 </script>
 
 <script type="text/javascript">

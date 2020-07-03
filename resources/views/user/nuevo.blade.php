@@ -132,8 +132,8 @@
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
                                 <select name="sexo" id="sexo" class="form-control" required>                
-                                    <option value="Femenino" selected> Femenino </option>
-                                    <option value="Masculino"> Masculino </option>
+                                    <option value="Femenino"> Femenino </option>
+                                    <option value="Masculino" selected> Masculino </option>
                                 </select>
                             </div>
                         </div>
@@ -277,11 +277,11 @@
         }else{
             //alert('hola');
             event.preventDefault();
-                // Swal.fire({
-                //     type: 'error',
-                //     title: 'Oops...',
-                //     text: 'Tienes que adicionar al menos un producto.'
-                // })
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Completa los puntos que estan marcados en rojo.'
+            })
         }
     }
 </script>

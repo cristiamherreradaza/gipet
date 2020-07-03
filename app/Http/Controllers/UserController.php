@@ -119,7 +119,8 @@ class UserController extends Controller
     	return Datatables::of($lista_personal)
             ->addColumn('action', function ($lista_personal) {
                 return '<button onclick="asigna_materias('.$lista_personal->id.')" class="btn btn-info" title="Asignar materias"><i class="fas fa-plus"></i></button>
-                <button onclick="editar('.$lista_personal->id.')" class="btn btn-primary" title="Editar usuario"><i class="fas fa-id-card"></i></button>';
+                <button onclick="editar('.$lista_personal->id.')" class="btn btn-primary" title="Editar usuario"><i class="fas fa-pencil-alt"></i></button>
+                <button onclick="eliminar(' . $lista_personal->id . ',\''.$lista_personal->nombre_usuario.'\')" class="btn btn-danger" title="Eliminar usuario"><i class="fas fa-minus"></i></button>';
             })
             ->editColumn('id', 'ID: {{$id}}')
             ->make(true);
@@ -187,5 +188,13 @@ class UserController extends Controller
         return response()->json([
             'usuario' => $datosNP->user_id
         ]);
+    }
+
+    public function eliminar($id)
+    {
+        $user = User::find($id);
+        $user->borrado = date('Y-m-d H:i:s');
+        $user->save();
+        return redirect('User/listado');
     }
 }
