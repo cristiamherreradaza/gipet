@@ -49,11 +49,55 @@ class UserController extends Controller
         //$user->foto = $request->foto;
         $user->persona_referencia = $request->persona_referencia;
         $user->numero_referencia = $request->numero_referencia;
-        $user->name = $request->name;
+        $user->name = $request->username;
 
         $user->save();
         return redirect('User/listado');
 
+    }
+
+    public function editar($id)
+    {
+        $user = User::find($id);
+        return view('user.editar')->with(compact('user'));
+    }
+
+    public function actualizar(Request $request)
+    {
+        $user = User::find($request->id);
+        $user->apellido_paterno = $request->apellido_paterno;
+        $user->apellido_materno = $request->apellido_materno;
+        $user->nombres = $request->nombres;
+        $user->nomina = $request->nomina;
+        //$user->password = Hash::make($request->username);
+        $user->cedula = $request->ci;
+        $user->expedido = $request->expedido;
+        $user->tipo_usuario = $request->tipo;
+        $user->nombre_usuario = $request->username;
+        //$user->fecha_incorporacion = date('Y-m-d');
+
+        //$user->vigente = 'Si';
+        $user->rol = $request->rol;
+        $user->fecha_nacimiento = $request->fecha_nacimiento;
+        $user->lugar_nacimiento = $request->lugar_nacimiento;
+        $user->sexo = $request->sexo;
+        $user->estado_civil = $request->estado_civil;
+        $user->nombre_conyugue = $request->nombre_conyugue;
+        $user->nombre_hijo = $request->nombre_hijo;
+        $user->direccion = $request->direccion;
+        $user->zona = $request->zona;
+        
+        $user->numero_celular = $request->numero_celular;
+        $user->numero_fijo = $request->numero_fijo;
+        $user->email = $request->email;
+        //$user->foto = $request->foto;
+        $user->persona_referencia = $request->persona_referencia;
+        $user->numero_referencia = $request->numero_referencia;
+        $user->name = $request->username;
+
+        $user->save();
+        return redirect('User/listado');
+        //dd($user);
     }
 
     public function asignar()
@@ -69,10 +113,13 @@ class UserController extends Controller
 
     public function ajax_listado()
     {
-    	$lista_personal = User::all();
+        //$lista_personal = User::all();
+        $lista_personal = User::whereNull('borrado')
+                            ->get();
     	return Datatables::of($lista_personal)
             ->addColumn('action', function ($lista_personal) {
-                return '<button onclick="asigna_materias('.$lista_personal->id.')" class="btn btn-info"><i class="fas fa-eye"></i></a>';
+                return '<button onclick="asigna_materias('.$lista_personal->id.')" class="btn btn-info" title="Asignar materias"><i class="fas fa-plus"></i></button>
+                <button onclick="editar('.$lista_personal->id.')" class="btn btn-primary" title="Editar usuario"><i class="fas fa-id-card"></i></button>';
             })
             ->editColumn('id', 'ID: {{$id}}')
             ->make(true);

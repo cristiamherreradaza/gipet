@@ -90,7 +90,7 @@
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
                                 <select name="tipo" id="tipo" class="form-control" required>
-                                    <option value="Administrativo" selected> Administrativo </option>                               
+                                    <option value="Academico" selected> Academico </option>                               
                                     <option value="Director"> Director </option>
                                     <option value="Docente"> Docente </option>
                                 </select>
@@ -132,7 +132,7 @@
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
                                 <select name="sexo" id="sexo" class="form-control" required>                
-                                    <option value="Feminino" selected> Femenino </option>
+                                    <option value="Femenino" selected> Femenino </option>
                                     <option value="Masculino"> Masculino </option>
                                 </select>
                             </div>

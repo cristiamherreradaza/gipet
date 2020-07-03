@@ -17,10 +17,12 @@
 @section('content')
 
 <div class="col-lg-12">
-    <div class="card">
-        <div class="card-header">
+    <div class="card border-info">
+        <div class="card-header bg-info mb-0 text-white">
+            <strong>
             {{ $asignatura->asignatura->codigo_asignatura }}
             {{ $asignatura->asignatura->nombre_asignatura }}
+            </strong>            
         </div>
         <div class="card-body">
             <div class="table-responsive">

@@ -106,15 +106,17 @@ $(document).ready(function() {
 
 function asigna_materias(user_id)
 {
-    // console.log(user_id);
     window.location.href = "{{ url('User/asigna_materias') }}/" + user_id;
+}
+
+function editar(user_id)
+{
+    window.location.href = "{{ url('User/editar') }}/" + user_id;
 }
 
 </script>
 
 <script type="text/javascript">
-
-
     // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
     $.ajaxSetup({
         headers: {
