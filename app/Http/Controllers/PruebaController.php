@@ -10,6 +10,7 @@ use App\Turno;
 use App\Persona;
 use App\Kardex;
 use App\Nota;
+use App\Materia;
 use App\CarreraPersona;
 use App\NotasPropuesta;
 use App\Prerequisito;
@@ -496,18 +497,30 @@ class PruebaController extends Controller
 
     public function asignaturas_inscripcion($carrera_id, $turno_id, $persona_id, $paralelo, $anio_vigente)
     {
-        $asignaturas = DB::select("SELECT asig.id, asig.codigo_asignatura, asig.nombre_asignatura, prer.sigla, prer.prerequisito_id
-                                    FROM asignaturas asig, prerequisitos prer
-                                    WHERE asig.carrera_id = '$carrera_id'
-                                    AND asig.anio_vigente = '$anio_vigente'
-                                    AND asig.id = prer.asignatura_id
-                                    ORDER BY asig.gestion, asig.orden_impresion");
+        // $asignaturas = DB::select("SELECT asig.id, asig.codigo_asignatura, asig.nombre_asignatura, prer.sigla, prer.prerequisito_id
+        //                             FROM asignaturas asig, prerequisitos prer
+        //                             WHERE asig.carrera_id = '$carrera_id'
+        //                             AND asig.anio_vigente = '$anio_vigente'
+        //                             AND asig.id = prer.asignatura_id
+        //                             ORDER BY asig.gestion, asig.orden_impresion");
+
+        $asignaturas = Asignatura::select('asignaturas.id', 'asignaturas.codigo_asignatura', 'asignaturas.nombre_asignatura', 'prerequisitos.sigla', 'prerequisitos.prerequisito_id')
+                        ->where('asignaturas.carrera_id', $carrera_id)
+                        ->where('asignaturas.anio_vigente', $anio_vigente)
+                        ->leftJoin('prerequisitos', 'asignaturas.id', '=', 'prerequisitos.asignatura_id')
+                        ->orderBy('asignaturas.gestion', 'ASC')
+                        ->get();
         foreach ($asignaturas as $asig) {
-            $inscripciones = DB::select("SELECT MAX(nota) as nota
-                                            FROM inscripciones
-                                            WHERE asignatura_id = '$asig->id'
-                                            AND persona_id = '$persona_id'
-                                            AND carrera_id = '$carrera_id'");
+            // $inscripciones = DB::select("SELECT MAX(nota) as nota
+            //                                 FROM inscripciones
+            //                                 WHERE asignatura_id = '$asig->id'
+            //                                 AND persona_id = '$persona_id'
+            //                                 AND carrera_id = '$carrera_id'");
+            $inscripciones = Inscripcion::max('inscripciones.nota')
+                        ->where('inscripciones.asignatura_id', $asig->id)
+                        ->where('inscripciones.persona_id', $persona_id)
+                        ->where('inscripciones.carrera_id', $carrera_id)
+                        ->get();
 
             if(!empty($inscripciones[0]->nota)){
                if ($inscripciones[0]->nota < 71) {
@@ -522,11 +535,17 @@ class PruebaController extends Controller
             } else {
 
                 if (!empty($asig->prerequisito_id)) {
-                    $prerequisito = DB::select("SELECT MAX(nota) as nota
-                                        FROM inscripciones
-                                        WHERE asignatura_id = '$asig->prerequisito_id'
-                                        AND persona_id = '$persona_id'
-                                        AND carrera_id = '$carrera_id'");
+                    // $prerequisito = DB::select("SELECT MAX(nota) as nota
+                    //                     FROM inscripciones
+                    //                     WHERE asignatura_id = '$asig->prerequisito_id'
+                    //                     AND persona_id = '$persona_id'
+                    //                     AND carrera_id = '$carrera_id'");
+                    $prerequisito = Inscripcion::max('inscripciones.nota as nota')
+                        ->where('asignaturas.asignatura_id', $asig->prerequisito_id)
+                        ->where('asignaturas.persona_id', $persona_id)
+                        ->where('asignaturas.carrera_id', $carrera_id)
+                        ->get();
+
                     if ($prerequisito[0]->nota > 70) {
                         DB::table('materias')->insert([
                               'asignatura_id' => $asig->id,
@@ -570,8 +589,11 @@ class PruebaController extends Controller
                 }
             }
         // aqui inscribimos las asignaturas que les corresponde
-        $asig_tomar = DB::select("SELECT DISTINCT asignatura_id, codigo_asignatura, nombre_asignatura
-                                    FROM materias");
+        // $asig_tomar = DB::select("SELECT DISTINCT asignatura_id, codigo_asignatura, nombre_asignatura
+        //                             FROM materias");
+        $asig_tomar = Materia::select('materia.asignatura_id', 'materia.codigo_asignatura', 'materia.nombre_asignatura')
+                 ->distinct('materia.asignatura_id')
+                 ->get();
             foreach ($asig_tomar as $asig_tomar1) {
 
                     $asignatu = DB::table('asignaturas')
@@ -609,5 +631,28 @@ class PruebaController extends Controller
                         $nueva_nota->save();
                     }
             }
+    }
+
+    public function detalle_alumno()
+    {
+        $persona_id = 3185;
+        $fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
+        $year = $fecha->format('Y');//obtenes solo el año actual
+
+        $datosPersonales = Persona::where('borrado', NULL)
+                        ->where('id', $persona_id)
+                        ->first();
+
+        $carrerasPersona = CarreraPersona::where('borrado', NULL)
+                        ->where('persona_id', $persona_id)
+                        ->get();
+        $inscripciones = CarreraPersona::where('borrado', NULL)
+                        ->where('persona_id', $persona_id)
+                        ->get();
+        $carreras = Carrera::where('borrado',NULL)->get();
+
+        $turnos = Turno::where('borrado', NULL)
+                        ->get();
+        return view('prueba.detalle_alumno')->with(compact('datosPersonales', 'carrerasPersona', 'inscripciones', 'carreras', 'turnos', 'year'));   
     }
 }

@@ -52,7 +52,7 @@
             <div class="col-lg-12">
                 <div class="card border-info">
                     <div class="card-header bg-info">
-                        <h4 class="mb-0 text-white">NUEVO ALUMNO</h4>
+                        <h4 class="mb-0 text-white">NUEVO ALUMNOS</h4>
                     </div>
                         <div class="card-body">
                             <div class="row" id="tabsProductos">

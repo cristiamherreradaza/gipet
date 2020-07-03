@@ -46,7 +46,7 @@
     <div class="col-md-12">
         <!-- Row -->
         {{-- <form action="{{ url('Producto/guarda') }}"  method="post" enctype="multipart/form-data" > --}}
-        <form action="{{ url('Prueba/guardar') }}" method="GET" >
+        <form action="{{ url('Inscripcion/guardar') }}" method="POST" >
             @csrf
         <div class="row">
             <div class="col-lg-12">
@@ -191,7 +191,7 @@
 
                                             </div>
                                         
-                                    </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-12 tabContenido" id="tab2C" style="display: none;">

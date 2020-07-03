@@ -34,6 +34,8 @@ Route::get('prueba/inicia', 'PruebaController@inicia');
 
 Route::get('listado', 'PruebaController@listado'); 
 
+Route::get('detalle_alumno', 'PruebaController@detalle_alumno');
+
 Route::get('Prueba/guardar', 'PruebaController@guardar'); 
 
 Auth::routes();
@@ -114,6 +116,8 @@ Route::get('Inscripcion/tomar_asignaturas/{persona_id}', 'InscripcionController@
 Route::get('Inscripcion/vista', 'InscripcionController@vista');
 
 Route::get('Inscripcion/ver_persona/{persona_id}', 'InscripcionController@ver_persona');
+
+Route::post('Inscripcion/guardar', 'InscripcionController@guardar');
 
 
 
