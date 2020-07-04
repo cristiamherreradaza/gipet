@@ -10,7 +10,7 @@
                     <tr>
                         <th>Sigla</th>
                         <th>Nombre</th>
-                        <th>Nombre</th>
+                        <th>Accion</th>
                     </tr>
                 </thead>
                 <tbody>

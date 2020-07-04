@@ -26,7 +26,7 @@ class NotasPropuesta extends Model
 
     public function asignatura()
     {
-        return $this->belongsTo('App\Asignatura' );
+        return $this->belongsTo('App\Asignatura');
     }
 
     public function turno()

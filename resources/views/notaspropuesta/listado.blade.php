@@ -15,14 +15,18 @@
 @section('content')
 <div class="card">
     <div class="card-body">
-        <h4 class="card-title">Lista de ponderaciones de asignaturas</h4>
+        <h3 class="card-title text-primary"><strong>LISTADO DE PONDERACI&Oacute;N DE ASIGNATURAS</strong></h3>
+        <h6 class="card-subtitle text-dark">DOCENTE: {{ auth()->user()->nombres }} {{ auth()->user()->apellido_paterno }} {{ auth()->user()->apellido_materno }}</h6>
         <h6 class="card-subtitle">Año {{ date('Y') }}</h6>
         <div class="table-responsive m-t-40">
-            <table class="table table-bordered table-striped">
-                <thead>
+            <table class="table table-bordered table-striped text-center">
+                <thead class="text-primary">
                     <tr>
-                        <th style="width: 10%">Codigo</th>
+                        <!-- <th style="width: 10%">Codigo</th> -->
+                        <th>Codigo</th>
                         <th>Asignatura</th>
+                        <th>Turno</th>
+                        <th>Paralelo</th>
                         <th>Asistencia</th>
                         <th>Practicas</th>
                         <th>Puntos Ganados</th>
@@ -35,19 +39,23 @@
                 <tbody>
                     @foreach($asignaturas as $asignatura)
                         <tr>
-                            <td>
-                                {{ $asignatura->asignatura->codigo_asignatura }}
-                            </td>
-                            <td>
-                                {{ $asignatura->asignatura->nombre_asignatura }}
-                            </td>
+                            <td>{{ $asignatura->asignatura->codigo_asignatura }}</td>
+                            <td>{{ $asignatura->asignatura->nombre_asignatura }}</td>
+                            <td>{{ $asignatura->turno->descripcion }}</td>
+                            <td>{{ $asignatura->paralelo }}</td>
                             <td><input size="10" min="0" max="100" pattern="^[0-9]+" onchange="calcula( {{ $asignatura->id }} )" data-asistencia="{{ $asignatura->nota_asistencia }}" type="number" id="asistencia-{{ $asignatura->id }}" name="asistencia-{{ $asignatura->id }}" value="{{ $asignatura->nota_asistencia }}" step="any"></td>
                             <td><input size="10" min="0" max="100" pattern="^[0-9]+" onchange="calcula( {{ $asignatura->id }} )" data-practicas="{{ $asignatura->nota_practicas }}" type="number" id="practicas-{{ $asignatura->id }}" name="practicas-{{ $asignatura->id }}" value="{{ $asignatura->nota_practicas }}" step="any"></td>
                             <td><input size="10" min="0" max="100" pattern="^[0-9]+" onchange="calcula( {{ $asignatura->id }} )" data-puntos="{{ $asignatura->nota_puntos_ganados }}" type="number" id="puntos-{{ $asignatura->id }}" name="puntos-{{ $asignatura->id }}" value="{{ $asignatura->nota_puntos_ganados }}" step="any"></td>
                             <td><input size="10" min="0" max="100" pattern="^[0-9]+" onchange="calcula( {{ $asignatura->id }} )" data-parcial="{{ $asignatura->nota_primer_parcial }}" type="number" id="parcial-{{ $asignatura->id }}" name="parcial-{{ $asignatura->id }}" value="{{ $asignatura->nota_primer_parcial }}" step="any"></td>
                             <td><input size="10" min="0" max="100" pattern="^[0-9]+" onchange="calcula( {{ $asignatura->id }} )" data-final="{{ $asignatura->nota_examen_final }}" type="number" id="final-{{ $asignatura->id }}" name="final-{{ $asignatura->id }}" value="{{ $asignatura->nota_examen_final }}" step="any"></td>
-                            <td id="totalsuma{{ $asignatura->id }}"></td>
-                            <td>{{ $asignatura->validado }}</td>
+                            <td><input size="10" min="0" max="100" type="number" id="totalsuma-{{ $asignatura->id }}" name="totalsuma-{{ $asignatura->id }}" value="{{ ($asignatura->nota_asistencia+$asignatura->nota_practicas+$asignatura->nota_puntos_ganados+$asignatura->nota_primer_parcial+$asignatura->nota_examen_final) }}" readonly></td>
+                            <td>
+                                @if($asignatura->validado == 'Si')
+                                    <i class="icon-check text-success"></i>
+                                @else
+                                    <i class="icon-close text-danger"></i>
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -98,21 +106,50 @@
         parcial = checkCampos(parcial);
         final = checkCampos(final);
 
+        // Sumamos las notas y guardamos en una variable
         var resultado = parseFloat(asistencia)+parseFloat(practicas)+parseFloat(puntos)+parseFloat(parcial)+parseFloat(final);
-        $('#totalsuma'+id).empty();
-        $('#totalsuma'+id).append(resultado);
-        $.ajax({
-            type:'POST',
-            url:"{{ url('notaspropuesta/actualizar') }}",
-            data: {
-                id : identificador,
-                asistencia : asistencia,
-                practicas : practicas,
-                puntos : puntos,
-                parcial : parcial,
-                final : final
+        // $('#totalsuma-'+id).empty();
+        // $('#totalsuma-'+id).append(resultado);
+        // Asignamos al input con id "'#totalsuma-'+id", el valor de "resultado"
+        $('#totalsuma-'+id).val(resultado);
+        // Comprobamos que si el resultado es mas de 100 no se guarde, en caso de que sea igual a 100 recien se guarda
+        if(resultado != 100){
+            //pregunta
+            if(resultado > 100){
+                //alerta que el resultado no puede ser menor a 100
+                //alert('total mayor a 100 cambie!!!!');
+                Swal.fire(
+                    'Oops...',
+                    'El resultado total no debe ser mayor a 100',
+                    'error'
+                    )
+                $('#totalsuma-'+id).css("border-color", "#FA0808");
+                //$('#totalsuma-'+id).css("background-color", "#F69DB2");
             }
-        });
+            
+        }else{
+            $.ajax({
+                type:'POST',
+                url:"{{ url('notaspropuesta/actualizar') }}",
+                data: {
+                    id : identificador,
+                    asistencia : asistencia,
+                    practicas : practicas,
+                    puntos : puntos,
+                    parcial : parcial,
+                    final : final
+                }
+            });
+            Swal.fire(
+                'Excelente!',
+                'Asignación de nota registrada correctamente.',
+                'success'
+            )
+            $('#totalsuma-'+id).css("border-color", "#39C449");
+            //$('#totalsuma-'+id).css("background-color", "#8CFA84");
+        }
+
+        
     }
 </script>
 
