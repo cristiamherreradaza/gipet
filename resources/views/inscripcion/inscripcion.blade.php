@@ -88,7 +88,7 @@
                                                             <input type="text" class="form-control" name="carnet" id="carnet" required>
                                                         </div>
                                                     </div>
-                                                    <input type="text" class="form-control" hidden name="persona_id" id="persona_id" required>
+                                                    <input type="text" class="form-control" hidden name="persona_id" id="persona_id">
                                                     <div class="col">
                                                         <div class="form-group">
                                                             <label>Expedido 
@@ -473,7 +473,7 @@
                                     <button type="submit" class="btn waves-effect waves-light btn-block btn-success">Guardar</button>
                                 </div>
                                 <div class="col-md-6">
-                                    <a href="{{ url('Producto/listado') }}">
+                                    <a href="{{ url('Persona/listado') }}">
                                         <button type="button" class="btn waves-effect waves-light btn-block btn-inverse">Cancelar</button>
                                     </a>
                                 </div>
@@ -679,30 +679,33 @@
                 ci : carnet
             },
             success:function(data){
-                $('#persona_id').val(data.id);
-                $('#expedido').val(data.expedido);
-                $('#apellido_paterno').val(data.apellido_paterno);
-                $('#apellido_materno').val(data.apellido_materno);
-                $('#nombres').val(data.nombres);
-                $('#fecha_nacimiento').val(data.fecha_nacimiento);
-                $('#email').val(data.email);
-                $('#direccion').val(data.direccion);
-                $('#telefono_celular').val(data.telefono_celular);
-                $('#sexo').val(data.sexo);
-                $('#trabaja').val(data.trabaja);
-                $('#empresa').val(data.empresa);
-                $('#direccion_empresa').val(data.direccion_empresa);
-                $('#telefono_empresa').val(data.telefono_empresa);
-                $('#fax').val(data.fax);
-                $('#email_empresa').val(data.email_empresa);
-                $('#nombre_padre').val(data.nombre_padre);
-                $('#celular_padre').val(data.celular_padre);
-                $('#nombre_madre').val(data.nombre_madre);
-                $('#celular_madre').val(data.celular_madre);
-                $('#nombre_tutor').val(data.nombre_tutor);
-                $('#telefono_tutor').val(data.telefono_tutor);
-                $('#nombre_esposo').val(data.nombre_esposo);
-                $('#telefono_esposo').val(data.telefono_esposo);
+                if (data.mensaje == 'si') {
+                    $('#persona_id').val(data.persona.id);
+                    $('#expedido').val(data.persona.expedido);
+                    $('#apellido_paterno').val(data.persona.apellido_paterno);
+                    $('#apellido_materno').val(data.persona.apellido_materno);
+                    $('#nombres').val(data.persona.nombres);
+                    $('#fecha_nacimiento').val(data.persona.fecha_nacimiento);
+                    $('#email').val(data.persona.email);
+                    $('#direccion').val(data.persona.direccion);
+                    $('#telefono_celular').val(data.persona.telefono_celular);
+                    $('#sexo').val(data.persona.sexo);
+                    $('#trabaja').val(data.persona.trabaja);
+                    $('#empresa').val(data.persona.empresa);
+                    $('#direccion_empresa').val(data.persona.direccion_empresa);
+                    $('#telefono_empresa').val(data.persona.telefono_empresa);
+                    $('#fax').val(data.persona.fax);
+                    $('#email_empresa').val(data.persona.email_empresa);
+                    $('#nombre_padre').val(data.persona.nombre_padre);
+                    $('#celular_padre').val(data.persona.celular_padre);
+                    $('#nombre_madre').val(data.persona.nombre_madre);
+                    $('#celular_madre').val(data.persona.celular_madre);
+                    $('#nombre_tutor').val(data.persona.nombre_tutor);
+                    $('#telefono_tutor').val(data.persona.telefono_tutor);
+                    $('#nombre_esposo').val(data.persona.nombre_esposo);
+                    $('#telefono_esposo').val(data.persona.telefono_esposo);
+                }
+                
             }
         });
            

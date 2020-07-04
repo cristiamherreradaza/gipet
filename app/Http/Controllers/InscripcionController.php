@@ -265,8 +265,16 @@ class InscripcionController extends Controller
     	$persona_id = Persona::where("borrado", NULL)
                     ->where('carnet', $carnet)
                     ->get();
-    	$per = Persona::find($persona_id[0]->id);
-        return response()->json($per);
+        if (!empty($persona_id[0]->id)) {
+           $per = Persona::find($persona_id[0]->id);
+            return response()->json([
+                'mensaje' => 'si',
+                'persona' => $per]);
+        } else {
+        return response()->json([
+                'mensaje' => 'no'
+            ]);
+        }
     }
 
 
