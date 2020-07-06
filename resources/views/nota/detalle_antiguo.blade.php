@@ -16,65 +16,56 @@
 
 @section('content')
 
-<div class="card">
-    <div class="card-body">
-        <h3 class="card-title text-primary"><strong>{{ $asignatura->asignatura->codigo_asignatura }} {{ $asignatura->asignatura->nombre_asignatura }}</strong></h3>
-        <h6 class="card-subtitle text-dark">DOCENTE: {{ auth()->user()->nombres }} {{ auth()->user()->apellido_paterno }} {{ auth()->user()->apellido_materno }}</h6>
-        <h6 class="card-subtitle text-dark">TURNO: {{ $asignatura->turno->descripcion }}</h6>
-        <h6 class="card-subtitle text-dark">PARALELO: {{ $asignatura->paralelo }}</h6>
-        <h6 class="card-subtitle">Año {{ date('Y') }}</h6>
-        <div class="table-responsive m-t-40">
-            <table id="myTable" class="table table-bordered table-striped text-center">
-                <thead class="text-primary">
-                    <tr>
-                        <th>Estudiante</th>
-                        <th>CI</th>
-                        <th>1er Bim</th>
-                        <th>2do Bim</th>
-                        <th>3er Bim</th>
-                        <th>4to Bim</th>
-                        <th>Promedio</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($inscritos as $inscrito)
+<div class="col-lg-12">
+    <div class="card border-info">
+        <div class="card-header bg-info mb-0 text-white">
+            <strong>
+            {{ $asignatura->asignatura->codigo_asignatura }}
+            {{ $asignatura->asignatura->nombre_asignatura }}
+            </strong>            
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="bg-primary text-white">
                         <tr>
-                            <td>{{ $inscrito->persona->nombres }} {{ $inscrito->persona->apellido_paterno }} {{ $inscrito->persona->apellido_materno }}</td>
-                            <td>{{ $inscrito->persona->carnet }}</td>
-                            @php
-                                $suma=0;
-                                $cantidad=1;
-                            @endphp
-                            @foreach($notas as $key => $nota)
-                                @if($nota->persona_id == $inscrito->persona_id)
-                                    <td>{{ $nota->nota_total }}</td>
-                                    @php
-                                        $suma=$suma+$nota->nota_total;
-                                        $cantidad=$key+1;
-                                    @endphp
-                                @endif
-                            @endforeach
-                            <td>{{ ($suma/$cantidad) }}</td>
-                            <td><button onclick="registra_notas('{{ $inscrito->id }}', '{{ $inscrito->asignatura_id }}', '{{ $inscrito->turno_id }}', '{{ $inscrito->persona_id }}', '{{ $inscrito->paralelo }}', '{{ $inscrito->anio_vigente }}')" class="btn btn-info" title="Registrar notas"><i class="fas fa-plus"></i></button></td>
+                            <th>Nomina Estudiantes</th>
+                            <th>Asistencia</th>
+                            <th>Practicas</th>
+                            <th>Puntos Ganados</th>
+                            <th>Primer Parcial</th>
+                            <th>Examen Final</th>
+                            <th>Total</th>
+                            <th>Segundo Turno</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach($notas as $nota)                                
+                            <tr>
+                                <td>
+                                    {{ $nota->persona->nombres }} {{ $nota->persona->apellido_paterno }} {{ $nota->persona->apellido_materno }}
+                                </td>
+                                <td><input size="10" min="0" max="{{ $asignatura->nota_asistencia }}" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-asistencia="{{ $nota->nota_asistencia }}" type="number" id="asistencia-{{ $nota->id }}" name="asistencia-{{ $nota->id }}" value="{{ $nota->nota_asistencia }}" step="any"></td>
+                                <td><input size="10" min="0" max="{{ $asignatura->nota_practicas }}" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-practicas="{{ $nota->nota_practicas }}" type="number" id="practicas-{{ $nota->id }}" name="practicas-{{ $nota->id }}" value="{{ $nota->nota_practicas }}" step="any"></td>
+                                <td><input size="10" min="0" max="{{ $asignatura->nota_puntos_ganados }}" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-puntos="{{ $nota->nota_puntos_ganados }}" type="number" id="puntos-{{ $nota->id }}" name="puntos-{{ $nota->id }}" value="{{ $nota->nota_puntos_ganados }}" step="any"></td>
+                                <td><input size="10" min="0" max="{{ $asignatura->nota_primer_parcial }}" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-parcial="{{ $nota->nota_primer_parcial }}" type="number" id="parcial-{{ $nota->id }}" name="parcial-{{ $nota->id }}" value="{{ $nota->nota_primer_parcial }}" step="any"></td>
+                                <td><input size="10" min="0" max="{{ $asignatura->nota_examen_final }}" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-final="{{ $nota->nota_examen_final }}" type="number" id="final-{{ $nota->id }}" name="final-{{ $nota->id }}" value="{{ $nota->nota_examen_final }}" step="any"></td>
+                                <td id="totalsuma{{ $nota->id }}">{{ $nota->nota_total }}</td>
+                                <td>
+                                    @if($nota->segundo_turno)
+                                        {{ $nota->segundo_turno }}
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
-
-<!-- Inicio modal notas estudiante -->
-<div id="modal_notas" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" id="muestraNotaAjax">
-        
-    </div>
-</div>
-<!-- Fin modal notas estudiante -->
-
-
-<div class="col-lg-12">
+            
     <form method="post" id="upload_form" enctype="multipart/form-data" class="upload_form float-left">
         @csrf
         <input type="file" name="select_file" id="select_file">
@@ -83,6 +74,7 @@
     <a class="btn btn-rounded btn-success float-lg-left" href="{{ url('nota/exportarexcel/'.$asignatura->id) }}">Exportar</a> 
     <a class="btn btn-rounded btn-info float-lg-right" href="{{ url('nota/listado') }}">Volver</a> 
     <a class="btn btn-rounded btn-danger float-lg-right" href="{{ url('nota/segundoTurno/'.$asignatura->id) }}">Segundo Turno</a> 
+    
 </div>
 
 @endsection
@@ -136,26 +128,6 @@ $(document).ready(function() {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-
-    function registra_notas(inscripcion_id, asignatura_id, turno_id, persona_id, paralelo, anio_vigente)
-    {           
-        $.ajax({
-            url: "{{ url('Nota/ajaxMuestraNota') }}",
-            data: {
-                asignatura_id: asignatura_id,
-                turno_id: turno_id,
-                persona_id: persona_id,
-                paralelo: paralelo,
-                anio_vigente: anio_vigente
-                },
-            type: 'get',
-            success: function(data) {
-                $("#muestraNotaAjax").html(data);
-                $("#modal_notas").modal('show');
-            }
-        }); 
-        
-    }
 
     function checkCampos(numero) {
         if(numero.length <= 0){

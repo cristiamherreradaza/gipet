@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\User;   
+use App\User;
+use App\Persona;
 use App\NotasPropuesta;
 use App\Nota;
 use App\Kardex;
@@ -24,7 +25,6 @@ class NotaController extends Controller
 
     public function listado()
     {
-        $usuario = Auth::user();
         $asignaturas = NotasPropuesta::where('user_id', Auth::user()->id)
                                     ->where('anio_vigente', date('Y'))
                                     ->where('borrado', NULL)
@@ -34,51 +34,43 @@ class NotaController extends Controller
 
     public function detalle($id)
     {
+        // Buscamos los detalles de la materia a mostrar
         $asignatura = NotasPropuesta::find($id);
-        
-        //En tabla Inscripcion leer filas que contengan valores similares a los de la NotaPropuesta
-        // $inscripciones = Inscripcion::where('asignatura_id', $asignatura->asignatura_id)
-        //                         ->where('turno_id', $asignatura->turno_id)
-        //                         ->where('paralelo', $asignatura->paralelo)
-        //                         ->where('anio_vigente', $asignatura->anio_vigente)
-        //                         ->where('borrado', NULL)
-        //                         ->get();
-        // // Capturamos X registros de Inscripcion, ahora debemos colocarlos en Notas
-        // // Haremos el recorrido de cada registro de $inscripciones, verificando si este valor existe
-        // // si existe, no se hara nada, si no existe, se creara un nuevo registro en la tabla
-        // foreach($inscripciones as $inscripcion){
-        //     //Capturamos en $nota al primer registro que contenga estos datos
-        //     $nota = Nota::where('asignatura_id', $inscripcion->asignatura_id)
-        //                 ->where('turno_id', $inscripcion->turno_id)
-        //                 ->where('user_id', $asignatura->user_id)
-        //                 ->where('persona_id', $inscripcion->persona_id)
-        //                 ->where('paralelo', $inscripcion->paralelo)
-        //                 ->where('anio_vigente', $inscripcion->anio_vigente)
-        //                 ->where('borrado', NULL)
-        //                 ->first();
-        //     //Si $nota no tiene ningun registro nos devolvera NULL, por tanto preguntamos si $nota es NULL
-        //     if(!$nota){
-        //         //Como $nota es NULL creara un nuevo registro que tenga estos valores
-        //         $nueva_nota = new Nota;
-        //         $nueva_nota->asignatura_id = $inscripcion->asignatura_id;
-        //         $nueva_nota->turno_id = $inscripcion->turno_id;
-        //         $nueva_nota->user_id = $asignatura->user_id;
-        //         $nueva_nota->persona_id = $inscripcion->persona_id;
-        //         $nueva_nota->paralelo = $inscripcion->paralelo;
-        //         $nueva_nota->anio_vigente = $inscripcion->anio_vigente;
-        //         $nueva_nota->save();
-        //     }
-        // }
-
+        // Buscamos a los estudiantes inscritos en esa materia
+        $inscritos = Inscripcion::where('asignatura_id', $asignatura->asignatura_id)
+                                ->where('turno_id', $asignatura->turno_id)
+                                ->where('paralelo', $asignatura->paralelo)
+                                ->where('anio_vigente', $asignatura->anio_vigente)
+                                ->whereNull('borrado')
+                                ->get();
         //Tomamos todas las notas que coincidan con estos valores y las devolveremos a la vista
         $notas = Nota::where('asignatura_id', $asignatura->asignatura_id)
                     ->where('turno_id', $asignatura->turno_id)
-                    ->where('user_id', $asignatura->user_id)
+                    //->where('user_id', $asignatura->user_id)
                     ->where('paralelo', $asignatura->paralelo)
                     ->where('anio_vigente', $asignatura->anio_vigente)
-                    ->where('borrado', NULL)
+                    ->whereNull('borrado')
                     ->get();
-        return view('nota.detalle')->with(compact('asignatura', 'notas'));
+        return view('nota.detalle')->with(compact('asignatura', 'inscritos', 'notas'));
+    }
+
+    public function ajaxMuestraNota(Request $request)
+    {
+        $asignatura = NotasPropuesta::where('asignatura_id', $request->asignatura_id)
+                                    ->where('turno_id', $request->turno_id)
+                                    ->where('user_id', Auth::user()->id)
+                                    ->where('paralelo', $request->paralelo)
+                                    ->where('anio_vigente', $request->anio_vigente)
+                                    ->whereNull('borrado')
+                                    ->first();
+        $notas = Nota::where('asignatura_id', $request->asignatura_id)
+                    ->where('turno_id', $request->turno_id)
+                    ->where('persona_id', $request->persona_id)
+                    ->where('paralelo', $request->paralelo)
+                    ->where('anio_vigente', $request->anio_vigente)
+                    ->whereNull('borrado')
+                    ->get();
+        return view('nota.ajaxMuestraNota')->with(compact('asignatura', 'notas'));
     }
 
     public function exportarexcel(Request $request)
