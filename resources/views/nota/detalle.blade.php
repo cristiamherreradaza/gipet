@@ -75,16 +75,20 @@
 
 
 <div class="col-lg-12">
-    <form method="post" id="upload_form" enctype="multipart/form-data" class="upload_form float-left">
+    <form method="post" id="upload_form" enctype="multipart/form-data" class="upload_form mt-4">
         @csrf
-        <input type="file" name="select_file" id="select_file">
-        <input type="submit" name="upload" id="upload" class="btn btn-rounded btn-success float-lg-right" value="Importar">
+        <div class="input-group">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" name="select_file" id="select_file">
+                <label class="custom-file-label" for="inputGroupFile04">Elegir archivo</label>
+            </div>
+            <div class="input-group-append">
+                <input type="submit" name="upload" id="upload" class="btn btn-success" value="Importar" style="width: 200px;">
+                <a class="btn btn-block btn-success" href="{{ url('nota/exportarexcel/'.$asignatura->id) }}" style="width: 200px;">Exportar</a>
+            </div>
+        </div>
     </form>
-    <a class="btn btn-rounded btn-success float-lg-left" href="{{ url('nota/exportarexcel/'.$asignatura->id) }}">Exportar</a> 
-    <a class="btn btn-rounded btn-info float-lg-right" href="{{ url('nota/listado') }}">Volver</a> 
-    <a class="btn btn-rounded btn-danger float-lg-right" href="{{ url('nota/segundoTurno/'.$asignatura->id) }}">Segundo Turno</a> 
 </div>
-
 @endsection
 
 
