@@ -108,7 +108,7 @@ $(document).ready(function() {
 function ver_persona(persona_id)
 {
     // console.log(user_id);
-    window.location.href = "{{ url('Inscripcion/ver_persona') }}/" + persona_id;
+    window.location.href = "{{ url('Kardex/detalle_estudiante') }}/" + persona_id;
 }
 
 </script>

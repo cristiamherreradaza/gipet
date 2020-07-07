@@ -244,7 +244,11 @@
     });
 
     $(function () {
-        $('#myTable').DataTable();
+        $('#myTable').DataTable({
+            language: {
+                url: '{{ asset('datatableEs.json') }}'
+            },
+        });
     });
 
     $('#formulario_carreras').on('submit', function (event) {

@@ -52,7 +52,11 @@
 <script>
     var asignaturas = @json($asignaturas); 
     $(function () {
-        $('#tabla-ajax_asignaturas').DataTable();
+        $('#tabla-ajax_asignaturas').DataTable({
+            language: {
+                url: '{{ asset('datatableEs.json') }}'
+            },
+        });
     });
 
     function nuevo_modal(carrera_id, anio_vigente)

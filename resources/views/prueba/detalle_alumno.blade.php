@@ -340,231 +340,332 @@
     <!-- /.modal-dialog -->
 </div>
 
-<div class="card">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-5 align-self-center">
-                <h4 class="page-title">KARDEX</h4>
-                <div class="d-flex align-items-center">
-                    <h4 class="card-title">Datos del Alumno</h4>
-                </div>
-            </div>
-            <br>
-            <div class="col-md-7 align-self-center d-none d-md-block">
-                <button class="btn float-right btn-warning"> Mas Datos</button>
-                <div class="dropdown float-right mr-2 hidden-sm-down">
-                   <button class="btn float-right btn-success"> Actualizar</button>
-                </div>
-            </div>
-        </div>
-        <br>
-        <div class="card border-inverse">
+ <!-- Row DATOS PERSONALES -->
+<div class="row">
+    <!-- Column -->
+    <div class="col-lg-12">
+        <div class="card">
             <div class="card-body">
-                <div class="form-body">
-                    <div class="row">
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label>Carnet 
-                                    <span class="text-danger">
-                                        <i class="mr-2 mdi mdi-alert-circle"></i>
-                                    </span>
-                                 </label>
-                                <input type="text" class="form-control" name="carnet" id="carnet" value="{{ $datosPersonales->carnet }}" required>
-                            </div>
-                        </div>
-                        <input type="text" class="form-control" hidden name="persona_id" id="persona_id" required>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label>Expedido 
-                                    <span class="text-danger">
-                                        <i class="mr-2 mdi mdi-alert-circle"></i>
-                                    </span>
-                                </label>
-                                <select name="expedido" id="expedido" class="form-control" value="{{ $datosPersonales->expedido }}">
-                                    <option value="La Paz">La Paz</option>
-                                    <option value="Cochabamba">Cochabamba</option>
-                                    <option value="Santa Cruz">Santa Cruz</option>
-                                    <option value="Oruro">Oruro</option>
-                                    <option value="Potosi">Potosi</option>
-                                    <option value="Tarija">Tarija</option>
-                                    <option value="Sucre">Sucre</option>
-                                    <option value="Beni">Beni</option>
-                                    <option value="Pando">Pando</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label>Apellido Paterno </label>
-                                <input type="text" class="form-control"
-                                    name="apellido_paterno" id="apellido_paterno" value="{{ $datosPersonales->apellido_paterno }}">
-                            </div>
-                        </div>
+                <div class="d-md-flex align-items-center">
+                    <h4 class="card-title">KARDEX</h4>
+                </div>
+                <div class="card border-success">
+                    <div class="card-header bg-success">
+                        <h4 class="mb-0 text-white">Datos del Estudiante</h4></div>
+                    <div class="card-body">
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-2">
+                                    <div class="form-group">
+                                        <label>Carnet 
+                                            <span class="text-danger">
+                                                <i class="mr-2 mdi mdi-alert-circle"></i>
+                                            </span>
+                                         </label>
+                                        <input type="text" class="form-control" name="carnet" id="carnet" value="{{ $datosPersonales->carnet }}" required>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control" hidden name="persona_id" id="persona_id" required>
+                                <div class="col-2">
+                                    <div class="form-group">
+                                        <label>Expedido 
+                                            <span class="text-danger">
+                                                <i class="mr-2 mdi mdi-alert-circle"></i>
+                                            </span>
+                                        </label>
+                                        <select name="expedido" id="expedido" class="form-control" value="{{ $datosPersonales->expedido }}">
+                                            <option value="La Paz">La Paz</option>
+                                            <option value="Cochabamba">Cochabamba</option>
+                                            <option value="Santa Cruz">Santa Cruz</option>
+                                            <option value="Oruro">Oruro</option>
+                                            <option value="Potosi">Potosi</option>
+                                            <option value="Tarija">Tarija</option>
+                                            <option value="Sucre">Sucre</option>
+                                            <option value="Beni">Beni</option>
+                                            <option value="Pando">Pando</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="form-group">
+                                        <label>Ape. Paterno </label>
+                                        <input type="text" class="form-control"
+                                            name="apellido_paterno" id="apellido_paterno" value="{{ $datosPersonales->apellido_paterno }}">
+                                    </div>
+                                </div>
 
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label>Apellido Materno </label>
-                                <input type="text" class="form-control"
-                                    name="apellido_materno" id="apellido_materno" value="{{ $datosPersonales->apellido_materno }}">
-                            </div>
-                        </div>
+                                <div class="col-2">
+                                    <div class="form-group">
+                                        <label>Ape. Materno </label>
+                                        <input type="text" class="form-control"
+                                            name="apellido_materno" id="apellido_materno" value="{{ $datosPersonales->apellido_materno }}">
+                                    </div>
+                                </div>
 
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label>Nombres
-                                    <span class="text-danger">
-                                        <i class="mr-2 mdi mdi-alert-circle"></i>
-                                    </span>
-                                </label>
-                                <input type="text" class="form-control" name="nombres" id="nombres" value="{{ $datosPersonales->nombres }}" required>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label>Nombres
+                                            <span class="text-danger">
+                                                <i class="mr-2 mdi mdi-alert-circle"></i>
+                                            </span>
+                                        </label>
+                                        <input type="text" class="form-control" name="nombres" id="nombres" value="{{ $datosPersonales->nombres }}" required>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-3">
-                            <div class="form-group">
-                                <label>Fecha Nacimiento
-                                    <span class="text-danger">
-                                        <i class="mr-2 mdi mdi-alert-circle"></i>
-                                    </span>
-                                </label>
-                                <input type="date" class="form-control" name="fecha_nacimiento" id="fecha_nacimiento" value="{{ $datosPersonales->fecha_nacimiento }}" required>
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label>Email </label>
-                                <input type="text" class="form-control" name="email" id="email" value="{{ $datosPersonales->email }}">
-                            </div>
-                        </div>
+                            <div class="row">
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label>Fecha Nacimiento
+                                            <span class="text-danger">
+                                                <i class="mr-2 mdi mdi-alert-circle"></i>
+                                            </span>
+                                        </label>
+                                        <input type="date" class="form-control" name="fecha_nacimiento" id="fecha_nacimiento" value="{{ $datosPersonales->fecha_nacimiento }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-2">
+                                    <div class="form-group">
+                                        <label>Email </label>
+                                        <input type="text" class="form-control" name="email" id="email" value="{{ $datosPersonales->email }}">
+                                    </div>
+                                </div>
 
-                        <div class="col-3">
-                            <div class="form-group">
-                                <label>Direccion </label>
-                                <input type="text" class="form-control" name="direccion" id="direccion" value="{{ $datosPersonales->direccion }}">
-                            </div>
-                        </div>
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label>Direccion </label>
+                                        <input type="text" class="form-control" name="direccion" id="direccion" value="{{ $datosPersonales->direccion }}">
+                                    </div>
+                                </div>
 
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label>Celular 
-                                    <span class="text-danger">
-                                        <i class="mr-2 mdi mdi-alert-circle"></i>
-                                    </span>
-                                </label>
-                                <input type="text" class="form-control" name="telefono_celular" id="telefono_celular" value="{{ $datosPersonales->telefono_celular }}" required>
-                            </div>
-                        </div>
+                                <div class="col-2">
+                                    <div class="form-group">
+                                        <label>Celular 
+                                            <span class="text-danger">
+                                                <i class="mr-2 mdi mdi-alert-circle"></i>
+                                            </span>
+                                        </label>
+                                        <input type="text" class="form-control" name="telefono_celular" id="telefono_celular" value="{{ $datosPersonales->telefono_celular }}" required>
+                                    </div>
+                                </div>
 
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label>Genero 
-                                    <span class="text-danger">
-                                        <i class="mr-2 mdi mdi-alert-circle"></i>
-                                    </span>
-                                </label>
-                                <select name="sexo" id="sexo" class="form-control" value="{{ $datosPersonales->sexo }}" required>
-                                    <option value="Masculino">Masculino</option>
-                                    <option value="Femenina">Femenina</option>
-                                </select>
+                                <div class="col-2">
+                                    <div class="form-group">
+                                        <label>Genero 
+                                            <span class="text-danger">
+                                                <i class="mr-2 mdi mdi-alert-circle"></i>
+                                            </span>
+                                        </label>
+                                        <select name="sexo" id="sexo" class="form-control" value="{{ $datosPersonales->sexo }}" required>
+                                            <option value="Masculino">Masculino</option>
+                                            <option value="Femenina">Femenina</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 align-self-center d-none d-md-block">
+                                <button class="btn float-right btn-warning"> Mas Datos</button>
+                                <div class="dropdown float-right mr-2 hidden-sm-down">
+                                   <button class="btn float-right btn-success"> Actualizar</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-5 align-self-center">
-                <h4 class="page-title">Datos Adicionales</h4>
+                <div class="card border-warning">
+                    <div class="card-header bg-warning">
+                        <h4 class="mb-0 text-white">Datos Adicionales del Estudiante</h4></div>
+                    <div class="card-body">
+                        <div class="form-body">
+                            <!--/row-->
+                            <!-- NOMBRE DEL ATRIBUTO ENCIMA -->
+                            <div class="row pt-3">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Trabaja 
+                                            <span class="text-danger">
+                                                <i class="mr-2 mdi mdi-alert-circle"></i>
+                                            </span>
+                                        </label>
+                                        <select class="form-control" id="trabaja" name="trabaja" value="{{ $datosPersonales->trabaja }}" required>
+                                            <option value="">Seleccionar</option>
+                                            <option value="Si">Si</option>
+                                            <option value="No">No</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- row -->
+                            <div class="row pt-3">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Nombre de la Empresa</label>
+                                        <input type="text" id="empresa" class="form-control" name="empresa" value="{{ $datosPersonales->empresa }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Direcci&oacute;n de la Empresa</label>
+                                        <input type="text" id="direccion_empresa" class="form-control" name="direccion_empresa" value="{{ $datosPersonales->direccion_empresa }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label class="control-label">Telefono de la Empresa</label>
+                                        <input type="text" id="telefono_empresa" class="form-control" name="telefono_empresa" value="{{ $datosPersonales->telefono_empresa }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label class="control-label">Fax</label>
+                                        <input type="text" id="fax" class="form-control" name="fax" value="{{ $datosPersonales->fax }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label class="control-label">Email Empresa</label>
+                                        <input type="email" id="email_empresa" class="form-control" name="email_empresa" value="{{ $datosPersonales->email_empresa }}">
+                                    </div>
+                                </div>
+                            </div>  
+                            <!-- row -->
+                            <div class="row">
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label>Nombre Padre </label>
+                                        <input type="text" class="form-control" name="nombre_padre" id="nombre_padre" value="{{ $datosPersonales->nombre_padre }}">
+                                    </div>
+                                </div>
+
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label>Celular Padre </label>
+                                        <input type="text" class="form-control" name="celular_padre" id="celular_padre" value="{{ $datosPersonales->celular_padre }}">
+                                    </div>
+                                </div>
+
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label>Nombre Madre </label>
+                                        <input type="text" class="form-control" name="nombre_madre" id="nombre_madre" value="{{ $datosPersonales->nombre_madre }}">
+                                    </div>
+                                </div>
+
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label>Celular Madre </label>
+                                        <input type="text" class="form-control" name="celular_madre" id="celular_madre" value="{{ $datosPersonales->celular_madre }}">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label>Nombre Tutor </label>
+                                        <input type="text" class="form-control" name="nombre_tutor" id="nombre_tutor" value="{{ $datosPersonales->nombre_tutor }}">
+                                    </div>
+                                </div>
+
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label>Celular Tutor </label>
+                                        <input type="text" class="form-control" name="telefono_tutor" id="telefono_tutor" value="{{ $datosPersonales->telefono_tutor }}">
+                                    </div>
+                                </div>
+
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label>Nombre Esposo(a) </label>
+                                        <input type="text" class="form-control" name="nombre_esposo" id="nombre_esposo" value="{{ $datosPersonales->nombre_esposo }}">
+                                    </div>
+                                </div>
+
+                                <div class="col-3">
+                                    <div class="form-group">
+                                        <label>Celular Esposo(a) </label>
+                                        <input type="text" class="form-control" name="telefono_esposo" id="telefono_esposo" value="{{ $datosPersonales->telefono_esposo }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 align-self-center d-none d-md-block">
+                                <button class="btn float-right btn-danger"> Cerrar</button>
+                                <div class="dropdown float-right mr-2 hidden-sm-down">
+                                   <button class="btn float-right btn-success"> Actualizar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<div class="card">
-    <div class="card-body">
-        <div class="row">
+<!-- Row -->
+ <!-- Row -->
+<div class="row">
 
-            <div class="col-md-6">
+    <div class="col-md-6">
 
-                <div class="card card-outline-primary">
-                    <div class="card-header">
-                        <h4 class="mb-0 float-left text-white">CARRERA</h4>
-                        {{-- <button type="button" class="float-right btn btn-success" onclick="nueva_carrera({{ $datosPersonales->id }})">Nueva Carrera</button> --}}
-                    </div>
-                    @if (!($carrerasPersona->isEmpty()))
-
-                        <div class="table-responsive m-t-40">
-                            <table class="table no-wrap">
-                                <thead>
-                                    <tr>
-                                        <th>CARRERA</th>
-                                        <th>TURNO</th>
-                                        <th>GESTION</th>
-                                        <th>
-
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($carrerasPersona as $cp)
-                                        <tr>
-                                            <td>{{ $cp->carrera->nombre }}</td>
-                                            <td>{{ $cp->turno->descripcion }}</td>
-                                            <td>{{ $cp->anio_vigente }}</td>
-                                            <td>
-
-                                                <button type="button" class="btn btn-warning" onclick="muestra_materias({{ $cp->carrera_id }}, {{ $cp->persona_id }}, {{ $cp->anio_vigente }})"><i class="fas fa-edit"></i></button>
-                                                <button type="button" class="btn btn-success" onclick="re_inscripcion({{ $cp->carrera_id}}, '{{ $datosPersonales->id}}', '{{ $datosPersonales->sexo}}')"><i class="fas fa-address-card"></i></button>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-
-                                </tbody>
-                            </table>
-                            
-                        </div>
-
-                    @else
-                        <h3 class="text-center">No esta inscrito a ninguna carrera</h3>
-                    @endif
-
-                </div>
+        <div class="card border-dark">
+            <div class="card-header bg-dark">
+                <h4 class="mb-0 text-white">CARRERAS</h4>
+                {{-- <button type="button" class="float-right btn btn-success" onclick="nueva_carrera({{ $datosPersonales->id }})">Nueva Carrera</button> --}}
             </div>
-            <div class="col-md-6">
-                <div class="card card-outline-info">
-                    <div class="card-header">
-                        <h4 class="mb-0 text-white float-left">Asignaturas Adicionales</h4>
-                        {{-- <button type="button" class="float-right btn btn-success" onclick="nuevo_asignatura({{ $datosPersonales->id }})">Nueva Asignatura</button> --}}
-                    </div>
+            @if (!($carrerasPersona->isEmpty()))
 
-                    <div class="table-responsive m-t-40" id="ajax_listado_asignaturas_adicionales">
-                        
-                    </div>
+                <div class="table-responsive m-t-40">
+                    <table class="table no-wrap">
+                        <thead>
+                            <tr>
+                                <th>CARRERA</th>
+                                <th>TURNO</th>
+                                <th>GESTION</th>
+                                <th>
+
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($carrerasPersona as $cp)
+                                <tr>
+                                    <td>{{ $cp->carrera->nombre }}</td>
+                                    <td>{{ $cp->turno->descripcion }}</td>
+                                    <td>{{ $cp->anio_vigente }}</td>
+                                    <td>
+
+                                        <button type="button" class="btn btn-warning" onclick="muestra_materias({{ $cp->carrera_id }}, {{ $cp->persona_id }}, {{ $cp->anio_vigente }})"><i class="fas fa-edit"></i></button>
+                                        <button type="button" class="btn btn-success" onclick="re_inscripcion({{ $cp->carrera_id}}, '{{ $datosPersonales->id}}', '{{ $datosPersonales->sexo}}')"><i class="fas fa-address-card"></i></button>
+                                    </td>
+                                </tr>
+                            @endforeach
+
+                        </tbody>
+                    </table>
+                    
                 </div>
-            </div>
+
+            @else
+                <h3 class="text-center">No esta inscrito a ninguna carrera</h3>
+            @endif
+
         </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card border-primary">
+            <div class="card-header bg-primary">
+                <h4 class="mb-0 text-white">Asignaturas Adicionales</h4>
+                {{-- <button type="button" class="float-right btn btn-success" onclick="nuevo_asignatura({{ $datosPersonales->id }})">Nueva Asignatura</button> --}}
+            </div>
 
-        <div class="row">
-
-            <div class="col-md-6" id="ajax_listado_materias">
+            <div class="table-responsive m-t-40" id="ajax_listado_asignaturas_adicionales">
                 
             </div>
-
-            <div class="col-md-6">
-                <div class="card card-outline-info">
-                    <div class="card-header">
-                        <h4 class="mb-0 text-white">MESUALIDADES</h4>
-                    </div>
-
-                    <div class="table-responsive m-t-40">
-                        
-                    </div>
-                </div>
-            </div>
         </div>
-
     </div>
 </div>
+<!-- Row -->
+
 
 @stop
 

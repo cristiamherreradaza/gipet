@@ -145,3 +145,15 @@ Route::get('Asignatura/ajax_muestra_prerequisitos/{asignatura_id}', 'AsignaturaC
 Route::get('Asignatura/elimina_prerequisito/{prerequisito_id}', 'AsignaturaController@elimina_prerequisito');
 Route::get('Carrera/ajax_combo_materias/{carrera_id}/{anio_vigente}', 'CarreraController@ajax_combo_materias');
 Route::post('Asignatura/guarda_prerequisito', 'AsignaturaController@guarda_prerequisito');
+
+//DETALLE DEL ESTUDIANTE
+Route::get('Kardex/detalle_estudiante/{persona_id}', 'KardexController@detalle_estudiante');
+Route::get('Kardex/ajax_datos_principales', 'KardexController@ajax_datos_principales');
+Route::post('Kardex/guardar_datosPrincipales', 'KardexController@guardar_datosPrincipales');
+Route::get('Kardex/ajax_datos_adicionales', 'KardexController@ajax_datos_adicionales');
+Route::post('Kardex/guardar_datosAdicionales', 'KardexController@guardar_datosAdicionales');
+Route::get('Kardex/ajax_datos_carreras', 'KardexController@ajax_datos_carreras');
+Route::post('Kardex/guardar_datosCarreras', 'KardexController@guardar_datosCarreras');
+Route::get('Kardex/ajax_datos_reinscripcion', 'KardexController@ajax_datos_reinscripcion');
+// Route::post('Kardex/guardar_datosCarreras', 'KardexController@guardar_datosCarreras');
+Route::get('Kardex/ajax_datos_asig_tomar', 'KardexController@ajax_datos_asig_tomar');
