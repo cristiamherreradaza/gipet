@@ -76,6 +76,7 @@ Route::post('nota/ajax_importar', 'NotaController@ajax_importar');
 
 Route::post('nota/segundoTurnoActualizar', 'NotaController@segundoTurnoActualizar');
 
+Route::get('Nota/ajaxMuestraNota', 'NotaController@ajaxMuestraNota');
 //NOTAS PROPUESTA
 Route::get('notaspropuesta/listado', 'NotasPropuestaController@listado');
 

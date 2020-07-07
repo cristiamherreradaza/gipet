@@ -222,31 +222,32 @@ class InscripcionController extends Controller
                                     FROM materias");
             foreach ($asig_tomar as $asig_tomar1) {
 
-                    $asignatu = DB::table('asignaturas')
-                    ->select('id', 'gestion')
-                    ->where('id','=',$asig_tomar1->asignatura_id)
-                    ->where('anio_vigente','=',$anio_vigente)
-                    ->get();
+                $asignatu = DB::table('asignaturas')
+                ->select('id', 'gestion')
+                ->where('id','=',$asig_tomar1->asignatura_id)
+                ->where('anio_vigente','=',$anio_vigente)
+                ->get();
 
-                    $inscripcion = new Inscripcion();
-                    $inscripcion->asignatura_id = $asig_tomar1->asignatura_id;
-                    $inscripcion->turno_id = $turno_id;
-                    $inscripcion->persona_id = $persona_id;
-                    $inscripcion->carrera_id = $carrera_id;
-                    $inscripcion->paralelo = $paralelo;
-                    $inscripcion->gestion = $asignatu[0]->gestion;
-                    $inscripcion->anio_vigente = $anio_vigente;
-                    $inscripcion->save();
+                $inscripcion = new Inscripcion();
+                $inscripcion->asignatura_id = $asig_tomar1->asignatura_id;
+                $inscripcion->turno_id = $turno_id;
+                $inscripcion->persona_id = $persona_id;
+                $inscripcion->carrera_id = $carrera_id;
+                $inscripcion->paralelo = $paralelo;
+                $inscripcion->gestion = $asignatu[0]->gestion;
+                $inscripcion->anio_vigente = $anio_vigente;
+                $inscripcion->save();
 
-                    // en esta parte registramos la nota del alumno inscrito
-                    $notas_pro = NotasPropuesta::where('asignatura_id', $asig_tomar1->asignatura_id)
-                                                ->where('turno_id', $turno_id)
-                                                ->where('paralelo', $paralelo)
-                                                ->where('anio_vigente', $anio_vigente)
-                                                ->select('user_id')
-                                                ->get();
-                    // dd($notas_pro[0]->user_id);
-                    if (!empty($notas_pro[0]->user_id)) {
+                // en esta parte registramos la nota del alumno inscrito
+                $notas_pro = NotasPropuesta::where('asignatura_id', $asig_tomar1->asignatura_id)
+                                            ->where('turno_id', $turno_id)
+                                            ->where('paralelo', $paralelo)
+                                            ->where('anio_vigente', $anio_vigente)
+                                            ->select('user_id')
+                                            ->get();
+                // dd($notas_pro[0]->user_id);
+                if (!empty($notas_pro[0]->user_id)) {
+                    for($i=1; $i<=4; $i++){
                         $nueva_nota = new Nota;
                         $nueva_nota->asignatura_id = $asig_tomar1->asignatura_id;
                         $nueva_nota->turno_id = $turno_id;
@@ -254,8 +255,10 @@ class InscripcionController extends Controller
                         $nueva_nota->persona_id = $persona_id;
                         $nueva_nota->paralelo = $paralelo;
                         $nueva_nota->anio_vigente = $anio_vigente;
+                        $nueva_nota->trimestre = $i;
                         $nueva_nota->save();
-                    }
+                    }                        
+                }
             }
     }
 

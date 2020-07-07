@@ -12,15 +12,16 @@
 
 <div class="card">
     <div class="card-body">
-        <h4 class="card-title">Lista de asignaturas</h4>
+        <h3 class="card-title text-primary"><strong>LISTADO DE ASIGNATURAS</strong></h3>
+        <h6 class="card-subtitle text-dark">DOCENTE: {{ auth()->user()->nombres }} {{ auth()->user()->apellido_paterno }} {{ auth()->user()->apellido_materno }}</h6>
         <h6 class="card-subtitle">Año {{ date('Y') }}</h6>
         <div class="table-responsive m-t-40">
-            <table id="myTable" class="table table-bordered table-striped">
-                <thead>
+            <table id="myTable" class="table table-bordered table-striped text-center">
+                <thead class="text-primary">
                     <tr>
+                        <th>Carrera</th>
                         <th>Codigo</th>
                         <th>Asignatura</th>
-                        <th>Carrera</th>
                         <th>Turno</th>
                         <th>Paralelo</th>
                         <th>Opciones</th>
@@ -29,9 +30,9 @@
                 <tbody>
                     @foreach($asignaturas as $asignatura)
                         <tr>
+                            <td>{{ $asignatura->asignatura->carrera->nombre }}</td>
                             <td>{{ $asignatura->asignatura->codigo_asignatura }}</td>
                             <td>{{ $asignatura->asignatura->nombre_asignatura }}</td>
-                            <td>{{ $asignatura->asignatura->carrera->nombre }}</td>
                             <td>{{ $asignatura->turno->descripcion }}</td>
                             <td>{{ $asignatura->paralelo }}</td>
                             <td><a href="{{ url('nota/detalle/'.$asignatura->id) }}" class="btn btn-info btn-rounded btn-sm"><i class="mdi mdi-note-text"></i> Notas</a></td>
