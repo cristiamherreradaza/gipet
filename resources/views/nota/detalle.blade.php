@@ -43,16 +43,16 @@
                             <td>{{ $inscrito->persona->nombres }} {{ $inscrito->persona->apellido_paterno }} {{ $inscrito->persona->apellido_materno }}</td>
                             <td>{{ $inscrito->persona->carnet }}</td>
                             @php
-                                $suma=0;
-                                $cantidad=1;
+                                $suma = 0;
+                                $cantidad = 0;
                             @endphp
-                            @foreach($notas as $key => $nota)
+                            @foreach($notas as $nota)
                                 @if($nota->persona_id == $inscrito->persona_id)
-                                    <td>{{ $nota->nota_total }}</td>
                                     @php
-                                        $suma=$suma+$nota->nota_total;
-                                        $cantidad=$key+1;
+                                        $suma = $suma + $nota->nota_total;
+                                        $cantidad = $cantidad + 1;
                                     @endphp
+                                    <td>{{ $nota->nota_total }}</td>                                    
                                 @endif
                             @endforeach
                             <td>{{ ($suma/$cantidad) }}</td>
