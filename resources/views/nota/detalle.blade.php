@@ -62,6 +62,21 @@
                 </tbody>
             </table>
         </div>
+        <div class="col-lg-8">
+            <form method="post" id="upload_form" enctype="multipart/form-data" class="upload_form mt-4">
+                @csrf
+                <div class="input-group">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" name="select_file" id="select_file">
+                        <label class="custom-file-label" for="inputGroupFile04">Elegir archivo</label>
+                    </div>
+                    <div class="input-group-append">
+                        <input type="submit" name="upload" id="upload" class="btn btn-success" value="Importar" style="width: 200px;">
+                        <a class="btn btn-block btn-success" href="{{ url('nota/exportarexcel/'.$asignatura->id) }}" style="width: 200px;">Exportar Formato</a>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -74,21 +89,7 @@
 <!-- Fin modal notas estudiante -->
 
 
-<div class="col-lg-12">
-    <form method="post" id="upload_form" enctype="multipart/form-data" class="upload_form mt-4">
-        @csrf
-        <div class="input-group">
-            <div class="custom-file">
-                <input type="file" class="custom-file-input" name="select_file" id="select_file">
-                <label class="custom-file-label" for="inputGroupFile04">Elegir archivo</label>
-            </div>
-            <div class="input-group-append">
-                <input type="submit" name="upload" id="upload" class="btn btn-success" value="Importar" style="width: 200px;">
-                <a class="btn btn-block btn-success" href="{{ url('nota/exportarexcel/'.$asignatura->id) }}" style="width: 200px;">Exportar</a>
-            </div>
-        </div>
-    </form>
-</div>
+
 @endsection
 
 

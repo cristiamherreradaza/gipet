@@ -81,6 +81,39 @@
                         </li>
                     </ul>
                 </li>
+
+                <li class="sidebar-item"> 
+                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                        <i data-feather="settings" class="feather-icon"></i><span class="hide-menu"> CONFIGURACIONES </span>
+                    </a>
+                    <ul aria-expanded="false" class="collapse  first-level">
+                        <li class="sidebar-item">
+                            <a href="{{ url('Carrera/listado_nuevo') }}" class="sidebar-link">
+                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Carreras </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url('Asignatura/listado') }}" class="sidebar-link">
+                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Asignaturas </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url('Descuento/listado') }}" class="sidebar-link">
+                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Descuentos </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url('Servicio/listado') }}" class="sidebar-link">
+                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Servicios </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url('Turno/listado') }}" class="sidebar-link">
+                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Turnos </span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 
                 <li class="nav-devider"></li>
                 <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">Otros</span>

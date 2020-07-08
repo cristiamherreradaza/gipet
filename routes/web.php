@@ -147,6 +147,31 @@ Route::get('Asignatura/elimina_prerequisito/{prerequisito_id}', 'AsignaturaContr
 Route::get('Carrera/ajax_combo_materias/{carrera_id}/{anio_vigente}', 'CarreraController@ajax_combo_materias');
 Route::post('Asignatura/guarda_prerequisito', 'AsignaturaController@guarda_prerequisito');
 
+Route::get('Carrera/listado_nuevo', 'CarreraController@listado_nuevo');
+Route::post('Carrera/guardar', 'CarreraController@guardar');
+Route::post('Carrera/actualizar', 'CarreraController@actualizar');
+Route::get('Carrera/eliminar/{id}', 'CarreraController@eliminar');
+
+Route::get('Descuento/listado', 'DescuentoController@listado');
+Route::post('Descuento/guardar', 'DescuentoController@guardar');
+Route::post('Descuento/actualizar', 'DescuentoController@actualizar');
+Route::get('Descuento/eliminar/{id}', 'DescuentoController@eliminar');
+
+Route::get('Servicio/listado', 'ServicioController@listado');
+Route::post('Servicio/guardar', 'ServicioController@guardar');
+Route::post('Servicio/actualizar', 'ServicioController@actualizar');
+Route::get('Servicio/eliminar/{id}', 'ServicioController@eliminar');
+
+Route::get('Turno/listado', 'TurnoController@listado');
+Route::post('Turno/guardar', 'TurnoController@guardar');
+Route::post('Turno/actualizar', 'TurnoController@actualizar');
+Route::get('Turno/eliminar/{id}', 'TurnoController@eliminar');
+
+Route::get('Asignatura/listado', 'AsignaturaController@listado');
+Route::get('Descuento/listado', 'DescuentoController@listado');
+Route::get('Servicio/listado', 'ServicioController@listado');
+Route::get('Turno/listado', 'TurnoController@listado');
+
 //DETALLE DEL ESTUDIANTE
 Route::get('Kardex/detalle_estudiante/{persona_id}', 'KardexController@detalle_estudiante');
 Route::get('Kardex/ajax_datos_principales', 'KardexController@ajax_datos_principales');

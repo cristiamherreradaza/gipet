@@ -9,6 +9,42 @@ use DataTables;
 
 class CarreraController extends Controller
 {
+    public function listado_nuevo()
+    {
+        $carreras = Carrera::whereNull('borrado')
+                            //->orderBy('nombre', 'asc')
+                            ->get();
+        return view('carrera.listado_nuevo')->with(compact('carreras'));
+    }
+
+    public function guardar(Request $request)
+    {
+        $carrera = new Carrera();
+        $carrera->nombre = $request->nombre_carrera;
+        $carrera->nivel = $request->nivel_carrera;
+        $carrera->anio_vigente = $request->anio_vigente_carrera;
+        $carrera->save();
+        return redirect('Carrera/listado_nuevo');
+    }
+
+    public function actualizar(Request $request)
+    {
+        $carrera = Carrera::find($request->id);
+        $carrera->nombre = $request->nombre;
+        $carrera->nivel = $request->nivel;
+        $carrera->anio_vigente = $request->anio_vigente;
+        $carrera->save();
+        return redirect('Carrera/listado_nuevo');
+    }
+
+    public function eliminar($id)
+    {
+        $carrera = Carrera::find($id);
+        $carrera->borrado = date('Y-m-d H:i:s');
+        $carrera->save();
+        return redirect('Carrera/listado_nuevo');
+    }
+
     protected $gestion_actual = 'a';
 
     public function tabla()
