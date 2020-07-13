@@ -272,14 +272,17 @@ class KardexController extends Controller
                                                 ->get();
                     // dd($notas_pro[0]->user_id);
                     if (!empty($notas_pro[0]->user_id)) {
-                        $nueva_nota = new Nota;
-                        $nueva_nota->asignatura_id = $asig_tomar1->asignatura_id;
-                        $nueva_nota->turno_id = $turno_id;
-                        $nueva_nota->user_id = $notas_pro[0]->user_id;
-                        $nueva_nota->persona_id = $persona_id;
-                        $nueva_nota->paralelo = $paralelo;
-                        $nueva_nota->anio_vigente = $anio_vigente;
-                        $nueva_nota->save();
+                        for($i=1; $i<=4; $i++){
+                            $nueva_nota = new Nota;
+                            $nueva_nota->asignatura_id = $asig_tomar1->asignatura_id;
+                            $nueva_nota->turno_id = $turno_id;
+                            $nueva_nota->user_id = $notas_pro[0]->user_id;
+                            $nueva_nota->persona_id = $persona_id;
+                            $nueva_nota->paralelo = $paralelo;
+                            $nueva_nota->anio_vigente = $anio_vigente;
+                            $nueva_nota->trimestre = $i;
+                            $nueva_nota->save();
+                        }
                     }
             }
     }
@@ -382,10 +385,100 @@ class KardexController extends Controller
         $asig_tomar = DB::select("SELECT DISTINCT asignatura_id, codigo_asignatura, nombre_asignatura
                                     FROM materias");
         //hasta aqui
+        DB::table('materias')->truncate();
 
         $turnos = Turno::where('borrado', NULL)
                         ->get();
 
-        return view('kardex.datos_asig_tomar')->with(compact('turno_id', 'paralelo', 'turnos', 'asig_tomar'));
+        return view('kardex.datos_asig_tomar')->with(compact('turno_id', 'paralelo', 'turnos', 'asig_tomar', 'anio_vigente', 'carrera_id', 'persona_id'));
+    }
+
+     public function guarda_reinscripcion(Request $request)
+    {
+        $persona = Persona::find($request->persona_id);
+        $carrera = new CarreraPersona();
+            $carrera->carrera_id   = $request->carrera_id;
+            $carrera->persona_id   = $request->persona_id;
+            $carrera->turno_id     = $request->turno_id;
+            $carrera->paralelo     = $request->paralelo;
+            $carrera->anio_vigente = $request->anio_vigente;
+            $carrera->sexo         = $persona->sexo;
+            $carrera->save();
+
+        // $nro = sizeof($request->producto_id);
+        foreach ($request->asignatura_id as $key => $valor) {
+            
+            $asignatu = DB::table('asignaturas')
+                    ->select('id', 'gestion')
+                    ->where('id','=',$request->asignatura_id[$key])
+                    ->where('anio_vigente','=',$request->anio_vigente)
+                    ->get();
+
+                $inscripcion = new Inscripcion();
+                $inscripcion->asignatura_id = $request->asignatura_id[$key];
+                $inscripcion->turno_id = $request->re_asig_turno[$key];
+                $inscripcion->persona_id = $request->persona_id;
+                $inscripcion->carrera_id = $request->carrera_id;
+                $inscripcion->paralelo = $request->re_asig_paralelo[$key];
+                $inscripcion->gestion = $asignatu[0]->gestion;
+                $inscripcion->anio_vigente = $request->anio_vigente;
+                $inscripcion->save();
+
+                // en esta parte registramos la nota del alumno inscrito
+                $notas_pro = NotasPropuesta::where('asignatura_id', $request->asignatura_id[$key])
+                                            ->where('turno_id', $request->re_asig_turno[$key])
+                                            ->where('paralelo', $request->re_asig_paralelo[$key])
+                                            ->where('anio_vigente', $request->anio_vigente)
+                                            ->select('user_id')
+                                            ->get();
+                // dd($notas_pro[0]->user_id);
+                if (!empty($notas_pro[0]->user_id)) {
+                    for($i=1; $i<=4; $i++){
+                        $nueva_nota = new Nota;
+                        $nueva_nota->asignatura_id = $request->asignatura_id[$key];
+                        $nueva_nota->turno_id = $request->re_asig_turno[$key];
+                        $nueva_nota->user_id = $notas_pro[0]->user_id;
+                        $nueva_nota->persona_id = $request->persona_id;
+                        $nueva_nota->paralelo = $request->re_asig_paralelo[$key];
+                        $nueva_nota->anio_vigente = $request->anio_vigente;
+                        $nueva_nota->trimestre = $i;
+                        $nueva_nota->save();
+                    }
+                }
+        }
+
+        return redirect('Kardex/detalle_estudiante/'.$request->persona_id);
+    }
+
+    public function ajax_datos_notas_carreras(Request $request)
+    {
+        $fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
+        $fecha_actual = $fecha->format('Y-m-d');//obtenes la fecha actual
+        $mes = $fecha->format('m');//obtenes la fecha actual
+        $anio = $fecha->format('Y');//obtenes la fecha actual
+
+        $carrera_id = $request->tipo_carrera_id;
+        $persona_id = $request->tipo_persona_id;
+        // dd($inscripciones);
+        $inscripciones = DB::select("SELECT insc.*
+                    FROM inscripciones insc, (SELECT MAX(id) as id
+                                                                        FROM inscripciones 
+                                                                        WHERE anio_vigente = '$anio'
+                                                                        AND carrera_id = '$carrera_id'
+                                                                        AND persona_id = '$persona_id'
+                                                                        GROUP BY asignatura_id)tmp
+                    WHERE insc.id = tmp.id
+                    ORDER BY insc.id ASC");
+
+        // $inscripciones = Inscripcion::where('persona_id', $persona_id)
+        //             ->where('carrera_id', $carrera_id)
+        //             ->where('anio_vigente', $anio)
+        //             ->orderBy('id', 'ASC')
+        //             ->groupBy('asignatura_id')
+        //             ->get(['asignatura_id', DB::raw('MAX(id) as id')]);
+        // dd($inscripciones);
+
+        return view('kardex.datos_notas_carreras')->with(compact('inscripciones'));
+        
     }
 }

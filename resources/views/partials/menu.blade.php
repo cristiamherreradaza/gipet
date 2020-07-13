@@ -112,6 +112,11 @@
                                 <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Turnos </span>
                             </a>
                         </li>
+                        <li class="sidebar-item">
+                            <a href="{{ url('Asignatura/asignaturas_equivalentes') }}" class="sidebar-link">
+                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Asignaturas Equivalentes </span>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 

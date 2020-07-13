@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Asignatura;
 use App\Prerequisito;
+use App\Carrera;
+use App\AsignaturasEquivalente;
 use Illuminate\Http\Request;
 
 class AsignaturaController extends Controller
@@ -112,5 +114,54 @@ class AsignaturaController extends Controller
             'asignatura_id' => $prerequisito_id
         ]);
 
+    }
+
+    public function asignaturas_equivalentes()
+    {
+        $anio_vigente = 2020;
+        $carrera = Carrera::whereNull('borrado')
+                            ->orderBy('id', 'ASC')
+                            ->get();
+
+        $asignatura = Asignatura::whereNull('borrado')
+                            ->where('anio_vigente', $anio_vigente)
+                            ->orderBy('id', 'ASC')
+                            ->get();
+
+        return view('asignatura.asignaturas_equivalentes')->with(compact('carrera', 'asignatura'));  
+    }
+
+    public function ajax_lista(Request $request)
+    {
+
+        $asignaturas = AsignaturasEquivalente::whereNull('borrado')
+                            ->orderBy('id', 'DESC')
+                            ->get();
+
+        return view('asignatura.lista')->with(compact('asignaturas'));  
+    }
+
+    public function guarda_equivalentes(Request $request)
+    {
+        $asig_1 = $request->tipo_asig_1;
+        $asig_2 = $request->tipo_asig_2;
+        $anio_vigente = $request->tipo_anio_vigente;
+
+        $carrera_1 = Asignatura::find($asig_1);
+        $carrera_2 = Asignatura::find($asig_2);
+
+        $asig_equivalente                  = new AsignaturasEquivalente();
+        $asig_equivalente->carrera_id_1    = $carrera_1->carrera_id;
+        $asig_equivalente->asignatura_id_1 = $asig_1;
+        $asig_equivalente->carrera_id_2    = $carrera_2->carrera_id;
+        $asig_equivalente->asignatura_id_2 = $asig_2;
+        $asig_equivalente->anio_vigente    = $anio_vigente;
+        $asig_equivalente->save();
+
+        $asignaturas = AsignaturasEquivalente::whereNull('borrado')
+                            ->orderBy('id', 'DESC')
+                            ->get();
+
+        return view('asignatura.lista')->with(compact('asignaturas'));  
     }
 }

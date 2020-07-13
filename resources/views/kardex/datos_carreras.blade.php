@@ -105,7 +105,7 @@
                 {{-- <td>{{ $cp->anio_vigente }}</td> --}}
                 <td>
 
-                    <button type="button" class="btn btn-info" title="M&aacute;s Opciones" onclick="datos_de_carreras()"><i class="fas fa-eye"></i></button>
+                    <button type="button" class="btn btn-info" title="M&aacute;s Opciones" onclick="datos_de_carreras('{{ $cp->carrera_id}}', '{{ $datosPersonales->id}}')"><i class="fas fa-eye"></i></button>
                     <button type="button" class="btn btn-success" title="Reinscripcion" onclick="reinscripcion('{{ $cp->carrera_id}}', '{{ $datosPersonales->id}}', '{{ $datosPersonales->sexo}}')"><i class="fas fa-address-card"></i></button>
                 </td>
             </tr>
@@ -161,9 +161,19 @@
         })
     }
 
-    function datos_de_carreras() {
-        $('#datos_reinscripcion').hide('slow');
-        $('#datos_carrera').show('slow');
+    function datos_de_carreras(carrera_id, persona_id) {
+        $.ajax({
+            type:'GET',
+            url:"{{ url('Kardex/ajax_datos_notas_carreras') }}",
+            data: {
+                tipo_carrera_id : carrera_id, tipo_persona_id : persona_id
+            },
+            success:function(data){
+                $('#datos_reinscripcion').hide('slow');
+                $('#datos_carrera').show('slow');
+                $("#datos_carrera").html(data);
+            }
+        });
     }
 
     function reinscripcion(carrera_id, id, sexo){

@@ -128,6 +128,9 @@ Route::get('Carrera/listado', 'CarreraController@listado');
 Route::get('Carrera/ajax_lista_asignaturas', 'CarreraController@ajax_lista_asignaturas');
 Route::get('Asignatura/listado_malla/{carrera_id}', 'AsignaturaController@listado_malla');
 Route::get('Asignatura/eliminar/{asignatura_id}', 'AsignaturaController@eliminar');
+Route::get('Asignatura/asignaturas_equivalentes', 'AsignaturaController@asignaturas_equivalentes');
+Route::get('Asignatura/ajax_lista', 'AsignaturaController@ajax_lista');
+Route::post('Asignatura/guarda_equivalentes', 'AsignaturaController@guarda_equivalentes');
 
 Route::get('User/nuevo', 'UserController@nuevo');
 Route::post('User/guarda', 'UserController@guarda');
@@ -183,3 +186,6 @@ Route::post('Kardex/guardar_datosCarreras', 'KardexController@guardar_datosCarre
 Route::get('Kardex/ajax_datos_reinscripcion', 'KardexController@ajax_datos_reinscripcion');
 // Route::post('Kardex/guardar_datosCarreras', 'KardexController@guardar_datosCarreras');
 Route::get('Kardex/ajax_datos_asig_tomar', 'KardexController@ajax_datos_asig_tomar');
+Route::post('Kardex/guarda_reinscripcion', 'KardexController@guarda_reinscripcion');
+
+Route::get('Kardex/ajax_datos_notas_carreras', 'KardexController@ajax_datos_notas_carreras');
