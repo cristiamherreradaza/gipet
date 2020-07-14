@@ -7,7 +7,8 @@
 @section('css')
 <style>
     input { 
-        text-align: center; 
+        text-align: center;
+        width: 130px;
     }
 </style>
 <!--alerts CSS -->
@@ -52,10 +53,13 @@
                                         $suma = $suma + $nota->nota_total;
                                         $cantidad = $cantidad + 1;
                                     @endphp
-                                    <td>{{ $nota->nota_total }}</td>                                    
+                                    <td>{{ round($nota->nota_total) }}</td>                                    
                                 @endif
                             @endforeach
-                            <td>{{ ($suma/$cantidad) }}</td>
+                            @if($cantidad == 0)
+                                $cantidad=1
+                            @endif
+                            <td>{{ round($suma/$cantidad) }}</td>
                             <td><button onclick="registra_notas('{{ $inscrito->id }}', '{{ $inscrito->asignatura_id }}', '{{ $inscrito->turno_id }}', '{{ $inscrito->persona_id }}', '{{ $inscrito->paralelo }}', '{{ $inscrito->anio_vigente }}')" class="btn btn-info" title="Registrar notas"><i class="fas fa-plus"></i></button></td>
                         </tr>
                     @endforeach

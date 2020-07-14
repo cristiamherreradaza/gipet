@@ -10,12 +10,12 @@
                 <thead class="align-middle text-primary">
                     <tr>
                         <th># Bimestre</th>
-                        <th>Asistencia</th>
-                        <th>Practicas</th>
-                        <th>Puntos Ganados</th>
-                        <th>Primer Parcial</th>
-                        <th>Examen Final</th>
+                        <th>Asistencia<h6 class="card-subtitle text-info">MAX: {{ round($asignatura->nota_asistencia) }}</h6></th>
+                        <th>Practicas<h6 class="card-subtitle text-info">MAX: {{ round($asignatura->nota_practicas) }}</h6></th>
+                        <th>Primer Parcial<h6 class="card-subtitle text-info">MAX: {{ round($asignatura->nota_primer_parcial) }}</h6></th>
+                        <th>Examen Final<h6 class="card-subtitle text-info">MAX: {{ round($asignatura->nota_examen_final) }}</h6></th>
                         <th>Total</th>
+                        <th>Extras<h6 class="card-subtitle text-info">MAX: {{ round($asignatura->nota_puntos_ganados) }}</h6></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -24,10 +24,10 @@
                             <td>{{ $nota->trimestre }}</td>
                             <td><input size="10" min="0" max="{{ $asignatura->nota_asistencia }}" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-asistencia="{{ $nota->nota_asistencia }}" type="number" id="asistencia-{{ $nota->id }}" name="asistencia-{{ $nota->id }}" value="{{ $nota->nota_asistencia }}" step="any"></td>
                             <td><input size="10" min="0" max="{{ $asignatura->nota_practicas }}" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-practicas="{{ $nota->nota_practicas }}" type="number" id="practicas-{{ $nota->id }}" name="practicas-{{ $nota->id }}" value="{{ $nota->nota_practicas }}" step="any"></td>
-                            <td><input size="10" min="0" max="{{ $asignatura->nota_puntos_ganados }}" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-puntos="{{ $nota->nota_puntos_ganados }}" type="number" id="puntos-{{ $nota->id }}" name="puntos-{{ $nota->id }}" value="{{ $nota->nota_puntos_ganados }}" step="any"></td>
                             <td><input size="10" min="0" max="{{ $asignatura->nota_primer_parcial }}" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-parcial="{{ $nota->nota_primer_parcial }}" type="number" id="parcial-{{ $nota->id }}" name="parcial-{{ $nota->id }}" value="{{ $nota->nota_primer_parcial }}" step="any"></td>
                             <td><input size="10" min="0" max="{{ $asignatura->nota_examen_final }}" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-final="{{ $nota->nota_examen_final }}" type="number" id="final-{{ $nota->id }}" name="final-{{ $nota->id }}" value="{{ $nota->nota_examen_final }}" step="any"></td>
                             <td id="totalsuma{{ $nota->id }}">{{ $nota->nota_total }}</td>
+                            <td><input size="10" min="0" max="{{ $asignatura->nota_puntos_ganados }}" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-puntos="{{ $nota->nota_puntos_ganados }}" type="number" id="puntos-{{ $nota->id }}" name="puntos-{{ $nota->id }}" value="{{ $nota->nota_puntos_ganados }}" step="any"></td>
                         </tr>
                     @endforeach
                 </tbody>
