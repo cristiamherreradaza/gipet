@@ -479,6 +479,13 @@ class KardexController extends Controller
         // dd($inscripciones);
 
         return view('kardex.datos_notas_carreras')->with(compact('inscripciones'));
+        // $inscritas = Inscripcion::where('persona_id', $request->tipo_persona_id)
+        //                         ->where('carrera_id', $request->tipo_carrera_id)
+        //                         ->where('anio_vigente', date('Y'))
+        //                         ->whereNull('borrado')
+        //                         ->get();
+
+        // return view('kardex.datos_notas_carreras2')->with(compact('inscripciones', 'inscritas'));
         
     }
 }

@@ -45,87 +45,87 @@
                                                     $num = 1;
                                                 @endphp
                                                 @foreach ($inscripciones as $insc)
-                                                @php
-                                                    $asig = DB::select("SELECT *
-                                                                            FROM asignaturas
-                                                                            WHERE id = '$insc->asignatura_id'");
-                                                @endphp
-                                                <tr>
-                                                    <td>{{ $num++ }}</td>
-                                                    <td>{{ $asig[0]->codigo_asignatura }}</td>
-                                                    <td>{{ $asig[0]->nombre_asignatura }}</td>
                                                     @php
-                                                        $nota1 = DB::select("SELECT nota.*
-                                                                            FROM notas nota, (SELECT MAX(id) as id
-                                                                                            FROM notas 
-                                                                                            WHERE asignatura_id = '481'
-                                                                                            AND turno_id = '$insc->turno_id'
-                                                                                            AND persona_id = '$insc->persona_id'
-                                                                                            AND paralelo = '$insc->paralelo'
-                                                                                            AND anio_vigente = '$insc->anio_vigente'
-                                                                                            AND trimestre = '1'
-                                                                                            GROUP BY asignatura_id)tmp
-                                                                            WHERE nota.id = tmp.id
-                                                                            ORDER BY nota.id ASC");
+                                                        $asig = DB::select("SELECT *
+                                                                                FROM asignaturas
+                                                                                WHERE id = '$insc->asignatura_id'");
                                                     @endphp
-                                                    <td>{{ $nota1[0]->nota_total }}</td>
-                                                    @php
-                                                        $nota2 = DB::select("SELECT nota.*
-                                                                            FROM notas nota, (SELECT MAX(id) as id
-                                                                                            FROM notas
-                                                                                            WHERE asignatura_id = '481'
-                                                                                            AND turno_id = '$insc->turno_id'
-                                                                                            AND persona_id = '$insc->persona_id'
-                                                                                            AND paralelo = '$insc->paralelo'
-                                                                                            AND anio_vigente = '$insc->anio_vigente'
-                                                                                            AND trimestre = '2'
-                                                                                            GROUP BY asignatura_id)tmp
-                                                                            WHERE nota.id = tmp.id
-                                                                            ORDER BY nota.id ASC");
-                                                    @endphp
-                                                    <td>{{ $nota2[0]->nota_total }}</td>
-                                                    @php
-                                                        $nota3 = DB::select("SELECT nota.*
-                                                                            FROM notas nota, (SELECT MAX(id) as id
-                                                                                            FROM notas 
-                                                                                            WHERE asignatura_id = '481'
-                                                                                            AND turno_id = '$insc->turno_id'
-                                                                                            AND persona_id = '$insc->persona_id'
-                                                                                            AND paralelo = '$insc->paralelo'
-                                                                                            AND anio_vigente = '$insc->anio_vigente'
-                                                                                            AND trimestre = '3'
-                                                                                            GROUP BY asignatura_id)tmp
-                                                                            WHERE nota.id = tmp.id
-                                                                            ORDER BY nota.id ASC");
-                                                    @endphp
-                                                    <td>{{ $nota3[0]->nota_total }}</td>
-                                                    @php
-                                                        $nota4 = DB::select("SELECT nota.*
-                                                                            FROM notas nota, (SELECT MAX(id) as id
-                                                                                            FROM notas 
-                                                                                            WHERE asignatura_id = '481'
-                                                                                            AND turno_id = '$insc->turno_id'
-                                                                                            AND persona_id = '$insc->persona_id'
-                                                                                            AND paralelo = '$insc->paralelo'
-                                                                                            AND anio_vigente = '$insc->anio_vigente'
-                                                                                            AND trimestre = '4'
-                                                                                            GROUP BY asignatura_id)tmp
-                                                                            WHERE nota.id = tmp.id
-                                                                            ORDER BY nota.id ASC");
-                                                    @endphp
-                                                    <td>{{ $nota4[0]->nota_total }}</td>
-                                                    @php
-                                                        if($insc->nota > 70){
-                                                    @endphp
-                                                    <td><span class="badge py-1 badge-success">{{ $insc->nota }}</span> </td>
-                                                    @php
-                                                        } else {
-                                                    @endphp
-                                                    <td><span class="badge py-1 badge-danger">{{ $insc->nota }}</span> </td>
-                                                    @php
-                                                        }
-                                                    @endphp
-                                                </tr>
+                                                    <tr>
+                                                        <td>{{ $num++ }}</td>
+                                                        <td>{{ $asig[0]->codigo_asignatura }}</td>
+                                                        <td>{{ $asig[0]->nombre_asignatura }}</td>
+                                                        @php
+                                                            $nota1 = DB::select("SELECT nota.*
+                                                                                FROM notas nota, (SELECT MAX(id) as id
+                                                                                                FROM notas 
+                                                                                                WHERE asignatura_id = '481'
+                                                                                                AND turno_id = '$insc->turno_id'
+                                                                                                AND persona_id = '$insc->persona_id'
+                                                                                                AND paralelo = '$insc->paralelo'
+                                                                                                AND anio_vigente = '$insc->anio_vigente'
+                                                                                                AND trimestre = '1'
+                                                                                                GROUP BY asignatura_id)tmp
+                                                                                WHERE nota.id = tmp.id
+                                                                                ORDER BY nota.id ASC");
+                                                        @endphp
+                                                        <td>{{ $nota1[0]->nota_total }}</td>
+                                                        @php
+                                                            $nota2 = DB::select("SELECT nota.*
+                                                                                FROM notas nota, (SELECT MAX(id) as id
+                                                                                                FROM notas
+                                                                                                WHERE asignatura_id = '481'
+                                                                                                AND turno_id = '$insc->turno_id'
+                                                                                                AND persona_id = '$insc->persona_id'
+                                                                                                AND paralelo = '$insc->paralelo'
+                                                                                                AND anio_vigente = '$insc->anio_vigente'
+                                                                                                AND trimestre = '2'
+                                                                                                GROUP BY asignatura_id)tmp
+                                                                                WHERE nota.id = tmp.id
+                                                                                ORDER BY nota.id ASC");
+                                                        @endphp
+                                                        <td>{{ $nota2[0]->nota_total }}</td>
+                                                        @php
+                                                            $nota3 = DB::select("SELECT nota.*
+                                                                                FROM notas nota, (SELECT MAX(id) as id
+                                                                                                FROM notas 
+                                                                                                WHERE asignatura_id = '481'
+                                                                                                AND turno_id = '$insc->turno_id'
+                                                                                                AND persona_id = '$insc->persona_id'
+                                                                                                AND paralelo = '$insc->paralelo'
+                                                                                                AND anio_vigente = '$insc->anio_vigente'
+                                                                                                AND trimestre = '3'
+                                                                                                GROUP BY asignatura_id)tmp
+                                                                                WHERE nota.id = tmp.id
+                                                                                ORDER BY nota.id ASC");
+                                                        @endphp
+                                                        <td>{{ $nota3[0]->nota_total }}</td>
+                                                        @php
+                                                            $nota4 = DB::select("SELECT nota.*
+                                                                                FROM notas nota, (SELECT MAX(id) as id
+                                                                                                FROM notas 
+                                                                                                WHERE asignatura_id = '481'
+                                                                                                AND turno_id = '$insc->turno_id'
+                                                                                                AND persona_id = '$insc->persona_id'
+                                                                                                AND paralelo = '$insc->paralelo'
+                                                                                                AND anio_vigente = '$insc->anio_vigente'
+                                                                                                AND trimestre = '4'
+                                                                                                GROUP BY asignatura_id)tmp
+                                                                                WHERE nota.id = tmp.id
+                                                                                ORDER BY nota.id ASC");
+                                                        @endphp
+                                                        <td>{{ $nota4[0]->nota_total }}</td>
+                                                        @php
+                                                            if($insc->nota > 70){
+                                                        @endphp
+                                                        <td><span class="badge py-1 badge-success">{{ $insc->nota }}</span> </td>
+                                                        @php
+                                                            } else {
+                                                        @endphp
+                                                        <td><span class="badge py-1 badge-danger">{{ $insc->nota }}</span> </td>
+                                                        @php
+                                                            }
+                                                        @endphp
+                                                    </tr>
                                                 @endforeach
                                             </tbody>
                                         </table>

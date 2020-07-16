@@ -48,25 +48,28 @@ class NotasExport implements FromCollection, WithMapping, WithHeadings, ShouldAu
             $nota->id,
             $nota->persona->nombres. ' ' .$nota->persona->apellido_paterno. ' ' .$nota->persona->apellido_materno,
             $nota->persona->carnet,
+            $nota->trimestre,
             $nota->nota_asistencia,
             $nota->nota_practicas,
             $nota->nota_puntos_ganados,
             $nota->nota_primer_parcial,
-            $nota->nota_examen_final,
+            $nota->nota_puntos_ganados,
         ];
     }
 
     public function headings() : array
     {
+        $notapropuesta = NotasPropuesta::find($this->id);
         return [
             '# Id',
             'Nombres y Apellidos',
             'CI',
-            'Asistencia',
-            'Practicas',
-            'Puntos Ganados',
-            'Primer Parcial',
-            'Examen Final',
+            'Bimestre',
+            'Asistencia (Max: '.round($notapropuesta->nota_asistencia).')',
+            'Practicas (Max: '.round($notapropuesta->nota_practicas).')',
+            'Primer Parcial (Max: '.round($notapropuesta->nota_primer_parcial).')',
+            'Examen Final (Max: '.round($notapropuesta->nota_examen_final).')',
+            'Extras (Max: '.round($notapropuesta->nota_puntos_ganados).')',
         ];
     }
 
@@ -84,8 +87,8 @@ class NotasExport implements FromCollection, WithMapping, WithHeadings, ShouldAu
         ];
         return [
             AfterSheet::class => function(AfterSheet $event) use ($styleArray) {
-                $event->sheet->getStyle('A1:H1')->applyFromArray($styleArray);
-                $event->sheet->getDelegate()->freezePane('B1');
+                $event->sheet->getStyle('A1:I1')->applyFromArray($styleArray);
+                $event->sheet->getDelegate()->freezePane('E1');
             },
         ];
     }
