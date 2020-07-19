@@ -51,8 +51,8 @@ class NotasExport implements FromCollection, WithMapping, WithHeadings, ShouldAu
             $nota->trimestre,
             $nota->nota_asistencia,
             $nota->nota_practicas,
-            $nota->nota_puntos_ganados,
             $nota->nota_primer_parcial,
+            $nota->nota_examen_final,
             $nota->nota_puntos_ganados,
         ];
     }

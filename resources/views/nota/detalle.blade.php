@@ -11,8 +11,6 @@
         width: 130px;
     }
 </style>
-<!--alerts CSS -->
-<!-- <link href="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet"> -->
 @endsection
 
 @section('content')
@@ -69,6 +67,10 @@
         <div class="col-lg-8">
             <form method="post" id="upload_form" enctype="multipart/form-data" class="upload_form mt-4">
                 @csrf
+                <input type="hidden" name="asignatura_id" id="asignatura_id" value="{{ $asignatura->asignatura_id }}">
+                <input type="hidden" name="turno_id" id="turno_id" value="{{ $asignatura->turno_id }}">
+                <input type="hidden" name="paralelo" id="paralelo" value="{{ $asignatura->paralelo }}">
+                <input type="hidden" name="anio_vigente" id="anio_vigente" value="{{ $asignatura->anio_vigente }}">
                 <div class="input-group">
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" name="select_file" id="select_file">
@@ -122,7 +124,7 @@ $(document).ready(function() {
                     data.message,
                     'success'
                     ).then(function() {
-                        location.reload();
+                        location.reload();          //Aqui editar
                         $('#select_file').val('');
                     });
                 }else{

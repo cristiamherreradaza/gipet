@@ -235,6 +235,7 @@ class NotaController extends Controller
 
     public function ajax_importar(Request $request)
     {
+        //dd($request->asignatura);
         $validation = Validator::make($request->all(), [
             'select_file' => 'required|mimes:xlsx|max:2048'
         ]);
@@ -242,6 +243,36 @@ class NotaController extends Controller
         {
             $file = $request->file('select_file');
             Excel::import(new NotasImport, $file);
+            // Una vez cargado los datos de los estudiantes de la materia, actualizar sus datos, en la tabla inscripciones
+            // Capturar todas las notas correspondientes a esa materia
+            // $notas = Nota::where('asignatura_id', $request->asignatura_id)
+            //             ->where('turno_id', $request->turno_id)
+            //             ->where('paralelo', $request->paralelo)
+            //             ->where('anio_vigente', $request->anio_vigente)
+            //             ->whereNull('borrado')
+            //             ->get();
+            // Sumar sus notas totales en un registro   REVISAR
+            $notas = Nota::groupBy('persona_id')
+                        ->selectRaw('persona_id, sum(nota_total) as total')
+                        ->where('asignatura_id', $request->asignatura_id)
+                        ->where('turno_id', $request->turno_id)
+                        ->where('paralelo', $request->paralelo)
+                        ->where('anio_vigente', $request->anio_vigente)
+                        ->whereNull('borrado')
+                        ->get();
+            //dd($notas);
+            // Por cada registro guardar en inscripcion
+            foreach($notas as $nota){
+                $inscripcion = Inscripcion::where('asignatura_id', $request->asignatura_id)
+                                        ->where('turno_id', $request->turno_id)
+                                        ->where('persona_id', $nota->persona_id)
+                                        ->where('paralelo', $request->paralelo)
+                                        ->where('anio_vigente', $request->anio_vigente)
+                                        ->whereNull('borrado')
+                                        ->first();
+                $inscripcion->nota = round($nota->total/4);
+                $inscripcion->save();
+            }
             return response()->json([
                 'message' => 'Importacion realizada con exito',
                 'sw' => 1
