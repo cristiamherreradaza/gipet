@@ -54,6 +54,7 @@
     $(function () {
         $('#myTable').DataTable({
             language: {
+                
                 url: '{{ asset('datatableEs.json') }}'
             },
         });

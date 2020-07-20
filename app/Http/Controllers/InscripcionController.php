@@ -139,7 +139,7 @@ class InscripcionController extends Controller
 
             }
         }
-        return redirect('Persona/listado');
+        return redirect('Kardex/detalle_estudiante/'.$persona_id);
     }
 
     public function asignaturas_inscripcion($carrera_id, $turno_id, $persona_id, $paralelo, $anio_vigente)
