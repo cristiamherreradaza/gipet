@@ -485,7 +485,7 @@ class KardexController extends Controller
                                 ->whereNull('borrado')
                                 ->get();
 
-        return view('kardex.datos_notas_carreras2')->with(compact('inscripciones', 'inscritas'));
+        return view('kardex.datos_notas_carreras')->with(compact('inscripciones', 'inscritas'));
         
     }
 }
