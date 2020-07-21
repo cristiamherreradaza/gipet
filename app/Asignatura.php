@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Asignatura extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'carrera_id',
         'gestion',
@@ -20,7 +22,7 @@ class Asignatura extends Model
         'anio_vigente',
         'orden_impresion',
         'estado',
-        'borrado',
+        'deleted_at',
     ];
 
     public function carrera()

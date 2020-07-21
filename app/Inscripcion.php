@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Inscripcion extends Model
 {
+    use SoftDeletes;
     protected $table = 'inscripciones';
 
     protected $fillable = [
@@ -17,7 +19,7 @@ class Inscripcion extends Model
         'anio_vigente',
         'nota',
         'estado',
-        'borrado',
+        'deleted_at',
     ];
 
 

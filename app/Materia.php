@@ -3,14 +3,16 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Materia extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'asignatura_id',
         'codigo_asignatura',
         'nombre_asignatura',
         'estado',
-        'borrado',
+        'deleted_at',
     ];
 }

@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class NotasPropuesta extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'asignatura_id',
         'turno_id',
@@ -21,7 +23,7 @@ class NotasPropuesta extends Model
         'validado',
         'vigente',
         'estado',
-        'borrado',
+        'deleted_at',
     ];
 
     public function asignatura()

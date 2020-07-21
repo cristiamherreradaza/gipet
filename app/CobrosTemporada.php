@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CobrosTemporada extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'servicio_id',
         'persona_id',
@@ -14,7 +16,7 @@ class CobrosTemporada extends Model
         'gestion',
         'fecha_generado',
         'estado',
-        'borrado',
+        'deleted_at',
     ];
 
     public function servicio()

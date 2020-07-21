@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Persona extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'apellido_paterno',
         'apellido_materno',
@@ -33,7 +35,7 @@ class Persona extends Model
         'nombre_esposo',
         'telefono_esposo',
         'estado',
-        'borrado',
+        'deleted_at',
     ];
 
     public function kardex()

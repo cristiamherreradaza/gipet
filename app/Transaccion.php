@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Transaccion extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'servicio_id',
         'descuento_id',
@@ -18,7 +20,7 @@ class Transaccion extends Model
         'saldo',
         'observacion',
         'estado',
-        'borrado',
+        'deleted_at',
     ];
 
     public function servicio()

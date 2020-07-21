@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CarrerasPersona extends Model
 {
+    use SoftDeletes;
 	protected $fillable = [
         'carrera_id',
         'persona_id',
@@ -13,7 +15,7 @@ class CarrerasPersona extends Model
         'anio_vigente',
         'sexo',
         'estado',
-        'borrado',
+        'deleted_at',
     ];
 
     public function carrera()

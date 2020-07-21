@@ -164,4 +164,10 @@ class AsignaturaController extends Controller
 
         return view('asignatura.lista')->with(compact('asignaturas'));  
     }
+
+    public function listado()
+    {
+        $asignaturas = Asignatura::where('carrera_id', 10)->get();
+        return view('asignatura.listado')->with(compact('asignaturas'));
+    }
 }

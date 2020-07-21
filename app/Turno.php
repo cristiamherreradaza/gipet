@@ -3,13 +3,15 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Turno extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'descripcion',
         'estado',
-        'borrado',
+        'deleted_at',
     ];
 
     public function kardex()

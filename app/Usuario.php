@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Usuario extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'apellido_paterno',
         'apellido_materno',
@@ -34,7 +36,7 @@ class Usuario extends Model
         'persona_referencia',
         'numero_referencia',
         'estado',
-        'borrado',
+        'deleted_at',
     ];
 
     public function notas()
