@@ -4,15 +4,15 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Descuento extends Model
+class CobrosTemporada extends Model
 {
     protected $fillable = [
         'servicio_id',
+        'persona_id',
         'nombre',
-        'descripcion',
-        'porcentaje',
-        'monto',
-        'a_pagar',
+        'mensualidad',
+        'gestion',
+        'fecha_generado',
         'estado',
         'borrado',
     ];
@@ -22,9 +22,9 @@ class Descuento extends Model
         return $this->belongsTo('App/Servicio');
     }
 
-    public function descuentopersonas()
+    public function persona()
     {
-        return $this->hasMany('App/DescuentoPersona');
+        return $this->belongsTo('App/Persona');
     }
 
     public function transacciones()

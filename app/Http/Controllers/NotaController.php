@@ -70,7 +70,16 @@ class NotaController extends Controller
                     ->where('anio_vigente', $request->anio_vigente)
                     ->whereNull('borrado')
                     ->get();
-        return view('nota.ajaxMuestraNota')->with(compact('asignatura', 'notas'));
+        if($asignatura->asignatura->ciclo == 'Semestral')
+        {
+            // Enviar a la vista donde registrará las notas correspondientes a 2 bimestres
+            return view('nota.ajaxMuestraNotaSemestral')->with(compact('asignatura', 'notas'));
+        }
+        else
+        {
+            // Enviar a la vista donde registrará las notas correspondientes a 4 bimestres
+            return view('nota.ajaxMuestraNotaAnual')->with(compact('asignatura', 'notas'));
+        }
     }
 
     public function exportarexcel(Request $request)
@@ -103,6 +112,12 @@ class NotaController extends Controller
                                     ->where('anio_vigente', $nota->anio_vigente)
                                     ->where('borrado', NULL)
                                     ->first();      // Encuentra la NotaPropuesta correspondiente a la Nota
+        if($ponderacion->asignatura->ciclo == 'Semestral')
+        {
+            
+        }
+
+        
         // Validacion para asistencia                                    
         if($request->asistencia <= $ponderacion->nota_asistencia && $request->asistencia >= 0)
         {

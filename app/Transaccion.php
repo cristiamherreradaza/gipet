@@ -8,12 +8,15 @@ class Transaccion extends Model
 {
     protected $fillable = [
         'servicio_id',
+        'descuento_id',
         'persona_id',
-        'kardex_id',
-        'fecha',
-        'monto',
+        'cobros_temporada_id',
+        'fecha_pago',
+        'estimado',
+        'a_pagar',
+        'pagado',
         'saldo',
-        'pendiente',
+        'observacion',
         'estado',
         'borrado',
     ];
@@ -23,13 +26,18 @@ class Transaccion extends Model
         return $this->belongsTo('App/Servicio');
     }
 
+    public function descuento()
+    {
+        return $this->belongsTo('App/Descuento');
+    }
+
     public function persona()
     {
         return $this->belongsTo('App/Persona');
     }
 
-    public function kardex()
+    public function cobrotemporada()
     {
-        return $this->belongsTo('App/Kardex');
+        return $this->belongsTo('App/CobrosTemporada');
     }
 }

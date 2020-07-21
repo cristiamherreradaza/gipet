@@ -1,10 +1,10 @@
-    <?php
+<?php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDescuentosTable extends Migration
+class CreateCobrosTemporadasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,18 @@ class CreateDescuentosTable extends Migration
      */
     public function up()
     {
-        Schema::create('descuentos', function (Blueprint $table) {
+        Schema::create('cobros_temporadas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('codigo_anterior')->nullable();
             $table->unsignedBigInteger('servicio_id')->nullable();
             $table->foreign('servicio_id')->references('id')->on('servicios');
-            $table->string('nombre', 30)->nullable();
-            $table->integer('porcentaje')->nullable();
-            $table->decimal('monto', 8, 2)->nullable();
-            $table->decimal('a_pagar', 8, 2)->nullable();
-            $table->string('estado', 15)->nullable();
+            $table->unsignedBigInteger('persona_id')->nullable();
+            $table->foreign('persona_id')->references('id')->on('personas');
+            $table->string('nombre', 100)->nullable();
+            $table->integer('mensualidad')->nullable();
+            $table->string('gestion', 30)->nullable();
+            $table->dateTime('fecha_generado', 0)->nullable();
+            $table->string('estado', 30)->nullable();
             $table->datetime('borrado', 0)->nullable();
             $table->timestamps();
         });
@@ -35,6 +37,6 @@ class CreateDescuentosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('descuentos');
+        Schema::dropIfExists('cobros_temporadas');
     }
 }

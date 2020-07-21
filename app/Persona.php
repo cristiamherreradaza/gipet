@@ -60,4 +60,9 @@ class Persona extends Model
     {
         return $this->hasMany('App\CarrerasPersona');
     }
+
+    public function cobrostemporadas()
+    {
+        return $this->hasMany('App/CobrosTemporada');
+    }
 }

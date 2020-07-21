@@ -19,7 +19,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($notas as $nota)                                
+                    @foreach($notas as $nota)
                         <tr>
                             <td>{{ $nota->trimestre }}</td>
                             <td><input size="10" min="0" max="{{ $asignatura->nota_asistencia }}" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-asistencia="{{ $nota->nota_asistencia }}" type="number" id="asistencia-{{ $nota->id }}" name="asistencia-{{ $nota->id }}" value="{{ $nota->nota_asistencia }}" step="any"></td>

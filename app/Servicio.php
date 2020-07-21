@@ -29,4 +29,9 @@ class Servicio extends Model
     {
         return $this->hasMany('App/DescuentoPersona');
     }
+
+    public function cobrostemporadas()
+    {
+        return $this->hasMany('App/CobrosTemporada');
+    }
 }
