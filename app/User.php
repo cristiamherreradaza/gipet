@@ -76,4 +76,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\NotasPropuesta');
     }
+
+    public function menususers()
+    {
+        return $this->hasMany('App\MenusUser');
+    }
 }
