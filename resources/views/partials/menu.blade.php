@@ -103,6 +103,11 @@
                             </a>
                         </li>
                         <li class="sidebar-item">
+                            <a href="{{ url('Perfil/listado') }}" class="sidebar-link">
+                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Perfiles </span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
                             <a href="{{ url('Servicio/listado') }}" class="sidebar-link">
                                 <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Servicios </span>
                             </a>

@@ -19,4 +19,9 @@ class Perfile extends Model
     {
         return $this->hasMany('App\MenusPerfile');
     }
+
+    public function users()
+    {
+        return $this->hasMany('App\User');
+    }
 }

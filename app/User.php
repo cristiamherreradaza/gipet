@@ -18,6 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'perfil_id',
         'apellido_paterno',
         'apellido_materno',
         'nombres',
@@ -80,5 +81,10 @@ class User extends Authenticatable
     public function menususers()
     {
         return $this->hasMany('App\MenusUser');
+    }
+
+    public function perfil()
+    {
+        return $this->belongsTo('App\Perfile');
     }
 }

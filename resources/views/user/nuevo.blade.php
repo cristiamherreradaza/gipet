@@ -11,7 +11,7 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Nombres</label>
                                 <span class="text-danger">
@@ -41,7 +41,7 @@
                                 <input type="text" name="ci" id="ci" class="form-control" required>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Expedido</label>
                                 <span class="text-danger">
@@ -60,7 +60,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <!-- <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Nomina</label>
                                 <select name="nomina" id="nomina" class="form-control"> 
@@ -68,13 +68,12 @@
                                     <option value="Lic."> Licenciado(a) </option>
                                     <option value="Ing."> Ingeniero(a) </option>
                                     <option value="Per."> Personal </option>
-                                    <!-- <option value="Sr(a)"> Señor(a) </option> -->
                                 </select>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Nombre de usuario</label>
                                 <span class="text-danger">
@@ -83,7 +82,7 @@
                                 <input type="text" name="username" id="username" class="form-control" required>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <!-- <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Tipo</label>
                                 <span class="text-danger">
@@ -95,7 +94,7 @@
                                     <option value="Docente"> Docente </option>
                                 </select>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Fecha de Nacimiento</label>
@@ -137,7 +136,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Estado Civil</label>
                                 <select name="estado_civil" id="estado_civil" class="form-control">
@@ -207,16 +206,28 @@
                                 <input type="text" name="numero_referencia" id="numero_referencia" class="form-control">
                             </div>                            
                         </div>
-                        <div class="col-md-2">
+                        <!-- <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Rol</label>
                                 <select name="rol" id="rol" class="form-control">
                                     <option value="" selected></option>
                                     <option value="D"> Docente </option>
-                                    <!-- <option value="">  </option> -->
                                 </select>
                             </div>
-                        </div>                                         
+                        </div> -->
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label">Perfil</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <select name="perfil" id="perfil" class="form-control" required>
+                                    @foreach($perfiles as $perfil)
+                                        <option value="{{ $perfil->id }}">{{ $perfil->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <br>
                     <div class="form-group">
@@ -242,7 +253,7 @@
         //pass
         var ci = $("#ci").val();
         var expedido = $("#expedido").val();
-        var tipo = $("#tipo").val();
+        //var tipo = $("#tipo").val();
         var username = $("#username").val();
         //fechaincorporacion
         //vigente
@@ -265,7 +276,6 @@
             ci.length>0 &&
             expedido.length>0 &&
             username.length>0 &&
-            tipo.length>0 &&
             fecha_nacimiento.length>0 &&
             lugar_nacimiento.length>0 &&
             sexo.length>0){
@@ -280,7 +290,7 @@
             Swal.fire({
                 type: 'error',
                 title: 'Oops...',
-                text: 'Completa los puntos que estan marcados en rojo.'
+                text: 'Completa las casillas que estan marcadas en rojo.'
             })
         }
     }

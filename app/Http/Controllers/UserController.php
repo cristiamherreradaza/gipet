@@ -6,6 +6,9 @@ use App\User;
 use App\Turno;
 use DataTables;
 use App\Asignatura;
+use App\Perfile;
+use App\MenusPerfile;
+use App\MenusUser;
 use App\NotasPropuesta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,25 +18,27 @@ class UserController extends Controller
 {
     public function nuevo()
     {
-        return view('user.nuevo');
+        $perfiles = Perfile::get();
+        return view('user.nuevo')->with(compact('perfiles'));
     }
 
     public function guarda(Request $request)
     {
+        //dd($request->perfil);
         $user = new User();
         $user->apellido_paterno = $request->apellido_paterno;
         $user->apellido_materno = $request->apellido_materno;
         $user->nombres = $request->nombres;
-        $user->nomina = $request->nomina;
+        //$user->nomina = $request->nomina;
         $user->password = Hash::make($request->username);
         $user->cedula = $request->ci;
         $user->expedido = $request->expedido;
-        $user->tipo_usuario = $request->tipo;
+        //$user->tipo_usuario = $request->tipo;
         $user->nombre_usuario = $request->username;
         $user->fecha_incorporacion = date('Y-m-d');
 
         $user->vigente = 'Si';
-        $user->rol = $request->rol;
+        //$user->rol = $request->rol;
         $user->fecha_nacimiento = $request->fecha_nacimiento;
         $user->lugar_nacimiento = $request->lugar_nacimiento;
         $user->sexo = $request->sexo;
@@ -50,8 +55,23 @@ class UserController extends Controller
         $user->persona_referencia = $request->persona_referencia;
         $user->numero_referencia = $request->numero_referencia;
         $user->name = $request->username;
-
+        $user->perfil_id = $request->perfil;
         $user->save();
+
+        if($request->perfil)
+        {
+            $menus = MenusPerfile::where('perfil_id', $request->perfil)->get();
+            if(count($menus) > 0)
+            {
+                foreach($menus as $menu)
+                {
+                    $menu_user = new MenusUser();
+                    $menu_user->user_id = $user->id;
+                    $menu_user->menu_id = $menu->menu_id;
+                    $menu_user->save();
+                }
+            }
+        }
         return redirect('User/listado');
 
     }
@@ -59,25 +79,27 @@ class UserController extends Controller
     public function editar($id)
     {
         $user = User::find($id);
-        return view('user.editar')->with(compact('user'));
+        $perfiles = Perfile::get();
+        return view('user.editar')->with(compact('user', 'perfiles'));
     }
 
     public function actualizar(Request $request)
     {
+        $sw=0;
         $user = User::find($request->id);
         $user->apellido_paterno = $request->apellido_paterno;
         $user->apellido_materno = $request->apellido_materno;
         $user->nombres = $request->nombres;
-        $user->nomina = $request->nomina;
+        //$user->nomina = $request->nomina;
         //$user->password = Hash::make($request->username);
         $user->cedula = $request->ci;
         $user->expedido = $request->expedido;
-        $user->tipo_usuario = $request->tipo;
+        //$user->tipo_usuario = $request->tipo;
         $user->nombre_usuario = $request->username;
         //$user->fecha_incorporacion = date('Y-m-d');
 
         //$user->vigente = 'Si';
-        $user->rol = $request->rol;
+        //$user->rol = $request->rol;
         $user->fecha_nacimiento = $request->fecha_nacimiento;
         $user->lugar_nacimiento = $request->lugar_nacimiento;
         $user->sexo = $request->sexo;
@@ -94,8 +116,42 @@ class UserController extends Controller
         $user->persona_referencia = $request->persona_referencia;
         $user->numero_referencia = $request->numero_referencia;
         $user->name = $request->username;
-
+        if($user->perfil_id != $request->perfil)
+        {
+            // Eliminaremos el perfil con sus respectivos menus anteriores en la tabla menusUser
+            $menuusers = MenusUser::where('user_id', $user->id)->get();
+            if(count($menuusers) > 0)
+            {
+                foreach($menuusers as $menuuser)
+                {
+                    $menuuser->delete();
+                }
+            }
+            // Asignaremos nuevo perfil
+            $user->perfil_id = $request->perfil;
+            $sw=1;
+        }        
         $user->save();
+
+        if($sw == 1)
+        {
+            if($request->perfil)
+            {
+                $menus = MenusPerfile::where('perfil_id', $request->perfil)->get();
+                if(count($menus) > 0)
+                {
+                    // Adicionaremos los nuevos
+                    foreach($menus as $menu)
+                    {
+                        $menu_user = new MenusUser();
+                        $menu_user->user_id = $user->id;
+                        $menu_user->menu_id = $menu->menu_id;
+                        $menu_user->save();
+                    }
+                }
+            }
+        }
+        
         return redirect('User/listado');
         //dd($user);
     }
@@ -114,8 +170,7 @@ class UserController extends Controller
     public function ajax_listado()
     {
         //$lista_personal = User::all();
-        $lista_personal = User::whereNull('borrado')
-                            ->get();
+        $lista_personal = User::get();
     	return Datatables::of($lista_personal)
             ->addColumn('action', function ($lista_personal) {
                 return '<button onclick="asigna_materias('.$lista_personal->id.')" class="btn btn-info" title="Asignar materias"><i class="fas fa-plus"></i></button>

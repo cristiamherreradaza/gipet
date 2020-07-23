@@ -175,6 +175,12 @@ Route::get('Descuento/listado', 'DescuentoController@listado');
 Route::get('Servicio/listado', 'ServicioController@listado');
 Route::get('Turno/listado', 'TurnoController@listado');
 
+Route::get('Perfil/listado', 'PerfilController@listado');
+Route::post('Perfil/guardar', 'PerfilController@guardar');
+Route::get('Perfil/ajaxListadoMenu', 'PerfilController@ajaxListadoMeny');
+Route::post('Perfil/actualizar', 'PerfilController@actualizar');
+Route::get('Perfil/eliminar/{id}', 'PerfilController@eliminar');
+
 //DETALLE DEL ESTUDIANTE
 Route::get('Kardex/detalle_estudiante/{persona_id}', 'KardexController@detalle_estudiante');
 Route::get('Kardex/ajax_datos_principales', 'KardexController@ajax_datos_principales');

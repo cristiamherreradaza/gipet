@@ -12,7 +12,7 @@
                 <div class="card-body">
                     <input type="hidden" name="id" id="id" value="{{ $user->id }}">
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Nombres</label>
                                 <span class="text-danger">
@@ -42,7 +42,7 @@
                                 <input type="text" name="ci" id="ci" class="form-control" value="{{ $user->cedula }}" required>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Expedido</label>
                                 <span class="text-danger">
@@ -97,64 +97,15 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label class="control-label">Nomina</label>
-                                <select name="nomina" id="nomina" class="form-control"> 
-                                    <option value=""></option>
-                                    @if($user->nomina == 'Lic.')
-                                        <option value="Lic." selected> Licenciado(a) </option>
-                                    @else
-                                        <option value="Lic."> Licenciado(a) </option>
-                                    @endif
-                                    @if($user->nomina == 'Ing.')
-                                        <option value="Ing." selected> Ingeniero(a) </option>
-                                    @else
-                                        <option value="Ing."> Ingeniero(a) </option>
-                                    @endif
-                                    @if($user->nomina == 'Per.')
-                                        <option value="Per." selected> Personal </option>
-                                    @else
-                                        <option value="Per."> Personal </option>
-                                    @endif                                
-                                    <!-- <option value="Sr(a)"> Señor(a) </option> -->
-                                </select>
-                            </div>
-                        </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Nombre de usuario</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
                                 <input type="text" name="username" id="username" class="form-control" value="{{ $user->name }}" required>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label class="control-label">Tipo</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <select name="tipo" id="tipo" class="form-control" required>
-                                    @if($user->tipo_usuario == 'Academico')
-                                        <option value="Academico" selected> Academico </option>
-                                    @else
-                                        <option value="Academico"> Academico </option>
-                                    @endif
-                                    @if($user->tipo_usuario == 'Director')
-                                        <option value="Director" selected> Director </option>
-                                    @else
-                                        <option value="Director"> Director </option>
-                                    @endif
-                                    @if($user->tipo_usuario == 'Docente')
-                                        <option value="Docente" selected> Docente </option>
-                                    @else
-                                        <option value="Docente"> Docente </option>
-                                    @endif
-                                </select>
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -242,7 +193,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Estado Civil</label>
                                 <select name="estado_civil" id="estado_civil" class="form-control">
@@ -320,7 +271,7 @@
                                 <input type="text" name="numero_referencia" id="numero_referencia" class="form-control" value="{{ $user->numero_referencia }}">
                             </div>                            
                         </div>
-                        <div class="col-md-2">
+                        <!-- <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Rol</label>
                                 <select name="rol" id="rol" class="form-control">
@@ -330,10 +281,26 @@
                                     @else
                                         <option value="D"> D </option>
                                     @endif
-                                    <!-- <option value="">  </option> -->
                                 </select>
                             </div>
-                        </div>                                         
+                        </div>  -->
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label">Perfil</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <select name="perfil" id="perfil" class="form-control" required>
+                                    @foreach($perfiles as $perfil)
+                                        @if($perfil->id == $user->perfil_id)
+                                            <option value="{{ $perfil->id }}" selected>{{ $perfil->nombre }}</option>
+                                        @else
+                                            <option value="{{ $perfil->id }}">{{ $perfil->nombre }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>                                        
                     </div>
                     <br>
                     <div class="form-group">
@@ -359,7 +326,7 @@
         //pass
         var ci = $("#ci").val();
         var expedido = $("#expedido").val();
-        var tipo = $("#tipo").val();
+        //var tipo = $("#tipo").val();
         var username = $("#username").val();
         //fechaincorporacion
         //vigente
@@ -382,7 +349,6 @@
             ci.length>0 &&
             expedido.length>0 &&
             username.length>0 &&
-            tipo.length>0 &&
             fecha_nacimiento.length>0 &&
             lugar_nacimiento.length>0 &&
             sexo.length>0){
@@ -397,7 +363,7 @@
             Swal.fire({
                 type: 'error',
                 title: 'Oops...',
-                text: 'Completa los puntos que estan marcados en rojo.'
+                text: 'Completa las casillas que estan marcadas en rojo.'
             })
         }
     }
