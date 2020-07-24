@@ -26,105 +26,45 @@
                 </li>
                 <!-- User Profile-->
                 <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">ADMINISTRACION</span></li>
-
-
-
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ url('Carrera/listado') }}" aria-expanded="false">
-                        <i data-feather="pie-chart" class="feather-icon"></i><span class="hide-menu"> Malla Curricular </span>
-                    </a>
-                </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ url('Inscripcion/inscripcion') }}" aria-expanded="false">
-                        <i data-feather="file-text" class="feather-icon"></i><span class="hide-menu"> Inscripciones </span>
-                    </a>
-                </li>
-
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="{{ url('Persona/listado') }}" aria-expanded="false">
-                        <i data-feather="users" class="feather-icon"></i><span class="hide-menu"> Alumnos </span>
-                    </a>
-                </li>
-
-                <li class="sidebar-item"> 
-                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                        <i data-feather="user" class="feather-icon"></i><span class="hide-menu"> PERSONAL </span>
-                    </a>
-                    <ul aria-expanded="false" class="collapse  first-level">
+                @php
+                    $menus = App\Menu::get();
+                @endphp
+                @foreach($menus as $menu)
+                    @php
+                        $padre='no';
+                    @endphp
+                    @foreach($menus as $row)
+                        @if($menu->id == $row->padre)
+                            @php
+                                $padre='si'
+                            @endphp
+                        @endif
+                    @endforeach
+                    @if($padre == 'si')
                         <li class="sidebar-item">
-                            <a href="{{ url('User/nuevo') }}" class="sidebar-link">
-                                <i data-feather="plus-circle" class="feather-icon"></i><span class="hide-menu"> Nuevo </span>
+                            <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                                <i data-feather="{{ $menu->icono }}" class="feather-icon"></i><span class="hide-menu"> {{ $menu->nombre }} </span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse  first-level">
+                            @foreach($menus as $hijo)
+                                @if($hijo->padre == $menu->id)
+                                    <li class="sidebar-item">
+                                        <a href='{{ url("$hijo->direccion") }}' class="sidebar-link">
+                                            <i data-feather="{{ $hijo->icono }}" class="feather-icon"></i><span class="hide-menu"> {{ $hijo->nombre }} </span>
+                                        </a>
+                                    </li>
+                                @endif
+                            @endforeach
+                            </ul>
+                        </li>
+                    @elseif(is_null($menu->padre))
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href='{{ url("$menu->direccion") }}' aria-expanded="false">
+                                <i data-feather="{{ $menu->icono }}" class="feather-icon"></i><span class="hide-menu"> {{ $menu->nombre }} </span>
                             </a>
                         </li>
-                        <li class="sidebar-item">
-                            <a href="{{ url('User/listado') }}" class="sidebar-link">
-                                <i data-feather="list" class="feather-icon"></i><span class="hide-menu"> Listado </span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="sidebar-item"> 
-                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                        <i data-feather="book-open" class="feather-icon"></i><span class="hide-menu"> ASIGNATURAS </span>
-                    </a>
-                    <ul aria-expanded="false" class="collapse  first-level">
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="{{ url('notaspropuesta/listado') }}">
-                                <i data-feather="file-plus" class="feather-icon"></i><span class="hide-menu"> Ponderacion </span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="{{ url('nota/listado') }}">
-                                <i data-feather="file-minus" class="feather-icon"></i><span class="hide-menu"> Notas </span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-
-                <li class="sidebar-item"> 
-                    <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                        <i data-feather="settings" class="feather-icon"></i><span class="hide-menu"> CONFIGURACIONES </span>
-                    </a>
-                    <ul aria-expanded="false" class="collapse  first-level">
-                        <li class="sidebar-item">
-                            <a href="{{ url('Carrera/listado_nuevo') }}" class="sidebar-link">
-                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Carreras </span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{ url('Asignatura/listado') }}" class="sidebar-link">
-                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Asignaturas </span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{ url('Descuento/listado') }}" class="sidebar-link">
-                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Descuentos </span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{ url('Perfil/listado') }}" class="sidebar-link">
-                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Perfiles </span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{ url('Servicio/listado') }}" class="sidebar-link">
-                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Servicios </span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{ url('Turno/listado') }}" class="sidebar-link">
-                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Turnos </span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a href="{{ url('Asignatura/asignaturas_equivalentes') }}" class="sidebar-link">
-                                <i data-feather="clipboard" class="feather-icon"></i><span class="hide-menu"> Asignaturas Equivalentes </span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                
+                    @endif
+                @endforeach
                 <li class="nav-devider"></li>
                 <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">Otros</span>
                 </li>

@@ -177,7 +177,7 @@ Route::get('Turno/listado', 'TurnoController@listado');
 
 Route::get('Perfil/listado', 'PerfilController@listado');
 Route::post('Perfil/guardar', 'PerfilController@guardar');
-Route::get('Perfil/ajaxListadoMenu', 'PerfilController@ajaxListadoMeny');
+Route::get('Perfil/ajaxListadoMenu', 'PerfilController@ajaxListadoMenu');
 Route::post('Perfil/actualizar', 'PerfilController@actualizar');
 Route::get('Perfil/eliminar/{id}', 'PerfilController@eliminar');
 
