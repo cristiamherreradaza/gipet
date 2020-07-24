@@ -31,38 +31,41 @@
                 @endphp
                 @foreach($menus as $menu)
                     @php
+                        $permiso = App\Menususer::where('menu_id', $menu->id)->where('user_id', auth()->user()->id)->first();
                         $padre='no';
                     @endphp
-                    @foreach($menus as $row)
-                        @if($menu->id == $row->padre)
-                            @php
-                                $padre='si'
-                            @endphp
+                    @if($permiso)
+                        @foreach($menus as $row)
+                            @if($menu->id == $row->padre)
+                                @php
+                                    $padre='si'
+                                @endphp
+                            @endif
+                        @endforeach
+                        @if($padre == 'si')
+                            <li class="sidebar-item">
+                                <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
+                                    <i data-feather="{{ $menu->icono }}" class="feather-icon"></i><span class="hide-menu"> {{ $menu->nombre }} </span>
+                                </a>
+                                <ul aria-expanded="false" class="collapse  first-level">
+                                @foreach($menus as $hijo)
+                                    @if($hijo->padre == $menu->id)
+                                        <li class="sidebar-item">
+                                            <a href='{{ url("$hijo->direccion") }}' class="sidebar-link">
+                                                <i data-feather="{{ $hijo->icono }}" class="feather-icon"></i><span class="hide-menu"> {{ $hijo->nombre }} </span>
+                                            </a>
+                                        </li>
+                                    @endif
+                                @endforeach
+                                </ul>
+                            </li>
+                        @elseif(is_null($menu->padre))
+                            <li class="sidebar-item">
+                                <a class="sidebar-link" href='{{ url("$menu->direccion") }}' aria-expanded="false">
+                                    <i data-feather="{{ $menu->icono }}" class="feather-icon"></i><span class="hide-menu"> {{ $menu->nombre }} </span>
+                                </a>
+                            </li>
                         @endif
-                    @endforeach
-                    @if($padre == 'si')
-                        <li class="sidebar-item">
-                            <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
-                                <i data-feather="{{ $menu->icono }}" class="feather-icon"></i><span class="hide-menu"> {{ $menu->nombre }} </span>
-                            </a>
-                            <ul aria-expanded="false" class="collapse  first-level">
-                            @foreach($menus as $hijo)
-                                @if($hijo->padre == $menu->id)
-                                    <li class="sidebar-item">
-                                        <a href='{{ url("$hijo->direccion") }}' class="sidebar-link">
-                                            <i data-feather="{{ $hijo->icono }}" class="feather-icon"></i><span class="hide-menu"> {{ $hijo->nombre }} </span>
-                                        </a>
-                                    </li>
-                                @endif
-                            @endforeach
-                            </ul>
-                        </li>
-                    @elseif(is_null($menu->padre))
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href='{{ url("$menu->direccion") }}' aria-expanded="false">
-                                <i data-feather="{{ $menu->icono }}" class="feather-icon"></i><span class="hide-menu"> {{ $menu->nombre }} </span>
-                            </a>
-                        </li>
                     @endif
                 @endforeach
                 <li class="nav-devider"></li>
