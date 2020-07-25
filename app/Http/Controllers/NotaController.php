@@ -105,17 +105,53 @@ class NotaController extends Controller
                                     ->where('paralelo', $nota->paralelo)
                                     ->where('anio_vigente', $nota->anio_vigente)
                                     ->first();      // Encuentra la NotaPropuesta correspondiente a la Nota
-        if($ponderacion->asignatura->ciclo == 'Semestral')
-        {
-            
-        }
 
-        
         // Validacion para asistencia                                    
         if($request->asistencia <= $ponderacion->nota_asistencia && $request->asistencia >= 0)
         {
-            $nota->nota_asistencia = $request->asistencia;    
-        }else
+            // Aqui preguntar si es semestral o anual
+            if($ponderacion->asignatura->ciclo == 'Semestral')                      // Es semestral, se registra en su 2 bimestres
+            {
+                // Si es semestral, ver a que bimestre hace referencia la nota (1ro -> 3ro y 2do -> 4to)
+                if($nota->trimestre == 1)
+                {
+                    // Si es 1er bimestre, buscar el registro que corresponde al 3er bimestre y llenar en ambos
+                    // Buscamos ese registro
+                    $segundoregistro = Nota::where('asignatura_id', $nota->asignatura_id)
+                                            ->where('turno_id', $nota->turno_id)
+                                            ->where('user_id', $nota->user_id)
+                                            ->where('persona_id', $nota->persona_id)
+                                            ->where('paralelo', $nota->paralelo)
+                                            ->where('anio_vigente', $nota->anio_vigente)
+                                            ->where('trimestre', 3)
+                                            ->first();
+                    // Colocamos la nota
+                    $segundoregistro->nota_asistencia = $request->asistencia;       // 3er Bimestre
+                }
+                if($nota->trimestre == 2)
+                {
+                    // Si es 2do bimestre, buscar el registro que corresponde al 4to bimestre y llenar en ambos
+                    $segundoregistro = Nota::where('asignatura_id', $nota->asignatura_id)
+                                            ->where('turno_id', $nota->turno_id)
+                                            ->where('user_id', $nota->user_id)
+                                            ->where('persona_id', $nota->persona_id)
+                                            ->where('paralelo', $nota->paralelo)
+                                            ->where('anio_vigente', $nota->anio_vigente)
+                                            ->where('trimestre', 4)
+                                            ->first();
+                    // Colocamos la nota
+                    $segundoregistro->nota_asistencia = $request->asistencia;       // 4to Bimestre
+                }
+                $segundoregistro->fecha_registro = date('Y-m-d H:i:s');
+                $segundoregistro->save();                                           // Guardamos registro
+                $nota->nota_asistencia = $request->asistencia;                      // 1er o 2do Bimestre
+            }
+            else                                                                    // Es anual, se registra en su bimestre
+            {
+                $nota->nota_asistencia = $request->asistencia;                      // Nota del bimestre     
+            }
+        }
+        else
         {
             return response()->json([
                 //0
@@ -128,8 +164,50 @@ class NotaController extends Controller
         // Validacion para practicas
         if($request->practicas <= $ponderacion->nota_practicas && $request->practicas >= 0)
         {
-            $nota->nota_practicas = $request->practicas;    
-        }else
+            // Aqui preguntar si es semestral o anual
+            if($ponderacion->asignatura->ciclo == 'Semestral')                      // Es semestral, se registra en su 2 bimestres
+            {
+                // Si es semestral, ver a que bimestre hace referencia la nota (1ro -> 3ro y 2do -> 4to)
+                if($nota->trimestre == 1)
+                {
+                    // Si es 1er bimestre, buscar el registro que corresponde al 3er bimestre y llenar en ambos
+                    // Buscamos ese registro
+                    $segundoregistro = Nota::where('asignatura_id', $nota->asignatura_id)
+                                            ->where('turno_id', $nota->turno_id)
+                                            ->where('user_id', $nota->user_id)
+                                            ->where('persona_id', $nota->persona_id)
+                                            ->where('paralelo', $nota->paralelo)
+                                            ->where('anio_vigente', $nota->anio_vigente)
+                                            ->where('trimestre', 3)
+                                            ->first();
+                    // Colocamos la nota
+                    $segundoregistro->nota_practicas = $request->practicas;       // 3er Bimestre
+                }
+                if($nota->trimestre == 2)
+                {
+                    // Si es 2do bimestre, buscar el registro que corresponde al 4to bimestre y llenar en ambos
+                    $segundoregistro = Nota::where('asignatura_id', $nota->asignatura_id)
+                                            ->where('turno_id', $nota->turno_id)
+                                            ->where('user_id', $nota->user_id)
+                                            ->where('persona_id', $nota->persona_id)
+                                            ->where('paralelo', $nota->paralelo)
+                                            ->where('anio_vigente', $nota->anio_vigente)
+                                            ->where('trimestre', 4)
+                                            ->first();
+                    // Colocamos la nota
+                    $segundoregistro->nota_practicas = $request->practicas;       // 4to Bimestre
+                }
+                $segundoregistro->fecha_registro = date('Y-m-d H:i:s');
+                $segundoregistro->save();                                           // Guardamos registro
+                $nota->nota_practicas = $request->practicas;                      // 1er o 2do Bimestre
+            }
+            else                                                                    // Es anual, se registra en su bimestre
+            {
+                $nota->nota_practicas = $request->practicas;                        // Nota del bimestre     
+            }
+            
+        }
+        else
         {
             return response()->json([
                 //0
@@ -142,8 +220,49 @@ class NotaController extends Controller
         // Validacion para puntos ganados(extras)
         if($request->puntos <= $ponderacion->nota_puntos_ganados && $request->puntos >= 0)
         {
-            $nota->nota_puntos_ganados = $request->puntos;    
-        }else
+            // Aqui preguntar si es semestral o anual
+            if($ponderacion->asignatura->ciclo == 'Semestral')                      // Es semestral, se registra en su 2 bimestres
+            {
+                // Si es semestral, ver a que bimestre hace referencia la nota (1ro -> 3ro y 2do -> 4to)
+                if($nota->trimestre == 1)
+                {
+                    // Si es 1er bimestre, buscar el registro que corresponde al 3er bimestre y llenar en ambos
+                    // Buscamos ese registro
+                    $segundoregistro = Nota::where('asignatura_id', $nota->asignatura_id)
+                                            ->where('turno_id', $nota->turno_id)
+                                            ->where('user_id', $nota->user_id)
+                                            ->where('persona_id', $nota->persona_id)
+                                            ->where('paralelo', $nota->paralelo)
+                                            ->where('anio_vigente', $nota->anio_vigente)
+                                            ->where('trimestre', 3)
+                                            ->first();
+                    // Colocamos la nota
+                    $segundoregistro->nota_puntos_ganados = $request->puntos;       // 3er Bimestre
+                }
+                if($nota->trimestre == 2)
+                {
+                    // Si es 2do bimestre, buscar el registro que corresponde al 4to bimestre y llenar en ambos
+                    $segundoregistro = Nota::where('asignatura_id', $nota->asignatura_id)
+                                            ->where('turno_id', $nota->turno_id)
+                                            ->where('user_id', $nota->user_id)
+                                            ->where('persona_id', $nota->persona_id)
+                                            ->where('paralelo', $nota->paralelo)
+                                            ->where('anio_vigente', $nota->anio_vigente)
+                                            ->where('trimestre', 4)
+                                            ->first();
+                    // Colocamos la nota
+                    $segundoregistro->nota_puntos_ganados = $request->puntos;       // 4to Bimestre
+                }
+                $segundoregistro->fecha_registro = date('Y-m-d H:i:s');
+                $segundoregistro->save();                                           // Guardamos registro
+                $nota->nota_puntos_ganados = $request->puntos;                      // 1er o 2do Bimestre
+            }
+            else                                                                    // Es anual, se registra en su bimestre
+            {
+                $nota->nota_puntos_ganados = $request->puntos;                      // Nota del bimestre     
+            }
+        }
+        else
         {
             return response()->json([
                 //0
@@ -156,8 +275,49 @@ class NotaController extends Controller
         // Validacion para primer parcial
         if($request->parcial <= $ponderacion->nota_primer_parcial && $request->nota_primer_parcial >= 0)
         {
-            $nota->nota_primer_parcial = $request->parcial;    
-        }else
+            // Aqui preguntar si es semestral o anual
+            if($ponderacion->asignatura->ciclo == 'Semestral')                      // Es semestral, se registra en su 2 bimestres
+            {
+                // Si es semestral, ver a que bimestre hace referencia la nota (1ro -> 3ro y 2do -> 4to)
+                if($nota->trimestre == 1)
+                {
+                    // Si es 1er bimestre, buscar el registro que corresponde al 3er bimestre y llenar en ambos
+                    // Buscamos ese registro
+                    $segundoregistro = Nota::where('asignatura_id', $nota->asignatura_id)
+                                            ->where('turno_id', $nota->turno_id)
+                                            ->where('user_id', $nota->user_id)
+                                            ->where('persona_id', $nota->persona_id)
+                                            ->where('paralelo', $nota->paralelo)
+                                            ->where('anio_vigente', $nota->anio_vigente)
+                                            ->where('trimestre', 3)
+                                            ->first();
+                    // Colocamos la nota
+                    $segundoregistro->nota_primer_parcial = $request->parcial;       // 3er Bimestre
+                }
+                if($nota->trimestre == 2)
+                {
+                    // Si es 2do bimestre, buscar el registro que corresponde al 4to bimestre y llenar en ambos
+                    $segundoregistro = Nota::where('asignatura_id', $nota->asignatura_id)
+                                            ->where('turno_id', $nota->turno_id)
+                                            ->where('user_id', $nota->user_id)
+                                            ->where('persona_id', $nota->persona_id)
+                                            ->where('paralelo', $nota->paralelo)
+                                            ->where('anio_vigente', $nota->anio_vigente)
+                                            ->where('trimestre', 4)
+                                            ->first();
+                    // Colocamos la nota
+                    $segundoregistro->nota_primer_parcial = $request->parcial;      // 4to Bimestre
+                }
+                $segundoregistro->fecha_registro = date('Y-m-d H:i:s');
+                $segundoregistro->save();                                           // Guardamos registro
+                $nota->nota_primer_parcial = $request->parcial;                     // 1er o 2do Bimestre
+            }
+            else                                                                    // Es anual, se registra en su bimestre
+            {
+                $nota->nota_primer_parcial = $request->parcial;                     // Nota del bimestre     
+            }
+        }
+        else
         {
             return response()->json([
                 //0
@@ -170,8 +330,49 @@ class NotaController extends Controller
         // Validacion para examen final
         if($request->final <= $ponderacion->nota_examen_final && $request->final >= 0)
         {
-            $nota->nota_examen_final = $request->final;    
-        }else
+            // Aqui preguntar si es semestral o anual
+            if($ponderacion->asignatura->ciclo == 'Semestral')                      // Es semestral, se registra en su 2 bimestres
+            {
+                // Si es semestral, ver a que bimestre hace referencia la nota (1ro -> 3ro y 2do -> 4to)
+                if($nota->trimestre == 1)
+                {
+                    // Si es 1er bimestre, buscar el registro que corresponde al 3er bimestre y llenar en ambos
+                    // Buscamos ese registro
+                    $segundoregistro = Nota::where('asignatura_id', $nota->asignatura_id)
+                                            ->where('turno_id', $nota->turno_id)
+                                            ->where('user_id', $nota->user_id)
+                                            ->where('persona_id', $nota->persona_id)
+                                            ->where('paralelo', $nota->paralelo)
+                                            ->where('anio_vigente', $nota->anio_vigente)
+                                            ->where('trimestre', 3)
+                                            ->first();
+                    // Colocamos la nota
+                    $segundoregistro->nota_examen_final = $request->final;          // 3er Bimestre
+                }
+                if($nota->trimestre == 2)
+                {
+                    // Si es 2do bimestre, buscar el registro que corresponde al 4to bimestre y llenar en ambos
+                    $segundoregistro = Nota::where('asignatura_id', $nota->asignatura_id)
+                                            ->where('turno_id', $nota->turno_id)
+                                            ->where('user_id', $nota->user_id)
+                                            ->where('persona_id', $nota->persona_id)
+                                            ->where('paralelo', $nota->paralelo)
+                                            ->where('anio_vigente', $nota->anio_vigente)
+                                            ->where('trimestre', 4)
+                                            ->first();
+                    // Colocamos la nota
+                    $segundoregistro->nota_examen_final = $request->final;          // 4to Bimestre
+                }
+                $segundoregistro->fecha_registro = date('Y-m-d H:i:s');
+                $segundoregistro->save();                                           // Guardamos registro
+                $nota->nota_examen_final = $request->final;                         // 1er o 2do Bimestre
+            }
+            else                                                                    // Es anual, se registra en su bimestre
+            {
+                $nota->nota_examen_final = $request->final;                         // Nota del bimestre     
+            }
+        }
+        else
         {
             return response()->json([
                 //0
@@ -184,7 +385,48 @@ class NotaController extends Controller
         // Si $val=1(si no hubo problemas con las notas), asignamos a la nota_total el valor acumulado por los inputs en interfaz
         if($val == 1)
         {
-            $nota->nota_total = $request->resultado;
+            // Aqui tambien preguntamos si es semestral o anual, para llenar 1 o 2 registros
+            // Aqui preguntar si es semestral o anual
+            if($ponderacion->asignatura->ciclo == 'Semestral')                      // Es semestral, se registra en su 2 bimestres
+            {
+                // Si es semestral, ver a que bimestre hace referencia la nota (1ro -> 3ro y 2do -> 4to)
+                if($nota->trimestre == 1)
+                {
+                    // Si es 1er bimestre, buscar el registro que corresponde al 3er bimestre y llenar en ambos
+                    // Buscamos ese registro
+                    $segundoregistro = Nota::where('asignatura_id', $nota->asignatura_id)
+                                            ->where('turno_id', $nota->turno_id)
+                                            ->where('user_id', $nota->user_id)
+                                            ->where('persona_id', $nota->persona_id)
+                                            ->where('paralelo', $nota->paralelo)
+                                            ->where('anio_vigente', $nota->anio_vigente)
+                                            ->where('trimestre', 3)
+                                            ->first();
+                    // Colocamos la nota
+                    $segundoregistro->nota_total = $request->resultado;       // 3er Bimestre
+                }
+                if($nota->trimestre == 2)
+                {
+                    // Si es 2do bimestre, buscar el registro que corresponde al 4to bimestre y llenar en ambos
+                    $segundoregistro = Nota::where('asignatura_id', $nota->asignatura_id)
+                                            ->where('turno_id', $nota->turno_id)
+                                            ->where('user_id', $nota->user_id)
+                                            ->where('persona_id', $nota->persona_id)
+                                            ->where('paralelo', $nota->paralelo)
+                                            ->where('anio_vigente', $nota->anio_vigente)
+                                            ->where('trimestre', 4)
+                                            ->first();
+                    // Colocamos la nota
+                    $segundoregistro->nota_total = $request->resultado;       // 4to Bimestre
+                }
+                $segundoregistro->fecha_registro = date('Y-m-d H:i:s');
+                $segundoregistro->save();                                           // Guardamos registro
+                $nota->nota_total = $request->resultado;                      // 1er o 2do Bimestre
+            }
+            else                                                                    // Es anual, se registra en su bimestre
+            {
+                $nota->nota_total = $request->resultado;                      // Nota del bimestre     
+            }
         }
         $nota->fecha_registro = date('Y-m-d H:i:s');
         $nota->save();                  // Guardamos en la tabla notas el registro correspondiente al bimestre
@@ -193,11 +435,11 @@ class NotaController extends Controller
         if($val == 1)
         {
             $inscripcion = Inscripcion::where('asignatura_id', $nota->asignatura_id)
-                        ->where('turno_id', $nota->turno_id)
-                        ->where('persona_id', $nota->persona_id)
-                        ->where('paralelo', $nota->paralelo) 
-                        ->where('anio_vigente', $nota->anio_vigente)
-                        ->firstOrFail();
+                                    ->where('turno_id', $nota->turno_id)
+                                    ->where('persona_id', $nota->persona_id)
+                                    ->where('paralelo', $nota->paralelo) 
+                                    ->where('anio_vigente', $nota->anio_vigente)
+                                    ->firstOrFail();
 
             // ESTA PARTE DEBE SER EVALUADA
             if($nota->segundo_turno && $nota->segundo_turno >= 61)
@@ -226,7 +468,8 @@ class NotaController extends Controller
             }
             // ESTA PARTE DEBE SER EVALUADA
 
-            if($nota->nota_total >= 61){
+            if($nota->nota_total >= 61)
+            {
                 //Actualización en Kardex
                 $kardex = Kardex::where('persona_id', $nota->persona_id)
                         ->where('asignatura_id', $nota->asignatura_id)
