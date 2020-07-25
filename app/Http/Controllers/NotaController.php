@@ -27,7 +27,6 @@ class NotaController extends Controller
     {
         $asignaturas = NotasPropuesta::where('user_id', Auth::user()->id)
                                     ->where('anio_vigente', date('Y'))
-                                    ->where('borrado', NULL)
                                     ->get();
         return view('nota.listado')->with(compact('asignaturas'));
     }
@@ -41,7 +40,6 @@ class NotaController extends Controller
                                 ->where('turno_id', $asignatura->turno_id)
                                 ->where('paralelo', $asignatura->paralelo)
                                 ->where('anio_vigente', $asignatura->anio_vigente)
-                                ->whereNull('borrado')
                                 ->get();
         //Tomamos todas las notas que coincidan con estos valores y las devolveremos a la vista
         $notas = Nota::where('asignatura_id', $asignatura->asignatura_id)
@@ -49,7 +47,6 @@ class NotaController extends Controller
                     //->where('user_id', $asignatura->user_id)
                     ->where('paralelo', $asignatura->paralelo)
                     ->where('anio_vigente', $asignatura->anio_vigente)
-                    ->whereNull('borrado')
                     ->get();
         return view('nota.detalle')->with(compact('asignatura', 'inscritos', 'notas'));
     }
@@ -61,14 +58,12 @@ class NotaController extends Controller
                                     ->where('user_id', Auth::user()->id)
                                     ->where('paralelo', $request->paralelo)
                                     ->where('anio_vigente', $request->anio_vigente)
-                                    ->whereNull('borrado')
                                     ->first();
         $notas = Nota::where('asignatura_id', $request->asignatura_id)
                     ->where('turno_id', $request->turno_id)
                     ->where('persona_id', $request->persona_id)
                     ->where('paralelo', $request->paralelo)
                     ->where('anio_vigente', $request->anio_vigente)
-                    ->whereNull('borrado')
                     ->get();
         if($asignatura->asignatura->ciclo == 'Semestral')
         {
@@ -96,7 +91,6 @@ class NotaController extends Controller
                     ->where('paralelo', $asignatura->paralelo)
                     ->where('anio_vigente', $asignatura->anio_vigente)
                     ->whereBetween('nota_total', [30,60])
-                    ->where('borrado', NULL)
                     ->get();
         return view('nota.segundoTurno')->with(compact('asignatura', 'segundoTurno'));
     }
@@ -110,7 +104,6 @@ class NotaController extends Controller
                                     ->where('user_id', $nota->user_id)
                                     ->where('paralelo', $nota->paralelo)
                                     ->where('anio_vigente', $nota->anio_vigente)
-                                    ->where('borrado', NULL)
                                     ->first();      // Encuentra la NotaPropuesta correspondiente a la Nota
         if($ponderacion->asignatura->ciclo == 'Semestral')
         {
@@ -204,7 +197,6 @@ class NotaController extends Controller
                         ->where('persona_id', $nota->persona_id)
                         ->where('paralelo', $nota->paralelo) 
                         ->where('anio_vigente', $nota->anio_vigente)
-                        ->where('borrado', NULL)
                         ->firstOrFail();
 
             // ESTA PARTE DEBE SER EVALUADA
@@ -222,7 +214,6 @@ class NotaController extends Controller
                                     ->where('turno_id', $inscripcion->turno_id)
                                     ->where('paralelo', $inscripcion->paralelo)
                                     ->where('anio_vigente', $inscripcion->anio_vigente)
-                                    ->where('borrado', NULL)
                                     ->get();        // Encontraremos los 4 registros correspondientes a esa asignatura
                 $suma=0;
                 $cantidad=4;
@@ -239,7 +230,6 @@ class NotaController extends Controller
                 //Actualización en Kardex
                 $kardex = Kardex::where('persona_id', $nota->persona_id)
                         ->where('asignatura_id', $nota->asignatura_id)
-                        ->where('borrado', NULL)
                         ->firstOrFail();
                 $kardex->aprobado = 'Si';
                 $kardex->anio_aprobado = date('Y');
@@ -264,7 +254,6 @@ class NotaController extends Controller
             //             ->where('turno_id', $request->turno_id)
             //             ->where('paralelo', $request->paralelo)
             //             ->where('anio_vigente', $request->anio_vigente)
-            //             ->whereNull('borrado')
             //             ->get();
             // Sumar sus notas totales en un registro   REVISAR
             $notas = Nota::groupBy('persona_id')
@@ -273,7 +262,6 @@ class NotaController extends Controller
                         ->where('turno_id', $request->turno_id)
                         ->where('paralelo', $request->paralelo)
                         ->where('anio_vigente', $request->anio_vigente)
-                        ->whereNull('borrado')
                         ->get();
             //dd($notas);
             // Por cada registro guardar en inscripcion
@@ -283,7 +271,6 @@ class NotaController extends Controller
                                         ->where('persona_id', $nota->persona_id)
                                         ->where('paralelo', $request->paralelo)
                                         ->where('anio_vigente', $request->anio_vigente)
-                                        ->whereNull('borrado')
                                         ->first();
                 $inscripcion->nota = round($nota->total/4);
                 $inscripcion->save();
@@ -333,7 +320,6 @@ class NotaController extends Controller
                                     ->where('persona_id', $nota->persona_id)
                                     ->where('paralelo', $nota->paralelo) 
                                     ->where('anio_vigente', $nota->anio_vigente)
-                                    ->where('borrado', NULL)
                                     ->firstOrFail();
             $inscripcion->nota = $nota->segundo_turno;
             $inscripcion->save();
