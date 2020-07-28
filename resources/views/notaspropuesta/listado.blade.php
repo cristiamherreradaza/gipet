@@ -47,19 +47,28 @@
                             <td><input size="10" min="0" max="100" pattern="^[0-9]+" onchange="calcula( {{ $asignatura->id }} )" data-practicas="{{ $asignatura->nota_practicas }}" type="number" id="practicas-{{ $asignatura->id }}" name="practicas-{{ $asignatura->id }}" value="{{ $asignatura->nota_practicas }}" step="any"></td>
                             <td><input size="10" min="0" max="100" pattern="^[0-9]+" onchange="calcula( {{ $asignatura->id }} )" data-parcial="{{ $asignatura->nota_primer_parcial }}" type="number" id="parcial-{{ $asignatura->id }}" name="parcial-{{ $asignatura->id }}" value="{{ $asignatura->nota_primer_parcial }}" step="any"></td>
                             <td><input size="10" min="0" max="100" pattern="^[0-9]+" onchange="calcula( {{ $asignatura->id }} )" data-final="{{ $asignatura->nota_examen_final }}" type="number" id="final-{{ $asignatura->id }}" name="final-{{ $asignatura->id }}" value="{{ $asignatura->nota_examen_final }}" step="any"></td>
-                            <td><input size="10" min="0" max="100" type="number" id="totalsuma-{{ $asignatura->id }}" name="totalsuma-{{ $asignatura->id }}" value="{{ ($asignatura->nota_asistencia+$asignatura->nota_practicas+$asignatura->nota_puntos_ganados+$asignatura->nota_primer_parcial+$asignatura->nota_examen_final) }}" readonly></td>
+                            <td><input size="10" min="0" max="100" type="number" id="totalsuma-{{ $asignatura->id }}" name="totalsuma-{{ $asignatura->id }}" value="{{ ($asignatura->nota_asistencia+$asignatura->nota_practicas+$asignatura->nota_primer_parcial+$asignatura->nota_examen_final) }}" readonly></td>
                             <td><input size="10" min="0" max="100" pattern="^[0-9]+" onchange="calcula( {{ $asignatura->id }} )" data-puntos="{{ $asignatura->nota_puntos_ganados }}" type="number" id="puntos-{{ $asignatura->id }}" name="puntos-{{ $asignatura->id }}" value="{{ $asignatura->nota_puntos_ganados }}" step="any"></td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-        <form method="post" id="upload_form" enctype="multipart/form-data" class="upload_form float-left">
-            @csrf
-            <input type="file" name="select_file" id="select_file">
-            <input type="submit" name="upload" id="upload" class="btn btn-rounded btn-success float-lg-right" value="Importar">
-        </form>
-        <a class="btn btn-rounded btn-success float-lg-left" href="{{ url('notaspropuesta/exportarexcel/'.$usuario->id) }}">Exportar</a> 
+        <div class="col-lg-8">
+            <form method="post" id="upload_form" enctype="multipart/form-data" class="upload_form mt-4">
+                @csrf
+                <div class="input-group">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" name="select_file" id="select_file">
+                        <label class="custom-file-label" for="inputGroupFile04">Elegir archivo</label>
+                    </div>
+                    <div class="input-group-append">
+                        <input type="submit" name="upload" id="upload" class="btn btn-success" value="Importar" style="width: 200px;">
+                        <a class="btn btn-block btn-success" href="{{ url('notaspropuesta/exportarexcel/'.$usuario->id) }}" style="width: 200px;">Exportar Formato</a>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 @stop
@@ -142,8 +151,6 @@
             $('#totalsuma-'+id).css("border-color", "#39C449");
             //$('#totalsuma-'+id).css("background-color", "#8CFA84");
         }
-
-        
     }
 </script>
 

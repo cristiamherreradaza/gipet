@@ -31,12 +31,28 @@ class NotasExport implements FromCollection, WithMapping, WithHeadings, ShouldAu
     public function collection()
     {
         $notapropuesta = NotasPropuesta::find($this->id);
-        return Nota::where('asignatura_id', $notapropuesta->asignatura_id)
-                    ->where('turno_id', $notapropuesta->turno_id)
-                    ->where('user_id', $notapropuesta->user_id)
-                    ->where('paralelo', $notapropuesta->paralelo)
-                    ->where('anio_vigente', $notapropuesta->anio_vigente)
-                    ->get();                
+        if($notapropuesta->asignatura->ciclo == 'Semestral')
+        {
+            return Nota::where('asignatura_id', $notapropuesta->asignatura_id)
+                        ->where('turno_id', $notapropuesta->turno_id)
+                        ->where('user_id', $notapropuesta->user_id)
+                        ->where('paralelo', $notapropuesta->paralelo)
+                        ->where('anio_vigente', $notapropuesta->anio_vigente)
+                        ->where(function ($query) {
+                            $query->where('trimestre', 1)
+                                ->orWhere('trimestre', 2);
+                        })
+                        ->get();
+        }
+        else
+        {
+            return Nota::where('asignatura_id', $notapropuesta->asignatura_id)
+                        ->where('turno_id', $notapropuesta->turno_id)
+                        ->where('user_id', $notapropuesta->user_id)
+                        ->where('paralelo', $notapropuesta->paralelo)
+                        ->where('anio_vigente', $notapropuesta->anio_vigente)
+                        ->get();
+        }
     }
 
     public function map($nota): array

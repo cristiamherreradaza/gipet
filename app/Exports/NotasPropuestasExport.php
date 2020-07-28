@@ -42,9 +42,9 @@ class NotasPropuestasExport implements FromCollection, WithMapping, WithHeadings
             $notapropuesta->asignatura->nombre_asignatura,
             $notapropuesta->nota_asistencia,
             $notapropuesta->nota_practicas,
-            $notapropuesta->nota_puntos_ganados,
             $notapropuesta->nota_primer_parcial,
             $notapropuesta->nota_examen_final,
+            $notapropuesta->nota_puntos_ganados,
         ];
     }
 
@@ -56,9 +56,9 @@ class NotasPropuestasExport implements FromCollection, WithMapping, WithHeadings
             'Nombre',
             'Asistencia',
             'Practicas',
-            'Puntos Ganados',
             'Primer Parcial',
             'Examen Final',
+            'Extras',
         ];
     }
 

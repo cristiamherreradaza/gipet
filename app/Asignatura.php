@@ -21,6 +21,7 @@ class Asignatura extends Model
         'periodo',
         'anio_vigente',
         'orden_impresion',
+        'ciclo',
         'estado',
         'deleted_at',
     ];
