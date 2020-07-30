@@ -195,3 +195,7 @@ Route::get('Kardex/ajax_datos_asig_tomar', 'KardexController@ajax_datos_asig_tom
 Route::post('Kardex/guarda_reinscripcion', 'KardexController@guarda_reinscripcion');
 
 Route::get('Kardex/ajax_datos_notas_carreras', 'KardexController@ajax_datos_notas_carreras');
+
+//TRANSACCIONES
+Route::get('Transaccion/pagos', 'TransaccionController@pagos');
+Route::get('Transaccion/verifica_ci', 'TransaccionController@verifica_ci');

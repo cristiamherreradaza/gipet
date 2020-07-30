@@ -49,12 +49,11 @@
                                                     @endphp
                                                         <option value="{{ $tur->id }}">{{ $tur->descripcion }}</option>
                                                     @php
-                                                        } else {
-                                                    @endphp
-                                                        <option value="{{ $tur->id }}">{{ $tur->descripcion }}</option>
-                                                    @php
                                                         }
                                                     @endphp
+                                                    @endforeach
+                                                    @foreach($turnos as $tur)
+                                                        <option value="{{ $tur->id }}">{{ $tur->descripcion }}</option>
                                                     @endforeach
                                                 </select>
                                             </td>

@@ -395,6 +395,8 @@ class KardexController extends Controller
 
      public function guarda_reinscripcion(Request $request)
     {
+        $datos = $request->all();
+        dd($datos);
         $persona = Persona::find($request->persona_id);
         $carrera = new CarreraPersona();
             $carrera->carrera_id   = $request->carrera_id;
