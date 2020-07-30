@@ -19,14 +19,14 @@ class NotasPropuestasImport implements ToModel
             // Buscamos ese id en notas_propuestas
             $notapropuesta = NotasPropuesta::find($row[0]);
             // Si el valor que se encuentra en la BBDD es igual al valor del excel (codigo_asignatura)
-            if($notapropuesta->asignatura->codigo_asignatura == $row[1]){
+            if($notapropuesta->asignatura->codigo_asignatura == $row[1] && $notapropuesta->asignatura->nombre_asignatura == $row[2]){
                 // Si la suma total de los valores es igual a 100
-                if($row[3]+$row[4]+$row[5]+$row[6]+$row[7] == 100){
+                if($row[3]+$row[4]+$row[5]+$row[6] == 100){
                     $notapropuesta->nota_asistencia = $row[3];
                     $notapropuesta->nota_practicas = $row[4];
-                    $notapropuesta->nota_puntos_ganados = $row[5];
-                    $notapropuesta->nota_primer_parcial = $row[6];
-                    $notapropuesta->nota_examen_final = $row[7];
+                    $notapropuesta->nota_primer_parcial = $row[5];
+                    $notapropuesta->nota_examen_final = $row[6];
+                    $notapropuesta->nota_puntos_ganados = $row[7];
                     $notapropuesta->fecha = date('Y-m-d H:i:s');
                     $notapropuesta->save();
                 }
