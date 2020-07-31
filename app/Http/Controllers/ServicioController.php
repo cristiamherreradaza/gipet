@@ -9,8 +9,7 @@ class ServicioController extends Controller
 {
     public function listado()
     {
-        $servicios = Servicio::whereNull('borrado')
-                        ->get();
+        $servicios = Servicio::get();
         return view('servicio.listado')->with(compact('servicios'));
     }
 

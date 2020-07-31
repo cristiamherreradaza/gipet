@@ -33,6 +33,7 @@
                         <th>3er Bim</th>
                         <th>4to Bim</th>
                         <th>Promedio</th>
+                        <th>Segundo Turno</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -44,6 +45,8 @@
                             @php
                                 $suma = 0;
                                 $cantidad = 0;
+                                $contador_registros = 0;
+                                $segundo = 0;
                             @endphp
                             @foreach($notas as $nota)
                                 @if($nota->persona_id == $inscrito->persona_id)
@@ -51,14 +54,48 @@
                                         $suma = $suma + $nota->nota_total;
                                         $cantidad = $cantidad + 1;
                                     @endphp
-                                    <td>{{ round($nota->nota_total) }}</td>                                    
+                                    <td>{{ round($nota->nota_total) }}</td>
+                                    @php
+                                        if($nota->registrado == 'Si')
+                                        {
+                                            $contador_registros = $contador_registros + 1;
+                                        }
+                                    @endphp
                                 @endif
                             @endforeach
                             @if($cantidad == 0)
                                 $cantidad=1
                             @endif
                             <td>{{ round($suma/$cantidad) }}</td>
-                            <td><button onclick="registra_notas('{{ $inscrito->id }}', '{{ $inscrito->asignatura_id }}', '{{ $inscrito->turno_id }}', '{{ $inscrito->persona_id }}', '{{ $inscrito->paralelo }}', '{{ $inscrito->anio_vigente }}')" class="btn btn-info" title="Registrar notas"><i class="fas fa-plus"></i></button></td>
+                            @foreach($notas as $nota)
+                                @if($nota->persona_id == $inscrito->persona_id)
+                                    @if($nota->segundo_turno == 61)
+                                        @php
+                                            $segundo = 61;
+                                        @endphp
+                                    @endif
+                                @endif
+                            @endforeach
+                            <td>{{ $segundo }}</td>
+                            <td>
+                                <button onclick="registra_notas('{{ $inscrito->id }}', '{{ $inscrito->asignatura_id }}', '{{ $inscrito->turno_id }}', '{{ $inscrito->persona_id }}', '{{ $inscrito->paralelo }}', '{{ $inscrito->anio_vigente }}')" class="btn btn-info" title="Registrar notas"><i class="fas fa-plus"></i></button>
+                                @php
+                                    $pago_segundo_turno = App\CobrosTemporada::where('persona_id', $inscrito->persona_id)
+                                                                ->where('carrera_id', $inscrito->carrera_id)
+                                                                ->where('asignatura_id', $inscrito->asignatura_id)
+                                                                ->where('servicio_id', 8)
+                                                                ->first();
+                                @endphp
+                                @if($inscrito->nota < 61 && $contador_registros == 4)
+                                    @if($pago_segundo_turno)
+                                        <button onclick="segundo_turno('{{ $inscrito->id }}')" class="btn btn-danger" title="Segundo turno"><i class="fas fa-chart-line"></i></button>
+                                    @else
+                                        <button class="btn btn-danger" title="Segundo turno" disabled><i class="fas fa-chart-line"></i></button>
+                                    @endif
+                                    
+                                @endif
+                            </td>
+                            
                         </tr>
                     @endforeach
                 </tbody>
@@ -94,6 +131,38 @@
 </div>
 <!-- Fin modal notas estudiante -->
 
+<!-- inicio modal nuevo servicio -->
+<div id="segundo_turno" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">SEGUNDO TURNO</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <form action="{{ url('Nota/segundoTurnoActualizar') }}"  method="POST">
+                @csrf
+                <div class="modal-body">
+                    <input type="hidden" name="inscripcion_id" id="inscripcion_id" value="">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Nota</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="nota_segundo_turno" type="number" id="nota_segundo_turno" pattern="^[0-9]+" min="0" class="form-control" value="0" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="enviar_nota()">REGISTRAR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- fin modal nuevo servicio -->
 
 
 @endsection
@@ -147,6 +216,13 @@ $(document).ready(function() {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    function segundo_turno(inscripcion_id)
+    {
+        //$("#nota_segundo_turno").val(0);
+        $("#inscripcion_id").val(inscripcion_id);
+        $("#segundo_turno").modal('show');
+    }
 
     function registra_notas(inscripcion_id, asignatura_id, turno_id, persona_id, paralelo, anio_vigente)
     {           

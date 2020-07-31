@@ -142,12 +142,15 @@ class NotaController extends Controller
                     // Colocamos la nota
                     $segundoregistro->nota_asistencia = $request->asistencia;       // 4to Bimestre
                 }
+                $segundoregistro->registrado = 'Si';
                 $segundoregistro->fecha_registro = date('Y-m-d H:i:s');
                 $segundoregistro->save();                                           // Guardamos registro
+                $nota->registrado = 'Si';
                 $nota->nota_asistencia = $request->asistencia;                      // 1er o 2do Bimestre
             }
             else                                                                    // Es anual, se registra en su bimestre
             {
+                $nota->registrado = 'Si';
                 $nota->nota_asistencia = $request->asistencia;                      // Nota del bimestre     
             }
         }
@@ -197,12 +200,15 @@ class NotaController extends Controller
                     // Colocamos la nota
                     $segundoregistro->nota_practicas = $request->practicas;       // 4to Bimestre
                 }
+                $segundoregistro->registrado = 'Si';
                 $segundoregistro->fecha_registro = date('Y-m-d H:i:s');
                 $segundoregistro->save();                                           // Guardamos registro
+                $nota->registrado = 'Si';
                 $nota->nota_practicas = $request->practicas;                      // 1er o 2do Bimestre
             }
             else                                                                    // Es anual, se registra en su bimestre
             {
+                $nota->registrado = 'Si';
                 $nota->nota_practicas = $request->practicas;                        // Nota del bimestre     
             }
             
@@ -253,12 +259,15 @@ class NotaController extends Controller
                     // Colocamos la nota
                     $segundoregistro->nota_puntos_ganados = $request->puntos;       // 4to Bimestre
                 }
+                $segundoregistro->registrado = 'Si';
                 $segundoregistro->fecha_registro = date('Y-m-d H:i:s');
                 $segundoregistro->save();                                           // Guardamos registro
+                $nota->registrado = 'Si';
                 $nota->nota_puntos_ganados = $request->puntos;                      // 1er o 2do Bimestre
             }
             else                                                                    // Es anual, se registra en su bimestre
             {
+                $nota->registrado = 'Si';
                 $nota->nota_puntos_ganados = $request->puntos;                      // Nota del bimestre     
             }
         }
@@ -308,12 +317,15 @@ class NotaController extends Controller
                     // Colocamos la nota
                     $segundoregistro->nota_primer_parcial = $request->parcial;      // 4to Bimestre
                 }
+                $segundoregistro->registrado = 'Si';
                 $segundoregistro->fecha_registro = date('Y-m-d H:i:s');
                 $segundoregistro->save();                                           // Guardamos registro
                 $nota->nota_primer_parcial = $request->parcial;                     // 1er o 2do Bimestre
+                $nota->registrado = 'Si';
             }
             else                                                                    // Es anual, se registra en su bimestre
             {
+                $nota->registrado = 'Si';
                 $nota->nota_primer_parcial = $request->parcial;                     // Nota del bimestre     
             }
         }
@@ -363,12 +375,15 @@ class NotaController extends Controller
                     // Colocamos la nota
                     $segundoregistro->nota_examen_final = $request->final;          // 4to Bimestre
                 }
+                $segundoregistro->registrado = 'Si';
                 $segundoregistro->fecha_registro = date('Y-m-d H:i:s');
                 $segundoregistro->save();                                           // Guardamos registro
                 $nota->nota_examen_final = $request->final;                         // 1er o 2do Bimestre
+                $nota->registrado = 'Si';
             }
             else                                                                    // Es anual, se registra en su bimestre
             {
+                $nota->registrado = 'Si';
                 $nota->nota_examen_final = $request->final;                         // Nota del bimestre     
             }
         }
@@ -419,12 +434,15 @@ class NotaController extends Controller
                     // Colocamos la nota
                     $segundoregistro->nota_total = $request->resultado;       // 4to Bimestre
                 }
+                $segundoregistro->registrado = 'Si';
                 $segundoregistro->fecha_registro = date('Y-m-d H:i:s');
                 $segundoregistro->save();                                           // Guardamos registro
                 $nota->nota_total = $request->resultado;                      // 1er o 2do Bimestre
+                $nota->registrado = 'Si';
             }
             else                                                                    // Es anual, se registra en su bimestre
             {
+                $nota->registrado = 'Si';
                 $nota->nota_total = $request->resultado;                      // Nota del bimestre     
             }
         }
@@ -441,43 +459,22 @@ class NotaController extends Controller
                                     ->where('anio_vigente', $nota->anio_vigente)
                                     ->firstOrFail();
 
-            // ESTA PARTE DEBE SER EVALUADA
-            if($nota->segundo_turno && $nota->segundo_turno >= 61)
-            {
-                // si 2do turno esta definido y es mayor o igual a 61, entonces colocar en inscripciones la nota de 2do turno  
-                $inscripcion->nota = $nota->segundo_turno;
-                $inscripcion->save();
+            // Colocamos en inscripciones la nota de 2do turno
+            $puntuaciones = Nota::where('asignatura_id', $inscripcion->asignatura_id)
+                                ->where('persona_id', $inscripcion->persona_id)
+                                ->where('turno_id', $inscripcion->turno_id)
+                                ->where('paralelo', $inscripcion->paralelo)
+                                ->where('anio_vigente', $inscripcion->anio_vigente)
+                                ->get();        // Encontraremos los 4 registros correspondientes a esa asignatura
+            $suma=0;
+            $cantidad=4;
+            $habilitado='Si';
+            foreach($puntuaciones as $puntuacion){
+                $suma = $suma + $puntuacion->nota_total;
             }
-            else
-            {
-                // 2do turno no esta definido o no es mayor o igual a 61, entonces colocar en inscripciones el promedio total de las notas
-                $puntuaciones = Nota::where('asignatura_id', $inscripcion->asignatura_id)
-                                    ->where('persona_id', $inscripcion->persona_id)
-                                    ->where('turno_id', $inscripcion->turno_id)
-                                    ->where('paralelo', $inscripcion->paralelo)
-                                    ->where('anio_vigente', $inscripcion->anio_vigente)
-                                    ->get();        // Encontraremos los 4 registros correspondientes a esa asignatura
-                $suma=0;
-                $cantidad=4;
-                foreach($puntuaciones as $puntuacion){
-                    $suma = $suma + $puntuacion->nota_total;
-                }
-                $resultado = round($suma/$cantidad);
-                $inscripcion->nota = $resultado;
-                $inscripcion->save();
-            }
-            // ESTA PARTE DEBE SER EVALUADA
-
-            if($nota->nota_total >= 61)
-            {
-                //Actualización en Kardex
-                $kardex = Kardex::where('persona_id', $nota->persona_id)
-                        ->where('asignatura_id', $nota->asignatura_id)
-                        ->firstOrFail();
-                $kardex->aprobado = 'Si';
-                $kardex->anio_aprobado = date('Y');
-                $kardex->save();
-            }
+            $resultado = round($suma/$cantidad);
+            $inscripcion->nota = $resultado;
+            $inscripcion->save();
         }
     }
 
@@ -546,27 +543,52 @@ class NotaController extends Controller
 
     public function segundoTurnoActualizar(Request $request)
     {
-        $nota = Nota::find($request->id);
-        $nota->segundo_turno = $request->segundo_turno;
-        $nota->save();
-        if($nota->segundo_turno >= 61){
-            //Actualización en Kardex
-            $kardex = Kardex::where('persona_id', $nota->persona_id)
-                            ->where('asignatura_id', $nota->asignatura_id)
-                            ->firstOrFail();
-            $kardex->aprobado = 'Si';
-            $kardex->anio_aprobado = date('Y');
-            $kardex->save();
-            //Actualización en Inscripciones
-            $inscripcion = Inscripcion::where('asignatura_id', $nota->asignatura_id)
-                                    ->where('turno_id', $nota->turno_id)
-                                    ->where('persona_id', $nota->persona_id)
-                                    ->where('paralelo', $nota->paralelo) 
-                                    ->where('anio_vigente', $nota->anio_vigente)
-                                    ->firstOrFail();
-            $inscripcion->nota = $nota->segundo_turno;
+        //dd($request->inscripcion_id);
+        //llega el dato
+        // crear un registro en tabla segundo turno con los datos de inscripcion
+        // colocar 61 en las 4 notas del estudiante con los datos de inscripcion
+        // colocar en inscripcion el valor de 61 solo si aprobo el examen el alumno
+        
+        
+        if($request->nota_segundo_turno > 61)
+        {
+            $inscripcion = Inscripcion::find($request->inscripcion_id);
+            $notas = Nota::where('asignatura_id', $inscripcion->asignatura_id)
+                        ->where('persona_id', $inscripcion->persona_id)
+                        ->where('turno_id', $inscripcion->turno_id)
+                        ->where('paralelo', $inscripcion->paralelo)
+                        ->where('anio_vigente', $inscripcion->anio_vigente)
+                        ->get();
+            foreach($notas as $nota)
+            {
+                $nota->segundo_turno = 61;
+                $nota->save();
+            }
+            $inscripcion->nota = 61;
             $inscripcion->save();
         }
+        return redirect('nota/listado');
+        // $nota = Nota::find($request->id);
+        // $nota->segundo_turno = $request->segundo_turno;
+        // $nota->save();
+        // if($nota->segundo_turno >= 61){
+        //     //Actualización en Kardex
+        //     $kardex = Kardex::where('persona_id', $nota->persona_id)
+        //                     ->where('asignatura_id', $nota->asignatura_id)
+        //                     ->firstOrFail();
+        //     $kardex->aprobado = 'Si';
+        //     $kardex->anio_aprobado = date('Y');
+        //     $kardex->save();
+        //     //Actualización en Inscripciones
+        //     $inscripcion = Inscripcion::where('asignatura_id', $nota->asignatura_id)
+        //                             ->where('turno_id', $nota->turno_id)
+        //                             ->where('persona_id', $nota->persona_id)
+        //                             ->where('paralelo', $nota->paralelo) 
+        //                             ->where('anio_vigente', $nota->anio_vigente)
+        //                             ->firstOrFail();
+        //     $inscripcion->nota = $nota->segundo_turno;
+        //     $inscripcion->save();
+        // }
     }
     
 }

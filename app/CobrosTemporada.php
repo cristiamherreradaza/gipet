@@ -11,10 +11,13 @@ class CobrosTemporada extends Model
     protected $fillable = [
         'servicio_id',
         'persona_id',
+        'carrera_id',
+        'asignatura_id',
         'nombre',
         'mensualidad',
         'gestion',
         'fecha_generado',
+        'nombre_combo',
         'estado',
         'deleted_at',
     ];
