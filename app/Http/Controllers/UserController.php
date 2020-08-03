@@ -280,4 +280,20 @@ class UserController extends Controller
             return redirect('User/perfil')->with('flash', $mensaje);
         }
     }
+
+    public function actualizarPerfil(Request $request)
+    {
+        $user = User::find($request->id);
+        $user->nombres = $request->nombres;
+        $user->apellido_paterno = $request->apellido_paterno;
+        $user->apellido_materno = $request->apellido_materno;
+        $user->direccion = $request->direccion;
+        $user->numero_fijo = $request->numero_fijo;
+        $user->numero_celular = $request->numero_celular;
+        $user->email = $request->email;
+        $user->persona_referencia = $request->persona_referencia;
+        $user->numero_referencia = $request->numero_referencia;
+        $user->save();
+        return redirect('home');
+    }
 }
