@@ -46,6 +46,11 @@ class Asignatura extends Model
         return $this->hasMany('App\NotasPropuesta');
     }
 
+    public function segundosturnos()
+    {
+        return $this->hasMany('App\SegundosTurno');
+    }
+
     // public function prerequisitos()
     // {
     //     return $this->hasMany('App\Prerequisito');

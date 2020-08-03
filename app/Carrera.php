@@ -36,4 +36,9 @@ class Carrera extends Model
     {
         return $this->hasMany('App\Inscripcion');
     }
+    
+    public function segundosturnos()
+    {
+        return $this->hasMany('App\SegundosTurno');
+    }
 }

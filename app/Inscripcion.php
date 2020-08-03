@@ -44,6 +44,11 @@ class Inscripcion extends Model
         return $this->belongsTo('App\Carrera');
     }
 
+    public function segundosturnos()
+    {
+        return $this->hasMany('App\SegundosTurno');
+    }
+
     // public function persona()
     // {
     //     return $this->hasMany('App\Persona');
