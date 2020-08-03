@@ -407,24 +407,24 @@
                                 <!-- ============================================================== -->
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        {{-- @if(auth()->user()->image) --}}
-                                            {{-- <img src="{{ auth()->user()->image }}" alt="user" class="rounded-circle" width="31"> --}}
-                                        {{-- @else --}}
+                                        @if(auth()->user()->foto)
+                                            <img src="{{ asset('assets/images/users/'.auth()->user()->foto) }}" class="rounded-circle" width="31">
+                                        @else
                                             <img src="{{ asset('assets/images/users/usuario.png') }}" alt="user" class="rounded-circle" width="31"/>
-                                        {{-- @endif --}}
+                                        @endif
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
                                         <div class="d-flex no-block align-items-center p-3 mb-2 border-bottom">
                                             <div class="">
-                                               {{--  @if(auth()->user()->image)
-                                                    <img src="{{ auth()->user()->image }}" alt="user" class="rounded" width="80">
-                                                @else --}}
+                                                @if(auth()->user()->foto)
+                                                    <img src="{{ asset('assets/images/users/'.auth()->user()->foto) }}" alt="user" class="rounded" width="80">
+                                                @else
                                                     <img src="{{ asset('assets/images/users/usuario.png') }}" alt="user" class="rounded" width="80">
-                                                {{-- @endif --}}
+                                                @endif
                                             </div>
                                             <div class="ml-2">
-                                                {{-- <h4 class="mb-0">{{ auth()->user()->name }}</h4>
-                                                <p class=" mb-0">{{ auth()->user()->email }}</p> --}}
+                                                <h4 class="mb-0">{{ auth()->user()->name }}</h4>
+                                                <p class=" mb-0">{{ auth()->user()->email }}</p>
                                                 <a href="{{ url('User/perfil') }}" class="btn btn-rounded btn-danger btn-sm">Ver Perfil</a>
                                             </div>
                                         </div>

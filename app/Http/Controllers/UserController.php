@@ -13,6 +13,7 @@ use App\NotasPropuesta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Validator;
 
 class UserController extends Controller
 {
@@ -251,5 +252,32 @@ class UserController extends Controller
         $user->borrado = date('Y-m-d H:i:s');
         $user->save();
         return redirect('User/listado');
+    }
+
+    public function perfil()
+    {
+        return view('user.perfil');
+    }
+
+    public function actualizarImagen(Request $request)
+    {
+        $validation = Validator::make($request->all(), [
+            'documento' => 'required|mimes:jpeg,jpg,png|max:2048'
+        ]);
+        if($validation->passes()){
+            $filename = time().'.'.request()->documento->getClientOriginalExtension();
+            request()->documento->move(public_path('assets/images/users'), $filename);
+            $usuario = User::find($request->id_usuario);
+            $usuario->foto = $filename;
+            $usuario->save();
+            return redirect('User/perfil');
+        }else{
+            switch ($validation->errors()->first()) {
+                default:
+                    $mensaje = "Fallo al cambiar de imagen, verificar que el archivo importado sea del tipo .jpg .jpeg .png y el limite no sea mayor a 2048 kbs.";
+                    break;
+            }
+            return redirect('User/perfil')->with('flash', $mensaje);
+        }
     }
 }

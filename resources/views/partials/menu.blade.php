@@ -11,8 +11,8 @@
                     <div class="user-profile text-center position-relative pt-4 mt-1">
                         <!-- User profile image -->
                         <div class="profile-img m-auto">
-                            @if(auth()->user()->image)
-                                <img src="{{ auth()->user()->image }}" alt="user" class="w-100 rounded-circle">
+                            @if(auth()->user()->foto)
+                                <img src="{{ asset('assets/images/users/'.auth()->user()->foto) }}" alt="user" class="w-100 rounded-circle">
                             @else
                                 <img src="{{ asset('assets/images/users/usuario.png') }}" alt="user" class="w-100 rounded-circle">
                             @endif
