@@ -63,14 +63,20 @@
                 </div>
                 <div>
                     <hr> </div>
-                <div class="card-body"> <small class="text-muted">Rol</small>
-                    <h6>{{ auth()->user()->rol }}</h6> <small class="text-muted p-t-30 db">Correo Electrónico</small>
-                    <h6>{{ auth()->user()->email }}</h6> <small class="text-muted p-t-30 db">Celular</small>
-                    <h6>{{ auth()->user()->celulares }}</h6> <small class="text-muted p-t-30 db">Dirección</small>
-                    <h6>71 Pilgrim Avenue Chevy Chase, MD 20815</h6>
-                    <div class="map-box">
+                <div class="card-body"> 
+                    <small class="text-muted">Nombre de usuario</small>
+                    <h6>{{ auth()->user()->name }}</h6>
+                    <small class="text-muted">Perfil</small>
+                    <h6>{{ auth()->user()->perfil->nombre }}</h6>
+                    <small class="text-muted p-t-30 db">Correo Electrónico</small>
+                    <h6>{{ auth()->user()->email }}</h6>
+                    <small class="text-muted p-t-30 db">Celular</small>
+                    <h6>{{ auth()->user()->celulares }}</h6>
+                    <small class="text-muted p-t-30 db">Dirección</small>
+                    <h6>{{ auth()->user()->direccion }}</h6>
+                    <!-- <div class="map-box">
                         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d470029.1604841957!2d72.29955005258641!3d23.019996818380896!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e848aba5bd449%3A0x4fcedd11614f6516!2sAhmedabad%2C+Gujarat!5e0!3m2!1sen!2sin!4v1493204785508" width="100%" height="150" frameborder="0" style="border:0" allowfullscreen></iframe>
-                    </div> 
+                    </div>  -->
                     <!-- <small class="text-muted p-t-30 db">Social Profile</small>
                     <br/>
                     <button class="btn btn-circle btn-secondary"><i class="fab fa-facebook"></i></button>
@@ -304,10 +310,6 @@
 </div>
 <!-- fin modal cambiar contrasena -->
 </div>
-
-
-
-
 @stop
 
 @section('js')

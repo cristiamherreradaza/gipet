@@ -143,6 +143,7 @@ Route::get('User/eliminaAsignacion/{np_id}', 'UserController@eliminaAsignacion')
 Route::get('User/perfil', 'UserController@perfil');
 Route::post('User/actualizarImagen', 'UserController@actualizarImagen');
 Route::post('User/actualizarPerfil', 'UserController@actualizarPerfil');
+Route::post('User/password', 'UserController@password');
 Route::get('Persona/detalle/{persona_id}', 'PersonaController@detalle');
 Route::get('Persona/ajax_materias/{carrera_id}/{persona_id}/{anio_vigente}', 'PersonaController@ajax_materias');
 

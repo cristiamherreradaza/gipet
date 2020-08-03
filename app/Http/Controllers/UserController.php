@@ -296,4 +296,12 @@ class UserController extends Controller
         $user->save();
         return redirect('home');
     }
+
+    public function password(Request $request)
+    {
+        $usuario = User::find($request->id_password);
+        $usuario->password = Hash::make($request->password);
+        $usuario->save();
+        return redirect('User/listado');
+    }
 }
