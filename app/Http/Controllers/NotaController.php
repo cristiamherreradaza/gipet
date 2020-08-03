@@ -10,6 +10,7 @@ use App\NotasPropuesta;
 use App\Nota;
 use App\Kardex;
 use App\Inscripcion;
+use App\SegundosTurno;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\NotasExport;
 use App\Imports\NotasImport;
@@ -80,19 +81,6 @@ class NotaController extends Controller
     public function exportarexcel(Request $request)
     {
         return Excel::download(new NotasExport($request->id), date('Y-m-d').'-ListadoNotas.xlsx');
-    }
-
-    public function segundoTurno($id)
-    {
-        $asignatura = NotasPropuesta::find($id);
-        $segundoTurno = Nota::where('asignatura_id', $asignatura->asignatura_id)
-                    ->where('turno_id', $asignatura->turno_id)
-                    ->where('user_id', $asignatura->user_id)
-                    ->where('paralelo', $asignatura->paralelo)
-                    ->where('anio_vigente', $asignatura->anio_vigente)
-                    ->whereBetween('nota_total', [30,60])
-                    ->get();
-        return view('nota.segundoTurno')->with(compact('asignatura', 'segundoTurno'));
     }
 
     public function actualizar(Request $request)
@@ -541,54 +529,51 @@ class NotaController extends Controller
         }
     }
 
-    public function segundoTurnoActualizar(Request $request)
+    public function segundoTurno(Request $request)
     {
-        //dd($request->inscripcion_id);
-        //llega el dato
-        // crear un registro en tabla segundo turno con los datos de inscripcion
-        // colocar 61 en las 4 notas del estudiante con los datos de inscripcion
-        // colocar en inscripcion el valor de 61 solo si aprobo el examen el alumno
-        
-        
-        if($request->nota_segundo_turno > 61)
+        $inscripcion = Inscripcion::find($request->inscripcion_id);
+        $segundo_turno = SegundosTurno::where('inscripcion_id', $inscripcion->id)
+                                        ->first();
+        if($segundo_turno)
         {
-            $inscripcion = Inscripcion::find($request->inscripcion_id);
-            $notas = Nota::where('asignatura_id', $inscripcion->asignatura_id)
+            // reemplazar nota
+            $segundo_turno->fecha_examen = date('Y-m-d');
+            $segundo_turno->nota_examen = $request->nota_segundo_turno;
+            $segundo_turno->save();
+        }
+        else
+        {
+            // Crear un registro nuevo
+            $segundo_turno = new SegundosTurno();
+            $segundo_turno->inscripcion_id = $inscripcion->id;
+            $segundo_turno->carrera_id = $inscripcion->carrera_id;
+            $segundo_turno->asignatura_id = $inscripcion->asignatura_id;
+            $segundo_turno->persona_id = $inscripcion->persona_id;
+            $segundo_turno->turno_id = $inscripcion->turno_id;
+            $segundo_turno->fecha_examen = date('Y-m-d');
+            $segundo_turno->nota_examen = $request->nota_segundo_turno;
+            $segundo_turno->save();
+        }
+
+        // Colocamos en los registros de la nota el valor que obtuvo el estudiante
+        $notas = Nota::where('asignatura_id', $inscripcion->asignatura_id)
                         ->where('persona_id', $inscripcion->persona_id)
                         ->where('turno_id', $inscripcion->turno_id)
                         ->where('paralelo', $inscripcion->paralelo)
                         ->where('anio_vigente', $inscripcion->anio_vigente)
                         ->get();
-            foreach($notas as $nota)
-            {
-                $nota->segundo_turno = 61;
-                $nota->save();
-            }
+        foreach($notas as $nota)
+        {
+            $nota->segundo_turno = $request->nota_segundo_turno;
+            $nota->save();
+        }
+
+        if($request->nota_segundo_turno >= 61)
+        {
             $inscripcion->nota = 61;
             $inscripcion->save();
         }
         return redirect('nota/listado');
-        // $nota = Nota::find($request->id);
-        // $nota->segundo_turno = $request->segundo_turno;
-        // $nota->save();
-        // if($nota->segundo_turno >= 61){
-        //     //Actualización en Kardex
-        //     $kardex = Kardex::where('persona_id', $nota->persona_id)
-        //                     ->where('asignatura_id', $nota->asignatura_id)
-        //                     ->firstOrFail();
-        //     $kardex->aprobado = 'Si';
-        //     $kardex->anio_aprobado = date('Y');
-        //     $kardex->save();
-        //     //Actualización en Inscripciones
-        //     $inscripcion = Inscripcion::where('asignatura_id', $nota->asignatura_id)
-        //                             ->where('turno_id', $nota->turno_id)
-        //                             ->where('persona_id', $nota->persona_id)
-        //                             ->where('paralelo', $nota->paralelo) 
-        //                             ->where('anio_vigente', $nota->anio_vigente)
-        //                             ->firstOrFail();
-        //     $inscripcion->nota = $nota->segundo_turno;
-        //     $inscripcion->save();
-        // }
     }
     
 }

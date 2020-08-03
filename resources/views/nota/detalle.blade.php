@@ -47,6 +47,7 @@
                                 $cantidad = 0;
                                 $contador_registros = 0;
                                 $segundo = 0;
+                                $nota_segundo = 0;
                             @endphp
                             @foreach($notas as $nota)
                                 @if($nota->persona_id == $inscrito->persona_id)
@@ -69,14 +70,12 @@
                             <td>{{ round($suma/$cantidad) }}</td>
                             @foreach($notas as $nota)
                                 @if($nota->persona_id == $inscrito->persona_id)
-                                    @if($nota->segundo_turno == 61)
-                                        @php
-                                            $segundo = 61;
-                                        @endphp
-                                    @endif
+                                    @php
+                                        $nota_segundo = $nota_segundo + $nota->segundo_turno;
+                                    @endphp
                                 @endif
                             @endforeach
-                            <td>{{ $segundo }}</td>
+                            <td>{{ $nota_segundo/4 }}</td>
                             <td>
                                 <button onclick="registra_notas('{{ $inscrito->id }}', '{{ $inscrito->asignatura_id }}', '{{ $inscrito->turno_id }}', '{{ $inscrito->persona_id }}', '{{ $inscrito->paralelo }}', '{{ $inscrito->anio_vigente }}')" class="btn btn-info" title="Registrar notas"><i class="fas fa-plus"></i></button>
                                 @php
@@ -139,7 +138,7 @@
                 <h4 class="modal-title" id="myModalLabel">SEGUNDO TURNO</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <form action="{{ url('Nota/segundoTurnoActualizar') }}"  method="POST">
+            <form action="{{ url('Nota/segundoTurno') }}"  method="POST">
                 @csrf
                 <div class="modal-body">
                     <input type="hidden" name="inscripcion_id" id="inscripcion_id" value="">

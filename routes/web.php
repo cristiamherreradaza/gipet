@@ -68,13 +68,11 @@ Route::get('nota/detalle/{id}', 'NotaController@detalle');
 
 Route::get('nota/exportarexcel/{id}', 'NotaController@exportarexcel');
 
-Route::get('nota/segundoTurno/{id}', 'NotaController@segundoTurno');
+Route::post('Nota/segundoTurno', 'NotaController@segundoTurno');
 
 Route::post('nota/actualizar', 'NotaController@actualizar');
 
 Route::post('nota/ajax_importar', 'NotaController@ajax_importar');
-
-Route::post('Nota/segundoTurnoActualizar', 'NotaController@segundoTurnoActualizar');
 
 Route::get('Nota/ajaxMuestraNota', 'NotaController@ajaxMuestraNota');
 //NOTAS PROPUESTA
