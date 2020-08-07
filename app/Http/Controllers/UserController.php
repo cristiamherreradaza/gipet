@@ -188,16 +188,14 @@ class UserController extends Controller
 
         $datos_persona = User::find($usuario_id);
 
-        $turnos = Turno::where('borrado', NULL)->get();
+        $turnos = Turno::get();
 
-        $asignaturas = Asignatura::where('borrado', NULL)
-                    ->where('anio_vigente', $gestion_vigente)
-                    ->get();
+        $asignaturas = Asignatura::where('anio_vigente', $gestion_vigente)
+                                ->get();
 
-        $asignaturas_docente = NotasPropuesta::where('borrado', NULL)
-                            ->where('user_id', $usuario_id)
-                            ->where('anio_vigente', $gestion_vigente)
-                            ->get();
+        $asignaturas_docente = NotasPropuesta::where('user_id', $usuario_id)
+                                            ->where('anio_vigente', $gestion_vigente)
+                                            ->get();
 
     	return view('user.asigna_materias')->with(compact('asignaturas', 'asignaturas_docente', 'datos_persona', 'turnos'));
     }
@@ -249,8 +247,7 @@ class UserController extends Controller
     public function eliminar($id)
     {
         $user = User::find($id);
-        $user->borrado = date('Y-m-d H:i:s');
-        $user->save();
+        $user->delete();
         return redirect('User/listado');
     }
 

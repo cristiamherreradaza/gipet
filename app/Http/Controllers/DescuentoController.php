@@ -9,8 +9,7 @@ class DescuentoController extends Controller
 {
     public function listado()
     {
-        $descuentos = Descuento::whereNull('borrado')
-                        ->get();
+        $descuentos = Descuento::get();
         return view('descuento.listado')->with(compact('descuentos'));
     }
 
@@ -35,8 +34,7 @@ class DescuentoController extends Controller
     public function eliminar($id)
     {
         $descuento = Descuento::find($id);
-        $descuento->borrado = date('Y-m-d H:i:s');
-        $descuento->save();
+        $descuento->delete();
         return redirect('Descuento/listado');
     }
 }

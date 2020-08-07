@@ -18,8 +18,8 @@ class PersonaController extends Controller
     public function nuevo()
     {
         // $combo_carreras = DB::table('carreras');
-        $carreras = Carrera::where('borrado', NULL)->get();
-        $turnos = Turno::where('borrado', NULL)->get();
+        $carreras = Carrera::get();
+        $turnos = Turno::get();
         // dd($carreras);
         return view('persona/nuevo')->with(compact('carreras', 'turnos'));
     }
@@ -73,16 +73,13 @@ class PersonaController extends Controller
 
     public function ver_persona($persona_id = null)
     {
-        $datosPersonales = Persona::where('borrado', NULL)
-                        ->where('id', $persona_id)
-                        ->first();
+        $datosPersonales = Persona::where('id', $persona_id)
+                                ->first();
 
-        $carrerasPersona = CarrerasPersona::where('borrado', NULL)
-                        ->where('persona_id', $persona_id)
-                        ->get();
-        $inscripciones = CarrerasPersona::where('borrado', NULL)
-                        ->where('persona_id', $persona_id)
-                        ->get();
+        $carrerasPersona = CarrerasPersona::where('persona_id', $persona_id)
+                                        ->get();
+        $inscripciones = CarrerasPersona::where('persona_id', $persona_id)
+                                        ->get();
 
         return view('persona.detalle')->with(compact('datosPersonales', 'carrerasPersona', 'inscripciones'));
 
@@ -93,17 +90,14 @@ class PersonaController extends Controller
     {
         // $fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
         // $anio = $fecha->format('Y');//obtenes solo el año actual
-        $datosPersonales = Persona::where('borrado', NULL)
-                        ->where('id', $persona_id)
-                        ->first();
+        $datosPersonales = Persona::where('id', $persona_id)
+                                ->first();
 
-        $carrerasPersona = CarrerasPersona::where('borrado', NULL)
-                        ->where('persona_id', $persona_id)
-                        ->get();
+        $carrerasPersona = CarrerasPersona::where('persona_id', $persona_id)
+                                        ->get();
         
-        $notas = Nota::where('borrado', NULL)
-                ->where('persona_id', $persona_id)
-                ->get();
+        $notas = Nota::where('persona_id', $persona_id)
+                    ->get();
         
         // $turnos = Turno::where('borrado', NULL)->get();
         // dd($turnos);
@@ -112,11 +106,10 @@ class PersonaController extends Controller
 
     public function ajax_materias(Request $request, $carrera_id, $persona_id, $anio_vigente)
     {
-        $materiasCarrera = Inscripcion::where('borrado', NULL)
-                            ->where('carrera_id', $carrera_id)    
-                            ->where('persona_id', $persona_id)    
-                            ->where('anio_vigente', $anio_vigente)
-                            ->get();
+        $materiasCarrera = Inscripcion::where('carrera_id', $carrera_id)    
+                                    ->where('persona_id', $persona_id)    
+                                    ->where('anio_vigente', $anio_vigente)
+                                    ->get();
 
         return view('persona.ajax_materias')->with(compact('materiasCarrera'));
     }
@@ -140,9 +133,8 @@ class PersonaController extends Controller
     public function verifica(Request $request)
     {
         $id = $request->id;
-        $carrera_persona = CarrerasPersona::where("borrado", NULL)
-                    ->where('id', $id)
-                    ->get();
+        $carrera_persona = CarrerasPersona::where('id', $id)
+                                        ->get();
         $carreras = DB::table('inscripciones')
                       ->select(
                         'inscripciones.id',

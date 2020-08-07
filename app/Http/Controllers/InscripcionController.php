@@ -19,8 +19,8 @@ class InscripcionController extends Controller
 {
     public function inscripcion()
     {
-        $carreras = Carrera::where('borrado',NULL)->get();
-        $turnos = Turno::where('borrado', NULL)->get();
+        $carreras = Carrera::get();
+        $turnos = Turno::get();
         $fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
 		$year = $fecha->format('Y');//obtenes solo el año actual
 		$asignaturas = DB::table('asignaturas')
@@ -90,9 +90,8 @@ class InscripcionController extends Controller
                 $persona->save();
         }
 
-        $id_persona = Persona::where("borrado", NULL)
-                    ->where('carnet', $request->carnet)
-                    ->get();
+        $id_persona = Persona::where('carnet', $request->carnet)
+                            ->get();
         $persona_id = $id_persona[0]->id;
 
         // REGISTRA LAS CARRERAS INSCRITAS
@@ -265,9 +264,8 @@ class InscripcionController extends Controller
     public function busca_ci(Request $request)
     {
     	$carnet = $request->ci;//buscar el carnet de identidad de una persona
-    	$persona_id = Persona::where("borrado", NULL)
-                    ->where('carnet', $carnet)
-                    ->get();
+    	$persona_id = Persona::where('carnet', $carnet)
+                            ->get();
         if (!empty($persona_id[0]->id)) {
            $per = Persona::find($persona_id[0]->id);
             return response()->json([
@@ -286,20 +284,16 @@ class InscripcionController extends Controller
     	$fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
 		$year = $fecha->format('Y');//obtenes solo el año actual
 
-        $datosPersonales = Persona::where('borrado', NULL)
-                        ->where('id', $persona_id)
-                        ->first();
+        $datosPersonales = Persona::where('id', $persona_id)
+                                ->first();
 
-        $carrerasPersona = CarreraPersona::where('borrado', NULL)
-                        ->where('persona_id', $persona_id)
-                        ->get();
-        $inscripciones = CarreraPersona::where('borrado', NULL)
-                        ->where('persona_id', $persona_id)
-                        ->get();
-        $carreras = Carrera::where('borrado',NULL)->get();
+        $carrerasPersona = CarreraPersona::where('persona_id', $persona_id)
+                                        ->get();
+        $inscripciones = CarreraPersona::where('persona_id', $persona_id)
+                                    ->get();
+        $carreras = Carrera::get();
 
-        $turnos = Turno::where('borrado', NULL)
-                        ->get();
+        $turnos = Turno::get();
 
         return view('inscripcion.detalle')->with(compact('datosPersonales', 'carrerasPersona', 'inscripciones', 'carreras', 'turnos', 'year'));
 
@@ -474,10 +468,9 @@ class InscripcionController extends Controller
 		$anio = $fecha->format('Y');//obtenes solo el año actual
 
 		$per = $persona_id;//obtenes el id de la persona seleccioanda en la vista
-		$carreras = CarreraPersona::where("borrado", NULL)
-	                       ->where('persona_id', $per)
-	                       ->where('anio_vigente', $anio)
-	                       ->get();
+		$carreras = CarreraPersona::where('persona_id', $per)
+                                ->where('anio_vigente', $anio)
+                                ->get();
 
 	    foreach ($carreras as $value1) {
 	    	$carr = $value1->carrera_id;//obtenes el id de la carrera seleccioanda en la vista
@@ -600,8 +593,8 @@ class InscripcionController extends Controller
     {
     	$id = 3185;//obtenes el id de la asignatura seleccioanda en la vista
     	$persona = Persona::find($id);
-    	$carreras = Carrera::where('borrado',NULL)->get();
-        $turnos = Turno::where('borrado', NULL)->get();
+    	$carreras = Carrera::get();
+        $turnos = Turno::get();
         $fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
 		$year = $fecha->format('Y');//obtenes solo el año actual
 		$asignaturas = DB::table('asignaturas')

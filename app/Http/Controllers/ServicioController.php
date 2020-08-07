@@ -36,8 +36,7 @@ class ServicioController extends Controller
     public function eliminar($id)
     {
         $servicio = Servicio::find($id);
-        $servicio->borrado = date('Y-m-d H:i:s');
-        $servicio->save();
+        $servicio->delete();
         return redirect('Servicio/listado');
     }
 }

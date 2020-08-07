@@ -11,9 +11,7 @@ class CarreraController extends Controller
 {
     public function listado_nuevo()
     {
-        $carreras = Carrera::whereNull('borrado')
-                            //->orderBy('nombre', 'asc')
-                            ->get();
+        $carreras = Carrera::get();
         return view('carrera.listado_nuevo')->with(compact('carreras'));
     }
 
@@ -40,8 +38,7 @@ class CarreraController extends Controller
     public function eliminar($id)
     {
         $carrera = Carrera::find($id);
-        $carrera->borrado = date('Y-m-d H:i:s');
-        $carrera->save();
+        $carrera->delete();
         return redirect('Carrera/listado_nuevo');
     }
 
@@ -69,8 +66,7 @@ class CarreraController extends Controller
     {
         $gestion = date('Y');
 
-        $carreras = Carrera::where("borrado", NULL)
-                    ->where('anio_vigente', $gestion)
+        $carreras = Carrera::where('anio_vigente', $gestion)
                     ->get();
 
         return view('carrera.listado', compact('carreras', 'gestion'));
@@ -80,16 +76,14 @@ class CarreraController extends Controller
     {
         $gestion = $request->c_gestion;
 
-        $datos_carrera = Carrera::where("borrado", NULL)
-                    ->where('id', $request->c_carrera_id)
-                    ->where('anio_vigente', $gestion)
-                    ->first();
+        $datos_carrera = Carrera::where('id', $request->c_carrera_id)
+                                ->where('anio_vigente', $gestion)
+                                ->first();
 
         if ($datos_carrera != null) {
-            $asignaturas = Asignatura::where("borrado", NULL)
-                ->where('carrera_id', $datos_carrera->id)
-                ->where('anio_vigente', $request->c_gestion)
-                ->get();
+            $asignaturas = Asignatura::where('carrera_id', $datos_carrera->id)
+                                    ->where('anio_vigente', $request->c_gestion)
+                                    ->get();
         }
 
         return view('carrera.ajax_lista_asignaturas', compact('asignaturas', 'datos_carrera'));
@@ -97,10 +91,9 @@ class CarreraController extends Controller
 
     public function ajax_combo_materias(Request $request, $carrera_id, $anio_vigente)
     {
-        $asignaturas = Asignatura::where("borrado", NULL)
-            ->where('carrera_id', $carrera_id)
-            ->where('anio_vigente', $anio_vigente)
-            ->get();
+        $asignaturas = Asignatura::where('carrera_id', $carrera_id)
+                                ->where('anio_vigente', $anio_vigente)
+                                ->get();
 
         return view('carrera.ajax_combo_materias', compact('asignaturas'));
     }

@@ -9,8 +9,7 @@ class TurnoController extends Controller
 {
     public function listado()
     {
-        $turnos = Turno::whereNull('borrado')
-                        ->get();
+        $turnos = Turno::get();
         return view('turno.listado')->with(compact('turnos'));
     }
 
@@ -33,8 +32,7 @@ class TurnoController extends Controller
     public function eliminar($id)
     {
         $turno = Turno::find($id);
-        $turno->borrado = date('Y-m-d H:i:s');
-        $turno->save();
+        $turno->delete();
         return redirect('Turno/listado');
     }
 }
