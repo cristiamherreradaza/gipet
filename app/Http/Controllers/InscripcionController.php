@@ -13,22 +13,36 @@ use App\NotasPropuesta;
 use App\CarreraPersona;
 use App\Prerequisito;
 use App\Kardex;
+use App\CobrosTemporada;
+use App\Servicio;
 use DB;
 
 class InscripcionController extends Controller
 {
     public function inscripcion()
     {
-        $carreras = Carrera::get();
+        $carreras = Carrera::where("deleted_at", NULL)
+                        ->get();
         $turnos = Turno::get();
         $fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
 		$year = $fecha->format('Y');//obtenes solo el año actual
-		$asignaturas = DB::table('asignaturas')
-			    ->join('prerequisitos', 'asignaturas.id', '=', 'prerequisitos.asignatura_id')
-			    ->where('asignaturas.anio_vigente', '=', $year)
-			    ->where('prerequisitos.sigla', '=', NULL)
-			    ->select('asignaturas.*')
-			    ->get();
+		// $asignaturas = DB::table('asignaturas')
+		// 	    ->join('prerequisitos', 'asignaturas.id', '=', 'prerequisitos.asignatura_id')
+		// 	    ->where('asignaturas.anio_vigente', '=', $year)
+		// 	    ->where('prerequisitos.sigla', '=', NULL)
+		// 	    ->select('asignaturas.*')
+		// 	    ->get();
+        
+        $asignaturas = DB::table('asignaturas')
+                ->where('asignaturas.anio_vigente', '=', $year)
+                ->join('servicios_asignaturas', 'asignaturas.id', '=', 'servicios_asignaturas.asignatura_id')
+                ->where('servicios_asignaturas.servicio_id', '!=', 2)
+                ->select('asignaturas.*')
+                ->get();      
+
+        // $asignaturas = Asignatura::where('anio_vigente', '=', $year)
+        //         ->where('servicio_id', '!=', 2)
+        //         ->get();
         // dd($asignaturas);
         return view('inscripcion.inscripcion', compact('carreras', 'turnos', 'year', 'asignaturas'));    
     }
@@ -89,10 +103,11 @@ class InscripcionController extends Controller
                 $persona->telefono_esposo   = $request->telefono_esposo;
                 $persona->save();
         }
-
-        $id_persona = Persona::where('carnet', $request->carnet)
-                            ->get();
+        $id_persona = Persona::where("deleted_at", NULL)
+                    ->where('carnet', $request->carnet)
+                    ->get();
         $persona_id = $id_persona[0]->id;
+
 
         // REGISTRA LAS CARRERAS INSCRITAS
         foreach ($request->numero as $carr) {
@@ -112,11 +127,114 @@ class InscripcionController extends Controller
                 $carrera_1->save();
 
                 $this->asignaturas_inscripcion($request->$datos_carrera, $request->$datos_turno, $persona_id, $request->$datos_paralelo, $request->$datos_gestion);
-
                 DB::table('materias')->truncate();
             }
-
             
+        }
+
+        $fecha_reg = new \DateTime();//aqui obtenemos la fecha y hora actual
+        $fecha_registro = $fecha_reg->format('Y-m-d');//obtenes solo el año actual
+
+        $consulta_carreras = CarreraPersona::whereDate('created_at', $fecha_registro)
+                ->where('persona_id', $persona_id)
+                ->orderBy('carrera_id')
+                ->get();
+
+
+        $nro_mensualidades = 10;
+
+        if ($consulta_carreras[0]->carrera_id == 1) {
+
+            foreach ($consulta_carreras as $con_carreras) {
+                
+                if ($con_carreras->carrera_id == 1) {
+
+                        $cobros_matricula = new CobrosTemporada();
+                        $cobros_matricula->servicio_id    = 1;
+                        $cobros_matricula->persona_id     = $persona_id;
+                        $cobros_matricula->carrera_id     = $con_carreras->carrera_id;
+                        $cobros_matricula->nombre         = 'MATRICULA';
+                        $cobros_matricula->gestion        = $con_carreras->anio_vigente;
+                        $cobros_matricula->nombre_combo   = 1;
+                        $cobros_matricula->estado         = 'Debe';
+                        $cobros_matricula->save();
+
+                            for ($i=1; $i <= $nro_mensualidades ; $i++) { 
+                                $cobros_mensualidades = new CobrosTemporada();
+                                $cobros_mensualidades->servicio_id    = 2;
+                                $cobros_mensualidades->persona_id     = $persona_id;
+                                $cobros_mensualidades->carrera_id     = $con_carreras->carrera_id;
+                                $cobros_mensualidades->nombre         = 'MENSUALIDAD';
+                                $cobros_mensualidades->mensualidad    = $i;
+                                $cobros_mensualidades->gestion        = $con_carreras->anio_vigente;
+                                $cobros_mensualidades->nombre_combo   = 1;
+                                $cobros_mensualidades->estado         = 'Debe';
+                                $cobros_mensualidades->save();
+
+                            } 
+                } else {
+                        
+                        if ($con_carreras->carrera_id != 2 && $con_carreras->carrera_id != 3 ) {
+
+                                $cobros_matricula = new CobrosTemporada();
+                                $cobros_matricula->servicio_id    = 1;
+                                $cobros_matricula->persona_id     = $persona_id;
+                                $cobros_matricula->carrera_id     = $con_carreras->carrera_id;
+                                $cobros_matricula->nombre         = 'MATRICULA';
+                                $cobros_matricula->gestion        = $con_carreras->anio_vigente;
+                                $cobros_matricula->estado         = 'Debe';
+                                $cobros_matricula->save();
+
+
+                                
+
+                                    for ($i=1; $i <= $nro_mensualidades ; $i++) { 
+                                        $cobros_mensualidades = new CobrosTemporada();
+                                        $cobros_mensualidades->servicio_id    = 2;
+                                        $cobros_mensualidades->persona_id     = $persona_id;
+                                        $cobros_mensualidades->carrera_id     = $con_carreras->carrera_id;
+                                        $cobros_mensualidades->nombre         = 'MENSUALIDAD';
+                                        $cobros_mensualidades->mensualidad    = $i;
+                                        $cobros_mensualidades->gestion        = $con_carreras->anio_vigente;
+                                        $cobros_mensualidades->estado         = 'Debe';
+                                        $cobros_mensualidades->save();
+
+                                    } 
+                                
+                            }                    
+                }
+            }
+
+
+
+        } else {
+            foreach ($consulta_carreras as $con_carre) {
+                
+                $cobros_matricula = new CobrosTemporada();
+                $cobros_matricula->servicio_id    = 1;
+                $cobros_matricula->persona_id     = $persona_id;
+                $cobros_matricula->carrera_id     = $con_carre->carrera_id;
+                $cobros_matricula->nombre         = 'MATRICULA';
+                $cobros_matricula->gestion        = $con_carre->anio_vigente;
+                $cobros_matricula->estado         = 'Debe';
+                $cobros_matricula->save();
+
+
+
+                    for ($i=1; $i <= $nro_mensualidades ; $i++) { 
+                        $cobros_mensualidades = new CobrosTemporada();
+                        $cobros_mensualidades->servicio_id    = 2;
+                        $cobros_mensualidades->persona_id     = $persona_id;
+                        $cobros_mensualidades->carrera_id     = $con_carre->carrera_id;
+                        $cobros_mensualidades->nombre         = 'MENSUALIDAD';
+                        $cobros_mensualidades->mensualidad    = $i;
+                        $cobros_mensualidades->gestion        = $con_carre->anio_vigente;
+                        $cobros_mensualidades->estado         = 'Debe';
+                        $cobros_mensualidades->save();
+
+                    }
+
+            }
         }
 
         // REGISTRA LAS ASIGNATURAS SUELTAS INSCRITAS
@@ -137,6 +255,21 @@ class InscripcionController extends Controller
             $inscripcion_1->save();
 
             }
+
+            $asignaturass = Asignatura::find($request->$datos_asig);
+            $servicioss = Servicio::find($asignaturass->servicio_id);
+
+            $cobros_matricula = new CobrosTemporada();
+            $cobros_matricula->servicio_id    = $asignaturass->servicio_id;
+            $cobros_matricula->persona_id     = $persona_id;
+            $cobros_matricula->asignatura_id  = $request->$datos_asig;
+            $cobros_matricula->nombre         = $servicioss->nombre;
+            $cobros_matricula->gestion        = $request->$datos_gestion_asig;
+            $cobros_matricula->estado         = 'Debe';
+            $cobros_matricula->save();
+
+
+
         }
         return redirect('Kardex/detalle_estudiante/'.$persona_id);
     }
@@ -264,8 +397,9 @@ class InscripcionController extends Controller
     public function busca_ci(Request $request)
     {
     	$carnet = $request->ci;//buscar el carnet de identidad de una persona
-    	$persona_id = Persona::where('carnet', $carnet)
-                            ->get();
+    	$persona_id = Persona::where("deleted_at", NULL)
+                    ->where('carnet', $carnet)
+                    ->get();
         if (!empty($persona_id[0]->id)) {
            $per = Persona::find($persona_id[0]->id);
             return response()->json([
@@ -284,16 +418,20 @@ class InscripcionController extends Controller
     	$fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
 		$year = $fecha->format('Y');//obtenes solo el año actual
 
-        $datosPersonales = Persona::where('id', $persona_id)
-                                ->first();
+        $datosPersonales = Persona::where('deleted_at', NULL)
+                        ->where('id', $persona_id)
+                        ->first();
 
-        $carrerasPersona = CarreraPersona::where('persona_id', $persona_id)
-                                        ->get();
-        $inscripciones = CarreraPersona::where('persona_id', $persona_id)
-                                    ->get();
-        $carreras = Carrera::get();
+        $carrerasPersona = CarreraPersona::where('deleted_at', NULL)
+                        ->where('persona_id', $persona_id)
+                        ->get();
+        $inscripciones = CarreraPersona::where('deleted_at', NULL)
+                        ->where('persona_id', $persona_id)
+                        ->get();
+        $carreras = Carrera::where('deleted_at',NULL)->get();
 
-        $turnos = Turno::get();
+        $turnos = Turno::where('deleted_at', NULL)
+                        ->get();
 
         return view('inscripcion.detalle')->with(compact('datosPersonales', 'carrerasPersona', 'inscripciones', 'carreras', 'turnos', 'year'));
 
@@ -346,7 +484,7 @@ class InscripcionController extends Controller
 		// 		      ->join('carreras', 'kardex.carrera_id','=','carreras.id')
 		// 		      ->where('carreras.gestion',$year)
 		// 		      ->distinct()->get();
-  //       $turnos = Turno::where('borrado', NULL)->get();
+  //       $turnos = Turno::where('deleted_at', NULL)->get();
 		
   //       // dd($persona);
   //       return view('inscripcion.re_inscripcion', compact('persona', 'carreras', 'turnos', 'year'));    
@@ -468,9 +606,11 @@ class InscripcionController extends Controller
 		$anio = $fecha->format('Y');//obtenes solo el año actual
 
 		$per = $persona_id;//obtenes el id de la persona seleccioanda en la vista
-		$carreras = CarreraPersona::where('persona_id', $per)
-                                ->where('anio_vigente', $anio)
-                                ->get();
+
+		$carreras = CarreraPersona::where("deleted_at", NULL)
+	                       ->where('persona_id', $per)
+	                       ->where('anio_vigente', $anio)
+	                       ->get();
 
 	    foreach ($carreras as $value1) {
 	    	$carr = $value1->carrera_id;//obtenes el id de la carrera seleccioanda en la vista
@@ -593,8 +733,10 @@ class InscripcionController extends Controller
     {
     	$id = 3185;//obtenes el id de la asignatura seleccioanda en la vista
     	$persona = Persona::find($id);
-    	$carreras = Carrera::get();
-        $turnos = Turno::get();
+
+    	$carreras = Carrera::where('deleted_at',NULL)->get();
+        $turnos = Turno::where('deleted_at', NULL)->get();
+
         $fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
 		$year = $fecha->format('Y');//obtenes solo el año actual
 		$asignaturas = DB::table('asignaturas')

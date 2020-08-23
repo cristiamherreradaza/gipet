@@ -46,7 +46,7 @@
                                                         $notas = App\Nota::where('persona_id', $inscripcion->persona_id)
                                                                         ->where('asignatura_id', $inscripcion->asignatura_id)
                                                                         ->where('anio_vigente', date('Y'))
-                                                                        ->whereNull('borrado')
+                                                                        ->whereNull('deleted_at')
                                                                         ->get();
                                                     @endphp
                                                     <tr>

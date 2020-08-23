@@ -32,6 +32,16 @@ class CobrosTemporada extends Model
         return $this->belongsTo('App/Persona');
     }
 
+    public function carrera()
+    {
+        return $this->belongsTo('App/Carrera');
+    }
+
+    public function asignatura()
+    {
+        return $this->belongsTo('App/Asignatura');
+    }
+
     public function transacciones()
     {
         return $this->hasMany('App/Transaccion');

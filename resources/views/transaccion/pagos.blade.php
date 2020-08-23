@@ -11,152 +11,6 @@
 
 @section('content')
 
-{{-- modal promo --}}
-<div id="danger-header-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="danger-header-modalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header modal-colored-header bg-danger">
-                <h4 class="modal-title text-white" id="danger-header-modalLabel">DATOS DE LA PROMOCION</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            </div>
-            <div class="modal-body" id="muestraAjaxPromo">
-                
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-{{-- fin modal promo --}}
-
-{{-- modal promo --}}
-<div id="warning-header-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="warning-header-modalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header modal-colored-header bg-warning">
-                <h4 class="modal-title text-white" id="warning-header-modalLabel">EXISTENCIAS DEL PRODUCTO</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            </div>
-            <div class="modal-body" id="ajaxMuestraTotalesAlmacenes">
-
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-{{-- fin modal promo --}}
-
-{{-- modal edita cliente --}}
-<div id="modalEditaCliete" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="warning-header-modalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header modal-colored-header bg-info">
-                <h4 class="modal-title text-white" id="warning-header-modalLabel">EDITA CLIENTE</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            </div>
-            <div class="modal-body" id="ajaxFormEditaCliente">
-
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-{{-- fin modal promo --}}
-
-{{-- modal nuevo cliente --}}
-<div id="success-header-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="warning-header-modalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header modal-colored-header bg-info">
-                <h4 class="modal-title text-white" id="warning-header-modalLabel">NUEVO CLIENTE</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            </div>
-            <form action="#" method="POST" id="formularioAjaxNuevoCliente">
-                @csrf
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">Nombre</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <input name="nombre_usuario" type="text" id="nombre_usuario" class="form-control" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">Correo Electrónico</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <input name="email_usuario" type="email" id="email_usuario" onchange="validaEmail()" class="form-control" required>
-                                <small id="msgValidaEmail" class="badge badge-default badge-danger form-text text-white float-left" style="display: none;">El correo ya existe, el cliente ya esta registrado</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">Contraseña</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <input name="password_usuario" type="password" id="password_usuario" class="form-control" minlength="8" placeholder="Debe tener al menos 8 digitos" required>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">Celular(es)</label>
-                                <input name="celular_usuario" type="text" id="celular_usuario" class="form-control">
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="row">
-                    
-                        <div class="col-md-12">
-                            <label class="control-label">Categorias:&nbsp;&nbsp;</label>
-                            {{-- @foreach ($grupos as $g)
-                            <div class="form-check form-check-inline">
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" name="grupos[]" class="custom-control-input" id="grupo_{{ $g->id }}"
-                                        value="{{ $g->id }}">
-                                    <label class="custom-control-label" for="grupo_{{ $g->id }}">{{ $g->nombre }}</label>
-                                </div>
-                            </div>
-                            @endforeach --}}
-                        </div>
-                    
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">Razón Social</label>
-                                <input name="razon_social_usuario" type="text" id="razon_social_usuario" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">Nit</label>
-                                <input name="nit_usuario" type="text" id="nit_usuario" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
-                <div class="modal-footer">
-                    <a class="btn waves-effect waves-light text-white btn-block btn-success" onclick="guardaAjaxCLiente()" id="btnGuardaCliente" style="display: none;">GUARDAR CLIENTE</a>
-                </div>
-            </form>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-{{-- fin modal nuevo cliente --}}
-
 <form action="{{ url('Venta/guardaVenta') }}" id="formularioVenta" method="POST">
     @csrf
 
@@ -184,7 +38,7 @@
                             <div class="form-group">
                                 <label class="control-label">Nombre Cliente</label>
                                 <div class="input-group mb-3">
-                                    <input type="text" class="form-control" id="nombre" name="nombre">
+                                    <input type="text" class="form-control" readonly id="nombre" name="nombre">
                                     <div class="input-group-append">
                                     </div>
                                 </div>
@@ -211,11 +65,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div id="listadoProductosAjax"></div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -229,67 +78,9 @@
                         <div class="card-header bg-info">
                             <h4 class="mb-0 text-white">CONCEPTO</h4>
                         </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>Input Select</label>
-                                        <select class="custom-select col-12" id="inlineFormCustomSelect">
-                                            <option selected>Choose...</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                {{-- <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label class="control-label">Carnet Identidad</label>
-                                        <div class="input-group mb-3">
-                                            <input type="text" class="form-control" id="carnet" name="carnet">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text"><i class="ti-search"></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> --}}
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label class="control-label">Carrera</label>
-                                        <div class="input-group mb-3">
-                                            <input type="text" class="form-control" id="nombre" name="nombre">
-                                            <div class="input-group-append">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label class="control-label">NIT</label>
-                                        <div class="input-group mb-3">
-                                            <input type="text" class="form-control" id="nit" name="nit">
-                                            <div class="input-group-append">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label class="control-label">Razon Social</label>
-                                        <div class="input-group mb-3">
-                                            <input type="text" class="form-control" id="razon_social_cliente" name="razon_social_cliente">
-                                            <div class="input-group-append">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div id="listadoProductosAjax"></div>
-                                </div>
-                            </div>
+                        <div class="card-body" id="concepto">
+                            
+                            
                         </div>
                     </div>
                 </div>
@@ -303,21 +94,20 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive m-t-40">
-                                <table id="tablaPedidoMayor" class="table table-bordered table-striped">
+                                <table id="tablaDetalle" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Codigo</th>
-                                            <th>Nombre</th>
-                                            <th>Marca</th>
-                                            <th class="text-center text-info"><i class="fas fa-archive"></i></th>
-                                            <th>Unidad</th>
-                                            <th>Precio</th>
                                             <th>Cantidad</th>
-                                            <th class="w-10 text-center">Total</th>
-                                            <th></th>
+                                            <th>Codigo</th>
+                                            <th>Descripcion</th>
+                                            <th>Concepto</th>
+                                            <th>Carrera</th>
+                                            <th>Asignatura</th>
+                                            <th class="w-10 text-center">Total Bs.</th>
+                                            <th>Accion</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="datos_tabla">
                                     </tbody>
                                 </table>
                             </div>
@@ -363,7 +153,7 @@
                         </table>
                     </div>
                     <div class="form-group">
-                        <a class="btn waves-effect waves-light btn-block btn-success text-white" onclick="validaItems()">REGISTRAR VENTA</a>
+                        <a class="btn waves-effect waves-light btn-block btn-success text-white" onclick="validaItems()">REGISTRAR PAGO</a>
                     </div>
                 </div>
             </div>
@@ -382,23 +172,92 @@
 <script src="{{ asset('js/NumeroALetras.js') }}"></script>
 <script src="{{ asset('dist/js/feather.min.js') }}"></script>
 <script>
-     $(document).on('keyup', '#carnet', function(e) {
-        carnet = $('#carnet').val();
+    $('#carnet').on('change', function(e){
+        var carnet = e.target.value;
+     // $(document).on('keyup', '#carnet', function(e) {
+     //    carnet = $('#carnet').val();
             $.ajax({
                 url: "{{ url('Transaccion/verifica_ci') }}",
                 data: {ci: carnet},
                 type: 'GET',
                 success: function(data) {
-
+                    // $("#concepto").html(data);
+                    // console.log(data.consulta.length);
                 var nombre_completo = data.nombres.concat(' ', data.apellido_paterno, ' ', data.apellido_materno);
                     $("#nombre").val(nombre_completo);
                     $("#nit").val(data.nit);
                     $("#razon_social_cliente").val(data.razon_social_cliente);
+
+                    $.ajax({
+                        url: "{{ url('Transaccion/consulta') }}",
+                        data: {termino: data.consulta},
+                        type: 'GET',
+                        success: function(data) {
+                            // $("#listadoProductosAjax").show('slow');
+                            // $("#listadoProductosAjax").html(data);
+                            $("#concepto").html(data);
+                        }
+                    });
+
+
+                    // // var num = data.consulta.length;
+                    // // var ser = '<option value="">Seleccionar</option>\
+                    // //            <option value="">Caja</option>';
+                    // $.each(data.servicios, function(index, value) {
+                    //     var serv = '<option value="">Seleccionar</option>\
+                    //                 <option value="">' + data.servicios[index].servicio_id + '\
+                    //             ';
+                    // });
+                    // $("#servicio_id").html(serv);
+                    //     // $("#servicio_id").html(ser);
                 }
             });
 
     });
 </script>
+
+<script>    
+    var room = 1;
+    // var cantidad = 1;
+    function guarda_tabla() {
+        var cantidad = $("#cantidad").val();
+        var servicio_id = $("#servicio_id").val();
+        var carrera_id = $("#carrera_id").val();
+        var asignatura_id = $("#asignatura_id").val();
+        var total = $("#total").val();
+
+        room++;
+        // cantidad++;
+        var objTo = document.getElementById('datos_tabla')
+        var tdtest = document.createElement("tr");
+        tdtest.setAttribute("class", "removeclass" + room);
+        var rtd = 'removeclass' + room;
+        tdtest.innerHTML = '<td>'+cantidad+'</td>\
+                            <td>'+servicio_id+'</td>\
+                            <td>'+servicio_id+'</td>\
+                            <td>'+cantidad+'</td>\
+                            <td>'+carrera_id+'</td>\
+                            <td>'+asignatura_id+'</td>\
+                            <td>'+total+'</td>\
+                            <td class="col-sm-2">\
+                                <div class="form-group">\
+                                    <button class="btn btn-danger" type="button" onclick="remove_education_fields(' + room + ');"> <i class="fa fa-minus"></i>\
+                                    </button>\
+                                </div>\
+                            </td>';
+
+        objTo.appendChild(tdtest)
+    }
+
+    function remove_education_fields(rid) {
+        $('.removeclass' + rid).remove();
+        // cantidad--;
+        // $('#cantidad').val(cantidad);
+    }
+
+</script>
+
+
 <script>
     // tabla de pedidos por unidad
     var t = $('#tablaPedido').DataTable({

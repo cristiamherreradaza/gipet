@@ -77,13 +77,13 @@ class CarreraController extends Controller
         $gestion = $request->c_gestion;
 
         $datos_carrera = Carrera::where('id', $request->c_carrera_id)
-                                ->where('anio_vigente', $gestion)
-                                ->first();
+                    ->where('anio_vigente', $gestion)
+                    ->first();
 
         if ($datos_carrera != null) {
             $asignaturas = Asignatura::where('carrera_id', $datos_carrera->id)
-                                    ->where('anio_vigente', $request->c_gestion)
-                                    ->get();
+                ->where('anio_vigente', $request->c_gestion)
+                ->get();
         }
 
         return view('carrera.ajax_lista_asignaturas', compact('asignaturas', 'datos_carrera'));
@@ -92,8 +92,8 @@ class CarreraController extends Controller
     public function ajax_combo_materias(Request $request, $carrera_id, $anio_vigente)
     {
         $asignaturas = Asignatura::where('carrera_id', $carrera_id)
-                                ->where('anio_vigente', $anio_vigente)
-                                ->get();
+            ->where('anio_vigente', $anio_vigente)
+            ->get();
 
         return view('carrera.ajax_combo_materias', compact('asignaturas'));
     }

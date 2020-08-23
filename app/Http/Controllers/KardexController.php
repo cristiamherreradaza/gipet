@@ -24,19 +24,19 @@ class KardexController extends Controller
         $fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
         $year = $fecha->format('Y');//obtenes solo el año actual
 
-        $datosPersonales = Persona::where('borrado', NULL)
+        $datosPersonales = Persona::where('deleted_at', NULL)
                         ->where('id', $persona_id)
                         ->first();
 
-        $carrerasPersona = CarreraPersona::where('borrado', NULL)
+        $carrerasPersona = CarreraPersona::where('deleted_at', NULL)
                         ->where('persona_id', $persona_id)
                         ->get();
-        $inscripciones = CarreraPersona::where('borrado', NULL)
+        $inscripciones = CarreraPersona::where('deleted_at', NULL)
                         ->where('persona_id', $persona_id)
                         ->get();
-        $carreras = Carrera::where('borrado',NULL)->get();
+        $carreras = Carrera::where('deleted_at',NULL)->get();
 
-        $turnos = Turno::where('borrado', NULL)
+        $turnos = Turno::where('deleted_at', NULL)
                         ->get();
         return view('kardex.detalle_estudiante')->with(compact('datosPersonales', 'carrerasPersona', 'inscripciones', 'carreras', 'turnos', 'year'));   
     }
@@ -44,7 +44,7 @@ class KardexController extends Controller
     public function ajax_datos_principales(Request $request)
     {
     	$ci = $request->tipo;
-        $datosPersonales = Persona::where('borrado', NULL)
+        $datosPersonales = Persona::where('deleted_at', NULL)
                         ->where('carnet', $ci)
                         ->first();
         return view('kardex.datos_principales')->with(compact('datosPersonales'));
@@ -64,7 +64,7 @@ class KardexController extends Controller
         $persona->sexo = $request->tipo_sexo;
         $persona->save();
 
-        $datosPersonales = Persona::where('borrado', NULL)
+        $datosPersonales = Persona::where('deleted_at', NULL)
                         ->where('id', $request->tipo_persona_id)
                         ->first();
         return view('kardex.datos_principales')->with(compact('datosPersonales'));
@@ -73,7 +73,7 @@ class KardexController extends Controller
     public function ajax_datos_adicionales(Request $request)
     {
     	$ci = $request->tipo;
-        $datosPersonales = Persona::where('borrado', NULL)
+        $datosPersonales = Persona::where('deleted_at', NULL)
                         ->where('carnet', $ci)
                         ->first();
         return view('kardex.datos_adicionales')->with(compact('datosPersonales'));
@@ -97,7 +97,7 @@ class KardexController extends Controller
         $persona->telefono_esposo = $request->tipo_telefono_esposo;
         $persona->save();
 
-        $datosPersonales = Persona::where('borrado', NULL)
+        $datosPersonales = Persona::where('deleted_at', NULL)
                         ->where('id', $request->tipo_persona_id)
                         ->first();
         return view('kardex.datos_adicionales')->with(compact('datosPersonales'));
@@ -106,15 +106,15 @@ class KardexController extends Controller
     public function ajax_datos_carreras(Request $request)
     {
     	$ci = $request->tipo;
-    	$carreras = Carrera::where('borrado',NULL)->get();
+    	$carreras = Carrera::where('deleted_at',NULL)->get();
 
-        $turnos = Turno::where('borrado', NULL)
+        $turnos = Turno::where('deleted_at', NULL)
                         ->get();
 
-    	$datosPersonales = Persona::where('borrado', NULL)
+    	$datosPersonales = Persona::where('deleted_at', NULL)
                         ->where('carnet', $ci)
                         ->first();
-        $carrerasPersona = CarreraPersona::where('borrado', NULL)
+        $carrerasPersona = CarreraPersona::where('deleted_at', NULL)
                         ->where('persona_id', $datosPersonales->id)
                         ->distinct()
                         ->get('carrera_id');
@@ -122,7 +122,7 @@ class KardexController extends Controller
     }
 
     public function guardar_datosCarreras(Request $request){
-    	$carreras_persona = CarreraPersona::where('borrado', NULL)
+    	$carreras_persona = CarreraPersona::where('deleted_at', NULL)
                         ->where('carrera_id', $request->tipo_carrera_id)
                         ->where('persona_id', $request->tipo_persona_id)
                         ->first();
@@ -140,15 +140,15 @@ class KardexController extends Controller
 	        $carrera->sexo         = $request->tipo_persona_sexo;
 	        $carrera->save();
 
-	        $carreras = Carrera::where('borrado',NULL)->get();
+	        $carreras = Carrera::where('deleted_at',NULL)->get();
 
-	        $turnos = Turno::where('borrado', NULL)
+	        $turnos = Turno::where('deleted_at', NULL)
 	                        ->get();
 
-	    	$datosPersonales = Persona::where('borrado', NULL)
+	    	$datosPersonales = Persona::where('deleted_at', NULL)
 	                        ->where('id', $request->tipo_persona_id)
 	                        ->first();
-	        $carrerasPersona = CarreraPersona::where('borrado', NULL)
+	        $carrerasPersona = CarreraPersona::where('deleted_at', NULL)
 	                        ->where('persona_id', $datosPersonales->id)
 	                        ->distinct()
 	                        ->get('carrera_id');
@@ -293,7 +293,7 @@ class KardexController extends Controller
         $carrera_id = $request->tipo_carrera_id;
         $persona_id = $request->tipo_persona_id;
         $sexo = $request->tipo_sexo;
-        $turnos = Turno::where('borrado', NULL)
+        $turnos = Turno::where('deleted_at', NULL)
                         ->get();
 
         return view('kardex.datos_reinscripcion')->with(compact('turnos', 'carrera_id', 'persona_id', 'sexo'));
@@ -387,7 +387,7 @@ class KardexController extends Controller
         //hasta aqui
         DB::table('materias')->truncate();
 
-        $turnos = Turno::where('borrado', NULL)
+        $turnos = Turno::where('deleted_at', NULL)
                         ->get();
 
         return view('kardex.datos_asig_tomar')->with(compact('turno_id', 'paralelo', 'turnos', 'asig_tomar', 'anio_vigente', 'carrera_id', 'persona_id'));
@@ -484,7 +484,7 @@ class KardexController extends Controller
         $inscritas = Inscripcion::where('persona_id', $request->tipo_persona_id)
                                 ->where('carrera_id', $request->tipo_carrera_id)
                                 ->where('anio_vigente', date('Y'))
-                                ->whereNull('borrado')
+                                ->whereNull('deleted_at')
                                 ->get();
 
         return view('kardex.datos_notas_carreras')->with(compact('inscripciones', 'inscritas'));

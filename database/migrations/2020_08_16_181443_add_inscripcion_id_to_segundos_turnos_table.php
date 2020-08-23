@@ -27,7 +27,7 @@ class AddInscripcionIdToSegundosTurnosTable extends Migration
     public function down()
     {
         Schema::table('segundos_turnos', function (Blueprint $table) {
-            $table->dropForeign(['inscripcion_id']);
+             $table->dropForeign(['inscripcion_id']);
             $table->dropColumn('inscripcion_id');
         });
     }

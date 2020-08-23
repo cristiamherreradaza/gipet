@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Servicio;
+use App\Carrera;
+use App\Asignatura;
+use App\ServiciosAsignatura;
+use DB;
 
 class ServicioController extends Controller
 {
@@ -39,4 +43,101 @@ class ServicioController extends Controller
         $servicio->delete();
         return redirect('Servicio/listado');
     }
+
+    public function listar()
+    {
+        $gestion = date('Y');
+
+        $carreras = Carrera::get();
+
+        $servicios = Servicio::where('gestion', $gestion)
+                    ->where('id', '!=' ,'1')
+                    ->where('id', '!=' ,'2')
+                    ->get();
+        return view('servicio.listar', compact('servicios', 'gestion', 'carreras'));
+    }
+
+    public function ajax_lista_cursos(Request $request)
+    {
+        $gestion = $request->c_gestion;
+
+        // $datos_carrera = Carrera::where('id', $request->c_servicio_id)
+        //             ->where('anio_vigente', $gestion)
+        //             ->first();
+        $servicios = Servicio::find($request->c_servicio_id);
+
+        $servicios_asignaturas = DB::table('servicios_asignaturas')
+             ->where('servicios_asignaturas.servicio_id', '=', $request->c_servicio_id)
+             ->join('asignaturas', 'servicios_asignaturas.asignatura_id', '=', 'asignaturas.id')
+             ->join('servicios', 'servicios_asignaturas.servicio_id', '=', 'servicios.id')
+             ->select('asignaturas.id as asignatura_id', 'asignaturas.nombre_asignatura', 'asignaturas.carga_horaria', 'asignaturas.anio_vigente', 'servicios.id as servicio_id', 'servicios.nombre as nombre_servicio')
+             ->get();
+        // dd($servicios_asignaturas);
+
+        // if ($datos_carrera != null) {
+        //     $asignaturas = Asignatura::where('carrera_id', $datos_carrera->id)
+        //         ->where('anio_vigente', $request->c_gestion)
+        //         ->get();
+        // }
+
+        return view('servicio.ajax_lista_cursos', compact('servicios', 'servicios_asignaturas'));
+    }
+
+    public function ajax_guardar_servicio_asignatura(Request $request)
+    {
+        if (!empty($request->asignatura_id)) {
+
+            $servicio = new ServiciosAsignatura();
+            $servicio->asignatura_id = $request->asignatura_id;
+            $servicio->servicio_id = $request->servicio_id;
+            $servicio->save();
+
+        } else {
+            $asig= Asignatura::all();
+
+            $servicio = new ServiciosAsignatura();
+            $servicio->asignatura_id = $asig->last()->id;
+            $servicio->servicio_id = $request->servicio_id;
+            $servicio->save();
+        }
+        
+        $servicios = Servicio::find($request->servicio_id);
+
+        $servicios_asignaturas = DB::table('servicios_asignaturas')
+             ->where('servicios_asignaturas.servicio_id', '=', $request->servicio_id)
+             ->join('asignaturas', 'servicios_asignaturas.asignatura_id', '=', 'asignaturas.id')
+             ->join('servicios', 'servicios_asignaturas.servicio_id', '=', 'servicios.id')
+             ->select('asignaturas.id as asignatura_id', 'asignaturas.nombre_asignatura', 'asignaturas.carga_horaria', 'asignaturas.anio_vigente', 'servicios.id as servicio_id', 'servicios.nombre as nombre_servicio')
+             ->get();
+
+        return view('servicio.ajax_lista_cursos', compact('servicios', 'servicios_asignaturas'));
+    }
+
+    public function ajax_verifica_codigo_asignatura(Request $request)
+    {
+        $codigo = $request->codigo_asignatura;
+        $asignatura = Asignatura::where('codigo_asignatura', $request->codigo_asignatura)
+                        ->where('anio_vigente', $request->gestion)
+                        ->first();
+        if (!empty($asignatura)) {
+            return response()->json(['mensaje'=>'Si', 'asignatura'=>$asignatura]);
+        } else {
+            return response()->json(['mensaje'=>'No']);
+        }
+        // dd($asignatura);
+        // exit();
+
+        // return response()->json(['mensaje'=>'Registrado Correctamente']);
+    }
+
+    public function ajax_verifica_nombre_asignatura(Request $request)
+    {
+        $nombre = $request->nombre_asignatura;
+        $servicio = Servicio::find($id);
+        $servicio->delete();
+        
+        return response()->json(['mensaje'=>'Registrado Correctamente']);
+    }
+
+    
 }

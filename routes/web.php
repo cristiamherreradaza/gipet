@@ -166,6 +166,14 @@ Route::get('Servicio/listado', 'ServicioController@listado');
 Route::post('Servicio/guardar', 'ServicioController@guardar');
 Route::post('Servicio/actualizar', 'ServicioController@actualizar');
 Route::get('Servicio/eliminar/{id}', 'ServicioController@eliminar');
+Route::get('Servicio/listar', 'ServicioController@listar');
+Route::get('Servicio/ajax_lista_cursos', 'ServicioController@ajax_lista_cursos');
+Route::post('Servicio/ajax_guardar_servicio_asignatura', 'ServicioController@ajax_guardar_servicio_asignatura');
+Route::get('Servicio/ajax_verifica_codigo_asignatura', 'ServicioController@ajax_verifica_codigo_asignatura');
+Route::get('Servicio/ajax_verifica_nombre_asignatura', 'ServicioController@ajax_verifica_nombre_asignatura');
+
+
+
 
 Route::get('Turno/listado', 'TurnoController@listado');
 Route::post('Turno/guardar', 'TurnoController@guardar');
@@ -201,3 +209,7 @@ Route::get('Kardex/ajax_datos_notas_carreras', 'KardexController@ajax_datos_nota
 //TRANSACCIONES
 Route::get('Transaccion/pagos', 'TransaccionController@pagos');
 Route::get('Transaccion/verifica_ci', 'TransaccionController@verifica_ci');
+Route::get('Transaccion/consulta', 'TransaccionController@consulta');
+
+Route::get('Transaccion/carreras', 'TransaccionController@carreras');
+Route::get('Transaccion/asignaturas', 'TransaccionController@asignaturas');
