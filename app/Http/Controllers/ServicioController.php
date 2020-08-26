@@ -116,10 +116,16 @@ class ServicioController extends Controller
     public function ajax_verifica_codigo_asignatura(Request $request)
     {
         $codigo = $request->codigo_asignatura;
-        $asignatura = Asignatura::where('codigo_asignatura', $request->codigo_asignatura)
+        $cod = '%'.$codigo.'%';
+        // $asignatura = Asignatura::where('codigo_asignatura', $request->codigo_asignatura)
+        //                 ->where('anio_vigente', $request->gestion)
+        //                 ->first();
+        $asignatura = Asignatura::where('codigo_asignatura', 'like', $cod)
                         ->where('anio_vigente', $request->gestion)
-                        ->first();
-        if (!empty($asignatura)) {
+                        ->get();
+        // dd($asignatura);
+        // exit();
+        if (!empty($asignatura[0])) {
             return response()->json(['mensaje'=>'Si', 'asignatura'=>$asignatura]);
         } else {
             return response()->json(['mensaje'=>'No']);

@@ -23,7 +23,9 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-3">
+                        <input type="text" hidden id="persona_id" name="persona_id">
+                        <input type="text" hidden id="gestion" name="gestion">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Carnet Identidad</label>
                                 <div class="input-group mb-3">
@@ -34,7 +36,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Nombre Cliente</label>
                                 <div class="input-group mb-3">
@@ -44,7 +46,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">NIT</label>
                                 <div class="input-group mb-3">
@@ -54,7 +56,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Razon Social</label>
                                 <div class="input-group mb-3">
@@ -127,23 +129,18 @@
                         <table class="table table-striped">
                             <tbody>
                                 <tr>
+                                    <td>Concepto</td>
+                                    <td><input type="text" name="concepto_pago" id="concepto_pago"
+                                            class="form-control text-left text-left"
+                                            style="width: 200px;"></td>
+                                </tr>
+                                <tr>
                                     <td>TOTAL</td>
                                     <td><input type="text" class="form-control text-right" name="totalCompra"
-                                            id="resultadoSubTotales" style="width: 120px;" readonly>
+                                            id="resultadoTotales" style="width: 120px;" readonly>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>EFECTIVO</td>
-                                    <td><input type="number" name="efectivo" id="efectivo"
-                                            class="form-control text-right text-right" step="any" value="0"
-                                            style="width: 120px;"></td>
-                                </tr>
-                                <tr>
-                                    <td>CAMBIO</td>
-                                    <td><input type="number" name="cambioVenta" id="cambioVenta"
-                                            class="form-control text-right text-right" step="any" value="0"
-                                            style="width: 120px;" readonly></td>
-                                </tr>
+                                
                                 <tr>
                                     <td colspan="2">
                                         <h6 class="text-info" id="montoLiteral"></h6>
@@ -184,6 +181,7 @@
                     // $("#concepto").html(data);
                     // console.log(data.consulta.length);
                 var nombre_completo = data.nombres.concat(' ', data.apellido_paterno, ' ', data.apellido_materno);
+                    $("#persona_id").val(data.id);
                     $("#nombre").val(nombre_completo);
                     $("#nit").val(data.nit);
                     $("#razon_social_cliente").val(data.razon_social_cliente);
@@ -225,34 +223,95 @@
         var carrera_id = $("#carrera_id").val();
         var asignatura_id = $("#asignatura_id").val();
         var total = $("#total").val();
+        var sum_total = 0;
 
-        room++;
-        // cantidad++;
-        var objTo = document.getElementById('datos_tabla')
-        var tdtest = document.createElement("tr");
-        tdtest.setAttribute("class", "removeclass" + room);
-        var rtd = 'removeclass' + room;
-        tdtest.innerHTML = '<td>'+cantidad+'</td>\
-                            <td>'+servicio_id+'</td>\
-                            <td>'+servicio_id+'</td>\
-                            <td>'+cantidad+'</td>\
-                            <td>'+carrera_id+'</td>\
-                            <td>'+asignatura_id+'</td>\
-                            <td>'+total+'</td>\
-                            <td class="col-sm-2">\
-                                <div class="form-group">\
-                                    <button class="btn btn-danger" type="button" onclick="remove_education_fields(' + room + ');"> <i class="fa fa-minus"></i>\
-                                    </button>\
-                                </div>\
-                            </td>';
+        $.ajax({
+                type:'GET',
+                url:"{{ url('Transaccion/verifica_datos') }}",
+                data: {
+                    tipo_servicio_id : servicio_id,
+                    tipo_carrera_id : carrera_id,
+                    tipo_asignatura_id : asignatura_id
+                },
+                success:function(data){
+                    var nom_carrera;
+                    var nom_asignatura;
+                        if (data.carrera != null) {
+                            nom_carrera = data.carrera.nombre;
+                        } else {
+                            nom_carrera = '';
+                        }
 
-        objTo.appendChild(tdtest)
+                        if (data.asignatura != null) {
+                            nom_asignatura = data.asignatura.nombre_asignatura;
+                        } else {
+                            nom_asignatura = '';
+                        }
+                        room++;
+                        // cantidad++;
+                        var objTo = document.getElementById('datos_tabla')
+                        var tdtest = document.createElement("tr");
+                        tdtest.setAttribute("class", "removeclass" + room);
+                        var rtd = 'removeclass' + room;
+                        tdtest.innerHTML = '<td>'+cantidad+'</td>\
+                                            <td>'+data.servicio.sigla+'</td>\
+                                            <td>'+data.servicio.nombre+'</td>\
+                                            <td>PAGO '+data.servicio.nombre+'</td>\
+                                            <td>'+nom_carrera+'</td>\
+                                            <td>'+nom_asignatura+'</td>\
+                                            <td>'+total+'</td>\
+                                            <td class="col-sm-2">\
+                                                <div class="form-group">\
+                                                    <button class="btn btn-danger" type="button" onclick="remove_education_fields(' + room + ');"> <i class="fa fa-minus"></i>\
+                                                    </button>\
+                                                </div>\
+                                            </td>';
+
+                        objTo.appendChild(tdtest)
+                var concep = 'PAGO DE ' + data.servicio.nombre;
+                $("#concepto_pago").val(concep);
+
+                $('#tablaDetalle tbody').find('tr').each(function (i, el) {
+                        //Voy incrementando las variables segun la fila ( .eq(0) representa la fila 1 )     
+                        sum_total += parseFloat($(this).find('td').eq(6).text());
+                });
+
+                $("#resultadoTotales").val(sum_total);
+
+                valorLiteral = numeroALetras(sum_total, {
+                                plural: 'Bolivianos',
+                                singular: 'Bolivianos',
+                                centPlural: 'Centavos',
+                                centSingular: 'Centavo'
+                            });
+                $("#montoLiteral").html(valorLiteral);
+
+                }
+            });
+
+
+        
     }
 
     function remove_education_fields(rid) {
+        var sum_total = 0;
         $('.removeclass' + rid).remove();
         // cantidad--;
         // $('#cantidad').val(cantidad);
+        $('#tablaDetalle tbody').find('tr').each(function (i, el) {
+                //Voy incrementando las variables segun la fila ( .eq(0) representa la fila 1 )     
+                sum_total += parseFloat($(this).find('td').eq(6).text());
+        });
+
+        $("#resultadoTotales").val(sum_total);
+
+        valorLiteral = numeroALetras(sum_total, {
+                                plural: 'Bolivianos',
+                                singular: 'Bolivianos',
+                                centPlural: 'Centavos',
+                                centSingular: 'Centavo'
+                            });
+                $("#montoLiteral").html(valorLiteral);
     }
 
 </script>

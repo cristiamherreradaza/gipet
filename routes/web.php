@@ -212,4 +212,8 @@ Route::get('Transaccion/verifica_ci', 'TransaccionController@verifica_ci');
 Route::get('Transaccion/consulta', 'TransaccionController@consulta');
 
 Route::get('Transaccion/carreras', 'TransaccionController@carreras');
+Route::get('Transaccion/verifica_cobros_temporada', 'TransaccionController@verifica_cobros_temporada');
 Route::get('Transaccion/asignaturas', 'TransaccionController@asignaturas');
+Route::get('Transaccion/verifica_descuento', 'TransaccionController@verifica_descuento');
+Route::get('Transaccion/verifica_datos', 'TransaccionController@verifica_datos');
+Route::get('Transaccion/formulario', 'TransaccionController@formulario');

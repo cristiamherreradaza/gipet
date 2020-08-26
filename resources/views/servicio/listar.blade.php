@@ -71,7 +71,7 @@
                         </div>
 
                         {{-- TABLA --}}
-                        <div class="row">
+                        <div class="row" id="mostrar_ocultar" style="display:none;">
                             <div class="card-body">
                                 <div class="table-responsive m-t-40">
                                     <table class="table table-bordered table-striped">
@@ -84,16 +84,8 @@
                                                 <th>Opcion</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                                <tr>
-                                                    <td> 1 </td>
-                                                    <td> CON - 101 </td>
-                                                    <td> Contabilidad I </td>
-                                                    <td> Contaduría General </td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-warning" onclick="muestra_modal()"><i class="fas fa-edit"></i></button>
-                                                    </td>
-                                                </tr>
+                                        <tbody id="tabla_asig">
+                                                
                                         </tbody>
                                     </table>
                                 </div>
@@ -444,34 +436,64 @@
 
 </script>
 <script>
-    $('#codigo_asignatura').on('change', function(e){
-         var codigo_asignatura = e.target.value;
-         var gestion = $('#c_gestion').val();
 
-         $.ajax({
+    $(document).on('keyup', '#codigo_asignatura', function(e) {
+        var codigo_asignatura = $('#codigo_asignatura').val();
+        var gestion = $('#c_gestion').val();
+        if (codigo_asignatura.length > 2) {
+
+                var table = document.getElementById('tabla_asig');
+                table.innerHTML = '';
+
+            $.ajax({
                 url: "{{ url('Servicio/ajax_verifica_codigo_asignatura') }}",
                 method: "GET",
                 data: {codigo_asignatura: codigo_asignatura, gestion: gestion},
                 cache: false,
                 success: function (data) {
+
                     if (data.mensaje == 'Si') {
-                        $("#asignatura_id").val(data.asignatura.id);
-                        $("#nombre_asignatura").val(data.asignatura.nombre_asignatura);
-                        $("#orden_impresion").val(data.asignatura.orden_impresion);
-                        $("#semestre").val(data.asignatura.semestre);
-                        $("#nivel").val(data.asignatura.nivel);
-                        $("#anio_vigente").val(data.asignatura.anio_vigente);
-                        $("#carrera_id").val(data.asignatura.carrera_id);
-                        $("#gestion").val(data.asignatura.gestion);
-                        $("#carga_horaria").val(data.asignatura.carga_horaria);
-                        $("#teorico").val(data.asignatura.teorico);
-                        $("#practico").val(data.asignatura.practico);  
+                        // appendElem.remove();
+                        
+                        var num = 1;
+                        $('#mostrar_ocultar').show('slow');//para visualizar las asignaturas
+                        $.each(data.asignatura, function(index, value) {
+                            $("#tabla_asig").append('<tr>'+
+                                                    '<td>' + 
+                                                        num +
+                                                    '</td>' + 
+                                                    '<td>' + data.asignatura[index].codigo_asignatura + '</td>' +
+                                                    '<td>' + data.asignatura[index].nombre_asignatura + '</td>' +
+                                                    '<td>' + data.asignatura[index].carrera_id + '</td>' +
+                                                    '<td>' +
+                                                        '<button type="button" class="btn btn-success" onclick="muestra_modal(' + data.asignatura[index].id +')"><i class="fas fa-address-card"></i></button>' +
+                                                    '</td>' +
+                                                '</tr>');
+                            num ++;
+                        });
+
+
+                        // $("#asignatura_id").val(data.asignatura.id);
+                        // $("#nombre_asignatura").val(data.asignatura.nombre_asignatura);
+                        // $("#orden_impresion").val(data.asignatura.orden_impresion);
+                        // $("#semestre").val(data.asignatura.semestre);
+                        // $("#nivel").val(data.asignatura.nivel);
+                        // $("#anio_vigente").val(data.asignatura.anio_vigente);
+                        // $("#carrera_id").val(data.asignatura.carrera_id);
+                        // $("#gestion").val(data.asignatura.gestion);
+                        // $("#carga_horaria").val(data.asignatura.carga_horaria);
+                        // $("#teorico").val(data.asignatura.teorico);
+                        // $("#practico").val(data.asignatura.practico);  
+                    } else {
+                        $('#mostrar_ocultar').hide('slow');//para visualizar las asignaturas
                     }
                     // $("#carga_ajax_lista_cursos").html(data);
                 }
             });
-         // alert(codigo);
+        }
+
     });
+
 
     $('#nombre_asignatura').on('change', function(e){
          var nombre_asignatura = e.target.value;

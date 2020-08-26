@@ -15,6 +15,7 @@ use App\Prerequisito;
 use App\Kardex;
 use App\CobrosTemporada;
 use App\Servicio;
+use App\ServiciosAsignatura;
 use DB;
 
 class InscripcionController extends Controller
@@ -256,11 +257,13 @@ class InscripcionController extends Controller
 
             }
 
-            $asignaturass = Asignatura::find($request->$datos_asig);
-            $servicioss = Servicio::find($asignaturass->servicio_id);
+            $asignaturass = ServiciosAsignatura::where('asignatura_id', $request->$datos_asig)
+                                                ->where('asignatura_id', '!=', 2)
+                                                ->get();
+            $servicioss = Servicio::find($asignaturass[0]->servicio_id);
 
             $cobros_matricula = new CobrosTemporada();
-            $cobros_matricula->servicio_id    = $asignaturass->servicio_id;
+            $cobros_matricula->servicio_id    = $asignaturass[0]->servicio_id;
             $cobros_matricula->persona_id     = $persona_id;
             $cobros_matricula->asignatura_id  = $request->$datos_asig;
             $cobros_matricula->nombre         = $servicioss->nombre;
