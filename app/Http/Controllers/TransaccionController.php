@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Persona;
 use App\CobrosTemporada;
+use App\DescuentoPersona;
 use App\Transaccion;
 use App\Servicio;
 use App\Carrera;
@@ -94,7 +95,7 @@ class TransaccionController extends Controller
         ]);
     }
 
-    public function verifica_cobros_temporada(Request $request)
+    public function verifica_cobros_temporada_carrera(Request $request)
     {
         $carrera_id = $request->tipo_carrera_id;
         $servicio_id = $request->tipo_servicio_id;
@@ -109,23 +110,145 @@ class TransaccionController extends Controller
                                     ->where('gestion', $gestion)
                                     ->where('estado', 'Debe')
                                     ->first();
+
         $transacciones = Transaccion::where('cobros_temporadas_id', $cobros_tem->id)
                                     ->get();
 
+        $descuentos = Descuento::find(1);
+
         if (count($transacciones) > 0) {
-            // foreach ($transacciones as $trans) {
-            //     # code...
-            // }
-            dd($transacciones->last()->saldo);
+            return response()->json([
+                'cantidad' => 1,
+                'precio_servicio' => $transacciones->last()->estimado,
+                'descuento_id' => $descuentos,
+                'descuento_bs' => 0,
+                'total' => $transacciones->last()->saldo,
+                'total_pagado' => $transacciones->last()->saldo,
+                'verifica' => 'si'
+            ]);
         } else {
-            dd('no');
+            $servicio = Servicio::find($servicio_id);
+            $des_per = DB::table('descuentos_personas')
+                        ->where('descuentos_personas.servicio_id', $servicio_id)
+                        ->where('descuentos_personas.persona_id', $persona_id)
+                        ->join('descuentos', 'descuentos_personas.descuento_id', '=', 'descuentos.id')
+                        ->select('descuentos.id', 'descuentos.nombre', 'descuentos.porcentaje')
+                        ->get();
+            if (count($des_per) > 0) {
+                $num = "0.";
+                $des_por = $num . $des_per[0]->porcentaje;
+                $des_bs = ($servicio->precio * $des_por);
+                $total = $servicio->precio - ($servicio->precio * $des_por);
+                $num_sin_dec = round($total);
+                // dd(round($servicio->precio * $des_por));
+                // exit();
+
+                return response()->json([
+                        'cantidad' => 1,
+                        'precio_servicio' => $servicio->precio,
+                        'descuento_id' => $des_per,
+                        'descuento_bs' => $des_bs,
+                        'total' => $num_sin_dec,
+                        'total_pagado' => $num_sin_dec,
+                        'verifica' => 'no'
+                ]);
+
+            } else {
+                $descuentos = Descuento::where('id', 1)
+                                        ->get();
+
+                return response()->json([
+                'cantidad' => 1,
+                'precio_servicio' => $servicio->precio,
+                'descuento_id' => $descuentos,
+                'descuento_bs' => 0,
+                'total' => $servicio->precio,
+                'total_pagado' => $servicio->precio,
+                'verifica' => 'no'
+            ]);
+            }
+
+            
         }
-
         
+    }
 
-        return response()->json([
-            'cobros_tem' => $cobros_tem
-        ]);
+    public function verifica_cobros_temporada_asignatura(Request $request)
+    {
+        $asignatura_id = $request->tipo_asignatura_id;
+        $servicio_id = $request->tipo_servicio_id;
+        $persona_id = $request->tipo_persona_id;
+
+        $fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
+        $gestion = $fecha->format('Y');//obtenes solo el año actual
+
+        $cobros_tem = CobrosTemporada::where('servicio_id', $servicio_id)
+                                    ->where('persona_id', $persona_id)
+                                    ->where('asignatura_id', $asignatura_id)
+                                    ->where('gestion', $gestion)
+                                    ->where('estado', 'Debe')
+                                    ->first();
+
+        $transacciones = Transaccion::where('cobros_temporadas_id', $cobros_tem->id)
+                                    ->get();
+
+        $descuentos = Descuento::find(1);
+
+        if (count($transacciones) > 0) {
+            return response()->json([
+                'cantidad' => 1,
+                'precio_servicio' => $transacciones->last()->estimado,
+                'descuento_id' => $descuentos,
+                'descuento_bs' => 0,
+                'total' => $transacciones->last()->saldo,
+                'total_pagado' => $transacciones->last()->saldo,
+                'verifica' => 'si'
+            ]);
+        } else {
+            $servicio = Servicio::find($servicio_id);
+            $des_per = DB::table('descuentos_personas')
+                        ->where('descuentos_personas.servicio_id', $servicio_id)
+                        ->where('descuentos_personas.persona_id', $persona_id)
+                        ->join('descuentos', 'descuentos_personas.descuento_id', '=', 'descuentos.id')
+                        ->select('descuentos.id', 'descuentos.nombre', 'descuentos.porcentaje')
+                        ->get();
+            if (count($des_per) > 0) {
+                $num = "0.";
+                $des_por = $num . $des_per[0]->porcentaje;
+                $des_bs = ($servicio->precio * $des_por);
+                $total = $servicio->precio - ($servicio->precio * $des_por);
+                $num_sin_dec = round($total);
+                // dd(round($servicio->precio * $des_por));
+                // exit();
+
+                return response()->json([
+                        'cantidad' => 1,
+                        'precio_servicio' => $servicio->precio,
+                        'descuento_id' => $des_per,
+                        'descuento_bs' => $des_bs,
+                        'total' => $num_sin_dec,
+                        'total_pagado' => $num_sin_dec,
+                        'verifica' => 'no'
+                ]);
+
+            } else {
+                $descuentos = Descuento::where('id', 1)
+                                        ->get();
+
+                return response()->json([
+                'cantidad' => 1,
+                'precio_servicio' => $servicio->precio,
+                'descuento_id' => $descuentos,
+                'descuento_bs' => 0,
+                'total' => $servicio->precio,
+                'total_pagado' => $servicio->precio,
+                'verifica' => 'no'
+            ]);
+            }
+
+            
+        }
+        
     }
 
     public function carreras(Request $request)
@@ -188,15 +311,18 @@ class TransaccionController extends Controller
         $servicio_id = $request->tipo_servicio_id;
         $carrera_id = $request->tipo_carrera_id;
         $asignatura_id = $request->tipo_asignatura_id;
+        $descuento_id = $request->tipo_descuento_id;
 
         $servicio = Servicio::find($servicio_id);
         $carrera = Carrera::find($carrera_id);
         $asignatura = Asignatura::find($asignatura_id);
+        $descuento = Descuento::find($descuento_id);
 
         return response()->json([
             'servicio' => $servicio,
             'carrera' => $carrera,
-            'asignatura' => $asignatura
+            'asignatura' => $asignatura,
+            'descuento' => $descuento
         ]);
     }
 
@@ -213,6 +339,368 @@ class TransaccionController extends Controller
         // dd($facturador::generar($numero_autorizacion, $numero_factura, $nit_cliente, $fecha_compra, $monto_compra, $clave));
 
         // return view('empresa.formulario');
+    }
+
+    public function guardar_todo(Request $request)
+    {
+
+        $fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
+
+        $gestion = $fecha->format('Y');//obtenes solo el año actual
+
+        $servicios = Servicio::where('nombre', $request->servicio)
+                            ->where('gestion', $gestion)
+                            ->first();
+
+        $descuento = Descuento::where('nombre', $request->descuento)
+                            ->first();
+        $total = $request->total;
+        
+        if (!empty($request->carrera)) {
+            $carrera = Carrera::where('nombre', $request->carrera)
+                            ->where('gestion', $gestion)
+                            ->first();
+            for ($i=0; $i < $request->cantidad; $i++) { 
+                $cobros_temporada = CobrosTemporada::where('servicio_id', $servicios->id)
+                                ->where('persona_id', $request->persona_id)
+                                ->where('carrera_id', $carrera->id)
+                                ->where('gestion', $gestion)
+                                ->where('estado', 'Debe')
+                                ->first();
+
+                $transacciones = Transaccion::where('cobros_temporadas_id', $cobros_temporada->id)
+                                            ->get();
+                if (count($transacciones) > 0) {
+                    $estimado = $transacciones->last()->estimado;
+                    $a_pagar = $transacciones->last()->saldo;
+
+                    if ($a_pagar < $total) {
+
+                        $total = $total - $a_pagar;
+                        $pagado = $a_pagar;
+                        $saldo = 0;
+                        $observacion = 'Pagado';
+
+                        //GUARDAR TRANSACCION
+                        $transacciones_guarda = new Transaccion();
+                        $transacciones_guarda->servicio_id          = $servicios->id;
+                        $transacciones_guarda->descuento_id         = $descuento->id;
+                        $transacciones_guarda->persona_id           = $request->persona_id;
+                        $transacciones_guarda->cobros_temporadas_id = $cobros_temporada->id;
+                        $transacciones_guarda->fecha_pago           = $fecha;
+                        $transacciones_guarda->estimado             = $estimado;
+                        $transacciones_guarda->a_pagar              = $a_pagar;
+                        $transacciones_guarda->pagado               = $pagado;
+                        $transacciones_guarda->saldo                = $saldo;
+                        $transacciones_guarda->observacion          = $observacion;
+                        $transacciones_guarda->save();
+
+                        //GUARDAR COBROS TEMPORADAS
+                        $cobros_tempo = CobrosTemporada::find($cobros_temporada->id);
+                        $cobros_tempo->estado = 'Pagado';
+                        $cobros_tempo->save();
+
+                    } else {
+
+                        $pagado_1 = $total;
+                        $saldo_1 = $a_pagar - $pagado_1;
+
+                        if ($saldo_1 == 0) {
+
+                            //GUARDAR TRANSACCION
+                            $transacciones_guarda_1 = new Transaccion();
+                            $transacciones_guarda_1->servicio_id          = $servicios->id;
+                            $transacciones_guarda_1->descuento_id         = $descuento->id;
+                            $transacciones_guarda_1->persona_id           = $request->persona_id;
+                            $transacciones_guarda_1->cobros_temporadas_id = $cobros_temporada->id;
+                            $transacciones_guarda_1->fecha_pago           = $fecha;
+                            $transacciones_guarda_1->estimado             = $estimado;
+                            $transacciones_guarda_1->a_pagar              = $a_pagar;
+                            $transacciones_guarda_1->pagado               = $pagado_1;
+                            $transacciones_guarda_1->saldo                = $saldo_1;
+                            $transacciones_guarda_1->observacion          = 'Pagado';
+                            $transacciones_guarda_1->save();
+
+                            //GUARDAR COBROS TEMPORADAS
+                            $cobros_tempo_1 = CobrosTemporada::find($cobros_temporada->id);
+                            $cobros_tempo_1->estado = 'Pagado';
+                            $cobros_tempo_1->save();
+
+                        } else {
+
+                            //GUARDAR TRANSACCION
+                            $transacciones_guarda_1 = new Transaccion();
+                            $transacciones_guarda_1->servicio_id          = $servicios->id;
+                            $transacciones_guarda_1->descuento_id         = $descuento->id;
+                            $transacciones_guarda_1->persona_id           = $request->persona_id;
+                            $transacciones_guarda_1->cobros_temporadas_id = $cobros_temporada->id;
+                            $transacciones_guarda_1->fecha_pago           = $fecha;
+                            $transacciones_guarda_1->estimado             = $estimado;
+                            $transacciones_guarda_1->a_pagar              = $a_pagar;
+                            $transacciones_guarda_1->pagado               = $pagado_1;
+                            $transacciones_guarda_1->saldo                = $saldo_1;
+                            $transacciones_guarda_1->observacion          = 'Pendiente';
+                            $transacciones_guarda_1->save();
+                        }
+
+                    }
+                } else {
+
+                    $estimado_sin = $servicios->precio;
+                    $num = "0.";
+                    $des_por = $num . $descuento->porcentaje;
+                    $a_pagar_sin = $estimado_sin - ($estimado_sin * $des_por);
+
+                    if ($a_pagar_sin < $total) {
+
+                        $total = $total - $a_pagar_sin;
+                        $pagado = $a_pagar_sin;
+                        $saldo = 0;
+                        $observacion = 'Pagado';
+
+                        //GUARDAR TRANSACCION
+                        $transacciones_guarda = new Transaccion();
+                        $transacciones_guarda->servicio_id          = $servicios->id;
+                        $transacciones_guarda->descuento_id         = $descuento->id;
+                        $transacciones_guarda->persona_id           = $request->persona_id;
+                        $transacciones_guarda->cobros_temporadas_id = $cobros_temporada->id;
+                        $transacciones_guarda->fecha_pago           = $fecha;
+                        $transacciones_guarda->estimado             = $estimado_sin;
+                        $transacciones_guarda->a_pagar              = $a_pagar_sin;
+                        $transacciones_guarda->pagado               = $pagado;
+                        $transacciones_guarda->saldo                = $saldo;
+                        $transacciones_guarda->observacion          = $observacion;
+                        $transacciones_guarda->save();
+
+                        //GUARDAR COBROS TEMPORADAS
+                        $cobros_tempo = CobrosTemporada::find($cobros_temporada->id);
+                        $cobros_tempo->estado = 'Pagado';
+                        $cobros_tempo->save();
+
+                    } else {
+
+                        $pagado_1 = $total;
+                        $saldo_1 = $a_pagar_sin - $pagado_1;
+
+                        if ($saldo_1 == 0) {
+
+                            //GUARDAR TRANSACCION
+                            $transacciones_guarda_1 = new Transaccion();
+                            $transacciones_guarda_1->servicio_id          = $servicios->id;
+                            $transacciones_guarda_1->descuento_id         = $descuento->id;
+                            $transacciones_guarda_1->persona_id           = $request->persona_id;
+                            $transacciones_guarda_1->cobros_temporadas_id = $cobros_temporada->id;
+                            $transacciones_guarda_1->fecha_pago           = $fecha;
+                            $transacciones_guarda_1->estimado             = $estimado_sin;
+                            $transacciones_guarda_1->a_pagar              = $a_pagar_sin;
+                            $transacciones_guarda_1->pagado               = $pagado_1;
+                            $transacciones_guarda_1->saldo                = $saldo_1;
+                            $transacciones_guarda_1->observacion          = 'Pagado';
+                            $transacciones_guarda_1->save();
+
+                            //GUARDAR COBROS TEMPORADAS
+                            $cobros_tempo_1 = CobrosTemporada::find($cobros_temporada->id);
+                            $cobros_tempo_1->estado = 'Pagado';
+                            $cobros_tempo_1->save();
+
+                        } else {
+
+                            //GUARDAR TRANSACCION
+                            $transacciones_guarda_1 = new Transaccion();
+                            $transacciones_guarda_1->servicio_id          = $servicios->id;
+                            $transacciones_guarda_1->descuento_id         = $descuento->id;
+                            $transacciones_guarda_1->persona_id           = $request->persona_id;
+                            $transacciones_guarda_1->cobros_temporadas_id = $cobros_temporada->id;
+                            $transacciones_guarda_1->fecha_pago           = $fecha;
+                            $transacciones_guarda_1->estimado             = $estimado_sin;
+                            $transacciones_guarda_1->a_pagar              = $a_pagar_sin;
+                            $transacciones_guarda_1->pagado               = $pagado_1;
+                            $transacciones_guarda_1->saldo                = $saldo_1;
+                            $transacciones_guarda_1->observacion          = 'Pendiente';
+                            $transacciones_guarda_1->save();
+                        }
+
+                    }
+
+                }
+            }
+
+        } else {
+
+            $asignatura = Asignatura::where('nombre_asignatura', $request->asignatura)
+                            ->where('anio_vigente', $gestion)
+                            ->first();
+
+            for ($i=0; $i < $request->cantidad; $i++) {    
+                         
+                $cobros_temporada = CobrosTemporada::where('servicio_id', $servicios->id)
+                            ->where('persona_id', $request->persona_id)
+                            ->where('asignatura_id', $asignatura->id)
+                            ->where('gestion', $gestion)
+                            ->where('estado', 'Debe')
+                            ->first();
+
+                $transacciones = Transaccion::where('cobros_temporadas_id', $cobros_temporada->id)
+                                        ->get();
+                if (count($transacciones) > 0) {
+                    $estimado = $transacciones->last()->estimado;
+                    $a_pagar = $transacciones->last()->saldo;
+
+                    if ($a_pagar < $total) {
+
+                        $total = $total - $a_pagar;
+                        $pagado = $a_pagar;
+                        $saldo = 0;
+                        $observacion = 'Pagado';
+
+                        //GUARDAR TRANSACCION
+                        $transacciones_guarda = new Transaccion();
+                        $transacciones_guarda->servicio_id          = $servicios->id;
+                        $transacciones_guarda->descuento_id         = $descuento->id;
+                        $transacciones_guarda->persona_id           = $request->persona_id;
+                        $transacciones_guarda->cobros_temporadas_id = $cobros_temporada->id;
+                        $transacciones_guarda->fecha_pago           = $fecha;
+                        $transacciones_guarda->estimado             = $estimado;
+                        $transacciones_guarda->a_pagar              = $a_pagar;
+                        $transacciones_guarda->pagado               = $pagado;
+                        $transacciones_guarda->saldo                = $saldo;
+                        $transacciones_guarda->observacion          = $observacion;
+                        $transacciones_guarda->save();
+
+                        //GUARDAR COBROS TEMPORADAS
+                        $cobros_tempo = CobrosTemporada::find($cobros_temporada->id);
+                        $cobros_tempo->estado = 'Pagado';
+                        $cobros_tempo->save();
+
+                    } else {
+
+                        $pagado_1 = $total;
+                        $saldo_1 = $a_pagar - $pagado_1;
+
+                        if ($saldo_1 == 0) {
+
+                            //GUARDAR TRANSACCION
+                            $transacciones_guarda_1 = new Transaccion();
+                            $transacciones_guarda_1->servicio_id          = $servicios->id;
+                            $transacciones_guarda_1->descuento_id         = $descuento->id;
+                            $transacciones_guarda_1->persona_id           = $request->persona_id;
+                            $transacciones_guarda_1->cobros_temporadas_id = $cobros_temporada->id;
+                            $transacciones_guarda_1->fecha_pago           = $fecha;
+                            $transacciones_guarda_1->estimado             = $estimado;
+                            $transacciones_guarda_1->a_pagar              = $a_pagar;
+                            $transacciones_guarda_1->pagado               = $pagado_1;
+                            $transacciones_guarda_1->saldo                = $saldo_1;
+                            $transacciones_guarda_1->observacion          = 'Pagado';
+                            $transacciones_guarda_1->save();
+
+                            //GUARDAR COBROS TEMPORADAS
+                            $cobros_tempo_1 = CobrosTemporada::find($cobros_temporada->id);
+                            $cobros_tempo_1->estado = 'Pagado';
+                            $cobros_tempo_1->save();
+
+                        } else {
+
+                            //GUARDAR TRANSACCION
+                            $transacciones_guarda_1 = new Transaccion();
+                            $transacciones_guarda_1->servicio_id          = $servicios->id;
+                            $transacciones_guarda_1->descuento_id         = $descuento->id;
+                            $transacciones_guarda_1->persona_id           = $request->persona_id;
+                            $transacciones_guarda_1->cobros_temporadas_id = $cobros_temporada->id;
+                            $transacciones_guarda_1->fecha_pago           = $fecha;
+                            $transacciones_guarda_1->estimado             = $estimado;
+                            $transacciones_guarda_1->a_pagar              = $a_pagar;
+                            $transacciones_guarda_1->pagado               = $pagado_1;
+                            $transacciones_guarda_1->saldo                = $saldo_1;
+                            $transacciones_guarda_1->observacion          = 'Pendiente';
+                            $transacciones_guarda_1->save();
+                        }
+
+                    }
+                } else {
+
+                    $estimado_sin = $servicios->precio;
+                    $num = "0.";
+                    $des_por = $num . $descuento_id->porcentaje;
+                    $a_pagar_sin = $estimado_sin - ($estimado_sin * $des_por);
+
+                    if ($a_pagar_sin < $total) {
+
+                        $total = $total - $a_pagar;
+                        $pagado = $a_pagar;
+                        $saldo = 0;
+                        $observacion = 'Pagado';
+
+                        //GUARDAR TRANSACCION
+                        $transacciones_guarda = new Transaccion();
+                        $transacciones_guarda->servicio_id          = $servicios->id;
+                        $transacciones_guarda->descuento_id         = $descuento->id;
+                        $transacciones_guarda->persona_id           = $request->persona_id;
+                        $transacciones_guarda->cobros_temporadas_id = $cobros_temporada->id;
+                        $transacciones_guarda->fecha_pago           = $fecha;
+                        $transacciones_guarda->estimado             = $estimado_sin;
+                        $transacciones_guarda->a_pagar              = $a_pagar_sin;
+                        $transacciones_guarda->pagado               = $pagado;
+                        $transacciones_guarda->saldo                = $saldo;
+                        $transacciones_guarda->observacion          = $observacion;
+                        $transacciones_guarda->save();
+
+                        //GUARDAR COBROS TEMPORADAS
+                        $cobros_tempo = CobrosTemporada::find($cobros_temporada->id);
+                        $cobros_tempo->estado = 'Pagado';
+                        $cobros_tempo->save();
+
+                    } else {
+
+                        $pagado_1 = $total;
+                        $saldo_1 = $a_pagar - $pagado_1;
+
+                        if ($saldo_1 == 0) {
+
+                            //GUARDAR TRANSACCION
+                            $transacciones_guarda_1 = new Transaccion();
+                            $transacciones_guarda_1->servicio_id          = $servicios->id;
+                            $transacciones_guarda_1->descuento_id         = $descuento->id;
+                            $transacciones_guarda_1->persona_id           = $request->persona_id;
+                            $transacciones_guarda_1->cobros_temporadas_id = $cobros_temporada->id;
+                            $transacciones_guarda_1->fecha_pago           = $fecha;
+                            $transacciones_guarda_1->estimado             = $estimado_sin;
+                            $transacciones_guarda_1->a_pagar              = $a_pagar_sin;
+                            $transacciones_guarda_1->pagado               = $pagado_1;
+                            $transacciones_guarda_1->saldo                = $saldo_1;
+                            $transacciones_guarda_1->observacion          = 'Pagado';
+                            $transacciones_guarda_1->save();
+
+                            //GUARDAR COBROS TEMPORADAS
+                            $cobros_tempo_1 = CobrosTemporada::find($cobros_temporada->id);
+                            $cobros_tempo_1->estado = 'Pagado';
+                            $cobros_tempo_1->save();
+
+                        } else {
+
+                            //GUARDAR TRANSACCION
+                            $transacciones_guarda_1 = new Transaccion();
+                            $transacciones_guarda_1->servicio_id          = $servicios->id;
+                            $transacciones_guarda_1->descuento_id         = $descuento->id;
+                            $transacciones_guarda_1->persona_id           = $request->persona_id;
+                            $transacciones_guarda_1->cobros_temporadas_id = $cobros_temporada->id;
+                            $transacciones_guarda_1->fecha_pago           = $fecha;
+                            $transacciones_guarda_1->estimado             = $estimado_sin;
+                            $transacciones_guarda_1->a_pagar              = $a_pagar_sin;
+                            $transacciones_guarda_1->pagado               = $pagado_1;
+                            $transacciones_guarda_1->saldo                = $saldo_1;
+                            $transacciones_guarda_1->observacion          = 'Pendiente';
+                            $transacciones_guarda_1->save();
+                        }
+
+                    }
+
+                }
+            }
+        }
+
+        return response()->json([
+            'guardado' => 'si'
+        ]);
     }
 
     

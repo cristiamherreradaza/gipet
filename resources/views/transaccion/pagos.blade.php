@@ -100,11 +100,11 @@
                                     <thead>
                                         <tr>
                                             <th>Cantidad</th>
-                                            <th>Codigo</th>
                                             <th>Descripcion</th>
                                             <th>Concepto</th>
                                             <th>Carrera</th>
                                             <th>Asignatura</th>
+                                            <th>Descuento</th>
                                             <th class="w-10 text-center">Total Bs.</th>
                                             <th>Accion</th>
                                         </tr>
@@ -150,7 +150,7 @@
                         </table>
                     </div>
                     <div class="form-group">
-                        <a class="btn waves-effect waves-light btn-block btn-success text-white" onclick="validaItems()">REGISTRAR PAGO</a>
+                        <a class="btn waves-effect waves-light btn-block btn-success text-white" onclick="guarda_transaccion()">REGISTRAR PAGO</a>
                     </div>
                 </div>
             </div>
@@ -222,7 +222,8 @@
         var servicio_id = $("#servicio_id").val();
         var carrera_id = $("#carrera_id").val();
         var asignatura_id = $("#asignatura_id").val();
-        var total = $("#total").val();
+        var descuento_id = $("#descuento_id").val();
+        var total = $("#total_pagado").val();
         var sum_total = 0;
 
         $.ajax({
@@ -231,7 +232,8 @@
                 data: {
                     tipo_servicio_id : servicio_id,
                     tipo_carrera_id : carrera_id,
-                    tipo_asignatura_id : asignatura_id
+                    tipo_asignatura_id : asignatura_id,
+                    tipo_descuento_id : descuento_id
                 },
                 success:function(data){
                     var nom_carrera;
@@ -254,11 +256,11 @@
                         tdtest.setAttribute("class", "removeclass" + room);
                         var rtd = 'removeclass' + room;
                         tdtest.innerHTML = '<td>'+cantidad+'</td>\
-                                            <td>'+data.servicio.sigla+'</td>\
                                             <td>'+data.servicio.nombre+'</td>\
                                             <td>PAGO '+data.servicio.nombre+'</td>\
                                             <td>'+nom_carrera+'</td>\
                                             <td>'+nom_asignatura+'</td>\
+                                            <td>'+data.descuento.nombre+'</td>\
                                             <td>'+total+'</td>\
                                             <td class="col-sm-2">\
                                                 <div class="form-group">\
@@ -312,6 +314,42 @@
                                 centSingular: 'Centavo'
                             });
                 $("#montoLiteral").html(valorLiteral);
+    }
+
+    function guarda_transaccion(){
+
+        $('#tablaDetalle tbody').find('tr').each(function (i, el) {
+                //Voy incrementando las variables segun la fila ( .eq(0) representa la fila 1 )     
+                cantidad = $(this).find('td').eq(0).text();
+                servicio = $(this).find('td').eq(1).text();
+                carrera = $(this).find('td').eq(3).text();
+                asignatura = $(this).find('td').eq(4).text();
+                descuento = $(this).find('td').eq(5).text();
+                total = $(this).find('td').eq(6).text();
+                persona_id = $("#persona_id").val();
+                
+                $.ajax({
+                type:'POST',
+                url:"{{ url('Transaccion/guardar_todo') }}",
+                data: {
+                    cantidad : cantidad,
+                    servicio : servicio,
+                    carrera : carrera,
+                    asignatura : asignatura,
+                    descuento : descuento,
+                    persona_id : persona_id,
+                    total : total
+                },
+                success:function(data){
+                        
+                }
+            });
+        });
+        Swal.fire({
+            type: 'success',
+            title: 'Excelente!',
+            text: 'Pago registrado'
+        })
     }
 
 </script>

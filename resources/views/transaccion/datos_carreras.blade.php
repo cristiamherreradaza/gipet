@@ -81,7 +81,7 @@
                 </span>
             </label>
             <select name="descuento_id" id="descuento_id" class="form-control">
-                <option value=""></option>
+                {{-- <option value=""></option> --}}
             </select>
         </div>
     </div>
@@ -128,7 +128,11 @@
 
             $('#cantidad').val('');
             $('#precio_servicio').val('');
+            $('#descuento_id').html('');
+            $('#descuento_bs').val('');
             $('#total').val('');
+            $('#total_pagado').val('');
+
 
             // console.log(servicio_id);
             // console.log(carnet);
@@ -176,17 +180,90 @@
         var carrera_id = e.target.value;
         var servicio_id = $('#servicio_id').val();
         var persona_id = $('#persona_id').val();
+        $('#descuento_id').html('');
 
 
             $.ajax({
                 type:'GET',
-                url:"{{ url('Transaccion/verifica_cobros_temporada') }}",
+                url:"{{ url('Transaccion/verifica_cobros_temporada_carrera') }}",
                 data: {
                     tipo_carrera_id : carrera_id,
                     tipo_servicio_id : servicio_id,
                     tipo_persona_id : persona_id
                 },
                 success:function(data){
+                    if (data.verifica == 'si') {
+
+                        $('#cantidad').val(data.cantidad);
+                        $('#precio_servicio').val(data.precio_servicio);
+                        $('#descuento_id').append('<option value="'+ data.descuento_id.id +'">'+ data.descuento_id.nombre +' - '+ data.descuento_id.porcentaje +'%</option>');
+                        $('#descuento_bs').val(data.descuento_bs);
+                        $('#total').val(data.total);
+                        $('#total_pagado').val(data.total_pagado);
+
+                    } else {
+
+                        $('#cantidad').val(data.cantidad);
+                        $('#precio_servicio').val(data.precio_servicio);
+
+                        $.each(data.descuento_id, function(index, value){
+                                    $('#descuento_id').append('<option value="'+ data.descuento_id[index].id +'">'+ data.descuento_id[index].nombre +' - '+ data.descuento_id[index].porcentaje +'%</option>');
+                        });
+                        $('#descuento_bs').val(data.descuento_bs);
+                        $('#total').val(data.total);
+                        $('#total_pagado').val(data.total_pagado);
+
+                    }
+                    
+                        // $('#asignatura_id').empty();
+                        // $('#asignatura_id').append('<option value="0">Seleccionar</option>');
+                            
+                        // $.each(data, function(index, value){
+                        //     $('#asignatura_id').append('<option value="'+ data[index].id +'">'+ data[index].nombre_asignatura +'</option>');
+                        // });
+                        
+                }
+            });
+    });
+
+    $('#asignatura_id').on('change', function(e){
+        var asignatura_id = e.target.value;
+        var servicio_id = $('#servicio_id').val();
+        var persona_id = $('#persona_id').val();
+        $('#descuento_id').html('');
+
+
+            $.ajax({
+                type:'GET',
+                url:"{{ url('Transaccion/verifica_cobros_temporada_asignatura') }}",
+                data: {
+                    tipo_asignatura_id : asignatura_id,
+                    tipo_servicio_id : servicio_id,
+                    tipo_persona_id : persona_id
+                },
+                success:function(data){
+                    if (data.verifica == 'si') {
+
+                        $('#cantidad').val(data.cantidad);
+                        $('#precio_servicio').val(data.precio_servicio);
+                        $('#descuento_id').append('<option value="'+ data.descuento_id.id +'">'+ data.descuento_id.nombre +' - '+ data.descuento_id.porcentaje +'%</option>');
+                        $('#descuento_bs').val(data.descuento_bs);
+                        $('#total').val(data.total);
+                        $('#total_pagado').val(data.total_pagado);
+
+                    } else {
+
+                        $('#cantidad').val(data.cantidad);
+                        $('#precio_servicio').val(data.precio_servicio);
+
+                        $.each(data.descuento_id, function(index, value){
+                                    $('#descuento_id').append('<option value="'+ data.descuento_id[index].id +'">'+ data.descuento_id[index].nombre +' - '+ data.descuento_id[index].porcentaje +'%</option>');
+                        });
+                        $('#descuento_bs').val(data.descuento_bs);
+                        $('#total').val(data.total);
+                        $('#total_pagado').val(data.total_pagado);
+
+                    }
                     
                         // $('#asignatura_id').empty();
                         // $('#asignatura_id').append('<option value="0">Seleccionar</option>');
