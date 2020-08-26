@@ -318,6 +318,26 @@
 
     function guarda_transaccion(){
 
+        persona_id = $("#persona_id").val();
+        nit = $("#nit").val();
+        razon_social_cliente = $("#razon_social_cliente").val();
+        resultadoTotales = $("#resultadoTotales").val();
+        
+
+        $.ajax({
+                type:'POST',
+                url:"{{ url('Transaccion/guardar_factura') }}",
+                data: {
+                    persona_id : persona_id,
+                    razon_social_cliente : razon_social_cliente,
+                    nit : nit,
+                    resultadoTotales : resultadoTotales
+                },
+                success:function(data){
+                        
+                }
+            });
+
         $('#tablaDetalle tbody').find('tr').each(function (i, el) {
                 //Voy incrementando las variables segun la fila ( .eq(0) representa la fila 1 )     
                 cantidad = $(this).find('td').eq(0).text();
@@ -326,7 +346,6 @@
                 asignatura = $(this).find('td').eq(4).text();
                 descuento = $(this).find('td').eq(5).text();
                 total = $(this).find('td').eq(6).text();
-                persona_id = $("#persona_id").val();
                 
                 $.ajax({
                 type:'POST',
@@ -345,6 +364,8 @@
                 }
             });
         });
+
+
         Swal.fire({
             type: 'success',
             title: 'Excelente!',

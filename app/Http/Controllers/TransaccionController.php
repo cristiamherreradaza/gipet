@@ -703,5 +703,17 @@ class TransaccionController extends Controller
         ]);
     }
 
+    public function guardar_factura(Request $request)
+    {
+        $persona_id = $request->persona_id;
+        $razon_social_cliente = $request->razon_social_cliente;
+        $nit = $request->nit;
+        $total = $request->resultadoTotales;
+
+        dd($total);
+
+
+    }
+
     
 }

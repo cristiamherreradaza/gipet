@@ -219,3 +219,4 @@ Route::get('Transaccion/verifica_descuento', 'TransaccionController@verifica_des
 Route::get('Transaccion/verifica_datos', 'TransaccionController@verifica_datos');
 Route::get('Transaccion/formulario', 'TransaccionController@formulario');
 Route::post('Transaccion/guardar_todo', 'TransaccionController@guardar_todo');
+Route::post('Transaccion/guardar_factura', 'TransaccionController@guardar_factura');
