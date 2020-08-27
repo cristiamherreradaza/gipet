@@ -11,6 +11,11 @@ use App\Servicio;
 use App\Carrera;
 use App\Descuento;
 use App\Asignatura;
+use App\Empresa;
+use App\DosificacionesFactura;
+use App\Factura;
+use App\DetallesFactura;
+use Illuminate\Support\Facades\Auth;
 use DB;
 use CodigoControlV7;
 
@@ -18,11 +23,6 @@ class TransaccionController extends Controller
 {
    	public function pagos()
     {
-        // $almacenes = Almacene::get();
-        // $grupos = Grupo::all();
-        // $clientes = User::where('rol', 'Cliente')
-        //             ->get();
-        // return view('transaccion.pagos')->with(compact('almacenes', 'clientes', 'grupos'));
         $servicios = Servicio::get();
         return view('transaccion.pagos', compact('servicios'));  
     }
@@ -30,25 +30,16 @@ class TransaccionController extends Controller
     public function verifica_ci(Request $request)
     {
     	$carnet = $request->ci;
-        // $almacenes = Almacene::get();
-        // $grupos = Grupo::all();
         $persona = Persona::where('carnet', $carnet)
                     ->first();
 
         $servicios = Servicio::get();
         
-        // $consulta = $this->consultar($persona->id);
-
         $servicios_persona = CobrosTemporada::where('persona_id', $persona->id)
         		   ->where('estado', 'Debe')
         		   ->select('servicio_id')
         		   ->groupBy('servicio_id')
                    ->get();
-        // foreach ($servicios as $valor) {
-        //     echo $valor->servicio_id;
-        //     echo ', ';
-        // }
-        // return view('transaccion.pagos')->with(compact('almacenes', 'clientes', 'grupos'));
         return response()->json([
             'id' => $persona->id,
             'nombres' => $persona->nombres,
@@ -58,22 +49,7 @@ class TransaccionController extends Controller
             'razon_social_cliente' => $persona->razon_social_cliente,
             'consulta' => $servicios_persona
         ]);
-        // return view('transaccion.datos_carreras')->with(compact('servicios', 'servicios_persona', 'persona'));
     }
-
-    // public function consultar($persona_id)
-    // {
-
-    //     $servicios = Servicio::get();
-
-    //     $servicios_persona = CobrosTemporada::where('persona_id', $persona_id)
-    //                ->where('estado', 'Debe')
-    //                ->select('servicio_id')
-    //                ->groupBy('servicio_id')
-    //                ->get();
-
-    //     return view('transaccion.datos_carreras')->with(compact('servicios', 'servicios_persona'));
-    // }
 
     public function consulta(Request $request)
     {
@@ -395,6 +371,13 @@ class TransaccionController extends Controller
                         $transacciones_guarda->observacion          = $observacion;
                         $transacciones_guarda->save();
 
+
+                        //GUARDAR DETALLE FACTURA
+                        $detalle_factura = new DetallesFactura();
+                        $detalle_factura->factura_id = $request->factura_id;
+                        $detalle_factura->transaccion_id = $transacciones_guarda->id;
+                        $detalle_factura->save();
+
                         //GUARDAR COBROS TEMPORADAS
                         $cobros_tempo = CobrosTemporada::find($cobros_temporada->id);
                         $cobros_tempo->estado = 'Pagado';
@@ -421,6 +404,12 @@ class TransaccionController extends Controller
                             $transacciones_guarda_1->observacion          = 'Pagado';
                             $transacciones_guarda_1->save();
 
+                            //GUARDAR DETALLE FACTURA
+                            $detalle_factura = new DetallesFactura();
+                            $detalle_factura->factura_id = $request->factura_id;
+                            $detalle_factura->transaccion_id = $transacciones_guarda_1->id;
+                            $detalle_factura->save();
+
                             //GUARDAR COBROS TEMPORADAS
                             $cobros_tempo_1 = CobrosTemporada::find($cobros_temporada->id);
                             $cobros_tempo_1->estado = 'Pagado';
@@ -441,6 +430,12 @@ class TransaccionController extends Controller
                             $transacciones_guarda_1->saldo                = $saldo_1;
                             $transacciones_guarda_1->observacion          = 'Pendiente';
                             $transacciones_guarda_1->save();
+
+                           //GUARDAR DETALLE FACTURA
+                            $detalle_factura = new DetallesFactura();
+                            $detalle_factura->factura_id = $request->factura_id;
+                            $detalle_factura->transaccion_id = $transacciones_guarda_1->id;
+                            $detalle_factura->save();
                         }
 
                     }
@@ -472,6 +467,12 @@ class TransaccionController extends Controller
                         $transacciones_guarda->observacion          = $observacion;
                         $transacciones_guarda->save();
 
+                        //GUARDAR DETALLE FACTURA
+                        $detalle_factura = new DetallesFactura();
+                        $detalle_factura->factura_id = $request->factura_id;
+                        $detalle_factura->transaccion_id = $transacciones_guarda->id;
+                        $detalle_factura->save();
+
                         //GUARDAR COBROS TEMPORADAS
                         $cobros_tempo = CobrosTemporada::find($cobros_temporada->id);
                         $cobros_tempo->estado = 'Pagado';
@@ -498,6 +499,12 @@ class TransaccionController extends Controller
                             $transacciones_guarda_1->observacion          = 'Pagado';
                             $transacciones_guarda_1->save();
 
+                            //GUARDAR DETALLE FACTURA
+                            $detalle_factura = new DetallesFactura();
+                            $detalle_factura->factura_id = $request->factura_id;
+                            $detalle_factura->transaccion_id = $transacciones_guarda_1->id;
+                            $detalle_factura->save();
+
                             //GUARDAR COBROS TEMPORADAS
                             $cobros_tempo_1 = CobrosTemporada::find($cobros_temporada->id);
                             $cobros_tempo_1->estado = 'Pagado';
@@ -518,6 +525,12 @@ class TransaccionController extends Controller
                             $transacciones_guarda_1->saldo                = $saldo_1;
                             $transacciones_guarda_1->observacion          = 'Pendiente';
                             $transacciones_guarda_1->save();
+
+                            //GUARDAR DETALLE FACTURA
+                            $detalle_factura = new DetallesFactura();
+                            $detalle_factura->factura_id = $request->factura_id;
+                            $detalle_factura->transaccion_id = $transacciones_guarda_1->id;
+                            $detalle_factura->save();
                         }
 
                     }
@@ -567,6 +580,12 @@ class TransaccionController extends Controller
                         $transacciones_guarda->observacion          = $observacion;
                         $transacciones_guarda->save();
 
+                        //GUARDAR DETALLE FACTURA
+                        $detalle_factura = new DetallesFactura();
+                        $detalle_factura->factura_id = $request->factura_id;
+                        $detalle_factura->transaccion_id = $transacciones_guarda->id;
+                        $detalle_factura->save();
+
                         //GUARDAR COBROS TEMPORADAS
                         $cobros_tempo = CobrosTemporada::find($cobros_temporada->id);
                         $cobros_tempo->estado = 'Pagado';
@@ -593,6 +612,12 @@ class TransaccionController extends Controller
                             $transacciones_guarda_1->observacion          = 'Pagado';
                             $transacciones_guarda_1->save();
 
+                            //GUARDAR DETALLE FACTURA
+                            $detalle_factura = new DetallesFactura();
+                            $detalle_factura->factura_id = $request->factura_id;
+                            $detalle_factura->transaccion_id = $transacciones_guarda_1->id;
+                            $detalle_factura->save();
+
                             //GUARDAR COBROS TEMPORADAS
                             $cobros_tempo_1 = CobrosTemporada::find($cobros_temporada->id);
                             $cobros_tempo_1->estado = 'Pagado';
@@ -613,6 +638,13 @@ class TransaccionController extends Controller
                             $transacciones_guarda_1->saldo                = $saldo_1;
                             $transacciones_guarda_1->observacion          = 'Pendiente';
                             $transacciones_guarda_1->save();
+
+                            //GUARDAR DETALLE FACTURA
+                            $detalle_factura = new DetallesFactura();
+                            $detalle_factura->factura_id = $request->factura_id;
+                            $detalle_factura->transaccion_id = $transacciones_guarda_1->id;
+                            $detalle_factura->save();
+
                         }
 
                     }
@@ -644,6 +676,13 @@ class TransaccionController extends Controller
                         $transacciones_guarda->observacion          = $observacion;
                         $transacciones_guarda->save();
 
+                        //GUARDAR DETALLE FACTURA
+                        $detalle_factura = new DetallesFactura();
+                        $detalle_factura->factura_id = $request->factura_id;
+                        $detalle_factura->transaccion_id = $transacciones_guarda->id;
+                        $detalle_factura->save();
+
+
                         //GUARDAR COBROS TEMPORADAS
                         $cobros_tempo = CobrosTemporada::find($cobros_temporada->id);
                         $cobros_tempo->estado = 'Pagado';
@@ -670,6 +709,12 @@ class TransaccionController extends Controller
                             $transacciones_guarda_1->observacion          = 'Pagado';
                             $transacciones_guarda_1->save();
 
+                            //GUARDAR DETALLE FACTURA
+                            $detalle_factura = new DetallesFactura();
+                            $detalle_factura->factura_id = $request->factura_id;
+                            $detalle_factura->transaccion_id = $transacciones_guarda_1->id;
+                            $detalle_factura->save();
+
                             //GUARDAR COBROS TEMPORADAS
                             $cobros_tempo_1 = CobrosTemporada::find($cobros_temporada->id);
                             $cobros_tempo_1->estado = 'Pagado';
@@ -690,6 +735,12 @@ class TransaccionController extends Controller
                             $transacciones_guarda_1->saldo                = $saldo_1;
                             $transacciones_guarda_1->observacion          = 'Pendiente';
                             $transacciones_guarda_1->save();
+
+                            //GUARDAR DETALLE FACTURA
+                            $detalle_factura = new DetallesFactura();
+                            $detalle_factura->factura_id = $request->factura_id;
+                            $detalle_factura->transaccion_id = $transacciones_guarda_1->id;
+                            $detalle_factura->save();
                         }
 
                     }
@@ -705,12 +756,55 @@ class TransaccionController extends Controller
 
     public function guardar_factura(Request $request)
     {
+        $fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
+        $gestion = $fecha->format('Y');//obtenes solo el año actual
+        $fecha_factura = $fecha->format('Ymd');
+
         $persona_id = $request->persona_id;
         $razon_social_cliente = $request->razon_social_cliente;
         $nit = $request->nit;
         $total = $request->resultadoTotales;
 
-        dd($total);
+        //Datos de la Empresa
+        $empresa = Empresa::where('estado', 'Vigente')
+                    ->first();
+
+        //Datos de dosificacion
+        $dosificacion = DosificacionesFactura::where('estado', 'Vigente')
+                    ->first();
+
+        //Datos del usuario logueado
+        $user_id = Auth::user()->id;
+
+        //Obtener Codigo de Control
+        $facturador = new CodigoControlV7();
+        $numero_autorizacion = $dosificacion->autorizacion_empresa;
+        $numero_factura = $dosificacion->nit_empresa;
+        $nit_cliente = $nit;
+        $fecha_compra = $fecha_factura;
+        $monto_compra = $total;
+        $clave = $dosificacion->llave_dosificacion;
+        $codigo_control = (CodigoControlV7::generar($numero_autorizacion, $numero_factura, $nit_cliente, $fecha_compra, $monto_compra, $clave));
+
+         //GUARDAR FACTURA
+        $factura = new Factura();
+        $factura->empresa_id        = $empresa->id;
+        $factura->dosificacion_id   = $dosificacion->id;
+        $factura->persona_id        = $persona_id;
+        $factura->user_id           = $user_id;
+        $factura->razon_social      = $razon_social_cliente;
+        $factura->nit               = $nit;
+        $factura->fecha             = $fecha;
+        $factura->total             = $total;
+        $factura->gestion           = $gestion;
+        $factura->codigo_control    = $codigo_control;
+        $factura->save();
+
+        $factura_id = $factura->id;
+
+        return response()->json([
+            'factura_id' => $factura_id
+        ]);
 
 
     }

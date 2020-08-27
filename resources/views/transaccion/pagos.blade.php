@@ -334,43 +334,46 @@
                     resultadoTotales : resultadoTotales
                 },
                 success:function(data){
-                        
+                        factura_id = data.factura_id;
+                        // AQUI
+                        $('#tablaDetalle tbody').find('tr').each(function (i, el) {
+                                //Voy incrementando las variables segun la fila ( .eq(0) representa la fila 1 )     
+                                cantidad = $(this).find('td').eq(0).text();
+                                servicio = $(this).find('td').eq(1).text();
+                                carrera = $(this).find('td').eq(3).text();
+                                asignatura = $(this).find('td').eq(4).text();
+                                descuento = $(this).find('td').eq(5).text();
+                                total = $(this).find('td').eq(6).text();
+                                
+                                $.ajax({
+                                type:'POST',
+                                url:"{{ url('Transaccion/guardar_todo') }}",
+                                data: {
+                                    cantidad : cantidad,
+                                    servicio : servicio,
+                                    carrera : carrera,
+                                    asignatura : asignatura,
+                                    descuento : descuento,
+                                    persona_id : persona_id,
+                                    total : total,
+                                    factura_id : factura_id
+                                },
+                                success:function(data){
+                                        
+                                }
+                            });
+                        });
+
+
+                        Swal.fire({
+                            type: 'success',
+                            title: 'Excelente!',
+                            text: 'Pago registrado'
+                        })
                 }
             });
 
-        $('#tablaDetalle tbody').find('tr').each(function (i, el) {
-                //Voy incrementando las variables segun la fila ( .eq(0) representa la fila 1 )     
-                cantidad = $(this).find('td').eq(0).text();
-                servicio = $(this).find('td').eq(1).text();
-                carrera = $(this).find('td').eq(3).text();
-                asignatura = $(this).find('td').eq(4).text();
-                descuento = $(this).find('td').eq(5).text();
-                total = $(this).find('td').eq(6).text();
-                
-                $.ajax({
-                type:'POST',
-                url:"{{ url('Transaccion/guardar_todo') }}",
-                data: {
-                    cantidad : cantidad,
-                    servicio : servicio,
-                    carrera : carrera,
-                    asignatura : asignatura,
-                    descuento : descuento,
-                    persona_id : persona_id,
-                    total : total
-                },
-                success:function(data){
-                        
-                }
-            });
-        });
-
-
-        Swal.fire({
-            type: 'success',
-            title: 'Excelente!',
-            text: 'Pago registrado'
-        })
+       
     }
 
 </script>
