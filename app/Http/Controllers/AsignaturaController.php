@@ -12,7 +12,7 @@ class AsignaturaController extends Controller
 {
     public function listado_malla(Request $request, $carrera_id)
     {
-        $asignaturas = Asignatura::where("borrado", NULL)
+        $asignaturas = Asignatura::where("deleted_at", NULL)
                     ->where('carrera_id', $carrera_id)
                     ->get();
         // dd($carreras[0]->nombre);
@@ -37,6 +37,7 @@ class AsignaturaController extends Controller
         $asignatura->teorico           = $request->teorico;
         $asignatura->practico          = $request->practico;
         $asignatura->anio_vigente      = $request->anio_vigente;
+        $asignatura->ciclo             = $request->ciclo;
 
         $sw = 0;
 
@@ -57,7 +58,7 @@ class AsignaturaController extends Controller
         // dd($asignatura_id);
         $hoy = date("Y-m-d H:i:s");
 
-        $asignatura = Asignatura::where("borrado", NULL)
+        $asignatura = Asignatura::where("deleted_at", NULL)
                     ->where('id', $asignatura_id)
                     ->first();
 
@@ -83,7 +84,7 @@ class AsignaturaController extends Controller
     public function ajax_muestra_prerequisitos(Request $request, $asignatura_id)
     {
         $prerequisitos = Prerequisito::where('asignatura_id', $asignatura_id)
-                        ->where('borrado', NULL)
+                        ->where('deleted_at', NULL)
                         ->get();
 
         return view('asignatura.ajax_muestra_prerequisitos', compact('prerequisitos'));
@@ -119,11 +120,11 @@ class AsignaturaController extends Controller
     public function asignaturas_equivalentes()
     {
         $anio_vigente = 2020;
-        $carrera = Carrera::whereNull('borrado')
+        $carrera = Carrera::whereNull('deleted_at')
                             ->orderBy('id', 'ASC')
                             ->get();
 
-        $asignatura = Asignatura::whereNull('borrado')
+        $asignatura = Asignatura::whereNull('deleted_at')
                             ->where('anio_vigente', $anio_vigente)
                             ->orderBy('id', 'ASC')
                             ->get();
@@ -134,7 +135,7 @@ class AsignaturaController extends Controller
     public function ajax_lista(Request $request)
     {
 
-        $asignaturas = AsignaturasEquivalente::whereNull('borrado')
+        $asignaturas = AsignaturasEquivalente::whereNull('deleted_at')
                             ->orderBy('id', 'DESC')
                             ->get();
 
@@ -158,7 +159,7 @@ class AsignaturaController extends Controller
         $asig_equivalente->anio_vigente    = $anio_vigente;
         $asig_equivalente->save();
 
-        $asignaturas = AsignaturasEquivalente::whereNull('borrado')
+        $asignaturas = AsignaturasEquivalente::whereNull('deleted_at')
                             ->orderBy('id', 'DESC')
                             ->get();
 

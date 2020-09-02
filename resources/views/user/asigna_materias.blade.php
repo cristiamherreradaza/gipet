@@ -121,11 +121,11 @@
                                     @foreach($asignaturas as $a)
                                         <tr>
                                             <td>{{ $a->codigo_asignatura }}</td>
-                                            <td>{{ $a->carrera->nombre }}</td>
+                                            <td>{{ $a->carrera['nombre'] }}</td>
                                             <td>{{ $a->nombre_asignatura }}</td>
                                             <td class="text-center">{{ $a->gestion }}</td>
                                             <td>
-                                                <button type="button" class="btn btn-success" onclick="asigna_materia('{{ $a->id }}', '{{ $a->nombre_asignatura }}', '{{ $a->codigo_asignatura }}', '{{ $a->carrera->nombre }}')"><i
+                                                <button type="button" class="btn btn-success" onclick="asigna_materia('{{ $a->id }}', '{{ $a->nombre_asignatura }}', '{{ $a->codigo_asignatura }}', '{{ $a->carrera['nombre'] }}')"><i
                                                         class="fas fa-arrow-right"></i></button>
                                             </td>
                                         </tr>
