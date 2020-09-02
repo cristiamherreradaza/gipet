@@ -64,12 +64,19 @@ class PersonaController extends Controller
         $lista_persona = Persona::select('id', 'apellido_paterno', 'apellido_materno', 'nombres', 'carnet', 'telefono_celular', 'razon_social_cliente', 'nit');
         return Datatables::of($lista_persona)
             ->addColumn('action', function ($lista_persona) {
-                return '<button onclick="ver_persona('.$lista_persona->id.')" class="btn btn-info"><i class="fas fa-eye"></i></button>';
+                return '<button onclick="ver_persona('.$lista_persona->id.')" title="Ver" class="btn btn-info"><i class="fas fa-eye"></i></button>
+                        <button type="button" class="btn btn-warning" title="Nueva Carrera"  onclick="inscripcion(' . $lista_persona->id . ')"><i class="fas fa-address-book"></i></button>
+                        <button type="button" class="btn btn-secondary" title="ReInscripcion"  onclick="reinscripcion(' .  $lista_persona->id . ')"><i class="fas fa-address-card"></i></button>
+                        <button type="button" class="btn btn-dark" title="Cursos Varios"  onclick="varios(' .  $lista_persona->id . ')"><i class="fas fa-file-alt"></i></button>
+                        <button type="button" class="btn btn-success" title="Recuperatorio"  onclick="recuperatorio(' .  $lista_persona->id . ')"><i class="fas fa-reply"></i></button>
+                        <button type="button" class="btn btn-danger" title="Estado(Activo/Inactivo)"  onclick="estado(' .  $lista_persona->id . ')"><i class="fas fa-user"></i></button>';
             })
             ->editColumn('id', 'ID: {{$id}}')
             ->make(true);
 
     }
+
+
 
     public function ver_persona($persona_id = null)
     {
@@ -160,5 +167,49 @@ class PersonaController extends Controller
         
     }
 
+    public function crear_persona()
+    {
+        return view('persona.crear_persona');
+    }
+
+    public function guardar_nuevos(Request $request)
+    {
+        $pers = Persona::where('carnet', $request->carnet)
+                        ->first();
+        if (!empty($pers)) {
+            return response()->json([
+                'mensaje' => 'no'
+            ]); 
+        } else {
+            $persona = new Persona();
+            $persona->apellido_paterno  = $request->apellido_paterno;
+            $persona->apellido_materno  = $request->apellido_materno;
+            $persona->nombres           = $request->nombres;
+            $persona->carnet            = $request->carnet;
+            $persona->expedido          = $request->expedido;
+            $persona->fecha_nacimiento  = $request->fecha_nacimiento;
+            $persona->sexo              = $request->sexo;
+            $persona->telefono_celular  = $request->telefono_celular;
+            $persona->email             = $request->email;
+            $persona->trabaja           = $request->trabaja;
+            $persona->empresa           = $request->empresa;
+            $persona->direccion_empresa = $request->direccion_empresa;
+            $persona->telefono_empresa  = $request->telefono_empresa;
+            $persona->nombre_padre      = $request->nombre_padre;
+            $persona->celular_padre     = $request->celular_padre;
+            $persona->nombre_madre      = $request->nombre_madre;
+            $persona->celular_madre     = $request->celular_madre;
+            $persona->nombre_tutor      = $request->nombre_tutor;
+            $persona->telefono_tutor    = $request->telefono_tutor;
+            $persona->nombre_esposo     = $request->nombre_esposo;
+            $persona->telefono_esposo   = $request->telefono_esposo;
+            $persona->save();
+
+            return response()->json([
+                    'mensaje' => 'si'
+                ]); 
+        }                
+        
+    }
    
 }

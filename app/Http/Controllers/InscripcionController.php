@@ -94,23 +94,34 @@ class InscripcionController extends Controller
     
     public function buscar_recuperatorio(Request $request)
     {
+
+        $fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
+        $year = $fecha->format('Y');//obtenes solo el año actual
+
         $nota_menor = 35;
         $nota_mayor = 60;
 
         $asignaturas = DB::table('inscripciones')
                         ->where('inscripciones.persona_id', '=', $request->tipo_persona_id)
-                        ->where('inscripciones.anio_vigente', '=', $request->tipo_gestion)
+                        ->where('inscripciones.anio_vigente', '=', $year)
+                        ->where('inscripciones.estado', '=', NULL)
                         ->whereBetween('inscripciones.nota', array($nota_menor, $nota_mayor))
                         ->join('carreras', 'inscripciones.carrera_id', '=', 'carreras.id')
                         ->join('asignaturas', 'inscripciones.asignatura_id', '=', 'asignaturas.id')
                         ->join('turnos', 'inscripciones.turno_id', '=', 'turnos.id')
-                        ->select('inscripciones.asignatura_id', 'inscripciones.persona_id', 'inscripciones.carrera_id', 'inscripciones.anio_vigente', 'carreras.nombre', 'asignaturas.nombre_asignatura', 'turnos.descripcion', 'inscripciones.paralelo', 'inscripciones.nota')
-                        ->get();  
+                        ->select('inscripciones.id', 'inscripciones.asignatura_id', 'inscripciones.persona_id', 'inscripciones.carrera_id', 'inscripciones.anio_vigente', 'carreras.nombre', 'asignaturas.nombre_asignatura', 'turnos.descripcion', 'inscripciones.paralelo', 'inscripciones.nota')
+                        ->get();
 
-        return response()->json([
-            'asignaturas' => $asignaturas,
-            'mensaje' => 'si'
-        ]);   
+         if (count($asignaturas) > 0) {
+            return response()->json([
+                'asignaturas' => $asignaturas,
+                'mensaje' => 'si'
+            ]);  
+        } else {
+            return response()->json([
+                'mensaje' => 'no'
+            ]);  
+        } 
     }
 
     public function inscripcion()

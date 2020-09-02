@@ -232,9 +232,17 @@
                     anio_vigente : anio_vigente
                 },
                 success:function(data){
+                    Swal.fire(
+                            'Excelente!',
+                            'Se Inscribio Correctamente para el Recuperatorio.',
+                            'success'
+                        )
                     if (data.mensaje == 'si') {
-                        $('#persona_id').val(data.persona.id);
-                        $('#nombres').val(data.persona.nombres +' '+ data.persona.apellido_paterno +' '+ data.persona.apellido_materno);
+                        Swal.fire(
+                            'Excelente!',
+                            'Se guardo Correctamente.',
+                            'success'
+                        )
                     }
                 }
             });

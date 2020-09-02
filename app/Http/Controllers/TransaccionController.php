@@ -15,6 +15,7 @@ use App\Empresa;
 use App\DosificacionesFactura;
 use App\Factura;
 use App\DetallesFactura;
+use App\Inscripcion;
 use Illuminate\Support\Facades\Auth;
 use DB;
 use CodigoControlV7;
@@ -29,8 +30,30 @@ class TransaccionController extends Controller
 
     public function pago_recuperatorio(Request $request)
     {
-        dd($request->persona_id);
-        exit();
+        $fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
+        $gestion = $fecha->format('Y');//obtenes solo el año actual
+
+        $servicios = Servicio::where('nombre', 'RECUPERATORIO')
+                            ->first();
+
+        $cobros_matricula = new CobrosTemporada();
+        $cobros_matricula->servicio_id    = $servicios->id;
+        $cobros_matricula->persona_id     = $request->persona_id;
+        $cobros_matricula->carrera_id     = $request->carrera_id;
+        $cobros_matricula->asignatura_id  = $request->asignatura_id;
+        $cobros_matricula->nombre         = $servicios->nombre;
+        $cobros_matricula->gestion        = $gestion;
+        $cobros_matricula->estado         = 'Debe';
+        $cobros_matricula->save();
+
+        $inscripciones = Inscripcion::find($request->inscripcion_id);
+        $inscripciones->estado = 'Recuperatorio';
+        $inscripciones->save();
+
+        return response()->json([
+            'persona_id' => $request->persona_id,
+            'mensaje' => 'si'
+        ]);
     }
 
     public function verifica_ci(Request $request)

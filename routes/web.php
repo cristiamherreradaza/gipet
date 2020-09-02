@@ -57,6 +57,9 @@ Route::get('Persona/verifica', 'PersonaController@verifica');
     // return datatables()->query(DB::table('personas'))->toJson();
 // });
 Route::get('persona/exportarexcel', 'PersonaController@exportarExcel')->name('personas.exportarexcel');
+//
+Route::get('Persona/crear_persona', 'PersonaController@crear_persona');
+Route::post('Persona/guardar_nuevos', 'PersonaController@guardar_nuevos');
 
 
 Route::get('user/asignar', 'UserController@asignar');
