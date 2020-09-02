@@ -27,12 +27,6 @@
                 </button>
             </div>
         </div>
-
-        <div class="form-group mb-0">
-            <div class="col-sm-12 text-center">
-                <p>No tienes una cuenta? <a href="register.html" class="text-info ml-1"><b>Registrate</b></a></p>
-            </div>
-        </div>
     </form>
 </div>
 @endsection

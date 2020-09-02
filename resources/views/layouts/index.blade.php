@@ -35,7 +35,7 @@
         <!-- Preloader - style you can find in spinners.css -->
         <!-- ============================================================== -->
         <div class="auth-wrapper d-flex no-block justify-content-center align-items-center"
-            style="background:url({{ asset('assets/images/background/fondo_tienda.jpg') }}); background-size: cover; background-position: center center;">
+            style="background:url({{ asset('assets/images/background/accounting.jpg') }}); background-size: cover; background-position: center center;">
             <div class="auth-box p-4 bg-white rounded">
                 @yield('content')
             </div>

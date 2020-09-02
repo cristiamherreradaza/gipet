@@ -115,9 +115,7 @@
                             </div>
 
                         </div>
-
                     </form>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="guarda_asignatura()">GUARDA ASIGNATURA</button>
@@ -181,14 +179,15 @@
 
 <div class="card">
     <div class="card-body">
-
         <div class="row">
             <div class="col-md-4">
                 <div class="card border-info">
-                <div class="card-header bg-info">
-                    <h4 class="mb-0 text-white">CARRERAS</h4>
-                </div>
-                    <br />  
+                    <div class="card-header bg-info">
+                        <h4 class="mb-0 text-white">
+                            CARRERAS &nbsp;&nbsp;
+                            <button type="button" class="btn waves-effect waves-light btn-sm btn-primary" onclick="nueva_carrera()"><i class="fas fa-plus"></i> &nbsp; NUEVA CARRERA</button>
+                        </h4>
+                    </div>
                     <form action="#" method="GET" id="formulario_carreras">
                         <div class="card-body">
                             <div class="row">
@@ -215,7 +214,7 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <button type="submit" class="btn waves-effect waves-light btn-block btn-success">VER ASIGNATURAS</button>
+                                <button type="submit" class="btn waves-effect waves-light btn-block btn-info">VER ASIGNATURAS</button>
                             </div>
                         </div>
                     </form>
@@ -225,16 +224,66 @@
                 
             </div>
         </div>
-
     </div>
 </div>
+
+<!-- inicio modal nueva carrera -->
+<div id="nueva_carrera" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">NUEVA CARRERA</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <form action="{{ url('Carrera/guardar') }}"  method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Nombre</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="nombre_carrera" type="text" id="nombre_carrera" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Nivel</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="nivel_carrera" type="text" id="nivel_carrera" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">A&ntilde;o vigente</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="anio_vigente_carrera" type="text" id="anio_vigente_carrera" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar_carrera()">GUARDAR CARRERA</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- fin modal nueva carrera -->
 
 @stop
 
 @section('js')
 <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
-
 <script>
     $.ajaxSetup({
         // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
@@ -250,6 +299,27 @@
             },
         });
     });
+
+    // Funcion que abre el modal para la creacion de una nueva carrera
+    function nueva_carrera()
+    {
+        $("#nueva_carrera").modal('show');
+    }
+
+    // Funcion que activa el alert al crear una carrera
+    function guardar_carrera()
+    {
+        var nombre_carrera = $("#nombre_carrera").val();
+        var nivel_carrera = $("#nivel_carrera").val();
+        var anio_vigente_carrera = $("#anio_vigente_carrera").val();
+        if(nombre_carrera.length>0 && nivel_carrera.length>0 && anio_vigente_carrera.length>0){
+            Swal.fire(
+                'Excelente!',
+                'Una nueva carrera fue registrada.',
+                'success'
+            )
+        }
+    }
 
     $('#formulario_carreras').on('submit', function (event) {
         event.preventDefault();
