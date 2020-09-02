@@ -288,18 +288,102 @@ class TransaccionController extends Controller
         $carrera_id = $request->tipo_carrera_id;
         $asignatura_id = $request->tipo_asignatura_id;
         $descuento_id = $request->tipo_descuento_id;
+        $persona_id = $request->tipo_persona_id;
+        $cantidad = $request->tipo_cantidad;
 
         $servicio = Servicio::find($servicio_id);
         $carrera = Carrera::find($carrera_id);
         $asignatura = Asignatura::find($asignatura_id);
         $descuento = Descuento::find($descuento_id);
 
-        return response()->json([
+        $meses = '';
+
+        $cobros_temp = CobrosTemporada::where('servicio_id', $servicio_id)
+                                        ->where('persona_id', $persona_id)
+                                        ->where('carrera_id', $carrera_id)
+                                        ->where('estado', 'Debe')
+                                        ->skip(0)
+                                        ->take($cantidad)
+                                        ->get();
+
+        if ($servicio_id == 2) {
+
+            $meses = $this->mes($cobros_temp);
+            return response()->json([
             'servicio' => $servicio,
             'carrera' => $carrera,
             'asignatura' => $asignatura,
-            'descuento' => $descuento
+            'descuento' => $descuento,
+            'meses' => $meses,
+            'mensu' => 'si'
         ]);
+        } else {
+            return response()->json([
+            'servicio' => $servicio,
+            'carrera' => $carrera,
+            'asignatura' => $asignatura,
+            'descuento' => $descuento,
+            'mensu' => 'no'
+        ]);
+        }
+
+    }
+
+    public function mes($cobros_temp){
+        $meses = '';
+        foreach ($cobros_temp as $cobros) {
+            $mes_num = $cobros->mensualidad;
+            if($mes_num == 1){
+                $meses = $meses . 'Ene, ';
+            }
+
+            if($mes_num == 2){
+                $meses = $meses . 'Feb, ';
+            }
+
+            if($mes_num == 3){
+                $meses = $meses . 'Mar, ';
+            }
+
+            if($mes_num == 4){
+                $meses = $meses . 'Abr, ';
+            }
+
+            if($mes_num == 5){
+                $meses = $meses . 'May, ';
+            }
+
+            if($mes_num == 6){
+                $meses = $meses . 'Jun, ';
+            }
+
+            if($mes_num == 7){
+                $meses = $meses . 'Jul, ';
+            }
+
+            if($mes_num == 8){
+                $meses = $meses . 'Ago, ';
+            }
+
+            if($mes_num == 9){
+                $meses = $meses . 'Sep, ';
+            }
+
+            if($mes_num == 10){
+                $meses = $meses . 'Oct, ';
+            }
+
+            if($mes_num == 11){
+                $meses = $meses . 'Nov, ';
+            }
+
+            if($mes_num == 12){
+                $meses = $meses . 'Dic, ';
+            }
+        }
+        $mes = trim($meses, ', ');
+        return $mes;
+        
     }
 
     public function formulario()

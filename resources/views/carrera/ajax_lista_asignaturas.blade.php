@@ -96,6 +96,7 @@
                 $("#teorico").val(element['teorico']);
                 $("#practico").val(element['practico']);
                 $("#anio_vigente").val(element['anio_vigente']);
+                $("#ciclo").val(element['ciclo']);
                 // console.log(element['nombre_asignatura']);
             }
         });

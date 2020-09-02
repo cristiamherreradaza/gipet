@@ -100,7 +100,7 @@
                                     <thead>
                                         <tr>
                                             <th>Cantidad</th>
-                                            <th>Descripcion</th>
+                                            <th>Sigla</th>
                                             <th>Concepto</th>
                                             <th>Carrera</th>
                                             <th>Asignatura</th>
@@ -224,6 +224,7 @@
         var asignatura_id = $("#asignatura_id").val();
         var descuento_id = $("#descuento_id").val();
         var total = $("#total_pagado").val();
+        var persona_id = $("#persona_id").val();
         var sum_total = 0;
 
         $.ajax({
@@ -233,7 +234,9 @@
                     tipo_servicio_id : servicio_id,
                     tipo_carrera_id : carrera_id,
                     tipo_asignatura_id : asignatura_id,
-                    tipo_descuento_id : descuento_id
+                    tipo_descuento_id : descuento_id,
+                    tipo_persona_id : persona_id,
+                    tipo_cantidad : cantidad
                 },
                 success:function(data){
                     var nom_carrera;
@@ -251,25 +254,52 @@
                         }
                         room++;
                         // cantidad++;
-                        var objTo = document.getElementById('datos_tabla')
-                        var tdtest = document.createElement("tr");
-                        tdtest.setAttribute("class", "removeclass" + room);
-                        var rtd = 'removeclass' + room;
-                        tdtest.innerHTML = '<td>'+cantidad+'</td>\
-                                            <td>'+data.servicio.nombre+'</td>\
-                                            <td>PAGO '+data.servicio.nombre+'</td>\
-                                            <td>'+nom_carrera+'</td>\
-                                            <td>'+nom_asignatura+'</td>\
-                                            <td>'+data.descuento.nombre+'</td>\
-                                            <td>'+total+'</td>\
-                                            <td class="col-sm-2">\
-                                                <div class="form-group">\
-                                                    <button class="btn btn-danger" type="button" onclick="remove_education_fields(' + room + ');"> <i class="fa fa-minus"></i>\
-                                                    </button>\
-                                                </div>\
-                                            </td>';
+                        if (data.mensu == 'si') {
+                            var objTo = document.getElementById('datos_tabla')
+                            var tdtest = document.createElement("tr");
+                            tdtest.setAttribute("class", "removeclass" + room);
+                            var rtd = 'removeclass' + room;
+                            tdtest.innerHTML = '<td>'+cantidad+'</td>\
+                                                <td>'+data.servicio.sigla+'</td>\
+                                                <td>PAGO '+data.servicio.nombre+'(' + data.meses + ')</td>\
+                                                <td>'+nom_carrera+'</td>\
+                                                <td>'+nom_asignatura+'</td>\
+                                                <td>'+data.descuento.nombre+'</td>\
+                                                <td>'+total+'</td>\
+                                                <td class="col-sm-2">\
+                                                    <div class="form-group">\
+                                                        <button class="btn btn-danger" type="button" onclick="remove_education_fields(' + room + ');"> <i class="fa fa-minus"></i>\
+                                                        </button>\
+                                                    </div>\
+                                                </td>';
 
-                        objTo.appendChild(tdtest)
+                            objTo.appendChild(tdtest)
+
+                        } else {
+                            var objTo = document.getElementById('datos_tabla')
+                            var tdtest = document.createElement("tr");
+                            tdtest.setAttribute("class", "removeclass" + room);
+                            var rtd = 'removeclass' + room;
+                            tdtest.innerHTML = '<td>'+cantidad+'</td>\
+                                                <td>'+data.servicio.sigla+'</td>\
+                                                <td>PAGO '+data.servicio.nombre+'</td>\
+                                                <td>'+nom_carrera+'</td>\
+                                                <td>'+nom_asignatura+'</td>\
+                                                <td>'+data.descuento.nombre+'</td>\
+                                                <td>'+total+'</td>\
+                                                <td class="col-sm-2">\
+                                                    <div class="form-group">\
+                                                        <button class="btn btn-danger" type="button" onclick="remove_education_fields(' + room + ');"> <i class="fa fa-minus"></i>\
+                                                        </button>\
+                                                    </div>\
+                                                </td>';
+
+                            objTo.appendChild(tdtest)
+                        }
+                        
+
+
+
                 var concep = 'PAGO DE ' + data.servicio.nombre;
                 $("#concepto_pago").val(concep);
 

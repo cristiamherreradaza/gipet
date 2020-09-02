@@ -20,6 +20,79 @@ use DB;
 
 class InscripcionController extends Controller
 {
+    public function nuevo()
+    {
+        $carreras = Carrera::where("deleted_at", NULL)
+                        ->get();
+        $turnos = Turno::get();
+        $fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
+        $year = $fecha->format('Y');//obtenes solo el año actual
+        
+        $asignaturas = DB::table('asignaturas')
+                ->where('asignaturas.anio_vigente', '=', $year)
+                ->join('servicios_asignaturas', 'asignaturas.id', '=', 'servicios_asignaturas.asignatura_id')
+                ->where('servicios_asignaturas.servicio_id', '!=', 2)
+                ->select('asignaturas.*')
+                ->get();      
+
+        return view('inscripcion.nuevo', compact('carreras', 'turnos', 'year', 'asignaturas'));    
+    }
+
+    public function reinscripcion()
+    {
+        $carreras = Carrera::where("deleted_at", NULL)
+                        ->get();
+        $turnos = Turno::get();
+        $fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
+        $year = $fecha->format('Y');//obtenes solo el año actual
+        
+        $asignaturas = DB::table('asignaturas')
+                ->where('asignaturas.anio_vigente', '=', $year)
+                ->join('servicios_asignaturas', 'asignaturas.id', '=', 'servicios_asignaturas.asignatura_id')
+                ->where('servicios_asignaturas.servicio_id', '!=', 2)
+                ->select('asignaturas.*')
+                ->get();      
+
+        return view('inscripcion.reinscripcion', compact('carreras', 'turnos', 'year', 'asignaturas'));    
+    }
+
+    public function varios()
+    {
+        $carreras = Carrera::where("deleted_at", NULL)
+                        ->get();
+        $turnos = Turno::get();
+        $fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
+        $year = $fecha->format('Y');//obtenes solo el año actual
+        
+        $asignaturas = DB::table('asignaturas')
+                ->where('asignaturas.anio_vigente', '=', $year)
+                ->join('servicios_asignaturas', 'asignaturas.id', '=', 'servicios_asignaturas.asignatura_id')
+                ->where('servicios_asignaturas.servicio_id', '!=', 2)
+                ->select('asignaturas.*')
+                ->get();      
+
+        return view('inscripcion.varios', compact('carreras', 'turnos', 'year', 'asignaturas'));    
+    }
+
+    public function recuperatorio()
+    {
+        $carreras = Carrera::where("deleted_at", NULL)
+                        ->get();
+        $turnos = Turno::get();
+        $fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
+        $year = $fecha->format('Y');//obtenes solo el año actual
+        
+        $asignaturas = DB::table('asignaturas')
+                ->where('asignaturas.anio_vigente', '=', $year)
+                ->join('servicios_asignaturas', 'asignaturas.id', '=', 'servicios_asignaturas.asignatura_id')
+                ->where('servicios_asignaturas.servicio_id', '!=', 2)
+                ->select('asignaturas.*')
+                ->get();      
+
+        return view('inscripcion.recuperatorio', compact('carreras', 'turnos', 'year', 'asignaturas'));    
+    }
+    
+
     public function inscripcion()
     {
         $carreras = Carrera::where("deleted_at", NULL)
@@ -400,14 +473,22 @@ class InscripcionController extends Controller
     public function busca_ci(Request $request)
     {
     	$carnet = $request->ci;//buscar el carnet de identidad de una persona
-    	$persona_id = Persona::where("deleted_at", NULL)
+    	$persona = Persona::where("deleted_at", NULL)
                     ->where('carnet', $carnet)
-                    ->get();
-        if (!empty($persona_id[0]->id)) {
-           $per = Persona::find($persona_id[0]->id);
+                    ->first();
+        if (!empty($persona)) {
+            $carreras = DB::table('carreras_personas')
+                                    ->where('carreras_personas.persona_id', $persona->id)
+                                    ->join('carreras', 'carreras_personas.carrera_id', '=', 'carreras.id')
+                                    ->select('carreras.id', 'carreras.nombre')
+                                    ->get();
+            // dd($carreras);
+            // exit();
             return response()->json([
                 'mensaje' => 'si',
-                'persona' => $per]);
+                'persona' => $persona,
+                'carreras' => $carreras
+            ]);
         } else {
         return response()->json([
                 'mensaje' => 'no'

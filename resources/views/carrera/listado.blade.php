@@ -69,7 +69,7 @@
                         </div>
                         <div class="row">
 
-                            <div class="col-md-5">
+                            <div class="col-md-4">
 
                                 <div class="form-group">
                                     <label class="control-label">Carrera</label>
@@ -82,13 +82,22 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label class="control-label">Curso</label>
                                     <select name="gestion" id="gestion" class="form-control custom-select" >
                                         <option value="1">Primero</option>
                                         <option value="2">Segundo</option>
                                         <option value="3">Tercero</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">Ciclo</label>
+                                    <select name="ciclo" id="ciclo" class="form-control custom-select">
+                                        <option value="Semestral">Semestral</option>
+                                        <option value="Anual">Anual</option>
                                     </select>
                                 </div>
                             </div>
