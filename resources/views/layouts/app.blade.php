@@ -58,9 +58,9 @@
                                 <b class="logo-icon">
                                     <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
                                     <!-- Dark Logo icon -->
-                                    <img src="{{ asset('assets/images/logo-icon.png') }}" alt="homepage" class="dark-logo" />
+                                    <img src="{{ asset('assets/images/background/portal_dos.png') }}" alt="homepage" class="dark-logo" />
                                     <!-- Light Logo icon -->
-                                    <img src="{{ asset('assets/images/icon_inicio.png') }}" alt="homepage" class="light-logo" />
+                                    <img src="{{ asset('assets/images/background/logo_trans.png') }}" alt="homepage" class="light-logo" style="max-width:50px; margin-top: -7px;"/>
                                 </b>
                                 <!--End Logo icon -->
                                 <!-- Logo text -->
@@ -68,7 +68,7 @@
                                     <!-- dark Logo text -->
                                     <img src="{{ asset('assets/images/logo-text.png') }}" alt="homepage" class="dark-logo" />
                                     <!-- Light Logo text -->
-                                    <img src="{{ asset('assets/images/titulo_inicio.png') }}" class="light-logo" alt="homepage" />
+                                    <img src="{{ asset('assets/images/background/titulo.png') }}" class="light-logo" alt="homepage" style="max-width:150px; margin-top: -7px;"/>
                                 </span>
                             </a>
                             <!-- ============================================================== -->
