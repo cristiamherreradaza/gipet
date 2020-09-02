@@ -27,6 +27,12 @@ class TransaccionController extends Controller
         return view('transaccion.pagos', compact('servicios'));  
     }
 
+    public function pago_recuperatorio(Request $request)
+    {
+        dd($request->persona_id);
+        exit();
+    }
+
     public function verifica_ci(Request $request)
     {
     	$carnet = $request->ci;
@@ -892,6 +898,8 @@ class TransaccionController extends Controller
 
 
     }
+
+
 
     
 }

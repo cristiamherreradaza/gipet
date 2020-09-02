@@ -92,6 +92,26 @@ class InscripcionController extends Controller
         return view('inscripcion.recuperatorio', compact('carreras', 'turnos', 'year', 'asignaturas'));    
     }
     
+    public function buscar_recuperatorio(Request $request)
+    {
+        $nota_menor = 35;
+        $nota_mayor = 60;
+
+        $asignaturas = DB::table('inscripciones')
+                        ->where('inscripciones.persona_id', '=', $request->tipo_persona_id)
+                        ->where('inscripciones.anio_vigente', '=', $request->tipo_gestion)
+                        ->whereBetween('inscripciones.nota', array($nota_menor, $nota_mayor))
+                        ->join('carreras', 'inscripciones.carrera_id', '=', 'carreras.id')
+                        ->join('asignaturas', 'inscripciones.asignatura_id', '=', 'asignaturas.id')
+                        ->join('turnos', 'inscripciones.turno_id', '=', 'turnos.id')
+                        ->select('inscripciones.asignatura_id', 'inscripciones.persona_id', 'inscripciones.carrera_id', 'inscripciones.anio_vigente', 'carreras.nombre', 'asignaturas.nombre_asignatura', 'turnos.descripcion', 'inscripciones.paralelo', 'inscripciones.nota')
+                        ->get();  
+
+        return response()->json([
+            'asignaturas' => $asignaturas,
+            'mensaje' => 'si'
+        ]);   
+    }
 
     public function inscripcion()
     {

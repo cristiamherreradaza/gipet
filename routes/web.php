@@ -123,6 +123,7 @@ Route::get('Inscripcion/nuevo', 'InscripcionController@nuevo');
 Route::get('Inscripcion/reinscripcion', 'InscripcionController@reinscripcion');
 Route::get('Inscripcion/varios', 'InscripcionController@varios');
 Route::get('Inscripcion/recuperatorio', 'InscripcionController@recuperatorio');
+Route::get('Inscripcion/buscar_recuperatorio', 'InscripcionController@buscar_recuperatorio');
 
 
 
@@ -227,3 +228,5 @@ Route::get('Transaccion/verifica_datos', 'TransaccionController@verifica_datos')
 Route::get('Transaccion/formulario', 'TransaccionController@formulario');
 Route::post('Transaccion/guardar_todo', 'TransaccionController@guardar_todo');
 Route::post('Transaccion/guardar_factura', 'TransaccionController@guardar_factura');
+
+Route::post('Transaccion/pago_recuperatorio', 'TransaccionController@pago_recuperatorio');

@@ -48,150 +48,150 @@
         {{-- <form action="{{ url('Producto/guarda') }}"  method="post" enctype="multipart/form-data" > --}}
         <form action="{{ url('Inscripcion/guardar') }}" method="POST" >
             @csrf
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="row mt-4">
-                    <div class="col-md-6">
-                        <div class="card border-warning">
-                            <div class="card-header bg-warning">
-                                <h4 class="mb-0 text-white">REINCRIPCION</h4></div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-2">
-                                        <div class="form-group">
-                                            <label>Carnet 
-                                                <span class="text-danger">
-                                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                                </span>
-                                             </label>
-                                            <input type="text" class="form-control" name="carnet" id="carnet" required>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="card border-warning">
+                                <div class="card-header bg-warning">
+                                    <h4 class="mb-0 text-white">REINCRIPCION</h4></div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label>Carnet 
+                                                    <span class="text-danger">
+                                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                    </span>
+                                                 </label>
+                                                <input type="text" class="form-control" name="carnet" id="carnet" required>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <input type="text" class="form-control" hidden name="persona_id" id="persona_id">
+                                        <input type="text" class="form-control" hidden name="persona_id" id="persona_id">
 
-                                    <div class="col-md-5">
-                                        <div class="form-group">
-                                            <label>Nombre
-                                                <span class="text-danger">
-                                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                                </span>
-                                            </label>
-                                            <input type="text" class="form-control" name="nombres" id="nombres" required>
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label>Nombre
+                                                    <span class="text-danger">
+                                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                    </span>
+                                                </label>
+                                                <input type="text" class="form-control" name="nombres" id="nombres" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label>Carrera 
+                                                    <span class="text-danger">
+                                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                    </span>
+                                                </label>
+                                                <select name="carrera_id" id="carrera_id" class="form-control">
+                                                    
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-5">
-                                        <div class="form-group">
-                                            <label>Carrera 
-                                                <span class="text-danger">
-                                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                                </span>
-                                            </label>
-                                            <select name="carrera_id" id="carrera_id" class="form-control">
-                                                
-                                            </select>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Turno 
+                                                    <span class="text-danger">
+                                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                    </span>
+                                                </label>
+                                                <select name="turno" id="turno" class="form-control">
+                                                    <option value="Mañana">Mañana</option>
+                                                    <option value="Tarde">Tarde</option>
+                                                    <option value="Noche">Noche</option>
+                                                    <option value="Especial">Especial</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Turno 
-                                                <span class="text-danger">
-                                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                                </span>
-                                            </label>
-                                            <select name="turno" id="turno" class="form-control">
-                                                <option value="Mañana">Mañana</option>
-                                                <option value="Tarde">Tarde</option>
-                                                <option value="Noche">Noche</option>
-                                                <option value="Especial">Especial</option>
-                                            </select>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Paralelo 
+                                                    <span class="text-danger">
+                                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                    </span>
+                                                </label>
+                                                <select name="paralelo" id="paralelo" class="form-control">
+                                                    <option value="A">A</option>
+                                                    <option value="B">B</option>
+                                                    <option value="C">C</option>
+                                                    <option value="D">D</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Paralelo 
-                                                <span class="text-danger">
-                                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                                </span>
-                                            </label>
-                                            <select name="paralelo" id="paralelo" class="form-control">
-                                                <option value="A">A</option>
-                                                <option value="B">B</option>
-                                                <option value="C">C</option>
-                                                <option value="D">D</option>
-                                            </select>
-                                        </div>
-                                    </div>
 
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Gestion
-                                                <span class="text-danger">
-                                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                                </span>
-                                            </label>
-                                            <input type="text" class="form-control" name="gestion" id="gestion" value="{{ date('Y') }}" required>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Gestion
+                                                    <span class="text-danger">
+                                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                    </span>
+                                                </label>
+                                                <input type="text" class="form-control" name="gestion" id="gestion" value="{{ date('Y') }}" required>
+                                            </div>
                                         </div>
                                     </div>
+                                    <div class="card-body text-right">
+                                        <a href="javascript:void(0)" class="btn btn-inverse">Ver Asignaturas</a>
+                                    </div>
                                 </div>
-                                <div class="card-body text-right">
-                                    <a href="javascript:void(0)" class="btn btn-inverse">Ver Asignaturas</a>
-                                </div>
+                                
                             </div>
-                            
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="card border-success">
-                            <div class="card-header bg-success">
-                                <h4 class="mb-0 text-white">ASIGNATURAS POR TOMAR</h4></div>
-                            <div class="card-body">
-                                <div class="table-responsive m-t-40">
-                                    <table id="myTable" class="table table-bordered table-striped text-center">
-                                        <thead>
-                                            <tr>
-                                                <th>Asignatura</th>
-                                                <th>Codigo</th>
-                                                <th>Turno</th>
-                                                <th>Paralelo</th>
-                                                <th>Accion</th>
-                                        </thead>
-                                        <tbody>
+                        <div class="col-md-6">
+                            <div class="card border-success">
+                                <div class="card-header bg-success">
+                                    <h4 class="mb-0 text-white">ASIGNATURAS POR TOMAR</h4></div>
+                                <div class="card-body">
+                                    <div class="table-responsive m-t-40">
+                                        <table id="myTable" class="table table-bordered table-striped text-center">
+                                            <thead>
                                                 <tr>
-                                                    <td>
-                                                        Informatica 1
-                                                    </td>
-                                                    <td>
-                                                        Inf - 111
-                                                    </td>
-                                                    <td>
-                                                        <select class="form-control custom-select" data-placeholder="Choose a Category" id="re_asig_turno" name="re_asig_turno[]" required>
-                                                            <option value="Mañana">Mañana</option>
-                                                            <option value="Tarde">Tarde</option>
-                                                            <option value="Noche">Noche</option>
-                                                            <option value="Especial">Especial</option>
-                                                        </select>
-                                                    </td>
-                                                    <td>
-                                                        <select class="form-control custom-select" data-placeholder="Choose a Category" id="re_asig_paralelo" name="re_asig_paralelo[]" required>
-                                                            <option value="A">A</option>
-                                                            <option value="B">B</option>
-                                                            <option value="C">C</option>
-                                                            <option value="D">D</option>
-                                                        </select>
-                                                    </td>
-                                                    <td><input type="checkbox" class="todo" name="asignatura_id[]" checked></td>
-                                                </tr>
-                                        </tbody>
-                                    </table>
+                                                    <th>Asignatura</th>
+                                                    <th>Codigo</th>
+                                                    <th>Turno</th>
+                                                    <th>Paralelo</th>
+                                                    <th>Accion</th>
+                                            </thead>
+                                            <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            Informatica 1
+                                                        </td>
+                                                        <td>
+                                                            Inf - 111
+                                                        </td>
+                                                        <td>
+                                                            <select class="form-control custom-select" data-placeholder="Choose a Category" id="re_asig_turno" name="re_asig_turno[]" required>
+                                                                <option value="Mañana">Mañana</option>
+                                                                <option value="Tarde">Tarde</option>
+                                                                <option value="Noche">Noche</option>
+                                                                <option value="Especial">Especial</option>
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <select class="form-control custom-select" data-placeholder="Choose a Category" id="re_asig_paralelo" name="re_asig_paralelo[]" required>
+                                                                <option value="A">A</option>
+                                                                <option value="B">B</option>
+                                                                <option value="C">C</option>
+                                                                <option value="D">D</option>
+                                                            </select>
+                                                        </td>
+                                                        <td><input type="checkbox" class="todo" name="asignatura_id[]" checked></td>
+                                                    </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
         </form>
 
         <!-- Row -->
