@@ -18,20 +18,44 @@
                         <tr>
                             <th>Sigla</th>
                             <th>Nombre</th>
-                            <th>Curso</th>
+                            <th>A&ntilde;o</th>
+                            <th>Horas Academicas</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($asignaturas as $a)
+                        @foreach($asignaturas as $asignatura)
                             <tr>
-                                <td>{{ $a->codigo_asignatura }}</td>
-                                <td>{{ $a->nombre_asignatura }}</td>
-                                <td>{{ $a->semestre }}</td>
+                                <td>{{ $asignatura->codigo_asignatura }}</td>
+                                <td>{{ $asignatura->nombre_asignatura }}</td>
+                                @php
+                                $anio = '';
+                                switch ($asignatura->gestion) {
+                                    case 1:
+                                        $anio = 'Primer Año';
+                                        break;
+                                    case 2:
+                                        $anio = 'Segundo Año';
+                                        break;
+                                    case 3:
+                                        $anio = 'Tercer Año';
+                                        break;
+                                    case 4:
+                                        $anio = 'Cuarto Año';
+                                        break;
+                                    case 5:
+                                        $anio = 'Quinto Año';
+                                        break;
+                                    default:
+                                        $anio = 'No definido';
+                                }
+                                @endphp
+                                <td>{{ $anio }}</td>
+                                <td class="text-center">{{ $asignatura->carga_horaria }}</td>
                                 <td>
-                                    <button type="button" class="btn btn-warning" onclick="muestra_modal({{ $a->id }})"><i class="fas fa-edit"></i></button>
-                                    <button type="button" class="btn btn-info" onclick="prerequisitos('{{ $a->id }}', '{{ $a->carrera_id }}', '{{ $a->anio_vigente }}')"><i class="fas fa-eye"></i></button>
-                                    <button type="button" class="btn btn-danger" onclick="elimina_asignatura('{{ $a->id }}', '{{ $a->nombre_asignatura }}')"><i class="fas fa-trash"></i></button>
+                                    <button type="button" class="btn btn-warning" onclick="muestra_modal({{ $asignatura->id }})" title="Editar Asignatura"><i class="fas fa-edit"></i></button>
+                                    <button type="button" class="btn btn-info" onclick="prerequisitos('{{ $asignatura->id }}', '{{ $asignatura->carrera_id }}', '{{ $asignatura->anio_vigente }}')" title="Ver Prerequisitos"><i class="fas fa-eye"></i></button>
+                                    <button type="button" class="btn btn-danger" onclick="elimina_asignatura('{{ $asignatura->id }}', '{{ $asignatura->nombre_asignatura }}')" title="Eliminar Asignatura"><i class="fas fa-trash"></i></button>
                                 </td>
                             </tr>
                         @endforeach
@@ -39,7 +63,7 @@
                 </table>
             @else
             <p></p>
-                <h3>La carrera no tiene asignaturas</h3>
+                <h3 class="text-center">La carrera no tiene asignaturas</h3>
             @endif
             
         </div>

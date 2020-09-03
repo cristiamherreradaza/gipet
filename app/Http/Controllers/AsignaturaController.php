@@ -21,64 +21,60 @@ class AsignaturaController extends Controller
 
     public function guarda(Request $request)
     {
-        if ($request->asignatura_id != "") {
+        if ($request->asignatura_id) {
             $asignatura = Asignatura::find($request->asignatura_id);
         } else {
         	$asignatura = new Asignatura();
         }
+        $asignatura->carrera_id        = $request->carrera_id;
         $asignatura->codigo_asignatura = $request->codigo_asignatura;
         $asignatura->nombre_asignatura = $request->nombre_asignatura;
         $asignatura->orden_impresion   = $request->orden_impresion;
-        $asignatura->semestre          = $request->semestre;
-        $asignatura->nivel             = $request->nivel;
-        $asignatura->carrera_id        = $request->carrera_id;
+        $asignatura->anio_vigente      = $request->anio_vigente;
         $asignatura->gestion           = $request->gestion;
+        $asignatura->ciclo             = $request->ciclo;
         $asignatura->carga_horaria     = $request->carga_horaria;
         $asignatura->teorico           = $request->teorico;
         $asignatura->practico          = $request->practico;
-        $asignatura->anio_vigente      = $request->anio_vigente;
-        $asignatura->ciclo             = $request->ciclo;
-
-        $sw = 0;
-
-        if ($asignatura->save()) {
-            $sw = 1;
-        } else {
-            $sw = 0;
-        }
-
-        return response()->json([
-            'sw' => $sw,
-        ]);
-
+        $asignatura->save();
+        // $sw = 0;
+        // if ($asignatura->save()) {
+        //     $sw = 1;
+        // } else {
+        //     $sw = 0;
+        // }
+        // return response()->json([
+        //     'sw' => $sw,
+        // ]);
     }
 
-    public function eliminar(Request $request, $asignatura_id)
+    public function eliminar($asignatura_id)
     {
-        // dd($asignatura_id);
-        $hoy = date("Y-m-d H:i:s");
-
-        $asignatura = Asignatura::where("deleted_at", NULL)
-                    ->where('id', $asignatura_id)
-                    ->first();
-
-        $elim_asignatura = Asignatura::find($asignatura_id);
-        $elim_asignatura->borrado = $hoy;
-
-        $sw = 0;
-
-        if ($elim_asignatura->save()) {
-            $sw = 1;
-        } else {
-            $sw = 0;
-        }
-
+        $asignatura = Asignatura::find($asignatura_id);
+        $anio_vigente = $asignatura->anio_vigente;
+        $carrera_id = $asignatura->carrera_id;
+        $asignatura->delete();
         return response()->json([
-            'sw' => $sw,
             'anio_vigente' => $asignatura->anio_vigente,
             'carrera_id' => $asignatura->carrera_id,
         ]);
-        
+        // $hoy = date("Y-m-d H:i:s");
+        // $asignatura = Asignatura::where("deleted_at", NULL)
+        //             ->where('id', $asignatura_id)
+        //             ->first();
+        // $elim_asignatura = Asignatura::find($asignatura_id);
+        // $elim_asignatura->borrado = $hoy;
+        // $sw = 0;
+        // if ($elim_asignatura->save()) {
+        //     $sw = 1;
+        // } else {
+        //     $sw = 0;
+        // }
+        // return response()->json([
+        //     'sw' => $sw,
+        //     'anio_vigente' => $asignatura->anio_vigente,
+        //     'carrera_id' => $asignatura->carrera_id,
+        // ]);
     }
 
     public function ajax_muestra_prerequisitos(Request $request, $asignatura_id)

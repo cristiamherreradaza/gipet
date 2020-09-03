@@ -11,9 +11,59 @@
 
 @section('content')
 
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card border-info">
+                    <div class="card-header bg-info">
+                        <h4 class="mb-0 text-white">
+                            CARRERAS &nbsp;&nbsp;
+                            <button type="button" class="btn waves-effect waves-light btn-sm btn-primary" onclick="nueva_carrera()"><i class="fas fa-plus"></i> &nbsp; NUEVA CARRERA</button>
+                        </h4>
+                    </div>
+                    <form action="#" method="GET" id="formulario_carreras">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <label class="control-label">Carreras </label>
+                                        
+                                        <select name="c_carrera_id" id="c_carrera_id" class="form-control" required>
+                                            <option value="">Seleccione</option>
+                                            @foreach ($carreras as $c)
+                                                <option value="{{ $c->id }}">{{ $c->nombre }}</option>
+                                            @endforeach
+                                        </select>
+                                        
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Gestion </label>
+                                        <input type="number" name="c_gestion" id="c_gestion" class="form-control" value="{{ $gestion }}" min="2011" max="{{ $gestion }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn waves-effect waves-light btn-block btn-info">VER ASIGNATURAS</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-8" id="carga_ajax_lista_asignaturas">
+                
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- inicio modal asignaturas -->
 <div id="modal_asignaturas" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog">
         <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="myModalLabel">FORMULARIO DE ASIGNATURAS</h4>
@@ -30,69 +80,39 @@
                                     <input name="codigo_asignatura" type="text" id="codigo_asignatura" class="form-control" required>
                                 </div>
                             </div>
-
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label">Nombre</label>
                                     <input name="nombre_asignatura" type="text" id="nombre_asignatura" class="form-control" required>
                                 </div>
                             </div>
-
-                            <div class="col-md-1">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="control-label">Orden</label>
-                                    <input name="orden_impresion" type="number" id="orden_impresion" class="form-control" >
+                                    <input name="orden_impresion" type="number" id="orden_impresion" min="1" class="form-control" >
                                 </div>
                             </div>
-
-                            <div class="col-md-1">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
                                 <div class="form-group">
-                                    <label class="control-label">Semestre</label>
-                                    <input name="semestre" type="number" id="semestre" class="form-control" >
-                                </div>
-                            </div>
-
-                            <div class="col-md-1">
-                                <div class="form-group">
-                                    <label class="control-label">Nivel</label>
-                                    <input name="nivel" type="number" id="nivel" class="form-control" >
-                                </div>
-                            </div>
-
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label class="control-label">Gestion</label>
+                                    <label class="control-label">A&ntilde;o Vigente</label>
                                     <input name="anio_vigente" type="number" id="anio_vigente" class="form-control">
                                 </div>
                             </div>
-
-                        </div>
-                        <div class="row">
-
                             <div class="col-md-4">
-
-                                <div class="form-group">
-                                    <label class="control-label">Carrera</label>
-                                    <select name="carrera_id" id="carrera_id" class="form-control custom-select" required>
-                                        <option value="">Seleccione</option>
-                                        @foreach ($carreras as $c)
-                                            <option value="{{ $c->id }}">{{ $c->nombre }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label class="control-label">Curso</label>
-                                    <select name="gestion" id="gestion" class="form-control custom-select" >
+                                    <select name="gestion" id="gestion" class="form-control custom-select">
                                         <option value="1">Primero</option>
                                         <option value="2">Segundo</option>
                                         <option value="3">Tercero</option>
+                                        <option value="4">Cuarto</option>
+                                        <option value="5">Quinto</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="control-label">Ciclo</label>
                                     <select name="ciclo" id="ciclo" class="form-control custom-select">
@@ -101,28 +121,28 @@
                                     </select>
                                 </div>
                             </div>
-
-                            <div class="col-md-2">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="control-label">Carga Horaria</label>
-                                    <input name="carga_horaria" type="number" id="carga_horaria" class="form-control" >
+                                    <input name="carga_horaria" type="number" id="carga_horaria" min="0" class="form-control" >
                                 </div>
                             </div>
 
-                            <div class="col-md-1">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="control-label">Teorico</label>
-                                    <input name="teorico" type="number" id="teorico" class="form-control" >
+                                    <input name="teorico" type="number" id="teorico" min="0" class="form-control" >
                                 </div>
                             </div>
 
-                            <div class="col-md-1">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="control-label">Practico</label>
-                                    <input name="practico" type="number" id="practico" class="form-control" >
+                                    <input name="practico" type="number" id="practico" min="0" class="form-control" >
                                 </div>
                             </div>
-
                         </div>
                     </form>
                 </div>
@@ -184,57 +204,7 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
-<!-- fin modal -->
-
-<div class="card">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="card border-info">
-                    <div class="card-header bg-info">
-                        <h4 class="mb-0 text-white">
-                            CARRERAS &nbsp;&nbsp;
-                            <button type="button" class="btn waves-effect waves-light btn-sm btn-primary" onclick="nueva_carrera()"><i class="fas fa-plus"></i> &nbsp; NUEVA CARRERA</button>
-                        </h4>
-                    </div>
-                    <form action="#" method="GET" id="formulario_carreras">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-9">
-                                    <div class="form-group">
-                                        <label class="control-label">Carreras </label>
-                                        
-                                        <select name="c_carrera_id" id="c_carrera_id" class="form-control" required>
-                                            <option value="">Seleccione</option>
-                                            @foreach ($carreras as $c)
-                                                <option value="{{ $c->id }}">{{ $c->nombre }}</option>
-                                            @endforeach
-                                        </select>
-                                        
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label class="control-label">Gestion </label>
-                                        <input type="number" name="c_gestion" id="c_gestion" class="form-control" value="{{ $gestion }}" min="2011" max="{{ $gestion }}">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <button type="submit" class="btn waves-effect waves-light btn-block btn-info">VER ASIGNATURAS</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="col-md-8" id="carga_ajax_lista_asignaturas">
-                
-            </div>
-        </div>
-    </div>
-</div>
+<!-- fin modal prerequisitos -->
 
 <!-- inicio modal nueva carrera -->
 <div id="nueva_carrera" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -346,42 +316,95 @@
         })
     });
 
+    // Funcion que guarda una asignatura nueva/existente y recarga los datos creados
     function guarda_asignatura() {
-        formulario_asignatura = $("#formulario_modal_asignatura").serializeArray();
-        carrera_id            = $("#carrera_id").val();
-        gestion               = $("#anio_vigente").val();
-        console.log(gestion);
+        // Capturamos todas las variables que se encuentran en el formulario de asignatura y las que necesitemos
+        carrera_id = $("#c_carrera_id").val();
+        asignatura_id = $("#asignatura_id").val();
+        codigo_asignatura = $("#codigo_asignatura").val();
+        nombre_asignatura = $("#nombre_asignatura").val();
+        orden_impresion = $("#orden_impresion").val();
+        anio_vigente = $("#anio_vigente").val();
+        gestion = $("#gestion").val();
+        ciclo = $("#ciclo").val();
+        carga_horaria = $("#carga_horaria").val();
+        teorico = $("#teorico").val();
+        practico = $("#practico").val();
+        // Utilizamos Ajax
         $.ajax({
             url: "{{ url('Asignatura/guarda') }}",
-            method: "POST",
-            data: formulario_asignatura,
+            data: {
+                carrera_id: carrera_id,
+                asignatura_id: asignatura_id,
+                codigo_asignatura: codigo_asignatura,
+                nombre_asignatura: nombre_asignatura,
+                orden_impresion: orden_impresion,
+                anio_vigente: anio_vigente,
+                gestion: gestion,
+                ciclo: ciclo,
+                carga_horaria: carga_horaria,
+                teorico: teorico,
+                practico: practico
+                },
             cache: false,
-            success: function(data)
-            {
-                if (data.sw == 1) 
-                {
-                    $.ajax({
-                        url: "{{ url('Carrera/ajax_lista_asignaturas') }}",
-                        method: "GET",
-                        data: {c_carrera_id: carrera_id, c_gestion: gestion},
-                        cache: false,
-                        success: function (data) {
-                            $("#carga_ajax_lista_asignaturas").html(data);
-                        }
-                    });
-
-                    Swal.fire(
-                        'Excelente!',
-                        'Los datos fueron guadados',
-                        'success'
-                    ).then(function() {
-                        $("#modal_asignaturas").modal('hide');
-                    });
-                } else {
-
-                }
+            type: 'post',
+            success: function(data) {
+                $.ajax({
+                    url: "{{ url('Carrera/ajax_lista_asignaturas') }}",
+                    data: {
+                        c_carrera_id: carrera_id,
+                        c_gestion: anio_vigente
+                        },
+                    cache: false,
+                    type: 'get',
+                    success: function (data) {
+                        $("#carga_ajax_lista_asignaturas").html(data);
+                    }
+                });
+                Swal.fire(
+                    'Excelente!',
+                    'Los datos fueron guardados',
+                    'success'
+                ).then(function() {
+                    $("#modal_asignaturas").modal('hide');
+                });
             }
-        })
+        });
+
+        // formulario_asignatura = $("#formulario_modal_asignatura").serializeArray();
+        // alert(formulario_asignatura);
+        // carrera_id            = $("#carrera_id").val();
+        // gestion               = $("#anio_vigente").val();
+        // console.log(gestion);
+        // $.ajax({
+        //     url: "{{ url('Asignatura/guarda') }}",
+        //     method: "POST",
+        //     data: formulario_asignatura,
+        //     cache: false,
+        //     success: function(data)
+        //     {
+        //         if (data.sw == 1) 
+        //         {
+        //             $.ajax({
+        //                 url: "{{ url('Carrera/ajax_lista_asignaturas') }}",
+        //                 method: "GET",
+        //                 data: {c_carrera_id: carrera_id, c_gestion: gestion},
+        //                 cache: false,
+        //                 success: function (data) {
+        //                     $("#carga_ajax_lista_asignaturas").html(data);
+        //                 }
+        //             });
+
+        //             Swal.fire(
+        //                 'Excelente!',
+        //                 'Los datos fueron guardados',
+        //                 'success'
+        //             ).then(function() {
+        //                 $("#modal_asignaturas").modal('hide');
+        //             });
+        //         }
+        //     }
+        // })
     }
 
     function elimina_asignatura(asignatura_id, nombre)
@@ -403,17 +426,18 @@
                     method: "GET",
                     cache: false,
                     success: function (data) {
-
                         $.ajax({
                             url: "{{ url('Carrera/ajax_lista_asignaturas') }}",
                             method: "GET",
-                            data: {c_carrera_id: data.carrera_id, c_gestion: data.anio_vigente},
+                            data: {
+                                c_carrera_id: data.carrera_id,
+                                c_gestion: data.anio_vigente
+                                },
                             cache: false,
                             success: function (data) {
                                 $("#carga_ajax_lista_asignaturas").html(data);
                             }
                         });
-
                         Swal.fire(
                             'Excelente!',
                             'La materia fue eliminada',
