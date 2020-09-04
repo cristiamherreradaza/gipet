@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Inscripcion;
 use App\Carrera;
 use App\Asignatura;
+use App\Materia;
 use App\Turno;
 use App\Persona;
 use App\Nota;
@@ -576,20 +577,39 @@ class InscripcionController extends Controller
 
     public function asignaturas_inscripcion($carrera_id, $turno_id, $persona_id, $paralelo, $anio_vigente)
     {
+        //dd('hola');
         $asignaturas = DB::select("SELECT asig.id, asig.codigo_asignatura, asig.nombre_asignatura, prer.sigla, prer.prerequisito_id
                                     FROM asignaturas asig, prerequisitos prer
                                     WHERE asig.carrera_id = '$carrera_id'
                                     AND asig.anio_vigente = '$anio_vigente'
                                     AND asig.id = prer.asignatura_id
                                     ORDER BY asig.gestion, asig.orden_impresion");
+        /*  1
+        $materias = Asignatura::where('carrera_id', $carrera_id)
+                            ->where('anio_vigente', $anio_vigente)
+                            ->orderBy('gestion', 'asc')
+                            ->get();
+        dd($materias);
+        */
+
+        //Verifica que no este inscrito el alumno ya en esas materias
         foreach ($asignaturas as $asig) {
             $inscripciones = DB::select("SELECT MAX(nota) as nota
                                             FROM inscripciones
                                             WHERE asignatura_id = '$asig->id'
                                             AND persona_id = '$persona_id'
                                             AND carrera_id = '$carrera_id'");
-
+            /*  2
+            $inscripciones = Inscripcion::where('asignatura_id', $asig->id)
+                                        ->where('persona_id', $persona_id)
+                                        ->where('carrera_id', $carrera_id)
+                                        ->get();
+            dd($inscripciones);
+            */
+            
             if(!empty($inscripciones[0]->nota)){
+                //dd('hola');
+                // Si la nota maxima es menor que 71
                if ($inscripciones[0]->nota < 71) {
                    DB::table('materias')->insert([
                               'asignatura_id' => $asig->id,
@@ -600,7 +620,7 @@ class InscripcionController extends Controller
                }
 
             } else {
-
+                //dd('falso');
                 if (!empty($asig->prerequisito_id)) {
                     $prerequisito = DB::select("SELECT MAX(nota) as nota
                                         FROM inscripciones
@@ -649,6 +669,8 @@ class InscripcionController extends Controller
                     ->delete();
                 }
             }
+
+            
         // aqui inscribimos las asignaturas que les corresponde
         $asig_tomar = DB::select("SELECT DISTINCT asignatura_id, codigo_asignatura, nombre_asignatura
                                     FROM materias");
@@ -670,27 +692,39 @@ class InscripcionController extends Controller
                 $inscripcion->anio_vigente = $anio_vigente;
                 $inscripcion->save();
 
-                // en esta parte registramos la nota del alumno inscrito
-                $notas_pro = NotasPropuesta::where('asignatura_id', $asig_tomar1->asignatura_id)
-                                            ->where('turno_id', $turno_id)
-                                            ->where('paralelo', $paralelo)
-                                            ->where('anio_vigente', $anio_vigente)
-                                            ->select('user_id')
-                                            ->get();
-                // dd($notas_pro[0]->user_id);
-                if (!empty($notas_pro[0]->user_id)) {
-                    for($i=1; $i<=4; $i++){
-                        $nueva_nota = new Nota;
-                        $nueva_nota->asignatura_id = $asig_tomar1->asignatura_id;
-                        $nueva_nota->turno_id = $turno_id;
-                        $nueva_nota->user_id = $notas_pro[0]->user_id;
-                        $nueva_nota->persona_id = $persona_id;
-                        $nueva_nota->paralelo = $paralelo;
-                        $nueva_nota->anio_vigente = $anio_vigente;
-                        $nueva_nota->trimestre = $i;
-                        $nueva_nota->save();
-                    }                        
+                // Aqui crearemos los 4 registros para la tabla notas, por cada inscripcion
+                for($i=1; $i<=4; $i++){
+                    $nueva_nota = new Nota;
+                    $nueva_nota->asignatura_id = $inscripcion->asignatura_id;
+                    $nueva_nota->turno_id = $inscripcion->turno_id;
+                    $nueva_nota->persona_id = $inscripcion->persona_id;
+                    $nueva_nota->paralelo = $inscripcion->paralelo;
+                    $nueva_nota->anio_vigente = $inscripcion->anio_vigente;
+                    $nueva_nota->trimestre = $i;
+                    $nueva_nota->save();
                 }
+
+                // en esta parte registramos la nota del alumno inscrito
+                // $notas_pro = NotasPropuesta::where('asignatura_id', $asig_tomar1->asignatura_id)
+                //                             ->where('turno_id', $turno_id)
+                //                             ->where('paralelo', $paralelo)
+                //                             ->where('anio_vigente', $anio_vigente)
+                //                             ->select('user_id')
+                //                             ->get();
+                // dd($notas_pro[0]->user_id);
+                // if (!empty($notas_pro[0]->user_id)) {
+                //     for($i=1; $i<=4; $i++){
+                //         $nueva_nota = new Nota;
+                //         $nueva_nota->asignatura_id = $asig_tomar1->asignatura_id;
+                //         $nueva_nota->turno_id = $turno_id;
+                //         $nueva_nota->user_id = $notas_pro[0]->user_id;
+                //         $nueva_nota->persona_id = $persona_id;
+                //         $nueva_nota->paralelo = $paralelo;
+                //         $nueva_nota->anio_vigente = $anio_vigente;
+                //         $nueva_nota->trimestre = $i;
+                //         $nueva_nota->save();
+                //     }                        
+                // }
             }
     }
 
