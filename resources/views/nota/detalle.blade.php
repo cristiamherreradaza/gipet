@@ -82,7 +82,7 @@
                                     $pago_segundo_turno = App\CobrosTemporada::where('persona_id', $inscrito->persona_id)
                                                                 ->where('carrera_id', $inscrito->carrera_id)
                                                                 ->where('asignatura_id', $inscrito->asignatura_id)
-                                                                ->where('servicio_id', 8)
+                                                                ->where('servicio_id', 7)
                                                                 ->first();
                                 @endphp
                                 @if($inscrito->nota < 61 && $contador_registros == 4)
