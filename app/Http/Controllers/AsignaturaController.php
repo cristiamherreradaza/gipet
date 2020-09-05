@@ -37,6 +37,19 @@ class AsignaturaController extends Controller
         $asignatura->teorico           = $request->teorico;
         $asignatura->practico          = $request->practico;
         $asignatura->save();
+
+        // Buscar en la tabla prerequisitos si existe este id de asignatura
+
+        // si existe dejarlo pasar
+        if (!$request->asignatura_id) {
+            $prerequisito_nuevo = new Prerequisito();
+            $prerequisito_nuevo->asignatura_id   = $asignatura->id;
+            $nPrerequisito->save();
+        }
+        // Si no existe crearlo con id pero en columna prerequisto NULL
+        
+        // Agregar en la tabla prerequisitos el id de esta asignatura creada
+
         // $sw = 0;
         // if ($asignatura->save()) {
         //     $sw = 1;
