@@ -44,7 +44,7 @@ class AsignaturaController extends Controller
         if (!$request->asignatura_id) {
             $prerequisito_nuevo = new Prerequisito();
             $prerequisito_nuevo->asignatura_id   = $asignatura->id;
-            $nPrerequisito->save();
+            $prerequisito_nuevo->save();
         }
         // Si no existe crearlo con id pero en columna prerequisto NULL
         
