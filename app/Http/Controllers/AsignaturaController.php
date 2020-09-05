@@ -102,13 +102,27 @@ class AsignaturaController extends Controller
     public function guarda_prerequisito(Request $request)
     {
         $asignatura = Asignatura::find($request->fp_materia);
-
-        $nPrerequisito                  = new Prerequisito();
-        $nPrerequisito->asignatura_id   = $request->fp_asignatura_id;
-        $nPrerequisito->prerequisito_id = $request->fp_materia;
-        $nPrerequisito->sigla           = $asignatura->codigo_asignatura;
-        $nPrerequisito->save();
-
+        $prerequisito = Prerequisito::where('asignatura_id', $request->fp_asignatura_id)
+                                    ->first();
+        if($prerequisito->prerequisito_id == NULL){
+            //sobreescribir
+            $prerequisito->prerequisito_id = $request->fp_materia;
+            $prerequisito->sigla           = $asignatura->codigo_asignatura;
+            $prerequisito->save();
+        }else{
+            //crear otro prerequisito
+            $prerequisito                  = new Prerequisito();
+            $prerequisito->asignatura_id   = $request->fp_asignatura_id;
+            $prerequisito->prerequisito_id = $request->fp_materia;
+            $prerequisito->sigla           = $asignatura->codigo_asignatura;
+            $prerequisito->save();
+        }
+        // $asignatura = Asignatura::find($request->fp_materia);
+        // $nPrerequisito                  = new Prerequisito();
+        // $nPrerequisito->asignatura_id   = $request->fp_asignatura_id;
+        // $nPrerequisito->prerequisito_id = $request->fp_materia;
+        // $nPrerequisito->sigla           = $asignatura->codigo_asignatura;
+        // $nPrerequisito->save();
         return response()->json([
             'asignatura_id' => $request->fp_asignatura_id
         ]);
@@ -116,14 +130,21 @@ class AsignaturaController extends Controller
 
     public function elimina_prerequisito(Request $request, $prerequisito_id)
     {
-        $eliminaPrerequisito          = Prerequisito::find($prerequisito_id);
-        $eliminaPrerequisito->borrado = date("Y-m-d H:i:s");
-        $eliminaPrerequisito->save();
-
+        $prerequisito = Prerequisito::find($prerequisito_id);
+        $cantidad = Prerequisito::where('asignatura_id', $prerequisito->asignatura_id)->count();
+        if($cantidad > 1){
+            $prerequisito->delete();
+        }else{
+            $prerequisito->prerequisito_id = NULL;
+            $prerequisito->sigla = NULL;
+            $prerequisito->save();
+        }
+        // $eliminaPrerequisito          = Prerequisito::find($prerequisito_id);
+        // $eliminaPrerequisito->borrado = date("Y-m-d H:i:s");
+        // $eliminaPrerequisito->save();
         return response()->json([
             'asignatura_id' => $prerequisito_id
         ]);
-
     }
 
     public function asignaturas_equivalentes()
