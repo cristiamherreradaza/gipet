@@ -610,7 +610,7 @@ class InscripcionController extends Controller
             if(!empty($inscripciones[0]->nota)){
                 //dd('hola');
                 // Si la nota maxima es menor que 71
-               if ($inscripciones[0]->nota < 71) {
+               if ($inscripciones[0]->nota < 61) {
                    DB::table('materias')->insert([
                         'asignatura_id' => $asig->id,
                         'codigo_asignatura' => $asig->codigo_asignatura,
@@ -627,7 +627,7 @@ class InscripcionController extends Controller
                                                 WHERE asignatura_id = '$asig->prerequisito_id'
                                                 AND persona_id = '$persona_id'
                                                 AND carrera_id = '$carrera_id'");
-                    if ($prerequisito[0]->nota > 70) {
+                    if ($prerequisito[0]->nota > 60) {
                         DB::table('materias')->insert([
                               'asignatura_id' => $asig->id,
                               'codigo_asignatura' => $asig->codigo_asignatura,

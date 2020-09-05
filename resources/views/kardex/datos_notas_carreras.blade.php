@@ -68,7 +68,7 @@
                                                             @endif
                                                         @endforeach
                                                         @php
-                                                            if($inscripcion->nota > 61){
+                                                            if($inscripcion->nota > 60){
                                                         @endphp
                                                         <td><span class="badge py-1 badge-success">{{ round($inscripcion->nota) }}</span> </td>
                                                         @php
