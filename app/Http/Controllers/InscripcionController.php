@@ -612,21 +612,21 @@ class InscripcionController extends Controller
                 // Si la nota maxima es menor que 71
                if ($inscripciones[0]->nota < 71) {
                    DB::table('materias')->insert([
-                              'asignatura_id' => $asig->id,
-                              'codigo_asignatura' => $asig->codigo_asignatura,
-                              'nombre_asignatura' => $asig->nombre_asignatura,                              
-                              'estado' => 1,
-                            ]);
+                        'asignatura_id' => $asig->id,
+                        'codigo_asignatura' => $asig->codigo_asignatura,
+                        'nombre_asignatura' => $asig->nombre_asignatura,                              
+                        'estado' => 1,
+                    ]);
                }
 
             } else {
                 //dd('falso');
                 if (!empty($asig->prerequisito_id)) {
                     $prerequisito = DB::select("SELECT MAX(nota) as nota
-                                        FROM inscripciones
-                                        WHERE asignatura_id = '$asig->prerequisito_id'
-                                        AND persona_id = '$persona_id'
-                                        AND carrera_id = '$carrera_id'");
+                                                FROM inscripciones
+                                                WHERE asignatura_id = '$asig->prerequisito_id'
+                                                AND persona_id = '$persona_id'
+                                                AND carrera_id = '$carrera_id'");
                     if ($prerequisito[0]->nota > 70) {
                         DB::table('materias')->insert([
                               'asignatura_id' => $asig->id,
@@ -692,10 +692,20 @@ class InscripcionController extends Controller
                 $inscripcion->anio_vigente = $anio_vigente;
                 $inscripcion->save();
 
+                // Buscaremos si existe un docente ya asignado a esta materia
+                $materia_docente = NotasPropuesta::where('asignatura_id', $inscripcion->asignatura_id)
+                                                ->where('turno_id', $inscripcion->turno_id)
+                                                ->where('paralelo', $inscripcion->paralelo)
+                                                ->where('anio_vigente', $inscripcion->anio_vigente)
+                                                ->first();
+
                 // Aqui crearemos los 4 registros para la tabla notas, por cada inscripcion
                 for($i=1; $i<=4; $i++){
                     $nueva_nota = new Nota;
                     $nueva_nota->asignatura_id = $inscripcion->asignatura_id;
+                    if($materia_docente){       //Si existe un docente ya asignado a esa materia, adiciona ese dato
+                        $nueva_nota->user_id = $materia_docente->user_id;
+                    }
                     $nueva_nota->turno_id = $inscripcion->turno_id;
                     $nueva_nota->persona_id = $inscripcion->persona_id;
                     $nueva_nota->paralelo = $inscripcion->paralelo;

@@ -10,84 +10,13 @@
 @endsection
 
 @section('content')
-
-<!-- inicio modal content -->
-<div id="modal_asigna" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">ASIGNACION DE MATERIA</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h5><b>Sigla: </b><span id="modal_sigla_materia"></span> &nbsp;&nbsp;&nbsp;&nbsp;<b>Nombre: </b><span id="modal_nombre_materia"></span></h5>
-                            <h5><b>Carrera: </b><span id="modal_carrera_materia"></span></h5>
-                        </div>
-                    </div>
-                    <form action="#" method="POST" id="formulario_modal_asignacion">
-                        @csrf
-                        <input type="hidden" name="asignatura_id" id="fm_asignatura_id" value="">
-                        <input type="hidden" name="user_id" id="fm_user_id" value="{{ $datos_persona->id }}">
-                        
-                        <div class="row">
-
-                            <div class="col-md-4">
-
-                                <div class="form-group">
-                                    <label class="control-label">Turno</label>
-                                    <select name="turno_id" id="turno_id" class="form-control custom-select" required>
-                                        @foreach ($turnos as $t)
-                                            <option value="{{ $t->id }}">{{ $t->descripcion }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="control-label">Paralelo</label>
-                                    <select name="paralelo" id="paralelo" class="form-control custom-select" >
-                                        <option value="A">A</option>
-                                        <option value="B">B</option>
-                                        <option value="C">C</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                            
-                                <div class="form-group">
-                                    <label class="control-label">A&ntilde;o</label>
-                                    <input type="number" name="anio_vigente" id="anio_vigente" class="form-control" value="{{ date('Y') }}">
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </form>
-
-                </div>
-                <div class="modal-footer">
-                    <button class="btn waves-effect waves-light btn-block btn-success" onclick="guarda_asignacion()">ASIGNAR</button>
-                </div>
-            </form>
-
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-<!-- fin modal -->
-
 <div class="card">
     <div class="card-body">
 
         <div class="row">
             <div class="col-md-6">
                 <h3>
-                    Nombre: 
+                    Docente: 
                     <span class="text-info">
                         {{ $datos_persona->apellido_paterno }}
                         {{ $datos_persona->apellido_materno }}
@@ -125,8 +54,9 @@
                                             <td>{{ $a->nombre_asignatura }}</td>
                                             <td class="text-center">{{ $a->gestion }}</td>
                                             <td>
-                                                <button type="button" class="btn btn-success" onclick="asigna_materia('{{ $a->id }}', '{{ $a->nombre_asignatura }}', '{{ $a->codigo_asignatura }}', '{{ $a->carrera['nombre'] }}')"><i
-                                                        class="fas fa-arrow-right"></i></button>
+                                                <button type="button" class="btn btn-success" onclick="asigna_materia('{{ $a->id }}', '{{ $a->nombre_asignatura }}', '{{ $a->codigo_asignatura }}', '{{ $a->carrera['nombre'] }}')">
+                                                    <i class="fas fa-arrow-right"></i>
+                                                </button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -178,6 +108,70 @@
     </div>
 </div>
 
+<!-- inicio modal asigna materia -->
+<div id="modal_asigna" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header modal-header-coloured bg-success">
+                <h4 class="modal-title text-white" id="myModalLabel">ASIGNACI&Oacute;N DE MATERIA</h4>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5><b class="text-danger">CARRERA: </b><span id="modal_carrera_materia"></span></h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5><b class="text-danger">SIGLA: </b><span id="modal_sigla_materia"></span></h5>
+                    </div>
+                    <div class="col-md-8">
+                        <h5><b class="text-danger">NOMBRE: </b><span id="modal_nombre_materia"></span></h5>
+                    </div>
+                </div>
+                <hr>
+                <form action="#" method="POST" id="formulario_modal_asignacion">
+                    @csrf
+                    <input type="hidden" name="asignatura_id" id="fm_asignatura_id" value="">
+                    <input type="hidden" name="user_id" id="fm_user_id" value="{{ $datos_persona->id }}">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Turno</label>
+                                <select name="turno_id" id="turno_id" class="form-control custom-select" required>
+                                    @foreach ($turnos as $turno)
+                                        <option value="{{ $turno->id }}">{{ $turno->descripcion }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Paralelo</label>
+                                <select name="paralelo" id="paralelo" class="form-control custom-select" >
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">A&ntilde;o</label>
+                                <input type="number" name="anio_vigente" id="anio_vigente" class="form-control" value="{{ date('Y') }}">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn waves-effect waves-light btn-block btn-success" onclick="guarda_asignacion()">ASIGNAR</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin modal asigna materia -->
 @stop
 
 @section('js')
@@ -225,16 +219,16 @@
         formulario_asignacion = $("#formulario_modal_asignacion").serializeArray();
         $.ajax({
             url: "{{ url('User/guarda_asignacion') }}",
-            method: "POST",
             data: formulario_asignacion,
+            type: 'post',
             cache: false,
             success: function(data)
             {
-                if (data.error_duplicado == 1) 
+                if (data.duplicado == 'Si') 
                 {
                     Swal.fire(
-                        'Alerta!',
-                        'La materia ya esta asignada al docente',
+                        'Error!',
+                        'La materia ya esta asignada al docente.',
                         'warning'
                     ).then(function() {
                         $("#modal_asigna").modal('hide');

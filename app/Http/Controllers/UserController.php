@@ -9,6 +9,7 @@ use App\Asignatura;
 use App\Perfile;
 use App\MenusPerfile;
 use App\MenusUser;
+use App\Nota;
 use App\NotasPropuesta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -202,34 +203,66 @@ class UserController extends Controller
 
     public function guarda_asignacion(Request $request)
     {
-        $error_duplicado = 0;
-        $asignacionGuardada = 0;
-        $validacion = NotasPropuesta::where('borrado', NULL)
-                    ->where('asignatura_id', $request->asignatura_id)
-                    ->where('user_id', $request->user_id)
-                    ->where('turno_id', $request->turno_id)
-                    ->where('paralelo', $request->paralelo)
-                    ->where('anio_vigente', $request->anio_vigente)
-                    ->count();
-        // dd($validacion);
-
-        if ($validacion > 0) {
-            $error_duplicado = 1;
+        $duplicado = 'No';
+        // Busca en la tabla notaspropuesta, si existe un registro que coincida con los request
+        $asignatura = NotasPropuesta::where('asignatura_id', $request->asignatura_id)
+                                    ->where('user_id', $request->user_id)
+                                    ->where('turno_id', $request->turno_id)
+                                    ->where('paralelo', $request->paralelo)
+                                    ->where('anio_vigente', $request->anio_vigente)
+                                    ->first();
+        if($asignatura){
+            // Existe un registro y cambia la variable a duplicado
+            $duplicado = 'Si';
         }else{
-            $nNotaPropuesta = new NotasPropuesta();
-            $nNotaPropuesta->asignatura_id = $request->asignatura_id;   
-            $nNotaPropuesta->user_id = $request->user_id;   
-            $nNotaPropuesta->paralelo = $request->paralelo;   
-            $nNotaPropuesta->turno_id = $request->turno_id;   
-            $nNotaPropuesta->anio_vigente = $request->anio_vigente;   
-            $nNotaPropuesta->save();
-            $asignacionGuardada = 1;
-        }
+            // No existe, entonces crear un registro
+            $asignatura = new NotasPropuesta();
+            $asignatura->asignatura_id = $request->asignatura_id;   
+            $asignatura->user_id = $request->user_id;   
+            $asignatura->paralelo = $request->paralelo;   
+            $asignatura->turno_id = $request->turno_id;   
+            $asignatura->anio_vigente = $request->anio_vigente;   
+            $asignatura->save();
 
+            // Si se hubieran registrado alumnos en esta materia, asignarles al docente en la tabla notas
+            $notas = Nota::where('asignatura_id', $request->asignatura_id)
+                        ->where('turno_id', $request->turno_id)
+                        ->where('paralelo', $request->paralelo)
+                        ->where('anio_vigente', $request->anio_vigente)
+                        ->get();
+            foreach($notas as $nota){
+                $nota->user_id = $asignatura->user_id;
+                $nota->save();
+            }
+        }
         return response()->json([
-            'error_duplicado' => $error_duplicado,
-            'asignacionGuardada' => $asignacionGuardada
+            'duplicado' => $duplicado
         ]);
+        // $error_duplicado = 0;
+        // $asignacionGuardada = 0;
+        // $validacion = NotasPropuesta::where('asignatura_id', $request->asignatura_id)
+        //                             ->where('user_id', $request->user_id)
+        //                             ->where('turno_id', $request->turno_id)
+        //                             ->where('paralelo', $request->paralelo)
+        //                             ->where('anio_vigente', $request->anio_vigente)
+        //                             ->count();
+                                    
+        // if ($validacion > 0) {
+        //     $error_duplicado = 1;
+        // }else{
+        //     $nNotaPropuesta = new NotasPropuesta();
+        //     $nNotaPropuesta->asignatura_id = $request->asignatura_id;   
+        //     $nNotaPropuesta->user_id = $request->user_id;   
+        //     $nNotaPropuesta->paralelo = $request->paralelo;   
+        //     $nNotaPropuesta->turno_id = $request->turno_id;   
+        //     $nNotaPropuesta->anio_vigente = $request->anio_vigente;   
+        //     $nNotaPropuesta->save();
+        //     $asignacionGuardada = 1;
+        // }
+        // return response()->json([
+        //     'error_duplicado' => $error_duplicado,
+        //     'asignacionGuardada' => $asignacionGuardada
+        // ]);
     }
 
     public function eliminaAsignacion(Request $request, $np_id)
