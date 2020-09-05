@@ -248,8 +248,7 @@
     function elimina_asignacion(np_id, nombre)
     {
         Swal.fire({
-            title: 'Quieres borrar ' + nombre + '?',
-            text: "Luego no podras recuperarlo!",
+            title: 'Quieres retirar ' + nombre + '?',
             type: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -261,13 +260,12 @@
 
                 $.ajax({
                     url: "{{ url('User/eliminaAsignacion') }}/"+np_id,
-                    method: "GET",
+                    type: 'get',
                     cache: false,
                     success: function (data) {
-
                         Swal.fire(
                             'Excelente!',
-                            'La materia fue eliminada',
+                            'El docente fue retirado de la materia.',
                             'success'
                         );
                         window.location.href = "{{ url('User/asigna_materias') }}/" + data.usuario;
@@ -276,7 +274,6 @@
 
             }
         })
-
     }
 </script>
 @endsection

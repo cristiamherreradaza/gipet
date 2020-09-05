@@ -267,13 +267,23 @@ class UserController extends Controller
 
     public function eliminaAsignacion(Request $request, $np_id)
     {
-        $datosNP = NotasPropuesta::find($np_id);
-
-        $eliminaNP = NotasPropuesta::find($np_id);
-        $eliminaNP->borrado = date('Y-m-d H:i:s');
-        $eliminaNP->save();
+        $nota_propuesta = NotasPropuesta::find($np_id);
+        $usuario_id = $nota_propuesta->user_id;
+        // Si existieran notas relacionadas a este docente modificar/retirar su user_id
+        $notas = Nota::where('asignatura_id', $nota_propuesta->asignatura_id)
+                    ->where('turno_id', $nota_propuesta->turno_id)
+                    ->where('user_id', $nota_propuesta->user_id)
+                    ->where('paralelo', $nota_propuesta->paralelo)
+                    ->where('anio_vigente', $nota_propuesta->anio_vigente)
+                    ->get();
+        foreach($notas as $nota){
+            $nota->user_id = NULL;
+            $nota->save();
+        }
+        // Ahora eliminamos el registro
+        $nota_propuesta->delete();
         return response()->json([
-            'usuario' => $datosNP->user_id
+            'usuario' => $nota_propuesta->user_id
         ]);
     }
 
