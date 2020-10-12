@@ -9,10 +9,12 @@ class CobrosTemporada extends Model
 {
     use SoftDeletes;
     protected $fillable = [
-        'servicio_id',
-        'persona_id',
+        'codigo_anterior',
+        'user_id',
         'carrera_id',
         'asignatura_id',
+        'servicio_id',
+        'persona_id',
         'nombre',
         'mensualidad',
         'gestion',
@@ -22,24 +24,29 @@ class CobrosTemporada extends Model
         'deleted_at',
     ];
 
-    public function servicio()
+    public function user()
     {
-        return $this->belongsTo('App/Servicio');
-    }
-
-    public function persona()
-    {
-        return $this->belongsTo('App/Persona');
+        return $this->belongsTo('App/User', 'user_id');
     }
 
     public function carrera()
     {
-        return $this->belongsTo('App/Carrera');
+        return $this->belongsTo('App/Carrera', 'carrera_id');
     }
 
     public function asignatura()
     {
-        return $this->belongsTo('App/Asignatura');
+        return $this->belongsTo('App/Asignatura', 'asignatura_id');
+    }
+
+    public function servicio()
+    {
+        return $this->belongsTo('App/Servicio', 'servicio_id');
+    }
+
+    public function persona()
+    {
+        return $this->belongsTo('App/Persona', 'persona_id');
     }
 
     public function transacciones()

@@ -14,7 +14,7 @@
 <div class="card">
     <div class="card-body">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-12">
                 <div class="card border-info">
                     <div class="card-header bg-info">
                         <h4 class="mb-0 text-white">
@@ -25,7 +25,7 @@
                     <form action="#" method="GET" id="formulario_carreras">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-9">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">Carreras </label>
                                         
@@ -44,29 +44,92 @@
                                         <input type="number" name="c_gestion" id="c_gestion" class="form-control" value="{{ $gestion }}" min="2011" max="{{ $gestion }}">
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <button type="submit" class="btn waves-effect waves-light btn-block btn-info">VER ASIGNATURAS</button>
+                                <div class="col-md-3">
+                                    <label class="control-label">&nbsp;</label>
+                                    <button type="submit" class="btn waves-effect waves-light btn-block btn-info">VER ASIGNATURAS</button>
+                                </div>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
-            <div class="col-md-8" id="carga_ajax_lista_asignaturas">
+            
+        </div>
+        <div class="row">
+            <div class="col-md-12" id="carga_ajax_lista_asignaturas">
                 
             </div>
         </div>
     </div>
 </div>
 
+<!-- inicio modal nueva carrera -->
+<div id="nueva_carrera" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">NUEVA CARRERA</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <form action="{{ url('Carrera/guardar') }}"  method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label">Nombre</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="nombre_carrera" type="text" id="nombre_carrera" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Duracion</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="duracion_carrera" type="number" id="duracion_carrera" class="form-control" value="1" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label">Nivel</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="nivel_carrera" type="text" id="nivel_carrera" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">A&ntilde;o vigente</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="anio_vigente_carrera" type="number" id="anio_vigente_carrera" class="form-control" value="{{ date('Y') }}" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar_carrera()">GUARDA CARRERA</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- fin modal nueva carrera -->
+
 <!-- inicio modal asignaturas -->
 <div id="modal_asignaturas" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">FORMULARIO DE ASIGNATURAS</h4>
+                    <h4 class="modal-title" id="myModalLabel">REGISTRAR ASIGNATURA</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
@@ -74,42 +137,82 @@
                         @csrf
                         <input type="hidden" name="asignatura_id" id="asignatura_id" value="">
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group">
-                                    <label class="control-label">Codigo</label>
+                                    <label class="control-label">Sigla</label>
+                                    <span class="text-danger">
+                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                    </span>
                                     <input name="codigo_asignatura" type="text" id="codigo_asignatura" class="form-control" required>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-8">
                                 <div class="form-group">
                                     <label class="control-label">Nombre</label>
+                                    <span class="text-danger">
+                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                    </span>
                                     <input name="nombre_asignatura" type="text" id="nombre_asignatura" class="form-control" required>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label">Orden</label>
-                                    <input name="orden_impresion" type="number" id="orden_impresion" min="1" class="form-control" >
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label class="control-label">A&ntilde;o Vigente</label>
-                                    <input name="anio_vigente" type="number" id="anio_vigente" class="form-control">
+                                    <label class="control-label">Pertenece a</label>
+                                    <span class="text-danger">
+                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                    </span>
+                                    <select name="gestion" id="gestion" class="form-control custom-select" required>
+                                        <option value="1" selected>Primer A&ntilde;o</option>
+                                        <option value="2">Segundo A&ntilde;o</option>
+                                        <option value="3">Tercer A&ntilde;o</option>
+                                        <option value="4">Cuarto A&ntilde;o</option>
+                                        <option value="5">Quinto A&ntilde;o</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label class="control-label">Curso</label>
-                                    <select name="gestion" id="gestion" class="form-control custom-select">
-                                        <option value="1">Primero</option>
-                                        <option value="2">Segundo</option>
-                                        <option value="3">Tercero</option>
-                                        <option value="4">Cuarto</option>
-                                        <option value="5">Quinto</option>
-                                    </select>
+                                    <label class="control-label">A&ntilde;o Vigente</label>
+                                    <span class="text-danger">
+                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                    </span>
+                                    <input name="anio_vigente" type="number" id="anio_vigente" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">Orden Impresion</label>
+                                    <input name="orden_impresion" type="number" id="orden_impresion" min="1" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">Carga Horaria</label>
+                                    <input name="carga_horaria" type="number" id="carga_horaria" min="0" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">Teorico</label>
+                                    <input name="teorico" type="number" id="teorico" min="0" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">Practico</label>
+                                    <input name="practico" type="number" id="practico" min="0" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">Carga Virtual</label>
+                                    <input name="carga_virtual" type="number" id="carga_virtual" min="0" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -121,26 +224,13 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label class="control-label">Carga Horaria</label>
-                                    <input name="carga_horaria" type="number" id="carga_horaria" min="0" class="form-control" >
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="control-label">Teorico</label>
-                                    <input name="teorico" type="number" id="teorico" min="0" class="form-control" >
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="control-label">Practico</label>
-                                    <input name="practico" type="number" id="practico" min="0" class="form-control" >
+                                    <label class="control-label">Semestre</label>
+                                    <select name="semestre" id="semestre" class="form-control">
+                                        <option value="1" selected>1</option>
+                                        <option value="2">2</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -163,31 +253,34 @@
     <div class="modal-dialog">
         <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">REGISTRO PREREQUISITOS</h4>
+                    <h4 class="modal-title" id="myModalLabel">VER PREREQUISITOS</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
                     <form action="#" method="POST" id="formulario_modal_prerequisito">
                         @csrf
                         <input type="hidden" name="fp_asignatura_id" id="fp_asignatura_id" value="">
+                        <div class="form-group row">
+                            <label class="col-sm-3 text-right control-label col-form-label">Asignatura</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="asignatura_nombre_prerequisito" readonly>
+                            </div>
+                        </div>
                         <div class="row">
-                            
                             <div class="col-md-9">
                                 <div class="form-group">
-                                    <label class="control-label">Nombre</label>
+                                    <label class="control-label">Seleccione</label>
                                     <div id="select_ajax_materias">
                                         
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="control-label">&nbsp;</label>
-                                    <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="guarda_prerequisito()">GUARDAR</button>
+                                    <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="guarda_prerequisito()">AGREGAR</button>
                                 </div>
                             </div>
-
                         </div>
 
                     </form>
@@ -205,58 +298,6 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- fin modal prerequisitos -->
-
-<!-- inicio modal nueva carrera -->
-<div id="nueva_carrera" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">NUEVA CARRERA</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            </div>
-            <form action="{{ url('Carrera/guardar') }}"  method="POST">
-                @csrf
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="control-label">Nombre</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <input name="nombre_carrera" type="text" id="nombre_carrera" class="form-control" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">Nivel</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <input name="nivel_carrera" type="text" id="nivel_carrera" class="form-control" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">A&ntilde;o vigente</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <input name="anio_vigente_carrera" type="text" id="anio_vigente_carrera" class="form-control" required>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar_carrera()">GUARDAR CARRERA</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- fin modal nueva carrera -->
 
 @stop
 
@@ -291,7 +332,8 @@
         var nombre_carrera = $("#nombre_carrera").val();
         var nivel_carrera = $("#nivel_carrera").val();
         var anio_vigente_carrera = $("#anio_vigente_carrera").val();
-        if(nombre_carrera.length>0 && nivel_carrera.length>0 && anio_vigente_carrera.length>0){
+        var duracion_carrera = $("#duracion_carrera").val();
+        if(nombre_carrera.length>0 && nivel_carrera.length>0 && duracion_carrera.length>0 && anio_vigente_carrera.length>0){
             Swal.fire(
                 'Excelente!',
                 'Una nueva carrera fue registrada.',
@@ -328,8 +370,10 @@
         gestion = $("#gestion").val();
         ciclo = $("#ciclo").val();
         carga_horaria = $("#carga_horaria").val();
+        carga_virtual = $("#carga_virtual").val();
         teorico = $("#teorico").val();
         practico = $("#practico").val();
+        semestre = $("#semestre").val();
         // Utilizamos Ajax
         $.ajax({
             url: "{{ url('Asignatura/guarda') }}",
@@ -343,8 +387,10 @@
                 gestion: gestion,
                 ciclo: ciclo,
                 carga_horaria: carga_horaria,
+                carga_virtual: carga_virtual,
                 teorico: teorico,
-                practico: practico
+                practico: practico,
+                semestre: semestre
                 },
             cache: false,
             type: 'post',

@@ -15,6 +15,7 @@ class UsersTableSeeder extends Seeder
         // se adiciono al administrador     
         User::insert([
           [
+            'perfil_id'=>'1',
           	'apellido_paterno'=>'Administrador',
           	'apellido_materno'=>'Administrador',
           	'nombres'=>'Administrador',

@@ -9,10 +9,17 @@ class Turno extends Model
 {
     use SoftDeletes;
     protected $fillable = [
+        'codigo_anterior',
+        'user_id',
         'descripcion',
         'estado',
         'deleted_at',
     ];
+
+    public function user()
+    {
+        return $this->hasMany('App\User', 'user_id');
+    }
 
     public function kardex()
     {

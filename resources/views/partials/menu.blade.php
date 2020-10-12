@@ -31,7 +31,9 @@
                 @endphp
                 @foreach($menus as $menu)
                     @php
-                        $permiso = App\Menususer::where('menu_id', $menu->id)->where('user_id', auth()->user()->id)->first();
+                        $permiso = App\MenusUser::where('menu_id', $menu->id)
+                                                ->where('user_id', auth()->user()->id)
+                                                ->first();
                         $padre='no';
                     @endphp
                     @if($permiso)

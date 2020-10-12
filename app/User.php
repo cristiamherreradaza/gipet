@@ -18,6 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'codigo_anterior',
         'perfil_id',
         'apellido_paterno',
         'apellido_materno',
@@ -67,6 +68,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    
+    public function perfil()
+    {
+        return $this->belongsTo('App\Perfile', 'perfil_id');
+    }
 
     public function notas()
     {
@@ -83,8 +89,5 @@ class User extends Authenticatable
         return $this->hasMany('App\MenusUser');
     }
 
-    public function perfil()
-    {
-        return $this->belongsTo('App\Perfile', 'perfil_id');
-    }
+    
 }

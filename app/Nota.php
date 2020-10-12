@@ -9,16 +9,18 @@ class Nota extends Model
 {
     use SoftDeletes;
     protected $fillable = [
+        'codigo_anterior',
+        'user_id',
+        'docente_id',
+        'persona_id',
         'asignatura_id',
-        'turno_id',
-        'user_id',        
-        'persona_id',      
-        'convalidado',
+        'turno_id',       
         'paralelo',
         'anio_vigente',
         'semestre',
         'trimestre',
         'fecha_registro',
+        'convalidado',
         'nota_asistencia',
         'nota_practicas',
         'nota_puntos_ganados',
@@ -32,23 +34,28 @@ class Nota extends Model
         'deleted_at',
     ];
 
-    public function asignatura()
-    {
-        return $this->belongsTo('App\Asignatura');
-    }
-
-    public function turno()
-    {
-        return $this->belongsTo('App\Turno');
-    }
-
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User', 'user_id');
+    }
+
+    public function docente()
+    {
+        return $this->belongsTo('App\User', 'docente_id');
     }
 
     public function persona()
     {
-        return $this->belongsTo('App\Persona');
+        return $this->belongsTo('App\Persona', 'persona_id');
+    }
+
+    public function asignatura()
+    {
+        return $this->belongsTo('App\Asignatura', 'asignatura_id');
+    }
+
+    public function turno()
+    {
+        return $this->belongsTo('App\Turno', 'turno_id');
     }
 }

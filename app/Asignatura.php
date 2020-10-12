@@ -9,31 +9,34 @@ class Asignatura extends Model
 {
     use SoftDeletes;
     protected $fillable = [
+        'codigo_anterior',
+        'user_id',
         'carrera_id',
         'gestion',
-        'codigo_asignatura',
-        'nombre_asignatura',
+        'sigla',
+        'nombre',
+        'ciclo',
+        'semestre',
+        'carga_horaria_virtual',
         'carga_horaria',
         'teorico',
         'practico',
         'nivel',
-        'semestre',
         'periodo',
         'anio_vigente',
         'orden_impresion',
-        'ciclo',
         'estado',
         'deleted_at',
     ];
 
-    public function carrera()
+    public function user()
     {
-        return $this->belongsTo('App\Carrera');
+        return $this->belongsTo('App\User', 'user_id');
     }
 
-    public function kardex()
+    public function carrera()
     {
-        return $this->hasMany('App\Kardex');
+        return $this->belongsTo('App\Carrera', 'carrera_id');
     }
 
     public function notas()
@@ -50,9 +53,4 @@ class Asignatura extends Model
     {
         return $this->hasMany('App\SegundosTurno');
     }
-
-    // public function prerequisitos()
-    // {
-    //     return $this->hasMany('App\Prerequisito');
-    // }
 }

@@ -1,71 +1,67 @@
-{{-- {{ dd($datos_carrera->id) }} --}}
-{{-- <div class="card card-outline-info"> --}}
-<div class="card border-primary">
-    @if ($datos_carrera)
-        <div class="card-header bg-primary">
-            <h4 class="mb-0 text-white">ASIGNATURAS - ({{ $datos_carrera->nombre }}) &nbsp;&nbsp;<button type="button" class="btn waves-effect waves-light btn-sm btn-warning" onclick="nuevo_modal('{{ $datos_carrera->id }}', '{{ $datos_carrera->anio_vigente }}')"><i class="fas fa-plus"></i> &nbsp; NUEVA MATERIA</button></h4>
+<div class="card border-info">
+    @if($datos_carrera)
+        <div class="card-header bg-info">
+            <h4 class="mb-0 text-white">ASIGNATURAS - ({{ $datos_carrera->nombre }}) &nbsp;&nbsp;
+                <button type="button" class="btn waves-effect waves-light btn-sm btn-primary" onclick="nuevo_modal('{{ $datos_carrera->id }}', '{{ $datos_carrera->anio_vigente }}')">
+                    <i class="fas fa-plus"></i> &nbsp; NUEVA ASIGNATURA
+                </button>
+            </h4>
         </div>
     @else
-        <div class="card-header bg-primary">
-            <h4 class="mb-0 text-white">NO EXISTE LA CARRERA EN ESA GESTION &nbsp;&nbsp;</h4>
+        <div class="card-header bg-info">
+            <h4 class="mb-0 text-white">NO EXISTE LA CARRERA EN ESA GESTION</h4>
         </div>
     @endif                                
     <div class="card-body">
         <div class="table-responsive m-t-40">
-            @if (!empty($asignaturas))
-                <table id="tabla-ajax_asignaturas" class="table table-bordered table-striped">
-                    <thead>
+            <table id="tabla-ajax_asignaturas" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Sigla</th>
+                        <th>Nombre</th>
+                        <th>A&ntilde;o</th>
+                        <th>Horas Academicas</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($asignaturas as $asignatura)
                         <tr>
-                            <th>Sigla</th>
-                            <th>Nombre</th>
-                            <th>A&ntilde;o</th>
-                            <th>Horas Academicas</th>
-                            <th>Acciones</th>
+                            <td>{{ $asignatura->sigla }}</td>
+                            <td>{{ $asignatura->nombre }}</td>
+                            @php
+                            $anio = '';
+                            switch ($asignatura->gestion) {
+                                case 1:
+                                    $anio = 'Primer Año';
+                                    break;
+                                case 2:
+                                    $anio = 'Segundo Año';
+                                    break;
+                                case 3:
+                                    $anio = 'Tercer Año';
+                                    break;
+                                case 4:
+                                    $anio = 'Cuarto Año';
+                                    break;
+                                case 5:
+                                    $anio = 'Quinto Año';
+                                    break;
+                                default:
+                                    $anio = 'No definido';
+                            }
+                            @endphp
+                            <td>{{ $anio }}</td>
+                            <td class="text-center">{{ $asignatura->carga_horaria }}</td>
+                            <td>
+                                <button type="button" class="btn btn-warning" onclick="muestra_modal({{ $asignatura->id }})" title="Editar Asignatura"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-info" onclick="prerequisitos('{{ $asignatura->id }}', '{{ $asignatura->nombre }}', '{{ $asignatura->carrera_id }}', '{{ $asignatura->anio_vigente }}')" title="Ver Prerequisitos"><i class="fas fa-eye"></i></button>
+                                <button type="button" class="btn btn-danger" onclick="elimina_asignatura('{{ $asignatura->id }}', '{{ $asignatura->nombre }}')" title="Eliminar Asignatura"><i class="fas fa-trash"></i></button>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($asignaturas as $asignatura)
-                            <tr>
-                                <td>{{ $asignatura->codigo_asignatura }}</td>
-                                <td>{{ $asignatura->nombre_asignatura }}</td>
-                                @php
-                                $anio = '';
-                                switch ($asignatura->gestion) {
-                                    case 1:
-                                        $anio = 'Primer Año';
-                                        break;
-                                    case 2:
-                                        $anio = 'Segundo Año';
-                                        break;
-                                    case 3:
-                                        $anio = 'Tercer Año';
-                                        break;
-                                    case 4:
-                                        $anio = 'Cuarto Año';
-                                        break;
-                                    case 5:
-                                        $anio = 'Quinto Año';
-                                        break;
-                                    default:
-                                        $anio = 'No definido';
-                                }
-                                @endphp
-                                <td>{{ $anio }}</td>
-                                <td class="text-center">{{ $asignatura->carga_horaria }}</td>
-                                <td>
-                                    <button type="button" class="btn btn-warning" onclick="muestra_modal({{ $asignatura->id }})" title="Editar Asignatura"><i class="fas fa-edit"></i></button>
-                                    <button type="button" class="btn btn-info" onclick="prerequisitos('{{ $asignatura->id }}', '{{ $asignatura->carrera_id }}', '{{ $asignatura->anio_vigente }}')" title="Ver Prerequisitos"><i class="fas fa-eye"></i></button>
-                                    <button type="button" class="btn btn-danger" onclick="elimina_asignatura('{{ $asignatura->id }}', '{{ $asignatura->nombre_asignatura }}')" title="Eliminar Asignatura"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            @else
-            <p></p>
-                <h3 class="text-center">La carrera no tiene asignaturas</h3>
-            @endif
-            
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -109,27 +105,27 @@
             if(element['id']==asignatura_id)
             {
                 $("#asignatura_id").val(element['id']);
-                $("#codigo_asignatura").val(element['codigo_asignatura']);
-                $("#nombre_asignatura").val(element['nombre_asignatura']);
+                $("#codigo_asignatura").val(element['sigla']);
+                $("#nombre_asignatura").val(element['nombre']);
                 $("#orden_impresion").val(element['orden_impresion']);
                 $("#semestre").val(element['semestre']);
                 $("#nivel").val(element['nivel']);
                 $("#carrera_id").val(element['carrera_id']);
                 $("#gestion").val(element['gestion']);
                 $("#carga_horaria").val(element['carga_horaria']);
+                $("#carga_virtual").val(element['carga_horaria_virtual']);
                 $("#teorico").val(element['teorico']);
                 $("#practico").val(element['practico']);
                 $("#anio_vigente").val(element['anio_vigente']);
                 $("#ciclo").val(element['ciclo']);
-                // console.log(element['nombre_asignatura']);
             }
         });
-        // console.log(asignaturas);
     }
 
-    function prerequisitos(asignatura_id, carrera_id, anio_vigente)
+    function prerequisitos(asignatura_id, nombre, carrera_id, anio_vigente)
     {
         $("#modal_prerequisitos").modal('show');
+        $("#asignatura_nombre_prerequisito").val(nombre);
         $("#ca_prerequisitos").load('{{ url('Asignatura/ajax_muestra_prerequisitos') }}/'+asignatura_id);
         $("#select_ajax_materias").load('{{ url('Carrera/ajax_combo_materias') }}/'+carrera_id+'/'+anio_vigente);
         $("#fp_asignatura_id").val(asignatura_id);

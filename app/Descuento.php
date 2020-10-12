@@ -9,6 +9,8 @@ class Descuento extends Model
 {
     use SoftDeletes;
     protected $fillable = [
+        'codigo_anterior',
+        'user_id',
         'servicio_id',
         'nombre',
         'descripcion',
@@ -19,9 +21,14 @@ class Descuento extends Model
         'deleted_at',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo('App/User', 'user_id');
+    }
+
     public function servicio()
     {
-        return $this->belongsTo('App/Servicio');
+        return $this->belongsTo('App/Servicio', 'servicio_id');
     }
 
     public function descuentopersonas()

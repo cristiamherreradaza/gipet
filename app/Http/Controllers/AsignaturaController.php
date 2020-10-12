@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Asignatura;
 use App\Prerequisito;
 use App\Carrera;
 use App\AsignaturasEquivalente;
-use Illuminate\Http\Request;
 
 class AsignaturaController extends Controller
 {
     public function listado_malla(Request $request, $carrera_id)
     {
-        $asignaturas = Asignatura::where("deleted_at", NULL)
-                    ->where('carrera_id', $carrera_id)
-                    ->get();
-        // dd($carreras[0]->nombre);
+        $asignaturas = Asignatura::where('carrera_id', $carrera_id)
+                                ->get();
         return view('asignatura.listado_malla', compact('asignaturas'));
     }
 
@@ -26,16 +25,19 @@ class AsignaturaController extends Controller
         } else {
         	$asignatura = new Asignatura();
         }
-        $asignatura->carrera_id        = $request->carrera_id;
-        $asignatura->codigo_asignatura = $request->codigo_asignatura;
-        $asignatura->nombre_asignatura = $request->nombre_asignatura;
-        $asignatura->orden_impresion   = $request->orden_impresion;
-        $asignatura->anio_vigente      = $request->anio_vigente;
-        $asignatura->gestion           = $request->gestion;
-        $asignatura->ciclo             = $request->ciclo;
-        $asignatura->carga_horaria     = $request->carga_horaria;
-        $asignatura->teorico           = $request->teorico;
-        $asignatura->practico          = $request->practico;
+        $asignatura->user_id = Auth::user()->id;
+        $asignatura->carrera_id = $request->carrera_id;
+        $asignatura->gestion = $request->gestion;
+        $asignatura->sigla = $request->codigo_asignatura;
+        $asignatura->nombre = $request->nombre_asignatura;
+        $asignatura->ciclo = $request->ciclo;
+        $asignatura->semestre = $request->semestre;
+        $asignatura->carga_horaria_virtual = $request->carga_virtual;
+        $asignatura->carga_horaria = $request->carga_horaria;
+        $asignatura->teorico = $request->teorico;
+        $asignatura->practico = $request->practico;
+        $asignatura->anio_vigente = $request->anio_vigente;
+        $asignatura->orden_impresion = $request->orden_impresion;
         $asignatura->save();
 
         // Buscar en la tabla prerequisitos si existe este id de asignatura
@@ -43,7 +45,7 @@ class AsignaturaController extends Controller
         // si existe dejarlo pasar
         if (!$request->asignatura_id) {
             $prerequisito_nuevo = new Prerequisito();
-            $prerequisito_nuevo->asignatura_id   = $asignatura->id;
+            $prerequisito_nuevo->asignatura_id = $asignatura->id;
             $prerequisito_nuevo->save();
         }
         // Si no existe crearlo con id pero en columna prerequisto NULL
@@ -90,13 +92,11 @@ class AsignaturaController extends Controller
         // ]);
     }
 
-    public function ajax_muestra_prerequisitos(Request $request, $asignatura_id)
+    public function ajax_muestra_prerequisitos($asignatura_id)
     {
-        $prerequisitos = Prerequisito::where('asignatura_id', $asignatura_id)
-                        ->where('deleted_at', NULL)
-                        ->get();
-
-        return view('asignatura.ajax_muestra_prerequisitos', compact('prerequisitos'));
+        $asignaturas = Prerequisito::where('asignatura_id', $asignatura_id)
+                                    ->get();
+        return view('asignatura.ajax_muestra_prerequisitos')->with(compact('asignaturas'));
     }
 
     public function guarda_prerequisito(Request $request)
@@ -149,7 +149,7 @@ class AsignaturaController extends Controller
 
     public function asignaturas_equivalentes()
     {
-        $anio_vigente = 2020;
+        $anio_vigente = date('Y');
         $carrera = Carrera::whereNull('deleted_at')
                             ->orderBy('id', 'ASC')
                             ->get();

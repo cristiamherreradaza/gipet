@@ -22,44 +22,44 @@ class MenuPerfilSeeder extends Seeder
                 'perfil_id'=> 1,
                 'menu_id'=> 2,
             ],
-            [
-                'perfil_id'=> 1,
-                'menu_id'=> 3,
-            ],
-            [
-                'perfil_id'=> 1,
-                'menu_id'=> 4,
-            ],
-            [
-                'perfil_id'=> 1,
-                'menu_id'=> 5,
-            ],
-            [
-                'perfil_id'=> 1,
-                'menu_id'=> 6,
-            ],
-            //Perfil de Docente
-            [
-                'perfil_id'=> 2,
-                'menu_id'=> 5,
-            ],
-            //Perfil de Secretaria
-            [
-                'perfil_id'=> 3,
-                'menu_id'=> 1,
-            ],
-            [
-                'perfil_id'=> 3,
-                'menu_id'=> 2,
-            ],
-            [
-                'perfil_id'=> 3,
-                'menu_id'=> 3,
-            ],
-            [
-                'perfil_id'=> 3,
-                'menu_id'=> 4,
-            ],
+            // [
+            //     'perfil_id'=> 1,
+            //     'menu_id'=> 3,
+            // ],
+            // [
+            //     'perfil_id'=> 1,
+            //     'menu_id'=> 4,
+            // ],
+            // [
+            //     'perfil_id'=> 1,
+            //     'menu_id'=> 5,
+            // ],
+            // [
+            //     'perfil_id'=> 1,
+            //     'menu_id'=> 6,
+            // ],
+            // //Perfil de Docente
+            // [
+            //     'perfil_id'=> 2,
+            //     'menu_id'=> 5,
+            // ],
+            // //Perfil de Secretaria
+            // [
+            //     'perfil_id'=> 3,
+            //     'menu_id'=> 1,
+            // ],
+            // [
+            //     'perfil_id'=> 3,
+            //     'menu_id'=> 2,
+            // ],
+            // [
+            //     'perfil_id'=> 3,
+            //     'menu_id'=> 3,
+            // ],
+            // [
+            //     'perfil_id'=> 3,
+            //     'menu_id'=> 4,
+            // ],
         ]);
     }
 }

@@ -18,14 +18,23 @@ class AsignaturasEquivalente extends Model
         'deleted_at',
     ];
 
-    public function carrera()
+    public function carrera_a()
     {
-        return $this->belongsTo('App\Carrera');
+        return $this->belongsTo('App\Carrera', 'carrera_id_1');
     }
 
-    public function asignatura()
+    public function asignatura_a()
     {
-        return $this->belongsTo('App\Asignatura');
+        return $this->belongsTo('App\Asignatura', 'asignatura_id_1');
     }
 
+    public function carrera_b()
+    {
+        return $this->belongsTo('App\Carrera', 'carrera_id_2');
+    }
+
+    public function asignatura_b()
+    {
+        return $this->belongsTo('App\Asignatura', 'asignatura_id_2');
+    }
 }

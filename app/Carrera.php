@@ -9,13 +9,21 @@ class Carrera extends Model
 {
     use SoftDeletes;
     protected $fillable = [
+        'codigo_anterior',
+        'user_id',
         'nombre',
         'nivel',
-        'semes',
+        'semestre',
         'gestion',
+        'anio_vigente',
         'estado',
         'deleted_at',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'user_id');
+    }
 
     public function asignaturas()
     {

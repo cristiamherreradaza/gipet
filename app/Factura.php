@@ -9,10 +9,11 @@ class Factura extends Model
 {
 	use SoftDeletes;
     protected $fillable = [
+        'codigo_anterior',
+        'user_id',
         'empresa_id',
 		'dosificacion_id',
 		'persona_id',
-		'user_id',
 		'razon_social',
 		'nit',
 		'fecha',
@@ -23,25 +24,25 @@ class Factura extends Model
 		'estado',
 		'deleted_at',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'user_id');
+    }
     
     public function empresa()
     {
-        return $this->belongsTo('App\Empresa');
+        return $this->belongsTo('App\Empresa', 'empresa_id');
     }
 
     public function dosificacion()
     {
-        return $this->belongsTo('App\Dosificacion');
+        return $this->belongsTo('App\Dosificacion', 'dosificacion_id');
     }
 
     public function persona()
     {
-        return $this->belongsTo('App\Persona');
-    }
-
-    public function user()
-    {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Persona', 'persona_id');
     }
 
     public function detallesfacturas()

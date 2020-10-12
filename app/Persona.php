@@ -9,21 +9,23 @@ class Persona extends Model
 {
     use SoftDeletes;
     protected $fillable = [
+        'codigo_anterior',
+        'user_id',
         'apellido_paterno',
         'apellido_materno',
         'nombres',
-        'carnet',
+        'cedula',
         'expedido',
         'fecha_nacimiento',
         'sexo',
         'direccion',
-        'telefono_fijo',
-        'telefono_celular',
+        'numero_fijo',
+        'numero_celular',
         'email',
         'trabaja',
         'empresa',
         'direccion_empresa',
-        'telefono_empresa',
+        'numero_empresa',
         'fax',
         'email_empresa',
         'nombre_padre',
@@ -31,16 +33,16 @@ class Persona extends Model
         'nombre_madre',
         'celular_madre',
         'nombre_tutor',
-        'telefono_tutor',
-        'nombre_esposo',
-        'telefono_esposo',
+        'celular_tutor',
+        'nombre_pareja',
+        'celular_pareja',
         'estado',
         'deleted_at',
     ];
 
-    public function kardex()
+    public function user()
     {
-        return $this->hasMany('App\Kardex');
+        return $this->belongsTo('App\User', 'user_id');
     }
 
     public function notas()
