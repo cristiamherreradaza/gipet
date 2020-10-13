@@ -147,19 +147,17 @@ class AsignaturaController extends Controller
         ]);
     }
 
+    // Funcion que envia los datos de las carreras y asignaturas correspondientes para el formulario
     public function asignaturas_equivalentes()
     {
         $anio_vigente = date('Y');
-        $carrera = Carrera::whereNull('deleted_at')
-                            ->orderBy('id', 'ASC')
+        $carreras = Carrera::orderBy('id', 'ASC')
                             ->get();
-
-        $asignatura = Asignatura::whereNull('deleted_at')
-                            ->where('anio_vigente', $anio_vigente)
-                            ->orderBy('id', 'ASC')
-                            ->get();
-
-        return view('asignatura.asignaturas_equivalentes')->with(compact('carrera', 'asignatura'));  
+        $asignaturas = Asignatura::where('anio_vigente', $anio_vigente)
+                                ->orderBy('id', 'ASC')
+                                ->get();
+        $equivalentes = AsignaturasEquivalente::get();
+        return view('asignatura.asignaturas_equivalentes')->with(compact('carreras', 'asignaturas', 'equivalentes'));  
     }
 
     public function ajax_lista(Request $request)
@@ -174,26 +172,44 @@ class AsignaturaController extends Controller
 
     public function guarda_equivalentes(Request $request)
     {
-        $asig_1 = $request->tipo_asig_1;
-        $asig_2 = $request->tipo_asig_2;
-        $anio_vigente = $request->tipo_anio_vigente;
+        // Si existen los parametros enviados desde interfaz
+        if($request->asignatura_1 && $request->asignatura_2 && $request->anio_vigente){
+            // Buscaremos los valores respectivos
+            $asignatura_a = Asignatura::find($request->asignatura_1);
+            $asignatura_b = Asignatura::find($request->asignatura_2);
+            // Si existen los valores buscados, creamos la equivalencia
+            if($asignatura_a && $asignatura_b){
+                $asignatura_equivalente = new AsignaturasEquivalente();
+                $asignatura_equivalente->user_id = Auth::user()->id;
+                $asignatura_equivalente->carrera_id_1 = $asignatura_a->carrera_id;
+                $asignatura_equivalente->asignatura_id_1 = $asignatura_a->id;
+                $asignatura_equivalente->carrera_id_2 = $asignatura_b->carrera_id;
+                $asignatura_equivalente->asignatura_id_2 = $asignatura_b->id;
+                $asignatura_equivalente->anio_vigente = $request->anio_vigente;
+                $asignatura_equivalente->save();
+            }
+        }
+        return redirect('Asignatura/asignaturas_equivalentes');
+        // $asig_1 = $request->asignatura_1;
+        // $asig_2 = $request->asignatura_2;
+        // $anio_vigente = $request->tipo_anio_vigente;
 
-        $carrera_1 = Asignatura::find($asig_1);
-        $carrera_2 = Asignatura::find($asig_2);
+        // $carrera_1 = Asignatura::find($request->asignatura_1);
+        // $carrera_2 = Asignatura::find($request->asignatura_2);
 
-        $asig_equivalente                  = new AsignaturasEquivalente();
-        $asig_equivalente->carrera_id_1    = $carrera_1->carrera_id;
-        $asig_equivalente->asignatura_id_1 = $asig_1;
-        $asig_equivalente->carrera_id_2    = $carrera_2->carrera_id;
-        $asig_equivalente->asignatura_id_2 = $asig_2;
-        $asig_equivalente->anio_vigente    = $anio_vigente;
-        $asig_equivalente->save();
+        // $asig_equivalente                  = new AsignaturasEquivalente();
+        // $asig_equivalente->carrera_id_1    = $carrera_1->carrera_id;
+        // $asig_equivalente->asignatura_id_1 = $asig_1;
+        // $asig_equivalente->carrera_id_2    = $carrera_2->carrera_id;
+        // $asig_equivalente->asignatura_id_2 = $asig_2;
+        // $asig_equivalente->anio_vigente    = $anio_vigente;
+        // $asig_equivalente->save();
 
-        $asignaturas = AsignaturasEquivalente::whereNull('deleted_at')
-                            ->orderBy('id', 'DESC')
-                            ->get();
+        // $asignaturas = AsignaturasEquivalente::whereNull('deleted_at')
+        //                     ->orderBy('id', 'DESC')
+        //                     ->get();
 
-        return view('asignatura.lista')->with(compact('asignaturas'));  
+        // return view('asignatura.lista')->with(compact('asignaturas'));  
     }
 
     public function listado()

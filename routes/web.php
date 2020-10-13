@@ -157,6 +157,7 @@ Route::post('User/actualizarPerfil', 'UserController@actualizarPerfil');
 Route::post('User/password', 'UserController@password');
 Route::get('Persona/detalle/{persona_id}', 'PersonaController@detalle');
 Route::get('Persona/ajax_materias/{carrera_id}/{persona_id}/{anio_vigente}', 'PersonaController@ajax_materias');
+Route::get('User/ajaxEditaPerfil', 'UserController@ajaxEditaPerfil');
 
 Route::get('Asignatura/ajax_muestra_prerequisitos/{asignatura_id}', 'AsignaturaController@ajax_muestra_prerequisitos');
 Route::get('Asignatura/elimina_prerequisito/{prerequisito_id}', 'AsignaturaController@elimina_prerequisito');

@@ -16,7 +16,15 @@
         @endphp
         <div class="custom-control custom-checkbox">
             <input type="checkbox" class="custom-control-input" value="{{ $menu->id }}" id="custom-Check{{$key}}" name="menus_editar[]" {{ $checked }}>
-            <label for="custom-Check{{$key}}" class="custom-control-label">{{ $menu->nombre }}</label>
+            <label for="custom-Check{{$key}}" class="custom-control-label">
+                {{ $menu->nombre }}
+                @if($menu->padre)
+                    @php
+                        $menu = App\Menu::find($menu->padre);
+                    @endphp
+                    ( {{ $menu->nombre }} )
+                @endif    
+            </label>
         </div>
     @endforeach
 </div>

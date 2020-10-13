@@ -27,6 +27,42 @@ class MenuSeeder extends Seeder
                 'padre'=> 1,
                 'orden'=> 1,
             ],
+            [
+                'nombre'=>'Equivalencias',
+                'direccion'=>'Asignatura/asignaturas_equivalentes',
+                'icono'=>'clipboard',
+                'padre'=> 1,
+                'orden'=> 2,
+            ],
+            [
+                'nombre'=>'Descuentos',
+                'direccion'=>'Descuento/listado',
+                'icono'=>'clipboard',
+                'padre'=> 1,
+                'orden'=> 3,
+            ],
+            [
+                'nombre'=>'Perfiles',
+                'direccion'=>'Perfil/listado',
+                'icono'=>'clipboard',
+                'padre'=> 1,
+                'orden'=> 4,
+            ],
+            [
+                'nombre'=>'Servicios',
+                'direccion'=>'Servicio/listado',
+                'icono'=>'clipboard',
+                'padre'=> 1,
+                'orden'=> 5,
+            ],
+            [
+                'nombre'=>'Turnos',
+                'direccion'=>'Turno/listado',
+                'icono'=>'clipboard',
+                'padre'=> 1,
+                'orden'=> 6,
+            ],
+            
             // [
             //     'nombre'=>'Inscripciones',
             //     'direccion'=>'Inscripcion/inscripcion',

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Servicio;
 use App\Carrera;
 use App\Asignatura;
@@ -20,6 +21,7 @@ class ServicioController extends Controller
     public function guardar(Request $request)
     {
         $servicio = new Servicio();
+        $servicio->user_id = Auth::user()->id;
         $servicio->sigla = $request->sigla_servicio;
         $servicio->nombre = $request->nombre_servicio;
         $servicio->precio = $request->precio_servicio;
@@ -30,6 +32,7 @@ class ServicioController extends Controller
     public function actualizar(Request $request)
     {
         $servicio = Servicio::find($request->id);
+        $servicio->user_id = Auth::user()->id;
         $servicio->sigla = $request->sigla;
         $servicio->nombre = $request->nombre;
         $servicio->precio = $request->precio;

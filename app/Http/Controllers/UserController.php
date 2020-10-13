@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use App\Turno;
-use DataTables;
-use App\Asignatura;
-use App\Perfile;
-use App\MenusPerfile;
-use App\MenusUser;
-use App\Nota;
-use App\NotasPropuesta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Validator;
+use DataTables;
+use App\User;
+use App\Turno;
+use App\Asignatura;
+use App\Perfile;
+use App\Menu;
+use App\MenusPerfile;
+use App\MenusUser;
+use App\Nota;
+use App\NotasPropuesta;
 
 class UserController extends Controller
 {
@@ -28,11 +29,12 @@ class UserController extends Controller
     {
         //dd($request->perfil);
         $user = new User();
+        $user->perfil_id = $request->perfil;
         $user->apellido_paterno = $request->apellido_paterno;
         $user->apellido_materno = $request->apellido_materno;
         $user->nombres = $request->nombres;
         //$user->nomina = $request->nomina;
-        $user->password = Hash::make($request->username);
+        $user->password = Hash::make('123456789');
         $user->cedula = $request->ci;
         $user->expedido = $request->expedido;
         //$user->tipo_usuario = $request->tipo;
@@ -50,14 +52,13 @@ class UserController extends Controller
         $user->direccion = $request->direccion;
         $user->zona = $request->zona;
         
-        $user->numero_celular = $request->numero_celular;
+        $user->numero_celular = $request->celular;
         $user->numero_fijo = $request->numero_fijo;
         $user->email = $request->email;
         //$user->foto = $request->foto;
         $user->persona_referencia = $request->persona_referencia;
         $user->numero_referencia = $request->numero_referencia;
         $user->name = $request->username;
-        $user->perfil_id = $request->perfil;
         $user->save();
 
         if($request->perfil)
@@ -75,7 +76,6 @@ class UserController extends Controller
             }
         }
         return redirect('User/listado');
-
     }
 
     public function editar($id)
@@ -88,37 +88,37 @@ class UserController extends Controller
     public function actualizar(Request $request)
     {
         $sw=0;
-        $user = User::find($request->id);
-        $user->apellido_paterno = $request->apellido_paterno;
-        $user->apellido_materno = $request->apellido_materno;
-        $user->nombres = $request->nombres;
-        //$user->nomina = $request->nomina;
-        //$user->password = Hash::make($request->username);
-        $user->cedula = $request->ci;
-        $user->expedido = $request->expedido;
-        //$user->tipo_usuario = $request->tipo;
-        $user->nombre_usuario = $request->username;
-        //$user->fecha_incorporacion = date('Y-m-d');
+        $user = User::find($request->id_edicion);
+        $user->apellido_paterno = $request->apellido_paterno_edicion;
+        $user->apellido_materno = $request->apellido_materno_edicion;
+        $user->nombres = $request->nombres_edicion;
+        //$user->nomina = $request->nomina_edicion;
+        //$user->password = Hash::make($request->username)_edicion;
+        $user->cedula = $request->ci_edicion;
+        $user->expedido = $request->expedido_edicion;
+        //$user->tipo_usuario = $request->tipo_edicion;
+        $user->nombre_usuario = $request->username_edicion;
+        //$user->fecha_incorporacion = date('Y-m-d')_edicion;
 
-        //$user->vigente = 'Si';
-        //$user->rol = $request->rol;
-        $user->fecha_nacimiento = $request->fecha_nacimiento;
-        $user->lugar_nacimiento = $request->lugar_nacimiento;
-        $user->sexo = $request->sexo;
-        $user->estado_civil = $request->estado_civil;
-        $user->nombre_conyugue = $request->nombre_conyugue;
-        $user->nombre_hijo = $request->nombre_hijo;
-        $user->direccion = $request->direccion;
-        $user->zona = $request->zona;
+        //$user->vigente = 'Si'_edicion;
+        //$user->rol = $request->rol_edicion;
+        $user->fecha_nacimiento = $request->fecha_nacimiento_edicion;
+        $user->lugar_nacimiento = $request->lugar_nacimiento_edicion;
+        $user->sexo = $request->sexo_edicion;
+        $user->estado_civil = $request->estado_civil_edicion;
+        $user->nombre_conyugue = $request->nombre_conyugue_edicion;
+        $user->nombre_hijo = $request->nombre_hijo_edicion;
+        $user->direccion = $request->direccion_edicion;
+        $user->zona = $request->zona_edicion;
         
-        $user->numero_celular = $request->numero_celular;
-        $user->numero_fijo = $request->numero_fijo;
-        $user->email = $request->email;
-        //$user->foto = $request->foto;
-        $user->persona_referencia = $request->persona_referencia;
-        $user->numero_referencia = $request->numero_referencia;
-        $user->name = $request->username;
-        if($user->perfil_id != $request->perfil)
+        $user->numero_celular = $request->celular_edicion;
+        $user->numero_fijo = $request->numero_fijo_edicion;
+        $user->email = $request->email_edicion;
+        //$user->foto = $request->foto_edicion;
+        $user->persona_referencia = $request->persona_referencia_edicion;
+        $user->numero_referencia = $request->numero_referencia_edicion;
+        $user->name = $request->username_edicion;
+        if($user->perfil_id != $request->perfil_edicion)
         {
             // Eliminaremos el perfil con sus respectivos menus anteriores en la tabla menusUser
             $menuusers = MenusUser::where('user_id', $user->id)->get();
@@ -130,16 +130,16 @@ class UserController extends Controller
                 }
             }
             // Asignaremos nuevo perfil
-            $user->perfil_id = $request->perfil;
+            $user->perfil_id = $request->perfil_edicion;
             $sw=1;
         }        
         $user->save();
 
         if($sw == 1)
         {
-            if($request->perfil)
+            if($request->perfil_edicion)
             {
-                $menus = MenusPerfile::where('perfil_id', $request->perfil)->get();
+                $menus = MenusPerfile::where('perfil_id', $request->perfil_edicion)->get();
                 if(count($menus) > 0)
                 {
                     // Adicionaremos los nuevos
@@ -158,6 +158,15 @@ class UserController extends Controller
         //dd($user);
     }
 
+    public function ajaxEditaPerfil(Request $request)
+    {
+        $perfil = Perfile::find($request->perfil_id);
+        $menugeneral = Menu::whereNull('padre')->get();
+        $menusperfil = MenusPerfile::where('perfil_id', $perfil->id)->get();
+        $usuario = User::find($request->usuario_id);
+        return view('user.ajaxEditaPerfil')->with(compact('perfil', 'menusperfil', 'menugeneral', 'usuario'));
+    }
+
     public function asignar()
     {
         $users = User::where('vigente', 'si')->get();
@@ -166,7 +175,10 @@ class UserController extends Controller
 
     public function listado()
     {
-    	return view('user.listado');
+        $usuarios = User::get();
+        $perfiles = Perfile::get();
+        $menus = Menu::whereNull('padre')->get();
+    	return view('user.listado')->with(compact('menus', 'perfiles', 'usuarios'));
     }
 
     public function ajax_listado()
@@ -290,6 +302,15 @@ class UserController extends Controller
     public function eliminar($id)
     {
         $user = User::find($id);
+        // Eliminaremos los respectivos menus asignados al usuario
+        $menuusers = MenusUser::where('user_id', $user->id)->get();
+        if(count($menuusers) > 0)
+        {
+            foreach($menuusers as $menuuser)
+            {
+                $menuuser->delete();
+            }
+        }
         $user->delete();
         return redirect('User/listado');
     }
