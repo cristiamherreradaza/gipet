@@ -53,6 +53,7 @@ Route::get('Persona/ajax_listado', 'PersonaController@ajax_listado');
 Route::get('Persona/ver_persona', 'PersonaController@ver_persona');
 Route::get('Persona/ajax_asignaturas_adicionales/{persona_id}', 'PersonaController@ajax_asignaturas_adicionales');
 Route::get('Persona/verifica', 'PersonaController@verifica');
+Route::get('Persona/ver_detalle/{id}', 'PersonaController@ver_detalle');
 // Route::get('persona/ajax_datos', function () {
     // return datatables()->query(DB::table('personas'))->toJson();
 // });

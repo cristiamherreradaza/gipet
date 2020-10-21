@@ -89,13 +89,13 @@
                             <!-- toggle and nav items -->
                             <!-- ============================================================== -->
                             <ul class="navbar-nav float-left mr-auto">
-                                <li class="nav-item d-none d-md-block"><a class="nav-link sidebartoggler waves-effect waves-light"
-                                        href="javascript:void(0)" data-sidebartype="mini-sidebar"><i
-                                            class="icon-arrow-left-circle"></i></a></li>
-                                <!-- ============================================================== -->
-                                <!-- Comment -->
-                                <!-- ============================================================== -->
-                                <li class="nav-item dropdown">
+                                <li class="nav-item d-none d-md-block">
+                                    <a class="nav-link sidebartoggler waves-effect waves-light" href="javascript:void(0)" data-sidebartype="mini-sidebar">
+                                        <i class="icon-arrow-left-circle"></i>
+                                    </a>
+                                </li>
+
+                                <!-- <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false"> <i class="mdi mdi-message"></i>
                                         <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
@@ -109,7 +109,6 @@
                                             </li>
                                             <li>
                                                 <div class="message-center notifications position-relative" style="height:250px;">
-                                                    <!-- Message -->
                                                     <a href="javascript:void(0)"
                                                         class="message-item d-flex align-items-center border-bottom px-3 py-2">
                                                         <span class="btn btn-danger rounded-circle btn-circle"><i
@@ -121,7 +120,6 @@
                                                                 class="font-12 text-nowrap d-block text-muted">9:30 AM</span>
                                                         </div>
                                                     </a>
-                                                    <!-- Message -->
                                                     <a href="javascript:void(0)"
                                                         class="message-item d-flex align-items-center border-bottom px-3 py-2">
                                                         <span class="btn btn-success rounded-circle btn-circle"><i
@@ -133,7 +131,6 @@
                                                                 class="font-12 text-nowrap d-block text-muted">9:10 AM</span>
                                                         </div>
                                                     </a>
-                                                    <!-- Message -->
                                                     <a href="javascript:void(0)"
                                                         class="message-item d-flex align-items-center border-bottom px-3 py-2">
                                                         <span class="btn btn-info rounded-circle btn-circle"><i
@@ -145,7 +142,6 @@
                                                                 class="font-12 text-nowrap d-block text-muted">9:08 AM</span>
                                                         </div>
                                                     </a>
-                                                    <!-- Message -->
                                                     <a href="javascript:void(0)"
                                                         class="message-item d-flex align-items-center border-bottom px-3 py-2">
                                                         <span class="btn btn-primary rounded-circle btn-circle"><i
@@ -166,12 +162,7 @@
                                         </ul>
                                     </div>
                                 </li>
-                                <!-- ============================================================== -->
-                                <!-- End Comment -->
-                                <!-- ============================================================== -->
-                                <!-- ============================================================== -->
-                                <!-- Messages -->
-                                <!-- ============================================================== -->
+
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle waves-effect waves-dark" href="" id="2" data-toggle="dropdown"
                                         aria-haspopup="true" aria-expanded="false"> <i class="mdi mdi-email"></i>
@@ -186,7 +177,6 @@
                                             </li>
                                             <li>
                                                 <div class="message-center message-body position-relative" style="height:250px;">
-                                                    <!-- Message -->
                                                     <a href="javascript:void(0)"
                                                         class="message-item d-flex align-items-center border-bottom px-3 py-2">
                                                         <span class="user-img position-relative d-inline-block"> <img
@@ -200,7 +190,6 @@
                                                                 class="font-12 text-nowrap d-block text-muted">9:30 AM</span>
                                                         </div>
                                                     </a>
-                                                    <!-- Message -->
                                                     <a href="javascript:void(0)"
                                                         class="message-item d-flex align-items-center border-bottom px-3 py-2">
                                                         <span class="user-img position-relative d-inline-block"> <img
@@ -214,7 +203,6 @@
                                                                 class="font-12 text-nowrap d-block text-muted">9:10 AM</span>
                                                         </div>
                                                     </a>
-                                                    <!-- Message -->
                                                     <a href="javascript:void(0)"
                                                         class="message-item d-flex align-items-center border-bottom px-3 py-2">
                                                         <span class="user-img position-relative d-inline-block"> <img
@@ -228,7 +216,6 @@
                                                                 AM</span>
                                                         </div>
                                                     </a>
-                                                    <!-- Message -->
                                                     <a href="javascript:void(0)"
                                                         class="message-item d-flex align-items-center border-bottom px-3 py-2">
                                                         <span class="user-img position-relative d-inline-block"> <img
@@ -251,12 +238,7 @@
                                         </ul>
                                     </div>
                                 </li>
-                                <!-- ============================================================== -->
-                                <!-- End Messages -->
-                                <!-- ============================================================== -->
-                                <!-- ============================================================== -->
-                                <!-- mega menu -->
-                                <!-- ============================================================== -->
+
                                 <li class="nav-item dropdown mega-dropdown"><a class="nav-link dropdown-toggle waves-effect waves-dark"
                                         href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <span class=""><i class="mdi mdi-view-grid"></i></span>
@@ -265,7 +247,6 @@
                                         <div class="mega-dropdown-menu row">
                                             <div class="col-lg-3 col-xlg-2 mb-4">
                                                 <h4 class="mb-3">CAROUSEL</h4>
-                                                <!-- CAROUSEL -->
                                                 <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
                                                     <div class="carousel-inner" role="listbox">
                                                         <div class="carousel-item active">
@@ -288,11 +269,9 @@
                                                         data-slide="next"> <span class="carousel-control-next-icon"
                                                             aria-hidden="true"></span> <span class="sr-only">Next</span> </a>
                                                 </div>
-                                                <!-- End CAROUSEL -->
                                             </div>
                                             <div class="col-lg-3 mb-4">
                                                 <h4 class="mb-3">ACCORDION</h4>
-                                                <!-- Accordian -->
                                                 <div id="accordion">
                                                     <div class="card mb-1">
                                                         <div class="card-header" id="headingOne">
@@ -352,7 +331,6 @@
                                             </div>
                                             <div class="col-lg-3  mb-4">
                                                 <h4 class="mb-3">CONTACT US</h4>
-                                                <!-- Contact -->
                                                 <form>
                                                     <div class="form-group">
                                                         <input type="text" class="form-control" id="exampleInputname1"
@@ -368,7 +346,6 @@
                                             </div>
                                             <div class="col-lg-3 col-xlg-4 mb-4">
                                                 <h4 class="mb-3">List style</h4>
-                                                <!-- List style -->
                                                 <ul class="list-style-none">
                                                     <li><a href="javascript:void(0)"><i class="fa fa-check text-success"></i> You can
                                                             give link</a></li>
@@ -384,10 +361,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </li>
-                                <!-- ============================================================== -->
-                                <!-- End mega menu -->
-                                <!-- ============================================================== -->
+                                </li> -->
                             </ul>
                             <!-- ============================================================== -->
                             <!-- Right side toggle and nav items -->

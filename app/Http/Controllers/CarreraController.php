@@ -104,6 +104,7 @@ class CarreraController extends Controller
                                 ->first();
         $asignaturas = Asignatura::where('carrera_id', $request->c_carrera_id)
                                 ->where('anio_vigente', $request->c_gestion)
+                                //->orderBy('gestion', 'DESC')
                                 ->get();
         return view('carrera.ajax_lista_asignaturas', compact('asignaturas', 'datos_carrera'));
     }

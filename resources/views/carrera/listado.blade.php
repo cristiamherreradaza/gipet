@@ -11,58 +11,50 @@
 
 @section('content')
 
-<div class="card">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card border-info">
-                    <div class="card-header bg-info">
-                        <h4 class="mb-0 text-white">
-                            CARRERAS &nbsp;&nbsp;
-                            <button type="button" class="btn waves-effect waves-light btn-sm btn-primary" onclick="nueva_carrera()"><i class="fas fa-plus"></i> &nbsp; NUEVA CARRERA</button>
-                        </h4>
+<div class="card border-info">
+    <div class="card-header bg-info">
+        <h4 class="mb-0 text-white">
+            CARRERAS &nbsp;&nbsp;
+            <button type="button" class="btn waves-effect waves-light btn-sm btn-primary" onclick="nueva_carrera()"><i class="fas fa-plus"></i> &nbsp; NUEVA CARRERA</button>
+        </h4>
+    </div>
+    <form action="#" method="GET" id="formulario_carreras">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label">Carreras </label>
+                        
+                        <select name="c_carrera_id" id="c_carrera_id" class="form-control" required>
+                            <option value="">Seleccione</option>
+                            @foreach ($carreras as $c)
+                                <option value="{{ $c->id }}">{{ $c->nombre }}</option>
+                            @endforeach
+                        </select>
+                        
                     </div>
-                    <form action="#" method="GET" id="formulario_carreras">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">Carreras </label>
-                                        
-                                        <select name="c_carrera_id" id="c_carrera_id" class="form-control" required>
-                                            <option value="">Seleccione</option>
-                                            @foreach ($carreras as $c)
-                                                <option value="{{ $c->id }}">{{ $c->nombre }}</option>
-                                            @endforeach
-                                        </select>
-                                        
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label class="control-label">Gestion </label>
-                                        <input type="number" name="c_gestion" id="c_gestion" class="form-control" value="{{ $gestion }}" min="2011" max="{{ $gestion }}">
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <br>
-                                    <button type="submit" class="btn btn-info" title="Ver Asignaturas de Carrera" ><i class="fas fa-eye"></i></button>
-                                    <button type="button" class="btn btn-light" title="Vista Impresion Carrera"  onclick="vista_impresion()"><i class="fas fa-print"></i></button>
-                                    <button type="button" class="btn btn-warning" title="Editar carrera"  onclick="edita_carrera()"><i class="fas fa-edit"></i></button>
-                                    <button type="button" class="btn btn-danger" title="Eliminar carrera"  onclick="elimina_carrera()"><i class="fas fa-trash-alt"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Gestion </label>
+                        <input type="number" name="c_gestion" id="c_gestion" class="form-control" value="{{ $gestion }}" min="2011" max="{{ $gestion }}">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <br>
+                    <button type="submit" class="btn btn-info" title="Ver Asignaturas de Carrera" ><i class="fas fa-eye"></i></button>
+                    <button type="button" class="btn btn-light" title="Vista Impresion Carrera"  onclick="vista_impresion()"><i class="fas fa-print"></i></button>
+                    <button type="button" class="btn btn-warning" title="Editar carrera"  onclick="edita_carrera()"><i class="fas fa-edit"></i></button>
+                    <button type="button" class="btn btn-danger" title="Eliminar carrera"  onclick="elimina_carrera()"><i class="fas fa-trash-alt"></i></button>
                 </div>
             </div>
-            
         </div>
-        <div class="row">
-            <div class="col-md-12" id="carga_ajax_lista_asignaturas">
-                
-            </div>
-        </div>
+    </form>
+</div>
+
+<div class="row">
+    <div class="col-md-12" id="carga_ajax_lista_asignaturas">
+        
     </div>
 </div>
 

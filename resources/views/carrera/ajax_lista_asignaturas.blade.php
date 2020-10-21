@@ -21,7 +21,7 @@
                         <th>Nombre</th>
                         <th>A&ntilde;o</th>
                         <th>Horas Academicas</th>
-                        <th>Acciones</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -54,8 +54,8 @@
                             <td>{{ $anio }}</td>
                             <td class="text-center">{{ $asignatura->carga_horaria }}</td>
                             <td>
-                                <button type="button" class="btn btn-warning" onclick="muestra_modal({{ $asignatura->id }})" title="Editar Asignatura"><i class="fas fa-edit"></i></button>
                                 <button type="button" class="btn btn-info" onclick="prerequisitos('{{ $asignatura->id }}', '{{ $asignatura->nombre }}', '{{ $asignatura->carrera_id }}', '{{ $asignatura->anio_vigente }}')" title="Ver Prerequisitos"><i class="fas fa-eye"></i></button>
+                                <button type="button" class="btn btn-warning" onclick="muestra_modal({{ $asignatura->id }})" title="Editar Asignatura"><i class="fas fa-edit"></i></button>
                                 <button type="button" class="btn btn-danger" onclick="elimina_asignatura('{{ $asignatura->id }}', '{{ $asignatura->nombre }}')" title="Eliminar Asignatura"><i class="fas fa-trash"></i></button>
                             </td>
                         </tr>
