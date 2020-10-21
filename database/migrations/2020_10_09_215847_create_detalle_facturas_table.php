@@ -21,6 +21,7 @@ class CreateDetalleFacturasTable extends Migration
             $table->foreign('factura_id')->references('id')->on('facturas');
             $table->unsignedBigInteger('transaccion_id')->nullable();
             $table->foreign('transaccion_id')->references('id')->on('transacciones');
+            $table->integer('anio_vigente')->nullable();
             $table->string('estado')->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();

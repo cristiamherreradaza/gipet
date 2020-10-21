@@ -39,8 +39,8 @@
                 <tbody>
                     @foreach($asignaturas as $asignatura)
                         <tr>
-                            <td>{{ $asignatura->asignatura->codigo_asignatura }}</td>
-                            <td>{{ $asignatura->asignatura->nombre_asignatura }}</td>
+                            <td>{{ $asignatura->asignatura->sigla }}</td>
+                            <td>{{ $asignatura->asignatura->nombre }}</td>
                             <td>{{ $asignatura->turno->descripcion }}</td>
                             <td>{{ $asignatura->paralelo }}</td>
                             <td><input size="10" min="0" max="100" pattern="^[0-9]+" onchange="calcula( {{ $asignatura->id }} )" data-asistencia="{{ $asignatura->nota_asistencia }}" type="number" id="asistencia-{{ $asignatura->id }}" name="asistencia-{{ $asignatura->id }}" value="{{ $asignatura->nota_asistencia }}" step="any"></td>
@@ -93,6 +93,7 @@
 
     function calcula(id)
     {
+
         //tenemos que enviar el id de la nota que se esta modificando y los valores insertados, ó que se encuentran en ese momento en los campos
         var identificador = id;
         var asistencia = $("#asistencia-"+id).val();

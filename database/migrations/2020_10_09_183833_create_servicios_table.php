@@ -22,6 +22,7 @@ class CreateServiciosTable extends Migration
             $table->string('nombre')->nullable();
             $table->decimal('precio', 15, 2)->nullable();
             $table->integer('gestion')->nullable();
+            $table->integer('anio_vigente')->nullable();
             $table->string('estado')->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();

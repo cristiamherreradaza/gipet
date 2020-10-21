@@ -45,8 +45,11 @@
                                     </div>
                                 </div>
                                 <div class="col-md-3">
-                                    <label class="control-label">&nbsp;</label>
-                                    <button type="submit" class="btn waves-effect waves-light btn-block btn-info">VER ASIGNATURAS</button>
+                                    <br>
+                                    <button type="submit" class="btn btn-info" title="Ver Asignaturas de Carrera" ><i class="fas fa-eye"></i></button>
+                                    <button type="button" class="btn btn-light" title="Vista Impresion Carrera"  onclick="vista_impresion()"><i class="fas fa-print"></i></button>
+                                    <button type="button" class="btn btn-warning" title="Editar carrera"  onclick="edita_carrera()"><i class="fas fa-edit"></i></button>
+                                    <button type="button" class="btn btn-danger" title="Eliminar carrera"  onclick="elimina_carrera()"><i class="fas fa-trash-alt"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -123,6 +126,14 @@
     </div>
 </div>
 <!-- fin modal nueva carrera -->
+
+<!-- inicio modal editar perfil -->
+<div id="editar_carrera" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" id="editaCarreraAjax">
+        
+    </div>
+</div>
+<!-- fin modal editar perfil -->
 
 <!-- inicio modal asignaturas -->
 <div id="modal_asignaturas" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -494,7 +505,97 @@
 
             }
         })
+    }
 
+    function elimina_carrera()
+    {
+        var carrera_id = $("#c_carrera_id").val();
+        if(carrera_id.length >0){
+            Swal.fire({
+                title: 'Seguro que deseas eliminar esta carrera?',
+                text: "Luego no podras recuperarla ni sus asignaturas!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, estoy seguro!',
+                cancelButtonText: "Cancelar",
+            }).then((result) => {
+                if (result.value) {
+                    Swal.fire(
+                        'Excelente!',
+                        'La carrera fue eliminada',
+                        'success'
+                    ).then(function() {
+                        window.location.href = "{{ url('Carrera/eliminar') }}/"+carrera_id;
+                    });
+                }
+            })
+        }else{
+            Swal.fire(
+                'Seleccione una carrera!',
+                '',
+                'info'
+            )
+        }
+    }
+
+    // Funcion que muestra los datos referentes a los permisos de un usuario
+    function edita_carrera()
+    {
+        var carrera_id = $("#c_carrera_id").val();
+        var anio_vigente = $("#c_gestion").val();
+        if(carrera_id.length >0){
+            $.ajax({
+                url: "{{ url('Carrera/ajaxEditaCarrera') }}",
+                data: {
+                    carrera_id: carrera_id,
+                    anio_vigente: anio_vigente
+                    },
+                type: 'get',
+                success: function(data) {
+                    $("#editaCarreraAjax").html(data);
+                    $("#editar_carrera").modal('show');
+                }
+            });
+        }else{
+            Swal.fire(
+                'Seleccione una carrera!',
+                '',
+                'info'
+            )
+        }
+    }
+
+    // Validacion antes de actualizar un perfil existente
+    function actualizar_carrera()
+    {
+        var id = $("#id_carrera_edicion").val();
+        var nombre = $("#nombre_carrera_edicion").val();
+        var duracion = $("#duracion_carrera_edicion").val();
+        var nivel = $("#nivel_carrera_edicion").val();
+        var anio_vigente = $("#anio_vigente_carrera_edicion").val();
+        if(nombre.length>0 && duracion.length>0 && nivel.length>0 && anio_vigente.length>0){
+            Swal.fire(
+                'Excelente!',
+                'Carrera actualizada correctamente.',
+                'success'
+            )
+        }
+    }
+
+    function vista_impresion()
+    {
+        var carrera_id = $("#c_carrera_id").val();
+        if(carrera_id.length >0){
+            window.open("{{ url('Carrera/vista_impresion') }}/"+carrera_id, '_blank');
+        }else{
+            Swal.fire(
+                'Seleccione una carrera!',
+                '',
+                'info'
+            )
+        }
     }
 
     function guarda_prerequisito() 
@@ -554,7 +655,5 @@
             }
         })
     }
-
-
 </script>
 @endsection

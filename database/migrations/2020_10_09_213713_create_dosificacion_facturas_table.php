@@ -27,6 +27,7 @@ class CreateDosificacionFacturasTable extends Migration
             $table->string('llave_dosificacion')->nullable();
             $table->string('nit_empresa')->nullable();
             $table->string('autorizacion_empresa')->nullable();
+            $table->integer('anio_vigente')->nullable();
             $table->string('estado')->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();

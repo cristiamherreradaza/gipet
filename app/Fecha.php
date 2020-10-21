@@ -14,7 +14,8 @@ class Fecha extends Model
         'fecha_inicio',
         'fecha_fin',
 		'periodo',
-		'gestion',
+        'gestion',
+        'anio_vigente',
 		'estado',
 		'deleted_at',
     ];

@@ -31,6 +31,7 @@ class CreateFacturasTable extends Migration
             $table->integer('gestion')->nullable();
             $table->string('validado')->nullable();
             $table->string('codigo_control')->nullable();
+            $table->integer('anio_vigente')->nullable();
             $table->string('estado')->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();

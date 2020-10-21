@@ -13,6 +13,7 @@ class CombosPago extends Model
         'carrera_id',
         'servicio_id',
         'nombre',
+        'anio_vigente',
         'estado',
         'deleted_at',
     ];

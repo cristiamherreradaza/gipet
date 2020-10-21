@@ -9,7 +9,7 @@ use App\Persona;
 use App\NotasPropuesta;
 use App\Nota;
 use App\Kardex;
-use App\Inscripcion;
+use App\Inscripcione;
 use App\SegundosTurno;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\NotasExport;
@@ -26,7 +26,7 @@ class NotaController extends Controller
 
     public function listado()
     {
-        $asignaturas = NotasPropuesta::where('user_id', Auth::user()->id)
+        $asignaturas = NotasPropuesta::where('docente_id', Auth::user()->id)
                                     ->where('anio_vigente', date('Y'))
                                     ->get();
         return view('nota.listado')->with(compact('asignaturas'));
@@ -37,7 +37,7 @@ class NotaController extends Controller
         // Buscamos los detalles de la materia a mostrar
         $asignatura = NotasPropuesta::find($id);
         // Buscamos a los estudiantes inscritos en esa materia
-        $inscritos = Inscripcion::where('asignatura_id', $asignatura->asignatura_id)
+        $inscritos = Inscripcione::where('asignatura_id', $asignatura->asignatura_id)
                                 ->where('turno_id', $asignatura->turno_id)
                                 ->where('paralelo', $asignatura->paralelo)
                                 ->where('anio_vigente', $asignatura->anio_vigente)
@@ -56,7 +56,7 @@ class NotaController extends Controller
     {
         $asignatura = NotasPropuesta::where('asignatura_id', $request->asignatura_id)
                                     ->where('turno_id', $request->turno_id)
-                                    ->where('user_id', Auth::user()->id)
+                                    ->where('docente_id', Auth::user()->id)
                                     ->where('paralelo', $request->paralelo)
                                     ->where('anio_vigente', $request->anio_vigente)
                                     ->first();
@@ -89,7 +89,7 @@ class NotaController extends Controller
         $nota = Nota::find($request->id);           // Encuentra la nota con el registro $id
         $ponderacion = NotasPropuesta::where('asignatura_id', $nota->asignatura_id)
                                     ->where('turno_id', $nota->turno_id)
-                                    ->where('user_id', $nota->user_id)
+                                    ->where('docente_id', $nota->docente_id)
                                     ->where('paralelo', $nota->paralelo)
                                     ->where('anio_vigente', $nota->anio_vigente)
                                     ->first();      // Encuentra la NotaPropuesta correspondiente a la Nota
@@ -107,7 +107,7 @@ class NotaController extends Controller
                     // Buscamos ese registro
                     $segundoregistro = Nota::where('asignatura_id', $nota->asignatura_id)
                                             ->where('turno_id', $nota->turno_id)
-                                            ->where('user_id', $nota->user_id)
+                                            ->where('docente_id', $nota->docente_id)
                                             ->where('persona_id', $nota->persona_id)
                                             ->where('paralelo', $nota->paralelo)
                                             ->where('anio_vigente', $nota->anio_vigente)
@@ -121,7 +121,7 @@ class NotaController extends Controller
                     // Si es 2do bimestre, buscar el registro que corresponde al 4to bimestre y llenar en ambos
                     $segundoregistro = Nota::where('asignatura_id', $nota->asignatura_id)
                                             ->where('turno_id', $nota->turno_id)
-                                            ->where('user_id', $nota->user_id)
+                                            ->where('docente_id', $nota->docente_id)
                                             ->where('persona_id', $nota->persona_id)
                                             ->where('paralelo', $nota->paralelo)
                                             ->where('anio_vigente', $nota->anio_vigente)
@@ -165,7 +165,7 @@ class NotaController extends Controller
                     // Buscamos ese registro
                     $segundoregistro = Nota::where('asignatura_id', $nota->asignatura_id)
                                             ->where('turno_id', $nota->turno_id)
-                                            ->where('user_id', $nota->user_id)
+                                            ->where('docente_id', $nota->docente_id)
                                             ->where('persona_id', $nota->persona_id)
                                             ->where('paralelo', $nota->paralelo)
                                             ->where('anio_vigente', $nota->anio_vigente)
@@ -179,7 +179,7 @@ class NotaController extends Controller
                     // Si es 2do bimestre, buscar el registro que corresponde al 4to bimestre y llenar en ambos
                     $segundoregistro = Nota::where('asignatura_id', $nota->asignatura_id)
                                             ->where('turno_id', $nota->turno_id)
-                                            ->where('user_id', $nota->user_id)
+                                            ->where('docente_id', $nota->docente_id)
                                             ->where('persona_id', $nota->persona_id)
                                             ->where('paralelo', $nota->paralelo)
                                             ->where('anio_vigente', $nota->anio_vigente)
@@ -224,7 +224,7 @@ class NotaController extends Controller
                     // Buscamos ese registro
                     $segundoregistro = Nota::where('asignatura_id', $nota->asignatura_id)
                                             ->where('turno_id', $nota->turno_id)
-                                            ->where('user_id', $nota->user_id)
+                                            ->where('docente_id', $nota->docente_id)
                                             ->where('persona_id', $nota->persona_id)
                                             ->where('paralelo', $nota->paralelo)
                                             ->where('anio_vigente', $nota->anio_vigente)
@@ -238,7 +238,7 @@ class NotaController extends Controller
                     // Si es 2do bimestre, buscar el registro que corresponde al 4to bimestre y llenar en ambos
                     $segundoregistro = Nota::where('asignatura_id', $nota->asignatura_id)
                                             ->where('turno_id', $nota->turno_id)
-                                            ->where('user_id', $nota->user_id)
+                                            ->where('docente_id', $nota->docente_id)
                                             ->where('persona_id', $nota->persona_id)
                                             ->where('paralelo', $nota->paralelo)
                                             ->where('anio_vigente', $nota->anio_vigente)
@@ -282,7 +282,7 @@ class NotaController extends Controller
                     // Buscamos ese registro
                     $segundoregistro = Nota::where('asignatura_id', $nota->asignatura_id)
                                             ->where('turno_id', $nota->turno_id)
-                                            ->where('user_id', $nota->user_id)
+                                            ->where('docente_id', $nota->docente_id)
                                             ->where('persona_id', $nota->persona_id)
                                             ->where('paralelo', $nota->paralelo)
                                             ->where('anio_vigente', $nota->anio_vigente)
@@ -296,7 +296,7 @@ class NotaController extends Controller
                     // Si es 2do bimestre, buscar el registro que corresponde al 4to bimestre y llenar en ambos
                     $segundoregistro = Nota::where('asignatura_id', $nota->asignatura_id)
                                             ->where('turno_id', $nota->turno_id)
-                                            ->where('user_id', $nota->user_id)
+                                            ->where('docente_id', $nota->docente_id)
                                             ->where('persona_id', $nota->persona_id)
                                             ->where('paralelo', $nota->paralelo)
                                             ->where('anio_vigente', $nota->anio_vigente)
@@ -340,7 +340,7 @@ class NotaController extends Controller
                     // Buscamos ese registro
                     $segundoregistro = Nota::where('asignatura_id', $nota->asignatura_id)
                                             ->where('turno_id', $nota->turno_id)
-                                            ->where('user_id', $nota->user_id)
+                                            ->where('docente_id', $nota->docente_id)
                                             ->where('persona_id', $nota->persona_id)
                                             ->where('paralelo', $nota->paralelo)
                                             ->where('anio_vigente', $nota->anio_vigente)
@@ -354,7 +354,7 @@ class NotaController extends Controller
                     // Si es 2do bimestre, buscar el registro que corresponde al 4to bimestre y llenar en ambos
                     $segundoregistro = Nota::where('asignatura_id', $nota->asignatura_id)
                                             ->where('turno_id', $nota->turno_id)
-                                            ->where('user_id', $nota->user_id)
+                                            ->where('docente_id', $nota->docente_id)
                                             ->where('persona_id', $nota->persona_id)
                                             ->where('paralelo', $nota->paralelo)
                                             ->where('anio_vigente', $nota->anio_vigente)
@@ -399,7 +399,7 @@ class NotaController extends Controller
                     // Buscamos ese registro
                     $segundoregistro = Nota::where('asignatura_id', $nota->asignatura_id)
                                             ->where('turno_id', $nota->turno_id)
-                                            ->where('user_id', $nota->user_id)
+                                            ->where('docente_id', $nota->docente_id)
                                             ->where('persona_id', $nota->persona_id)
                                             ->where('paralelo', $nota->paralelo)
                                             ->where('anio_vigente', $nota->anio_vigente)
@@ -413,7 +413,7 @@ class NotaController extends Controller
                     // Si es 2do bimestre, buscar el registro que corresponde al 4to bimestre y llenar en ambos
                     $segundoregistro = Nota::where('asignatura_id', $nota->asignatura_id)
                                             ->where('turno_id', $nota->turno_id)
-                                            ->where('user_id', $nota->user_id)
+                                            ->where('docente_id', $nota->docente_id)
                                             ->where('persona_id', $nota->persona_id)
                                             ->where('paralelo', $nota->paralelo)
                                             ->where('anio_vigente', $nota->anio_vigente)
@@ -440,7 +440,7 @@ class NotaController extends Controller
         // Si $val=1(si no hubo problemas con las notas), buscamos el registro del alumno correspondiente a esa asignatura
         if($val == 1)
         {
-            $inscripcion = Inscripcion::where('asignatura_id', $nota->asignatura_id)
+            $inscripcion = Inscripcione::where('asignatura_id', $nota->asignatura_id)
                                     ->where('turno_id', $nota->turno_id)
                                     ->where('persona_id', $nota->persona_id)
                                     ->where('paralelo', $nota->paralelo) 

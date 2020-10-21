@@ -24,7 +24,8 @@
                         <th>#</th>
                         <th>Nombre de usuario</th>
                         <th>Perfil</th>
-                        <th>Nombres y Apellidos</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
                         <th>CI</th>
                         <th>Celular</th>
                         <th>Opciones</th>
@@ -36,12 +37,14 @@
                             <td>{{ ($key+1) }}</td>
                             <td>{{ $usuario->name }}</td>
                             <td>{{ $usuario->perfil->nombre }}</td>
-                            <td>{{ $usuario->nombres }} {{ $usuario->apellido_paterno }} {{ $usuario->apellido_materno }}</td>
+                            <td>{{ $usuario->nombres }}</td>
+                            <td>{{ $usuario->apellido_paterno }} {{ $usuario->apellido_materno }}</td>
                             <td>{{ $usuario->cedula }}</td>
                             <td>{{ $usuario->celulares }}</td>
                             <td>
                                 <button type="button" class="btn btn-warning" title="Editar usuario"  onclick="editar('{{ $usuario->id }}', '{{ $usuario->nombres }}', '{{ $usuario->apellido_paterno }}', '{{ $usuario->apellido_materno }}', '{{ $usuario->cedula }}', '{{ $usuario->expedido }}', '{{ $usuario->estado_civil }}', '{{ $usuario->sexo }}', '{{ $usuario->fecha_nacimiento }}', '{{ $usuario->lugar_nacimiento }}', '{{ $usuario->name }}', '{{ $usuario->email }}', '{{ $usuario->perfil_id }}', '{{ $usuario->zona }}', '{{ $usuario->direccion }}', '{{ $usuario->numero_fijo }}', '{{ $usuario->numero_celular }}', '{{ $usuario->nombre_conyugue }}', '{{ $usuario->nombre_hijo }}', '{{ $usuario->persona_referencia }}', '{{ $usuario->numero_referencia }}')"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-primary" title="Editar permisos"  onclick="permisos('{{ $usuario->id }}', '{{ $usuario->perfil_id }}')"><i class="fas fa-list"></i></button>
+                                <button type="button" class="btn btn-primary" title="Asignar materias"  onclick="asignar('{{ $usuario->id }}')"><i class="fas fa-plus-circle"></i></button>
+                                <button type="button" class="btn btn-secondary" title="Editar permisos"  onclick="permisos('{{ $usuario->id }}', '{{ $usuario->perfil_id }}')"><i class="fas fa-list"></i></button>
                                 <button type="button" class="btn btn-info" title="Cambiar contraseña"  onclick="contrasena({{ $usuario->id }})"><i class="fas fa-key"></i></button>
                                 <button type="button" class="btn btn-danger" title="Eliminar usuario"  onclick="eliminar('{{ $usuario->id }}', '{{ $usuario->name }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
@@ -573,6 +576,14 @@
 </div>
 <!-- fin modal editar usuario -->
 
+<!-- inicio modal asignar materias -->
+<div id="asigna_materias" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" id="asignaMateriasAjax">
+        
+    </div>
+</div>
+<!-- fin modal asignar materias -->
+
 <!-- inicio modal editar perfil -->
 <div id="editar_perfiles" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" id="editaPerfilAjax">
@@ -619,17 +630,7 @@
 <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script>
-    $(function () {
-        $("#botonGuardaNuevoUsuario").prop("disabled", false);
-        $("#botonGuardaEdicionUsuario").prop("disabled", false);
-
-        $('#myTable').DataTable({
-            language: {
-                url: '{{ asset('datatableEs.json') }}'
-            },
-        });
-    });
-
+    // Funcion que habilita el uso de Ajax
     $.ajaxSetup({
         // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
         headers: {
@@ -637,40 +638,14 @@
         }
     });
 
-    //Funcion para ocultar/mostrar y validar datos dependiendo del Tipo de perfil seleccionado
-    $( function() {
-        $("#ventana_almacen_existente").hide();
-        $(".ventana_almacen_nuevo").hide();
-        $("#perfil_usuario").val("");
-        $("#perfil_usuario").change( function() {
-            if($(this).val() == "") {                               // Si el select de Tipo de Perfil esta vacio (Seleccione), todo se oculta y sus valores se limpian
-                $("#almacen_usuario").val("");
-                $("#nombre_nuevo_almacen").val("");
-                $("#telefonos_nuevo_almacen").val("");
-                $("#direccion_nuevo_almacen").val("");
-
-                $("#almacen_usuario").prop('required',false);
-                $("#nombre_nuevo_almacen").prop('required',false);
-                $("#direccion_nuevo_almacen").prop('required',false);
-                
-                $("#ventana_almacen_existente").hide();
-                $(".ventana_almacen_nuevo").hide();
-            }
-            if ($(this).val() != "" && $(this).val() != "4") {      // Si el select de Tipo de Perfil es diferente de "" y de 4, mostrara select de un almacen existente
-                $("#almacen_usuario").prop('required',true);
-                $("#nombre_nuevo_almacen").prop('required',false);
-                $("#direccion_nuevo_almacen").prop('required',false);
-                $(".ventana_almacen_nuevo").hide();
-                $("#ventana_almacen_existente").show();
-                //$("#guarda_cupon").prop("disabled", false);
-            }
-            if ($(this).val() == "4") {                             // Si el select de Tipo de Perfil esta con 4 (Mayorista), mostrara los detalles para nuevo almacen
-                $("#nombre_nuevo_almacen").prop('required',true);
-                $("#direccion_nuevo_almacen").prop('required',true);
-                $("#almacen_usuario").prop('required',false);
-                $("#ventana_almacen_existente").hide();
-                $(".ventana_almacen_nuevo").show();
-            }
+    // Funcion que establece la configuracion para el datatable
+    $(function () {
+        // $("#botonGuardaNuevoUsuario").prop("disabled", false);
+        // $("#botonGuardaEdicionUsuario").prop("disabled", false);
+        $('#myTable').DataTable({
+            language: {
+                url: '{{ asset('datatableEs.json') }}'
+            },
         });
     });
 
@@ -732,6 +707,79 @@
         }
     }
 
+    // Funcion que despliega el modal de edicion de usuario, mandando todos sus datos al mismo
+    function editar(id, nombres, apellido_paterno, apellido_materno, cedula, expedido, estado_civil, sexo, fecha_nacimiento, lugar_nacimiento, name, email, perfil_id, zona, direccion, numero_fijo, numero_celular, nombre_conyugue, nombre_hijo, persona_referencia, numero_referencia)
+    {
+        $("#id_edicion").val(id);
+        $("#nombres_edicion").val(nombres);
+        $("#apellido_paterno_edicion").val(apellido_paterno);
+        $("#apellido_materno_edicion").val(apellido_materno);
+        $("#ci_edicion").val(cedula);
+        $("#expedido_edicion").val(expedido);
+        $("#estado_civil_edicion").val(estado_civil);
+        $("#sexo_edicion").val(sexo);
+        $("#fecha_nacimiento_edicion").val(fecha_nacimiento);
+        $("#lugar_nacimiento_edicion").val(lugar_nacimiento);
+        $("#username_edicion").val(name);
+        $("#email_edicion").val(email);
+        $("#perfil_edicion").val(perfil_id);
+        $("#zona_edicion").val(zona);
+        $("#direccion_edicion").val(direccion);
+        $("#numero_fijo_edicion").val(numero_fijo);
+        $("#celular_edicion").val(numero_celular);
+        $("#nombre_conyugue_edicion").val(nombre_conyugue);
+        $("#nombre_hijo_edicion").val(nombre_hijo);
+        $("#persona_referencia_edicion").val(persona_referencia);
+        $("#numero_referencia_edicion").val(numero_referencia);
+        $("#editar_usuarios").modal('show');
+    }
+
+    // Funcion que despliega un modal que indica que materias se le puede agregar y que materias tiene
+    function asignar(usuario_id)
+    {
+        window.location.href = "{{ url('User/asigna_materias') }}/"+usuario_id;
+    }
+
+
+
+
+    //Funcion para ocultar/mostrar y validar datos dependiendo del Tipo de perfil seleccionado
+    $( function() {
+        $("#ventana_almacen_existente").hide();
+        $(".ventana_almacen_nuevo").hide();
+        $("#perfil_usuario").val("");
+        $("#perfil_usuario").change( function() {
+            if($(this).val() == "") {                               // Si el select de Tipo de Perfil esta vacio (Seleccione), todo se oculta y sus valores se limpian
+                $("#almacen_usuario").val("");
+                $("#nombre_nuevo_almacen").val("");
+                $("#telefonos_nuevo_almacen").val("");
+                $("#direccion_nuevo_almacen").val("");
+
+                $("#almacen_usuario").prop('required',false);
+                $("#nombre_nuevo_almacen").prop('required',false);
+                $("#direccion_nuevo_almacen").prop('required',false);
+                
+                $("#ventana_almacen_existente").hide();
+                $(".ventana_almacen_nuevo").hide();
+            }
+            if ($(this).val() != "" && $(this).val() != "4") {      // Si el select de Tipo de Perfil es diferente de "" y de 4, mostrara select de un almacen existente
+                $("#almacen_usuario").prop('required',true);
+                $("#nombre_nuevo_almacen").prop('required',false);
+                $("#direccion_nuevo_almacen").prop('required',false);
+                $(".ventana_almacen_nuevo").hide();
+                $("#ventana_almacen_existente").show();
+                //$("#guarda_cupon").prop("disabled", false);
+            }
+            if ($(this).val() == "4") {                             // Si el select de Tipo de Perfil esta con 4 (Mayorista), mostrara los detalles para nuevo almacen
+                $("#nombre_nuevo_almacen").prop('required',true);
+                $("#direccion_nuevo_almacen").prop('required',true);
+                $("#almacen_usuario").prop('required',false);
+                $("#ventana_almacen_existente").hide();
+                $(".ventana_almacen_nuevo").show();
+            }
+        });
+    });
+
     // Funcion que comprueba que existen ciertos valores en el formulario y si estan muestra una alerta de exito
     function guardar_edicion()
     {        
@@ -783,6 +831,9 @@
             })
         }
     }
+
+
+
 
     // Funcion para validar el email en Nuevo usuario
     function validaEmail()
@@ -842,32 +893,7 @@
         });
     }
 
-    // Funcion que despliega el modal de edicion de usuario, mandando todos sus datos al mismo
-    function editar(id, nombres, apellido_paterno, apellido_materno, cedula, expedido, estado_civil, sexo, fecha_nacimiento, lugar_nacimiento, name, email, perfil_id, zona, direccion, numero_fijo, numero_celular, nombre_conyugue, nombre_hijo, persona_referencia, numero_referencia)
-    {
-        $("#id_edicion").val(id);
-        $("#nombres_edicion").val(nombres);
-        $("#apellido_paterno_edicion").val(apellido_paterno);
-        $("#apellido_materno_edicion").val(apellido_materno);
-        $("#ci_edicion").val(cedula);
-        $("#expedido_edicion").val(expedido);
-        $("#estado_civil_edicion").val(estado_civil);
-        $("#sexo_edicion").val(sexo);
-        $("#fecha_nacimiento_edicion").val(fecha_nacimiento);
-        $("#lugar_nacimiento_edicion").val(lugar_nacimiento);
-        $("#username_edicion").val(name);
-        $("#email_edicion").val(email);
-        $("#perfil_edicion").val(perfil_id);
-        $("#zona_edicion").val(zona);
-        $("#direccion_edicion").val(direccion);
-        $("#numero_fijo_edicion").val(numero_fijo);
-        $("#celular_edicion").val(numero_celular);
-        $("#nombre_conyugue_edicion").val(nombre_conyugue);
-        $("#nombre_hijo_edicion").val(nombre_hijo);
-        $("#persona_referencia_edicion").val(persona_referencia);
-        $("#numero_referencia_edicion").val(numero_referencia);
-        $("#editar_usuarios").modal('show');
-    }
+    
 
     // Funcion que emite una alerta de exito en caso de encontrarse ciertos valores
     function actualizar_usuario()

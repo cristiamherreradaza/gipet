@@ -21,6 +21,7 @@ class Transaccione extends Model
         'pagado',
         'saldo',
         'observacion',
+        'anio_vigente',
         'estado',
         'deleted_at',
     ];

@@ -32,6 +32,7 @@ class CreateTransaccionesTable extends Migration
             $table->decimal('pagado', 15, 2)->nullable();
             $table->decimal('saldo', 15, 2)->nullable();
             $table->string('observacion')->nullable();
+            $table->integer('anio_vigente')->nullable();
             $table->string('estado')->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();

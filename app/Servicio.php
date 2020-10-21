@@ -15,6 +15,7 @@ class Servicio extends Model
         'nombre',
         'precio',
         'gestion',
+        'anio_vigente',
         'estado',
         'deleted_at',
     ];

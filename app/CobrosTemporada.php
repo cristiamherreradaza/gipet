@@ -20,6 +20,7 @@ class CobrosTemporada extends Model
         'gestion',
         'fecha_generado',
         'nombre_combo',
+        'anio_vigente',
         'estado',
         'deleted_at',
     ];

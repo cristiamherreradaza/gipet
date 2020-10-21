@@ -21,7 +21,7 @@ class NotasPropuestaController extends Controller
     public function listado()
     {
         $usuario = Auth::user();
-        $asignaturas = NotasPropuesta::where('user_id', Auth::user()->id)
+        $asignaturas = NotasPropuesta::where('docente_id', Auth::user()->id)
                                     ->where('anio_vigente', date('Y'))
                                     ->get();
         return view('notaspropuesta.listado')->with(compact('usuario', 'asignaturas'));

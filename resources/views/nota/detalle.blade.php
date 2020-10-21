@@ -17,7 +17,7 @@
 
 <div class="card">
     <div class="card-body">
-        <h3 class="card-title text-primary"><strong>{{ $asignatura->asignatura->codigo_asignatura }} {{ $asignatura->asignatura->nombre_asignatura }}</strong></h3>
+        <h3 class="card-title text-primary"><strong>{{ $asignatura->asignatura->sigla }} {{ $asignatura->asignatura->nombre }}</strong></h3>
         <h6 class="card-subtitle text-dark">DOCENTE: {{ auth()->user()->nombres }} {{ auth()->user()->apellido_paterno }} {{ auth()->user()->apellido_materno }}</h6>
         <h6 class="card-subtitle text-dark">TURNO: {{ $asignatura->turno->descripcion }}</h6>
         <h6 class="card-subtitle text-dark">PARALELO: {{ $asignatura->paralelo }}</h6>
@@ -34,14 +34,14 @@
                         <th>4to Bim</th>
                         <th>Promedio</th>
                         <th>Segundo Turno</th>
-                        <th>Acciones</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($inscritos as $inscrito)
                         <tr>
                             <td>{{ $inscrito->persona->nombres }} {{ $inscrito->persona->apellido_paterno }} {{ $inscrito->persona->apellido_materno }}</td>
-                            <td>{{ $inscrito->persona->carnet }}</td>
+                            <td>{{ $inscrito->persona->cedula }}</td>
                             @php
                                 $suma = 0;
                                 $cantidad = 0;
@@ -122,15 +122,15 @@
     </div>
 </div>
 
-<!-- Inicio modal notas estudiante -->
+<!-- Inicio modal registro de notas de estudiante -->
 <div id="modal_notas" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" id="muestraNotaAjax">
         
     </div>
 </div>
-<!-- Fin modal notas estudiante -->
+<!-- Fin modal registro de notas de estudiante -->
 
-<!-- inicio modal nuevo servicio -->
+<!-- inicio modal segundo turno -->
 <div id="segundo_turno" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -161,7 +161,7 @@
         </div>
     </div>
 </div>
-<!-- fin modal nuevo servicio -->
+<!-- fin modal segundo turno -->
 
 
 @endsection

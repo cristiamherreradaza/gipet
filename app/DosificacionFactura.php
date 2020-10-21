@@ -19,7 +19,8 @@ class DosificacionFactura extends Model
 		'tiempo',
 		'llave_dosificacion',
 		'nit_empresa',
-		'autorizacion_empresa',
+        'autorizacion_empresa',
+        'anio_vigente',
 		'estado',
 		'deleted_at',
     ];

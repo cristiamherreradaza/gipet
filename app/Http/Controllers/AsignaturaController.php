@@ -212,6 +212,13 @@ class AsignaturaController extends Controller
         // return view('asignatura.lista')->with(compact('asignaturas'));  
     }
 
+    public function elimina_equivalentes($id)
+    {
+        $asignatura = AsignaturasEquivalente::find($id);
+        $asignatura->delete();
+        return redirect('Asignatura/asignaturas_equivalentes');
+    }
+
     public function listado()
     {
         $asignaturas = Asignatura::where('carrera_id', 10)->get();

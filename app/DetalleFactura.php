@@ -12,6 +12,7 @@ class DetalleFactura extends Model
         'user_id',
         'factura_id',
         'transaccion_id',
+        'anio_vigente',
         'estado',
 		'deleted_at',
     ];

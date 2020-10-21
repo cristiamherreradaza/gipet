@@ -25,6 +25,7 @@ class CreateDescuentosTable extends Migration
             $table->integer('porcentaje')->nullable();
             $table->decimal('monto', 15, 2)->default(0);
             $table->decimal('a_pagar', 15, 2)->default(0);
+            $table->integer('anio_vigente')->nullable();
             $table->string('estado')->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();

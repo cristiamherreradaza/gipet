@@ -158,6 +158,12 @@ class UserController extends Controller
         //dd($user);
     }
 
+    public function ajax_asigna_materias(Request $request)
+    {
+        $usuario = User::find($request->usuario_id);
+        return view('user.ajaxAsignaMaterias')->with(compact('usuario'));
+    }
+
     public function ajaxEditaPerfil(Request $request)
     {
         $perfil = Perfile::find($request->perfil_id);
@@ -167,9 +173,10 @@ class UserController extends Controller
         return view('user.ajaxEditaPerfil')->with(compact('perfil', 'menusperfil', 'menugeneral', 'usuario'));
     }
 
+    
     public function asignar()
     {
-        $users = User::where('vigente', 'si')->get();
+        $users = User::where('vigente', 'Si')->get();
         return view('user.asignar')->with(compact('users'));
     }
 
@@ -195,30 +202,25 @@ class UserController extends Controller
             ->make(true);
     }
 
-    public function asigna_materias($usuario_id = null)
+    // Funcion que muestra vista para la asignacion de materias a los docentes
+    public function asigna_materias($id)
     {
-        $gestion_vigente = date('Y');
-
-        $datos_persona = User::find($usuario_id);
-
+        $docente = User::find($id);
         $turnos = Turno::get();
-
-        $asignaturas = Asignatura::where('anio_vigente', $gestion_vigente)
-                                ->get();
-
-        $asignaturas_docente = NotasPropuesta::where('user_id', $usuario_id)
-                                            ->where('anio_vigente', $gestion_vigente)
+        $asignaturas = Asignatura::where('anio_vigente', date('Y'))->get();
+        $asignaturas_docente = NotasPropuesta::where('docente_id', $id)
+                                            ->where('anio_vigente', date('Y'))
                                             ->get();
-
-    	return view('user.asigna_materias')->with(compact('asignaturas', 'asignaturas_docente', 'datos_persona', 'turnos'));
+    	return view('user.asigna_materias')->with(compact('asignaturas', 'asignaturas_docente', 'docente', 'turnos'));
     }
 
+    // Funcion que procesa la solicitud de asignacion de materias a los docentes
     public function guarda_asignacion(Request $request)
     {
         $duplicado = 'No';
         // Busca en la tabla notaspropuesta, si existe un registro que coincida con los request
         $asignatura = NotasPropuesta::where('asignatura_id', $request->asignatura_id)
-                                    ->where('user_id', $request->user_id)
+                                    ->where('docente_id', $request->user_id)
                                     ->where('turno_id', $request->turno_id)
                                     ->where('paralelo', $request->paralelo)
                                     ->where('anio_vigente', $request->anio_vigente)
@@ -229,11 +231,12 @@ class UserController extends Controller
         }else{
             // No existe, entonces crear un registro
             $asignatura = new NotasPropuesta();
-            $asignatura->asignatura_id = $request->asignatura_id;   
-            $asignatura->user_id = $request->user_id;   
-            $asignatura->paralelo = $request->paralelo;   
-            $asignatura->turno_id = $request->turno_id;   
-            $asignatura->anio_vigente = $request->anio_vigente;   
+            $asignatura->user_id = Auth::user()->id;
+            $asignatura->asignatura_id = $request->asignatura_id;
+            $asignatura->docente_id = $request->user_id;
+            $asignatura->paralelo = $request->paralelo;
+            $asignatura->turno_id = $request->turno_id;
+            $asignatura->anio_vigente = $request->anio_vigente;
             $asignatura->save();
 
             // Si se hubieran registrado alumnos en esta materia, asignarles al docente en la tabla notas
@@ -243,60 +246,54 @@ class UserController extends Controller
                         ->where('anio_vigente', $request->anio_vigente)
                         ->get();
             foreach($notas as $nota){
-                $nota->user_id = $asignatura->user_id;
+                $nota->docente_id = $request->user_id;
                 $nota->save();
             }
         }
         return response()->json([
             'duplicado' => $duplicado
         ]);
-        // $error_duplicado = 0;
-        // $asignacionGuardada = 0;
-        // $validacion = NotasPropuesta::where('asignatura_id', $request->asignatura_id)
-        //                             ->where('user_id', $request->user_id)
-        //                             ->where('turno_id', $request->turno_id)
-        //                             ->where('paralelo', $request->paralelo)
-        //                             ->where('anio_vigente', $request->anio_vigente)
-        //                             ->count();
-                                    
-        // if ($validacion > 0) {
-        //     $error_duplicado = 1;
-        // }else{
-        //     $nNotaPropuesta = new NotasPropuesta();
-        //     $nNotaPropuesta->asignatura_id = $request->asignatura_id;   
-        //     $nNotaPropuesta->user_id = $request->user_id;   
-        //     $nNotaPropuesta->paralelo = $request->paralelo;   
-        //     $nNotaPropuesta->turno_id = $request->turno_id;   
-        //     $nNotaPropuesta->anio_vigente = $request->anio_vigente;   
-        //     $nNotaPropuesta->save();
-        //     $asignacionGuardada = 1;
-        // }
-        // return response()->json([
-        //     'error_duplicado' => $error_duplicado,
-        //     'asignacionGuardada' => $asignacionGuardada
-        // ]);
     }
 
+    // Funcion que elimina la asignacion de un docente a la materia que tenia asignada
     public function eliminaAsignacion(Request $request, $np_id)
     {
         $nota_propuesta = NotasPropuesta::find($np_id);
-        $usuario_id = $nota_propuesta->user_id;
-        // Si existieran notas relacionadas a este docente modificar/retirar su user_id
-        $notas = Nota::where('asignatura_id', $nota_propuesta->asignatura_id)
+        $usuario_id = $nota_propuesta->docente_id;
+        // Si existieran notas relacionadas a este docente modificar/retirar su docente_id
+        $notas = Nota::where('docente_id', $nota_propuesta->docente_id)
+                    ->where('asignatura_id', $nota_propuesta->asignatura_id)
                     ->where('turno_id', $nota_propuesta->turno_id)
-                    ->where('user_id', $nota_propuesta->user_id)
                     ->where('paralelo', $nota_propuesta->paralelo)
                     ->where('anio_vigente', $nota_propuesta->anio_vigente)
                     ->get();
         foreach($notas as $nota){
-            $nota->user_id = NULL;
+            $nota->docente_id = NULL;
             $nota->save();
         }
         // Ahora eliminamos el registro
         $nota_propuesta->delete();
         return response()->json([
-            'usuario' => $nota_propuesta->user_id
+            'usuario' => $usuario_id
         ]);
+        // $nota_propuesta = NotasPropuesta::find($np_id);
+        // $usuario_id = $nota_propuesta->user_id;
+        // // Si existieran notas relacionadas a este docente modificar/retirar su user_id
+        // $notas = Nota::where('asignatura_id', $nota_propuesta->asignatura_id)
+        //             ->where('turno_id', $nota_propuesta->turno_id)
+        //             ->where('user_id', $nota_propuesta->user_id)
+        //             ->where('paralelo', $nota_propuesta->paralelo)
+        //             ->where('anio_vigente', $nota_propuesta->anio_vigente)
+        //             ->get();
+        // foreach($notas as $nota){
+        //     $nota->user_id = NULL;
+        //     $nota->save();
+        // }
+        // // Ahora eliminamos el registro
+        // $nota_propuesta->delete();
+        // return response()->json([
+        //     'usuario' => $nota_propuesta->user_id
+        // ]);
     }
 
     public function eliminar($id)

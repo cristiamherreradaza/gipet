@@ -17,7 +17,7 @@
         </h4>
     </div>
     <div class="card-body" id="lista">
-        <form action="{{ url('Asignatura/guardar') }}"  method="POST">
+        <form action="{{ url('Asignatura/guarda_equivalentes') }}" method="POST">
             @csrf
             <div class="modal-body">
                 <div class="row">
@@ -27,7 +27,7 @@
                             <span class="text-danger">
                                 <i class="mr-2 mdi mdi-alert-circle"></i>
                             </span>
-                            <select class="select2 form-control custom-select" id="asignatura_1" style="width: 100%; height:36px;" required>
+                            <select class="select2 form-control custom-select" name="asignatura_1" id="asignatura_1" style="width: 100%; height:36px;" required>
                                 <option value="">Buscar Asignatura</option>
                                 @foreach ($carreras as $carrera_a)
                                 <optgroup label="{{ $carrera_a->nombre }}">
@@ -48,8 +48,8 @@
                             <span class="text-danger">
                                 <i class="mr-2 mdi mdi-alert-circle"></i>
                             </span>
-                            <select class="select2 form-control custom-select" id="asignatura_2" style="width: 100%; height:36px;" required>
-                                <option>Buscar Equivalencia</option>
+                            <select class="select2 form-control custom-select" name="asignatura_2" id="asignatura_2" style="width: 100%; height:36px;" required>
+                                <option value="">Buscar Equivalencia</option>
                                 @foreach ($carreras as $carrera_b)
                                 <optgroup label="{{ $carrera_b->nombre }}">
                                     @foreach($asignaturas as $asignatura_b)
@@ -77,7 +77,7 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                    <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar_asignatura_equivalente()">Guardar</button>
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar_asignatura_equivalente()">Guardar</button>
                 </div>
                 <div class="col-md-6">
                     <button type="button" class="btn waves-effect waves-light btn-block btn-inverse" onclick="cerrar_datos_carrera()">Cerrar</button>
@@ -104,7 +104,7 @@
                         <th>Carrera 2</th>
                         <th>Asignatura 2</th>
                         <th>Gestion</th>
-                        <th>Opciones</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -117,8 +117,7 @@
                             <td>{{ $equivalencia->asignatura_b->nombre }}</td>
                             <td>{{ $equivalencia->anio_vigente }}</td>
                             <td>
-                                <button type="button" class="btn btn-info" title="Editar equivalencia"  onclick="editar('{{ $equivalencia->id }}', '{{ $equivalencia->nombre }}', '{{ $equivalencia->porcentaje }}')"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-danger" title="Eliminar equivalencia"  onclick="eliminar('{{ $equivalencia->id }}', '{{ $equivalencia->nombre }}')"><i class="fas fa-trash-alt"></i></button>
+                                <button type="button" class="btn btn-danger" title="Eliminar equivalencia"  onclick="eliminar('{{ $equivalencia->id }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
                     @endforeach
@@ -154,42 +153,43 @@
 
     });
 
-    // $(document).ready(function(){
-    //     $.ajax({
-    //         type:'GET',
-    //         url:"{{ url('Asignatura/ajax_lista') }}",
-    //         success:function(data){
-    //             // $("#grafico_alcance").show('slow');
-    //             $("#lista_equivalencias").html(data);
-    //         }
-    //     });
-    // });
-
     function guardar_asignatura_equivalente(){
-        // var asignatura_1 = $("#asignatura_1").val();
-        // var asignatura_2 = $("#asignatura_2").val();
-        // var anio_vigente = $("#anio_vigente").val();
-        // $.ajax({
-        //     type:'POST',
-        //     url:"{{ url('Asignatura/guarda_equivalentes') }}",
-        //     data: {
-        //         asignatura_1 : asignatura_1,
-        //         asignatura_2 : asignatura_2,
-        //         anio_vigente : anio_vigente
-        //     },
-        //     success:function(data){
-        //         $("#asignatura_1").val('');
-        //         $("#asignatura_2").val('');
-        //         $("#anio_vigente").val('');
+        var asignatura_1 = $("#asignatura_1").val();
+        var asignatura_2 = $("#asignatura_2").val();
+        var anio_vigente = $("#anio_vigente").val();
+        if(asignatura_1.length>0 && asignatura_2.length>0 && anio_vigente.length>0){
+            Swal.fire(
+                'Excelente!',
+                'Se guardo Correctamente.',
+                'success'
+            )
+        }
+    }
+
+    function eliminar(id, nombre)
+    {
+        Swal.fire({
+            title: 'Quieres borrar la equivalencia?',
+            text: "Luego no podras recuperarlo!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, estoy seguro!',
+            cancelButtonText: "Cancelar",
+        }).then((result) => {
+            if (result.value) {
                 Swal.fire(
                     'Excelente!',
-                    'Se guardo Correctamente.',
+                    'La equivalencia fue eliminada',
                     'success'
-                )
-        //         $("#lista_equivalencias").html(data);
-        //     }
-        // });
+                ).then(function() {
+                    window.location.href = "{{ url('Asignatura/elimina_equivalentes') }}/"+id;
+                });
+            }
+        })
     }
+
     function nueva_carrera()
     {
         $('#mostrar').show('slow');

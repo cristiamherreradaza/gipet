@@ -17,6 +17,7 @@ class CreatePerfilesTable extends Migration
             $table->bigIncrements('id');
             $table->string('nombre')->nullable();
             $table->string('descripcion')->nullable();
+            $table->integer('anio_vigente')->nullable();
             $table->string('estado')->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();

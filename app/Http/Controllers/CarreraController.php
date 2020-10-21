@@ -29,21 +29,43 @@ class CarreraController extends Controller
         return redirect('Carrera/listado');
     }
 
+    public function ajaxEditaCarrera(Request $request)
+    {
+        $carrera = Carrera::find($request->carrera_id);
+        return view('carrera.ajaxEditaCarrera')->with(compact('carrera'));
+    }
+
     public function actualizar(Request $request)
     {
-        $carrera = Carrera::find($request->id);
-        $carrera->nombre = $request->nombre;
-        $carrera->nivel = $request->nivel;
-        $carrera->anio_vigente = $request->anio_vigente;
+        $carrera = Carrera::find($request->id_carrera_edicion);
+        $carrera->user_id = Auth::user()->id;
+        $carrera->nombre = $request->nombre_carrera_edicion;
+        $carrera->nivel = $request->nivel_carrera_edicion;
+        $carrera->duracion_anios = $request->duracion_carrera_edicion;
+        $carrera->anio_vigente = $request->anio_vigente_carrera_edicion;
         $carrera->save();
-        return redirect('Carrera/listado_nuevo');
+        return redirect('Carrera/listado');
     }
 
     public function eliminar($id)
     {
+        // Al eliminar la carrera, deben eliminarse tambien en tablas
+        // asignaturas, asignaturas_equivalentes, notas_propuestas, notas, inscripciones
         $carrera = Carrera::find($id);
+        $asignaturas = Asignatura::where('carrera_id', $carrera->id)
+                                ->get();
+        foreach($asignaturas as $asignatura){
+            $asignatura->delete();
+        }
         $carrera->delete();
-        return redirect('Carrera/listado_nuevo');
+        return redirect('Carrera/listado');
+    }
+
+    public function vista_impresion($id)
+    {
+        $carrera = Carrera::find($id);
+        $asignaturas = Asignatura::where('carrera_id', $carrera->id)->get();
+        return view('carrera.vista_impresion')->with(compact('carrera', 'asignaturas'));
     }
 
     protected $gestion_actual = 'a';

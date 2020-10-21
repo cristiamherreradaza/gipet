@@ -46,6 +46,7 @@ class CreateUsersTable extends Migration
             $table->string('persona_referencia')->nullable();
             $table->string('numero_referencia')->nullable();
             $table->string('name')->nullable();
+            $table->integer('anio_vigente')->nullable();
             $table->string('estado')->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->rememberToken();

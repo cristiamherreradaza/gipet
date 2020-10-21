@@ -21,6 +21,7 @@ class CreateServiciosAsignaturasTable extends Migration
             $table->foreign('asignatura_id')->references('id')->on('asignaturas');
             $table->unsignedBigInteger('servicio_id')->nullable();
             $table->foreign('servicio_id')->references('id')->on('servicios');
+            $table->integer('anio_vigente')->nullable();
             $table->string('estado')->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();

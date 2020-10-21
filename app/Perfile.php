@@ -11,6 +11,7 @@ class Perfile extends Model
     protected $fillable = [
         'nombre',
         'descripcion',
+        'anio_vigente',
         'estado',
         'deleted_at',
     ];

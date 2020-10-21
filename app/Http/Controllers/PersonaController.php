@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Nota;
 use App\Turno;
 use App\Kardex;
@@ -10,8 +13,6 @@ use App\Carrera;
 use App\Persona;
 use App\Inscripcion;
 use App\CarrerasPersona;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class PersonaController extends Controller
 {
@@ -61,6 +62,23 @@ class PersonaController extends Controller
 
     public function ajax_listado()
     {
+        $estudiantes = Persona::get();
+        //$estudiantes = Persona::select('id', 'apellido_paterno', 'apellido_materno', 'nombres', 'carnet', 'telefono_celular', 'razon_social_cliente', 'nit');
+        return Datatables::of($estudiantes)
+            ->addColumn('action', function ($estudiantes) {
+                return '<button onclick="ver_persona('.$estudiantes->id.')"        type="button" class="btn btn-info"      title="Ver"><i class="fas fa-eye"></i></button>
+                        <button onclick="inscripcion(' . $estudiantes->id . ')"    type="button" class="btn btn-warning"   title="Nueva Carrera"  ><i class="fas fa-address-book"></i></button>
+                        <button onclick="reinscripcion(' .  $estudiantes->id . ')" type="button" class="btn btn-secondary" title="ReInscripcion"  ><i class="fas fa-address-card"></i></button>
+                        <button onclick="varios(' .  $estudiantes->id . ')"        type="button" class="btn btn-dark"      title="Cursos Varios"  ><i class="fas fa-file-alt"></i></button>
+                        <button onclick="recuperatorio(' .  $estudiantes->id . ')" type="button" class="btn btn-success"   title="Recuperatorio" ><i class="fas fa-reply"></i></button>
+                        <button onclick="estado(' .  $estudiantes->id . ')"        type="button" class="btn btn-danger"    title="Estado(Activo/Inactivo)" ><i class="fas fa-user"></i></button>';
+            })
+            ->make(true);
+    }
+
+    /*
+    public function ajax_listado()
+    {
         $lista_persona = Persona::select('id', 'apellido_paterno', 'apellido_materno', 'nombres', 'carnet', 'telefono_celular', 'razon_social_cliente', 'nit');
         return Datatables::of($lista_persona)
             ->addColumn('action', function ($lista_persona) {
@@ -73,12 +91,10 @@ class PersonaController extends Controller
             })
             ->editColumn('id', 'ID: {{$id}}')
             ->make(true);
-
     }
+    */
 
-
-
-    public function ver_persona($persona_id = null)
+    public function ver_persona($persona_id)
     {
         $datosPersonales = Persona::where('id', $persona_id)
                                 ->first();

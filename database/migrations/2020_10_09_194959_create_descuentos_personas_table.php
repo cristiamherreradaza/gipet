@@ -26,6 +26,7 @@ class CreateDescuentosPersonasTable extends Migration
             $table->foreign('descuento_id')->references('id')->on('descuentos');
             $table->integer('numero_mensualidad')->nullable();
             $table->decimal('a_pagar', 15, 2)->nullable();
+            $table->integer('anio_vigente')->nullable();
             $table->string('estado')->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();

@@ -21,6 +21,7 @@ class CreateMateriasTable extends Migration
             $table->foreign('asignatura_id')->references('id')->on('asignaturas');
             $table->string('codigo_asignatura')->nullable();
             $table->string('nombre_asignatura')->nullable();
+            $table->integer('anio_vigente')->nullable();
             $table->string('estado')->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();

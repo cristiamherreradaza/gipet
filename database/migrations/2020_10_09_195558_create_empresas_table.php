@@ -24,6 +24,7 @@ class CreateEmpresasTable extends Migration
             $table->string('razon_social')->nullable();
             $table->string('numero_autorizacion')->nullable();
             $table->string('anio')->nullable();
+            $table->integer('anio_vigente')->nullable();
             $table->string('estado')->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();

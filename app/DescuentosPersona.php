@@ -16,6 +16,7 @@ class DescuentosPersona extends Model
         'descuento_id',
         'numero_mensualidad',
         'a_pagar',
+        'anio_vigente',
         'estado',
         'deleted_at',
     ];

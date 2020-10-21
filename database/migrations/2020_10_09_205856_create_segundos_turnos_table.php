@@ -32,6 +32,7 @@ class CreateSegundosTurnosTable extends Migration
             $table->string('cedula')->nullable();
             $table->decimal('nota_examen', 15, 2)->nullable();
             $table->string('validado')->nullable();
+            $table->integer('anio_vigente')->nullable();
             $table->string('estado')->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();

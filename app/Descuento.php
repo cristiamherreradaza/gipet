@@ -17,6 +17,7 @@ class Descuento extends Model
         'porcentaje',
         'monto',
         'a_pagar',
+        'anio_vigente',
         'estado',
         'deleted_at',
     ];

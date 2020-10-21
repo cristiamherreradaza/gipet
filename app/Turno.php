@@ -12,6 +12,7 @@ class Turno extends Model
         'codigo_anterior',
         'user_id',
         'descripcion',
+        'anio_vigente',
         'estado',
         'deleted_at',
     ];

@@ -27,6 +27,7 @@ class CreateInscripcionesTable extends Migration
             $table->unsignedBigInteger('persona_id')->nullable();
             $table->foreign('persona_id')->references('id')->on('personas');
             $table->string('paralelo')->nullable();
+            $table->integer('semestre')->nullable();
             $table->integer('gestion')->nullable();
             $table->integer('anio_vigente')->nullable();
             $table->decimal('nota', 15, 2)->nullable();

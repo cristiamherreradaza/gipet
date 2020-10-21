@@ -45,6 +45,7 @@ class CreatePersonasTable extends Migration
             $table->string('celular_pareja')->nullable();   
             $table->string('nit')->nullable();
             $table->string('razon_social_cliente')->nullable();
+            $table->integer('anio_vigente')->nullable();
             $table->string('estado')->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();

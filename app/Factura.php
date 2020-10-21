@@ -20,7 +20,8 @@ class Factura extends Model
 		'total',
 		'gestion',
 		'validado',
-		'codigo_control',
+        'codigo_control',
+        'anio_vigente',
 		'estado',
 		'deleted_at',
     ];

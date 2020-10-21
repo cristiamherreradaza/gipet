@@ -20,6 +20,7 @@ class SegundosTurno extends Model
         'cedula',
         'nota_examen',
         'validado',
+        'anio_vigente',
         'estado',
         'deleted_at',
     ];

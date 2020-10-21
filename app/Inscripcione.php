@@ -16,6 +16,7 @@ class Inscripcione extends Model
         'turno_id',
         'persona_id',
         'paralelo',
+        'semestre',
         'gestion',
         'anio_vigente',
         'nota',

@@ -47,6 +47,7 @@ class User extends Authenticatable
         'persona_referencia',
         'numero_referencia',
         'name',
+        'anio_vigente',
         'estado',
         'deleted_at',
     ];

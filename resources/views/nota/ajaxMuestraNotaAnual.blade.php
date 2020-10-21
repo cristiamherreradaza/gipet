@@ -4,7 +4,7 @@
         <button type="button" class="close text-white" data-dismiss="modal" aria-hidden="true">×</button>
     </div>
     <div class="modal-body">
-        <h6><strong class="text-info">Estudiante: </strong class="text-info">{{ $notas[0]->persona->nombres }} {{ $notas[0]->persona->apellido_paterno }} {{ $notas[0]->persona->apellido_materno }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong class="text-info">Cedula de Identidad: </strong>{{ $notas[0]->persona->carnet }}</h6>    
+        <h6><strong class="text-info">Estudiante: </strong class="text-info">{{ $notas[0]->persona->nombres }} {{ $notas[0]->persona->apellido_paterno }} {{ $notas[0]->persona->apellido_materno }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong class="text-info">Cedula de Identidad: </strong>{{ $notas[0]->persona->cedula }}</h6>    
         <div class="table-responsive">
             <table class="table table-hover text-center">
                 <thead class="align-middle text-primary">

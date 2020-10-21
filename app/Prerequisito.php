@@ -12,6 +12,7 @@ class Prerequisito extends Model
         'user_id',
         'asignatura_id',
         'prerequisito_id',
+        'anio_vigente',
         'estado',
         'deleted_at',
     ];

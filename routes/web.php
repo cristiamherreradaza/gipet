@@ -123,7 +123,10 @@ Route::post('Inscripcion/guardar', 'InscripcionController@guardar');
 
 //inscripciones
 Route::get('Inscripcion/nuevo', 'InscripcionController@nuevo');
-Route::get('Inscripcion/reinscripcion', 'InscripcionController@reinscripcion');
+Route::get('Inscripcion/reinscripcion/{id}', 'InscripcionController@reinscripcion');
+Route::post('Inscripcion/ajaxBuscaAsignatura', 'InscripcionController@ajaxBuscaAsignatura');
+Route::post('Inscripcion/guarda_reinscripcion', 'InscripcionController@guarda_reinscripcion');
+//Route::get('Inscripcion/reinscripcion', 'InscripcionController@reinscripcion');
 Route::get('Inscripcion/varios', 'InscripcionController@varios');
 Route::get('Inscripcion/recuperatorio', 'InscripcionController@recuperatorio');
 Route::get('Inscripcion/buscar_recuperatorio', 'InscripcionController@buscar_recuperatorio');
@@ -140,6 +143,7 @@ Route::get('Asignatura/eliminar/{asignatura_id}', 'AsignaturaController@eliminar
 Route::get('Asignatura/asignaturas_equivalentes', 'AsignaturaController@asignaturas_equivalentes');
 Route::get('Asignatura/ajax_lista', 'AsignaturaController@ajax_lista');
 Route::post('Asignatura/guarda_equivalentes', 'AsignaturaController@guarda_equivalentes');
+Route::get('Asignatura/elimina_equivalentes/{id}', 'AsignaturaController@elimina_equivalentes');
 
 Route::get('User/nuevo', 'UserController@nuevo');
 Route::post('User/guarda', 'UserController@guarda');
@@ -149,7 +153,7 @@ Route::get('User/eliminar/{user_id}', 'UserController@eliminar');
 Route::post('User/guarda_asignacion', 'UserController@guarda_asignacion');
 Route::get('User/listado', 'UserController@listado');
 Route::get('User/ajax_listado', 'UserController@ajax_listado');
-Route::get('User/asigna_materias/{user_id}', 'UserController@asigna_materias');
+//Route::get('User/asigna_materias/{user_id}', 'UserController@asigna_materias');
 Route::get('User/eliminaAsignacion/{np_id}', 'UserController@eliminaAsignacion');
 Route::get('User/perfil', 'UserController@perfil');
 Route::post('User/actualizarImagen', 'UserController@actualizarImagen');
@@ -158,6 +162,8 @@ Route::post('User/password', 'UserController@password');
 Route::get('Persona/detalle/{persona_id}', 'PersonaController@detalle');
 Route::get('Persona/ajax_materias/{carrera_id}/{persona_id}/{anio_vigente}', 'PersonaController@ajax_materias');
 Route::get('User/ajaxEditaPerfil', 'UserController@ajaxEditaPerfil');
+
+Route::get('User/asigna_materias/{id}', 'UserController@asigna_materias');
 
 Route::get('Asignatura/ajax_muestra_prerequisitos/{asignatura_id}', 'AsignaturaController@ajax_muestra_prerequisitos');
 Route::get('Asignatura/elimina_prerequisito/{prerequisito_id}', 'AsignaturaController@elimina_prerequisito');
@@ -168,6 +174,8 @@ Route::get('Carrera/listado_nuevo', 'CarreraController@listado_nuevo');
 Route::post('Carrera/guardar', 'CarreraController@guardar');
 Route::post('Carrera/actualizar', 'CarreraController@actualizar');
 Route::get('Carrera/eliminar/{id}', 'CarreraController@eliminar');
+Route::get('Carrera/vista_impresion/{id}', 'CarreraController@vista_impresion');
+Route::get('Carrera/ajaxEditaCarrera', 'CarreraController@ajaxEditaCarrera');
 
 Route::get('Descuento/listado', 'DescuentoController@listado');
 Route::post('Descuento/guardar', 'DescuentoController@guardar');

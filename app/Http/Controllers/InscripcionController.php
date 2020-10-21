@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Inscripcion;
+use Illuminate\Support\Facades\Auth;
+use App\Inscripcione;
 use App\Carrera;
 use App\Asignatura;
 use App\Materia;
@@ -11,7 +12,7 @@ use App\Turno;
 use App\Persona;
 use App\Nota;
 use App\NotasPropuesta;
-use App\CarreraPersona;
+use App\CarrerasPersona;
 use App\Prerequisito;
 use App\Kardex;
 use App\CobrosTemporada;
@@ -23,22 +24,142 @@ class InscripcionController extends Controller
 {
     public function nuevo()
     {
-        $carreras = Carrera::where("deleted_at", NULL)
-                        ->get();
+        $carreras = Carrera::get();
         $turnos = Turno::get();
-        $fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
-        $year = $fecha->format('Y');//obtenes solo el año actual
-        
-        $asignaturas = DB::table('asignaturas')
-                ->where('asignaturas.anio_vigente', '=', $year)
-                ->join('servicios_asignaturas', 'asignaturas.id', '=', 'servicios_asignaturas.asignatura_id')
-                ->where('servicios_asignaturas.servicio_id', '!=', 2)
-                ->select('asignaturas.*')
-                ->get();      
-
-        return view('inscripcion.nuevo', compact('carreras', 'turnos', 'year', 'asignaturas'));    
+        $anio_actual = date('Y');
+        // $asignaturas = DB::table('asignaturas')
+        //         ->where('asignaturas.anio_vigente', '=', $anio_actual)
+        //         ->join('servicios_asignaturas', 'asignaturas.id', '=', 'servicios_asignaturas.asignatura_id')
+        //         ->where('servicios_asignaturas.servicio_id', '!=', 2)
+        //         ->select('asignaturas.*')
+        //         ->get();
+        return view('inscripcion.nuevo')->with(compact('carreras', 'turnos', 'anio_actual'));
     }
 
+    public function reinscripcion($id)
+    {
+        $estudiante = Persona::find($id);
+        $turnos = Turno::get();
+        // Conseguir las materias que aprobó el estudiante
+        $aprobadas = Inscripcione::where('persona_id', $id)
+                                ->where('nota', '>=', 61)
+                                ->get();
+        $array_aprobadas = array();
+        foreach($aprobadas as $materia){
+            array_push($array_aprobadas, $materia->asignatura_id);
+        }
+        // Conseguir las carreras en las que esta inscrito el estudiante
+        $array_carreras = array();
+        $carreras_estudiante = Inscripcione::where('persona_id', $id)
+                                            ->groupBy('carrera_id')
+                                            ->select('carrera_id')
+                                            ->get();
+        foreach($carreras_estudiante as $carrera){
+            array_push($array_carreras, $carrera->carrera_id);
+        }
+        // Preguntamos se esta inscrito en una carrera
+        if(count($array_carreras)==1){
+            // Se encuentra inscrito en una sola carrera
+            // Sacaremos en que gestion se encuentra el alumno
+            $gestion = Inscripcione::where('persona_id', $id)
+                                    ->where('nota', '>=', 61)
+                                    ->max('gestion');
+            // Veremos si esa gestion esta dividida en semestres o no
+            
+            // Haremos la busqueda de esas asignaturas pendientes en esa gestion
+            $pendientes = Asignatura::where('carrera_id', $array_carreras[0])
+                                    ->where('gestion', $gestion)
+                                    ->whereNotIn('id', $array_aprobadas)
+                                    ->get();
+            // Contaremos la cantidad que tiene para tomar
+            $cantidad = count($pendientes);
+            // si la cantidad es 0, significa que ya aprobo todas las materias de esa gestion
+            if($cantidad == 0){
+                //dd('no tiene materias pendientes en esa gestion');
+                // procedemos a subirle una gestion y hacer una nueva busqueda de pendientes
+                $gestion = $gestion + 1;
+                $pendientes = Asignatura::where('carrera_id', $array_carreras[0])
+                                        ->where('gestion', $gestion)
+                                        ->whereNotIn('id', $array_aprobadas)
+                                        ->get();
+            }
+        }else{
+            //dd('mas de una carrera');
+        }
+        return view('inscripcion.reinscripcion0')->with(compact('estudiante', 'pendientes', 'turnos'));
+    }
+
+    public function guarda_reinscripcion(Request $request)
+    {
+        // Si existen asignaturas enviadas
+        if($request->asignatura){
+            $llaves = array_keys($request->asignatura);
+            // Por cada asignatura
+            foreach($llaves as $ll){
+                $asignatura = Asignatura::find($request->asignatura[$ll]);
+                $turno_id = 'turno_'.$request->asignatura[$ll];
+                $paralelo = 'paralelo_'.$request->asignatura[$ll];
+                // Verificaremos que no este registrada la asignatura
+                $registro = Inscripcione::where('carrera_id', $asignatura->carrera_id)
+                                        ->where('asignatura_id', $asignatura->id)
+                                        ->where('turno_id', $request->$turno_id)
+                                        ->where('persona_id', $request->persona_id)
+                                        ->first();
+                // Si no esta registrada, se procede a la inscripcion
+                if(!$registro){
+                    // Si no existe un registro con las mismas variables, procedemos a registrar en las tablas inscripciones y notas
+                    // Inscripcion en la tabla inscripciones
+                    $inscripcion = new Inscripcione();
+                    $inscripcion->user_id = Auth::user()->id;
+                    $inscripcion->carrera_id = $asignatura->carrera_id;
+                    $inscripcion->asignatura_id = $asignatura->id;
+                    $inscripcion->turno_id = $request->$turno_id;
+                    $inscripcion->persona_id = $request->persona_id;
+                    $inscripcion->paralelo = $request->$paralelo;
+                    $inscripcion->semestre = $asignatura->semestre;
+                    $inscripcion->gestion = $asignatura->gestion;
+                    $inscripcion->anio_vigente = date('Y');  //se debe usar $request->$datos_gestion?
+                    $inscripcion->save();
+                    // Buscaremos si existe un docente ya asignado a esta materia
+                    $docente = NotasPropuesta::where('asignatura_id', $asignatura->id)
+                                            ->where('turno_id', $request->$turno_id)
+                                            ->where('paralelo', $request->$paralelo)
+                                            ->where('anio_vigente', date('Y'))   //$request->$datos_gestion
+                                            ->first();
+                    // Por cada materia inscrita, ingresamos 4 registros correspondientes a los 4 bimestres
+                    for($i=1; $i<=4; $i++){
+                        // Inscripcion en la tabla notas
+                        $nota = new Nota();
+                        $nota->user_id = Auth::user()->id;
+                        if($docente){
+                            $nota->docente_id = $docente->docente_id;
+                        }
+                        $nota->persona_id = $request->persona_id;
+                        $nota->asignatura_id = $asignatura->id;
+                        $nota->turno_id = $request->$turno_id;
+                        $nota->paralelo = $request->$paralelo;
+                        $nota->anio_vigente = date('Y'); //$request->$datos_gestion
+                        $nota->trimestre = $i;
+                        $nota->fecha_registro = date('Y-m-d');
+                        $nota->save();
+                    }
+
+                }
+            }
+        }
+        return redirect('Persona/listado');
+    }
+
+    public function ajaxBuscaAsignatura(Request $request)
+    {
+        $asignaturas = Asignatura::where('nombre', 'like', "%$request->termino%")
+                                ->orWhere('sigla', 'like', "%$request->termino%")
+                                ->limit(8)
+                                ->get();
+        return view('inscripcion.ajaxBuscaAsignatura')->with(compact('asignaturas'));
+    }
+
+    /*
     public function reinscripcion()
     {
         $carreras = Carrera::where("deleted_at", NULL)
@@ -56,6 +177,7 @@ class InscripcionController extends Controller
 
         return view('inscripcion.reinscripcion', compact('carreras', 'turnos', 'year', 'asignaturas'));    
     }
+    */
 
     public function varios()
     {
@@ -155,75 +277,171 @@ class InscripcionController extends Controller
 
     public function guardar(Request $request)
     {
-        // EN ESTE IF AGREGAREMOS O ACTUALIZAREMOS LOS DATOS DE UN ESTUDIANTE
-        if (!empty($request->persona_id)) {
-                $persona = Persona::find($request->persona_id);
-                $persona->apellido_paterno  = $request->apellido_paterno;
-                $persona->apellido_materno  = $request->apellido_materno;
-                $persona->nombres           = $request->nombres;
-                $persona->carnet            = $request->carnet;
-                $persona->expedido          = $request->expedido;
-                $persona->fecha_nacimiento  = $request->fecha_nacimiento;
-                $persona->sexo              = $request->sexo;
-                $persona->telefono_celular  = $request->telefono_celular;
-                $persona->email             = $request->email;
-                $persona->direccion         = $request->direccion;
-                $persona->trabaja           = $request->trabaja;
-                $persona->empresa           = $request->empresa;
-                $persona->direccion_empresa = $request->direccion_empresa;
-                $persona->telefono_empresa  = $request->telefono_empresa;
-                $persona->email_empresa     = $request->email_empresa;
-                $persona->nombre_padre      = $request->nombre_padre;
-                $persona->celular_padre     = $request->celular_padre;
-                $persona->nombre_madre      = $request->nombre_madre;
-                $persona->celular_madre     = $request->celular_madre;
-                $persona->nombre_tutor      = $request->nombre_tutor;
-                $persona->telefono_tutor    = $request->telefono_tutor;
-                $persona->nombre_esposo     = $request->nombre_esposo;
-                $persona->telefono_esposo   = $request->telefono_esposo;
-                $persona->save();
-        } else {
-                $persona = new Persona();
-                $persona->apellido_paterno  = $request->apellido_paterno;
-                $persona->apellido_materno  = $request->apellido_materno;
-                $persona->nombres           = $request->nombres;
-                $persona->carnet            = $request->carnet;
-                $persona->expedido          = $request->expedido;
-                $persona->fecha_nacimiento  = $request->fecha_nacimiento;
-                $persona->sexo              = $request->sexo;
-                $persona->telefono_celular  = $request->telefono_celular;
-                $persona->email             = $request->email;
-                $persona->direccion         = $request->direccion;
-                $persona->trabaja           = $request->trabaja;
-                $persona->empresa           = $request->empresa;
-                $persona->direccion_empresa = $request->direccion_empresa;
-                $persona->telefono_empresa  = $request->telefono_empresa;
-                $persona->email_empresa     = $request->email_empresa;
-                $persona->nombre_padre      = $request->nombre_padre;
-                $persona->celular_padre     = $request->celular_padre;
-                $persona->nombre_madre      = $request->nombre_madre;
-                $persona->celular_madre     = $request->celular_madre;
-                $persona->nombre_tutor      = $request->nombre_tutor;
-                $persona->telefono_tutor    = $request->telefono_tutor;
-                $persona->nombre_esposo     = $request->nombre_esposo;
-                $persona->telefono_esposo   = $request->telefono_esposo;
-                $persona->save();
+        // Si existe el parametro $request->persona_id actualizamos, si no existe, creamos uno nuevo
+        if($request->persona_id){
+            $persona = Persona::find($request->persona_id);
+        }else{
+            $persona = new Persona();
         }
-        $id_persona = Persona::where("deleted_at", NULL)
-                    ->where('carnet', $request->carnet)
-                    ->get();
-        $persona_id = $id_persona[0]->id;
+        $persona->user_id           = Auth::user()->id;
+        $persona->apellido_paterno  = $request->apellido_paterno;
+        $persona->apellido_materno  = $request->apellido_materno;
+        $persona->nombres           = $request->nombres;
+        $persona->cedula            = $request->carnet;
+        $persona->expedido          = $request->expedido;
+        $persona->fecha_nacimiento  = $request->fecha_nacimiento;
+        $persona->sexo              = $request->sexo;
+        $persona->direccion         = $request->direccion;
+        // numero_fijo
+        $persona->numero_celular    = $request->telefono_celular;
+        $persona->email             = $request->email;
+        $persona->trabaja           = $request->trabaja;
+        $persona->empresa           = $request->empresa;
+        $persona->direccion_empresa = $request->direccion_empresa;
+        $persona->numero_empresa    = $request->telefono_empresa;
+        // fax
+        $persona->email_empresa     = $request->email_empresa;
+        $persona->nombre_padre      = $request->nombre_padre;
+        $persona->celular_padre     = $request->celular_padre;
+        $persona->nombre_madre      = $request->nombre_madre;
+        $persona->celular_madre     = $request->celular_madre;
+        $persona->nombre_tutor      = $request->nombre_tutor;
+        $persona->celular_tutor     = $request->telefono_tutor;
+        $persona->nombre_pareja     = $request->nombre_esposo;
+        $persona->celular_pareja    = $request->telefono_esposo;
+        // nit
+        // razon_social_cliente
+        $persona->save();
 
+        // En la variable $request->numero, que es un array, se envia la cantidad de carreras inscritas
+        foreach ($request->numero as $registro) {
+            // Por cada carrera existente, se crean los valores para cada carrera
+            $datos_carrera = 'carrera_'.$registro;
+            $datos_turno = 'turno_'.$registro;
+            $datos_paralelo = 'paralelo_'.$registro;
+            $datos_gestion = 'gestion_'.$registro;
+            // Si la variable $request->$datos_carrera es diferente de 0
+            if ($request->$datos_carrera != 0) {
+                // Leeremos la curricula de la tabla Asignaturas y como es una nueva inscripcion capturamos las primeras asignaturas de la carrera
+                $asignaturas_carrera = Asignatura::where('carrera_id', $request->$datos_carrera)
+                                                ->where('anio_vigente', $request->$datos_gestion)
+                                                ->where('gestion', 1)
+                                                ->where('semestre', 1)
+                                                ->get();
+                // Por cada asignatura encontrada
+                foreach($asignaturas_carrera as $asignatura){
+                    // Verificaremos que no exista un registro con estas variables
+                    $registro = Inscripcione::where('carrera_id', $asignatura->carrera_id)
+                                            ->where('asignatura_id', $asignatura->id)
+                                            ->where('turno_id', $request->$datos_turno)
+                                            ->where('persona_id', $persona->id)
+                                            //->where('nota', '>', 60)
+                                            ->first();
+                    if(!$registro){
+                        // Si no existe un registro con las mismas variables, procedemos a registrar en las tablas inscripciones y notas
+                        // Inscripcion en la tabla inscripciones
+                        $inscripcion = new Inscripcione();
+                        $inscripcion->user_id = Auth::user()->id;
+                        $inscripcion->carrera_id = $asignatura->carrera_id;
+                        $inscripcion->asignatura_id = $asignatura->id;
+                        $inscripcion->turno_id = $request->$datos_turno;
+                        $inscripcion->persona_id = $persona->id;
+                        $inscripcion->paralelo = $request->$datos_paralelo;
+                        $inscripcion->semestre = $asignatura->semestre;
+                        $inscripcion->gestion = $asignatura->gestion;
+                        $inscripcion->anio_vigente = $request->$datos_gestion;
+                        $inscripcion->save();
+                        // Buscaremos si existe un docente ya asignado a esta materia
+                        $docente = NotasPropuesta::where('asignatura_id', $asignatura->id)
+                                                ->where('turno_id', $request->$datos_turno)
+                                                ->where('paralelo', $request->$datos_paralelo)
+                                                ->where('anio_vigente', $request->$datos_gestion)
+                                                ->first();
+                        // Por cada materia inscrita, ingresamos 4 registros correspondientes a los 4 bimestres
+                        for($i=1; $i<=4; $i++){
+                            // Inscripcion en la tabla notas
+                            $nota = new Nota();
+                            $nota->user_id = Auth::user()->id;
+                            if($docente){
+                                $nota->docente_id = $docente->docente_id;
+                            }
+                            $nota->persona_id = $persona->id;
+                            $nota->asignatura_id = $asignatura->id;
+                            $nota->turno_id = $request->$datos_turno;
+                            $nota->paralelo = $request->$datos_paralelo;
+                            $nota->anio_vigente = $request->$datos_gestion;
+                            $nota->trimestre = $i;
+                            $nota->fecha_registro = date('Y-m-d');
+                            $nota->save();
+                        }
+                    }
+                }
+            }
+        }
+        // redirigir a kardex de alumno
+        // redirigir a facturacion
+        // redirigir al listado de alumnos
+        //return redirect('Inscripcion/nuevo');
+        return redirect('Persona/listado');
+    }
+    
+    /*
+    public function guardar(Request $request)
+    {
+        //dd('hola');
+        // Si existe el parametro $request->persona_id actualizamos, si no existe, creamos uno nuevo
+        if($request->persona_id){
+            $persona = Persona::find($request->persona_id);
+        }else{
+            $persona = new Persona();
+        }
+        $persona->user_id           = Auth::user()->id;
+        $persona->apellido_paterno  = $request->apellido_paterno;
+        $persona->apellido_materno  = $request->apellido_materno;
+        $persona->nombres           = $request->nombres;
+        $persona->cedula            = $request->carnet;
+        $persona->expedido          = $request->expedido;
+        $persona->fecha_nacimiento  = $request->fecha_nacimiento;
+        $persona->sexo              = $request->sexo;
+        $persona->direccion         = $request->direccion;
+        // numero_fijo
+        $persona->numero_celular    = $request->telefono_celular;
+        $persona->email             = $request->email;
+        $persona->trabaja           = $request->trabaja;
+        $persona->empresa           = $request->empresa;
+        $persona->direccion_empresa = $request->direccion_empresa;
+        $persona->numero_empresa    = $request->telefono_empresa;
+        // fax
+        $persona->email_empresa     = $request->email_empresa;
+        $persona->nombre_padre      = $request->nombre_padre;
+        $persona->celular_padre     = $request->celular_padre;
+        $persona->nombre_madre      = $request->nombre_madre;
+        $persona->celular_madre     = $request->celular_madre;
+        $persona->nombre_tutor      = $request->nombre_tutor;
+        $persona->celular_tutor     = $request->telefono_tutor;
+        $persona->nombre_pareja     = $request->nombre_esposo;
+        $persona->celular_pareja    = $request->telefono_esposo;
+        // nit
+        // razon_social_cliente
+        $persona->save();
+
+        // Capturamos el id de esa persona
+        $persona_id = $persona->id;
 
         // REGISTRA LAS CARRERAS INSCRITAS
-        foreach ($request->numero as $carr) {
-            $datos_carrera = 'carrera_'.$carr;
-            $datos_turno = 'turno_'.$carr;
-            $datos_paralelo = 'paralelo_'.$carr;
-            $datos_gestion = 'gestion_'.$carr;
-
+        // En la variable $request->numero, que es un array, se envia la cantidad de carreras inscritas
+        dd($request->numero);
+        foreach ($request->numero as $registro) {
+            // Por cada carrera existente, se crean los valores para cada carrera
+            $datos_carrera = 'carrera_'.$registro;
+            $datos_turno = 'turno_'.$registro;
+            $datos_paralelo = 'paralelo_'.$registro;
+            $datos_gestion = 'gestion_'.$registro;
+            // Si la variable $request->$datos_carrera es diferente de 0
             if ($request->$datos_carrera != 0) {
+                // Se crean un nuevo registro en la tabla carreras_personas
                 $carrera_1 = new CarreraPersona();
+                $carrera_1->user_id      = Auth::user()->id;
                 $carrera_1->carrera_id   = $request->$datos_carrera;
                 $carrera_1->persona_id   = $persona_id;
                 $carrera_1->turno_id     = $request->$datos_turno;
@@ -231,13 +449,19 @@ class InscripcionController extends Controller
                 $carrera_1->anio_vigente = $request->$datos_gestion;
                 $carrera_1->sexo         = $request->sexo;
                 $carrera_1->save();
+                // Se llama a la funcion asignaturas_inscripcion, insertando los datos
+                $this->asignaturas_inscripcion($request->$datos_carrera,
+                                                $request->$datos_turno,
+                                                $persona_id,
+                                                $request->$datos_paralelo,
+                                                $request->$datos_gestion);
 
-                $this->asignaturas_inscripcion($request->$datos_carrera, $request->$datos_turno, $persona_id, $request->$datos_paralelo, $request->$datos_gestion);
                 DB::table('materias')->truncate();
             }
             
         }
 
+        // Datos para facturacion
         $fecha_reg = new \DateTime();//aqui obtenemos la fecha y hora actual
         $fecha_registro = $fecha_reg->format('Y-m-d');//obtenes solo el año actual
 
@@ -345,6 +569,7 @@ class InscripcionController extends Controller
      
         return redirect('Kardex/detalle_estudiante/'.$persona_id);
     }
+    */
 
     public function guardar_antiguo(Request $request)
     {
@@ -586,21 +811,21 @@ class InscripcionController extends Controller
                                     ORDER BY asig.gestion, asig.orden_impresion");
         /*  1
         $materias = Asignatura::where('carrera_id', $carrera_id)
-                            ->where('anio_vigente', $anio_vigente)
-                            ->orderBy('gestion', 'asc')
-                            ->get();
+                                ->where('anio_vigente', $anio_vigente)
+                                ->orderBy('gestion', 'asc')
+                                ->get();
         dd($materias);
         */
 
         //Verifica que no este inscrito el alumno ya en esas materias
-        foreach ($asignaturas as $asig) {
+        foreach ($asignaturas as $asignatura) {
             $inscripciones = DB::select("SELECT MAX(nota) as nota
-                                            FROM inscripciones
-                                            WHERE asignatura_id = '$asig->id'
-                                            AND persona_id = '$persona_id'
-                                            AND carrera_id = '$carrera_id'");
+                                        FROM inscripciones
+                                        WHERE asignatura_id = '$asignatura->id'
+                                        AND persona_id = '$persona_id'
+                                        AND carrera_id = '$carrera_id'");
             /*  2
-            $inscripciones = Inscripcion::where('asignatura_id', $asig->id)
+            $inscripciones = Inscripcion::where('asignatura_id', $asignatura->id)
                                         ->where('persona_id', $persona_id)
                                         ->where('carrera_id', $carrera_id)
                                         ->get();
@@ -612,35 +837,35 @@ class InscripcionController extends Controller
                 // Si la nota maxima es menor que 71
                if ($inscripciones[0]->nota < 61) {
                    DB::table('materias')->insert([
-                        'asignatura_id' => $asig->id,
-                        'codigo_asignatura' => $asig->codigo_asignatura,
-                        'nombre_asignatura' => $asig->nombre_asignatura,                              
+                        'asignatura_id' => $asignatura->id,
+                        'codigo_asignatura' => $asignatura->codigo_asignatura,
+                        'nombre_asignatura' => $asignatura->nombre_asignatura,                              
                         'estado' => 1,
                     ]);
                }
 
             } else {
                 //dd('falso');
-                if (!empty($asig->prerequisito_id)) {
+                if (!empty($asignatura->prerequisito_id)) {
                     $prerequisito = DB::select("SELECT MAX(nota) as nota
                                                 FROM inscripciones
-                                                WHERE asignatura_id = '$asig->prerequisito_id'
+                                                WHERE asignatura_id = '$asignatura->prerequisito_id'
                                                 AND persona_id = '$persona_id'
                                                 AND carrera_id = '$carrera_id'");
                     if ($prerequisito[0]->nota > 60) {
                         DB::table('materias')->insert([
-                              'asignatura_id' => $asig->id,
-                              'codigo_asignatura' => $asig->codigo_asignatura,
-                              'nombre_asignatura' => $asig->nombre_asignatura,                              
+                              'asignatura_id' => $asignatura->id,
+                              'codigo_asignatura' => $asignatura->codigo_asignatura,
+                              'nombre_asignatura' => $asignatura->nombre_asignatura,                              
                               'estado' => 1,
                             ]);
                     }
 
                 } else {
                     DB::table('materias')->insert([
-                              'asignatura_id' => $asig->id,
-                              'codigo_asignatura' => $asig->codigo_asignatura,
-                              'nombre_asignatura' => $asig->nombre_asignatura,                              
+                              'asignatura_id' => $asignatura->id,
+                              'codigo_asignatura' => $asignatura->codigo_asignatura,
+                              'nombre_asignatura' => $asignatura->nombre_asignatura,                              
                               'estado' => 1,
                             ]);
                 }
@@ -738,27 +963,28 @@ class InscripcionController extends Controller
             }
     }
 
+    // Funcion que busca y devuelve coincidencias con respeocto al campo CI insertado
     public function busca_ci(Request $request)
     {
-    	$carnet = $request->ci;//buscar el carnet de identidad de una persona
-    	$persona = Persona::where("deleted_at", NULL)
-                    ->where('carnet', $carnet)
-                    ->first();
-        if (!empty($persona)) {
-            $carreras = DB::table('carreras_personas')
-                                    ->where('carreras_personas.persona_id', $persona->id)
-                                    ->join('carreras', 'carreras_personas.carrera_id', '=', 'carreras.id')
-                                    ->select('carreras.id', 'carreras.nombre')
-                                    ->get();
+        $persona = Persona::where('cedula', $request->ci)->first();
+        if ($persona)
+        {
+            $carreras = CarrerasPersona::where('persona_id', $persona->id)->get();
+            // $carreras = DB::table('carreras_personas')
+            //                 ->where('carreras_personas.persona_id', $persona->id)
+            //                 ->join('carreras', 'carreras_personas.carrera_id', '=', 'carreras.id')
+            //                 ->select('carreras.id', 'carreras.nombre')
+            //                 ->get();
             // dd($carreras);
-            // exit();
             return response()->json([
                 'mensaje' => 'si',
                 'persona' => $persona,
                 'carreras' => $carreras
             ]);
-        } else {
-        return response()->json([
+        }
+        else
+        {
+            return response()->json([
                 'mensaje' => 'no'
             ]);
         }

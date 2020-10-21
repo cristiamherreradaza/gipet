@@ -10,6 +10,7 @@ class ServiciosAsignatura extends Model
         'user_id',
         'asignatura_id',
         'servicio_id',
+        'anio_vigente',
         'estado',
         'deleted_at',
     ];

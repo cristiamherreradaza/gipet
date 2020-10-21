@@ -11,7 +11,7 @@ use App\Persona;
 use App\Kardex;
 use App\Nota;
 use App\Materia;
-use App\CarreraPersona;
+use App\CarrerasPersona;
 use App\NotasPropuesta;
 use App\Prerequisito;
 use DB;
@@ -28,10 +28,10 @@ class KardexController extends Controller
                         ->where('id', $persona_id)
                         ->first();
 
-        $carrerasPersona = CarreraPersona::where('deleted_at', NULL)
+        $carrerasPersona = CarrerasPersona::where('deleted_at', NULL)
                         ->where('persona_id', $persona_id)
                         ->get();
-        $inscripciones = CarreraPersona::where('deleted_at', NULL)
+        $inscripciones = CarrerasPersona::where('deleted_at', NULL)
                         ->where('persona_id', $persona_id)
                         ->get();
         $carreras = Carrera::where('deleted_at',NULL)->get();
@@ -114,7 +114,7 @@ class KardexController extends Controller
     	$datosPersonales = Persona::where('deleted_at', NULL)
                         ->where('carnet', $ci)
                         ->first();
-        $carrerasPersona = CarreraPersona::where('deleted_at', NULL)
+        $carrerasPersona = CarrerasPersona::where('deleted_at', NULL)
                         ->where('persona_id', $datosPersonales->id)
                         ->distinct()
                         ->get('carrera_id');
@@ -122,7 +122,7 @@ class KardexController extends Controller
     }
 
     public function guardar_datosCarreras(Request $request){
-    	$carreras_persona = CarreraPersona::where('deleted_at', NULL)
+    	$carreras_persona = CarrerasPersona::where('deleted_at', NULL)
                         ->where('carrera_id', $request->tipo_carrera_id)
                         ->where('persona_id', $request->tipo_persona_id)
                         ->first();
@@ -131,7 +131,7 @@ class KardexController extends Controller
         	return response()->json(['mensaje'=>'si']);
 
         } else {
-        	$carrera = new CarreraPersona();
+        	$carrera = new CarrerasPersona();
 	        $carrera->carrera_id   = $request->tipo_carrera_id;
 	        $carrera->persona_id   = $request->tipo_persona_id;
 	        $carrera->turno_id     = $request->tipo_turno_id;
@@ -148,7 +148,7 @@ class KardexController extends Controller
 	    	$datosPersonales = Persona::where('deleted_at', NULL)
 	                        ->where('id', $request->tipo_persona_id)
 	                        ->first();
-	        $carrerasPersona = CarreraPersona::where('deleted_at', NULL)
+	        $carrerasPersona = CarrerasPersona::where('deleted_at', NULL)
 	                        ->where('persona_id', $datosPersonales->id)
 	                        ->distinct()
 	                        ->get('carrera_id');
@@ -398,7 +398,7 @@ class KardexController extends Controller
         $datos = $request->all();
         dd($datos);
         $persona = Persona::find($request->persona_id);
-        $carrera = new CarreraPersona();
+        $carrera = new CarrerasPersona();
             $carrera->carrera_id   = $request->carrera_id;
             $carrera->persona_id   = $request->persona_id;
             $carrera->turno_id     = $request->turno_id;

@@ -12,24 +12,20 @@
 @section('content')
 <div class="card">
     <div class="card-body">
-
         <div class="row">
             <div class="col-md-6">
                 <h3>
                     Docente: 
                     <span class="text-info">
-                        {{ $datos_persona->apellido_paterno }}
-                        {{ $datos_persona->apellido_materno }}
-                        {{ $datos_persona->nombres }}
+                        {{ $docente->apellido_paterno }}
+                        {{ $docente->apellido_materno }}
+                        {{ $docente->nombres }}
                     </span>
                 </h3>
             </div>
         </div>
-
         <div class="row">
-            
             <div class="col-md-6">
-                
                 <div class="card border-primary">
                     <div class="card-header bg-primary">
                         <h4 class="mb-0 text-white">ASIGNATURAS</h4>
@@ -47,14 +43,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($asignaturas as $a)
+                                    @foreach($asignaturas as $asignatura)
                                         <tr>
-                                            <td>{{ $a->codigo_asignatura }}</td>
-                                            <td>{{ $a->carrera['nombre'] }}</td>
-                                            <td>{{ $a->nombre_asignatura }}</td>
-                                            <td class="text-center">{{ $a->gestion }}</td>
+                                            <td>{{ $asignatura->sigla }}</td>
+                                            <td>{{ $asignatura->carrera->nombre }}</td>
+                                            <td>{{ $asignatura->nombre }}</td>
+                                            <td class="text-center">{{ $asignatura->gestion }}</td>
                                             <td>
-                                                <button type="button" class="btn btn-success" onclick="asigna_materia('{{ $a->id }}', '{{ $a->nombre_asignatura }}', '{{ $a->codigo_asignatura }}', '{{ $a->carrera['nombre'] }}')">
+                                                <button type="button" class="btn btn-success" onclick="asigna_materia('{{ $asignatura->id }}', '{{ $asignatura->nombre }}', '{{ $asignatura->sigla }}', '{{ $asignatura->carrera->nombre }}')">
                                                     <i class="fas fa-arrow-right"></i>
                                                 </button>
                                             </td>
@@ -79,21 +75,19 @@
                                         <th>Sigla</th>
                                         <th>Carrera</th>
                                         <th>Nombre</th>
-                                        <th>Curso</th>
-                                        <th>Acciones</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($asignaturas_docente as $ad)
+                                    @foreach($asignaturas_docente as $asignatura)
                                     <tr>
-                                        <td>{{ $ad->asignatura->codigo_asignatura }}</td>
-                                        <td>{{ $ad->asignatura->carrera->nombre }}</td>
-                                        <td>{{ $ad->asignatura->nombre_asignatura }}</td>
-                                        <td>{{ $ad->gestion }}</td>
+                                        <td>{{ $asignatura->asignatura->sigla }}</td>
+                                        <td>{{ $asignatura->asignatura->carrera->nombre }}</td>
+                                        <td>{{ $asignatura->asignatura->nombre }}</td>
                                         <td>
-                                            <button type="button" class="btn btn-danger"
-                                                onclick="elimina_asignacion('{{ $ad->id }}', '{{ $ad->asignatura->nombre_asignatura }}')"><i
-                                                    class="fas fa-trash"></i></button>
+                                            <button type="button" class="btn btn-danger" onclick="elimina_asignacion('{{ $asignatura->id }}', '{{ $asignatura->asignatura->nombre }}')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
                                         </td>
                                     </tr>
                                     @endforeach
@@ -104,7 +98,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -134,7 +127,7 @@
                 <form action="#" method="POST" id="formulario_modal_asignacion">
                     @csrf
                     <input type="hidden" name="asignatura_id" id="fm_asignatura_id" value="">
-                    <input type="hidden" name="user_id" id="fm_user_id" value="{{ $datos_persona->id }}">
+                    <input type="hidden" name="user_id" id="fm_user_id" value="{{ $docente->id }}">
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
@@ -153,6 +146,7 @@
                                     <option value="A">A</option>
                                     <option value="B">B</option>
                                     <option value="C">C</option>
+                                    <option value="D">D</option>
                                 </select>
                             </div>
                         </div>
@@ -215,6 +209,8 @@
         // console.log(nombre_asignatura);
     }
 
+    // Funcion ajax que al presionar el boton "ASIGNAR" que captura los valores del formulario del modal
+    // los envia para el procesamiento en el controlador
     function guarda_asignacion() {
         formulario_asignacion = $("#formulario_modal_asignacion").serializeArray();
         $.ajax({
@@ -239,12 +235,13 @@
                         'La materia esta asignada al docente',
                         'success'
                     );
-                    window.location.href = "{{ url('User/asigna_materias') }}/" + {{ $datos_persona->id }};
+                    window.location.href = "{{ url('User/asigna_materias') }}/" + {{ $docente->id }};
                 }
             }
         })
     }
 
+    // Funcion para la eliminacion de una materia a un docente
     function elimina_asignacion(np_id, nombre)
     {
         Swal.fire({

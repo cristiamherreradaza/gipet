@@ -22,6 +22,7 @@ class CreateFechasTable extends Migration
             $table->date('fecha_fin')->nullable();
             $table->string('periodo')->nullable();
             $table->integer('gestion')->nullable();
+            $table->integer('anio_vigente')->nullable();
             $table->string('estado')->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();

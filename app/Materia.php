@@ -13,7 +13,18 @@ class Materia extends Model
         'asignatura_id',
         'codigo_asignatura',
         'nombre_asignatura',
+        'anio_vigente',
         'estado',
         'deleted_at',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'user_id');
+    }
+
+    public function asignatura()
+    {
+        return $this->belongsTo('App\Asignatura', 'asignatura_id');
+    }
 }

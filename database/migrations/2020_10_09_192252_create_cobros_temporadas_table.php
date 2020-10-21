@@ -31,6 +31,7 @@ class CreateCobrosTemporadasTable extends Migration
             $table->integer('gestion')->nullable();
             $table->date('fecha_generado')->nullable();
             $table->string('nombre_combo')->nullable();
+            $table->integer('anio_vigente')->nullable();
             $table->string('estado')->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();

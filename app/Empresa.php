@@ -17,6 +17,7 @@ class Empresa extends Model
 		'razon_social',
 		'numero_autorizacion',
 		'anio',
+		'anio_vigente',
 		'estado',
 		'deleted_at',
     ];

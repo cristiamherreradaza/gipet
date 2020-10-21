@@ -42,28 +42,25 @@
 
 <div id="divmsg" style="display:none" class="alert alert-primary" role="alert"></div>
 <div class="row">
-    <!-- Column -->
     <div class="col-md-12">
-        <!-- Row -->
-        {{-- <form action="{{ url('Producto/guarda') }}"  method="post" enctype="multipart/form-data" > --}}
         <form action="{{ url('Inscripcion/guardar') }}" method="POST" >
             @csrf
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card border-info">
-                    <div class="card-header bg-info">
-                        <h4 class="mb-0 text-white">NUEVA INSCRIPCION</h4>
-                    </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card border-info">
+                        <div class="card-header bg-info">
+                            <h4 class="mb-0 text-white">NUEVA INSCRIPCION</h4>
+                        </div>
                         <div class="card-body">
                             <div class="row" id="tabsProductos">
                                 <div class="col-md-3">
-                                    <button type="button" id="tab1" class="btn btn-block btn-inverse activo">DATOS PERSONALES</button>
+                                    <button type="button" id="tab1" class="btn btn-block btn-info activo">DATOS PERSONALES</button>
                                 </div>
                                 <div class="col-md-3">
-                                    <button type="button" id="tab2" class="btn btn-block btn-primary inactivo">DATOS PROFESIONALES</button>
+                                    <button type="button" id="tab2" class="btn btn-block btn-info inactivo">DATOS PROFESIONALES</button>
                                 </div>
                                 <div class="col-md-3">
-                                    <button type="button" id="tab3" class="btn btn-block btn-warning inactivo">REFERENCIA PERSONAL</button>
+                                    <button type="button" id="tab3" class="btn btn-block btn-info inactivo">REFERENCIA PERSONAL</button>
                                 </div>
                                 <div class="col-md-3">
                                     <button type="button" id="tab4" class="btn btn-block btn-info inactivo">DATOS DE LA CARRERA</button>
@@ -71,17 +68,17 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12 tabContenido" id="tab1C">
-                                    <div class="card border-inverse">
+                                    <div class="card border-info">
                                         <div class="card-body">
                                             <div class="form-body">
                                                 <div class="row">
                                                     <div class="col">
                                                         <div class="form-group">
-                                                            <label>Carnet 
+                                                            <label>Cedula de Identidad 
                                                                 <span class="text-danger">
                                                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                                                 </span>
-                                                             </label>
+                                                            </label>
                                                             <input type="text" class="form-control" name="carnet" id="carnet" required>
                                                         </div>
                                                     </div>
@@ -109,16 +106,14 @@
                                                     <div class="col">
                                                         <div class="form-group">
                                                             <label>Apellido Paterno </label>
-                                                            <input type="text" class="form-control"
-                                                                name="apellido_paterno" id="apellido_paterno">
+                                                            <input type="text" class="form-control" name="apellido_paterno" id="apellido_paterno">
                                                         </div>
                                                     </div>
 
                                                     <div class="col">
                                                         <div class="form-group">
                                                             <label>Apellido Materno </label>
-                                                            <input type="text" class="form-control"
-                                                                name="apellido_materno" id="apellido_materno">
+                                                            <input type="text" class="form-control" name="apellido_materno" id="apellido_materno">
                                                         </div>
                                                     </div>
 
@@ -144,21 +139,18 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-
                                                     <div class="col-3">
                                                         <div class="form-group">
                                                             <label>Email </label>
                                                             <input type="text" class="form-control" name="email" id="email">
                                                         </div>
                                                     </div>
-
                                                     <div class="col-3">
                                                         <div class="form-group">
                                                             <label>Direccion </label>
                                                             <input type="text" class="form-control" name="direccion" id="direccion">
                                                         </div>
                                                     </div>
-
                                                     <div class="col-3">
                                                         <div class="form-group">
                                                             <label>Celular 
@@ -169,7 +161,6 @@
                                                             <input type="text" class="form-control" name="telefono_celular" id="telefono_celular" required>
                                                         </div>
                                                     </div>
-
                                                     <div class="col-3">
                                                         <div class="form-group">
                                                             <label>Genero 
@@ -179,25 +170,22 @@
                                                             </label>
                                                             <select name="sexo" id="sexo" class="form-control" required>
                                                                 <option value="Masculino">Masculino</option>
-                                                                <option value="Femenina">Femenina</option>
+                                                                <option value="Femenino">Femenino</option>
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    
                                                 </div>
-
                                             </div>
-                                        
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-12 tabContenido" id="tab2C" style="display: none;">
-                                    <div class="card border-primary">
+                                    <div class="card border-info">
                                         <div class="card-body">
                                             <div class="form-body">
                                                 <!--/row-->
                                                 <!-- NOMBRE DEL ATRIBUTO ENCIMA -->
-                                                <div class="row pt-3">
+                                                <div class="row">
                                                     <div class="col-md-3">
                                                         <div class="form-group">
                                                             <label class="control-label">Trabaja 
@@ -214,7 +202,7 @@
                                                     </div>
                                                 </div>
                                                 <!-- row -->
-                                                <div class="row pt-3">
+                                                <div class="row">
                                                     <div class="col-md-3">
                                                         <div class="form-group">
                                                             <label class="control-label">Nombre de la Empresa</label>
@@ -252,7 +240,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12 tabContenido" id="tab3C" style="display: none;">
-                                    <div class="card border-warning">
+                                    <div class="card border-info">
                                         <div class="card-body">
                                             <div class="form-body">
                                                 <div class="row">
@@ -330,10 +318,10 @@
                                                                 <i class="mr-2 mdi mdi-alert-circle"></i>
                                                             </span>
                                                         </label>
-                                                        <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="carrera_1" name="carrera_1">
+                                                        <select class="form-control custom-select" tabindex="1" id="carrera_1" name="carrera_1">
                                                             <option value="0">Seleccionar</option>
-                                                            @foreach($carreras as $carre)
-                                                            <option value="{{ $carre->id }}">{{ $carre->nombre }}</option>
+                                                            @foreach($carreras as $carrera)
+                                                                <option value="{{ $carrera->id }}">{{ $carrera->nombre }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -345,10 +333,10 @@
                                                                 <i class="mr-2 mdi mdi-alert-circle"></i>
                                                             </span>
                                                         </label>
-                                                        <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="turno_1" name="turno_1">
+                                                        <select class="form-control custom-select" tabindex="1" id="turno_1" name="turno_1">
                                                             <option value="">Seleccionar</option>
-                                                            @foreach($turnos as $tur)
-                                                            <option value="{{ $tur->id }}">{{ $tur->descripcion }}</option>
+                                                            @foreach($turnos as $turno)
+                                                                <option value="{{ $turno->id }}">{{ $turno->descripcion }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -360,7 +348,7 @@
                                                                 <i class="mr-2 mdi mdi-alert-circle"></i>
                                                             </span>
                                                         </label>
-                                                        <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="paralelo_1" name="paralelo_1">
+                                                        <select class="form-control custom-select" tabindex="1" id="paralelo_1" name="paralelo_1">
                                                             <option value="">Seleccionar</option>
                                                             <option value="A">A</option>
                                                             <option value="B">B</option>
@@ -372,7 +360,7 @@
                                                 <div class="col-3">
                                                     <div class="form-group">
                                                         <label class="control-label">Gesti&oacute;n</label>
-                                                        <input type="text" class="form-control" id="gestion_1" name="gestion_1" value="{{ $year }}">
+                                                        <input type="text" class="form-control" id="gestion_1" name="gestion_1" value="{{ $anio_actual }}">
                                                     </div>
                                                 </div>
                                                 <input type="text" hidden name="cantidad" id="cantidad" value="1">
@@ -392,7 +380,6 @@
                                     </div>
                                 </div>
                             </div>
-                            
                             <div class="row">
                                 <div class="col-md-6">
                                     <button type="submit" class="btn waves-effect waves-light btn-block btn-success">Guardar</button>
@@ -403,13 +390,10 @@
                                     </a>
                                 </div>
                             </div>
-
                         </div>
-                    
-
+                    </div>
                 </div>
             </div>
-        </div>
         </form>
 
         <!-- Row -->
@@ -426,7 +410,62 @@
 <script src="{{ asset('js/jquery.zoom.js') }}"></script>
 <script src="{{ asset('assets/libs/jquery.repeater/jquery.repeater.min.js') }}"></script>
 <script src="{{ asset('assets/extra-libs/jquery.repeater/repeater-init.js') }}"></script>
-<script>    
+<script>
+    // Funcion donde definimos cabecera donde estara el token y poder hacer nuestras operaciones de put,post...
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    // Funcion que al insertar un numero en el Campo Carnet, busca y devuevle 1 coincidencia
+    $('#carnet').on('change', function(e){
+        var carnet = e.target.value;
+        //alert(carnet);
+        $.ajax({
+            type:'GET',
+            url:"{{ url('Inscripcion/busca_ci') }}",
+            data: {
+                ci : carnet
+            },
+            success:function(data){
+                if (data.mensaje == 'si') {
+                    $('#persona_id').val(data.persona.id);
+                    $('#apellido_paterno').val(data.persona.apellido_paterno);
+                    $('#apellido_materno').val(data.persona.apellido_materno);
+                    $('#nombres').val(data.persona.nombres);
+                    //cedula
+                    $('#expedido').val(data.persona.expedido);
+                    $('#fecha_nacimiento').val(data.persona.fecha_nacimiento);
+                    $('#sexo').val(data.persona.sexo);
+                    $('#direccion').val(data.persona.direccion);
+                    // numero_fijo
+                    $('#telefono_celular').val(data.persona.numero_celular);
+                    $('#email').val(data.persona.email);
+                    $('#trabaja').val(data.persona.trabaja);
+                    $('#empresa').val(data.persona.empresa);
+                    $('#direccion_empresa').val(data.persona.direccion_empresa);
+                    $('#telefono_empresa').val(data.persona.numero_empresa);
+                    $('#fax').val(data.persona.fax);
+                    $('#email_empresa').val(data.persona.email_empresa);
+                    $('#nombre_padre').val(data.persona.nombre_padre);
+                    $('#celular_padre').val(data.persona.celular_padre);
+                    $('#nombre_madre').val(data.persona.nombre_madre);
+                    $('#celular_madre').val(data.persona.celular_madre);
+                    $('#nombre_tutor').val(data.persona.nombre_tutor);
+                    $('#telefono_tutor').val(data.persona.celular_tutor);
+                    $('#nombre_esposo').val(data.persona.nombre_pareja);
+                    $('#telefono_esposo').val(data.persona.celular_pareja);
+                    // nit
+                    // razon_social_cliente
+
+                }
+            }
+        });
+    });
+    
+    
+
     var room = 1;
     var cantidad = 1;
     function education_fields() {
@@ -446,8 +485,8 @@
                                     </label>\
                                     <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="carrera_' + room + '" name="carrera_' + room + '">\
                                         <option value="">Seleccionar</option>\
-                                        @foreach($carreras as $carre)\
-                                        <option value="{{ $carre->id }}">{{ $carre->nombre }}</option>\
+                                        @foreach($carreras as $carrera)\
+                                        <option value="{{ $carrera->id }}">{{ $carrera->nombre }}</option>\
                                         @endforeach\
                                     </select>\
                                 </div>\
@@ -461,8 +500,8 @@
                                     </label>\
                                     <select class="form-control custom-select" data-placeholder="Choose a Category" tabindex="1" id="turno_' + room + '" name="turno_' + room + '">\
                                         <option value="">Seleccionar</option>\
-                                        @foreach($turnos as $tur)\
-                                        <option value="{{ $tur->id }}">{{ $tur->descripcion }}</option>\
+                                        @foreach($turnos as $turno)\
+                                        <option value="{{ $turno->id }}">{{ $turno->descripcion }}</option>\
                                         @endforeach\
                                     </select>\
                                 </div>\
@@ -486,14 +525,14 @@
                             <div class="col-2">\
                                 <div class="form-group">\
                                     <label class="control-label">Gesti&oacute;n</label>\
-                                    <input type="text" class="form-control" id="gestion_' + room + '" name="gestion_' + room + '" value="{{ $year }}">\
+                                    <input type="text" class="form-control" id="gestion_' + room + '" name="gestion_' + room + '" value="{{ $anio_actual }}">\
                                 </div>\
                             </div>\
                             <input type="text" hidden name="numero[]" id="numero" value="' + room + '">\
                             <div class="col-2">\
                                 <div class="form-group">\
-                                    <label class="control-label"></label>\
-                                    <button class="btn btn-danger" type="button" onclick="remove_education_fields(' + room + ');"> <i class="fa fa-minus"></i>\
+                                    <label class="control-label"></label><br>\
+                                    <button class="btn btn-danger" type="button" title="Retirar carrera" onclick="remove_education_fields(' + room + ');"> <i class="fa fa-minus"></i>\
                                     </button>\
                                 </div>\
                             </div>';
@@ -509,64 +548,19 @@
         $('#cantidad').val(cantidad);
     }
 
-</script>
+    
 
-<script>
-    $('#carnet').on('change', function(e){
-            var carnet = e.target.value;
-            $.ajax({
-            type:'GET',
-            url:"{{ url('Inscripcion/busca_ci') }}",
-            data: {
-                ci : carnet
-            },
-            success:function(data){
-                if (data.mensaje == 'si') {
-                    $('#persona_id').val(data.persona.id);
-                    $('#expedido').val(data.persona.expedido);
-                    $('#apellido_paterno').val(data.persona.apellido_paterno);
-                    $('#apellido_materno').val(data.persona.apellido_materno);
-                    $('#nombres').val(data.persona.nombres);
-                    $('#fecha_nacimiento').val(data.persona.fecha_nacimiento);
-                    $('#email').val(data.persona.email);
-                    $('#direccion').val(data.persona.direccion);
-                    $('#telefono_celular').val(data.persona.telefono_celular);
-                    $('#sexo').val(data.persona.sexo);
-                    $('#trabaja').val(data.persona.trabaja);
-                    $('#empresa').val(data.persona.empresa);
-                    $('#direccion_empresa').val(data.persona.direccion_empresa);
-                    $('#telefono_empresa').val(data.persona.telefono_empresa);
-                    $('#fax').val(data.persona.fax);
-                    $('#email_empresa').val(data.persona.email_empresa);
-                    $('#nombre_padre').val(data.persona.nombre_padre);
-                    $('#celular_padre').val(data.persona.celular_padre);
-                    $('#nombre_madre').val(data.persona.nombre_madre);
-                    $('#celular_madre').val(data.persona.celular_madre);
-                    $('#nombre_tutor').val(data.persona.nombre_tutor);
-                    $('#telefono_tutor').val(data.persona.telefono_tutor);
-                    $('#nombre_esposo').val(data.persona.nombre_esposo);
-                    $('#telefono_esposo').val(data.persona.telefono_esposo);
-                }
-                
-            }
-        });
-           
+    // generamos los tabs
+    $('#tabsProductos div .btn').click(function () {
+        var t = $(this).attr('id');
+
+        if ($(this).hasClass('inactivo')) { //preguntamos si tiene la clase inactivo 
+            $('#tabsProductos div .btn').addClass('inactivo');
+            $(this).removeClass('inactivo');
+
+            $('.tabContenido').hide();
+            $('#' + t + 'C').fadeIn('slow');
+        }
     });
 </script>
-<script>
-// generamos los tabs
-$('#tabsProductos div .btn').click(function () {
-    var t = $(this).attr('id');
-
-    if ($(this).hasClass('inactivo')) { //preguntamos si tiene la clase inactivo 
-        $('#tabsProductos div .btn').addClass('inactivo');
-        $(this).removeClass('inactivo');
-
-        $('.tabContenido').hide();
-        $('#' + t + 'C').fadeIn('slow');
-    }
-});
-</script>
-
-
 @endsection

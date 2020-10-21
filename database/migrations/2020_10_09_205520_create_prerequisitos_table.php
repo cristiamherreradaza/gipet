@@ -22,6 +22,7 @@ class CreatePrerequisitosTable extends Migration
             $table->unsignedBigInteger('prerequisito_id')->nullable();
             $table->foreign('prerequisito_id')->references('id')->on('asignaturas');
             $table->string('sigla')->nullable();
+            $table->integer('anio_vigente')->nullable();
             $table->string('estado')->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();

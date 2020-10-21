@@ -36,6 +36,7 @@ class Persona extends Model
         'celular_tutor',
         'nombre_pareja',
         'celular_pareja',
+        'anio_vigente',
         'estado',
         'deleted_at',
     ];
