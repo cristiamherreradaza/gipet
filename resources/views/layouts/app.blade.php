@@ -370,12 +370,12 @@
                                 <!-- ============================================================== -->
                                 <!-- Search -->
                                 <!-- ============================================================== -->
-                                <li class="nav-item search-box d-none d-md-block">
+                                <!-- <li class="nav-item search-box d-none d-md-block">
                                     <form class="app-search mt-3 mr-2">
                                         <input type="text" class="form-control rounded-pill border-0" placeholder="Search for...">
                                         <a class="srh-btn"><i class="ti-search"></i></a>
                                     </form>
-                                </li>
+                                </li> -->
                                 <!-- ============================================================== -->
                                 <!-- User profile and search -->
                                 <!-- ============================================================== -->
@@ -417,7 +417,7 @@
                                 <!-- ============================================================== -->
                                 <!-- create new -->
                                 <!-- ============================================================== -->
-                                <li class="nav-item dropdown">
+                                <!-- <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button"
                                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="flag-icon flag-icon-us"></i>
@@ -429,7 +429,7 @@
                                         <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-es"></i> Spanish</a>
                                         <a class="dropdown-item" href="#"><i class="flag-icon flag-icon-de"></i> German</a>
                                     </div>
-                                </li>
+                                </li> -->
                             </ul>
                         </div>
                     </nav>
