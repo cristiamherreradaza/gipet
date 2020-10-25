@@ -18,6 +18,8 @@ class CreateInscripcionesTable extends Migration
             $table->integer('codigo_anterior')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
+            $table->unsignedBigInteger('resolucion_id')->nullable();
+            $table->foreign('resolucion_id')->references('id')->on('resoluciones');
             $table->unsignedBigInteger('carrera_id')->nullable();
             $table->foreign('carrera_id')->references('id')->on('carreras');
             $table->unsignedBigInteger('asignatura_id')->nullable();
@@ -31,6 +33,9 @@ class CreateInscripcionesTable extends Migration
             $table->integer('gestion')->nullable();
             $table->integer('anio_vigente')->nullable();
             $table->decimal('nota', 15, 2)->nullable();
+            $table->integer('nota_aprobacion')->nullable();
+            $table->string('troncal')->nullable();
+            $table->string('aprobo')->nullable();
             $table->string('estado')->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();

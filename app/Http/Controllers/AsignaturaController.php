@@ -30,6 +30,7 @@ class AsignaturaController extends Controller
         $asignatura->gestion = $request->gestion;
         $asignatura->sigla = $request->codigo_asignatura;
         $asignatura->nombre = $request->nombre_asignatura;
+        $asignatura->troncal = $request->troncal;
         $asignatura->ciclo = $request->ciclo;
         $asignatura->semestre = $request->semestre;
         $asignatura->carga_horaria_virtual = $request->carga_virtual;

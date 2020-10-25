@@ -18,6 +18,10 @@ class CreateNotasTable extends Migration
             $table->integer('codigo_anterior')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
+            $table->unsignedBigInteger('resolucion_id')->nullable();
+            $table->foreign('resolucion_id')->references('id')->on('resoluciones');
+            $table->unsignedBigInteger('inscripcion_id')->nullable();
+            $table->foreign('inscripcion_id')->references('id')->on('inscripciones');
             $table->unsignedBigInteger('docente_id')->nullable();
             $table->foreign('docente_id')->references('id')->on('users');
             $table->unsignedBigInteger('persona_id')->nullable();
@@ -39,6 +43,7 @@ class CreateNotasTable extends Migration
             $table->decimal('nota_examen_final', 15, 2)->nullable();
             $table->decimal('nota_total', 15, 2)->nullable();
             $table->decimal('segundo_turno', 15, 2)->nullable();
+            $table->integer('nota_aprobacion')->nullable();
             $table->string('validado')->nullable();
             $table->string('registrado')->nullable();
             $table->string('estado')->nullable();

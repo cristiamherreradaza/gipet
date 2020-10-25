@@ -47,6 +47,25 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-label">Resolucion Ministerial</label>
+                        <span class="text-danger">
+                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                        </span>
+                        <select name="resolucion_carrera_edicion" id="resolucion_carrera_edicion" class="form-control" required>
+                            @foreach($resoluciones as $resolucion)
+                                @if($resolucion->id == $carrera->resolucion_id)
+                                    <option value="{{ $resolucion->id }}" selected>{{ $resolucion->resolucion }}</option>
+                                @else
+                                    <option value="{{ $resolucion->id }}">{{ $resolucion->resolucion }}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="modal-footer">
             <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="actualizar_carrera()">ACTUALIZAR CARRERA</button>

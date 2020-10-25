@@ -23,6 +23,7 @@ class CreateAsignaturasTable extends Migration
             $table->integer('gestion')->nullable();
             $table->string('sigla')->nullable();    //codigo_asignatura
             $table->string('nombre')->nullable();    //nombre_asignatura
+            $table->string('troncal')->nullable();
             $table->string('ciclo')->nullable();
             $table->integer('semestre')->nullable();
             $table->integer('carga_horaria_virtual')->nullable();

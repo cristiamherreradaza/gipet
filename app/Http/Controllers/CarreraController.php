@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Carrera;
 use App\Asignatura;
+use App\Carrera;
+use App\Resolucione;
 use DataTables;
 
 class CarreraController extends Controller
@@ -19,12 +20,15 @@ class CarreraController extends Controller
     // Funcion que guarda una nueva carrera
     public function guardar(Request $request)
     {
+        $resolucion = Resolucione::find($request->resolucion_carrera);
         $carrera = new Carrera();
         $carrera->user_id = Auth::user()->id;
+        $carrera->resolucion_id = $resolucion->id;
         $carrera->nombre = $request->nombre_carrera;
         $carrera->nivel = $request->nivel_carrera;
         $carrera->duracion_anios = $request->duracion_carrera;
         $carrera->anio_vigente = $request->anio_vigente_carrera;
+        $carrera->nota_aprobacion = $resolucion->nota_aprobacion;
         $carrera->save();
         return redirect('Carrera/listado');
     }
@@ -32,17 +36,21 @@ class CarreraController extends Controller
     public function ajaxEditaCarrera(Request $request)
     {
         $carrera = Carrera::find($request->carrera_id);
-        return view('carrera.ajaxEditaCarrera')->with(compact('carrera'));
+        $resoluciones = Resolucione::get();
+        return view('carrera.ajaxEditaCarrera')->with(compact('carrera', 'resoluciones'));
     }
 
     public function actualizar(Request $request)
     {
         $carrera = Carrera::find($request->id_carrera_edicion);
+        $resolucion = Resolucione::find($request->resolucion_carrera_edicion);
         $carrera->user_id = Auth::user()->id;
+        $carrera->resolucion_id = $resolucion->id;
         $carrera->nombre = $request->nombre_carrera_edicion;
         $carrera->nivel = $request->nivel_carrera_edicion;
         $carrera->duracion_anios = $request->duracion_carrera_edicion;
         $carrera->anio_vigente = $request->anio_vigente_carrera_edicion;
+        $carrera->nota_aprobacion = $resolucion->nota_aprobacion;
         $carrera->save();
         return redirect('Carrera/listado');
     }
@@ -93,7 +101,8 @@ class CarreraController extends Controller
         $gestion = date('Y');
         $carreras = Carrera::where('anio_vigente', $gestion)
                         ->get();
-        return view('carrera.listado', compact('carreras', 'gestion'));
+        $resoluciones = Resolucione::get();
+        return view('carrera.listado', compact('carreras', 'gestion', 'resoluciones'));
     }
 
     // Funcion que captura la informacion de la carrera seleccionada y busca sus asignaturas

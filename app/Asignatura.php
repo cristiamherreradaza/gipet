@@ -15,6 +15,7 @@ class Asignatura extends Model
         'gestion',
         'sigla',
         'nombre',
+        'troncal',
         'ciclo',
         'semestre',
         'carga_horaria_virtual',

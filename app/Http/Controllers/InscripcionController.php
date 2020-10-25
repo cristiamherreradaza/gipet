@@ -36,57 +36,323 @@ class InscripcionController extends Controller
         return view('inscripcion.nuevo')->with(compact('carreras', 'turnos', 'anio_actual'));
     }
 
+    public function guardar(Request $request)
+    {
+        // Si existe el parametro $request->persona_id actualizamos, si no existe, creamos uno nuevo
+        if($request->persona_id){
+            $persona = Persona::find($request->persona_id);
+        }else{
+            $persona = new Persona();
+        }
+        $persona->user_id           = Auth::user()->id;
+        $persona->apellido_paterno  = $request->apellido_paterno;
+        $persona->apellido_materno  = $request->apellido_materno;
+        $persona->nombres           = $request->nombres;
+        $persona->cedula            = $request->carnet;
+        $persona->expedido          = $request->expedido;
+        $persona->fecha_nacimiento  = $request->fecha_nacimiento;
+        $persona->sexo              = $request->sexo;
+        $persona->direccion         = $request->direccion;
+        // numero_fijo
+        $persona->numero_celular    = $request->telefono_celular;
+        $persona->email             = $request->email;
+        $persona->trabaja           = $request->trabaja;
+        $persona->empresa           = $request->empresa;
+        $persona->direccion_empresa = $request->direccion_empresa;
+        $persona->numero_empresa    = $request->telefono_empresa;
+        // fax
+        $persona->email_empresa     = $request->email_empresa;
+        $persona->nombre_padre      = $request->nombre_padre;
+        $persona->celular_padre     = $request->celular_padre;
+        $persona->nombre_madre      = $request->nombre_madre;
+        $persona->celular_madre     = $request->celular_madre;
+        $persona->nombre_tutor      = $request->nombre_tutor;
+        $persona->celular_tutor     = $request->telefono_tutor;
+        $persona->nombre_pareja     = $request->nombre_esposo;
+        $persona->celular_pareja    = $request->telefono_esposo;
+        // nit
+        // razon_social_cliente
+        $persona->save();
+
+        // En la variable $request->numero, que es un array, se envia la cantidad de carreras inscritas
+        foreach ($request->numero as $registro) {
+            // Por cada carrera existente, se crean los valores para cada carrera
+            $datos_carrera = 'carrera_'.$registro;
+            $datos_turno = 'turno_'.$registro;
+            $datos_paralelo = 'paralelo_'.$registro;
+            $datos_gestion = 'gestion_'.$registro;
+            // Si la variable $request->$datos_carrera es diferente de 0, en $request->$datos_carrera esta la carrera_id enviada por interfaz
+            if ($request->$datos_carrera != 0) {
+                // Para inscribirlo a esa materia, tenemos que validar, que no este inscrito ya en esa carrera
+                $verificacion = Inscripcione::where('carrera_id', $request->$datos_carrera)
+                                            ->where('persona_id', $persona->id)
+                                            ->first();
+                // Si no existe un valor en verificacion es que el alumno no se encuentra en la carrera y se le puede inscribir
+                if(!$verificacion){
+                    // Tenemos que ver como se lleva a cabo la 1era gestion, si es por semestres o anual
+                    $info_primera_gestion = Asignatura::where('carrera_id', $request->$datos_carrera)
+                                                    ->where('gestion', 1)
+                                                    ->where('ciclo', 'Semestral')
+                                                    ->first();
+                    // Si existe valor en $info_primera_gestion entonces la gestion esta divida en semestres, caso contrario es anual
+                    if($info_primera_gestion){
+                        // Procedemos a la inscripcion de forma SEMESTRAL
+                        // Leeremos la curricula de la tabla Asignaturas y como es una nueva inscripcion capturamos las primeras asignaturas de la carrera
+                        $asignaturas_carrera = Asignatura::where('carrera_id', $request->$datos_carrera)
+                                                        ->where('anio_vigente', $request->$datos_gestion)
+                                                        ->where('gestion', 1)
+                                                        ->where('semestre', 1)
+                                                        ->get();
+                    }else{
+                        // Procedemos a la inscripcion de forma ANUAL
+                        // Leeremos la curricula de la tabla Asignaturas y como es una nueva inscripcion capturamos las primeras asignaturas de la carrera
+                        $asignaturas_carrera = Asignatura::where('carrera_id', $request->$datos_carrera)
+                                                        ->where('anio_vigente', $request->$datos_gestion)
+                                                        ->where('gestion', 1)
+                                                        ->get();
+                    }
+                    // Crearemos un array para guardar los id's que se inscribiran
+                    $array_inscripciones = array();
+                    // Por cada asignatura encontrada
+                    foreach($asignaturas_carrera as $asignatura){
+                        // Verificaremos que no exista un registro con estas variables
+                        $registro = Inscripcione::where('carrera_id', $asignatura->carrera_id)
+                                                ->where('asignatura_id', $asignatura->id)
+                                                ->where('turno_id', $request->$datos_turno)
+                                                ->where('persona_id', $persona->id)
+                                                //->where('nota', '>', 60)
+                                                ->first();
+                        if(!$registro){
+                            // Si no existe un registro con las mismas variables, procedemos a registrar en las tablas inscripciones y notas
+                            // Antes buscaremos la informacion de la carrera
+                            $informacion_carrera = Carrera::find($request->$datos_carrera);
+                            // Inscripcion en la tabla inscripciones
+                            $inscripcion = new Inscripcione();
+                            $inscripcion->user_id = Auth::user()->id;
+                            $inscripcion->resolucion_id = $informacion_carrera->resolucion_id;
+                            $inscripcion->carrera_id = $request->$datos_carrera;
+                            $inscripcion->asignatura_id = $asignatura->id;
+                            $inscripcion->turno_id = $request->$datos_turno;
+                            $inscripcion->persona_id = $persona->id;
+                            $inscripcion->paralelo = $request->$datos_paralelo;
+                            $inscripcion->semestre = $asignatura->semestre;
+                            $inscripcion->gestion = $asignatura->gestion;
+                            $inscripcion->anio_vigente = $request->$datos_gestion;
+                            $inscripcion->nota_aprobacion = $informacion_carrera->nota_aprobacion;
+                            $inscripcion->troncal = $asignatura->troncal;
+                            //$inscripcion->aprobo = 'Si', 'No', 'Cursando';
+                            $inscripcion->estado = 'Cursando';  // Cuando acaba semestre/gestion cambiar a Finalizado
+                            $inscripcion->save();
+                            // en un array capturar los id's de las inscripciones realizadas - PENDIENTE
+                            array_push($array_inscripciones, $inscripcion->id);
+                            // Buscaremos si existe un docente ya asignado a esta materia
+                            $docente = NotasPropuesta::where('asignatura_id', $asignatura->id)
+                                                    ->where('turno_id', $request->$datos_turno)
+                                                    ->where('paralelo', $request->$datos_paralelo)
+                                                    ->where('anio_vigente', $request->$datos_gestion)
+                                                    ->first();
+                            // Por cada materia inscrita, ingresamos 4 registros correspondientes a los 4 bimestres
+                            for($i=1; $i<=4; $i++){
+                                // Inscripcion en la tabla notas
+                                $nota = new Nota();
+                                $nota->user_id = Auth::user()->id;
+                                $nota->resolucion_id = $informacion_carrera->resolucion_id;
+                                $nota->inscripcion_id = $inscripcion->id;
+                                if($docente){
+                                    $nota->docente_id = $docente->docente_id;
+                                }
+                                $nota->persona_id = $persona->id;
+                                $nota->asignatura_id = $asignatura->id;
+                                $nota->turno_id = $request->$datos_turno;
+                                $nota->paralelo = $request->$datos_paralelo;
+                                $nota->anio_vigente = $request->$datos_gestion;
+                                $nota->trimestre = $i;
+                                $nota->fecha_registro = date('Y-m-d');
+                                $nota->nota_aprobacion = $informacion_carrera->nota_aprobacion;
+                                $nota->save();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // redirigir a kardex de alumno con las materias inscritas (ARRAY DE ID'S INSCRIPCIONES)
+        // redirigir a facturacion
+        // redirigir al listado de alumnos
+        //return redirect('Inscripcion/nuevo');
+        return redirect('Persona/listado');
+    }
+
     public function reinscripcion($id)
     {
         $estudiante = Persona::find($id);
         $turnos = Turno::get();
-        // Conseguir las materias que aprobó el estudiante
-        $aprobadas = Inscripcione::where('persona_id', $id)
-                                ->where('nota', '>=', 61)
-                                ->get();
-        $array_aprobadas = array();
-        foreach($aprobadas as $materia){
-            array_push($array_aprobadas, $materia->asignatura_id);
-        }
+        // Veremos en que carreras esta inscrito el estudiante, para sacar las notas de aprobacion de sus respectivas resoluciones
         // Conseguir las carreras en las que esta inscrito el estudiante
         $array_carreras = array();
+        // Creamos una variable array que almacenara los ids de las materias/inscripcion aprobadas y las que se cursan actualmente
+        // para mostrar las materias que tiene por tomar
+        $array_aprobadas = array();
+        // Creamos un array sobre el cual se guardaran todas las materias para tomar
+        $array_pendientes = array();
+        // Buscaremos las carreras en las que esta inscrito el Estudiante X
         $carreras_estudiante = Inscripcione::where('persona_id', $id)
                                             ->groupBy('carrera_id')
                                             ->select('carrera_id')
                                             ->get();
+        // Almacenaremos en $array_carreras, el id de las carreras en las que esta inscrito el estudiante
         foreach($carreras_estudiante as $carrera){
             array_push($array_carreras, $carrera->carrera_id);
         }
-        // Preguntamos se esta inscrito en una carrera
-        if(count($array_carreras)==1){
-            // Se encuentra inscrito en una sola carrera
-            // Sacaremos en que gestion se encuentra el alumno
+        // Ya que tenemos la(s) carrera(s) del estudiante, iteramos sobre esta para hallar todas sus materias aprobadas
+        // foreach($array_carreras as $carrera){
+        //     $informacion_carrera = Carrera::find($carrera);
+        //     // Conseguir las materias que aprobó el estudiante
+        //     $aprobadas = Inscripcione::where('persona_id', $id)
+        //                             ->where('carrera_id', $informacion_carrera->id)
+        //                             // ANALIZAR PARA CUANDO SE HAGA LA CONVALIDACION DE LA RESOLUCION MINISTERIAL, NOTA_APROBACION
+        //                             ->where('aprobo', 'Si')
+        //                             ->get();
+        //     foreach($aprobadas as $materia){
+        //         array_push($array_aprobadas, $materia->asignatura_id);
+        //     }
+        // }
+        // Tambien se conseguira las materias que esta cursando el estudiante actualmente
+        $cursando = Inscripcione::where('persona_id', $id)
+                                ->where('estado', 'Cursando')
+                                ->get();
+        // Y se almacenara en el mismo $array_aprobadas las carreras que este cursando actualmente
+        foreach($cursando as $materia){
+            array_push($array_aprobadas, $materia->asignatura_id);
+        }
+        
+        // Procedemos a la inscripcion, por cada carrera existente
+        foreach($array_carreras as $carrera){
+            // Sacamos la gestion maxima, gestion que tiene el estudiante con sus materias aprobadas
             $gestion = Inscripcione::where('persona_id', $id)
-                                    ->where('nota', '>=', 61)
+                                    ->where('carrera_id', $carrera)
+                                    ->where('aprobo', 'Si')
                                     ->max('gestion');
-            // Veremos si esa gestion esta dividida en semestres o no
-            
-            // Haremos la busqueda de esas asignaturas pendientes en esa gestion
-            $pendientes = Asignatura::where('carrera_id', $array_carreras[0])
-                                    ->where('gestion', $gestion)
-                                    ->whereNotIn('id', $array_aprobadas)
-                                    ->get();
-            // Contaremos la cantidad que tiene para tomar
-            $cantidad = count($pendientes);
-            // si la cantidad es 0, significa que ya aprobo todas las materias de esa gestion
-            if($cantidad == 0){
-                //dd('no tiene materias pendientes en esa gestion');
-                // procedemos a subirle una gestion y hacer una nueva busqueda de pendientes
-                $gestion = $gestion + 1;
-                $pendientes = Asignatura::where('carrera_id', $array_carreras[0])
+            // Si no hubiera aprobado nada, por defecto estara en gestion 1
+            if(!$gestion){
+                $gestion = 1;
+            }
+            // Tenemos que ver como se lleva a cabo la gestion X, si es por semestres o anual
+            $info_gestion_x = Asignatura::where('carrera_id', $carrera)
+                                        ->where('gestion', $gestion)
+                                        ->where('ciclo', 'Semestral')
+                                        ->first();
+            // Si existe valor en $info_gestion_x entonces la gestion esta divida en semestres, caso contrario es anual
+            if($info_gestion_x){
+                // Es semestral, debemos ver en que semestre se encuentra si es 1 o 2
+                $semestre = Inscripcione::where('persona_id', $id)
+                                        ->where('carrera_id', $carrera)
+                                        ->where('gestion', $gestion)
+                                        ->where('aprobo', 'Si')
+                                        ->max('semestre');
+                // Si no hubiera aprobado nada, por defecto estara en semestre 1
+                if(!$semestre){
+                    $semestre = 1;
+                }
+                // Para enviar las materias que tiene para tomar, debemos verificar que sus troncales 
+                // de ese semestre y esa gestion, esten como aprobadas
+                $materias_aprobadas_carrera = Inscripcione::where('carrera_id', $carrera)
+                                                            ->where('persona_id', $id)
+                                                            ->where('gestion', $gestion)
+                                                            ->where('semestre', $semestre)
+                                                            ->where('aprobo', 'Si')
+                                                            ->get();
+                foreach($materias_aprobadas_carrera as $materia){
+                    array_push($array_aprobadas, $materia->asignatura_id);
+                }
+                // Haremos la busqueda de esas asignaturas pendientes en ese semestre
+                $pendientes = Asignatura::where('carrera_id', $carrera)
+                                        ->where('gestion', $gestion)
+                                        ->where('semestre', $semestre)
+                                        ->whereNotIn('id', $array_aprobadas)
+                                        ->get();
+                // Contaremos la cantidad que tiene para tomar
+                $cantidad = count($pendientes);
+                // Si la cantidad es = 0, si no tiene ninguna materia pendiente de ese semestre/gestion
+                if($cantidad == 0){
+                    // Si todas las que aprobo pertenecen a primer semestre
+                    if($semestre == 1){
+                        // Desplegara las materias que corresponden a segundo semestre
+                        // Subiremos un semestre y hacer una nueva busqueda de pendientes
+                        $semestre = $semestre + 1;
+                        $pendientes = Asignatura::where('carrera_id', $carrera)
+                                                ->where('gestion', $gestion)
+                                                ->where('semestre', $semestre)
+                                                ->whereNotIn('id', $array_aprobadas)
+                                                ->get();
+                    }else{
+                        // El semestre es 2, entonces desplegara las materias que pertenecen a la siguiente gestion
+                        // y volvera a evaluar si la gestion es semestral o anual
+                        // Antes procedemos a subirle una gestion y hacer una nueva busqueda de pendientes
+                        $gestion = $gestion + 1;
+                        // y ver si esta gestione esta dividida en semestres o es anual
+                        $info_gestion_x = Asignatura::where('carrera_id', $carrera)
+                                                    ->where('gestion', $gestion)
+                                                    ->where('ciclo', 'Semestral')
+                                                    ->first();
+                        if($info_gestion_x){
+                            // es semestral
+                            $pendientes = Asignatura::where('carrera_id', $carrera)
+                                                    ->where('gestion', $gestion)
+                                                    ->where('semestre', 1)      // debemos sacar el maximo de semestre
+                                                    ->whereNotIn('id', $array_aprobadas)
+                                                    ->get();
+                        }else{
+                            // es anual
+                            $pendientes = Asignatura::where('carrera_id', $carrera)
+                                                    ->where('gestion', $gestion)
+                                                    ->whereNotIn('id', $array_aprobadas)
+                                                    ->get();
+                        }
+                    }
+                }
+                // AQUI ACUMULAR PENDIENTES EN UN ARRAY_PENDIENTE
+                foreach($pendientes as $pendiente){
+                    array_push($array_pendientes, $pendiente->id);
+                }
+            }else{
+                // Es Anual, procedemos a ver que materias de esa gestion tiene aprobadas y si estuviera cursando
+                $materias_aprobadas_carrera = Inscripcione::where('carrera_id', $carrera)
+                                                        ->where('persona_id', $id)
+                                                        ->where('gestion', $gestion)
+                                                        ->where('aprobo', 'Si')
+                                                        ->get();
+                // Adicionaremos en $array_aprobadas, las materias que tenga aprobadas de esa gestion
+                foreach($materias_aprobadas_carrera as $materia){
+                    array_push($array_aprobadas, $materia->asignatura_id);
+                }
+                // Haremos la busqueda de esas asignaturas pendientes en esa gestion
+                $pendientes = Asignatura::where('carrera_id', $carrera)
                                         ->where('gestion', $gestion)
                                         ->whereNotIn('id', $array_aprobadas)
                                         ->get();
+                // Contaremos la cantidad que tiene para tomar
+                $cantidad = count($pendientes);
+                if($cantidad == 0){
+                    // No tiene materias pendientes en esa gestion, por tanto se sube una gestion
+                    // y se busca todas las que tenga pendientes
+                    $gestion = $gestion + 1;
+                    $pendientes = Asignatura::where('carrera_id', $carrera)
+                                            ->where('gestion', $gestion)
+                                            ->whereNotIn('id', $array_aprobadas)
+                                            ->get();
+                }
+                // AQUI ACUMULAR PENDIENTES EN UN ARRAY_PENDIENTE
+                foreach($pendientes as $pendiente){
+                    array_push($array_pendientes, $pendiente->id);
+                }
             }
-        }else{
-            //dd('mas de una carrera');
         }
-        return view('inscripcion.reinscripcion0')->with(compact('estudiante', 'pendientes', 'turnos'));
+        // Finalmente en pendientes almacenaremos todas las asignaturas que se encontraron que deberian poder tomarse por el alumno
+        $pendientes = Asignatura::whereIn('id', $array_pendientes)
+                                ->orderBy('id')
+                                ->get();
+        return view('inscripcion.reinscripcion0')->with(compact('estudiante', 'pendientes', 'turnos')); // CAMBIAR NOMBRE DE VISTA, PRIMERO PRUEBAS
     }
 
     public function guarda_reinscripcion(Request $request)
@@ -275,115 +541,7 @@ class InscripcionController extends Controller
         return view('inscripcion.inscripcion', compact('carreras', 'turnos', 'year', 'asignaturas'));    
     }
 
-    public function guardar(Request $request)
-    {
-        // Si existe el parametro $request->persona_id actualizamos, si no existe, creamos uno nuevo
-        if($request->persona_id){
-            $persona = Persona::find($request->persona_id);
-        }else{
-            $persona = new Persona();
-        }
-        $persona->user_id           = Auth::user()->id;
-        $persona->apellido_paterno  = $request->apellido_paterno;
-        $persona->apellido_materno  = $request->apellido_materno;
-        $persona->nombres           = $request->nombres;
-        $persona->cedula            = $request->carnet;
-        $persona->expedido          = $request->expedido;
-        $persona->fecha_nacimiento  = $request->fecha_nacimiento;
-        $persona->sexo              = $request->sexo;
-        $persona->direccion         = $request->direccion;
-        // numero_fijo
-        $persona->numero_celular    = $request->telefono_celular;
-        $persona->email             = $request->email;
-        $persona->trabaja           = $request->trabaja;
-        $persona->empresa           = $request->empresa;
-        $persona->direccion_empresa = $request->direccion_empresa;
-        $persona->numero_empresa    = $request->telefono_empresa;
-        // fax
-        $persona->email_empresa     = $request->email_empresa;
-        $persona->nombre_padre      = $request->nombre_padre;
-        $persona->celular_padre     = $request->celular_padre;
-        $persona->nombre_madre      = $request->nombre_madre;
-        $persona->celular_madre     = $request->celular_madre;
-        $persona->nombre_tutor      = $request->nombre_tutor;
-        $persona->celular_tutor     = $request->telefono_tutor;
-        $persona->nombre_pareja     = $request->nombre_esposo;
-        $persona->celular_pareja    = $request->telefono_esposo;
-        // nit
-        // razon_social_cliente
-        $persona->save();
 
-        // En la variable $request->numero, que es un array, se envia la cantidad de carreras inscritas
-        foreach ($request->numero as $registro) {
-            // Por cada carrera existente, se crean los valores para cada carrera
-            $datos_carrera = 'carrera_'.$registro;
-            $datos_turno = 'turno_'.$registro;
-            $datos_paralelo = 'paralelo_'.$registro;
-            $datos_gestion = 'gestion_'.$registro;
-            // Si la variable $request->$datos_carrera es diferente de 0
-            if ($request->$datos_carrera != 0) {
-                // Leeremos la curricula de la tabla Asignaturas y como es una nueva inscripcion capturamos las primeras asignaturas de la carrera
-                $asignaturas_carrera = Asignatura::where('carrera_id', $request->$datos_carrera)
-                                                ->where('anio_vigente', $request->$datos_gestion)
-                                                ->where('gestion', 1)
-                                                ->where('semestre', 1)
-                                                ->get();
-                // Por cada asignatura encontrada
-                foreach($asignaturas_carrera as $asignatura){
-                    // Verificaremos que no exista un registro con estas variables
-                    $registro = Inscripcione::where('carrera_id', $asignatura->carrera_id)
-                                            ->where('asignatura_id', $asignatura->id)
-                                            ->where('turno_id', $request->$datos_turno)
-                                            ->where('persona_id', $persona->id)
-                                            //->where('nota', '>', 60)
-                                            ->first();
-                    if(!$registro){
-                        // Si no existe un registro con las mismas variables, procedemos a registrar en las tablas inscripciones y notas
-                        // Inscripcion en la tabla inscripciones
-                        $inscripcion = new Inscripcione();
-                        $inscripcion->user_id = Auth::user()->id;
-                        $inscripcion->carrera_id = $asignatura->carrera_id;
-                        $inscripcion->asignatura_id = $asignatura->id;
-                        $inscripcion->turno_id = $request->$datos_turno;
-                        $inscripcion->persona_id = $persona->id;
-                        $inscripcion->paralelo = $request->$datos_paralelo;
-                        $inscripcion->semestre = $asignatura->semestre;
-                        $inscripcion->gestion = $asignatura->gestion;
-                        $inscripcion->anio_vigente = $request->$datos_gestion;
-                        $inscripcion->save();
-                        // Buscaremos si existe un docente ya asignado a esta materia
-                        $docente = NotasPropuesta::where('asignatura_id', $asignatura->id)
-                                                ->where('turno_id', $request->$datos_turno)
-                                                ->where('paralelo', $request->$datos_paralelo)
-                                                ->where('anio_vigente', $request->$datos_gestion)
-                                                ->first();
-                        // Por cada materia inscrita, ingresamos 4 registros correspondientes a los 4 bimestres
-                        for($i=1; $i<=4; $i++){
-                            // Inscripcion en la tabla notas
-                            $nota = new Nota();
-                            $nota->user_id = Auth::user()->id;
-                            if($docente){
-                                $nota->docente_id = $docente->docente_id;
-                            }
-                            $nota->persona_id = $persona->id;
-                            $nota->asignatura_id = $asignatura->id;
-                            $nota->turno_id = $request->$datos_turno;
-                            $nota->paralelo = $request->$datos_paralelo;
-                            $nota->anio_vigente = $request->$datos_gestion;
-                            $nota->trimestre = $i;
-                            $nota->fecha_registro = date('Y-m-d');
-                            $nota->save();
-                        }
-                    }
-                }
-            }
-        }
-        // redirigir a kardex de alumno
-        // redirigir a facturacion
-        // redirigir al listado de alumnos
-        //return redirect('Inscripcion/nuevo');
-        return redirect('Persona/listado');
-    }
     
     /*
     public function guardar(Request $request)

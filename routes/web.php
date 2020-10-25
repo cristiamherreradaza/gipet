@@ -194,7 +194,10 @@ Route::get('Servicio/ajax_verifica_codigo_asignatura', 'ServicioController@ajax_
 Route::get('Servicio/ajax_verifica_nombre_asignatura', 'ServicioController@ajax_verifica_nombre_asignatura');
 
 
-
+Route::get('Resolucion/listado', 'ResolucionController@listado');
+Route::post('Resolucion/guardar', 'ResolucionController@guardar');
+Route::post('Resolucion/actualizar', 'ResolucionController@actualizar');
+Route::get('Resolucion/eliminar/{id}', 'ResolucionController@eliminar');
 
 Route::get('Turno/listado', 'TurnoController@listado');
 Route::post('Turno/guardar', 'TurnoController@guardar');
@@ -211,6 +214,12 @@ Route::post('Perfil/guardar', 'PerfilController@guardar');
 Route::get('Perfil/ajaxListadoMenu', 'PerfilController@ajaxListadoMenu');
 Route::post('Perfil/actualizar', 'PerfilController@actualizar');
 Route::get('Perfil/eliminar/{id}', 'PerfilController@eliminar');
+
+Route::get('Predefinida/listado', 'PredefinidaController@listado');
+Route::post('Predefinida/guardar', 'PredefinidaController@guardar');
+Route::post('Predefinida/actualizar', 'PredefinidaController@actualizar');
+Route::get('Predefinida/eliminar/{id}', 'PredefinidaController@eliminar');
+Route::get('Predefinida/cambiar/{id}', 'PredefinidaController@cambiar');
 
 //DETALLE DEL ESTUDIANTE
 Route::get('Kardex/detalle_estudiante/{persona_id}', 'KardexController@detalle_estudiante');

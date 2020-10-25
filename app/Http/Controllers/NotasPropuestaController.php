@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\NotasPropuesta;
+use App\Predefinida;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\NotasPropuestasExport;
 use App\Imports\NotasPropuestasImport;

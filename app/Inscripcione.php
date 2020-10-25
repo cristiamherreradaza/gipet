@@ -11,6 +11,7 @@ class Inscripcione extends Model
     protected $fillable = [
         'codigo_anterior',
         'user_id',
+        'resolucion_id',
         'carrera_id',
         'asignatura_id',
         'turno_id',
@@ -20,6 +21,9 @@ class Inscripcione extends Model
         'gestion',
         'anio_vigente',
         'nota',
+        'nota_aprobacion',
+        'troncal',
+        'aprobo',
         'estado',
         'deleted_at',
     ];
@@ -27,6 +31,11 @@ class Inscripcione extends Model
     public function user()
     {
         return $this->belongsTo('App\User', 'user_id');
+    }
+
+    public function resolucion()
+    {
+        return $this->belongsTo('App\Resolucione', 'resolucion_id');
     }
 
     public function carrera()

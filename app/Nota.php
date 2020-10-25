@@ -11,6 +11,8 @@ class Nota extends Model
     protected $fillable = [
         'codigo_anterior',
         'user_id',
+        'resolucion_id',
+        'inscripcion_id',
         'docente_id',
         'persona_id',
         'asignatura_id',
@@ -28,6 +30,7 @@ class Nota extends Model
         'nota_examen_final',
         'nota_total',
         'segundo_turno',
+        'nota_aprobacion',
         'validado',
         'registrado',
         'estado',
@@ -37,6 +40,11 @@ class Nota extends Model
     public function user()
     {
         return $this->belongsTo('App\User', 'user_id');
+    }
+
+    public function inscripcion()
+    {
+        return $this->belongsTo('App\Inscripcione', 'inscripcion_id');
     }
 
     public function docente()

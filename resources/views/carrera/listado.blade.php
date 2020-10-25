@@ -109,6 +109,21 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Resolucion Ministerial</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <select name="resolucion_carrera" id="resolucion_carrera" class="form-control" required>
+                                    @foreach($resoluciones as $resolucion)
+                                        <option value="{{ $resolucion->id }}">{{ $resolucion->resolucion }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar_carrera()">GUARDA CARRERA</button>
@@ -119,20 +134,20 @@
 </div>
 <!-- fin modal nueva carrera -->
 
-<!-- inicio modal editar perfil -->
+<!-- inicio modal editar carrera -->
 <div id="editar_carrera" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" id="editaCarreraAjax">
         
     </div>
 </div>
-<!-- fin modal editar perfil -->
+<!-- fin modal editar carrera -->
 
 <!-- inicio modal asignaturas -->
 <div id="modal_asignaturas" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">REGISTRAR ASIGNATURA</h4>
+                    <h4 class="modal-title" id="myModalLabel">ASIGNATURA</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
@@ -233,6 +248,17 @@
                                     <select name="semestre" id="semestre" class="form-control">
                                         <option value="1" selected>1</option>
                                         <option value="2">2</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label">Troncal</label>
+                                    <select name="troncal" id="troncal" class="form-control">
+                                        <option value="Si" selected>Si</option>
+                                        <option value="No">No</option>
                                     </select>
                                 </div>
                             </div>
@@ -377,6 +403,7 @@
         teorico = $("#teorico").val();
         practico = $("#practico").val();
         semestre = $("#semestre").val();
+        troncal = $("#troncal").val();
         // Utilizamos Ajax
         $.ajax({
             url: "{{ url('Asignatura/guarda') }}",
@@ -393,7 +420,8 @@
                 carga_virtual: carga_virtual,
                 teorico: teorico,
                 practico: practico,
-                semestre: semestre
+                semestre: semestre,
+                troncal: troncal
                 },
             cache: false,
             type: 'post',

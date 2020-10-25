@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Validator;
 use DataTables;
 use App\User;
+use App\Predefinida;
 use App\Turno;
 use App\Asignatura;
 use App\Perfile;
@@ -229,16 +230,36 @@ class UserController extends Controller
             // Existe un registro y cambia la variable a duplicado
             $duplicado = 'Si';
         }else{
-            // No existe, entonces crear un registro
-            $asignatura = new NotasPropuesta();
-            $asignatura->user_id = Auth::user()->id;
-            $asignatura->asignatura_id = $request->asignatura_id;
-            $asignatura->docente_id = $request->user_id;
-            $asignatura->paralelo = $request->paralelo;
-            $asignatura->turno_id = $request->turno_id;
-            $asignatura->anio_vigente = $request->anio_vigente;
-            $asignatura->save();
-
+            // No existe, entonces crear un registro, previo verificaremos si se establecieron notas predefinidas
+            $predefinida = Predefinida::where('activo', 'Si')->first();
+            // Evaluaremos si encontro un registro que este activo
+            if($predefinida){
+                // Existe un registro, entonces colocar en la nota propuesta, los valores de predefinida
+                $asignatura = new NotasPropuesta();
+                $asignatura->user_id = Auth::user()->id;
+                $asignatura->asignatura_id = $request->asignatura_id;
+                $asignatura->docente_id = $request->user_id;
+                $asignatura->paralelo = $request->paralelo;
+                $asignatura->turno_id = $request->turno_id;
+                $asignatura->anio_vigente = $request->anio_vigente;
+                $asignatura->fecha = date('Y-m-d');
+                $asignatura->nota_asistencia = $predefinida->nota_asistencia;
+                $asignatura->nota_practicas = $predefinida->nota_practicas;
+                $asignatura->nota_puntos_ganados = $predefinida->nota_puntos_ganados;
+                $asignatura->nota_primer_parcial = $predefinida->nota_primer_parcial;
+                $asignatura->nota_examen_final = $predefinida->nota_examen_final;
+                $asignatura->save();
+            }else{
+                // No existe, entonces crear registro sin valores predefinidos
+                $asignatura = new NotasPropuesta();
+                $asignatura->user_id = Auth::user()->id;
+                $asignatura->asignatura_id = $request->asignatura_id;
+                $asignatura->docente_id = $request->user_id;
+                $asignatura->paralelo = $request->paralelo;
+                $asignatura->turno_id = $request->turno_id;
+                $asignatura->anio_vigente = $request->anio_vigente;
+                $asignatura->save();
+            }
             // Si se hubieran registrado alumnos en esta materia, asignarles al docente en la tabla notas
             $notas = Nota::where('asignatura_id', $request->asignatura_id)
                         ->where('turno_id', $request->turno_id)
