@@ -1,254 +1,388 @@
 @extends('layouts.app')
 
+@section('metadatos')
+<meta name="csrf-token" content="{{ csrf_token() }}" />
+@endsection
+
 @section('css')
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/libs/select2/dist/css/select2.min.css') }}">
+<style>
+
+    /* these styles are for the demo, but are not required for the plugin */
+    .zoom {
+        display: inline-block;
+        position: relative;
+        cursor: zoom-in;
+    }
+
+    /* magnifying glass icon */
+    .zoom:after {
+        content: '';
+        display: block;
+        width: 33px;
+        height: 33px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: url(icon.png);
+    }
+
+    .zoom img {
+        display: block;
+    }
+
+    .zoom img::selection {
+        background-color: transparent;
+    }
+
+</style>
 @endsection
 
 @section('content')
-
-<!--
-<div class="page-breadcrumb">
+<div id="divmsg" style="display:none" class="alert alert-primary" role="alert"></div>
+<!-- Formulario Informacion Personal de Estudiante -->
+<form action="{{ url('Persona/actualizar') }}" method="POST">
+    @csrf
+    <div class="row" id="tabsEstudiante">
+        <div class="col-md-4">
+            <button type="button" id="tab1" class="btn btn-block btn-info activo">DATOS PERSONALES</button>
+        </div>
+        <div class="col-md-4">
+            <button type="button" id="tab2" class="btn btn-block btn-info inactivo">DATOS PROFESIONALES</button>
+        </div>
+        <div class="col-md-4">
+            <button type="button" id="tab3" class="btn btn-block btn-info inactivo">REFERENCIA PERSONAL</button>
+        </div>
+    </div>
     <div class="row">
-        <div class="col-md-12 align-self-center">
-            <h1 class="page-title">Kardex de Estudiante</h1>
-            <div class="d-flex align-items-center">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb mt-2">
-                        <li class="breadcrumb-item"><a href="{{ url('home') }}">INICIO</a></li>
-                        <li class="breadcrumb-item active" aria-current="page"><a href="{{ url('Persona/listado') }}">ESTUDIANTES</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">{{ strtoupper($estudiante->nombres) }} {{ strtoupper($estudiante->apellido_paterno) }} {{ strtoupper($estudiante->apellido_materno) }}</li>
-                    </ol>
-                </nav>
+        <div class="col-md-12 tabContenido" id="tab1C">
+            <div class="card border-info">
+                <div class="card-body">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Cedula de Identidad 
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                    </label>
+                                    <input type="text" class="form-control" name="carnet" id="carnet" value="{{ $estudiante->cedula }}" required>
+                                </div>
+                            </div>
+                            <input type="text" class="form-control" hidden name="persona_id" id="persona_id" value="{{ $estudiante->id }}">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Expedido 
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                    </label>
+                                    <select name="expedido" id="expedido" class="form-control">
+                                        <option value="La Paz" {{ $estudiante->expedido=='La Paz' ? 'selected' : '' }}>La Paz</option>
+                                        <option value="Cochabamba" {{ $estudiante->expedido=='Cochabamba' ? 'selected' : '' }}>Cochabamba</option>
+                                        <option value="Santa Cruz" {{ $estudiante->expedido=='Santa Cruz' ? 'selected' : '' }}>Santa Cruz</option>
+                                        <option value="Oruro" {{ $estudiante->expedido=='Oruro' ? 'selected' : '' }}>Oruro</option>
+                                        <option value="Potosi" {{ $estudiante->expedido=='Potosi' ? 'selected' : '' }}>Potosi</option>
+                                        <option value="Tarija" {{ $estudiante->expedido=='Tarija' ? 'selected' : '' }}>Tarija</option>
+                                        <option value="Sucre" {{ $estudiante->expedido=='Sucre' ? 'selected' : '' }}>Sucre</option>
+                                        <option value="Beni" {{ $estudiante->expedido=='Beni' ? 'selected' : '' }}>Beni</option>
+                                        <option value="Pando" {{ $estudiante->expedido=='Pando' ? 'selected' : '' }}>Pando</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Apellido Paterno </label>
+                                    <input type="text" class="form-control" name="apellido_paterno" id="apellido_paterno" value="{{ $estudiante->apellido_paterno }}">
+                                </div>
+                            </div>
+
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Apellido Materno </label>
+                                    <input type="text" class="form-control" name="apellido_materno" id="apellido_materno" value="{{ $estudiante->apellido_materno }}">
+                                </div>
+                            </div>
+
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Nombres
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                    </label>
+                                    <input type="text" class="form-control" name="nombres" id="nombres" value="{{ $estudiante->nombres }}" required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Fecha Nacimiento
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                    </label>
+                                    <input type="date" class="form-control" name="fecha_nacimiento" id="fecha_nacimiento" value="{{ $estudiante->fecha_nacimiento }}" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Email </label>
+                                    <input type="text" class="form-control" name="email" id="email" value="{{ $estudiante->email }}">
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Direccion </label>
+                                    <input type="text" class="form-control" name="direccion" id="direccion" value="{{ $estudiante->direccion }}">
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Celular 
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                    </label>
+                                    <input type="text" class="form-control" name="telefono_celular" id="telefono_celular" value="{{ $estudiante->numero_celular }}" required>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Genero 
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                    </label>
+                                    <select name="sexo" id="sexo" class="form-control" required>
+                                        <option value="Masculino" {{ $estudiante->sexo=='Masculino' ? 'selected' : '' }}>Masculino</option>
+                                        <option value="Femenino" {{ $estudiante->sexo=='Femenino' ? 'selected' : '' }}>Femenino</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 tabContenido" id="tab2C" style="display: none;">
+            <div class="card border-info">
+                <div class="card-body">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Trabaja 
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                    </label>
+                                    <select class="form-control" id="trabaja" name="trabaja" required>
+                                        <option value="Si" {{ $estudiante->trabaja=='Si' ? 'selected' : '' }}>Si</option>
+                                        <option value="No" {{ $estudiante->trabaja=='No' ? 'selected' : '' }}>No</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Nombre de la Empresa</label>
+                                    <input type="text" id="empresa" class="form-control" name="empresa" value="{{ $estudiante->empresa }}">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Direcci&oacute;n de la Empresa</label>
+                                    <input type="text" id="direccion_empresa" class="form-control" name="direccion_empresa" value="{{ $estudiante->direccion_empresa }}">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">Telefono de la Empresa</label>
+                                    <input type="text" id="telefono_empresa" class="form-control" name="telefono_empresa" value="{{ $estudiante->numero_empresa }}">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">Fax</label>
+                                    <input type="text" id="fax" class="form-control" name="fax" value="{{ $estudiante->fax }}">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">Email Empresa</label>
+                                    <input type="email" id="email_empresa" class="form-control" name="email_empresa" value="{{ $estudiante->email_empresa }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 tabContenido" id="tab3C" style="display: none;">
+            <div class="card border-info">
+                <div class="card-body">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Nombre Padre </label>
+                                    <input type="text" class="form-control" name="nombre_padre" id="nombre_padre" value="{{ $estudiante->nombre_padre }}">
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Celular Padre </label>
+                                    <input type="text" class="form-control" name="celular_padre" id="celular_padre" value="{{ $estudiante->celular_padre }}">
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Nombre Madre </label>
+                                    <input type="text" class="form-control" name="nombre_madre" id="nombre_madre" value="{{ $estudiante->nombre_madre }}">
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Celular Madre </label>
+                                    <input type="text" class="form-control" name="celular_madre" id="celular_madre" value="{{ $estudiante->celular_madre }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Nombre Tutor </label>
+                                    <input type="text" class="form-control" name="nombre_tutor" id="nombre_tutor" value="{{ $estudiante->nombre_tutor }}">
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Celular Tutor </label>
+                                    <input type="text" class="form-control" name="telefono_tutor" id="telefono_tutor" value="{{ $estudiante->celular_tutor }}">
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Nombre Esposo </label>
+                                    <input type="text" class="form-control" name="nombre_esposo" id="nombre_esposo" value="{{ $estudiante->nombre_pareja }}">
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label>Celular Esposo </label>
+                                    <input type="text" class="form-control" name="telefono_esposo" id="telefono_esposo" value="{{ $estudiante->celular_pareja }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <button type="submit" class="btn waves-effect waves-light btn-block btn-info">Actualizar Perfil</button>
+        </div>
+        <div class="col-md-6">
+            <a href="{{ url('Persona/listado') }}" type="button" class="btn waves-effect waves-light btn-block btn-inverse">Volver</a>
+        </div>
+    </div>
+</form>
+<br>
+<!-- Botones de Informacion Academica de Estudiante -->
+<div class="card border-info">
+    <div class="card-header bg-info">
+        <div class="row">
+            <div class="col-md-3">
+                <button type="button" onclick="inscripciones()" class="btn btn-block btn-light text-info">INSCRIPCIONES</button>
+            </div>
+            <div class="col-md-3">
+                <button type="button" onclick="materias()" class="btn btn-block btn-light text-info">MATERIAS</button>
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="btn btn-block btn-light text-info">MENSUALIDADES</button>
+            </div>
+            <div class="col-md-3">
+                <button type="button" class="btn btn-block btn-light text-info">CARRERAS</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="detalleAcademicoAjax">
+                    <!-- <p>Elegir algo</p> -->
+                </div>
             </div>
         </div>
     </div>
 </div>
--->
 
-<div class="container-fluid mt-3">
-    <div class="row justify-content-md-center">
-        <div class="card col-md-12">
-            <div class="row">
-                <div class="col-md-4 text-center">
-                    @if($estudiante->foto)
-                        <img class="img-fluid align-center" src="{{ asset('assets/images/users/'.$estudiante->foto) }}">
-                    @else
-                        <img src="{{ asset('assets/images/users/unnamed.png') }}" class="img-fluid" style="height:250px; width:250px;">
-                    @endif
-                </div>
-                <div class="col-md-8">
-                    <div class="row px-4 py-3">
-                        <h3 class="mt-3"><strong class="text-info"><u>INFORMACI&Oacute;N PERSONAL</u></strong></h3>                        
-                    </div>
-                    <div class="row px-2">
-                        <div class="col-md-3 text-left">
-                            <h5><strong><span class="text-danger">Nombres:</strong></h5>
-                            <h5><strong><span class="text-danger">Apellido Paterno:</strong></h5>
-                            <h5><strong><span class="text-danger">Apellido Materno:</strong></h5>
-                            <h5><strong><span class="text-danger">Cedula Identidad:</strong></h5>
-                            <h5><strong><span class="text-danger">Numero:</strong></h5>
-                        </div>
-                        <div class="col-md-9 text-left">
-                            <h5><strong>{{ $estudiante->nombres }}</strong></h5>
-                            <h5><strong>{{ $estudiante->apellido_paterno }}</strong></h5>
-                            <h5><strong>{{ $estudiante->apellido_materno }}</strong></h5>
-                            <h5><strong>{{ $estudiante->cedula }}</strong></h5>
-                            <h5><strong>{{ $estudiante->numero_celular }}</strong></h5>
-                        </div>
-                    </div>
-                </div>
-            </div>            
-        </div>        
-    </div>
-    <div class="row justify-content-md-center">
-        <div class="card col-md-12">           
-                <!-- Tabs -->
-                <ul class="nav nav-pills custom-pills justify-content-md-center" id="pills-tab" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active text-primary" id="pills-setting-tab" data-toggle="pill" href="#stock" role="tab" aria-controls="pills-setting" aria-selected="true"><strong>MATERIAS APROBADAS</strong></a>
-                    </li>
-                    <!-- <li class="nav-item">
-                        <a class="nav-link  text-primary" id="pills-timeline-tab" data-toggle="pill" href="#general" role="tab" aria-controls="pills-timeline" aria-selected="false"><strong>HISTORIAL POR GESTION</strong></a>
-                    </li> -->
-                    <li class="nav-item">
-                        <a class="nav-link text-primary" id="pills-profile-tab" data-toggle="pill" href="#especificacion" role="tab" aria-controls="pills-profile" aria-selected="false"><strong>MAS INFORMACI&Oacute;N</strong></a>
-                    </li>                    
-                </ul>
-                <!-- Tabs -->
-                <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade show active" id="stock" role="tabpanel" aria-labelledby="pills-setting-tab">
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                    <table class="table">
-                                        @foreach($carreras as $id)
-                                        @php
-                                            $carrera = App\Carrera::find($id);
-                                        @endphp
-                                        <thead>
-                                            <tr>
-                                                <td colspan="7" class="text-info">
-                                                    <strong>CARRERA: {{ strtoupper($carrera->nombre) }}</strong>
-                                                </td>
-                                            </tr>
-                                        </thead>
-                                        <thead class="bg-primary text-white text-center">
-                                            <tr>
-                                                <th>Gestion</th>
-                                                <th>Sigla</th>
-                                                <th>Materia</th>
-                                                <th>1er Bimestre</th>
-                                                <th>2do Bimestre</th>
-                                                <th>3er Bimestre</th>
-                                                <th>4to Bimestre</th>
-                                                <th>Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="text-center">
-                                            @for($i = 1; $i <= $carrera->duracion_anios; $i++)
-                                                @php
-                                                    $inscripciones = App\Inscripcione::where('carrera_id', $carrera->id)
-                                                                                    ->where('persona_id', $estudiante->id)
-                                                                                    ->where('gestion', $i)
-                                                                                    ->where('nota', '>=', 61)
-                                                                                    ->get();
-                                                @endphp
-                                                @foreach($inscripciones as $inscripcion)
-                                                    <tr>
-                                                        <td>{{ $inscripcion->gestion }}</td>
-                                                        <td>{{ $inscripcion->asignatura->sigla }}</td>
-                                                        <td>{{ $inscripcion->asignatura->nombre }}</td>
-                                                        @php
-                                                            $notas = App\Nota::where('asignatura_id', $inscripcion->asignatura->id)
-                                                                            ->where('persona_id', $estudiante->id)
-                                                                            ->where('anio_vigente', $inscripcion->anio_vigente)
-                                                                            ->get();
-                                                        @endphp
-                                                        @foreach($notas as $nota)
-                                                            <td>{{ $nota->nota_total }}</td>    
-                                                        @endforeach
-                                                        <td>{{ $inscripcion->nota }}</td>
-                                                    </tr>
-                                                @endforeach
-                                            @endfor
-                                        </tbody>
-                                        @endforeach
-                                    </table>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- <div class="tab-pane fade" id="general" role="tabpanel" aria-labelledby="pills-timeline-tab">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-3 col-xs-6 b-r"><strong class="text-danger">CODIGO</strong>
-                                    <br>
-                                    <p>persona_</p>
-                                </div>
-                                <div class="col-md-3 col-xs-6 b-r"><strong class="text-danger">NOMBRE</strong>
-                                    <br>
-                                    <p>persona_</p>
-                                </div>
-                                <div class="col-md-3 col-xs-6 b-r"><strong class="text-danger">NOMBRE DE VENTA</strong>
-                                    <br>
-                                    <p>persona_</p>
-                                </div>
-                                <div class="col-md-3 col-xs-6"><strong class="text-danger">MODELO</strong>
-                                    <br>
-                                    <p>persona_</p>
-                                </div>
-                            </div>
-                            <hr>
-                            <p class="mt-4">
-                            persona_descriopcion
-                            </p>  
-                            <hr>
-                            <h3><strong class="text-danger">Enlace Referencia :</strong></h3>
-                                <a href="" target="_blank">persona_</a>
-                            <hr>
-                            <h3><strong class="text-danger">Enlace Video :</strong></h3>
-                                <a href="" target="_blank">persona_</a>
-                        </div>
-                    </div> -->
-                    <div class="tab-pane fade" id="especificacion" role="tabpanel" aria-labelledby="pills-profile-tab">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-3 col-xs-6 b-r"><strong class="text-danger">SEXO</strong>
-                                    <br>
-                                    <p>{{ $estudiante->sexo }}</p>
-                                </div>
-                                <div class="col-md-3 col-xs-6 b-r"><strong class="text-danger">FECHA NACIMIENTO</strong>
-                                    <br>
-                                    <p>{{ $estudiante->fecha_nacimiento }}</p>
-                                </div>
-                                <div class="col-md-3 col-xs-6 b-r"><strong class="text-danger">DIRECCION</strong>
-                                    <br>
-                                    <p>{{ $estudiante->direccion }}</p>
-                                </div>
-                                <div class="col-md-3 col-xs-6"><strong class="text-danger">EMAIL</strong>
-                                    <br>
-                                    <p>{{ $estudiante->email }}</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-3 col-xs-6 b-r"><strong class="text-danger">EMPRESA</strong>
-                                    <br>
-                                    <p>{{ $estudiante->empresa }}</p>
-                                </div>
-                                <div class="col-md-3 col-xs-6 b-r"><strong class="text-danger">DIRECCION EMPRESA</strong>
-                                    <br>
-                                    <p>{{ $estudiante->direccion_empresa }}</p>
-                                </div>
-                                <div class="col-md-3 col-xs-6 b-r"><strong class="text-danger">NUMERO EMPRESA</strong>
-                                    <br>
-                                    <p>{{ $estudiante->numero_empresa }}</p>
-                                </div>
-                                <div class="col-md-3 col-xs-6"><strong class="text-danger">EMAIL EMPRESA</strong>
-                                    <br>
-                                    <p>{{ $estudiante->email_empresa }}</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-3 col-xs-6 b-r"><strong class="text-danger">NOMBRE PADRE</strong>
-                                    <br>
-                                    <p>{{ $estudiante->nombre_padre }}</p>
-                                </div>
-                                <div class="col-md-3 col-xs-6 b-r"><strong class="text-danger">NUMERO PADRE</strong>
-                                    <br>
-                                    <p>{{ $estudiante->celular_padre }}</p>
-                                </div>
-                                <div class="col-md-3 col-xs-6 b-r"><strong class="text-danger">NOMBRE MADRE</strong>
-                                    <br>
-                                    <p>{{ $estudiante->nombre_madre }}</p>
-                                </div>
-                                <div class="col-md-3 col-xs-6"><strong class="text-danger">NUMERO MADRE</strong>
-                                    <br>
-                                    <p>{{ $estudiante->celular_madre }}</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-3 col-xs-6 b-r"><strong class="text-danger">NOMBRE TUTOR</strong>
-                                    <br>
-                                    <p>{{ $estudiante->nombre_tutor }}</p>
-                                </div>
-                                <div class="col-md-3 col-xs-6 b-r"><strong class="text-danger">NUMERO TUTOR</strong>
-                                    <br>
-                                    <p>{{ $estudiante->celular_tutor }}</p>
-                                </div>
-                                <div class="col-md-3 col-xs-6 b-r"><strong class="text-danger">NOMBRE PAREJA</strong>
-                                    <br>
-                                    <p>{{ $estudiante->nombre_pareja }}</p>
-                                </div>
-                                <div class="col-md-3 col-xs-6"><strong class="text-danger">NUMERO PAREJA</strong>
-                                    <br>
-                                    <p>{{ $estudiante->celular_pareja }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>                    
-                </div>
-        </div>
-    </div>
-</div>
-
+<br>
+<!-- Pizarra que refleja la Informacion Academica de Estudiante -->
 @stop
-@section('js')
 
+@section('js')
+<script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js') }}"></script>
+<script src="{{ asset('assets/libs/select2/dist/js/select2.min.js') }}"></script>
+<script src="{{ asset('dist/js/pages/forms/select2/select2.init.js') }}"></script>
+<script src="{{ asset('assets/libs/tinymce/tinymce.min.js') }}"></script>
+<script src="{{ asset('js/jquery.zoom.js') }}"></script>
+<script src="{{ asset('assets/libs/jquery.repeater/jquery.repeater.min.js') }}"></script>
+<script src="{{ asset('assets/extra-libs/jquery.repeater/repeater-init.js') }}"></script>
+<script>
+    // Funcion donde definimos cabecera donde estara el token y poder hacer nuestras operaciones de put,post...
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    // Tabs para Informacion Personal del Estudiante
+    $('#tabsEstudiante div .btn').click(function () {
+        var t = $(this).attr('id');
+        if ($(this).hasClass('inactivo')) { //preguntamos si tiene la clase inactivo 
+            $('#tabsEstudiante div .btn').addClass('inactivo');
+            $(this).removeClass('inactivo');
+
+            $('.tabContenido').hide();
+            $('#' + t + 'C').fadeIn('slow');
+        }
+    });
+
+    function inscripciones(){
+        persona_id = $('#persona_id').val();
+        $.ajax({
+            url: "{{ url('Persona/ajaxDetalleInscripciones') }}",
+            data: {
+                persona_id : persona_id
+                },
+            type: 'get',
+            success: function(data) {
+                $("#detalleAcademicoAjax").show('slow');
+                $("#detalleAcademicoAjax").html(data);
+            }
+        });
+    }
+
+    function materias(){
+        persona_id = $('#persona_id').val();
+        $.ajax({
+            url: "{{ url('Persona/ajaxDetalleMaterias') }}",
+            data: {
+                persona_id : persona_id
+                },
+            type: 'get',
+            success: function(data) {
+                $("#detalleAcademicoAjax").show('slow');
+                $("#detalleAcademicoAjax").html(data);
+            }
+        });
+    }
+    
+</script>
 @endsection

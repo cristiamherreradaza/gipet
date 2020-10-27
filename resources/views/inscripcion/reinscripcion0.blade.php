@@ -42,7 +42,7 @@
         @csrf
         <input type="hidden" name="persona_id" id="persona_id" value="{{ $estudiante->id }}">
         <div class="card-header bg-primary">
-            <h4 class="mb-0 text-white">DETALLE DE REINSCRIPCI&Oacute;N</h4>
+            <h4 class="mb-0 text-white">DETALLE DE REINSCRIPCI&Oacute;N - (Pendientes Gestion Actual)</h4>
         </div>
         <div class="card-body">
             <div class="row">

@@ -35,7 +35,7 @@ class NotasPropuesta extends Model
 
     public function docente()
     {
-        return $this->belongsTo('App\Docente', 'docente_id');
+        return $this->belongsTo('App\User', 'docente_id');
     }
 
     public function asignatura()

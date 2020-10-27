@@ -55,6 +55,39 @@ class PersonaController extends Controller
         // se guardo a la persona
     }
 
+    public function actualizar(Request $request)
+    {
+        $persona                    = Persona::find($request->persona_id);
+        $persona->user_id           = Auth::user()->id;
+        $persona->apellido_paterno  = $request->apellido_paterno;
+        $persona->apellido_materno  = $request->apellido_materno;
+        $persona->nombres           = $request->nombres;
+        $persona->cedula            = $request->carnet;
+        $persona->expedido          = $request->expedido;
+        $persona->fecha_nacimiento  = $request->fecha_nacimiento;
+        $persona->sexo              = $request->sexo;
+        $persona->direccion         = $request->direccion;
+        // numero_fijo
+        $persona->numero_celular    = $request->telefono_celular;
+        $persona->email             = $request->email;
+        $persona->trabaja           = $request->trabaja;
+        $persona->empresa           = $request->empresa;
+        $persona->direccion_empresa = $request->direccion_empresa;
+        $persona->numero_empresa    = $request->telefono_empresa;
+        // fax
+        $persona->email_empresa     = $request->email_empresa;
+        $persona->nombre_padre      = $request->nombre_padre;
+        $persona->celular_padre     = $request->celular_padre;
+        $persona->nombre_madre      = $request->nombre_madre;
+        $persona->celular_madre     = $request->celular_madre;
+        $persona->nombre_tutor      = $request->nombre_tutor;
+        $persona->celular_tutor     = $request->telefono_tutor;
+        $persona->nombre_pareja     = $request->nombre_esposo;
+        $persona->celular_pareja    = $request->telefono_esposo;
+        $persona->save();
+        return redirect('Persona/ver_detalle/'.$persona->id);
+    }
+
     public function listado()
     {
         return view('persona.listado');
@@ -67,10 +100,7 @@ class PersonaController extends Controller
         return Datatables::of($estudiantes)
             ->addColumn('action', function ($estudiantes) {
                 return '<button onclick="ver_persona('.$estudiantes->id.')"        type="button" class="btn btn-info"      title="Ver"><i class="fas fa-eye"></i></button>
-
                         <button onclick="reinscripcion(' .  $estudiantes->id . ')" type="button" class="btn btn-light" title="ReInscripcion"  ><i class="fas fa-address-card"></i></button>
-
-
                         <button onclick="estado(' .  $estudiantes->id . ')"        type="button" class="btn btn-danger"    title="Estado(Activo/Inactivo)" ><i class="fas fa-user"></i></button>';
             })
             ->make(true);
@@ -106,6 +136,61 @@ class PersonaController extends Controller
         // }
         
         return view('persona.ver_detalle')->with(compact('estudiante', 'carreras'));
+    }
+
+    public function ajaxDetalleInscripciones(Request $request)
+    {
+        $persona = Persona::find($request->persona_id);
+        // Buscaremos todas las materias en las que aprobo este como  'Si'
+        $aprobadas = Inscripcione::where('persona_id', $request->persona_id)
+                                ->where('aprobo', 'Si')
+                                ->get();
+        // Buscaremos todas las materias en las que su estado sea 'Cursando'
+        $cursando = Inscripcione::where('persona_id', $request->persona_id)
+                                ->where('estado', 'Cursando')
+                                ->get();
+        // Crearemos $array_carreras
+        $array_elegidas = array();
+        // Almacenaremos en $array_elegidas los id de la coleccion aprobadas
+        foreach($aprobadas as $aprobada){
+            array_push($array_elegidas, $aprobada->id);
+        }
+        // Almacenaremos en $array_elegidas los id de la coleccion cursando
+        foreach($cursando as $cursar){
+            array_push($array_elegidas, $cursar->id);
+        }
+        // Volveremos a juntar en una coleccion todas esta
+        $inscripciones = Inscripcione::whereIn('id', $array_elegidas)
+                                    ->get();
+
+        // Agruparemos por fechas de inscripcione
+        $inscripciones = Inscripcione::where('persona_id', $request->persona_id)
+                                    ->select('carrera_id', 'gestion', 'semestre', 'anio_vigente', 'estado')
+                                    ->groupBy('carrera_id', 'gestion', 'semestre', 'anio_vigente', 'estado')
+                                    ->get();
+        
+        // Posteriormente enviaremos esa coleccion a interfaz
+        return view('persona.ajaxDetalleInscripciones')->with(compact('inscripciones'));
+    }
+
+    public function ajaxDetalleMaterias(Request $request)
+    {
+        $persona = Persona::find($request->persona_id);
+        // Primero queremos saber en cuantas carreras esta inscrito
+        $carreras = Inscripcione::where('persona_id', $request->persona_id)
+                                ->groupBy('carrera_id')
+                                ->select('carrera_id')
+                                ->get();
+        // Crearemos $array_carreras
+        $array_carreras = array();
+        // Almacenaremos en este array los id de las carreras en las que esta registrado el estudiante (1,2,...)
+        foreach($carreras as $carrera){
+            array_push($array_carreras, $carrera->carrera_id);
+        }
+        // Despues tenemos que ver las gestiones/semestres que aprobo o esta cursando
+
+        // Posteriormente enviaremos eso a interfaz
+        return view('persona.ajaxDetalleMaterias')->with(compact('carreras', 'persona'));
     }
 
     /*
