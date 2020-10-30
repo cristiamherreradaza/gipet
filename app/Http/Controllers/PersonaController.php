@@ -137,6 +137,19 @@ class PersonaController extends Controller
         return view('persona.ver_detalle')->with(compact('estudiante', 'carreras'));
     }
 
+    public function ajaxDetalleHistorialAcademico(Request $request)
+    {
+        $persona = Persona::find($request->persona_id);
+        $carreras = Inscripcione::where('persona_id', $request->persona_id)
+                                ->groupBy('carrera_id')
+                                ->select('carrera_id')
+                                ->get();
+        $inscripciones = Inscripcione::where('persona_id', $request->persona_id)
+                                    ->orderBy('fecha_registro', 'asc')
+                                    ->get();
+        return view('persona.ajaxDetalleHistorialAcademico')->with(compact('persona', 'carreras', 'inscripciones'));
+    }
+
     public function ajaxDetalleInscripciones(Request $request)
     {
         $persona = Persona::find($request->persona_id);

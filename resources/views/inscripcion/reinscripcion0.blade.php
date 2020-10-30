@@ -116,10 +116,10 @@
             <div class="row">
                 <div class="col-md-6">
                     <!-- <button class="btn btn-info btn-block" type="submit" onclick="validaItems()"><span><i class="fa fa-print"></i> CONFIRMAR REINSCRIPCION </span></button> -->
-                    <button type="submit" id="botonSubmit" class="btn waves-effect waves-light btn-block btn-info" onclick="validaItems()">CONFIRMAR REINSCRIPCION</button>
+                    <button type="submit" id="botonSubmit" class="btn waves-effect waves-light btn-block btn-inverse" onclick="validaItems()">CONFIRMAR REINSCRIPCION</button>
                 </div>
                 <div class="col-md-6">
-                    <a href="{{ url('Persona/ver_detalle/'.$estudiante->id) }}" type="button" class="btn waves-effect waves-light btn-block btn-info">VOLVER</a>
+                    <a href="{{ url('Persona/ver_detalle/'.$estudiante->id) }}" type="button" class="btn waves-effect waves-light btn-block btn-inverse">VOLVER</a>
                 </div>
             </div>
         </div>

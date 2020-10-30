@@ -62,6 +62,7 @@ Route::get('persona/exportarexcel', 'PersonaController@exportarExcel')->name('pe
 Route::get('Persona/crear_persona', 'PersonaController@crear_persona');
 Route::post('Persona/guardar_nuevos', 'PersonaController@guardar_nuevos');
 Route::post('Persona/actualizar', 'PersonaController@actualizar');
+Route::get('Persona/ajaxDetalleHistorialAcademico', 'PersonaController@ajaxDetalleHistorialAcademico');
 Route::get('Persona/ajaxDetalleInscripciones', 'PersonaController@ajaxDetalleInscripciones');
 Route::get('Persona/ajaxDetalleMaterias', 'PersonaController@ajaxDetalleMaterias');
 

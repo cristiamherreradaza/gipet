@@ -300,17 +300,23 @@
 <div class="card border-info">
     <div class="card-header bg-info">
         <div class="row">
-            <div class="col-md-3">
-                <button type="button" onclick="inscripciones()" class="btn btn-block btn-light text-info">INSCRIPCIONES</button>
+            <div class="col-md-2">
+                <button type="button" onclick="historial_academico()" class="btn btn-block btn-light text-info">Historial Academico</button>
             </div>
-            <div class="col-md-3">
-                <button type="button" onclick="materias()" class="btn btn-block btn-light text-info">MATERIAS</button>
+            <div class="col-md-2">
+                <button type="button" onclick="inscripciones()" class="btn btn-block btn-light text-info">Inscripciones</button>
             </div>
-            <div class="col-md-3">
-                <button type="button" class="btn btn-block btn-light text-info">MENSUALIDADES</button>
+            <div class="col-md-2">
+                <button type="button" onclick="materias()" class="btn btn-block btn-light text-info">Materias</button>
             </div>
-            <div class="col-md-3">
-                <button type="button" class="btn btn-block btn-light text-info">CARRERAS</button>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-block btn-light text-info">Mensualidades</button>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-block btn-light text-info">Carreras</button>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-block btn-light text-info">Extras</button>
             </div>
         </div>
     </div>
@@ -357,6 +363,23 @@
         }
     });
 
+    // Funcion que se ejecuta al hacer clic en Historial Academico
+    function historial_academico(){
+        persona_id = $('#persona_id').val();
+        $.ajax({
+            url: "{{ url('Persona/ajaxDetalleHistorialAcademico') }}",
+            data: {
+                persona_id : persona_id
+                },
+            type: 'get',
+            success: function(data) {
+                $("#detalleAcademicoAjax").show('slow');
+                $("#detalleAcademicoAjax").html(data);
+            }
+        });
+    }
+
+    // Funcion que se ejecuta al hacer clic en Inscripciones
     function inscripciones(){
         persona_id = $('#persona_id').val();
         $.ajax({
@@ -372,6 +395,7 @@
         });
     }
 
+    // Funcion que se ejecuta al hacer clic en materias
     function materias(){
         persona_id = $('#persona_id').val();
         $.ajax({
