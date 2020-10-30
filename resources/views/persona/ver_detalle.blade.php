@@ -284,10 +284,13 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
-            <button type="submit" class="btn waves-effect waves-light btn-block btn-info">Actualizar Perfil</button>
+        <div class="col-md-4">
+            <button type="submit" class="btn waves-effect waves-light btn-block btn-inverse">Actualizar Perfil</button>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
+            <a href="{{ url('Inscripcion/reinscripcion/'.$estudiante->id) }}" type="button" class="btn waves-effect waves-light btn-block btn-inverse">Reinscribir</a>
+        </div>
+        <div class="col-md-4">
             <a href="{{ url('Persona/listado') }}" type="button" class="btn waves-effect waves-light btn-block btn-inverse">Volver</a>
         </div>
     </div>

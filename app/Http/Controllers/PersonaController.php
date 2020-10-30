@@ -100,7 +100,6 @@ class PersonaController extends Controller
         return Datatables::of($estudiantes)
             ->addColumn('action', function ($estudiantes) {
                 return '<button onclick="ver_persona('.$estudiantes->id.')"        type="button" class="btn btn-info"      title="Ver"><i class="fas fa-eye"></i></button>
-                        <button onclick="reinscripcion(' .  $estudiantes->id . ')" type="button" class="btn btn-light" title="ReInscripcion"  ><i class="fas fa-address-card"></i></button>
                         <button onclick="estado(' .  $estudiantes->id . ')"        type="button" class="btn btn-danger"    title="Estado(Activo/Inactivo)" ><i class="fas fa-user"></i></button>';
             })
             ->make(true);

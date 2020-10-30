@@ -32,6 +32,7 @@ class CreateInscripcionesTable extends Migration
             $table->integer('semestre')->nullable();
             $table->integer('gestion')->nullable();
             $table->integer('anio_vigente')->nullable();
+            $table->date('fecha_registro')->nullable();
             $table->decimal('nota', 15, 2)->nullable();
             $table->integer('nota_aprobacion')->nullable();
             $table->string('troncal')->nullable();

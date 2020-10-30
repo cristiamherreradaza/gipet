@@ -20,6 +20,7 @@ class Inscripcione extends Model
         'semestre',
         'gestion',
         'anio_vigente',
+        'fecha_registro',
         'nota',
         'nota_aprobacion',
         'troncal',
