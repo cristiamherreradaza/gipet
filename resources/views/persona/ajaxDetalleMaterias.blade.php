@@ -1,3 +1,4 @@
+<h1 class="text-center text-dark-info"><strong>Materias Actuales</strong></h1>
 @foreach($carreras as $carrera)
     @php
         $informacionCarrera = App\Carrera::find($carrera->carrera_id);
@@ -13,16 +14,14 @@
                 <tr>
                     <th>#</th>
                     <th>FECHA INSCRIPCION</th>
-                    <th>GESTION ACADEMICA</th>
-                    <th>SEMESTRE/A&Ntilde;O</th>
                     <th>SIGLA</th>
                     <th>ASIGNATURA</th>
-                    <th>REQUISITOS</th>
-                    <th>NOTA</th>
+                    <th>1ER BIMESTRE</th>
+                    <th>2DO BIMESTRE</th>
+                    <th>3ER BIMESTRE</th>
+                    <th>4TO BIMESTRE</th>
+                    <th>TOTAL</th>
                     <th>RECUPERATORIO</th>
-                    <th>OBSERVACIONES</th>
-                    <th># LIBRO</th>
-                    <th># FOLIO</th>
                 </tr>
             </thead>
             <tbody>
@@ -31,58 +30,34 @@
                         <tr>
                             <td>{{ $key }}</td>
                             <td>{{ $materia->fecha_registro }}</td>
-                            <td>{{ $materia->anio_vigente }}</td>
-                            <td>
-                                @switch($materia->gestion)
-                                    @case(1)
-                                        Primero
-                                        @break
-                                    @case(2)
-                                        Segundo
-                                        @break
-                                    @case(3)
-                                        Tercero
-                                        @break
-                                    @case(4)
-                                        Cuarto
-                                        @break
-                                    @case(5)
-                                        Quinto
-                                        @break
-                                @endswitch
-                            </td>
                             <td>{{ $materia->asignatura->sigla }}</td>
-                            <td>{{ $materia->asignatura->nombre }}</td>
-                            <td>
-                                @php
-                                    $prerequisito = App\Prerequisito::where('asignatura_id', $materia->asignatura_id)
-                                                                    ->first();
-                                @endphp
-                                @if($prerequisito->prerequisito_id)
-                                    {{ $prerequisito->prerequisito->sigla }}
+                            <td class="text-left">{{ $materia->asignatura->nombre }}</td>
+                            @php
+                                $notas = App\Nota::where('inscripcion_id', $materia->id)
+                                                ->get();
+                            @endphp
+                            @foreach($notas as $nota)
+                                @if($nota->trimestre == 1)
+                                    <td>{{ $nota->total ? $nota->total : 0 }}</td>
                                 @endif
-                            </td>
+                                @if($nota->trimestre == 2)
+                                    <td>{{ $nota->total ? $nota->total : 0 }}</td>
+                                @endif
+                                @if($nota->trimestre == 3)
+                                    <td>{{ $nota->total ? $nota->total : 0 }}</td>
+                                @endif
+                                @if($nota->trimestre == 4)
+                                    <td>{{ $nota->total ? $nota->total : 0 }}</td>
+                                @endif
+                            @endforeach
                             <td>{{ $materia->nota ? $materia->nota : '0' }}</td>
                             <td>
                                 @php
                                     $resultado = App\Nota::where('inscripcion_id', $materia->id)
                                                             ->first();
                                 @endphp
-                                {{ $resultado->segundo_turno }}
+                                {{ $resultado->segundo_turno ? $resultado->segundo_turno : '-' }}
                             </td>
-                            <td>
-                                @if($materia->aprobo == 'Si')
-                                    APROBADO
-                                @else
-                                    @if($materia->estado == 'Cursando')
-                                        CURSANDO
-                                    @else
-                                        REPROBADO
-                                    @endif
-                                @endif
-                            </td>
-                            <td>-</td>
-                            <td>-</td>
                         </tr>
                         @php
                             $key++
@@ -91,5 +66,5 @@
                 @endforeach
             </tbody>
         </table>
-</div>
+    </div>
 @endforeach

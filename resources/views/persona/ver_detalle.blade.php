@@ -304,7 +304,7 @@
                 <button type="button" onclick="historial_academico()" class="btn btn-block btn-light text-info">Historial Academico</button>
             </div>
             <div class="col-md-2">
-                <button type="button" onclick="inscripciones()" class="btn btn-block btn-light text-info">Inscripciones</button>
+                <button type="button" onclick="pensum()" class="btn btn-block btn-light text-info">Pensum</button>
             </div>
             <div class="col-md-2">
                 <button type="button" onclick="materias()" class="btn btn-block btn-light text-info">Materias Actuales</button>
@@ -382,11 +382,11 @@
         });
     }
 
-    // Funcion que se ejecuta al hacer clic en Inscripciones
-    function inscripciones(){
+    // Funcion que se ejecuta al hacer clic en pensum
+    function pensum(){
         persona_id = $('#persona_id').val();
         $.ajax({
-            url: "{{ url('Persona/ajaxDetalleInscripciones') }}",
+            url: "{{ url('Persona/ajaxDetallePensum') }}",
             data: {
                 persona_id : persona_id
                 },

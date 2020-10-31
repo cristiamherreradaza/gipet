@@ -303,6 +303,15 @@ class InscripcionController extends Controller
                             foreach($pendientes as $materia){
                                 array_push($array_materias, $materia->id);
                             }
+                            // Tambien debemos enviar las materias que esta cursando actualmente
+                            $actuales = Inscripcione::where('carrera_id', $informacion_carrera->id)
+                                                    ->where('persona_id', $estudiante->id)
+                                                    ->where('estado', 'Cursando')
+                                                    ->get();
+                            // Pasaremos en un array las materias que actualmente esta cursando el estudiante X
+                            foreach($actuales as $materia){
+                                array_push($array_cursando, $materia->asignatura_id);
+                            }
                         }
                     }
                 }else{

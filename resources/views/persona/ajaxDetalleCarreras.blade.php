@@ -1,4 +1,4 @@
-<p>aqui ira formulario para inscribir carreras o retirar</p>
+<h1 class="text-center text-dark-info"><strong>Carreras</strong></h1>
 <div class="table-responsive">
     <table class="table table-striped no-wrap" id="tablaProductosEncontrados">
         <thead>
