@@ -203,6 +203,9 @@ class InscripcionController extends Controller
         }
         // Por cada carrera que tenga el estudiante
         foreach($array_carreras as $carrera){
+            // if($carrera == 3){              //  ELIMINAR     HECHO PARA PRUEBAS
+            //     continue;                   //  ELIMINAR     HECHO PARA PRUEBAS
+            // }                               //  ELIMINAR     HECHO PARA PRUEBAS
             // En una variable almacenaremos los datos de la carrera
             $informacion_carrera = Carrera::find($carrera);
             // Hallaremos la maxima gestion que aprobo el alumno en la carrera X
@@ -220,7 +223,6 @@ class InscripcionController extends Controller
                                             ->where('persona_id', $estudiante->id)
                                             ->where('aprobo', 'Si')
                                             ->max('semestre');
-                                            
             // Si no hubiera valor en maximo semestre, puede ser que el modo de inscripcion se lleva por gestiones o no aprobó nada
             if(!$maximo_semestre){
                 // Preguntaremos si en esa maxima_gestion de la carrera X se encuentran valores en semestre
@@ -341,6 +343,15 @@ class InscripcionController extends Controller
                         // Pasaremos en un array las materias pendientes
                         foreach($pendientes as $materia){
                             array_push($array_materias, $materia->id);
+                        }
+                        // Sera necesario agregar tambien a las materias que se estan cursando
+                        $actuales = Inscripcione::where('carrera_id', $informacion_carrera->id)
+                                                ->where('persona_id', $estudiante->id)
+                                                ->where('estado', 'Cursando')
+                                                ->get();
+                        // Pasaremos en un array las materias que actualmente esta cursando el estudiante X
+                        foreach($actuales as $materia){
+                        array_push($array_cursando, $materia->asignatura_id);
                         }
                     }
                 }

@@ -112,5 +112,6 @@
                 @endforeach
             </tbody>
         </table>
-</div>
+    </div>
+    <br>
 @endforeach
