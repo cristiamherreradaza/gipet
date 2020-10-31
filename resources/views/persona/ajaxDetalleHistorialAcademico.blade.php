@@ -12,6 +12,7 @@
             <thead>
                 <tr>
                     <th>#</th>
+                    <th>FECHA INSCRIPCION</th>
                     <th>GESTION ACADEMICA</th>
                     <th>SEMESTRE/A&Ntilde;O</th>
                     <th>SIGLA</th>
@@ -26,26 +27,27 @@
             </thead>
             <tbody>
                 @foreach($inscripciones as $materia)
-                    @if($materia->carrera_id == $informacionCarrera->id)
+                    @if($materia->carrera_id == $informacionCarrera->id && $materia->estado == 'Finalizado')
                         <tr>
                             <td>{{ $key }}</td>
+                            <td>{{ $materia->fecha_registro }}</td>
                             <td>{{ $materia->anio_vigente }}</td>
                             <td>
                                 @switch($materia->gestion)
                                     @case(1)
-                                        Primero
+                                        PRIMERO
                                         @break
                                     @case(2)
-                                        Segundo
+                                        SEGUNDO
                                         @break
                                     @case(3)
-                                        Tercero
+                                        TERCERO
                                         @break
                                     @case(4)
-                                        Cuarto
+                                        CUARTO
                                         @break
                                     @case(5)
-                                        Quinto
+                                        QUINTO
                                         @break
                                 @endswitch
                             </td>
@@ -68,7 +70,17 @@
                                 @endphp
                                 {{ $resultado->segundo_turno }}
                             </td>
-                            <td>{{ $materia->aprobo == 'Si' ? 'APROBADO' : 'REPROBADO' }}</td>
+                            <td>
+                                @if($materia->aprobo == 'Si')
+                                    APROBADO
+                                @else
+                                    @if($materia->estado == 'Cursando')
+                                        CURSANDO
+                                    @else
+                                        REPROBADO
+                                    @endif
+                                @endif
+                            </td>
                             <td>-</td>
                             <td>-</td>
                         </tr>

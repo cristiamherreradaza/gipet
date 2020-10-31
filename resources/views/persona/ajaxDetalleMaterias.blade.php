@@ -4,45 +4,90 @@
         $asignaturas = App\Inscripcione::where('persona_id', $persona->id)
                                         ->where('carrera_id', $informacionCarrera->id)
                                         ->get();
+        $key=1;
     @endphp
-    <h3>{{ $informacionCarrera->nombre }}</h3>
+    <h3><strong class="text-danger">{{ strtoupper($informacionCarrera->nombre) }}</strong></h3>
     <div class="table-responsive">
-        <table class="table table-striped no-wrap" id="tablaProductosEncontrados">
+        <table class="table table-striped no-wrap text-center" id="tablaProductosEncontrados">
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Asignatura</th>
-                    <th>Nota</th>
-                    <th>Docente</th>
+                    <th>FECHA INSCRIPCION</th>
+                    <th>GESTION ACADEMICA</th>
+                    <th>SEMESTRE/A&Ntilde;O</th>
+                    <th>SIGLA</th>
+                    <th>ASIGNATURA</th>
+                    <th>REQUISITOS</th>
+                    <th>NOTA</th>
+                    <th>RECUPERATORIO</th>
+                    <th>OBSERVACIONES</th>
+                    <th># LIBRO</th>
+                    <th># FOLIO</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($asignaturas as $key => $asignatura)
-                    @php
-                        $registro = App\NotasPropuesta::where('asignatura_id', $asignatura->asignatura_id)
-                                                    ->where('turno_id', $asignatura->turno_id)
-                                                    ->where('paralelo', $asignatura->paralelo)
-                                                    ->where('anio_vigente', $asignatura->anio_vigente)
-                                                    ->first();
-                    @endphp
-                    <tr>
-                        <td>{{ ($key+1) }}</td>
-                        <td>{{ $asignatura->asignatura->nombre }} {{ $asignatura->asignatura->sigla }}</td>
-                        <td>
-                            @if($asignatura->nota)
-                                {{ $asignatura->nota }}
-                            @else
-                                0
-                            @endif
-                        </td>
-                        <td>
-                            @if($registro)
-                                {{ $registro->docente->nombres }} {{ $registro->docente->apellido_paterno }} {{ $registro->docente->apellido_materno }}
-                            @else
-                                Sin Docente
-                            @endif
-                        </td>
-                    </tr>
+                @foreach($inscripciones as $materia)
+                    @if($materia->carrera_id == $informacionCarrera->id && $materia->estado == 'Cursando')
+                        <tr>
+                            <td>{{ $key }}</td>
+                            <td>{{ $materia->fecha_registro }}</td>
+                            <td>{{ $materia->anio_vigente }}</td>
+                            <td>
+                                @switch($materia->gestion)
+                                    @case(1)
+                                        Primero
+                                        @break
+                                    @case(2)
+                                        Segundo
+                                        @break
+                                    @case(3)
+                                        Tercero
+                                        @break
+                                    @case(4)
+                                        Cuarto
+                                        @break
+                                    @case(5)
+                                        Quinto
+                                        @break
+                                @endswitch
+                            </td>
+                            <td>{{ $materia->asignatura->sigla }}</td>
+                            <td>{{ $materia->asignatura->nombre }}</td>
+                            <td>
+                                @php
+                                    $prerequisito = App\Prerequisito::where('asignatura_id', $materia->asignatura_id)
+                                                                    ->first();
+                                @endphp
+                                @if($prerequisito->prerequisito_id)
+                                    {{ $prerequisito->prerequisito->sigla }}
+                                @endif
+                            </td>
+                            <td>{{ $materia->nota ? $materia->nota : '0' }}</td>
+                            <td>
+                                @php
+                                    $resultado = App\Nota::where('inscripcion_id', $materia->id)
+                                                            ->first();
+                                @endphp
+                                {{ $resultado->segundo_turno }}
+                            </td>
+                            <td>
+                                @if($materia->aprobo == 'Si')
+                                    APROBADO
+                                @else
+                                    @if($materia->estado == 'Cursando')
+                                        CURSANDO
+                                    @else
+                                        REPROBADO
+                                    @endif
+                                @endif
+                            </td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        @php
+                            $key++
+                        @endphp
+                    @endif
                 @endforeach
             </tbody>
         </table>

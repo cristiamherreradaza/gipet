@@ -307,13 +307,13 @@
                 <button type="button" onclick="inscripciones()" class="btn btn-block btn-light text-info">Inscripciones</button>
             </div>
             <div class="col-md-2">
-                <button type="button" onclick="materias()" class="btn btn-block btn-light text-info">Materias</button>
+                <button type="button" onclick="materias()" class="btn btn-block btn-light text-info">Materias Actuales</button>
             </div>
             <div class="col-md-2">
                 <button type="button" class="btn btn-block btn-light text-info">Mensualidades</button>
             </div>
             <div class="col-md-2">
-                <button type="button" class="btn btn-block btn-light text-info">Carreras</button>
+                <button type="button" onclick="carreras()" class="btn btn-block btn-light text-info">Carreras</button>
             </div>
             <div class="col-md-2">
                 <button type="button" class="btn btn-block btn-light text-info">Extras</button>
@@ -363,6 +363,9 @@
         }
     });
 
+    // Funcion para que cargue de inicio la funcion ajax historial_academico
+    $(window).on("load", historial_academico);
+
     // Funcion que se ejecuta al hacer clic en Historial Academico
     function historial_academico(){
         persona_id = $('#persona_id').val();
@@ -400,6 +403,22 @@
         persona_id = $('#persona_id').val();
         $.ajax({
             url: "{{ url('Persona/ajaxDetalleMaterias') }}",
+            data: {
+                persona_id : persona_id
+                },
+            type: 'get',
+            success: function(data) {
+                $("#detalleAcademicoAjax").show('slow');
+                $("#detalleAcademicoAjax").html(data);
+            }
+        });
+    }
+
+    // Funcion que se ejecuta al hacer clic en Carreras
+    function carreras(){
+        persona_id = $('#persona_id').val();
+        $.ajax({
+            url: "{{ url('Persona/ajaxDetalleCarreras') }}",
             data: {
                 persona_id : persona_id
                 },

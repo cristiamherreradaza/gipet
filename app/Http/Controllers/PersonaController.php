@@ -188,21 +188,25 @@ class PersonaController extends Controller
     public function ajaxDetalleMaterias(Request $request)
     {
         $persona = Persona::find($request->persona_id);
-        // Primero queremos saber en cuantas carreras esta inscrito
         $carreras = Inscripcione::where('persona_id', $request->persona_id)
                                 ->groupBy('carrera_id')
                                 ->select('carrera_id')
                                 ->get();
-        // Crearemos $array_carreras
-        $array_carreras = array();
-        // Almacenaremos en este array los id de las carreras en las que esta registrado el estudiante (1,2,...)
-        foreach($carreras as $carrera){
-            array_push($array_carreras, $carrera->carrera_id);
-        }
-        // Despues tenemos que ver las gestiones/semestres que aprobo o esta cursando
+        $inscripciones = Inscripcione::where('persona_id', $request->persona_id)
+                                    ->orderBy('fecha_registro', 'asc')
+                                    ->get();
+        return view('persona.ajaxDetalleMaterias')->with(compact('persona', 'carreras', 'inscripciones'));
+    }
 
-        // Posteriormente enviaremos eso a interfaz
-        return view('persona.ajaxDetalleMaterias')->with(compact('carreras', 'persona'));
+    public function ajaxDetalleCarreras(Request $request)
+    {
+        $persona = Persona::find($request->persona_id);
+        $carreras = Inscripcione::where('persona_id', $persona->id)
+                                ->select('carrera_id')
+                                ->groupBy('carrera_id')
+                                ->get();
+        // Posteriormente enviaremos esa coleccion a interfaz
+        return view('persona.ajaxDetalleCarreras')->with(compact('carreras', 'persona'));
     }
 
     /*

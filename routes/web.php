@@ -65,6 +65,7 @@ Route::post('Persona/actualizar', 'PersonaController@actualizar');
 Route::get('Persona/ajaxDetalleHistorialAcademico', 'PersonaController@ajaxDetalleHistorialAcademico');
 Route::get('Persona/ajaxDetalleInscripciones', 'PersonaController@ajaxDetalleInscripciones');
 Route::get('Persona/ajaxDetalleMaterias', 'PersonaController@ajaxDetalleMaterias');
+Route::get('Persona/ajaxDetalleCarreras', 'PersonaController@ajaxDetalleCarreras');
 
 Route::get('user/asignar', 'UserController@asignar');
 
