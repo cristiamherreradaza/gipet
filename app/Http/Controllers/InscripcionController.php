@@ -203,6 +203,9 @@ class InscripcionController extends Controller
         }
         // Por cada carrera que tenga el estudiante
         foreach($array_carreras as $carrera){
+            // if($carrera == 3){              //  ELIMINAR     HECHO PARA PRUEBAS
+            //     continue;                   //  ELIMINAR     HECHO PARA PRUEBAS
+            // }                               //  ELIMINAR     HECHO PARA PRUEBAS
             // En una variable almacenaremos los datos de la carrera
             $informacion_carrera = Carrera::find($carrera);
             // Hallaremos la maxima gestion que aprobo el alumno en la carrera X
@@ -256,7 +259,6 @@ class InscripcionController extends Controller
                     // Como existe un valor, entonces la gestion se lleva por semestres
                     if($maximo_semestre == 1){
                         // Pasamos al siguiente semestre
-                        
                         $maximo_semestre = $maximo_semestre + 1;
                         $pendientes = Asignatura::where('carrera_id', $informacion_carrera->id)
                                                 ->where('gestion', $maxima_gestion)
@@ -266,13 +268,22 @@ class InscripcionController extends Controller
                         foreach($pendientes as $materia){
                             array_push($array_materias, $materia->id);
                         }
+                        // Ahora buscaremos materias que este cursando para descartarlas
+                        $actuales = Inscripcione::where('carrera_id', $informacion_carrera->id)
+                                                ->where('persona_id', $estudiante->id)
+                                                ->where('estado', 'Cursando')
+                                                ->get();
+                        // Pasaremos en un array las materias que actualmente esta cursando el estudiante X
+                        foreach($actuales as $materia){
+                            array_push($array_cursando, $materia->asignatura_id);
+                        }
                     }else{
                         // El semestre es 2 por tanto, pasamos a la siguiente gestion
                         $maxima_gestion = $maxima_gestion + 1;
                         // Buscaremos los pendientes de esa gestion
                         $pendientes = Asignatura::where('carrera_id', $informacion_carrera->id)
                                                 ->where('gestion', $maxima_gestion)
-                                                ->where('semestre', $maximo_semestre)
+                                                //->where('semestre', $maximo_semestre)
                                                 ->first();
                         // Si tiene materias pendientes, si no tiene finalizo su carrera
                         if($pendientes){
@@ -293,6 +304,15 @@ class InscripcionController extends Controller
                             // Pasaremos en un array las materias pendientes
                             foreach($pendientes as $materia){
                                 array_push($array_materias, $materia->id);
+                            }
+                            // Tambien debemos enviar las materias que esta cursando actualmente
+                            $actuales = Inscripcione::where('carrera_id', $informacion_carrera->id)
+                                                    ->where('persona_id', $estudiante->id)
+                                                    ->where('estado', 'Cursando')
+                                                    ->get();
+                            // Pasaremos en un array las materias que actualmente esta cursando el estudiante X
+                            foreach($actuales as $materia){
+                                array_push($array_cursando, $materia->asignatura_id);
                             }
                         }
                     }
@@ -323,6 +343,15 @@ class InscripcionController extends Controller
                         // Pasaremos en un array las materias pendientes
                         foreach($pendientes as $materia){
                             array_push($array_materias, $materia->id);
+                        }
+                        // Sera necesario agregar tambien a las materias que se estan cursando
+                        $actuales = Inscripcione::where('carrera_id', $informacion_carrera->id)
+                                                ->where('persona_id', $estudiante->id)
+                                                ->where('estado', 'Cursando')
+                                                ->get();
+                        // Pasaremos en un array las materias que actualmente esta cursando el estudiante X
+                        foreach($actuales as $materia){
+                        array_push($array_cursando, $materia->asignatura_id);
                         }
                     }
                 }
@@ -561,6 +590,7 @@ class InscripcionController extends Controller
                                         ->where('asignatura_id', $asignatura->id)
                                         ->where('turno_id', $request->$turno_id)
                                         ->where('persona_id', $request->persona_id)
+                                        ->where('estado', 'Cursando')
                                         ->first();
                 // Si no esta registrada, se procede a la inscripcion
                 if(!$registro){

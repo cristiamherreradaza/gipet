@@ -150,59 +150,38 @@ class PersonaController extends Controller
         return view('persona.ajaxDetalleHistorialAcademico')->with(compact('persona', 'carreras', 'inscripciones'));
     }
 
-    public function ajaxDetalleInscripciones(Request $request)
+    public function ajaxDetallePensum(Request $request)
     {
         $persona = Persona::find($request->persona_id);
-        // Buscaremos todas las materias en las que aprobo este como  'Si'
-        $aprobadas = Inscripcione::where('persona_id', $request->persona_id)
-                                ->where('aprobo', 'Si')
+        $carreras = Inscripcione::where('persona_id', $request->persona_id)
+                                ->groupBy('carrera_id')
+                                ->select('carrera_id')
                                 ->get();
-        // Buscaremos todas las materias en las que su estado sea 'Cursando'
-        $cursando = Inscripcione::where('persona_id', $request->persona_id)
-                                ->where('estado', 'Cursando')
-                                ->get();
-        // Crearemos $array_carreras
-        $array_elegidas = array();
-        // Almacenaremos en $array_elegidas los id de la coleccion aprobadas
-        foreach($aprobadas as $aprobada){
-            array_push($array_elegidas, $aprobada->id);
-        }
-        // Almacenaremos en $array_elegidas los id de la coleccion cursando
-        foreach($cursando as $cursar){
-            array_push($array_elegidas, $cursar->id);
-        }
-        // Volveremos a juntar en una coleccion todas esta
-        $inscripciones = Inscripcione::whereIn('id', $array_elegidas)
-                                    ->get();
-
-        // Agruparemos por fechas de inscripcione
-        $inscripciones = Inscripcione::where('persona_id', $request->persona_id)
-                                    ->select('carrera_id', 'gestion', 'semestre', 'anio_vigente', 'estado')
-                                    ->groupBy('carrera_id', 'gestion', 'semestre', 'anio_vigente', 'estado')
-                                    ->get();
-        
-        // Posteriormente enviaremos esa coleccion a interfaz
-        return view('persona.ajaxDetalleInscripciones')->with(compact('inscripciones'));
+        return view('persona.ajaxDetallePensum')->with(compact('carreras', 'persona'));
     }
 
     public function ajaxDetalleMaterias(Request $request)
     {
         $persona = Persona::find($request->persona_id);
-        // Primero queremos saber en cuantas carreras esta inscrito
         $carreras = Inscripcione::where('persona_id', $request->persona_id)
                                 ->groupBy('carrera_id')
                                 ->select('carrera_id')
                                 ->get();
-        // Crearemos $array_carreras
-        $array_carreras = array();
-        // Almacenaremos en este array los id de las carreras en las que esta registrado el estudiante (1,2,...)
-        foreach($carreras as $carrera){
-            array_push($array_carreras, $carrera->carrera_id);
-        }
-        // Despues tenemos que ver las gestiones/semestres que aprobo o esta cursando
+        $inscripciones = Inscripcione::where('persona_id', $request->persona_id)
+                                    ->orderBy('fecha_registro', 'asc')
+                                    ->get();
+        return view('persona.ajaxDetalleMaterias')->with(compact('persona', 'carreras', 'inscripciones'));
+    }
 
-        // Posteriormente enviaremos eso a interfaz
-        return view('persona.ajaxDetalleMaterias')->with(compact('carreras', 'persona'));
+    public function ajaxDetalleCarreras(Request $request)
+    {
+        $persona = Persona::find($request->persona_id);
+        $carreras = Inscripcione::where('persona_id', $persona->id)
+                                ->select('carrera_id')
+                                ->groupBy('carrera_id')
+                                ->get();
+        // Posteriormente enviaremos esa coleccion a interfaz
+        return view('persona.ajaxDetalleCarreras')->with(compact('carreras', 'persona'));
     }
 
     /*

@@ -147,10 +147,10 @@
 
     // tabla de pedidos por unidad
     var t = $('#tablaPedido').DataTable({
-        paging: true,
-        searching: true,
-        ordering:  true,
-        info: true,
+        paging: false,
+        searching: false,
+        ordering:  false,
+        info: false,
         language: {
             url: '{{ asset('datatableEs.json') }}'
         },

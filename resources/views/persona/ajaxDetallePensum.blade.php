@@ -1,9 +1,8 @@
-<h1 class="text-center text-dark-info"><strong>Historial Academico</strong></h1>
+<h1 class="text-center text-dark-info"><strong>Pensum</strong></h1>
 @foreach($carreras as $carrera)
     @php
         $informacionCarrera = App\Carrera::find($carrera->carrera_id);
-        $asignaturas = App\Inscripcione::where('persona_id', $persona->id)
-                                        ->where('carrera_id', $informacionCarrera->id)
+        $asignaturas = App\Asignatura::where('carrera_id', $informacionCarrera->id)
                                         ->get();
         $key=1;
     @endphp
@@ -13,7 +12,6 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>FECHA INSCRIPCION</th>
                     <th>GESTION ACADEMICA</th>
                     <th>SEMESTRE/A&Ntilde;O</th>
                     <th>SIGLA</th>
@@ -27,14 +25,24 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($inscripciones as $materia)
-                    @if($materia->carrera_id == $informacionCarrera->id && $materia->estado == 'Finalizado')
+                @foreach($asignaturas as $asignatura)
+                    @if($asignatura->carrera_id == $informacionCarrera->id)
+                        @php
+                            $detalle = App\Inscripcione::where('carrera_id', $informacionCarrera->id)
+                                                        ->where('asignatura_id', $asignatura->id)
+                                                        ->where('persona_id', $persona->id)
+                                                        ->where('aprobo', 'Si')
+                                                        ->first();
+                        @endphp
                         <tr>
                             <td>{{ $key }}</td>
-                            <td>{{ $materia->fecha_registro }}</td>
-                            <td>{{ $materia->anio_vigente }}</td>
                             <td>
-                                @switch($materia->gestion)
+                                @if($detalle)
+                                    {{ $detalle->anio_vigente }}                                    
+                                @endif
+                            </td>
+                            <td>
+                                @switch($asignatura->gestion)
                                     @case(1)
                                         PRIMERO
                                         @break
@@ -52,11 +60,11 @@
                                         @break
                                 @endswitch
                             </td>
-                            <td>{{ $materia->asignatura->sigla }}</td>
-                            <td class="text-left">{{ $materia->asignatura->nombre }}</td>
+                            <td>{{ $asignatura->sigla }}</td>
+                            <td class="text-left">{{ $asignatura->nombre }}</td>
                             <td>
                                 @php
-                                    $prerequisito = App\Prerequisito::where('asignatura_id', $materia->asignatura_id)
+                                    $prerequisito = App\Prerequisito::where('asignatura_id', $asignatura->id)
                                                                     ->first();
                                 @endphp
                                 @if($prerequisito->prerequisito_id)
@@ -65,27 +73,37 @@
                                     NINGUNO
                                 @endif
                             </td>
-                            <td>{{ $materia->nota ? round($materia->nota) : '0' }}</td>
                             <td>
-                                @php
-                                    $resultado = App\Nota::where('inscripcion_id', $materia->id)
-                                                            ->first();
-                                @endphp
-                                {{ $resultado->segundo_turno ? round($resultado->segundo_turno) : '-' }}
+                                @if($detalle)
+                                    {{ $detalle->nota ? round($detalle->nota) : 0 }}
+                                @endif
                             </td>
                             <td>
-                                @if($materia->aprobo == 'Si')
-                                    APROBADO
-                                @else
-                                    @if($materia->estado == 'Cursando')
-                                        CURSANDO
-                                    @else
-                                        REPROBADO
+                                @if($detalle)
+                                    @php
+                                        $resultado = App\Nota::where('inscripcion_id', $detalle->id)
+                                                            ->first();
+                                    @endphp
+                                    {{ $resultado->segundo_turno ? round($resultado->segundo_turno) : '-' }}
+                                @endif
+                            </td>
+                            <td>
+                                @if($detalle)
+                                    @if($detalle->aprobo == 'Si')
+                                        APROBADO
                                     @endif
                                 @endif
                             </td>
-                            <td>-</td>
-                            <td>-</td>
+                            <td>
+                                @if($detalle)
+                                    -
+                                @endif
+                            </td>
+                            <td>
+                                @if($detalle)
+                                    -
+                                @endif
+                            </td>
                         </tr>
                         @php
                             $key++
