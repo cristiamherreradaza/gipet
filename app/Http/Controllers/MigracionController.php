@@ -88,22 +88,24 @@ class MigracionController extends Controller
 
     public function asignatura()
     {
-
         $asignaturas = DB::select('SELECT * FROM asignaturas_anterior');
         // dd($asignaturas);
         foreach ($asignatura as $valor) {
         	DB::table('asignaturas')->insert([
-        	'user_id' => $valor->asignaturaID,
             'codigo_anterior' => $valor->asignaturaID,
-			//'carrera_id' => $valor->carreraID,
+        	'user_id' => 1,
+			'carrera_id' => $valor->carreraID,
 			'gestion' => $valor->gestion,
-			'codigo_asignatura' => $valor->cod_asig,
-			'nombre_asignatura' => $valor->asignatura,
+			'sigla' => $valor->cod_asig,
+			'nombre' => $valor->asignatura,
+			'troncal' => "Si",
+			'ciclo' => "Anual",
+			'semestre' => $valor->semes,
+			'carga_horaria' => $valor->carga_horaria,
 			'carga_horaria' => $valor->carga_horaria,
 			'teorico' => $valor->teorico,
 			'practico' => $valor->practico,
 			'nivel' => $valor->nivel,
-			'semestre' => $valor->semes,
 			'periodo' => $valor->periodo,
 			'anio_vigente' => $valor->anio_vigen,
 			'orden_impresion' => $valor->ord_imp,
