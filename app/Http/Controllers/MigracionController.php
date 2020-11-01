@@ -89,11 +89,11 @@ class MigracionController extends Controller
     public function asignatura()
     {
 
-        $asignatura = DB::select('SELECT *
-								FROM asignaturas_copy');
-        //dd($docente);
+        $asignaturas = DB::select('SELECT * FROM asignaturas_anterior');
+        // dd($asignaturas);
         foreach ($asignatura as $valor) {
-        	 DB::table('asignaturas')->insert([
+        	DB::table('asignaturas')->insert([
+        	'user_id' => $valor->asignaturaID,
             'codigo_anterior' => $valor->asignaturaID,
 			//'carrera_id' => $valor->carreraID,
 			'gestion' => $valor->gestion,
@@ -109,7 +109,6 @@ class MigracionController extends Controller
 			'orden_impresion' => $valor->ord_imp,
         	]);
         }
-
     }
 
     public function notas_propuestas()
