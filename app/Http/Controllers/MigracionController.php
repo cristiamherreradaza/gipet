@@ -90,7 +90,7 @@ class MigracionController extends Controller
     {
         $asignaturas = DB::select('SELECT * FROM asignaturas_anterior');
         // dd($asignaturas);
-        foreach ($asignatura as $valor) {
+        foreach ($asignaturas as $valor) {
         	DB::table('asignaturas')->insert([
             'codigo_anterior' => $valor->asignaturaID,
         	'user_id' => 1,
@@ -101,7 +101,7 @@ class MigracionController extends Controller
 			'troncal' => "Si",
 			'ciclo' => "Anual",
 			'semestre' => $valor->semes,
-			'carga_horaria' => $valor->carga_horaria,
+			'carga_horaria_virtual' => 80,
 			'carga_horaria' => $valor->carga_horaria,
 			'teorico' => $valor->teorico,
 			'practico' => $valor->practico,
@@ -110,6 +110,8 @@ class MigracionController extends Controller
 			'anio_vigente' => $valor->anio_vigen,
 			'orden_impresion' => $valor->ord_imp,
         	]);
+
+        echo $valor->asignaturaID."<br />";
         }
     }
 
