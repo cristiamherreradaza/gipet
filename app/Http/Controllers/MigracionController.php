@@ -140,6 +140,45 @@ class MigracionController extends Controller
 
     }
 
+    public function docentes()
+    {
+    	$docentes = DB::table('docentes')->get();
+
+        foreach ($docentes as $valor) {
+        	 DB::table('usuarios')->insert([
+            'codigo_anterior' => $valor->docenID,
+			'apellido_paterno' => $valor->a_paterno,
+			'apellido_materno' => $valor->a_materno,
+			'nombres' => $valor->nombres,
+			'nomina' => $valor->nomi,
+			'password' => $valor->codID,
+			'cedula' => $valor->carnet,
+			'expedido' => $valor->ciu_d,
+			'tipo_usuario' => $valor->tipo_usu,
+			'nombre_usuario' => $valor->nom_usua,
+			'fecha_incorporacion' => $valor->fec_incor,
+			'vigente' => $valor->vig,
+			'rol' => $valor->rol,
+			'fecha_nacimiento' => $valor->fec_nac,
+			'lugar_nacimiento' => $valor->lug_nac,
+			'sexo' => $valor->sexo,
+			'estado_civil' => $valor->est_civil,
+			'nombre_conyugue' => $valor->nom_cony,
+			'nombre_hijo' => $valor->nom_hijo,
+			'direccion' => $valor->direcc_doc,
+			'zona' => $valor->zona,
+			'numero_celular' => $valor->num_cel,
+			'numero_fijo' => $valor->num_fijo,
+			'email' => $valor->email_d,
+			'foto' => $valor->foto,
+			'persona_referencia' => $valor->p_referencia,
+			'numero_referencia' => $valor->f_referencia,
+        	]);
+        }
+
+    	dd($docentes);	
+    }
+
     public function asignatura()
     {
         $asignaturas = DB::select('SELECT * FROM asignaturas_anterior');
@@ -220,20 +259,10 @@ class MigracionController extends Controller
     public function datosKardex()
     {
     	$kardex = DB::table('datos_kardex')
-    				->where('anio_act', 2015)
+    				// ->where('anio_act', 2015)
     				->get();
 
     	foreach($kardex as $k){
-
-    		$datosPersona = DB::table('personas')
-    						->where('cedula', $k->carnetIDA)
-    						->first();
-
-    		if($datosPersona != null){
-    			echo $datosPersona->id."<br />";
-    		}
-
-    		// dd($datosPersona);
 
     		// fecha nacimiento
     		$fechaInscripcion = $k->fecha_ins;
@@ -243,16 +272,27 @@ class MigracionController extends Controller
     			$fechaN = $k->fecha_ins;
     		}
 
-/*    		DB::table('carreras_personas')->insert([
-    			'codigo_anterior'=>$k->kardexID,
-    			'user_id'=>1,
-    			'carrera_id'=>$k->carreraID,
-    			'persona_id'=>$datosPersona->id,
-    			'turno_id'=>$k->turnoID,
-    			'fecha_inscripcion'=>$fechaN,
-    			'anio_vigente'=>$k->anio_act,
-    		]);
-*/    	}
+    		$datosPersona = DB::table('personas')
+    						->where('cedula', $k->carnetIDA)
+    						->first();
+
+    		if($datosPersona != null){
+
+    			echo $datosPersona->cedula."-".$fechaN."<br />";
+
+    			DB::table('carreras_personas')->insert([
+    				'codigo_anterior'=>$k->kardexID,
+    				'user_id'=>1,
+    				'carrera_id'=>$k->carreraID,
+    				'persona_id'=>$datosPersona->id,
+    				'turno_id'=>$k->turnoID,
+    				'fecha_inscripcion'=>$fechaN,
+    				'anio_vigente'=>$k->anio_act,
+    			]);
+
+    		}
+    		// dd($datosPersona);
+    	}
     	dd($kardex);
     }
 }
