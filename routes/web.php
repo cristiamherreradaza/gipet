@@ -99,6 +99,7 @@ Route::get('Migracion/asignatura', 'MigracionController@asignatura');
 Route::get('Migracion/notas_propuestas', 'MigracionController@notas_propuestas');
 Route::get('Migracion/asignaturas_prerequisitos', 'MigracionController@asignaturas_prerequisitos');
 Route::get('Migracion/persona', 'MigracionController@persona');
+Route::get('Migracion/datosKardex', 'MigracionController@datosKardex');
 
 //INSCRIPCIONES
 Route::get('Inscripcion/inscripcion', 'InscripcionController@inscripcion');

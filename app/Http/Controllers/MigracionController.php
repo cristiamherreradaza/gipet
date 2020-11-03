@@ -216,4 +216,43 @@ class MigracionController extends Controller
         }
 
     }
+
+    public function datosKardex()
+    {
+    	$kardex = DB::table('datos_kardex')
+    				->where('anio_act', 2015)
+    				->get();
+
+    	foreach($kardex as $k){
+
+    		$datosPersona = DB::table('personas')
+    						->where('cedula', $k->carnetIDA)
+    						->first();
+
+    		if($datosPersona != null){
+    			echo $datosPersona->id."<br />";
+    		}
+
+    		// dd($datosPersona);
+
+    		// fecha nacimiento
+    		$fechaInscripcion = $k->fecha_ins;
+    		if($fechaInscripcion == "0000-00-00"){
+    			$fechaN = null;
+    		}else{
+    			$fechaN = $k->fecha_ins;
+    		}
+
+/*    		DB::table('carreras_personas')->insert([
+    			'codigo_anterior'=>$k->kardexID,
+    			'user_id'=>1,
+    			'carrera_id'=>$k->carreraID,
+    			'persona_id'=>$datosPersona->id,
+    			'turno_id'=>$k->turnoID,
+    			'fecha_inscripcion'=>$fechaN,
+    			'anio_vigente'=>$k->anio_act,
+    		]);
+*/    	}
+    	dd($kardex);
+    }
 }
