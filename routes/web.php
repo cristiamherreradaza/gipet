@@ -94,12 +94,11 @@ Route::post('notaspropuesta/ajax_importar', 'NotasPropuestaController@ajax_impor
 
 //MIGRACIONES
 Route::get('Migracion/inicia', 'MigracionController@inicia');
-
 Route::get('Migracion/usuario', 'MigracionController@usuario');
-
 Route::get('Migracion/asignatura', 'MigracionController@asignatura');
-
 Route::get('Migracion/notas_propuestas', 'MigracionController@notas_propuestas');
+Route::get('Migracion/asignaturas_prerequisitos', 'MigracionController@asignaturas_prerequisitos');
+Route::get('Migracion/persona', 'MigracionController@persona');
 
 //INSCRIPCIONES
 Route::get('Inscripcion/inscripcion', 'InscripcionController@inscripcion');
