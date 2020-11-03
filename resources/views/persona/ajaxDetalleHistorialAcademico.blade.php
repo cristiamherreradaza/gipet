@@ -73,17 +73,11 @@
                                 @endphp
                                 {{ $resultado->segundo_turno ? round($resultado->segundo_turno) : '-' }}
                             </td>
-                            <td>
-                                @if($materia->aprobo == 'Si')
-                                    APROBADO
-                                @else
-                                    @if($materia->estado == 'Cursando')
-                                        CURSANDO
-                                    @else
-                                        REPROBADO
-                                    @endif
-                                @endif
-                            </td>
+                            @if($materia->aprobo == 'Si')
+                                <td class="text-success">APROBADO</td>
+                            @else
+                                <td class="text-danger">REPROBADO</td>
+                            @endif
                             <td>-</td>
                             <td>-</td>
                         </tr>

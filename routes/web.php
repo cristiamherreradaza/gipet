@@ -126,6 +126,8 @@ Route::get('Inscripcion/ver_persona/{persona_id}', 'InscripcionController@ver_pe
 
 Route::post('Inscripcion/guardar', 'InscripcionController@guardar');
 
+Route::post('Inscripcion/inscribirCarrera', 'InscripcionController@inscribirCarrera');
+
 //inscripciones
 Route::get('Inscripcion/nuevo', 'InscripcionController@nuevo');
 Route::get('Inscripcion/reinscripcion/{id}', 'InscripcionController@reinscripcion');

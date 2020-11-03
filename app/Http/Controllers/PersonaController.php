@@ -180,8 +180,15 @@ class PersonaController extends Controller
                                 ->select('carrera_id')
                                 ->groupBy('carrera_id')
                                 ->get();
+        $array_carreras = array();
+        foreach($carreras as $carrera){
+            array_push($array_carreras, $carrera->carrera_id);
+        }
+        // Enviamos las carreras disponibles para inscribirse
+        $disponibles = Carrera::whereNotIn('id', $array_carreras)->get();
+        $turnos = Turno::get();
         // Posteriormente enviaremos esa coleccion a interfaz
-        return view('persona.ajaxDetalleCarreras')->with(compact('carreras', 'persona'));
+        return view('persona.ajaxDetalleCarreras')->with(compact('carreras', 'persona', 'disponibles', 'turnos'));
     }
 
     /*
