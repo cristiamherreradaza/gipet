@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use DB;
+use App\Nota;
+use App\User;
+use App\Persona;
+use App\Asignatura;
+use Illuminate\Http\Request;
 
 class MigracionController extends Controller
 {
@@ -145,34 +149,30 @@ class MigracionController extends Controller
     	$docentes = DB::table('docentes')->get();
 
         foreach ($docentes as $valor) {
-        	 DB::table('usuarios')->insert([
+
+			// fecha de fecha_incorporacion
+			$fechaIncorporacion = $valor->fec_incor;
+			if($fechaIncorporacion == "0000-00-00"){
+				$fechaN = null;
+			}else{
+				$fechaN = $valor->fec_incor;
+			}
+
+        	DB::table('users')->insert([
             'codigo_anterior' => $valor->docenID,
+            'perfil_id' => 2,
 			'apellido_paterno' => $valor->a_paterno,
 			'apellido_materno' => $valor->a_materno,
 			'nombres' => $valor->nombres,
 			'nomina' => $valor->nomi,
-			'password' => $valor->codID,
+			'password' => 123456789,
 			'cedula' => $valor->carnet,
-			'expedido' => $valor->ciu_d,
-			'tipo_usuario' => $valor->tipo_usu,
+			'expedido' => "La Paz",
+			'tipo_usuario' => "Docente",
 			'nombre_usuario' => $valor->nom_usua,
-			'fecha_incorporacion' => $valor->fec_incor,
+			'fecha_incorporacion' => $fechaN,
 			'vigente' => $valor->vig,
 			'rol' => $valor->rol,
-			'fecha_nacimiento' => $valor->fec_nac,
-			'lugar_nacimiento' => $valor->lug_nac,
-			'sexo' => $valor->sexo,
-			'estado_civil' => $valor->est_civil,
-			'nombre_conyugue' => $valor->nom_cony,
-			'nombre_hijo' => $valor->nom_hijo,
-			'direccion' => $valor->direcc_doc,
-			'zona' => $valor->zona,
-			'numero_celular' => $valor->num_cel,
-			'numero_fijo' => $valor->num_fijo,
-			'email' => $valor->email_d,
-			'foto' => $valor->foto,
-			'persona_referencia' => $valor->p_referencia,
-			'numero_referencia' => $valor->f_referencia,
         	]);
         }
 
@@ -246,16 +246,6 @@ class MigracionController extends Controller
 
     }
 
-    public function notas_propuestas()
-    {
-        for ($i=0; $i < 166 ; $i++) { 
-        	DB::table('notas_propuestas')->insert([
-            'codigo_anterior' => 1,
-        	]);
-        }
-
-    }
-
     public function datosKardex()
     {
     	$kardex = DB::table('datos_kardex')
@@ -294,5 +284,144 @@ class MigracionController extends Controller
     		// dd($datosPersona);
     	}
     	dd($kardex);
+    }
+
+    public function notas()
+    {
+
+        // para la gestion 2015
+		$notas = DB::table('reg_notas')
+				->whereNull('nota')
+    			->whereYear('fec_reg', 2015)
+				->get();
+		// dd($notas);
+
+		foreach($notas as $key => $n)
+		{
+			$alumno = Persona::where('cedula', $n->carnetID)->first();
+            
+			$docente = User::where('codigo_anterior', $n->docenID)->first();
+			$asignatura = Asignatura::where('codigo_anterior', $n->asignaturaID)->first();
+			echo $key." - ".$n->regID." - ".$n->carnetID." - ".$alumno->cedula."<br />";
+			$notaFinal = $n->asist_a+$n->trab_a+$n->p_ganados+$n->p_parcial+$n->e_final;
+
+			if($n->trim == 1)
+			{
+                if($alumno && $docente && $asignatura)
+                {
+                    $notas                      = new Nota();
+                    $notas->codigo_anterior     = $n->regID;
+                    $notas->user_id             = 1;
+                    $notas->resolucion_id       = 1;
+                    $notas->docente_id          = $docente->id;
+                    $notas->asignatura_id       = $asignatura->id;
+                    $notas->turno_id            = $n->turn;
+                    $notas->anio_vigente        = 2015;
+                    $notas->trimestre           = $n->trim;
+                    $notas->fecha_registro      = $n->fec_reg;
+                    $notas->nota_asistencia     = $n->asist_a;
+                    $notas->nota_practicas      = $n->trab_a;
+                    $notas->nota_puntos_ganados = $n->p_ganados;
+                    $notas->nota_primer_parcial = $n->p_parcial;
+                    $notas->nota_examen_final   = $n->e_final;
+                    $notas->nota_total          = $notaFinal;
+                    $notas->nota_aprobacion     = 61;
+                    $notas->save();
+
+                    $notas                      = new Nota();
+                    $notas->codigo_anterior     = $n->regID;
+                    $notas->user_id             = 1;
+                    $notas->resolucion_id       = 1;
+                    $notas->docente_id          = $docente->id;
+                    $notas->asignatura_id       = $asignatura->id;
+                    $notas->turno_id            = $n->turn;
+                    $notas->anio_vigente        = 2015;
+                    $notas->trimestre           = $n->trim+2;
+                    $notas->fecha_registro      = $n->fec_reg;
+                    $notas->nota_asistencia     = $n->asist_a;
+                    $notas->nota_practicas      = $n->trab_a;
+                    $notas->nota_puntos_ganados = $n->p_ganados;
+                    $notas->nota_primer_parcial = $n->p_parcial;
+                    $notas->nota_examen_final   = $n->e_final;
+                    $notas->nota_total          = $notaFinal;
+                    $notas->nota_aprobacion     = 61;
+                    $notas->save();
+    			}
+    		}else{
+                $notas                      = new Nota();
+                $notas->codigo_anterior     = $n->regID;
+                $notas->user_id             = 1;
+                $notas->resolucion_id       = 1;
+                $notas->docente_id          = $docente->id;
+                $notas->asignatura_id       = $asignatura->id;
+                $notas->turno_id            = $n->turn;
+                $notas->anio_vigente        = 2015;
+                $notas->trimestre           = $n->trim;
+                $notas->fecha_registro      = $n->fec_reg;
+                $notas->nota_asistencia     = $n->asist_a;
+                $notas->nota_practicas      = $n->trab_a;
+                $notas->nota_puntos_ganados = $n->p_ganados;
+                $notas->nota_primer_parcial = $n->p_parcial;
+                $notas->nota_examen_final   = $n->e_final;
+                $notas->nota_total          = $notaFinal;
+                $notas->nota_aprobacion     = 61;
+                $notas->save();
+
+                $notas                      = new Nota();
+                $notas->codigo_anterior     = $n->regID;
+                $notas->user_id             = 1;
+                $notas->resolucion_id       = 1;
+                $notas->docente_id          = $docente->id;
+                $notas->asignatura_id       = $asignatura->id;
+                $notas->turno_id            = $n->turn;
+                $notas->anio_vigente        = 2015;
+                $notas->trimestre           = $n->trim+2;
+                $notas->fecha_registro      = $n->fec_reg;
+                $notas->nota_asistencia     = $n->asist_a;
+                $notas->nota_practicas      = $n->trab_a;
+                $notas->nota_puntos_ganados = $n->p_ganados;
+                $notas->nota_primer_parcial = $n->p_parcial;
+                $notas->nota_examen_final   = $n->e_final;
+                $notas->nota_total          = $notaFinal;
+                $notas->nota_aprobacion     = 61;
+                $notas->save();
+            }
+    	}
+    	//saco todas las notas totales de la gestion
+/*    	$notas = DB::select("
+    		SELECT
+    		  carnetID,
+    		  asignaturaID,
+    		  AVG(asist_a + trab_a + p_parcial + e_final + p_ganados) AS total
+    		FROM reg_notas
+    		WHERE gestionn = 1
+    		AND YEAR(fec_reg) = 2019
+    		GROUP BY carnetID, asignaturaID;
+    		");
+    	foreach($notas as $n)
+    	{
+    		// echo $n->regID." - ".$n->asignaturaID." - ".$n->regID;
+    	}
+		dd($notas);
+
+    	// 8360693  2017
+    	// 9094729  2017
+    	// 13643259 2019   4
+    	// 4745132  2019
+    	// 9126591  2019
+    	
+/*    	foreach ($notas as $n) {
+
+    		DB::table('notas')->insert([
+    			'codigo_anterior'=>$n->regID,
+    			'user_id'=>1,
+    			'resolucion_id'=>1,
+    			'persona_id'=>$datosPersona->id,
+    			'turno_id'=>$k->turnoID,
+    			'fecha_inscripcion'=>$fechaN,
+    			'anio_vigente'=>$k->anio_act,
+    		]);		
+		}	
+*/
     }
 }
