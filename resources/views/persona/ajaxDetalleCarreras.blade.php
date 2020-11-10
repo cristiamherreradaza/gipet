@@ -111,6 +111,7 @@
                     <td>{{ $semestre }}</td>
                     <td>{{ $anio }}</td>
                     <td>{{ $resultado->estado }}</td>
+                    <td><a href="{{ url('Inscripcion/reinscripcion/'.$persona->id.'/'.$detalle->id) }}" class="btn btn-info">Reinscribir</a></td>
                 </tr>
             @endforeach
         </tbody>

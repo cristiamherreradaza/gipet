@@ -3,6 +3,7 @@
     @php
         $informacionCarrera = App\Carrera::find($carrera->carrera_id);
         $asignaturas = App\Asignatura::where('carrera_id', $informacionCarrera->id)
+                                        ->where('anio_vigente', $informacionCarrera->anio_vigente)
                                         ->get();
         $key=1;
     @endphp

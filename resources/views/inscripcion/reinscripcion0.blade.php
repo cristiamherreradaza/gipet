@@ -17,7 +17,7 @@
     </div>
     <div class="card-body">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Buscar Asignatura</label>
                     <div class="input-group mb-3">
@@ -26,6 +26,41 @@
                             <span class="input-group-text"><i class="ti-search"></i></span>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Turno
+                        <span class="text-danger">
+                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                        </span>
+                    </label>
+                    <select class="form-control custom-select" tabindex="1" id="turno_reinscripcion" name="turno_reinscripcion">
+                        @foreach($turnos as $turno)
+                            <option value="{{ $turno->id }}">{{ $turno->descripcion }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>Paralelo
+                        <span class="text-danger">
+                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                        </span>
+                    </label>
+                    <select class="form-control custom-select" tabindex="1" id="paralelo_reinscripcion" name="paralelo_reinscripcion">
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Gesti&oacute;n</label>
+                    <input type="number" class="form-control" id="gestion_reinscripcion" name="gestion_reinscripcion" value="{{ date('Y') }}">
                 </div>
             </div>
         </div>
@@ -41,6 +76,9 @@
     <form action="{{ url('Inscripcion/guarda_reinscripcion') }}" method="POST">
         @csrf
         <input type="hidden" name="persona_id" id="persona_id" value="{{ $estudiante->id }}">
+        <input type="hidden" name="turno" id="turno">
+        <input type="hidden" name="paralelo" id="paralelo">
+        <input type="hidden" name="gestion" id="gestion">
         <div class="card-header bg-primary">
             <h4 class="mb-0 text-white">DETALLE DE REINSCRIPCI&Oacute;N - (Pendientes Gestion Actual)</h4>
         </div>
@@ -74,8 +112,6 @@
                                     <th>Carrera</th>
                                     <th>Semestre</th>
                                     <th>Gestion</th>
-                                    <th>Turno</th>
-                                    <th>Paralelo</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -88,21 +124,6 @@
                                         <td>{{ $asignatura->carrera->nombre }}</td>
                                         <td>{{ $asignatura->semestre }}</td>
                                         <td>{{ $asignatura->gestion }}</td>
-                                        <td>
-                                            <select class="form-control custom-select" id="turno_{{ $asignatura->id }}" name="turno_{{ $asignatura->id }}">
-                                                @foreach($turnos as $turno)
-                                                    <option value="{{ $turno->id }}">{{ $turno->descripcion }}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select class="form-control custom-select" id="paralelo_{{ $asignatura->id }}" name="paralelo_{{ $asignatura->id }}">
-                                                <option value="A">A</option>
-                                                <option value="B">B</option>
-                                                <option value="C">C</option>
-                                                <option value="D">D</option>
-                                            </select>
-                                        </td>
                                         <td><button type="button" class="btn btn-danger btnElimina" title="Eliminar asignatura"><i class="fas fa-trash-alt"></i></button></td>
                                     </tr>
                                 @endforeach
@@ -217,6 +238,30 @@
                 }
             });
         }
+    });
+
+    //Funcion de para turno
+    $( function() {
+        $("#turno").val($('#turno_reinscripcion').val());
+        $("#turno_reinscripcion").change( function() {
+            $("#turno").val($('#turno_reinscripcion').val());
+        });
+    });
+
+    //Funcion de para paralelo
+    $( function() {
+        $("#paralelo").val($('#paralelo_reinscripcion').val());
+        $("#paralelo_reinscripcion").change( function() {
+            $("#paralelo").val($('#paralelo_reinscripcion').val());
+        });
+    });
+
+    //Funcion de para gestion
+    $( function() {
+        $("#gestion").val($('#gestion_reinscripcion').val());
+        $("#gestion_reinscripcion").change( function() {
+            $("#gestion").val($('#gestion_reinscripcion').val());
+        });
     });
 
     function adicionaPedido(item)
