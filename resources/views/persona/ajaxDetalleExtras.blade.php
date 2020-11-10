@@ -45,7 +45,15 @@
                             @endif
                         </td>
                         <td>
-                            <button></button>
+                            @if(!$registro)
+                                <button type="button" class="btn btn-success" title="Inscribir"  onclick="inscribir_curso_corto('{{ $persona->id }}', '{{ $asignatura->id }}')"><i class="fas fa-certificate"></i></button>
+                                <button type="button" class="btn btn-info" title="Ver detalle" disabled><i class="fas fa-eye"></i></button>
+                                <button type="button" class="btn btn-danger" title="Eliminar Inscripcion" disabled><i class="fas fa-trash-alt"></i></button>
+                            @else
+                                <button type="button" class="btn btn-success" title="Inscribir" disabled><i class="fas fa-certificate"></i></button>
+                                <button type="button" class="btn btn-info" title="Ver detalle"  onclick="ver_curso_corto('{{ $registro->id }}')"><i class="fas fa-eye"></i></button>
+                                <button type="button" class="btn btn-danger" title="Eliminar Inscripcion"  onclick="eliminar_curso_corto('{{ $registro->id }}')"><i class="fas fa-trash-alt"></i></button>
+                            @endif
                         </td>
                     </tr>
                     @php

@@ -22,6 +22,7 @@ class Inscripcione extends Model
         'anio_vigente',
         'fecha_registro',
         'nota',
+        'segundo_turno',
         'nota_aprobacion',
         'troncal',
         'aprobo',
