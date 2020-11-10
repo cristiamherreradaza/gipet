@@ -106,6 +106,8 @@ Route::get('Migracion/persona', 'MigracionController@persona');
 Route::get('Migracion/datosKardex', 'MigracionController@datosKardex');
 Route::get('Migracion/docentes', 'MigracionController@docentes');
 Route::get('Migracion/notas', 'MigracionController@notas');
+Route::get('Migracion/notas2', 'MigracionController@notas2');
+Route::get('Migracion/convalidacion', 'MigracionController@convalidacion');
 
 //INSCRIPCIONES
 Route::get('Inscripcion/inscripcion', 'InscripcionController@inscripcion');
