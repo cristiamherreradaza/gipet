@@ -66,6 +66,10 @@ Route::get('Persona/ajaxDetalleHistorialAcademico', 'PersonaController@ajaxDetal
 Route::get('Persona/ajaxDetallePensum', 'PersonaController@ajaxDetallePensum');
 Route::get('Persona/ajaxDetalleMaterias', 'PersonaController@ajaxDetalleMaterias');
 Route::get('Persona/ajaxDetalleCarreras', 'PersonaController@ajaxDetalleCarreras');
+Route::get('Persona/ajaxDetalleHistorialInscripciones', 'PersonaController@ajaxDetalleHistorialInscripciones');
+Route::get('Persona/ajaxDetalleCertificados', 'PersonaController@ajaxDetalleCertificados');
+Route::get('Persona/ajaxDetalleMensualidades', 'PersonaController@ajaxDetalleMensualidades');
+Route::get('Persona/ajaxDetalleExtras', 'PersonaController@ajaxDetalleExtras');
 
 Route::get('user/asignar', 'UserController@asignar');
 
@@ -134,6 +138,8 @@ Route::get('Inscripcion/ver_persona/{persona_id}', 'InscripcionController@ver_pe
 
 Route::post('Inscripcion/guardar', 'InscripcionController@guardar');
 
+Route::post('Inscripcion/inscribirCarrera', 'InscripcionController@inscribirCarrera');
+
 //inscripciones
 Route::get('Inscripcion/nuevo', 'InscripcionController@nuevo');
 Route::get('Inscripcion/reinscripcion/{id}', 'InscripcionController@reinscripcion');
@@ -143,7 +149,7 @@ Route::post('Inscripcion/guarda_reinscripcion', 'InscripcionController@guarda_re
 Route::get('Inscripcion/varios', 'InscripcionController@varios');
 Route::get('Inscripcion/recuperatorio', 'InscripcionController@recuperatorio');
 Route::get('Inscripcion/buscar_recuperatorio', 'InscripcionController@buscar_recuperatorio');
-
+Route::get('Inscripcion/reinscripcion/{personaId}/{carreraId}', 'InscripcionController@reinscripcion');
 
 
 
@@ -232,6 +238,16 @@ Route::post('Predefinida/guardar', 'PredefinidaController@guardar');
 Route::post('Predefinida/actualizar', 'PredefinidaController@actualizar');
 Route::get('Predefinida/eliminar/{id}', 'PredefinidaController@eliminar');
 Route::get('Predefinida/cambiar/{id}', 'PredefinidaController@cambiar');
+
+Route::get('Certificado/listado', 'CertificadoController@listado');
+Route::post('Certificado/guardar', 'CertificadoController@guardar');
+Route::post('Certificado/actualizar', 'CertificadoController@actualizar');
+Route::get('Certificado/eliminar/{id}', 'CertificadoController@eliminar');
+Route::get('Certificado/cambiar/{id}', 'CertificadoController@cambiar');
+Route::get('Certificado/ajaxEditaRequisitos', 'CertificadoController@ajaxEditaRequisitos');
+Route::post('Certificado/requisitos', 'CertificadoController@requisitos');
+Route::get('Certificado/emitir_certificado/{persona_id}/{certificado_id}', 'CertificadoController@emitir_certificado');
+Route::get('Certificado/eliminar_certificado/{persona_id}/{certificacion_id}', 'CertificadoController@eliminar_certificado');
 
 //DETALLE DEL ESTUDIANTE
 Route::get('Kardex/detalle_estudiante/{persona_id}', 'KardexController@detalle_estudiante');

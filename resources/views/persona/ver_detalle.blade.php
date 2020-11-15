@@ -284,13 +284,13 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-6">
             <button type="submit" class="btn waves-effect waves-light btn-block btn-inverse">Actualizar Perfil</button>
         </div>
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
             <a href="{{ url('Inscripcion/reinscripcion/'.$estudiante->id) }}" type="button" class="btn waves-effect waves-light btn-block btn-inverse">Reinscribir</a>
-        </div>
-        <div class="col-md-4">
+        </div> -->
+        <div class="col-md-6">
             <a href="{{ url('Persona/listado') }}" type="button" class="btn waves-effect waves-light btn-block btn-inverse">Volver</a>
         </div>
     </div>
@@ -300,23 +300,32 @@
 <div class="card border-info">
     <div class="card-header bg-info">
         <div class="row">
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <button type="button" onclick="historial_academico()" class="btn btn-block btn-light text-info">Historial Academico</button>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <button type="button" onclick="pensum()" class="btn btn-block btn-light text-info">Pensum</button>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <button type="button" onclick="materias()" class="btn btn-block btn-light text-info">Materias Actuales</button>
             </div>
-            <div class="col-md-2">
-                <button type="button" class="btn btn-block btn-light text-info">Mensualidades</button>
-            </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <button type="button" onclick="carreras()" class="btn btn-block btn-light text-info">Carreras</button>
             </div>
-            <div class="col-md-2">
-                <button type="button" class="btn btn-block btn-light text-info">Extras</button>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-3">
+                <button type="button" onclick="historial_inscripciones()" class="btn btn-block btn-light text-info">Historial Inscripciones</button>
+            </div>
+            <div class="col-md-3">
+                <button type="button" onclick="certificados()" class="btn btn-block btn-light text-info">Certificados</button>
+            </div>
+            <div class="col-md-3">
+                <button type="button" onclick="mensualidades()" class="btn btn-block btn-light text-info">Mensualidades</button>
+            </div>
+            <div class="col-md-3">
+                <button type="button" onclick="extras()" class="btn btn-block btn-light text-info">Extras</button>
             </div>
         </div>
     </div>
@@ -419,6 +428,70 @@
         persona_id = $('#persona_id').val();
         $.ajax({
             url: "{{ url('Persona/ajaxDetalleCarreras') }}",
+            data: {
+                persona_id : persona_id
+                },
+            type: 'get',
+            success: function(data) {
+                $("#detalleAcademicoAjax").show('slow');
+                $("#detalleAcademicoAjax").html(data);
+            }
+        });
+    }
+
+    // Funcion que se ejecuta al hacer clic en Historial Inscripciones
+    function historial_inscripciones(){
+        persona_id = $('#persona_id').val();
+        $.ajax({
+            url: "{{ url('Persona/ajaxDetalleHistorialInscripciones') }}",
+            data: {
+                persona_id : persona_id
+                },
+            type: 'get',
+            success: function(data) {
+                $("#detalleAcademicoAjax").show('slow');
+                $("#detalleAcademicoAjax").html(data);
+            }
+        });
+    }
+
+    // Funcion que se ejecuta al hacer clic en Certificados
+    function certificados(){
+        persona_id = $('#persona_id').val();
+        $.ajax({
+            url: "{{ url('Persona/ajaxDetalleCertificados') }}",
+            data: {
+                persona_id : persona_id
+                },
+            type: 'get',
+            success: function(data) {
+                $("#detalleAcademicoAjax").show('slow');
+                $("#detalleAcademicoAjax").html(data);
+            }
+        });
+    }
+
+    // Funcion que se ejecuta al hacer clic en Mensualidades
+    function mensualidades(){
+        persona_id = $('#persona_id').val();
+        $.ajax({
+            url: "{{ url('Persona/ajaxDetalleMensualidades') }}",
+            data: {
+                persona_id : persona_id
+                },
+            type: 'get',
+            success: function(data) {
+                $("#detalleAcademicoAjax").show('slow');
+                $("#detalleAcademicoAjax").html(data);
+            }
+        });
+    }
+
+    // Funcion que se ejecuta al hacer clic en Extras
+    function extras(){
+        persona_id = $('#persona_id').val();
+        $.ajax({
+            url: "{{ url('Persona/ajaxDetalleExtras') }}",
             data: {
                 persona_id : persona_id
                 },

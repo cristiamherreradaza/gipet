@@ -62,18 +62,6 @@
                     carrera,
                     semestre,
                     gestion,
-                    `<select class="form-control custom-select" id="turno_` + id + `" name="turno_` + id + `">
-                        <option value="1">Mañana</option>
-                        <option value="2">Tarde</option>
-                        <option value="3">Noche</option>
-                        <option value="4">Especial</option>
-                    </select>`,
-                    `<select class="form-control custom-select" id="paralelo_` + id + `" name="paralelo_` + id + `">
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                        <option value="D">D</option>
-                    </select>`,
                     //`<input type="number" class="form-control" value="1" min="1" name="item[` + id + `]" required>`,
                     '<button type="button" class="btn btn-danger btnElimina" title="Eliminar asignatura"><i class="fas fa-trash-alt"></i></button>'
                 ]).draw(false);

@@ -5,14 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Carrera;
+use App\CarrerasPersona;
+use App\Certificado;
+use App\Inscripcione;
 use App\Nota;
 use App\Turno;
 use App\Kardex;
 use DataTables;
-use App\Carrera;
 use App\Persona;
-use App\Inscripcione;
-use App\CarrerasPersona;
 
 class PersonaController extends Controller
 {
@@ -180,8 +181,57 @@ class PersonaController extends Controller
                                 ->select('carrera_id')
                                 ->groupBy('carrera_id')
                                 ->get();
+        $array_carreras = array();
+        foreach($carreras as $carrera){
+            array_push($array_carreras, $carrera->carrera_id);
+        }
+        // Enviamos las carreras disponibles para inscribirse
+        $disponibles = Carrera::whereNotIn('id', $array_carreras)->get();
+        $turnos = Turno::get();
         // Posteriormente enviaremos esa coleccion a interfaz
-        return view('persona.ajaxDetalleCarreras')->with(compact('carreras', 'persona'));
+        return view('persona.ajaxDetalleCarreras')->with(compact('carreras', 'persona', 'disponibles', 'turnos'));
+    }
+
+    public function ajaxDetalleHistorialInscripciones(Request $request)
+    {
+        $persona = Persona::find($request->persona_id);
+        $inscripciones = CarrerasPersona::where('persona_id', $persona->id)
+                                    ->orderBy('carrera_id')
+                                    ->get();
+        return view('persona.ajaxDetalleHistorialInscripciones')->with(compact('persona', 'inscripciones'));
+    }
+
+    public function ajaxDetalleCertificados(Request $request)
+    {
+        $persona = Persona::find($request->persona_id);
+        $certificados = Certificado::get();
+        return view('persona.ajaxDetalleCertificados')->with(compact('certificados', 'persona'));
+    }
+
+    public function ajaxDetalleMensualidades(Request $request)
+    {
+        $persona = Persona::find($request->persona_id);
+        $carreras = Inscripcione::where('persona_id', $persona->id)
+                                ->select('carrera_id')
+                                ->groupBy('carrera_id')
+                                ->get();
+        $array_carreras = array();
+        foreach($carreras as $carrera){
+            array_push($array_carreras, $carrera->carrera_id);
+        }
+        // Enviamos las carreras disponibles para inscribirse
+        $disponibles = Carrera::whereNotIn('id', $array_carreras)->get();
+        $turnos = Turno::get();
+        // Posteriormente enviaremos esa coleccion a interfaz
+        return view('persona.ajaxDetalleMensualidades')->with(compact('carreras', 'persona', 'disponibles', 'turnos'));
+    }
+
+    public function ajaxDetalleExtras(Request $request)
+    {
+        $persona = Persona::find($request->persona_id);
+        $carreras = Carrera::whereNotNull('estado')->get();
+        // Posteriormente enviaremos esa coleccion a interfaz
+        return view('persona.ajaxDetalleExtras')->with(compact('carreras', 'persona'));
     }
 
     /*

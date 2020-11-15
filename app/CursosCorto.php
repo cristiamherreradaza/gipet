@@ -5,27 +5,31 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Inscripcione extends Model
+class CursosCorto extends Model
 {
     use SoftDeletes;
     protected $fillable = [
-        'codigo_anterior',
         'user_id',
         'resolucion_id',
-        'carrera_id',
-        'asignatura_id',
-        'turno_id',
+        'inscripcion_id',
+        'docente_id',
         'persona_id',
+        'asignatura_id',
+        'turno_id',       
         'paralelo',
-        'semestre',
-        'gestion',
         'anio_vigente',
         'fecha_registro',
-        'nota',
+        'convalidado',
+        'nota_asistencia',
+        'nota_practicas',
+        'nota_puntos_ganados',
+        'nota_primer_parcial',
+        'nota_examen_final',
+        'nota_total',
         'segundo_turno',
         'nota_aprobacion',
-        'troncal',
-        'aprobo',
+        'validado',
+        'registrado',
         'estado',
         'deleted_at',
     ];
@@ -35,14 +39,19 @@ class Inscripcione extends Model
         return $this->belongsTo('App\User', 'user_id');
     }
 
-    public function resolucion()
+    public function inscripcion()
     {
-        return $this->belongsTo('App\Resolucione', 'resolucion_id');
+        return $this->belongsTo('App\Inscripcione', 'inscripcion_id');
     }
 
-    public function carrera()
+    public function docente()
     {
-        return $this->belongsTo('App\Carrera', 'carrera_id');
+        return $this->belongsTo('App\User', 'docente_id');
+    }
+
+    public function persona()
+    {
+        return $this->belongsTo('App\Persona', 'persona_id');
     }
 
     public function asignatura()
@@ -53,15 +62,5 @@ class Inscripcione extends Model
     public function turno()
     {
         return $this->belongsTo('App\Turno', 'turno_id');
-    }
-
-    public function persona()
-    {
-        return $this->belongsTo('App\Persona', 'persona_id');
-    }
-
-    public function segundosturnos()
-    {
-        return $this->hasMany('App\SegundosTurno');
     }
 }
