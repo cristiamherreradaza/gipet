@@ -104,6 +104,10 @@ Route::get('Migracion/docentes', 'MigracionController@docentes');
 Route::get('Migracion/notas', 'MigracionController@notas');
 Route::get('Migracion/notas2', 'MigracionController@notas2');
 Route::get('Migracion/convalidacion', 'MigracionController@convalidacion');
+Route::get('Migracion/notas3', 'MigracionController@notas3');
+Route::get('Migracion/notasInscrtipciones', 'MigracionController@notasInscrtipciones');
+Route::get('Migracion/llenaParalelos', 'MigracionController@llenaParalelos');
+Route::get('Migracion/llenaNotas', 'MigracionController@llenaNotas');
 
 //INSCRIPCIONES
 Route::get('Inscripcion/inscripcion', 'InscripcionController@inscripcion');

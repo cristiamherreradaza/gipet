@@ -8,6 +8,7 @@ use App\User;
 use App\Persona;
 use App\Asignatura;
 use App\Inscripcione;
+use App\CarrerasPersona;
 use Illuminate\Http\Request;
 
 class MigracionController extends Controller
@@ -267,43 +268,51 @@ class MigracionController extends Controller
     						->where('cedula', $k->carnetIDA)
     						->first();
 
+            echo $k->kardexID." - ".$k->carnetIDA."<br />";
+
     		if($datosPersona != null){
 
     			echo $datosPersona->cedula."-".$fechaN."<br />";
 
     			DB::table('carreras_personas')->insert([
-    				'codigo_anterior'=>$k->kardexID,
-    				'user_id'=>1,
-    				'carrera_id'=>$k->carreraID,
-    				'persona_id'=>$datosPersona->id,
-    				'turno_id'=>$k->turnoID,
-    				'fecha_inscripcion'=>$fechaN,
-    				'anio_vigente'=>$k->anio_act,
+    				'codigo_anterior'   => $k->kardexID,
+    				'user_id'           => 1,
+    				'carrera_id'        => $k->carreraID,
+    				'persona_id'        => $datosPersona->id,
+    				'turno_id'          => $k->turnoID,
+                    'paralelo'          => $k->a_paralelo,
+    				'fecha_inscripcion' => $fechaN,
+    				'anio_vigente'      => $k->anio_act,
+                    'estado'            => $k->observacion,
     			]);
 
     		}
     		// dd($datosPersona);
     	}
-    	dd($kardex);
+    	// dd($kardex);
     }
 
+    // para las gestion es 2015 - 2018
     public function notas()
     {
-
+        $gestion = 2018;
         // para la gestion 2015
 		$notas = DB::table('reg_notas')
 				->whereNull('nota')
-    			->whereYear('fec_reg', 2015)
+    			->whereYear('fec_reg', $gestion)
 				->get();
 		// dd($notas);0
 
 		foreach($notas as $key => $n)
 		{
 			$alumno = Persona::where('cedula', $n->carnetID)->first();
-            
 			$docente = User::where('codigo_anterior', $n->docenID)->first();
-			$asignatura = Asignatura::where('codigo_anterior', $n->asignaturaID)->first();
-			echo $key." - ".$n->regID." - ".$n->carnetID." - ".$alumno->cedula."<br />";
+            $asignatura = Asignatura::where('codigo_anterior', $n->asignaturaID)->first();
+             if($alumno && $docente && $asignatura)
+            {
+                // echo $key." - ".$n->regID." - ".$n->carnetID." - ".$alumno->cedula." - ".$alumno->id." - ".$asignatura->id."<br />";
+                echo $key." - ".$n->regID." - ".$n->carnetID." - ".$alumno->cedula."<br />";
+            }
 			$notaFinal = $n->asist_a+$n->trab_a+$n->p_ganados+$n->p_parcial+$n->e_final;
 
 			if($n->trim == 1)
@@ -312,13 +321,14 @@ class MigracionController extends Controller
                 {
                     $notas                      = new Nota();
                     $notas->codigo_anterior     = $n->regID;
-                    $notas->user_id             = 1;
+                    $notas->user_id             = 36;
                     $notas->resolucion_id       = 1;
                     $notas->docente_id          = $docente->id;
                     $notas->persona_id          = $alumno->id;
                     $notas->asignatura_id       = $asignatura->id;
                     $notas->turno_id            = $n->turn;
-                    $notas->anio_vigente        = 2015;
+                    $notas->anio_vigente        = $gestion;
+                    $notas->semestre            = $n->semesn;
                     $notas->trimestre           = $n->trim;
                     $notas->fecha_registro      = $n->fec_reg;
                     $notas->nota_asistencia     = $n->asist_a;
@@ -332,13 +342,14 @@ class MigracionController extends Controller
 
                     $notas                      = new Nota();
                     $notas->codigo_anterior     = $n->regID;
-                    $notas->user_id             = 1;
+                    $notas->user_id             = 36;
                     $notas->resolucion_id       = 1;
                     $notas->docente_id          = $docente->id;
                     $notas->persona_id          = $alumno->id;
                     $notas->asignatura_id       = $asignatura->id;
                     $notas->turno_id            = $n->turn;
-                    $notas->anio_vigente        = 2015;
+                    $notas->anio_vigente        = $gestion;
+                    $notas->semestre            = $n->semesn;
                     $notas->trimestre           = $n->trim+2;
                     $notas->fecha_registro      = $n->fec_reg;
                     $notas->nota_asistencia     = $n->asist_a;
@@ -351,45 +362,50 @@ class MigracionController extends Controller
                     $notas->save();
     			}
     		}else{
-                $notas                      = new Nota();
-                $notas->codigo_anterior     = $n->regID;
-                $notas->user_id             = 1;
-                $notas->resolucion_id       = 1;
-                $notas->docente_id          = $docente->id;
-                $notas->persona_id          = $alumno->id;
-                $notas->asignatura_id       = $asignatura->id;
-                $notas->turno_id            = $n->turn;
-                $notas->anio_vigente        = 2015;
-                $notas->trimestre           = $n->trim;
-                $notas->fecha_registro      = $n->fec_reg;
-                $notas->nota_asistencia     = $n->asist_a;
-                $notas->nota_practicas      = $n->trab_a;
-                $notas->nota_puntos_ganados = $n->p_ganados;
-                $notas->nota_primer_parcial = $n->p_parcial;
-                $notas->nota_examen_final   = $n->e_final;
-                $notas->nota_total          = $notaFinal;
-                $notas->nota_aprobacion     = 61;
-                $notas->save();
+                if($alumno && $docente && $asignatura)
+                {
+                    $notas                      = new Nota();
+                    $notas->codigo_anterior     = $n->regID;
+                    $notas->user_id             = 36;
+                    $notas->resolucion_id       = 1;
+                    $notas->docente_id          = $docente->id;
+                    $notas->persona_id          = $alumno->id;
+                    $notas->asignatura_id       = $asignatura->id;
+                    $notas->turno_id            = $n->turn;
+                    $notas->anio_vigente        = $gestion;
+                    $notas->semestre            = $n->semesn;
+                    $notas->trimestre           = $n->trim;
+                    $notas->fecha_registro      = $n->fec_reg;
+                    $notas->nota_asistencia     = $n->asist_a;
+                    $notas->nota_practicas      = $n->trab_a;
+                    $notas->nota_puntos_ganados = $n->p_ganados;
+                    $notas->nota_primer_parcial = $n->p_parcial;
+                    $notas->nota_examen_final   = $n->e_final;
+                    $notas->nota_total          = $notaFinal;
+                    $notas->nota_aprobacion     = 61;
+                    $notas->save();
 
-                $notas                      = new Nota();
-                $notas->codigo_anterior     = $n->regID;
-                $notas->user_id             = 1;
-                $notas->resolucion_id       = 1;
-                $notas->docente_id          = $docente->id;
-                $notas->persona_id          = $alumno->id;
-                $notas->asignatura_id       = $asignatura->id;
-                $notas->turno_id            = $n->turn;
-                $notas->anio_vigente        = 2015;
-                $notas->trimestre           = $n->trim+2;
-                $notas->fecha_registro      = $n->fec_reg;
-                $notas->nota_asistencia     = $n->asist_a;
-                $notas->nota_practicas      = $n->trab_a;
-                $notas->nota_puntos_ganados = $n->p_ganados;
-                $notas->nota_primer_parcial = $n->p_parcial;
-                $notas->nota_examen_final   = $n->e_final;
-                $notas->nota_total          = $notaFinal;
-                $notas->nota_aprobacion     = 61;
-                $notas->save();
+                    $notas                      = new Nota();
+                    $notas->codigo_anterior     = $n->regID;
+                    $notas->user_id             = 36;
+                    $notas->resolucion_id       = 1;
+                    $notas->docente_id          = $docente->id;
+                    $notas->persona_id          = $alumno->id;
+                    $notas->asignatura_id       = $asignatura->id;
+                    $notas->turno_id            = $n->turn;
+                    $notas->anio_vigente        = $gestion;
+                    $notas->semestre            = $n->semesn;
+                    $notas->trimestre           = $n->trim+2;
+                    $notas->fecha_registro      = $n->fec_reg;
+                    $notas->nota_asistencia     = $n->asist_a;
+                    $notas->nota_practicas      = $n->trab_a;
+                    $notas->nota_puntos_ganados = $n->p_ganados;
+                    $notas->nota_primer_parcial = $n->p_parcial;
+                    $notas->nota_examen_final   = $n->e_final;
+                    $notas->nota_total          = $notaFinal;
+                    $notas->nota_aprobacion     = 61;
+                    $notas->save();
+                }
             }
     	}
     	//saco todas las notas totales de la gestion
@@ -428,6 +444,54 @@ class MigracionController extends Controller
     		]);		
 		}	
 */
+    }
+    // para las gestiones 2019
+     public function notas3()
+    {
+        $gestion = 2020;
+        // para la gestion 2015
+		$notas = DB::table('reg_notas')
+				->whereNull('nota')
+    			->whereYear('fec_reg', $gestion)
+				->get();
+		// dd($notas);0
+
+		foreach($notas as $key => $n)
+		{
+			$alumno = Persona::where('cedula', $n->carnetID)->first();
+			$docente = User::where('codigo_anterior', $n->docenID)->first();
+            $asignatura = Asignatura::where('codigo_anterior', $n->asignaturaID)->first();
+             if($alumno && $docente && $asignatura)
+            {
+                // echo $key." - ".$n->regID." - ".$n->carnetID." - ".$alumno->cedula." - ".$alumno->id." - ".$asignatura->id."<br />";
+                echo $key." - ".$n->regID." - ".$n->carnetID." - ".$alumno->cedula."<br />";
+            }
+			$notaFinal = $n->asist_a+$n->trab_a+$n->p_ganados+$n->p_parcial+$n->e_final;
+
+            if($alumno && $docente && $asignatura)
+            {
+                $notas                      = new Nota();
+                $notas->codigo_anterior     = $n->regID;
+                $notas->user_id             = 36;
+                $notas->resolucion_id       = 1;
+                $notas->docente_id          = $docente->id;
+                $notas->persona_id          = $alumno->id;
+                $notas->asignatura_id       = $asignatura->id;
+                $notas->turno_id            = $n->turn;
+                $notas->anio_vigente        = $gestion;
+                $notas->semestre            = $n->semesn;
+                $notas->trimestre           = $n->trim;
+                $notas->fecha_registro      = $n->fec_reg;
+                $notas->nota_asistencia     = $n->asist_a;
+                $notas->nota_practicas      = $n->trab_a;
+                $notas->nota_puntos_ganados = $n->p_ganados;
+                $notas->nota_primer_parcial = $n->p_parcial;
+                $notas->nota_examen_final   = $n->e_final;
+                $notas->nota_total          = $notaFinal;
+                $notas->nota_aprobacion     = 61;
+                $notas->save();
+            }
+        }
     }
 
     // para la gestion 2016, 2017, 2018
@@ -551,7 +615,7 @@ class MigracionController extends Controller
 
     public function convalidacion()
     {
-        $gestion = 2016;
+        $gestion = 2020;
         // dd($gestion);
         $notas = DB::table('reg_notas')
                 ->whereNotNull('nota')
@@ -585,25 +649,116 @@ class MigracionController extends Controller
             }
             echo $n->regID ." - ". $gestion." - ".$n->carnetID."<br />";
 
-            $inscripcion                  = new Inscripcione();
-            $inscripcion->codigo_anterior = $n->regID;
-            $inscripcion->user_id         = $codigoDocente;
-            $inscripcion->resolucion_id   = 1;
-            $inscripcion->carrera_id      = $asignatura->carrera_id;
-            $inscripcion->asignatura_id   = $asignatura->id;
-            $inscripcion->turno_id        = $n->turn;
-            $inscripcion->persona_id      = $alumno->id;
-            $inscripcion->semestre        = $n->semesn;
-            $inscripcion->gestion         = $n->gestionn;
-            $inscripcion->anio_vigente    = $gestion;
-            $inscripcion->fecha_registro  = $n->fec_reg;
-            $inscripcion->nota            = $n->nota;
-            $inscripcion->nota_aprobacion = 61;
-            $inscripcion->troncal         = "Si";
-            $inscripcion->aprobo          = $aprobo;
-            $inscripcion->estado          = "Finalizado";
-            $inscripcion->save();
+            if($asignatura && $alumno)
+            {
+                $inscripcion                  = new Inscripcione();
+                $inscripcion->codigo_anterior = $n->regID;
+                $inscripcion->user_id         = $codigoDocente;
+                $inscripcion->resolucion_id   = 1;
+                $inscripcion->carrera_id      = $asignatura->carrera_id;
+                $inscripcion->asignatura_id   = $asignatura->id;
+                $inscripcion->turno_id        = $n->turn;
+                $inscripcion->persona_id      = $alumno->id;
+                $inscripcion->semestre        = $n->semesn;
+                $inscripcion->gestion         = $n->gestionn;
+                $inscripcion->anio_vigente    = $gestion;
+                $inscripcion->fecha_registro  = $n->fec_reg;
+                $inscripcion->nota            = $n->nota;
+                $inscripcion->nota_aprobacion = 61;
+                $inscripcion->troncal         = "Si";
+                $inscripcion->aprobo          = $aprobo;
+                $inscripcion->estado          = "Finalizado";
+                $inscripcion->save();
+            }
         }
         
+    }
+
+    public function notasInscrtipciones()
+    {
+        $gestion = 2020;
+
+        $notas = Nota::where('anio_vigente', $gestion)    
+                ->selectRaw("
+                    id,
+                    user_id,
+                    docente_id,
+                    persona_id, 
+                    turno_id,
+                    paralelo,
+                    anio_vigente,
+                    semestre,
+                    trimestre,
+                    fecha_registro,
+                    asignatura_id, AVG(nota_asistencia + nota_practicas+ nota_primer_parcial + nota_examen_final + nota_puntos_ganados) AS total ")
+                ->groupBy('persona_id', 'asignatura_id')
+                ->get();
+        foreach($notas as $n)
+        {
+            $notaRedondeada = round($n['total'], 0, PHP_ROUND_HALF_UP);
+            $asignatura = Asignatura::where('id', $n->asignatura_id)->first();
+            echo $n['id']." - ".$n['persona_id']." - ".$n['total']." - ".$notaRedondeada."<br />";
+
+            $inscripcion = new Inscripcione();
+            $inscripcion->user_id = $n['docente_id'];
+            $inscripcion->resolucion_id = 1;
+            $inscripcion->carrera_id = $asignatura->carrera_id;
+            $inscripcion->asignatura_id = $n['asignatura_id'];
+            $inscripcion->turno_id = $n['turno_id'];
+            $inscripcion->persona_id = $n['persona_id'];
+            $inscripcion->paralelo = $n['paralelo'];
+            $inscripcion->semestre = $n['semestre'];
+            $inscripcion->gestion = $n['gestion'];
+            $inscripcion->anio_vigente = $n['anio_vigente'];
+            $inscripcion->fecha_registro = $n['fecha_registro'];
+            $inscripcion->nota = $notaRedondeada;
+            $inscripcion->save();
+            // $inscripcion->persona_id = $n->persona_id;
+            /*echo "<pre>";
+            print_r($n);    
+            echo "</pre>";*/
+        }
+        // dd($notas);
+    }
+
+    public function deInscripcionesANotas()
+    {
+        $gestion = 2015;
+        $inscripciones = Inscripcione::where('anio_vigente', $gestion);
+        foreach($inscripciones as $i)
+        {
+            echo $i->id."<br />";
+            
+        }
+    }
+
+    // funcion para llenar paralelos
+    public function llenaParalelos()
+    {
+        $gestion = 2020;
+        $carreras = CarrerasPersona::where('anio_vigente', $gestion)->get();
+        foreach($carreras as $c){
+            echo $c->id." - ".$c->carrera_id." - ".$c->estado."<br />";
+            $inscripciones = Inscripcione::where('anio_vigente', $gestion)
+                                ->where('persona_id', $c->persona_id)
+                                ->update(['paralelo' => $c->paralelo]);
+        }   
+    }
+
+    // funcion para llenar notas
+    public function llenaNotas(){
+        $gestion = 2020;
+        $inscripciones = Inscripcione::where('anio_vigente', $gestion)->get();
+        foreach($inscripciones as $i)
+        {
+            echo $i->id." - ".$i->persona_id." - ".$i->nota."<br />";
+            $notas = Nota::where('anio_vigente', $gestion)
+                            ->where('persona_id', $i->persona_id)
+                            ->where('asignatura_id', $i->asignatura_id)
+                            ->update([
+                                'inscripcion_id' => $i->id,
+                                'paralelo' => $i->paralelo,
+                                ]);
+        }
     }
 }
