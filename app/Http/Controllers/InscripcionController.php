@@ -4,17 +4,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade as PDF;
 use App\Inscripcione;
 use App\Carrera;
 use App\Asignatura;
 use App\Materia;
 use App\Turno;
+use App\User;
 use App\Persona;
 use App\Nota;
 use App\NotasPropuesta;
 use App\CarrerasPersona;
 use App\Prerequisito;
 use App\Kardex;
+use App\CursosCorto;
 use App\CobrosTemporada;
 use App\Servicio;
 use App\ServiciosAsignatura;
@@ -1147,8 +1150,6 @@ class InscripcionController extends Controller
         return view('inscripcion.inscripcion', compact('carreras', 'turnos', 'year', 'asignaturas'));    
     }
 
-
-    
     /*
     public function guardar(Request $request)
     {
@@ -1779,8 +1780,6 @@ class InscripcionController extends Controller
 
     }
 
-  
-
     public function lista()
     {
     	$personas = Persona::all();
@@ -1795,7 +1794,6 @@ class InscripcionController extends Controller
 
     public function re_inscripcion(Request $request)
     {
-
     	$carrera = new CarreraPersona();
         $carrera->carrera_id   = $request->re_carrera_id;
         $carrera->persona_id   = $request->re_persona_id;
@@ -1810,26 +1808,6 @@ class InscripcionController extends Controller
         $this->asignaturas_reinscripcion($request->re_turno_id, $request->re_persona_id, $request->re_carrera_id, $request->re_paralelo, $request->re_anio_vigente);
 
         return redirect('Inscripcion/ver_persona/'.$request->re_persona_id);
-
-  //   	$fecha = new \DateTime();//aqui obtenemos la fecha y hora actual
-		// $year = $fecha->format('Y');//obtenes solo el año actual
-
-  //   	$id = $request->id;//obtenes el id de la asignatura seleccioanda en la vista
-  //   	$persona = Persona::find($id);
-  //   	// $carreras = Carrera::where('estado',1)->get();
-  //   	$carreras = DB::table('kardex')
-		// 		      ->select(
-		// 		        'kardex.carrera_id',
-		// 		        'carreras.nombre',
-		// 		        'carreras.gestion'
-		// 		      )
-		// 		      ->join('carreras', 'kardex.carrera_id','=','carreras.id')
-		// 		      ->where('carreras.gestion',$year)
-		// 		      ->distinct()->get();
-  //       $turnos = Turno::where('deleted_at', NULL)->get();
-		
-  //       // dd($persona);
-  //       return view('inscripcion.re_inscripcion', compact('persona', 'carreras', 'turnos', 'year'));    
     }
 
     public function asignaturas_reinscripcion($turno_id, $persona_id, $carrera_id, $paralelo, $anio_vigente)
@@ -2070,7 +2048,6 @@ class InscripcionController extends Controller
     	    
     }
 
-
     public function vista()
     {
     	$id = 3185;//obtenes el id de la asignatura seleccioanda en la vista
@@ -2092,4 +2069,297 @@ class InscripcionController extends Controller
     	
     }
 
+    public function ajaxMuestraNotaInscripcion(Request $request)
+    {
+        $inscripcion = Inscripcione::find($request->inscripcion_id);
+        $notas = Nota::where('inscripcion_id', $request->inscripcion_id)
+                    ->get();
+        return view('inscripcion.ajaxMuestraNotaInscripcion')->with(compact('inscripcion', 'notas'));
+    }
+
+    public function actualizaNotaInscripcion(Request $request)
+    {
+        // Capturaremos las inscripcion_id y desde ahi crearemos las variables necesarias para el proceso
+        $inscripcion = Inscripcione::find($request->inscripcion_id);
+        $asignatura = Asignatura::find($inscripcion->asignatura_id);
+        $persona = Persona::find($inscripcion->persona_id);
+        $notas = Nota::where('inscripcion_id', $inscripcion->id)
+                    ->get();
+        // Actualizaremos los valores correspondientes a la tabla Motas
+        // Preguntamos por el ciclo, si es semestral
+        if($asignatura->ciclo == 'Semestral'){
+            // Es Semestral, las notas se actualizaran en base a los bimestres 1->3 y 2->4
+            foreach($notas as $nota){
+                // Capturamos las registros enviados desde interfaz, respectivos a cada nota
+                $asistencia = 'asistencia-'.$nota->id;
+                $practicas = 'practicas-'.$nota->id;
+                $parcial = 'parcial-'.$nota->id;
+                $final = 'final-'.$nota->id;
+                $puntos = 'puntos-'.$nota->id;
+                // Si el trimestre es 1
+                if($nota->trimestre == 1){
+                    // Primero calcularemos para llenar la nota total
+                    $total = $request->$asistencia + $request->$practicas + $request->$parcial + $request->$final;
+                    $necesario = 100 - $total;
+                    if($necesario >= 10){
+                        $total = $total + $request->$puntos;
+                    }else{
+                        if($necesario <= $request->$puntos){
+                            $total = $total + $necesario;
+                        }else{
+                            $total = $total + $request->$puntos;
+                        }
+                    }
+                    // Ahora si guardaremos los valores que se mandaron para el trimestre 1
+                    $nota->nota_asistencia = $request->$asistencia;
+                    $nota->nota_practicas = $request->$practicas;
+                    $nota->nota_primer_parcial = $request->$parcial;
+                    $nota->nota_examen_final = $request->$final;
+                    $nota->nota_puntos_ganados = $request->$puntos;
+                    $nota->nota_total = $total;
+                    $nota->save();
+                    // Hallaremos el registro con en el trimestre 3
+                    $terceraNota = Nota::where('inscripcion_id', $inscripcion->id)
+                                        ->where('trimestre', 3)
+                                        ->first();
+                    // Guardaremos los registros con los datos del trimestre 1
+                    $terceraNota->nota_asistencia = $request->$asistencia;
+                    $terceraNota->nota_practicas = $request->$practicas;
+                    $terceraNota->nota_primer_parcial = $request->$parcial;
+                    $terceraNota->nota_examen_final = $request->$final;
+                    $terceraNota->nota_puntos_ganados = $request->$puntos;
+                    $terceraNota->nota_total = $total;
+                    $terceraNota->save();
+                }
+                // Si el trimestre es 2
+                if($nota->trimestre == 2){
+                    // Primero calcularemos para llenar la nota total
+                    $total = $request->$asistencia + $request->$practicas + $request->$parcial + $request->$final;
+                    $necesario = 100 - $total;
+                    if($necesario >= 10){
+                        $total = $total + $request->$puntos;
+                    }else{
+                        if($necesario <= $request->$puntos){
+                            $total = $total + $necesario;
+                        }else{
+                            $total = $total + $request->$puntos;
+                        }
+                    }
+                    // Ahora si guardaremos los valores que se mandaron para el trimestre 2
+                    $nota->nota_asistencia = $request->$asistencia;
+                    $nota->nota_practicas = $request->$practicas;
+                    $nota->nota_primer_parcial = $request->$parcial;
+                    $nota->nota_examen_final = $request->$final;
+                    $nota->nota_puntos_ganados = $request->$puntos;
+                    $nota->nota_total = $total;
+                    $nota->save();
+                    // Hallaremos el registro con en el trimestre 4
+                    $cuartaNota = Nota::where('inscripcion_id', $inscripcion->id)
+                                        ->where('trimestre', 4)
+                                        ->first();
+                    // Guardaremos los registros con los datos del trimestre 2
+                    $cuartaNota->nota_asistencia = $request->$asistencia;
+                    $cuartaNota->nota_practicas = $request->$practicas;
+                    $cuartaNota->nota_primer_parcial = $request->$parcial;
+                    $cuartaNota->nota_examen_final = $request->$final;
+                    $cuartaNota->nota_puntos_ganados = $request->$puntos;
+                    $cuartaNota->nota_total = $total;
+                    $cuartaNota->save();
+                }
+            }
+        }else{
+            // Es Anual, las notas se actualizaran de forma independiente
+            foreach($notas as $nota){
+                // Capturamos las registros enviados desde interfaz, respectivos a cada nota
+                $asistencia = 'asistencia-'.$nota->id;
+                $practicas = 'practicas-'.$nota->id;
+                $parcial = 'parcial-'.$nota->id;
+                $final = 'final-'.$nota->id;
+                $puntos = 'puntos-'.$nota->id;
+                // Primero calcularemos para llenar la nota total
+                $total = $request->$asistencia + $request->$practicas + $request->$parcial + $request->$final;
+                $necesario = 100 - $total;
+                if($necesario >= 10){
+                    $total = $total + $request->$puntos;
+                }else{
+                    if($necesario <= $request->$puntos){
+                        $total = $total + $necesario;
+                    }else{
+                        $total = $total + $request->$puntos;
+                    }
+                }
+                // Ahora si guardaremos los valores que se mandaron
+                $nota->nota_asistencia = $request->$asistencia;
+                $nota->nota_practicas = $request->$practicas;
+                $nota->nota_primer_parcial = $request->$parcial;
+                $nota->nota_examen_final = $request->$final;
+                $nota->nota_puntos_ganados = $request->$puntos;
+                $nota->nota_total = $total;
+                $nota->save();
+            }
+        }
+        // Actualizaremos los valores correspondientes a la tabla Inscripciones
+        $notaTotal = 0;
+        // Volvemos a capturar en la variable $notas la coleccion del modelo Notas
+        $notas = Nota::where('inscripcion_id', $inscripcion->id)
+                    ->get();
+        foreach($notas as $nota){
+            $notaTotal = $notaTotal + $nota->nota_total;
+        }
+        $notaTotal = round($notaTotal/4);
+        $inscripcion->nota = $notaTotal;
+        if($notaTotal >= $inscripcion->nota_aprobacion){
+            $inscripcion->aprobo = 'Si';
+        }else{
+            $inscripcion->aprobo = 'No';
+        }
+        $inscripcion->save();
+        return redirect('Persona/ver_detalle/'.$persona->id);
+    }
+
+    public function inscribirCursoCorto($persona_id, $asignatura_id)
+    {
+        // Si existen los dos parametros
+        if($persona_id && $asignatura_id)
+        {
+            // Buscaremos si no existe un registro ya en inscripciones
+            $registro = Inscripcione::where('persona_id', $persona_id)
+                                    ->where('asignatura_id', $asignatura_id)
+                                    ->where('aprobo', 'Si')
+                                    ->first();
+            // Si no existe un registro, procedemos a la inscripcion
+            if(!$registro)
+            {
+                $asignatura = Asignatura::find($asignatura_id);
+                $persona = Persona::find($persona_id);
+                // Buscaremos si existe un docente ya asignado a esta materia
+                $docente = NotasPropuesta::where('asignatura_id', $asignatura->id)
+                                        //->where('turno_id', $request->$datos_turno)
+                                        //->where('paralelo', $request->$datos_paralelo)
+                                        ->where('anio_vigente', date('Y'))
+                                        ->first();
+                // Registramos en inscripciones
+                $inscripcion = new Inscripcione();
+                $inscripcion->user_id = Auth::user()->id;
+                $inscripcion->resolucion_id = $asignatura->carrera->resolucion_id;
+                $inscripcion->carrera_id = $asignatura->carrera->id;
+                $inscripcion->asignatura_id = $asignatura->id;
+                $inscripcion->persona_id = $persona->id;
+                $inscripcion->gestion = $asignatura->gestion;
+                $inscripcion->anio_vigente = date('Y');
+                $inscripcion->fecha_registro = date('Y-m-d');
+                $inscripcion->nota_aprobacion = $asignatura->carrera->nota_aprobacion;
+                //$inscripcion->aprobo = 'Si', 'No', 'Cursando';
+                $inscripcion->estado = 'Cursando';  // Cuando acaba semestre/gestion cambiar a Finalizado
+                $inscripcion->save();
+                // Registramos en cursos_cortos
+                $curso_corto = new CursosCorto();
+                $curso_corto->user_id = Auth::user()->id;
+                $curso_corto->resolucion_id = $asignatura->carrera->resolucion_id;
+                $curso_corto->inscripcion_id = $inscripcion->id;
+                if($docente){
+                    $curso_corto->docente_id = $docente->docente_id;
+                }
+                $curso_corto->persona_id = $persona->id;
+                $curso_corto->asignatura_id = $asignatura->id;
+                $curso_corto->anio_vigente = date('Y');
+                //$curso_corto->trimestre = $i;
+                $curso_corto->fecha_registro = date('Y-m-d');
+                $curso_corto->nota_aprobacion = $asignatura->carrera->nota_aprobacion;
+                $curso_corto->save();
+            }
+            return redirect('Persona/ver_detalle/'.$persona_id);
+        }
+        return redirect('Persona/listado');
+    }
+
+    public function ajaxVerCursoCorto(Request $request)
+    {
+        $inscripcion = Inscripcione::find($request->inscripcion_id);
+        $curso = CursosCorto::where('inscripcion_id', $request->inscripcion_id)
+                            ->first();
+        return view('inscripcion.ajaxVerCursoCorto')->with(compact('inscripcion', 'curso'));
+    }
+
+    public function actualizaCursoCorto(Request $request)
+    {
+        // Capturaremos las inscripcion_id y desde ahi crearemos las variables necesarias para el proceso
+        $inscripcion = Inscripcione::find($request->inscripcion_id);
+        $asignatura = Asignatura::find($inscripcion->asignatura_id);
+        $persona = Persona::find($inscripcion->persona_id);
+        $curso = CursosCorto::where('inscripcion_id', $inscripcion->id)
+                    ->first();
+
+        // Primero calcularemos para llenar la nota total
+        $total = $request->asistencia + $request->practicas + $request->parcial + $request->final;
+        $necesario = 100 - $total;
+        if($necesario >= 10){
+            $total = $total + $request->puntos;
+        }else{
+            if($necesario <= $request->puntos){
+                $total = $total + $necesario;
+            }else{
+                $total = $total + $request->puntos;
+            }
+        }
+        // Ahora si guardaremos los valores que se mandaron para el trimestre 1
+        $curso->nota_asistencia = $request->asistencia;
+        $curso->nota_practicas = $request->practicas;
+        $curso->nota_primer_parcial = $request->parcial;
+        $curso->nota_examen_final = $request->final;
+        $curso->nota_puntos_ganados = $request->puntos;
+        $curso->nota_total = $total;
+        $curso->save();
+
+        // Actualizaremos los valores correspondientes a la tabla Inscripciones
+        $inscripcion->nota = $total;
+        if($total >= $inscripcion->nota_aprobacion){
+            $inscripcion->aprobo = 'Si';
+        }else{
+            $inscripcion->aprobo = 'No';
+        }
+        $inscripcion->save();
+        return redirect('Persona/ver_detalle/'.$persona->id);
+    }
+
+    public function eliminarCursoCorto($id)
+    {
+        if($id)
+        {
+            $inscripcion = Inscripcione::find($id);
+            if($inscripcion)
+            {
+                $persona_id = $inscripcion->persona_id;
+                $curso_corto = CursosCorto::where('inscripcion_id', $inscripcion->id)
+                                        ->first();
+                if($curso_corto)
+                {
+                    $curso_corto->delete();
+                }
+                $inscripcion->delete();
+                return redirect('Persona/ver_detalle/'.$persona_id);
+            }
+        }
+        return redirect('Persona/listado');
+    }
+
+    public function ajaxMuestraInscripcion(Request $request)
+    {
+        $registro = CarrerasPersona::find($request->inscripcion_id);
+        $inscripciones = Inscripcione::where('carrera_id', $registro->carrera_id)
+                                    ->where('persona_id', $registro->persona_id)
+                                    ->where('turno_id', $registro->turno_id)
+                                    ->where('fecha_registro', $registro->fecha_inscripcion)
+                                    ->get();
+        return view('inscripcion.ajaxMuestraInscripcion')->with(compact('registro', 'inscripciones'));
+    }
+
+    public function pruebapdf()
+    {
+        $users  = User::get();
+        // En la variable pdf se cargara la vista con sus respectivos datos
+        $pdf    = PDF::loadView('pdf.users', compact('users'));
+        // Nombre del pdf a exportar
+        return $pdf->download('users-list.pdf');
+    }
 }

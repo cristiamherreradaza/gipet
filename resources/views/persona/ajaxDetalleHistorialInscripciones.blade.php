@@ -35,9 +35,38 @@
                     <td>{{ $inscripcion->turno->descripcion }}</td>
                     <td>{{ $inscripcion->paralelo }}</td>
                     <td>{{ $inscripcion->anio_vigente }}</td>
-                    <td></td>
+                    <td>
+                        <button type="button" class="btn btn-info" title="Ver detalle" onclick="ajaxMuestraInscripcion('{{ $inscripcion->id }}')"><i class="fas fa-eye"></i></button>
+                        <button type="button" class="btn btn-danger" title="Eliminar Inscripcion" disabled><i class="fas fa-trash-alt"></i></button>
+                    </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 </div>
+
+<!-- inicio modal editar perfil -->
+<div id="detalle_modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" id="contenido_modal">
+        
+    </div>
+</div>
+<!-- fin modal editar perfil -->
+
+<script>
+    // Funcion que muestra los datos referentes a los una inscripcion del historial academico
+    function ajaxMuestraInscripcion(inscripcion_id)
+    {
+        $.ajax({
+            url: "{{ url('Inscripcion/ajaxMuestraInscripcion') }}",
+            data: {
+                inscripcion_id: inscripcion_id
+                },
+            type: 'get',
+            success: function(data) {
+                $("#contenido_modal").html(data);
+                $("#detalle_modal").modal('show');
+            }
+        });
+    }
+</script>

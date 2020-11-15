@@ -31,6 +31,7 @@ class Nota extends Model
         'nota_total',
         'segundo_turno',
         'nota_aprobacion',
+        'finalizado',
         'validado',
         'registrado',
         'estado',

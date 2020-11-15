@@ -147,6 +147,15 @@ Route::get('Inscripcion/recuperatorio', 'InscripcionController@recuperatorio');
 Route::get('Inscripcion/buscar_recuperatorio', 'InscripcionController@buscar_recuperatorio');
 Route::get('Inscripcion/reinscripcion/{personaId}/{carreraId}', 'InscripcionController@reinscripcion');
 
+Route::get('Inscripcion/ajaxMuestraInscripcion', 'InscripcionController@ajaxMuestraInscripcion');
+Route::get('Inscripcion/ajaxMuestraNotaInscripcion', 'InscripcionController@ajaxMuestraNotaInscripcion');
+Route::post('Inscripcion/actualizaNotaInscripcion', 'InscripcionController@actualizaNotaInscripcion');
+Route::get('Inscripcion/inscribirCursoCorto/{persona_id}/{asignatura_id}', 'InscripcionController@inscribirCursoCorto');
+Route::get('Inscripcion/ajaxVerCursoCorto', 'InscripcionController@ajaxVerCursoCorto');
+Route::post('Inscripcion/actualizaCursoCorto', 'InscripcionController@actualizaCursoCorto');
+Route::get('Inscripcion/eliminarCursoCorto/{id}', 'InscripcionController@eliminarCursoCorto');
+
+Route::get('Inscripcion/pruebapdf', 'InscripcionController@pruebapdf')->name('users.pdf');      //ELIMINAR
 
 
 // ADMINISTRACION

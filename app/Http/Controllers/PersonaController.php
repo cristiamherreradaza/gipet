@@ -141,10 +141,17 @@ class PersonaController extends Controller
     public function ajaxDetalleHistorialAcademico(Request $request)
     {
         $persona = Persona::find($request->persona_id);
+        $array_carreras = array();
         $carreras = Inscripcione::where('persona_id', $request->persona_id)
                                 ->groupBy('carrera_id')
                                 ->select('carrera_id')
                                 ->get();
+        foreach($carreras as $carrera){
+            array_push($array_carreras, $carrera->carrera_id);
+        }
+        $carreras = Carrera::whereIn('id', $array_carreras)
+                            ->whereNull('estado')
+                            ->get();
         $inscripciones = Inscripcione::where('persona_id', $request->persona_id)
                                     ->orderBy('fecha_registro', 'asc')
                                     ->get();
@@ -154,20 +161,34 @@ class PersonaController extends Controller
     public function ajaxDetallePensum(Request $request)
     {
         $persona = Persona::find($request->persona_id);
+        $array_carreras = array();
         $carreras = Inscripcione::where('persona_id', $request->persona_id)
                                 ->groupBy('carrera_id')
                                 ->select('carrera_id')
                                 ->get();
+        foreach($carreras as $carrera){
+            array_push($array_carreras, $carrera->carrera_id);
+        }
+        $carreras = Carrera::whereIn('id', $array_carreras)
+                            ->whereNull('estado')
+                            ->get();
         return view('persona.ajaxDetallePensum')->with(compact('carreras', 'persona'));
     }
 
     public function ajaxDetalleMaterias(Request $request)
     {
         $persona = Persona::find($request->persona_id);
+        $array_carreras = array();
         $carreras = Inscripcione::where('persona_id', $request->persona_id)
                                 ->groupBy('carrera_id')
                                 ->select('carrera_id')
                                 ->get();
+        foreach($carreras as $carrera){
+            array_push($array_carreras, $carrera->carrera_id);
+        }
+        $carreras = Carrera::whereIn('id', $array_carreras)
+                            ->whereNull('estado')
+                            ->get();
         $inscripciones = Inscripcione::where('persona_id', $request->persona_id)
                                     ->orderBy('fecha_registro', 'asc')
                                     ->get();
@@ -185,6 +206,9 @@ class PersonaController extends Controller
         foreach($carreras as $carrera){
             array_push($array_carreras, $carrera->carrera_id);
         }
+        $carreras = Carrera::whereIn('id', $array_carreras)
+                            ->whereNull('estado')
+                            ->get();
         // Enviamos las carreras disponibles para inscribirse
         $disponibles = Carrera::whereNotIn('id', $array_carreras)->get();
         $turnos = Turno::get();

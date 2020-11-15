@@ -84,7 +84,7 @@
         <tbody>
             @foreach($carreras as $key => $carrera)
                 @php
-                    $detalle = App\Carrera::find($carrera->carrera_id);
+                    $detalle = App\Carrera::find($carrera->id);
                     $gestion = App\Inscripcione::where('carrera_id', $detalle->id)
                                                 ->where('persona_id', $persona->id)
                                                 ->max('gestion');
@@ -103,6 +103,12 @@
                         $estado = $estado->where('semestre', $semestre);
                     }
                     $resultado = $estado->first();
+                    $parametro = App\Asignatura::where('carrera_id', $detalle->id)
+                                                ->where('anio_vigente', $detalle->anio_vigente)
+                                                ->count();
+                    $comparacion = App\Inscripcione::where('carrera_id', $detalle->id)
+                                                    ->where('aprobo', 'Si')
+                                                    ->count();
                 @endphp
                 <tr>
                     <td>{{ ($key+1) }}</td>
@@ -111,7 +117,14 @@
                     <td>{{ $semestre }}</td>
                     <td>{{ $anio }}</td>
                     <td>{{ $resultado->estado }}</td>
-                    <td><a href="{{ url('Inscripcion/reinscripcion/'.$persona->id.'/'.$detalle->id) }}" class="btn btn-info">Reinscribir</a></td>
+                    <td>
+                        <a href="{{ url('Inscripcion/reinscripcion/'.$persona->id.'/'.$detalle->id) }}" class="btn btn-inverse" title="Reinscribir"><i class="fas fa-plus"></i></a>
+                        @if($parametro == $comparacion)
+                        <a href="{{ url('Inscripcion/convalidar/'.$persona->id.'/'.$detalle->id) }}" class="btn btn-warning" title="Convalidar"><i class="fas fa-arrows-alt-h"></i></a>
+                        @else
+                        <button class="btn btn-warning" title="Convalidar" disabled><i class="fas fa-arrows-alt-h"></i></button>
+                        @endif
+                    </td>
                 </tr>
             @endforeach
         </tbody>
