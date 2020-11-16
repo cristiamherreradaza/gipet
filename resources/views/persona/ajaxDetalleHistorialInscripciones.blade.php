@@ -18,9 +18,9 @@
                 @php
                     $registro = App\Inscripcione::where('persona_id', $persona->id)
                                                 ->where('carrera_id', $inscripcion->carrera_id)
-                                                ->where('turno_id', $inscripcion->turno_id)
-                                                ->where('paralelo', $inscripcion->paralelo)
-                                                ->where('fecha_registro', $inscripcion->fecha_inscripcion)
+                                                // ->where('turno_id', $inscripcion->turno_id)
+                                                ->where('anio_vigente', $inscripcion->anio_vigente)
+                                                // ->where('fecha_registro', $inscripcion->fecha_inscripcion)
                                                 ->first();
                 @endphp
                 <tr>

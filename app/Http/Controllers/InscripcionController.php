@@ -2349,8 +2349,9 @@ class InscripcionController extends Controller
         $registro = CarrerasPersona::find($request->inscripcion_id);
         $inscripciones = Inscripcione::where('carrera_id', $registro->carrera_id)
                                     ->where('persona_id', $registro->persona_id)
-                                    ->where('turno_id', $registro->turno_id)
-                                    ->where('fecha_registro', $registro->fecha_inscripcion)
+                                    ->where('anio_vigente', $registro->anio_vigente)
+                                    // ->where('turno_id', $registro->turno_id)
+                                    // ->where('fecha_registro', $registro->fecha_inscripcion)
                                     ->get();
         return view('inscripcion.ajaxMuestraInscripcion')->with(compact('registro', 'inscripciones'));
     }

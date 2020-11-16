@@ -445,7 +445,7 @@ class MigracionController extends Controller
 		}	
 */
     }
-    // para las gestiones 2019
+    // para las gestiones 2019-2020
      public function notas3()
     {
         $gestion = 2020;
@@ -732,7 +732,7 @@ class MigracionController extends Controller
         }
     }
 
-    // funcion para llenar paralelos
+    // funcion para regularizar los paralelos
     public function llenaParalelos()
     {
         $gestion = 2020;
@@ -745,7 +745,7 @@ class MigracionController extends Controller
         }   
     }
 
-    // funcion para llenar notas
+    // funcion para regularizar las inscripciones y paralelos en notas
     public function llenaNotas(){
         $gestion = 2020;
         $inscripciones = Inscripcione::where('anio_vigente', $gestion)->get();
@@ -760,5 +760,10 @@ class MigracionController extends Controller
                                 'paralelo' => $i->paralelo,
                                 ]);
         }
+    }
+
+    // esta funcion completa todas las notas a 4 filas
+    public function regularizaNotasAlumnos(){
+        
     }
 }
