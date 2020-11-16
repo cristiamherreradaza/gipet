@@ -2349,10 +2349,29 @@ class InscripcionController extends Controller
         $registro = CarrerasPersona::find($request->inscripcion_id);
         $inscripciones = Inscripcione::where('carrera_id', $registro->carrera_id)
                                     ->where('persona_id', $registro->persona_id)
-                                    ->where('turno_id', $registro->turno_id)
-                                    ->where('fecha_registro', $registro->fecha_inscripcion)
+                                    //->where('turno_id', $registro->turno_id)
+                                    //->where('fecha_registro', $registro->fecha_inscripcion)
+                                    ->where('anio_vigente', $registro->anio_vigente)
                                     ->get();
         return view('inscripcion.ajaxMuestraInscripcion')->with(compact('registro', 'inscripciones'));
+    }
+
+    public function boletin($id)
+    {
+        $registro = CarrerasPersona::find($id);
+        $persona = Persona::find($registro->persona_id);
+        $carrera = Carrera::find($registro->carrera_id);
+        // En la variable inscripciones hallaremos la relacion entre el registro de la tabla carreras_personas e inscripciones
+        $inscripciones = Inscripcione::where('carrera_id', $registro->carrera_id)
+                                    ->where('persona_id', $registro->persona_id)
+                                    ->where('turno_id', $registro->turno_id)
+                                    //->where('paralelo', $registro->paralelo)                //paralelo
+                                    //->where('fecha_registro', $registro->fecha_inscripcion) //fecha_inscripcion
+                                    ->where('anio_vigente', $registro->anio_vigente)        //anio_vigente
+                                    ->get();
+        $pdf    = PDF::loadView('pdf.boletinCalificacionInscripcion', compact('registro', 'carrera', 'persona', 'inscripciones'))->setPaper('letter');
+        // return $pdf->download('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
+        return $pdf->stream('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
     }
 
     public function pruebapdf()
