@@ -2345,6 +2345,7 @@ class InscripcionController extends Controller
 
     public function ajaxMuestraInscripcion(Request $request)
     {
+        // capturamos las variables
         $registro = CarrerasPersona::find($request->inscripcion_id);
         $inscripciones = Inscripcione::where('carrera_id', $registro->carrera_id)
                                     ->where('persona_id', $registro->persona_id)
