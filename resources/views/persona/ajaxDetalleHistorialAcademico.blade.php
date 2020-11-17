@@ -22,8 +22,7 @@
                     <th>NOTA</th>
                     <th>RECUPERATORIO</th>
                     <th>OBSERVACIONES</th>
-                    <th># LIBRO</th>
-                    <th># FOLIO</th>
+                    <th>CONVALIDADO</th>
                     <th></th>
                 </tr>
             </thead>
@@ -66,21 +65,32 @@
                                     NINGUNO
                                 @endif
                             </td>
-                            <td>{{ $materia->nota ? round($materia->nota) : '0' }}</td>
+                            <td>
+                                @if($materia->convalidado == 'Si')
+                                    {{ $materia->nota ? round($materia->nota) : '0' }} ({{ $materia->nota_aprobacion }})
+                                @else
+                                    {{ $materia->nota ? round($materia->nota) : '0' }}
+                                @endif
+                            </td>
                             <td>
                                 @php
                                     $resultado = App\Nota::where('inscripcion_id', $materia->id)
                                                             ->first();
                                 @endphp
-                                {{ $resultado->segundo_turno ? round($resultado->segundo_turno) : '-' }}
+                                {{ $resultado ? round($resultado->segundo_turno) : '-' }}
                             </td>
                             @if($materia->aprobo == 'Si')
                                 <td class="text-success">APROBADO</td>
                             @else
                                 <td class="text-danger">REPROBADO</td>
                             @endif
-                            <td>-</td>
-                            <td>-</td>
+                            <td>
+                                @if($materia->convalidado == 'Si')
+                                    {{ $materia->convalidado }}
+                                @else
+                                    No
+                                @endif
+                            </td>
                             <td>
                                 <button type="button" class="btn btn-info" title="Ver detalle" onclick="ajaxMuestraNotaInscripcion('{{ $materia->id }}')"><i class="fas fa-eye"></i></button>
                             </td>

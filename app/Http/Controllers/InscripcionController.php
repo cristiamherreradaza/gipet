@@ -2365,9 +2365,9 @@ class InscripcionController extends Controller
         $inscripciones = Inscripcione::where('carrera_id', $registro->carrera_id)
                                     ->where('persona_id', $registro->persona_id)
                                     ->where('turno_id', $registro->turno_id)
-                                    //->where('paralelo', $registro->paralelo)                //paralelo
-                                    //->where('fecha_registro', $registro->fecha_inscripcion) //fecha_inscripcion
-                                    ->where('anio_vigente', $registro->anio_vigente)        //anio_vigente
+                                    //->where('paralelo', $registro->paralelo)                  //paralelo
+                                    //->where('fecha_registro', $registro->fecha_inscripcion)   //fecha_inscripcion
+                                    ->where('anio_vigente', $registro->anio_vigente)            //anio_vigente
                                     ->get();
         $pdf    = PDF::loadView('pdf.boletinCalificacionInscripcion', compact('registro', 'carrera', 'persona', 'inscripciones'))->setPaper('letter');
         // return $pdf->download('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');

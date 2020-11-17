@@ -93,6 +93,13 @@
             </tr>
         </table>
         <br>
+        @php
+            $detalle = App\Inscripcione::where('carrera_id', $registro->carrera_id)
+                                        ->where('persona_id', $registro->persona_id)
+                                        ->where('turno_id', $registro->turno_id)
+                                        ->where('anio_vigente', $registro->anio_vigente)        //anio_vigente
+                                        ->first();
+        @endphp
         <table class="bordess" style="width:100%; font-family: 'Times New Roman', Times, serif; font-size:14px; text-align:center">
             <tr style="border: 1px solid black; border-collapse: collapse">
                 <td class="celdabg" style="width:50%;"><strong>Carrera: </strong></td>
@@ -100,7 +107,7 @@
                 <td class="celdabg" style="width:50%;"><strong>Nivel: </strong></td>
                 <td style="width:50%;" nowrap>{{ $carrera->nivel }}</td>
                 <td class="celdabg" style="width:50%;"><strong>Curso: </strong></td>
-                <td style="width:50%;" nowrap>1° A&ntilde;o</td>
+                <td style="width:50%;" nowrap>{{ $detalle ? $detalle->gestion : 'N/T' }}° A&ntilde;o</td>
             </tr>
         </table>
         <br>
@@ -128,14 +135,30 @@
                 <th nowrap>FINAL</th>
             </tr>
             @foreach($inscripciones as $inscripcion)
+                @php
+                    $notas = App\Nota::where('inscripcion_id', $inscripcion->id)
+                                    ->get();
+                @endphp
                 <tr>
                     <td nowrap>{{ $inscripcion->asignatura->sigla }}</td>
                     <td style="text-align:left" nowrap>{{ $inscripcion->asignatura->nombre }}</td>
-                    <td></td>
-                    <td></td>
+                    @foreach($notas as $nota)
+                        @if($nota->trimestre == 1)
+                            <td>{{ $nota->nota_total }}</td>
+                        @endif
+                        @if($nota->trimestre == 2)
+                            <td>{{ $nota->nota_total }}</td>
+                        @endif
+                    @endforeach
                     <td style="background-color: #e5e5e5;">0</td>
-                    <td></td>
-                    <td></td>
+                    @foreach($notas as $nota)
+                        @if($nota->trimestre == 3)
+                            <td>{{ $nota->nota_total }}</td>
+                        @endif
+                        @if($nota->trimestre == 4)
+                            <td>{{ $nota->nota_total }}</td>
+                        @endif
+                    @endforeach
                     <td style="background-color: #e5e5e5;">0</td>
                     <td></td>
                     <td style="background-color: #e5e5e5;">{{ $inscripcion->nota ? round($inscripcion->nota) : '0' }}</td>

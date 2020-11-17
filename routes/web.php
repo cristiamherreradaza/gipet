@@ -291,3 +291,7 @@ Route::post('Transaccion/guardar_todo', 'TransaccionController@guardar_todo');
 Route::post('Transaccion/guardar_factura', 'TransaccionController@guardar_factura');
 
 Route::post('Transaccion/pago_recuperatorio', 'TransaccionController@pago_recuperatorio');
+
+// REPORTES
+Route::get('Lista/alumnos', 'ListaController@alumnos');
+Route::get('Lista/ajaxBusquedaAlumnos', 'ListaController@ajaxBusquedaAlumnos');
