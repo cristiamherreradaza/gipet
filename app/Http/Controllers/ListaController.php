@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use DataTables;
 use App\Asignatura;
 use App\Carrera;
+use App\CarrerasPersona;
 use App\Inscripcione;
 use App\Persona;
 use App\Turno;
@@ -20,37 +21,59 @@ class ListaController extends Controller
         $cursos     = Asignatura::select('gestion')
                                 ->groupBy('gestion')
                                 ->get();
-        $gestiones  = Inscripcione::select('anio_vigente')
-                                ->groupBy('anio_vigente')
-                                ->get();
-        $paralelos  = Inscripcione::select('paralelo')
+        $turnos     = Turno::get();
+        $paralelos  = CarrerasPersona::select('paralelo')
                                 ->groupBy('paralelo')
                                 ->get();
-        $turnos     = Turno::get();
-        return view('lista.alumnos')->with(compact('carreras', 'cursos', 'gestiones', 'paralelos', 'turnos'));
+        $gestiones  = CarrerasPersona::select('anio_vigente')
+                                ->groupBy('anio_vigente')
+                                ->get();
+        $estados    = CarrerasPersona::select('vigencia')
+                                    ->groupBy('vigencia')
+                                    ->get();
+        return view('lista.alumnos')->with(compact('carreras', 'cursos', 'gestiones', 'paralelos', 'turnos', 'estados'));
     }
 
     public function ajaxBusquedaAlumnos(Request $request)
     {
-        $resultado = DB::table('inscripciones')
-                        ->whereNull('inscripciones.deleted_at')
-                        ->where('inscripciones.carrera_id', $request->carrera)
-                        ->where('inscripciones.gestion', $request->curso)
-                        ->where('inscripciones.turno_id', $request->turno)
-                        //->where('inscripciones.paralelo', $request->paralelo)
-                        ->where('inscripciones.anio_vigente', $request->gestion)
-                        // consulta de alumno vigente/novigente
-                        ->leftJoin('personas', 'inscripciones.persona_id', '=', 'personas.id')
+        $resultado = DB::table('carreras_personas')
+                        ->whereNull('carreras_personas.deleted_at')
+                        ->where('carreras_personas.carrera_id', $request->carrera)
+                        ->where('carreras_personas.gestion', $request->curso)
+                        ->where('carreras_personas.turno_id', $request->turno)
+                        ->where('carreras_personas.paralelo', $request->paralelo)
+                        ->where('carreras_personas.anio_vigente', $request->gestion)
+                        ->where('carreras_personas.vigencia', $request->estado)
+                        ->leftJoin('personas', 'carreras_personas.persona_id', '=', 'personas.id')
                         ->select(
                             'personas.cedula as cedula',
                             'personas.apellido_paterno as apellido_paterno',
                             'personas.apellido_materno as apellido_materno',
                             'personas.nombres as nombres',
                             'personas.numero_celular as numero_celular',
-                            'personas.estado as estado'
-                        )
-                        ->groupBy('inscripciones.persona_id');
+                            'carreras_personas.vigencia as estado'
+                        );
+                        //->groupBy('carreras_personas.persona_id');
         return Datatables::of($resultado)->make(true);
+        // $resultado = DB::table('inscripciones')
+        //                 ->whereNull('inscripciones.deleted_at')
+        //                 ->where('inscripciones.carrera_id', $request->carrera)
+        //                 ->where('inscripciones.gestion', $request->curso)
+        //                 ->where('inscripciones.turno_id', $request->turno)
+        //                 //->where('inscripciones.paralelo', $request->paralelo)
+        //                 ->where('inscripciones.anio_vigente', $request->gestion)
+        //                 // consulta de alumno vigente/novigente
+        //                 ->leftJoin('personas', 'inscripciones.persona_id', '=', 'personas.id')
+        //                 ->select(
+        //                     'personas.cedula as cedula',
+        //                     'personas.apellido_paterno as apellido_paterno',
+        //                     'personas.apellido_materno as apellido_materno',
+        //                     'personas.nombres as nombres',
+        //                     'personas.numero_celular as numero_celular',
+        //                     'personas.estado as estado'
+        //                 )
+        //                 ->groupBy('inscripciones.persona_id');
+        // return Datatables::of($resultado)->make(true);
 
         // $resultado = Inscripcione::with('persona')
         //                         ->where('carrera_id', $request->carrera)

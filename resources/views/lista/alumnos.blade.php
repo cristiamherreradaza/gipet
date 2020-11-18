@@ -75,8 +75,9 @@
                         <div class="form-group">
                             <label class="control-label">Estado</label>
                             <select name="estado" id="estado" class="form-control">
-                                <option value="Vigente"> Vigente </option>
-                                <option value="No Vigente"> No Vigente </option>
+                                @foreach($estados as $estado)
+                                    <option value="{{ $estado->vigencia }}"> {{ $estado->vigencia }} </option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -183,7 +184,7 @@
                 {data: 'apellido_materno', name: 'personas.apellido_materno'},
                 {data: 'nombres', name: 'personas.nombres'},
                 {data: 'numero_celular', name: 'personas.numero_celular'},
-                {data: 'estado', name: 'personas.estado'},
+                {data: 'estado', name: 'carreras_personas.vigencia'},
                 // {data: 'saldo', name: 'ventas.saldo'},
             ],
             language: {
