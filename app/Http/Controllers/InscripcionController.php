@@ -2374,6 +2374,23 @@ class InscripcionController extends Controller
         return $pdf->stream('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
     }
 
+    public function reportePdfHistorialAcademico($persona_id, $carrera_id)
+    {
+        if($persona_id && $carrera_id)
+        {
+            $persona        = Persona::find($persona_id);
+            $carrera        = Carrera::find($carrera_id);
+            $inscripciones  = Inscripcione::where('persona_id', $persona->id)
+                                        ->where('carrera_id', $carrera->id)
+                                        //->orderBy('id')
+                                        ->get();
+            $pdf    = PDF::loadView('pdf.historialAcademico', compact('carrera', 'persona', 'inscripciones'))->setPaper('letter');
+            // return $pdf->download('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
+            return $pdf->stream('historialAcademico_'.date('Y-m-d H:i:s').'.pdf');
+        }
+        return redirect('Persona/listado');
+    }
+
     public function pruebapdf()
     {
         $users  = User::get();

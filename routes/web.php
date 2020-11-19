@@ -159,6 +159,9 @@ Route::get('Inscripcion/inscribirCursoCorto/{persona_id}/{asignatura_id}', 'Insc
 Route::get('Inscripcion/ajaxVerCursoCorto', 'InscripcionController@ajaxVerCursoCorto');
 Route::post('Inscripcion/actualizaCursoCorto', 'InscripcionController@actualizaCursoCorto');
 Route::get('Inscripcion/eliminarCursoCorto/{id}', 'InscripcionController@eliminarCursoCorto');
+
+// PDFS
+Route::get('Inscripcion/reportePdfHistorialAcademico/{persona_id}/{carrera_id}', 'InscripcionController@reportePdfHistorialAcademico');
 Route::get('Inscripcion/boletin/{id}', 'InscripcionController@boletin');
 
 Route::get('Inscripcion/pruebapdf', 'InscripcionController@pruebapdf')->name('users.pdf');      //ELIMINAR

@@ -7,7 +7,12 @@
                                         ->get();
         $key=1;
     @endphp
-    <h3><strong class="text-danger">{{ strtoupper($informacionCarrera->nombre) }}</strong></h3>
+    <h3>
+        <strong class="text-danger">{{ strtoupper($informacionCarrera->nombre) }}</strong> &nbsp;
+        <button class="btn btn-light" onclick="reportePdfHistorialAcademico('{{ $persona->id }}', '{{ $informacionCarrera->id }}')">
+            <i class="fas fa-file-pdf"></i>
+        </button>
+    </h3>
     <div class="table-responsive">
         <table class="table table-striped no-wrap text-center" id="tablaProductosEncontrados">
             <thead>
@@ -129,5 +134,10 @@
                 $("#detalle_modal").modal('show');
             }
         });
+    }
+
+    function reportePdfHistorialAcademico(persona_id, carrera_id)
+    {
+        window.location.href = "{{ url('Inscripcion/reportePdfHistorialAcademico') }}/"+persona_id+"/"+carrera_id;
     }
 </script>
