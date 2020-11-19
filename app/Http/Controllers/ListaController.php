@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade as PDF;
 use DataTables;
 use App\Asignatura;
 use App\Carrera;
@@ -88,7 +89,19 @@ class ListaController extends Controller
         // return Datatables::of($resultado)
         //                 ->addColumn('persona', function (Inscripcione $inscripcion){ $inscripcion->persona->cedula; })
         //                 ->make(true);
+    }
 
-
+    public function reportePdfAlumnos($carrera_id, $curso_id, $turno_id, $paralelo, $gestion, $estado)
+    {
+        $listado    = CarrerasPersona::where('carrera_id', $carrera_id)
+                                    ->where('gestion', $curso_id)
+                                    ->where('turno_id', $turno_id)
+                                    ->where('paralelo', $paralelo)
+                                    ->where('anio_vigente', $gestion)
+                                    ->where('vigencia', $estado)
+                                    ->get();
+        $pdf    = PDF::loadView('pdf.listaAlumnoCarreraCursoTurnoParalelo', compact('listado'))->setPaper('letter');
+        // return $pdf->download('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
+        return $pdf->stream('listaAlumnos_'.date('Y-m-d H:i:s').'.pdf');
     }
 }

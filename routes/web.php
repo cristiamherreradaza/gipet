@@ -298,3 +298,4 @@ Route::post('Transaccion/pago_recuperatorio', 'TransaccionController@pago_recupe
 // REPORTES
 Route::get('Lista/alumnos', 'ListaController@alumnos');
 Route::get('Lista/ajaxBusquedaAlumnos', 'ListaController@ajaxBusquedaAlumnos');
+Route::get('Lista/reportePdfAlumnos/{carrera}/{curso}/{turno}/{paralelo}/{gestion}/{estado}', 'ListaController@reportePdfAlumnos');

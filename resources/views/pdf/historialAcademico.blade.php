@@ -82,7 +82,7 @@
             <tr>
                 <td style="width:65%; text-align:center;">
                     <p style="font-family: 'Times New Roman', Times, serif; font-size:20px; line-height:1%">
-                        <strong>HISTORIAL ACADEMICO</strong>
+                        <strong>HISTORIAL ACAD&Eacute;MICO</strong>
                     </p>
                 </td>
             </tr>
@@ -106,7 +106,7 @@
                 <td><strong>NIVEL DE FORMACION:</strong></td>
                 <td>{{ strtoupper($carrera->nivel) }}</td>
                 <td><strong>FECHA DE CONCLUSION:</strong></td>
-                <td>20/02/2017</td>
+                <td>{{ date('Y') }}/{{ date('m') }}/{{ date('d') }}</td>
             </tr>
             <tr>
                 <td><strong>REGIMEN:</strong></td>
@@ -122,6 +122,7 @@
             </tr>
         </table>
         <br>
+        <hr>
         <table cellpadding="1" class="celdas" style="font-family: 'Times New Roman', Times, serif; font-size:10px; text-align:center">
             <tr>
                 <th>N°</th>
@@ -184,8 +185,7 @@
         <p style="font: normal 12px/150% Times New Roman, Times, serif; text-align:left;">
             <strong>Lugar y fecha: </strong> La Paz - {{ date('Y-m-d') }}.
         </p>
-        <br><br><br><br>
-
+        <br><br><br><br><br><br>
         <table style="width:100%;">
             <tr>
                 <td style="text-align:center; font-family: 'Times New Roman', Times, serif; font-size:14px;">

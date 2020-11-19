@@ -103,6 +103,13 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">RESULTADO DE BUSQUEDA</h4>
+                <div class="row">
+                    <div class="col-md-12">
+                        <button class="btn btn-light" onclick="reportePdfAlumnos()">
+                            <i class="fas fa-file-pdf">&nbsp; PDF</i>
+                        </button>        
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table id="tabla-tienda" class="table table-bordered table-striped no-wrap">
                         <thead class="text-center">
@@ -206,6 +213,19 @@
         //         }
         //     });
         // });
+    }
+
+    function reportePdfAlumnos()
+    {
+        //alert('hola');
+        var carrera     = $("#carrera").val();
+        var curso       = $("#curso").val();
+        var turno       = $("#turno").val();
+        var paralelo    = $("#paralelo").val();
+        var gestion     = $("#gestion").val();
+        var estado      = $("#estado").val();
+        // Aplicar validaciones, para cuando los campos sean vacios
+        window.location.href = "{{ url('Lista/reportePdfAlumnos') }}/"+carrera+'/'+curso+'/'+turno+'/'+paralelo+'/'+gestion+'/'+estado;
     }
 </script>
 
