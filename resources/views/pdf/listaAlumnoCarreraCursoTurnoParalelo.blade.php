@@ -12,7 +12,7 @@
         }
  
         body {
-            margin: 5cm 1cm 5cm;
+            margin: 5cm 1cm 2cm;
         }
  
         header {
@@ -29,10 +29,10 @@
  
         footer {
             position: fixed;
-            bottom: 1cm;
+            bottom: 0cm;
             left: 1cm;
             right: 1cm;
-            height: 5cm;
+            height: 2cm;
             background-color: #fff;
             color: black;
             text-align: center;
