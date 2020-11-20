@@ -194,9 +194,8 @@
                                                                 </span>
                                                             </label>
                                                             <select class="form-control" id="trabaja" name="trabaja" required>
-                                                                <option value="">Seleccionar</option>
                                                                 <option value="Si">Si</option>
-                                                                <option value="No">No</option>
+                                                                <option value="No" selected>No</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -311,6 +310,24 @@
                                     <div class="card border-info">
                                         <div class="card-body">
                                             <div class="row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Fecha de Inscripcion</label>
+                                                        <span class="text-danger">
+                                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                        </span>
+                                                        <input type="date" name="fecha_inscripcion" id="fecha_inscripcion" class="form-control" value="{{ date('Y-m-d') }}" required>
+                                                    </div> 
+                                                </div>
+                                                <div class="col-md-6"></div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="control-label">&nbsp;</label>
+                                                        <button class="form-control btn btn-success" type="button" onclick="education_fields();"><i class="fas fa-plus"></i>&nbsp;ADICIONAR CARRERA</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
                                                 <div class="col-3">
                                                     <div class="form-group">
                                                         <label>Carrera
@@ -341,7 +358,7 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-3">
+                                                <div class="col">
                                                     <div class="form-group">
                                                         <label>Paralelo
                                                             <span class="text-danger">
@@ -357,20 +374,22 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-3">
+                                                <div class="col">
                                                     <div class="form-group">
                                                         <label class="control-label">Gesti&oacute;n</label>
                                                         <input type="text" class="form-control" id="gestion_1" name="gestion_1" value="{{ $anio_actual }}">
                                                     </div>
+                                                </div>
+                                                <div class="col-1">
                                                 </div>
                                                 <input type="text" hidden name="cantidad" id="cantidad" value="1">
                                                 <input type="text" hidden name="numero[]" id="numero" value="1">    
                                             </div>
                                             <div class="row">
                                                 <div class="col-lg-2 col-md-12">
-                                                    <div class="form-group">
+                                                    <!-- <div class="form-group">
                                                         <button class="btn btn-success" type="button" onclick="education_fields();">ADICIONAR CARRERA</button>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
                                             </div>
                                             <div id="education_fields">
@@ -382,11 +401,11 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success">Guardar</button>
+                                    <button type="submit" class="btn waves-effect waves-light btn-block btn-inverse">GUARDAR</button>
                                 </div>
                                 <div class="col-md-6">
                                     <a href="{{ url('Persona/listado') }}">
-                                        <button type="button" class="btn waves-effect waves-light btn-block btn-inverse">Cancelar</button>
+                                        <button type="button" class="btn waves-effect waves-light btn-block btn-inverse">CANCELAR</button>
                                     </a>
                                 </div>
                             </div>
@@ -506,7 +525,7 @@
                                     </select>\
                                 </div>\
                             </div>\
-                            <div class="col-2">\
+                            <div class="col">\
                                 <div class="form-group">\
                                     <label>Paralelo\
                                         <span class="text-danger">\
@@ -522,14 +541,14 @@
                                     </select>\
                                 </div>\
                             </div>\
-                            <div class="col-2">\
+                            <div class="col">\
                                 <div class="form-group">\
                                     <label class="control-label">Gesti&oacute;n</label>\
                                     <input type="text" class="form-control" id="gestion_' + room + '" name="gestion_' + room + '" value="{{ $anio_actual }}">\
                                 </div>\
                             </div>\
                             <input type="text" hidden name="numero[]" id="numero" value="' + room + '">\
-                            <div class="col-2">\
+                            <div class="col-1">\
                                 <div class="form-group">\
                                     <label class="control-label"></label><br>\
                                     <button class="btn btn-danger" type="button" title="Retirar carrera" onclick="remove_education_fields(' + room + ');"> <i class="fa fa-minus"></i>\

@@ -35,6 +35,7 @@ class InscripcionController extends Controller
 
     public function guardar(Request $request)
     {
+        dd('hola');
         // Si existe el parametro $request->persona_id actualizamos, si no existe, creamos uno nuevo
         if($request->persona_id){
             $persona = Persona::find($request->persona_id);
@@ -71,6 +72,8 @@ class InscripcionController extends Controller
         // razon_social_cliente
         $persona->save();
 
+
+        
         // En la variable $request->numero, que es un array, se envia la cantidad de carreras inscritas
         foreach ($request->numero as $registro) {
             // Por cada carrera existente, se crean los valores para cada carrera
