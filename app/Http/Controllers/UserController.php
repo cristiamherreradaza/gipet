@@ -383,4 +383,39 @@ class UserController extends Controller
         $usuario->save();
         return redirect('User/listado');
     }
+
+    public function actualizarPermisosPerfil(Request $request)
+    {
+        if($request->permisos)
+        {
+            $usuario            = User::find($request->usuario_id);
+            $menus_permisos     = MenusUser::where('user_id', $usuario->id)
+                                        ->get();
+            // Eliminamos todos los permisos correspondientes al usuario X
+            foreach($menus_permisos as $menu)
+            {
+                $menu->delete();
+            }
+            // Si existen valores en el array $request->permisos
+            foreach($request->permisos as $registro)
+            {
+                // En una variable almacenamos a los menus correspondientes al padre
+                $nuevos_permisos    = Menu::where('id', $registro)
+                                        ->orWhere('padre', $registro)
+                                        ->get();
+                if(count($nuevos_permisos) > 0)
+                {
+                    // Llenamos con los nuevos valores correspondientes
+                    foreach($nuevos_permisos as $menu)
+                    {
+                        $nuevo          = new MenusUser();
+                        $nuevo->user_id = $usuario->id;
+                        $nuevo->menu_id = $menu->id;
+                        $nuevo->save();
+                    }
+                }
+            }
+        }
+        return redirect('User/listado');
+    }
 }

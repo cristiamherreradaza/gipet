@@ -35,7 +35,6 @@ class InscripcionController extends Controller
 
     public function guardar(Request $request)
     {
-        dd('hola');
         // Si existe el parametro $request->persona_id actualizamos, si no existe, creamos uno nuevo
         if($request->persona_id){
             $persona = Persona::find($request->persona_id);
@@ -71,9 +70,6 @@ class InscripcionController extends Controller
         // nit
         // razon_social_cliente
         $persona->save();
-
-
-        
         // En la variable $request->numero, que es un array, se envia la cantidad de carreras inscritas
         foreach ($request->numero as $registro) {
             // Por cada carrera existente, se crean los valores para cada carrera
@@ -95,10 +91,13 @@ class InscripcionController extends Controller
                     $carreras_persona->carrera_id = $request->$datos_carrera;
                     $carreras_persona->persona_id = $persona->id;
                     $carreras_persona->turno_id = $request->$datos_turno;
+                    $carreras_persona->gestion = '1';
                     $carreras_persona->paralelo = $request->$datos_paralelo;
-                    $carreras_persona->fecha_inscripcion = date('Y-m-d');
+                    $carreras_persona->fecha_inscripcion = $request->fecha_inscripcion;
                     $carreras_persona->anio_vigente = $request->$datos_gestion;
-                    //$carreras_persona->sexo = $persona->sexo;
+                    $carreras_persona->sexo = $persona->sexo;
+                    $carreras_persona->vigencia = 'Vigentes';
+                    //$carreras_persona->estado = '';   APROBO/REPROBO/ABANDONO/NULL
                     $carreras_persona->save();
                     // Tenemos que ver como se lleva a cabo la 1era gestion, si es por semestres o anual
                     $info_primera_gestion = Asignatura::where('carrera_id', $request->$datos_carrera)
@@ -149,7 +148,7 @@ class InscripcionController extends Controller
                             $inscripcion->semestre = $asignatura->semestre;
                             $inscripcion->gestion = $asignatura->gestion;
                             $inscripcion->anio_vigente = $request->$datos_gestion;
-                            $inscripcion->fecha_registro = date('Y-m-d');
+                            $inscripcion->fecha_registro = $request->fecha_inscripcion;
                             $inscripcion->nota_aprobacion = $informacion_carrera->nota_aprobacion;
                             $inscripcion->troncal = $asignatura->troncal;
                             //$inscripcion->aprobo = 'Si', 'No', 'Cursando';
@@ -179,7 +178,7 @@ class InscripcionController extends Controller
                                 $nota->paralelo = $request->$datos_paralelo;
                                 $nota->anio_vigente = $request->$datos_gestion;
                                 $nota->trimestre = $i;
-                                $nota->fecha_registro = date('Y-m-d');
+                                $nota->fecha_registro = $request->fecha_inscripcion;
                                 $nota->nota_aprobacion = $informacion_carrera->nota_aprobacion;
                                 $nota->save();
                             }

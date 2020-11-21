@@ -196,7 +196,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Persona/detalle/{persona_id}', 'PersonaController@detalle');
     Route::get('Persona/ajax_materias/{carrera_id}/{persona_id}/{anio_vigente}', 'PersonaController@ajax_materias');
     Route::get('User/ajaxEditaPerfil', 'UserController@ajaxEditaPerfil');
-
+    Route::post('User/actualizarPermisosPerfil', 'UserController@actualizarPermisosPerfil');
     Route::get('User/asigna_materias/{id}', 'UserController@asigna_materias');
 
     Route::get('Asignatura/ajax_muestra_prerequisitos/{asignatura_id}', 'AsignaturaController@ajax_muestra_prerequisitos');

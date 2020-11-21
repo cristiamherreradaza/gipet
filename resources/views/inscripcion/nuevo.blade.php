@@ -377,7 +377,7 @@
                                                 <div class="col">
                                                     <div class="form-group">
                                                         <label class="control-label">Gesti&oacute;n</label>
-                                                        <input type="text" class="form-control" id="gestion_1" name="gestion_1" value="{{ $anio_actual }}">
+                                                        <input type="number" class="form-control" id="gestion_1" name="gestion_1" value="{{ $anio_actual }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-1">
@@ -544,7 +544,7 @@
                             <div class="col">\
                                 <div class="form-group">\
                                     <label class="control-label">Gesti&oacute;n</label>\
-                                    <input type="text" class="form-control" id="gestion_' + room + '" name="gestion_' + room + '" value="{{ $anio_actual }}">\
+                                    <input type="number" class="form-control" id="gestion_' + room + '" name="gestion_' + room + '" value="{{ $anio_actual }}">\
                                 </div>\
                             </div>\
                             <input type="text" hidden name="numero[]" id="numero" value="' + room + '">\

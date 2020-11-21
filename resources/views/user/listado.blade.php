@@ -373,19 +373,13 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Fecha de Nacimiento</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <input type="date" name="fecha_nacimiento_edicion" id="fecha_nacimiento_edicion" class="form-control" required>
+                                <input type="date" name="fecha_nacimiento_edicion" id="fecha_nacimiento_edicion" class="form-control">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Lugar de Nacimiento</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <select name="lugar_nacimiento_edicion" id="lugar_nacimiento_edicion" class="form-control" required>
+                                <select name="lugar_nacimiento_edicion" id="lugar_nacimiento_edicion" class="form-control">
                                     <option value=""></option>
                                     <option value="BENI"> Beni </option>
                                     <option value="CHUQUISACA"> Chuquisaca </option>
@@ -813,8 +807,8 @@
             ci.length>0 &&
             expedido.length>0 &&
             username.length>0 &&
-            fecha_nacimiento.length>0 &&
-            lugar_nacimiento.length>0 &&
+            //fecha_nacimiento.length>0 &&
+            //lugar_nacimiento.length>0 &&
             sexo.length>0){
                 Swal.fire(
                     'Excelente!',

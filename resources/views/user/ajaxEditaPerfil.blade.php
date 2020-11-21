@@ -1,36 +1,20 @@
 <div class="modal-content">
     <div class="modal-header">
-        <h4 class="modal-title" id="myModalLabel">EDITAR PERFIL</h4>
+        <h4 class="modal-title" id="myModalLabel">EDITAR PERMISOS</h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
     </div>
-    <form action="{{ url('Perfil/actualizar') }}"  method="POST" >
+    <form action="{{ url('User/actualizarPermisosPerfil') }}"  method="POST" >
         @csrf
-        <div class="modal-body">        
-            <input type="hidden" name="id" id="id" value="{{ $perfil->id }}">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="control-label">Nombre</label>
-                        <span class="text-danger">
-                            <i class="mr-2 mdi mdi-alert-circle"></i>
-                        </span>
-                        <input name="nombre" type="text" id="nombre" class="form-control" value="{{ $perfil->nombre }}" required>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="control-label">Descripcion</label>
-                        <input name="descripcion" type="text" id="descripcion" class="form-control" value="{{ $perfil->descripcion }}">
-                    </div>
-                </div>
-            </div>
+        <div class="modal-body">
+            <input type="hidden" name="usuario_id" id="usuario_id" value="{{ $usuario->id }}">
+            <input type="hidden" name="perfil_id" id="perfil_id" value="{{ $perfil->id }}">
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
                         <label class="control-label">Menus</label>
                         @foreach($menugeneral as $key => $menu)
                             @php
-                                $consulta = App\MenusPerfile::where('perfil_id', $perfil->id)->where('menu_id', $menu->id)->count();
+                                $consulta = App\MenusUser::where('user_id', $usuario->id)->where('menu_id', $menu->id)->count();
                                 if($consulta > 0)
                                 {
                                     $checkeado = 'checked';
@@ -42,7 +26,7 @@
                             @endphp
                             <div class="col-sm-3">
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input cajas" value="{{ $menu->id }}" id="customCheck-{{$key}}" name="datosmenu[]" {{ $checkeado }}>
+                                    <input type="checkbox" class="custom-control-input cajas" value="{{ $menu->id }}" id="customCheck-{{$key}}" name="permisos[]" {{ $checkeado }}>
                                     <label for="customCheck-{{$key}}" class="custom-control-label">{{ $menu->nombre }}</label>
                                 </div>
                             </div>
