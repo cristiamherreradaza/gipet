@@ -79,8 +79,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('nota/detalle/{id}', 'NotaController@detalle');
 
-    Route::get('nota/exportarexcel/{id}', 'NotaController@exportarexcel');
-
+    //Route::get('nota/exportarexcel/{id}', 'NotaController@exportarexcel');
+    Route::get('nota/exportarexcel/{asignatura_id}/{bimestre}', 'NotaController@exportarexcel');
+    Route::get('Nota/finalizarBimestre/{nota_propuesta_id}/{bimestre}', 'NotaController@finalizarBimestre');
     Route::post('Nota/segundoTurno', 'NotaController@segundoTurno');
 
     Route::post('nota/actualizar', 'NotaController@actualizar');

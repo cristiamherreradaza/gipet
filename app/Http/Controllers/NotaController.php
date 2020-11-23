@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\User;
+use App\Asignatura;
 use App\Persona;
 use App\NotasPropuesta;
 use App\Nota;
@@ -26,9 +27,18 @@ class NotaController extends Controller
 
     public function listado()
     {
-        $asignaturas = NotasPropuesta::where('docente_id', Auth::user()->id)
+        $arrayAsignaturas   = array();
+        $asignaturas        = NotasPropuesta::where('docente_id', Auth::user()->id)
                                     ->where('anio_vigente', date('Y'))
                                     ->get();
+        // foreach($asignaturas as $materia)
+        // {
+        //     array_push($arrayAsignaturas, $materia->asignatura_id);
+        // }
+        // $asignaturas    = Asignatura::whereIn('id', $arrayAsignaturas)
+        //                             ->orderBy('gestion')
+        //                             ->orderBy('semestre')
+        //                             ->get();
         return view('nota.listado')->with(compact('asignaturas'));
     }
 
@@ -37,19 +47,53 @@ class NotaController extends Controller
         // Buscamos los detalles de la materia a mostrar
         $asignatura = NotasPropuesta::find($id);
         // Buscamos a los estudiantes inscritos en esa materia
-        $inscritos = Inscripcione::where('asignatura_id', $asignatura->asignatura_id)
+        $inscritos  = Inscripcione::where('asignatura_id', $asignatura->asignatura_id)
                                 ->where('turno_id', $asignatura->turno_id)
                                 ->where('paralelo', $asignatura->paralelo)
                                 ->where('anio_vigente', $asignatura->anio_vigente)
                                 ->get();
         //Tomamos todas las notas que coincidan con estos valores y las devolveremos a la vista
-        $notas = Nota::where('asignatura_id', $asignatura->asignatura_id)
+        $notas  = Nota::where('asignatura_id', $asignatura->asignatura_id)
                     ->where('turno_id', $asignatura->turno_id)
                     //->where('user_id', $asignatura->user_id)
                     ->where('paralelo', $asignatura->paralelo)
                     ->where('anio_vigente', $asignatura->anio_vigente)
                     ->get();
-        return view('nota.detalle')->with(compact('asignatura', 'inscritos', 'notas'));
+        // Veremos si la asignatura se lleva de forma semestral o anual
+        $materia    = Asignatura::find($asignatura->asignatura_id);
+        $ciclo    = $materia->ciclo;
+        if($ciclo == 'Semestral')
+        {
+            $maximo  = 2;
+        }
+        else
+        {
+            $maximo  = 4;
+        }
+        // Haremos una iteracion para encontrar en que bimestre se tiene que registrar las notas
+        for($i = 1; $i <= $maximo; $i++)
+        {
+            // Buscamos un registro donde no se haya finalizado las notas
+            $bimestre   = Nota::where('asignatura_id', $asignatura->asignatura_id)
+                            ->where('turno_id', $asignatura->turno_id)
+                            ->where('paralelo', $asignatura->paralelo)
+                            ->where('anio_vigente', $asignatura->anio_vigente)
+                            ->where('trimestre', $i)
+                            ->whereNull('finalizado')
+                            ->first();
+            if($bimestre)
+            {
+                $bimestre   = $i;
+                break;
+            }
+        }
+        // Verificamos que en el caso de que el valor de bimestre NO exista
+        if(!$bimestre)
+        {
+            // $bimestre tomara el valor de 0, y en ese caso es un indicador de que finalizo todos los registros de notas
+            $bimestre   = 0;
+        }
+        return view('nota.detalle')->with(compact('asignatura', 'inscritos', 'notas', 'ciclo', 'bimestre'));
     }
 
     public function ajaxMuestraNota(Request $request)
@@ -78,9 +122,14 @@ class NotaController extends Controller
         }
     }
 
-    public function exportarexcel(Request $request)
+    // public function exportarexcel(Request $request)
+    // {
+    //     return Excel::download(new NotasExport($request->id), date('Y-m-d').'-ListadoNotas.xlsx');
+    // }
+
+    public function exportarexcel($asignatura_id, $bimestre)
     {
-        return Excel::download(new NotasExport($request->id), date('Y-m-d').'-ListadoNotas.xlsx');
+        return Excel::download(new NotasExport($asignatura_id, $bimestre), date('Y-m-d').'-ListadoNotas.xlsx');
     }
 
     public function actualizar(Request $request)
@@ -483,7 +532,7 @@ class NotaController extends Controller
             //             ->where('paralelo', $request->paralelo)
             //             ->where('anio_vigente', $request->anio_vigente)
             //             ->get();
-            // Sumar sus notas totales en un registro   REVISAR
+            // Sumar sus notas totales en un registro           REVISAR
             $notas = Nota::groupBy('persona_id')
                         ->selectRaw('persona_id, sum(nota_total) as total')
                         ->where('asignatura_id', $request->asignatura_id)
@@ -491,15 +540,15 @@ class NotaController extends Controller
                         ->where('paralelo', $request->paralelo)
                         ->where('anio_vigente', $request->anio_vigente)
                         ->get();
-            //dd($notas);
+            // dd($notas);
             // Por cada registro guardar en inscripcion
             foreach($notas as $nota){
-                $inscripcion = Inscripcion::where('asignatura_id', $request->asignatura_id)
-                                        ->where('turno_id', $request->turno_id)
-                                        ->where('persona_id', $nota->persona_id)
-                                        ->where('paralelo', $request->paralelo)
-                                        ->where('anio_vigente', $request->anio_vigente)
-                                        ->first();
+                $inscripcion = Inscripcione::where('asignatura_id', $request->asignatura_id)
+                                            ->where('turno_id', $request->turno_id)
+                                            ->where('persona_id', $nota->persona_id)
+                                            ->where('paralelo', $request->paralelo)
+                                            ->where('anio_vigente', $request->anio_vigente)
+                                            ->first();
                 $inscripcion->nota = round($nota->total/4);
                 $inscripcion->save();
             }
@@ -527,6 +576,102 @@ class NotaController extends Controller
                 'sw' => 0
             ]);
         }
+    }
+
+    public function finalizarBimestre($nota_propuesta_id, $bimestre)
+    {
+        $nota_propuesta = NotasPropuesta::find($nota_propuesta_id);
+        $notas  = Nota::where('asignatura_id', $nota_propuesta->asignatura_id)
+                        ->where('turno_id', $nota_propuesta->turno_id)
+                        ->where('paralelo', $nota_propuesta->paralelo)
+                        ->where('anio_vigente', $nota_propuesta->anio_vigente)
+                        // ->where('docente_id', $nota_propuesta->docente_id)
+                        ->where('trimestre', $bimestre)
+                        ->get();
+        // Verificamos como se lleva a cabo esta asignatura, si es semestral o anual
+        if($nota_propuesta->asignatura->ciclo == 'Semestral')
+        {
+            // Finalizaremos 2 bimestres, dependiendo de la variable de entrada
+            // Preguntaremos si $bimestre es 1 o 2
+            if($bimestre == 1)
+            {
+                // Buscamos los registros del bimestre 3
+                $notas_anexo    = Nota::where('asignatura_id', $nota_propuesta->asignatura_id)
+                                    ->where('turno_id', $nota_propuesta->turno_id)
+                                    ->where('paralelo', $nota_propuesta->paralelo)
+                                    ->where('anio_vigente', $nota_propuesta->anio_vigente)
+                                    // ->where('docente_id', $nota_propuesta->docente_id)
+                                    ->where('trimestre', 3)
+                                    ->get();
+                // Finalizamos bimestre 1 y 3
+                foreach($notas as $nota)
+                {
+                    $nota->finalizado = 'Si';
+                    $nota->save();
+                }
+                foreach($notas_anexo as $nota)
+                {
+                    $nota->finalizado = 'Si';
+                    $nota->save();
+                }
+            }
+            if($bimestre == 2)
+            {
+                // Buscamos los registros del bimestre 3
+                $notas_anexo    = Nota::where('asignatura_id', $nota_propuesta->asignatura_id)
+                                    ->where('turno_id', $nota_propuesta->turno_id)
+                                    ->where('paralelo', $nota_propuesta->paralelo)
+                                    ->where('anio_vigente', $nota_propuesta->anio_vigente)
+                                    // ->where('docente_id', $nota_propuesta->docente_id)
+                                    ->where('trimestre', 4)
+                                    ->get();
+                // Finalizamos bimestre 2 y 4
+                foreach($notas as $nota)
+                {
+                    $nota->finalizado = 'Si';
+                    $nota->save();
+                }
+                foreach($notas_anexo as $nota)
+                {
+                    $nota->finalizado = 'Si';
+                    $nota->save();
+                }
+            }
+        }
+        else
+        {
+            // Finalizaremos bimestre por bimestre
+            foreach($notas as $nota)
+            {
+                $nota->finalizado = 'Si';
+                $nota->save();
+            }
+        }
+        // Analizamos si todos los bimestre estan finalizados y si es asi, en inscripciones cambiamos el estado a Finalizado
+        $no_finalizado  = Nota::where('asignatura_id', $nota_propuesta->asignatura_id)
+                                ->where('turno_id', $nota_propuesta->turno_id)
+                                ->where('paralelo', $nota_propuesta->paralelo)
+                                ->where('anio_vigente', $nota_propuesta->anio_vigente)
+                                // ->where('docente_id', $nota_propuesta->docente_id)
+                                ->whereNull('finalizado')
+                                ->first();
+        if(!$no_finalizado)
+        {
+            // No existen registros que esten pendientes por calificar, por tanto en inscripciones, el estado se vuelve finalizado
+            // Tenemos que buscar a las personas inscritas en esta asignatura
+            $inscritos  = Inscripcione::where('asignatura_id', $nota_propuesta->asignatura_id)
+                                    ->where('turno_id', $nota_propuesta->turno_id)
+                                    ->where('paralelo', $nota_propuesta->paralelo)
+                                    ->where('anio_vigente', $nota_propuesta->anio_vigente)
+                                    // ->where('docente_id', $nota_propuesta->docente_id)
+                                    ->get();
+            foreach($inscritos as $inscrito)
+            {
+                $inscrito->estado = 'Finalizado';
+                $inscrito->save();
+            }
+        }
+        return redirect('nota/detalle/'.$nota_propuesta_id);
     }
 
     public function segundoTurno(Request $request)

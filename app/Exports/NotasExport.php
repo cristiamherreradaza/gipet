@@ -21,38 +21,48 @@ class NotasExport implements FromCollection, WithMapping, WithHeadings, ShouldAu
     * @return \Illuminate\Support\Collection
     */
     use Exportable;
-    protected $id;
+    protected $asignatura_id;
+    protected $bimestre;
 
-    public function __construct($id)
+    public function __construct($asignatura_id, $bimestre)
     {
-        $this->id = $id;
+        $this->asignatura_id    = $asignatura_id;
+        $this->bimestre         = $bimestre;
     }
     
     public function collection()
     {
-        $notapropuesta = NotasPropuesta::find($this->id);
-        if($notapropuesta->asignatura->ciclo == 'Semestral')
-        {
-            return Nota::where('asignatura_id', $notapropuesta->asignatura_id)
-                        ->where('turno_id', $notapropuesta->turno_id)
-                        ->where('user_id', $notapropuesta->user_id)
-                        ->where('paralelo', $notapropuesta->paralelo)
-                        ->where('anio_vigente', $notapropuesta->anio_vigente)
-                        ->where(function ($query) {
-                            $query->where('trimestre', 1)
-                                ->orWhere('trimestre', 2);
-                        })
-                        ->get();
-        }
-        else
-        {
-            return Nota::where('asignatura_id', $notapropuesta->asignatura_id)
-                        ->where('turno_id', $notapropuesta->turno_id)
-                        ->where('user_id', $notapropuesta->user_id)
-                        ->where('paralelo', $notapropuesta->paralelo)
-                        ->where('anio_vigente', $notapropuesta->anio_vigente)
-                        ->get();
-        }
+        $notapropuesta  = NotasPropuesta::find($this->asignatura_id);
+        $bimestre       = $this->bimestre;
+        return Nota::where('asignatura_id', $notapropuesta->asignatura_id)
+                    ->where('turno_id', $notapropuesta->turno_id)
+                    ->where('paralelo', $notapropuesta->paralelo)
+                    //->where('docente_id', $notapropuesta->docente_id)
+                    ->where('anio_vigente', $notapropuesta->anio_vigente)
+                    ->where('trimestre', $bimestre)
+                    ->get();
+        // if($notapropuesta->asignatura->ciclo == 'Semestral')
+        // {
+        //     return Nota::where('asignatura_id', $notapropuesta->asignatura_id)
+        //                 ->where('turno_id', $notapropuesta->turno_id)
+        //                 ->where('user_id', $notapropuesta->user_id)
+        //                 ->where('paralelo', $notapropuesta->paralelo)
+        //                 ->where('anio_vigente', $notapropuesta->anio_vigente)
+        //                 ->where(function ($query) {
+        //                     $query->where('trimestre', 1)
+        //                         ->orWhere('trimestre', 2);
+        //                 })
+        //                 ->get();
+        // }
+        // else
+        // {
+        //     return Nota::where('asignatura_id', $notapropuesta->asignatura_id)
+        //                 ->where('turno_id', $notapropuesta->turno_id)
+        //                 ->where('user_id', $notapropuesta->user_id)
+        //                 ->where('paralelo', $notapropuesta->paralelo)
+        //                 ->where('anio_vigente', $notapropuesta->anio_vigente)
+        //                 ->get();
+        // }
     }
 
     public function map($nota): array
@@ -63,7 +73,7 @@ class NotasExport implements FromCollection, WithMapping, WithHeadings, ShouldAu
         return [
             $nota->id,
             $nota->persona->nombres. ' ' .$nota->persona->apellido_paterno. ' ' .$nota->persona->apellido_materno,
-            $nota->persona->carnet,
+            $nota->persona->cedula,
             $nota->trimestre,
             $nota->nota_asistencia,
             $nota->nota_practicas,
@@ -75,7 +85,7 @@ class NotasExport implements FromCollection, WithMapping, WithHeadings, ShouldAu
 
     public function headings() : array
     {
-        $notapropuesta = NotasPropuesta::find($this->id);
+        $notapropuesta = NotasPropuesta::find($this->asignatura_id);
         return [
             '# Id',
             'Nombres y Apellidos',
@@ -108,5 +118,4 @@ class NotasExport implements FromCollection, WithMapping, WithHeadings, ShouldAu
             },
         ];
     }
-    
 }

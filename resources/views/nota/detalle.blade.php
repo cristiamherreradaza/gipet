@@ -14,7 +14,6 @@
 @endsection
 
 @section('content')
-
 <div class="card">
     <div class="card-body">
         <h3 class="card-title text-primary"><strong>{{ $asignatura->asignatura->sigla }} {{ $asignatura->asignatura->nombre }}</strong></h3>
@@ -28,10 +27,18 @@
                     <tr>
                         <th>Estudiante</th>
                         <th>CI</th>
-                        <th>1er Bim</th>
-                        <th>2do Bim</th>
-                        <th>3er Bim</th>
-                        <th>4to Bim</th>
+                        <th>
+                            1er Bim
+                        </th>
+                        <th>
+                            2do Bim
+                        </th>
+                        <th>
+                            3er Bim
+                        </th>
+                        <th>
+                            4to Bim
+                        </th>
                         <th>Promedio</th>
                         <th>Segundo Turno</th>
                         <th></th>
@@ -100,25 +107,43 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-lg-8">
-            <form method="post" id="upload_form" enctype="multipart/form-data" class="upload_form mt-4">
-                @csrf
-                <input type="hidden" name="asignatura_id" id="asignatura_id" value="{{ $asignatura->asignatura_id }}">
-                <input type="hidden" name="turno_id" id="turno_id" value="{{ $asignatura->turno_id }}">
-                <input type="hidden" name="paralelo" id="paralelo" value="{{ $asignatura->paralelo }}">
-                <input type="hidden" name="anio_vigente" id="anio_vigente" value="{{ $asignatura->anio_vigente }}">
-                <div class="input-group">
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" name="select_file" id="select_file">
-                        <label class="custom-file-label" for="inputGroupFile04">Elegir archivo</label>
-                    </div>
-                    <div class="input-group-append">
-                        <input type="submit" name="upload" id="upload" class="btn btn-success" value="Importar" style="width: 200px;">
-                        <a class="btn btn-block btn-success" href="{{ url('nota/exportarexcel/'.$asignatura->id) }}" style="width: 200px;">Exportar Formato</a>
+        
+        <form method="post" id="upload_form" enctype="multipart/form-data" class="upload_form mt-4">
+            @csrf
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group row">
+                        <label for="bimestre" class="col-sm-4 text-right control-label col-form-label">Bimestre Actual</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="bimestre" id="bimestre" value="{{ $bimestre != '0' ? $bimestre : 'Finalizado' }}" readonly>
+                        </div>
                     </div>
                 </div>
-            </form>
-        </div>
+                @if($bimestre != 0)
+                    <div class="col-md-8">
+                        <input type="hidden" name="nota_propuesta" id="nota_propuesta" value="{{ $asignatura->id }}">
+                        <input type="hidden" name="asignatura_id" id="asignatura_id" value="{{ $asignatura->asignatura_id }}">
+                        <input type="hidden" name="turno_id" id="turno_id" value="{{ $asignatura->turno_id }}">
+                        <input type="hidden" name="paralelo" id="paralelo" value="{{ $asignatura->paralelo }}">
+                        <input type="hidden" name="anio_vigente" id="anio_vigente" value="{{ $asignatura->anio_vigente }}">
+                        <div class="input-group">
+                            <a class="btn btn-block btn-success" href="{{ url('nota/exportarexcel/'.$asignatura->id.'/'.$bimestre) }}" style="width: 200px;">Exportar Formato</a>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="select_file" id="select_file">
+                                <label class="custom-file-label" for="inputGroupFile04">Elegir archivo</label>
+                            </div>
+                            <div class="input-group-append">
+                                <input type="submit" name="upload" id="upload" class="btn btn-success" value="Importar" style="width: 200px;">
+                                <button type="button" class="btn btn-block btn-danger" onclick="finalizarBimestre()" style="width: 200px;">Finalizar Bimestre</button>
+                                <!-- <a class="btn btn-block btn-danger" href="{{ url('nota/finalizarBimestre/'.$asignatura->id.'/'.$bimestre) }}" style="width: 200px;"></a> -->
+                            </div>
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </form>
+        
+        
     </div>
 </div>
 
@@ -162,8 +187,6 @@
     </div>
 </div>
 <!-- fin modal segundo turno -->
-
-
 @endsection
 
 
@@ -175,7 +198,7 @@
 // Script de importacion de excel
 $(document).ready(function() {
     $('.upload_form').on('submit', function(event) {
-        event.preventDefault();
+        //event.preventDefault();
         $.ajax({
             url: "{{ url('nota/ajax_importar') }}",
             method: "POST",
@@ -301,6 +324,32 @@ $(document).ready(function() {
                 }
             }
         });
+    }
+
+    function finalizarBimestre()
+    {
+        var bimestre = $("#bimestre").val();
+        var nota_propuesta = $("#nota_propuesta").val();
+        Swal.fire({
+            title: 'Deseas finalizar las evaluaciones del bimestre ' + bimestre + '?',
+            text: "No podras modificar mas las notas de este bimestre!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, estoy seguro!',
+            cancelButtonText: "Cancelar",
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire(
+                    'Excelente!',
+                    'Calificaciones finalizadas',
+                    'success'
+                ).then(function() {
+                    window.location.href = "{{ url('Nota/finalizarBimestre') }}/"+nota_propuesta+'/'+bimestre;
+                });
+            }
+        })
     }
 </script>
 
