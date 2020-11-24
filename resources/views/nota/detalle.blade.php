@@ -198,7 +198,7 @@
 // Script de importacion de excel
 $(document).ready(function() {
     $('.upload_form').on('submit', function(event) {
-        //event.preventDefault();
+        event.preventDefault();
         $.ajax({
             url: "{{ url('nota/ajax_importar') }}",
             method: "POST",

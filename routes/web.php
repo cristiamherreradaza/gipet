@@ -301,6 +301,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Lista/alumnos', 'ListaController@alumnos');
     Route::get('Lista/ajaxBusquedaAlumnos', 'ListaController@ajaxBusquedaAlumnos');
     Route::get('Lista/reportePdfAlumnos/{carrera}/{curso}/{turno}/{paralelo}/{gestion}/{estado}', 'ListaController@reportePdfAlumnos');
+
+    // EXCEL
+    Route::get('Importacion/excel', 'ImportacionController@excel');
+    Route::get('Importacion/exportar/{carrera}/{turno}/{paralelo}/{anio_vigente}', 'ImportacionController@exportar');
+    Route::post('Importacion/importar', 'ImportacionController@importar');
 });
 
 
