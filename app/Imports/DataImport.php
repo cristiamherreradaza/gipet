@@ -43,6 +43,8 @@ class DataImport implements ToModel
                     // Preguntamos si coinciden carrera con asignatura
                     if($carrera->id == $asignatura->carrera_id)     // Si el id de carrera en la tabla carrera es igual a carrera_id en la tabla asignaturas
                     {
+                        // Capturamos variables de session
+                        $numero = session('numero');
                         // Tenemos que crear carreras_personas
                         // Buscaremos si existe un registro con los datos enviados para carreras_personas
                         $registro   = CarrerasPersona::where('carrera_id', $carrera->id)
@@ -55,16 +57,17 @@ class DataImport implements ToModel
                         // Si no existe el registro, creamos uno nuevo, si existe, pasamos de largo
                         if(!$registro)
                         {
-                            $carrerasPersona                    = new CarrerasPersona();
-                            $carrerasPersona->user_id           = Auth::user()->id;
-                            $carrerasPersona->carrera_id        = $carrera->id;
-                            $carrerasPersona->persona_id        = $persona->id;
-                            $carrerasPersona->turno_id          = $turno->id;
-                            $carrerasPersona->gestion           = $asignatura->gestion;
-                            $carrerasPersona->paralelo          = $row[6];
-                            $carrerasPersona->fecha_inscripcion = date('Y-m-d');
-                            $carrerasPersona->anio_vigente      = $row[7];
-                            $carrerasPersona->sexo              = $persona->sexo;
+                            $carrerasPersona                        = new CarrerasPersona();
+                            $carrerasPersona->user_id               = Auth::user()->id;
+                            $carrerasPersona->carrera_id            = $carrera->id;
+                            $carrerasPersona->persona_id            = $persona->id;
+                            $carrerasPersona->turno_id              = $turno->id;
+                            $carrerasPersona->gestion               = $asignatura->gestion;
+                            $carrerasPersona->paralelo              = $row[6];
+                            $carrerasPersona->fecha_inscripcion     = date('Y-m-d');
+                            $carrerasPersona->anio_vigente          = $row[7];
+                            $carrerasPersona->sexo                  = $persona->sexo;
+                            $carrerasPersona->numero_importacion    = $numero;
                             $carrerasPersona->save();
                         }
                         // Tenemos que crear inscripciones
@@ -80,20 +83,21 @@ class DataImport implements ToModel
                         // Si no existe el registro, creamos uno nuevo, si existe, pasamos de largo
                         if(!$registro)
                         {
-                            $inscripcion                    = new Inscripcione();
-                            $inscripcion->user_id           = Auth::user()->id;
-                            $inscripcion->resolucion_id     = $carrera->resolucion->id;
-                            $inscripcion->carrera_id        = $carrera->id;
-                            $inscripcion->asignatura_id     = $asignatura->id;
-                            $inscripcion->turno_id          = $turno->id;
-                            $inscripcion->persona_id        = $persona->id;
-                            $inscripcion->paralelo          = $row[6];
-                            $inscripcion->semestre          = $asignatura->semestre;
-                            $inscripcion->gestion           = $asignatura->gestion;
-                            $inscripcion->anio_vigente      = $row[7];
-                            $inscripcion->fecha_registro    = date('Y-m-d');
-                            $inscripcion->nota_aprobacion   = $carrera->resolucion->nota_aprobacion;
-                            $inscripcion->troncal           = 'Si';
+                            $inscripcion                        = new Inscripcione();
+                            $inscripcion->user_id               = Auth::user()->id;
+                            $inscripcion->resolucion_id         = $carrera->resolucion->id;
+                            $inscripcion->carrera_id            = $carrera->id;
+                            $inscripcion->asignatura_id         = $asignatura->id;
+                            $inscripcion->turno_id              = $turno->id;
+                            $inscripcion->persona_id            = $persona->id;
+                            $inscripcion->paralelo              = $row[6];
+                            $inscripcion->semestre              = $asignatura->semestre;
+                            $inscripcion->gestion               = $asignatura->gestion;
+                            $inscripcion->anio_vigente          = $row[7];
+                            $inscripcion->fecha_registro        = date('Y-m-d');
+                            $inscripcion->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
+                            $inscripcion->troncal               = 'Si';
+                            $inscripcion->numero_importacion    = $numero;
                             $inscripcion->save();
 
                             // Buscaremos si existe un docente ya asignado a esta materia
@@ -149,6 +153,7 @@ class DataImport implements ToModel
                                 $notaUno->nota_total            = $totalUno;
                                 $notaUno->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
                                 $notaUno->finalizado            = 'Si';
+                                $notaUno->numero_importacion    = $numero;
                                 $notaUno->save();
                                 // Primero calcularemos para llenar la nota total del registro 2
                                 $totalDos = $row[13] + $row[14] + $row[15] + $row[16];
@@ -192,6 +197,7 @@ class DataImport implements ToModel
                                 $notaDos->nota_total            = $totalDos;
                                 $notaDos->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
                                 $notaDos->finalizado            = 'Si';
+                                $notaDos->numero_importacion    = $numero;
                                 $notaDos->save();
                                 // Creando registros para bimestre 3
                                 $notaTres                        = new Nota();
@@ -217,6 +223,7 @@ class DataImport implements ToModel
                                 $notaTres->nota_total            = $notaUno->nota_total;
                                 $notaTres->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
                                 $notaTres->finalizado            = 'Si';
+                                $notaTres->numero_importacion    = $numero;
                                 $notaTres->save();
                                 // Creando registros para bimestre 4
                                 $notaCuatro                        = new Nota();
@@ -242,6 +249,7 @@ class DataImport implements ToModel
                                 $notaCuatro->nota_total            = $notaDos->nota_total;
                                 $notaCuatro->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
                                 $notaCuatro->finalizado            = 'Si';
+                                $notaCuatro->numero_importacion    = $numero;
                                 $notaCuatro->save();
                             }
                             if($row[4] == 'Anual')              // Si es Anual
@@ -289,6 +297,7 @@ class DataImport implements ToModel
                                 $notaUno->nota_total            = $totalUno;
                                 $notaUno->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
                                 $notaUno->finalizado            = 'Si';
+                                $notaUno->numero_importacion    = $numero;
                                 $notaUno->save();
                                 // Primero calcularemos para llenar la nota total del registro 2
                                 $totalDos = $row[13] + $row[14] + $row[15] + $row[16];
@@ -332,6 +341,7 @@ class DataImport implements ToModel
                                 $notaDos->nota_total            = $totalDos;
                                 $notaDos->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
                                 $notaDos->finalizado            = 'Si';
+                                $notaDos->numero_importacion    = $numero;
                                 $notaDos->save();
                                 // Primero calcularemos para llenar la nota total del registro 3
                                 $totalTres = $row[18] + $row[19] + $row[20] + $row[21];
@@ -375,6 +385,7 @@ class DataImport implements ToModel
                                 $notaTres->nota_total            = $totalTres;
                                 $notaTres->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
                                 $notaTres->finalizado            = 'Si';
+                                $notaTres->numero_importacion    = $numero;
                                 $notaTres->save();
                                 // Primero calcularemos para llenar la nota total del registro 4
                                 $totalCuatro = $row[23] + $row[24] + $row[25] + $row[26];
@@ -418,6 +429,7 @@ class DataImport implements ToModel
                                 $notaCuatro->nota_total            = $totalCuatro;
                                 $notaCuatro->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
                                 $notaCuatro->finalizado            = 'Si';
+                                $notaCuatro->numero_importacion    = $numero;
                                 $notaCuatro->save();
                             }
                             // Actualizamos inscripcion

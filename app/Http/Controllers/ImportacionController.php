@@ -41,6 +41,18 @@ class ImportacionController extends Controller
         ]);
         if($validation->passes())
         {
+            // Buscaremos el valor maximo de importacion
+            $maximo = CarrerasPersona::max('numero_importacion');
+            if($maximo)
+            {
+                $numero = $maximo + 1;
+            }
+            else
+            {
+                $numero = 1;
+            }
+            // Creamos variables de sesión para pasar al import
+            session(['numero' => $numero]);
             $file = $request->file('select_file');
             Excel::import(new DataImport, $file);
 
