@@ -2366,7 +2366,7 @@ class InscripcionController extends Controller
         // En la variable inscripciones hallaremos la relacion entre el registro de la tabla carreras_personas e inscripciones
         $inscripciones = Inscripcione::where('carrera_id', $registro->carrera_id)
                                     ->where('persona_id', $registro->persona_id)
-                                    ->where('turno_id', $registro->turno_id)
+                                    //->where('turno_id', $registro->turno_id)
                                     //->where('paralelo', $registro->paralelo)                  //paralelo
                                     //->where('fecha_registro', $registro->fecha_inscripcion)   //fecha_inscripcion
                                     ->where('anio_vigente', $registro->anio_vigente)            //anio_vigente

@@ -31,6 +31,7 @@ class ListaController extends Controller
                                 ->get();
         $estados    = CarrerasPersona::select('vigencia')
                                     ->groupBy('vigencia')
+                                    ->orderBy('vigencia', 'desc')
                                     ->get();
         return view('lista.alumnos')->with(compact('carreras', 'cursos', 'gestiones', 'paralelos', 'turnos', 'estados'));
     }
