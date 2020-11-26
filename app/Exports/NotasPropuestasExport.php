@@ -26,7 +26,7 @@ class NotasPropuestasExport implements FromCollection, WithMapping, WithHeadings
 
     public function collection()
     {
-        return NotasPropuesta::where('user_id', $this->id)
+        return NotasPropuesta::where('docente_id', $this->id)
                             ->where('anio_vigente', date('Y'))
                             ->get();                
     }
@@ -38,8 +38,8 @@ class NotasPropuestasExport implements FromCollection, WithMapping, WithHeadings
         */
         return [
             $notapropuesta->id,
-            $notapropuesta->asignatura->codigo_asignatura,
-            $notapropuesta->asignatura->nombre_asignatura,
+            $notapropuesta->asignatura->sigla,
+            $notapropuesta->asignatura->nombre,
             $notapropuesta->nota_asistencia,
             $notapropuesta->nota_practicas,
             $notapropuesta->nota_primer_parcial,

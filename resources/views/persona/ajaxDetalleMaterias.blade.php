@@ -6,8 +6,28 @@
                                         ->where('carrera_id', $informacionCarrera->id)
                                         ->get();
         $key=1;
+        $existenciaInscripcion = App\Inscripcione::where('persona_id', $persona->id)
+                                                ->where('carrera_id', $informacionCarrera->id)
+                                                ->where('estado', 'Cursando')
+                                                ->first();
+        $existenciaNota = App\Nota::where('persona_id', $persona->id)
+                                ->whereNull('finalizado')
+                                ->first();
+        if($existenciaInscripcion || $existenciaNota)
+        {
+            $mostrar = 'Si';
+        }
+        else
+        {
+            $mostrar = 'No';
+        }
     @endphp
-    <h3><strong class="text-danger">{{ strtoupper($informacionCarrera->nombre) }}</strong></h3>
+    <h3>
+        <strong class="text-danger">{{ strtoupper($informacionCarrera->nombre) }}</strong>
+        @if($mostrar == 'Si')
+            <button type="button" onclick="finalizarCalificaciones('{{ $persona->id }}', '{{ $informacionCarrera->id }}')" class="float-right btn btn-danger">Finalizar Calificaciones</button>
+        @endif
+    </h3>
     <div class="table-responsive">
         <table class="table table-striped no-wrap text-center" id="tablaProductosEncontrados">
             <thead>
@@ -105,5 +125,29 @@
                 $("#detalle_modal").modal('show');
             }
         });
+    }
+
+    function finalizarCalificaciones(persona_id, carrera_id)
+    {
+        Swal.fire({
+            title: 'Deseas finalizar el periodo de calificación?',
+            text: "Los docentes asignados a estas asignaturas no podran modificar los registros!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, estoy seguro!',
+            cancelButtonText: "Cancelar",
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire(
+                    'Excelente!',
+                    'Calificaciones finalizadas',
+                    'success'
+                ).then(function() {
+                    window.location.href = "{{ url('Inscripcion/finalizarCalificaciones') }}/"+persona_id+'/'+carrera_id;
+                });
+            }
+        })
     }
 </script>

@@ -109,6 +109,7 @@ class NotaController extends Controller
                     ->where('persona_id', $request->persona_id)
                     ->where('paralelo', $request->paralelo)
                     ->where('anio_vigente', $request->anio_vigente)
+                    ->where('trimestre', $request->bimestre)
                     ->get();
         if($asignatura->asignatura->ciclo == 'Semestral')
         {

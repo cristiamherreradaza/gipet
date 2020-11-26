@@ -84,7 +84,9 @@
                             @endforeach
                             <td>{{ $nota_segundo/4 }}</td>
                             <td>
-                                <button onclick="registra_notas('{{ $inscrito->id }}', '{{ $inscrito->asignatura_id }}', '{{ $inscrito->turno_id }}', '{{ $inscrito->persona_id }}', '{{ $inscrito->paralelo }}', '{{ $inscrito->anio_vigente }}')" class="btn btn-info" title="Registrar notas"><i class="fas fa-plus"></i></button>
+                                @if($bimestre != 0)
+                                    <button onclick="registra_notas('{{ $inscrito->id }}', '{{ $bimestre }}', '{{ $inscrito->asignatura_id }}', '{{ $inscrito->turno_id }}', '{{ $inscrito->persona_id }}', '{{ $inscrito->paralelo }}', '{{ $inscrito->anio_vigente }}')" class="btn btn-info" title="Registrar notas"><i class="fas fa-plus"></i></button>
+                                @endif
                                 @php
                                     $pago_segundo_turno = App\CobrosTemporada::where('persona_id', $inscrito->persona_id)
                                                                 ->where('carrera_id', $inscrito->carrera_id)
@@ -100,14 +102,12 @@
                                     @endif
                                     
                                 @endif
-                            </td>
-                            
+                            </td>              
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-        
         <form method="post" id="upload_form" enctype="multipart/form-data" class="upload_form mt-4">
             @csrf
             <div class="row">
@@ -141,9 +141,7 @@
                     </div>
                 @endif
             </div>
-        </form>
-        
-        
+        </form>        
     </div>
 </div>
 
@@ -246,11 +244,12 @@ $(document).ready(function() {
         $("#segundo_turno").modal('show');
     }
 
-    function registra_notas(inscripcion_id, asignatura_id, turno_id, persona_id, paralelo, anio_vigente)
+    function registra_notas(inscripcion_id, bimestre, asignatura_id, turno_id, persona_id, paralelo, anio_vigente)
     {           
         $.ajax({
             url: "{{ url('Nota/ajaxMuestraNota') }}",
             data: {
+                bimestre: bimestre,
                 asignatura_id: asignatura_id,
                 turno_id: turno_id,
                 persona_id: persona_id,
@@ -292,7 +291,24 @@ $(document).ready(function() {
         parcial = checkCampos(parcial);
         final = checkCampos(final);
 
-        var resultado = parseFloat(asistencia)+parseFloat(practicas)+parseFloat(puntos)+parseFloat(parcial)+parseFloat(final);
+        var resultado = parseFloat(asistencia) + parseFloat(practicas) + parseFloat(parcial) + parseFloat(final);
+        var necesario = 100 - resultado;
+        if(necesario >= 10)
+        {
+            resultado = resultado + parseFloat(puntos);
+        }
+        else
+        {
+            if(necesario <= parseFloat(puntos))
+            {
+                resultado = resultado + necesario;
+            }
+            else
+            {
+                resultado = resultado + parseFloat(puntos);
+            }
+        }
+        //var resultado = parseFloat(asistencia)+parseFloat(practicas)+parseFloat(puntos)+parseFloat(parcial)+parseFloat(final);
         $('#totalsuma'+id).empty();
         $('#totalsuma'+id).append(resultado);
         //alert(resultado);
