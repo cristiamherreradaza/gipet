@@ -2490,4 +2490,64 @@ class InscripcionController extends Controller
         return $pdf->download('users-list.pdf');
     }
 
+    public function pruebaMigracion()
+    {
+        // Agarramos las inscripciones respectivas al anio X
+        $inscripciones  = Inscripcione::where('anio_vigente', 2012)
+                                    ->get();
+                                    //->count();
+        $notas          = Nota::count();
+        //dd($notas);
+        foreach($inscripciones as $inscripcion)
+        {
+            //dd($inscripcion->id);
+            dd($inscripcion->persona->cedula);
+            // Obtenemos las notas correspondientes a esa inscripcion_id
+            $notas  = Nota::where('inscripcion_id', $inscripcion->id)
+                            ->get();
+            
+            dd(count($notas));
+            // Caso 1 -> 4 registros
+            if(count($notas) == 4)
+            {
+                // Si tiene todo no pasa nada
+            }
+            // Caso 2 -> 3 registros
+            if(count($notas) == 3)
+            {
+                // Le falta un registro, crear un registro con 0 en sus puntuaciones
+                // Cual es el trimestre faltante?, buscaremos los semestres existentes
+                $array_trimestres   = array();
+                foreach($notas as $nota)
+                {
+                    
+                }
+            }
+            // Caso 3 -> 2 registros
+            if(count($notas) == 2)
+            {
+                // Le falta dos registros, crear 2 copiando los otros 2 existentes
+            }
+            // Caso 4 -> 1 registros
+            if(count($notas) == 1)
+            {
+                // Le falta tres registros, crear tres registros copiandose del unico existente
+            }
+            // Caso 5 -> 0 registros    inscripcion_id->37630(14229120)
+            if(count($notas) == 0)
+            {
+                // No tiene registros en notas, por tanto crear registro con nota_total
+                // igual al de la inscripcion, si lo tiene, si no tiene
+            }
+        }
+        // de todas las inscripciones del 2011, verificar por cada inscripcione
+        // que tenga sus respectivos 4 registros por inscripcion
+        
+        
+        
+        
+        // 5. si le falta 4 registros.... pendiente de evaluacion
+        dd($inscripciones);
+    }
+
 }

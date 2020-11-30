@@ -168,7 +168,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Inscripcion/boletin/{id}', 'InscripcionController@boletin');
 
     Route::get('Inscripcion/pruebapdf', 'InscripcionController@pruebapdf')->name('users.pdf');      //ELIMINAR
-
+    Route::get('Inscripcion/pruebaMigracion', 'InscripcionController@pruebaMigracion');
 
     // ADMINISTRACION
     Route::post('Asignatura/guarda', 'AsignaturaController@guarda');
