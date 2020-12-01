@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Barryvdh\DomPDF\Facade as PDF;
-use DataTables;
-use App\Asignatura;
-use App\Carrera;
-use App\CarrerasPersona;
-use App\Inscripcione;
-use App\Persona;
 use App\Turno;
+use DataTables;
+use App\Carrera;
+use App\Persona;
+use App\Asignatura;
+use App\Inscripcione;
+use App\CarrerasPersona;
+use Illuminate\Http\Request;
+use App\Exports\PersonasExport;
+use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ListaController extends Controller
 {
@@ -108,4 +110,11 @@ class ListaController extends Controller
         // return $pdf->download('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
         return $pdf->stream('listaAlumnos_'.date('Y-m-d H:i:s').'.pdf');
     }
+
+    public function reporteExcelAlumnos($carrera_id, $curso_id, $turno_id, $paralelo, $gestion, $estado)
+    {
+        return Excel::download(new PersonasExport($carrera_id, $curso_id, $turno_id, $paralelo, $gestion, $estado), date('Y-m-d') . '-listado.xlsx');
+
+    }
+
 }

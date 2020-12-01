@@ -107,7 +107,11 @@
                     <div class="col-md-12">
                         <button class="btn btn-light" onclick="reportePdfAlumnos()">
                             <i class="fas fa-file-pdf">&nbsp; PDF</i>
-                        </button>        
+                        </button>
+                        
+                        <button class="btn btn-light" onclick="reporteExcelAlumnos()">
+                            <i class="fas fa-file-pdf">&nbsp; EXCEL</i>
+                        </button>
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -217,7 +221,6 @@
 
     function reportePdfAlumnos()
     {
-        //alert('hola');
         var carrera     = $("#carrera").val();
         var curso       = $("#curso").val();
         var turno       = $("#turno").val();
@@ -228,6 +231,20 @@
         window.open("{{ url('Lista/reportePdfAlumnos') }}/"+carrera+'/'+curso+'/'+turno+'/'+paralelo+'/'+gestion+'/'+estado);
         //window.location.href = "{{ url('Lista/reportePdfAlumnos') }}/"+carrera+'/'+curso+'/'+turno+'/'+paralelo+'/'+gestion+'/'+estado;
     }
+
+    function reporteExcelAlumnos()
+    {
+        var carrera     = $("#carrera").val();
+        var curso       = $("#curso").val();
+        var turno       = $("#turno").val();
+        var paralelo    = $("#paralelo").val();
+        var gestion     = $("#gestion").val();
+        var estado      = $("#estado").val();
+        // Aplicar validaciones, para cuando los campos sean vacios
+        window.open("{{ url('Lista/reporteExcelAlumnos') }}/"+carrera+'/'+curso+'/'+turno+'/'+paralelo+'/'+gestion+'/'+estado);
+        //window.location.href = "{{ url('Lista/reportePdfAlumnos') }}/"+carrera+'/'+curso+'/'+turno+'/'+paralelo+'/'+gestion+'/'+estado;
+    }
+
 </script>
 
 @endsection

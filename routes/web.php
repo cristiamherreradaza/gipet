@@ -313,6 +313,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Importacion/exportarAlumnos', 'ImportacionController@exportarAlumnos');
     Route::post('Importacion/importar_3', 'ImportacionController@importar_3');
     Route::post('Importacion/ajaxBuscaAlumno', 'ImportacionController@ajaxBuscaAlumno');
+    Route::get('Lista/reporteExcelAlumnos/{carrera_id}/{curso_id}/{turno_id}/{paralelo}/{gestion}/{estado}', 'ListaController@reporteExcelAlumnos');
 });
 
 
