@@ -47,6 +47,9 @@ class ListaController extends Controller
                         ->where('carreras_personas.anio_vigente', $request->gestion)
                         ->where('carreras_personas.vigencia', $request->estado)
                         ->leftJoin('personas', 'carreras_personas.persona_id', '=', 'personas.id')
+                        ->orderBy('personas.apellido_paterno')
+                        ->orderBy('personas.apellido_materno')
+                        ->orderBy('personas.nombres')
                         ->select(
                             'personas.cedula as cedula',
                             'personas.apellido_paterno as apellido_paterno',

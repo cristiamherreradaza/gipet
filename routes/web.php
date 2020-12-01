@@ -307,6 +307,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Importacion/excel', 'ImportacionController@excel');
     Route::get('Importacion/exportar/{carrera}/{turno}/{paralelo}/{anio_vigente}', 'ImportacionController@exportar');
     Route::post('Importacion/importar', 'ImportacionController@importar');
+    Route::get('Importacion/alternativa', 'ImportacionController@alternativa');
+    Route::post('Importacion/importar_2', 'ImportacionController@importar_2');
 });
 
 

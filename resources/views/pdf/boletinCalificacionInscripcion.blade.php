@@ -138,28 +138,28 @@
                 @php
                     $notas = App\Nota::where('inscripcion_id', $inscripcion->id)
                                     ->get();
+                    $notaUno = App\Nota::where('inscripcion_id', $inscripcion->id)
+                                    ->where('trimestre', '1')
+                                    ->first();
+                    $notaDos = App\Nota::where('inscripcion_id', $inscripcion->id)
+                                    ->where('trimestre', '2')
+                                    ->first();
+                    $notaTres = App\Nota::where('inscripcion_id', $inscripcion->id)
+                                    ->where('trimestre', '3')
+                                    ->first();
+                    $notaCuatro = App\Nota::where('inscripcion_id', $inscripcion->id)
+                                    ->where('trimestre', '4')
+                                    ->first();
                 @endphp
                 <tr>
                     <td nowrap>{{ $inscripcion->asignatura->sigla }}</td>
                     <td style="text-align:left" nowrap>{{ $inscripcion->asignatura->nombre }}</td>
-                    @foreach($notas as $nota)
-                        @if($nota->trimestre == 1)
-                            <td>{{ $nota->nota_total }}</td>
-                        @endif
-                        @if($nota->trimestre == 2)
-                            <td>{{ $nota->nota_total }}</td>
-                        @endif
-                    @endforeach
-                    <td style="background-color: #e5e5e5;">0</td>
-                    @foreach($notas as $nota)
-                        @if($nota->trimestre == 3)
-                            <td>{{ $nota->nota_total }}</td>
-                        @endif
-                        @if($nota->trimestre == 4)
-                            <td>{{ $nota->nota_total }}</td>
-                        @endif
-                    @endforeach
-                    <td style="background-color: #e5e5e5;">0</td>
+                    <td>{{ $notaUno ? round($notaUno->nota_total) : '' }}</td>
+                    <td>{{ $notaDos ? round($notaDos->nota_total) : '' }}</td>
+                    <td style="background-color: #e5e5e5;">{{ $notaUno && $notaDos ? round($notaUno->nota_total+$notaDos->nota_total)/2 : '' }}</td>
+                    <td>{{ $notaTres ? round($notaTres->nota_total) : '' }}</td>
+                    <td>{{ $notaCuatro ? round($notaCuatro->nota_total) : '' }}</td>
+                    <td style="background-color: #e5e5e5;">{{ $notaTres && $notaCuatro ? round($notaTres->nota_total+$notaCuatro->nota_total)/2 : '' }}</td>
                     <td></td>
                     <td style="background-color: #e5e5e5;">{{ $inscripcion->nota ? round($inscripcion->nota) : '0' }}</td>
                 </tr>

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\DataExport;
 use App\Imports\DataImport;
+use App\Imports\AlternativaImport;
 use App\Asignatura;
 use App\Carrera;
 use App\CarrerasPersona;
@@ -55,7 +56,8 @@ class ImportacionController extends Controller
             session(['numero' => $numero]);
             $file = $request->file('select_file');
             Excel::import(new DataImport, $file);
-
+            // Eliminamos variables de sesión
+            session()->forget('numero');
             //dd('hola');
             // Una vez cargado los datos de los estudiantes de la materia, actualizar sus datos, en la tabla inscripciones
             // Capturar todas las notas correspondientes a esa materia
@@ -84,6 +86,69 @@ class ImportacionController extends Controller
             //     $inscripcion->nota = round($nota->total/4);
             //     $inscripcion->save();
             // }
+            return response()->json([
+                'message' => 'Importacion realizada con exito',
+                'sw' => 1
+            ]);
+        }
+        else
+        {
+            switch ($validation->errors()->first()) {
+                case "The select file field is required.":
+                    $mensaje = "Es necesario agregar un archivo excel.";
+                    break;
+                case "The select file must be a file of type: xlsx.":
+                    $mensaje = "El archivo debe ser del tipo: xlsx.";
+                    break;
+                default:
+                    $mensaje = "Fallo al importar el archivo seleccionado.";
+                    break;
+            }
+            return response()->json([
+                //0
+                'message' => $mensaje,
+                'sw' => 0
+            ]);
+        }
+    }
+
+    public function alternativa()
+    {
+        $carreras   = Carrera::whereNull('estado')->get();
+        $turnos     = Turno::get();
+        $paralelos  = CarrerasPersona::select('paralelo')
+                                ->groupBy('paralelo')
+                                ->get();
+        $gestiones  = CarrerasPersona::select('anio_vigente')
+                                ->groupBy('anio_vigente')
+                                ->get();
+        return view('excel.alternativa')->with(compact('carreras', 'gestiones', 'paralelos', 'turnos'));
+    }
+
+    public function importar_2(Request $request)
+    {
+        //dd($request->asignatura);
+        $validation = Validator::make($request->all(), [
+            'select_file' => 'required|mimes:xlsx|max:2048'
+        ]);
+        if($validation->passes())
+        {
+            // Buscaremos el valor maximo de importacion
+            $maximo = CarrerasPersona::max('numero_importacion');
+            if($maximo)
+            {
+                $numero = $maximo + 1;
+            }
+            else
+            {
+                $numero = 1;
+            }
+            // Creamos variables de sesión para pasar al import
+            session(['numero' => $numero]);
+            $file = $request->file('select_file');
+            Excel::import(new AlternativaImport, $file);
+            // Eliminamos variables de sesión
+            session()->forget('numero');
             return response()->json([
                 'message' => 'Importacion realizada con exito',
                 'sw' => 1

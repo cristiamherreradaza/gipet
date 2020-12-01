@@ -138,6 +138,7 @@
 
     function reportePdfHistorialAcademico(persona_id, carrera_id)
     {
-        window.location.href = "{{ url('Inscripcion/reportePdfHistorialAcademico') }}/"+persona_id+"/"+carrera_id;
+        window.open("{{ url('Inscripcion/reportePdfHistorialAcademico') }}/"+persona_id+"/"+carrera_id);
+        //window.location.href = "{{ url('Inscripcion/reportePdfHistorialAcademico') }}/"+persona_id+"/"+carrera_id;
     }
 </script>
