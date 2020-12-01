@@ -309,6 +309,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('Importacion/importar', 'ImportacionController@importar');
     Route::get('Importacion/alternativa', 'ImportacionController@alternativa');
     Route::post('Importacion/importar_2', 'ImportacionController@importar_2');
+    Route::get('Importacion/alumnos', 'ImportacionController@alumnos');
+    Route::get('Importacion/exportarAlumnos', 'ImportacionController@exportarAlumnos');
+    Route::post('Importacion/importar_3', 'ImportacionController@importar_3');
+    Route::post('Importacion/ajaxBuscaAlumno', 'ImportacionController@ajaxBuscaAlumno');
 });
 
 

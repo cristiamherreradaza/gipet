@@ -2472,7 +2472,7 @@ class InscripcionController extends Controller
             $carrera        = Carrera::find($carrera_id);
             $inscripciones  = Inscripcione::where('persona_id', $persona->id)
                                         ->where('carrera_id', $carrera->id)
-                                        //->orderBy('id')
+                                        ->orderBy('id')
                                         ->get();
             $pdf    = PDF::loadView('pdf.historialAcademico', compact('carrera', 'persona', 'inscripciones'))->setPaper('letter');
             // return $pdf->download('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
