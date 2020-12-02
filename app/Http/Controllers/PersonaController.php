@@ -153,7 +153,7 @@ class PersonaController extends Controller
                             ->whereNull('estado')
                             ->get();
         $inscripciones = Inscripcione::where('persona_id', $request->persona_id)
-                                    ->orderBy('fecha_registro', 'asc')
+                                    ->orderBy('anio_vigente', 'asc')
                                     ->get();
         return view('persona.ajaxDetalleHistorialAcademico')->with(compact('persona', 'carreras', 'inscripciones'));
     }

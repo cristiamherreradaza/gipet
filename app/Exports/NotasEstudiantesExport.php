@@ -30,7 +30,8 @@ class NotasEstudiantesExport implements FromCollection, WithMapping, WithHeading
     public function collection()
     {
         return Inscripcione::whereIn('id', $this->array_inscripciones)
-                            //->orderBy('persona_id')
+                            ->orderBy('persona_id')
+                            ->orderBy('anio_vigente')
                             ->get();
     }
 
@@ -56,6 +57,8 @@ class NotasEstudiantesExport implements FromCollection, WithMapping, WithHeading
         if(!$notaCuatro){
             $notaCuatro = new Nota();
         }
+        ($inscripcion->convalidado == 'Si' ? $convalidado = 'Si' : $convalidado = 'No');
+        ($inscripcion->gestion ? $inscripcionGestion = $inscripcion->gestion : $inscripcionGestion = $inscripcion->asignatura->gestion);
         // APLICAR VALIDACIONES
         return [
             $inscripcion->id,
@@ -63,7 +66,7 @@ class NotasEstudiantesExport implements FromCollection, WithMapping, WithHeading
             $inscripcion->carrera->nombre,
             $inscripcion->asignatura->sigla,
             $inscripcion->asignatura->nombre,
-            $inscripcion->gestion,
+            $inscripcionGestion,
             $inscripcion->asignatura->ciclo,
             $inscripcion->turno->descripcion,
             $inscripcion->paralelo,
@@ -88,6 +91,8 @@ class NotasEstudiantesExport implements FromCollection, WithMapping, WithHeading
             $notaCuatro->nota_primer_parcial,
             $notaCuatro->nota_examen_final,
             $notaCuatro->nota_puntos_ganados,
+            $convalidado,
+            $inscripcion->nota,
             //$this->anio_vigente,
         ];
     }
@@ -123,6 +128,12 @@ class NotasEstudiantesExport implements FromCollection, WithMapping, WithHeading
                 '',
                 '',
                 'Bimestre 4',
+                '',
+                '',
+                '',
+                '',
+                '(Referencial)',
+                '',
             ],
             [
                 '',
@@ -155,6 +166,8 @@ class NotasEstudiantesExport implements FromCollection, WithMapping, WithHeading
                 'Nota Primer Parcial',
                 'Nota Examen Final',
                 'Nota Puntos',
+                'Convalidado',
+                'Total',
             ]
         ];
     }
@@ -172,8 +185,8 @@ class NotasEstudiantesExport implements FromCollection, WithMapping, WithHeading
         ];
         return [
             AfterSheet::class => function(AfterSheet $event) use ($styleArray) {
-                $event->sheet->getStyle('A1:AD1')->applyFromArray($styleArray);
-                $event->sheet->getStyle('A2:AD2')->applyFromArray($styleArray);
+                $event->sheet->getStyle('A1:AF1')->applyFromArray($styleArray);
+                $event->sheet->getStyle('A2:AF2')->applyFromArray($styleArray);
                 $event->sheet->getDelegate()->freezePane('F1');
                 $event->sheet->mergeCells('A1:A2');
                 $event->sheet->mergeCells('B1:B2');
@@ -190,6 +203,7 @@ class NotasEstudiantesExport implements FromCollection, WithMapping, WithHeading
                 $event->sheet->mergeCells('P1:T1');
                 $event->sheet->mergeCells('U1:Y1');
                 $event->sheet->mergeCells('Z1:AD1');
+                $event->sheet->mergeCells('AE1:AF1');
             },
         ];
     }

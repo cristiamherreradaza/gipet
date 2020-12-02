@@ -61,7 +61,7 @@ class NotasEstudiantesImport implements ToModel
                                                     ->where('persona_id', $persona->id)
                                                     ->where('turno_id', $turno->id)
                                                     ->where('gestion', $row[5])
-                                                    ->where('paralelo', $row[8])
+                                                    //->where('paralelo', $row[8])
                                                     ->where('anio_vigente', $row[9])
                                                     ->first();
                         // Si no existe el registro, creamos uno nuevo, si existe, pasamos de largo
@@ -93,7 +93,7 @@ class NotasEstudiantesImport implements ToModel
                         // Si no existe el inscripcion, creamos uno nuevo, si existe, pasamos de largo
                         if(!$inscripcion)
                         {
-                            $inscripcion                    = new Inscripcione();
+                            $inscripcion                        = new Inscripcione();
                             $inscripcion->user_id               = Auth::user()->id;
                             $inscripcion->resolucion_id         = $carrera->resolucion->id;
                             $inscripcion->carrera_id            = $carrera->id;
@@ -118,7 +118,27 @@ class NotasEstudiantesImport implements ToModel
                                                 ->first();
                         // Tenemos que crear notas
                         // Preguntamos cual es el ciclo de la asignatura
-                        if($row[4] == 'Semestral')          // Si es Semestral
+                        ($row[10] ? $row[10] = $row[10] : $row[10] = 0);
+                        ($row[11] ? $row[11] = $row[11] : $row[11] = 0);
+                        ($row[12] ? $row[12] = $row[12] : $row[12] = 0);
+                        ($row[13] ? $row[13] = $row[13] : $row[13] = 0);
+                        ($row[14] ? $row[14] = $row[14] : $row[14] = 0);
+                        ($row[15] ? $row[15] = $row[15] : $row[15] = 0);
+                        ($row[16] ? $row[16] = $row[16] : $row[16] = 0);
+                        ($row[17] ? $row[17] = $row[17] : $row[17] = 0);
+                        ($row[18] ? $row[18] = $row[18] : $row[18] = 0);
+                        ($row[19] ? $row[19] = $row[19] : $row[19] = 0);
+                        ($row[20] ? $row[20] = $row[20] : $row[20] = 0);
+                        ($row[21] ? $row[21] = $row[21] : $row[21] = 0);
+                        ($row[22] ? $row[22] = $row[22] : $row[22] = 0);
+                        ($row[23] ? $row[23] = $row[23] : $row[23] = 0);
+                        ($row[24] ? $row[24] = $row[24] : $row[24] = 0);
+                        ($row[25] ? $row[25] = $row[25] : $row[25] = 0);
+                        ($row[26] ? $row[26] = $row[26] : $row[26] = 0);
+                        ($row[27] ? $row[27] = $row[27] : $row[27] = 0);
+                        ($row[28] ? $row[28] = $row[28] : $row[28] = 0);
+                        ($row[29] ? $row[29] = $row[29] : $row[29] = 0);
+                        if($row[6] == 'Semestral')          // Si es Semestral
                         {
                             // Leera 2 bimestres y replicara 2
                             // Primero calcularemos para llenar la nota total del registro 1
@@ -290,7 +310,7 @@ class NotasEstudiantesImport implements ToModel
                             $notaCuatro->numero_importacion    = $numero;
                             $notaCuatro->save();
                         }
-                        if($row[4] == 'Anual')              // Si es Anual
+                        if($row[6] == 'Anual')              // Si es Anual
                         {
                             // Leera 4 bimestres y replicara 0
                             // Primero calcularemos para llenar la nota total del registro 1
@@ -511,10 +531,21 @@ class NotasEstudiantesImport implements ToModel
                         {
                             $aprobo = 'No';
                         }
-                        $inscripcion->nota      = $totalNotas;
-                        $inscripcion->aprobo    = $aprobo;
-                        $inscripcion->estado    = 'Finalizado';
-                        $inscripcion->save();
+                        if(!$row[30] || $row[30] == 'No')
+                        {
+                            $inscripcion->nota      = $totalNotas;
+                            $inscripcion->aprobo    = $aprobo;
+                            $inscripcion->estado    = 'Finalizado';
+                            $inscripcion->save();
+                        }
+                        else
+                        {
+                            $inscripcion->nota      = $row[31];
+                            ($row[31] >= $inscripcion->nota_aprobacion ? $aprobo = 'Si' : $aprobo = 'No');
+                            $inscripcion->aprobo    = $aprobo;
+                            $inscripcion->estado    = 'Finalizado';
+                            $inscripcion->save();
+                        }
                     }
                 }
             }

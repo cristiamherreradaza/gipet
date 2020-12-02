@@ -113,7 +113,7 @@
         <br>
         <table class="bordess" style="width:100%; font-family: 'Times New Roman', Times, serif; font-size:14px; text-align:center">
             <tr style="border: 1px solid black; border-collapse: collapse">
-                <td class="celdabg" style="width:50%;">En la gestión academica {{ date('Y') }} ha obtenido las siguientes calificaciones:</td>
+                <td class="celdabg" style="width:50%;">En la gestión academica {{ $gestionAcademica }} ha obtenido las siguientes calificaciones:</td>
             </tr>
         </table>
         <br>
@@ -156,10 +156,10 @@
                     <td style="text-align:left" nowrap>{{ $inscripcion->asignatura->nombre }}</td>
                     <td>{{ $notaUno ? round($notaUno->nota_total) : '' }}</td>
                     <td>{{ $notaDos ? round($notaDos->nota_total) : '' }}</td>
-                    <td style="background-color: #e5e5e5;">{{ $notaUno && $notaDos ? round($notaUno->nota_total+$notaDos->nota_total)/2 : '' }}</td>
+                    <td style="background-color: #e5e5e5;">{{ $notaUno && $notaDos ? round(($notaUno->nota_total+$notaDos->nota_total)/2) : '' }}</td>
                     <td>{{ $notaTres ? round($notaTres->nota_total) : '' }}</td>
                     <td>{{ $notaCuatro ? round($notaCuatro->nota_total) : '' }}</td>
-                    <td style="background-color: #e5e5e5;">{{ $notaTres && $notaCuatro ? round($notaTres->nota_total+$notaCuatro->nota_total)/2 : '' }}</td>
+                    <td style="background-color: #e5e5e5;">{{ $notaTres && $notaCuatro ? round(($notaTres->nota_total+$notaCuatro->nota_total)/2) : '' }}</td>
                     <td></td>
                     <td style="background-color: #e5e5e5;">{{ $inscripcion->nota ? round($inscripcion->nota) : '0' }}</td>
                 </tr>

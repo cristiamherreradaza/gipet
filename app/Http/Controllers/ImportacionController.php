@@ -217,9 +217,8 @@ class ImportacionController extends Controller
         return Excel::download(new NotasEstudiantesExport($array_inscripciones), date('Y-m-d').'-estudiantesImportacion.xlsx');
     }
 
-    public function importar_3()
+    public function importar_3(Request $request)
     {
-        dd('hola');
         $validation = Validator::make($request->all(), [
             'select_file' => 'required|mimes:xlsx|max:2048'
         ]);
@@ -238,7 +237,7 @@ class ImportacionController extends Controller
             // Creamos variables de sesión para pasar al import
             session(['numero' => $numero]);
             $file = $request->file('select_file');
-            Excel::import(new AlternativaImport, $file);
+            Excel::import(new NotasEstudiantesImport, $file);
             // Eliminamos variables de sesión
             session()->forget('numero');
             return response()->json([

@@ -2448,18 +2448,19 @@ class InscripcionController extends Controller
 
     public function boletin($id)
     {
-        $registro = CarrerasPersona::find($id);
-        $persona = Persona::find($registro->persona_id);
-        $carrera = Carrera::find($registro->carrera_id);
+        $registro   = CarrerasPersona::find($id);
+        $persona    = Persona::find($registro->persona_id);
+        $carrera    = Carrera::find($registro->carrera_id);
         // En la variable inscripciones hallaremos la relacion entre el registro de la tabla carreras_personas e inscripciones
-        $inscripciones = Inscripcione::where('carrera_id', $registro->carrera_id)
+        $inscripciones  = Inscripcione::where('carrera_id', $registro->carrera_id)
                                     ->where('persona_id', $registro->persona_id)
                                     //->where('turno_id', $registro->turno_id)
                                     //->where('paralelo', $registro->paralelo)                  //paralelo
                                     //->where('fecha_registro', $registro->fecha_inscripcion)   //fecha_inscripcion
                                     ->where('anio_vigente', $registro->anio_vigente)            //anio_vigente
                                     ->get();
-        $pdf    = PDF::loadView('pdf.boletinCalificacionInscripcion', compact('registro', 'carrera', 'persona', 'inscripciones'))->setPaper('letter');
+        $gestionAcademica   = $registro->anio_vigente;
+        $pdf    = PDF::loadView('pdf.boletinCalificacionInscripcion', compact('registro', 'carrera', 'persona', 'inscripciones', 'gestionAcademica'))->setPaper('letter');
         // return $pdf->download('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
         return $pdf->stream('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
     }
