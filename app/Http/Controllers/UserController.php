@@ -119,21 +119,35 @@ class UserController extends Controller
         $user->persona_referencia = $request->persona_referencia_edicion;
         $user->numero_referencia = $request->numero_referencia_edicion;
         $user->name = $request->username_edicion;
-        if($user->perfil_id != $request->perfil_edicion)
+        // if($user->perfil_id != $request->perfil_edicion)
+        // {
+        //     // Eliminaremos el perfil con sus respectivos menus anteriores en la tabla menusUser
+        //     $menuusers = MenusUser::where('user_id', $user->id)->get();
+        //     if(count($menuusers) > 0)
+        //     {
+        //         foreach($menuusers as $menuuser)
+        //         {
+        //             $menuuser->delete();
+        //         }
+        //     }
+        //     // Asignaremos nuevo perfil
+        //     $user->perfil_id = $request->perfil_edicion;
+        //     $sw=1;
+        // }
+
+        // Eliminaremos el perfil con sus respectivos menus anteriores en la tabla menusUser
+        $menuusers = MenusUser::where('user_id', $user->id)->get();
+        if(count($menuusers) > 0)
         {
-            // Eliminaremos el perfil con sus respectivos menus anteriores en la tabla menusUser
-            $menuusers = MenusUser::where('user_id', $user->id)->get();
-            if(count($menuusers) > 0)
+            foreach($menuusers as $menuuser)
             {
-                foreach($menuusers as $menuuser)
-                {
-                    $menuuser->delete();
-                }
+                $menuuser->delete();
             }
-            // Asignaremos nuevo perfil
-            $user->perfil_id = $request->perfil_edicion;
-            $sw=1;
-        }        
+        }
+        // Asignaremos nuevo perfil
+        $user->perfil_id = $request->perfil_edicion;
+        $sw=1;
+        
         $user->save();
 
         if($sw == 1)
