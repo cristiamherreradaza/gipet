@@ -28,6 +28,18 @@ class NotasEstudiantesImport implements ToModel
             // Tomamos la inscripcion y la cedula de identidad y verificamos que exista en la base de datos
             $inscripcion    = Inscripcione::find($row[0]);
             $persona        = Persona::where('cedula', $row[1])->first();
+            // Buscamos el anio_ingreso, para hacer seguimiento de la malla curricular de ese anio_ingreso
+            $anio_ingreso   = CarrerasPersona::where('persona_id', $persona->id)
+                                            ->min('anio_vigente');
+            if(!$anio_ingreso)
+            {
+                $anio_ingreso   = Inscripcione::where('persona_id', $persona->id)
+                                            ->min('anio_vigente');
+                if(!$anio_ingreso)
+                {
+                    $anio_ingreso   = $row[9];
+                }
+            }
             if($persona)         // Si existe un registro, procedemos
             {
                 // Si existe una inscripcion (un id)
@@ -43,7 +55,7 @@ class NotasEstudiantesImport implements ToModel
                     $asignatura = Asignatura::where('sigla', $row[3])
                                             ->where('nombre', $row[4])
                                             // ->where('ciclo', $row[4])
-                                            ->where('anio_vigente', $row[9])
+                                            ->where('anio_vigente', $anio_ingreso)
                                             ->first();
                     $turno      = Turno::where('descripcion', $row[7])->first();
                 }
@@ -82,33 +94,36 @@ class NotasEstudiantesImport implements ToModel
                         }
                         // Tenemos que crear inscripciones
                         // Buscaremos si existe un registro con los datos enviados para inscripciones
-                        // $inscripcion    = Inscripcione::where('carrera_id', $carrera->id)
-                        //                             ->where('asignatura_id', $asignatura->id)
-                        //                             ->where('turno_id', $turno->id)
-                        //                             ->where('persona_id', $persona->id)
-                        //                             ->where('paralelo', $row[8])
-                        //                             ->where('gestion', $row[5])
-                        //                             ->where('anio_vigente', $row[9])
-                        //                             ->first();
-                        // Si no existe el inscripcion, creamos uno nuevo, si existe, pasamos de largo
                         if(!$inscripcion)
                         {
-                            $inscripcion                        = new Inscripcione();
-                            $inscripcion->user_id               = Auth::user()->id;
-                            $inscripcion->resolucion_id         = $carrera->resolucion->id;
-                            $inscripcion->carrera_id            = $carrera->id;
-                            $inscripcion->asignatura_id         = $asignatura->id;
-                            $inscripcion->turno_id              = $turno->id;
-                            $inscripcion->persona_id            = $persona->id;
-                            $inscripcion->paralelo              = $row[8];
-                            $inscripcion->semestre              = $asignatura->semestre;
-                            $inscripcion->gestion               = $row[5];
-                            $inscripcion->anio_vigente          = $row[9];
-                            $inscripcion->fecha_registro        = date('Y-m-d');
-                            $inscripcion->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
-                            $inscripcion->troncal               = 'Si';
-                            $inscripcion->numero_importacion    = $numero;
-                            $inscripcion->save();
+                            $inscripcion    = Inscripcione::where('carrera_id', $carrera->id)
+                                                        ->where('asignatura_id', $asignatura->id)
+                                                        ->where('turno_id', $turno->id)
+                                                        ->where('persona_id', $persona->id)
+                                                        ->where('paralelo', $row[8])
+                                                        ->where('gestion', $row[5])
+                                                        ->where('anio_vigente', $row[9])
+                                                        ->first();
+                            // Si no existe el inscripcion, creamos uno nuevo, si existe, pasamos de largo
+                            if(!$inscripcion)
+                            {
+                                $inscripcion                        = new Inscripcione();
+                                $inscripcion->user_id               = Auth::user()->id;
+                                $inscripcion->resolucion_id         = $carrera->resolucion->id;
+                                $inscripcion->carrera_id            = $carrera->id;
+                                $inscripcion->asignatura_id         = $asignatura->id;
+                                $inscripcion->turno_id              = $turno->id;
+                                $inscripcion->persona_id            = $persona->id;
+                                $inscripcion->paralelo              = $row[8];
+                                $inscripcion->semestre              = $asignatura->semestre;
+                                $inscripcion->gestion               = $row[5];
+                                $inscripcion->anio_vigente          = $row[9];
+                                $inscripcion->fecha_registro        = date('Y-m-d');
+                                $inscripcion->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
+                                $inscripcion->troncal               = 'Si';
+                                $inscripcion->numero_importacion    = $numero;
+                                $inscripcion->save();
+                            }
                         }
                         // Buscaremos si existe un docente ya asignado a esta materia
                         $docente = NotasPropuesta::where('asignatura_id', $asignatura->id)
@@ -522,17 +537,10 @@ class NotasEstudiantesImport implements ToModel
                         // Sumamos las notas
                         $totalNotas = $notaUno->nota_total + $notaDos->nota_total + $notaTres->nota_total + $notaCuatro->nota_total;
                         $totalNotas = round($totalNotas/4);
-                        // Comparamos con respecto a la nota de aprobacion y registramos
-                        if($totalNotas >= $inscripcion->nota_aprobacion)    // Si su nota total es mayor o igual que la nota de aprobacion
-                        {
-                            $aprobo = 'Si';
-                        }
-                        else        // Su nota total es menor a la nota de aprobacion
-                        {
-                            $aprobo = 'No';
-                        }
                         if(!$row[30] || $row[30] == 'No')
                         {
+                            // Comparamos con respecto a la nota de aprobacion y registramos
+                            ($totalNotas >= $inscripcion->nota_aprobacion ? $aprobo = 'Si' : $aprobo = 'No');
                             $inscripcion->nota      = $totalNotas;
                             $inscripcion->aprobo    = $aprobo;
                             $inscripcion->estado    = 'Finalizado';

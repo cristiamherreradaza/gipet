@@ -201,6 +201,18 @@ class InscripcionController extends Controller
         $estudiante = Persona::find($persona_id);
         $turnos = Turno::get();
         $carrera = Carrera::find($carrera_id);
+        // Buscamos el anio_ingreso, para hacer seguimiento de la malla curricular de ese anio_ingreso
+        $anio_ingreso   = CarrerasPersona::where('persona_id', $estudiante->id)
+                                        ->min('anio_vigente');
+        if(!$anio_ingreso)
+        {
+            $anio_ingreso   = Inscripcione::where('persona_id', $estudiante->id)
+                                        ->min('anio_vigente');
+            if(!$anio_ingreso)
+            {
+                $anio_ingreso   = date('Y');
+            }
+        }
         // Buscaremos las carreras en las que esta inscrito el Estudiante X
         $carreras_estudiante = Carrera::where('id', $carrera_id)->get();
         // Crearemos la variable $array_materias
@@ -241,7 +253,7 @@ class InscripcionController extends Controller
             if(!$maximo_semestre){
                 // Preguntaremos si en esa maxima_gestion de la carrera X se encuentran valores en semestre
                 $tipo_ciclo = Asignatura::where('carrera_id', $informacion_carrera->id)
-                                        ->where('anio_vigente', $informacion_carrera->anio_vigente)
+                                        ->where('anio_vigente', $anio_ingreso)
                                         ->where('gestion', $maxima_gestion)
                                         ->first();
                 // Si el ciclo es Semestral no aprobó nada el estudiante, caso contrario la gestion se lleva de forma anual y no existe un valor en $maximo_semestre
@@ -261,7 +273,7 @@ class InscripcionController extends Controller
             $total_aprobadas = $aprobadas->count();
             // Por otra parte hallaremos las materias de esa carrera X en la gestion X y semestre X
             $materias_curricula = Asignatura::where('carrera_id', $informacion_carrera->id)
-                                            ->where('anio_vigente', $informacion_carrera->anio_vigente)
+                                            ->where('anio_vigente', $anio_ingreso)
                                             ->where('gestion', $maxima_gestion);
             if($maximo_semestre){
                 $materias_curricula = $materias_curricula->where('semestre', $maximo_semestre);
@@ -277,7 +289,7 @@ class InscripcionController extends Controller
                         // Pasamos al siguiente semestre
                         $maximo_semestre = $maximo_semestre + 1;
                         $pendientes = Asignatura::where('carrera_id', $informacion_carrera->id)
-                                                ->where('anio_vigente', $informacion_carrera->anio_vigente)
+                                                ->where('anio_vigente', $anio_ingreso)
                                                 ->where('gestion', $maxima_gestion)
                                                 ->where('semestre', $maximo_semestre)
                                                 ->get();
@@ -299,7 +311,7 @@ class InscripcionController extends Controller
                         $maxima_gestion = $maxima_gestion + 1;
                         // Buscaremos los pendientes de esa gestion
                         $pendientes = Asignatura::where('carrera_id', $informacion_carrera->id)
-                                                ->where('anio_vigente', $informacion_carrera->anio_vigente)
+                                                ->where('anio_vigente', $anio_ingreso)
                                                 ->where('gestion', $maxima_gestion)
                                                 //->where('semestre', $maximo_semestre)
                                                 ->first();
@@ -310,14 +322,14 @@ class InscripcionController extends Controller
                                 // Pasamos al siguiente semestre que sera 1 de nuevo
                                 $maximo_semestre = 1;
                                 $pendientes = Asignatura::where('carrera_id', $informacion_carrera->id)
-                                                        ->where('anio_vigente', $informacion_carrera->anio_vigente)
+                                                        ->where('anio_vigente', $anio_ingreso)
                                                         ->where('gestion', $maxima_gestion)
                                                         ->where('semestre', $maximo_semestre)
                                                         ->get();
                             }else{
                                 // Es Anual por tanto
                                 $pendientes = Asignatura::where('carrera_id', $informacion_carrera->id)
-                                                        ->where('anio_vigente', $informacion_carrera->anio_vigente)
+                                                        ->where('anio_vigente', $anio_ingreso)
                                                         ->where('gestion', $maxima_gestion)
                                                         ->get();
                             }
@@ -342,7 +354,7 @@ class InscripcionController extends Controller
                     $maxima_gestion = $maxima_gestion + 1;
                     // Buscaremos los pendientes de esa gestion
                     $pendientes = Asignatura::where('carrera_id', $informacion_carrera->id)
-                                            ->where('anio_vigente', $informacion_carrera->anio_vigente)                        
+                                            ->where('anio_vigente', $anio_ingreso)                        
                                             ->where('gestion', $maxima_gestion)
                                             ->first();
                     // Si tiene materias pendientes, si no tiene finalizo su carrera
@@ -352,14 +364,14 @@ class InscripcionController extends Controller
                             // Pasamos al siguiente semestre que sera 1 de nuevo
                             $maximo_semestre = 1;
                             $pendientes = Asignatura::where('carrera_id', $informacion_carrera->id)
-                                                    ->where('anio_vigente', $informacion_carrera->anio_vigente)
+                                                    ->where('anio_vigente', $anio_ingreso)
                                                     ->where('gestion', $maxima_gestion)
                                                     ->where('semestre', $maximo_semestre)
                                                     ->get();
                         }else{
                             // Es Anual por tanto
                             $pendientes = Asignatura::where('carrera_id', $informacion_carrera->id)
-                                                    ->where('anio_vigente', $informacion_carrera->anio_vigente)
+                                                    ->where('anio_vigente', $anio_ingreso)
                                                     ->where('gestion', $maxima_gestion)
                                                     ->get();
                         }
@@ -395,7 +407,7 @@ class InscripcionController extends Controller
                 // Por otra parte hallaremos las materias de esa carrera X en la gestion X y semestre X
                 $materias_curricula = Asignatura::where('carrera_id', $informacion_carrera->id)
                                                 ->whereNotIn('id', $array_aprobadas)
-                                                ->where('anio_vigente', $informacion_carrera->anio_vigente)
+                                                ->where('anio_vigente', $anio_ingreso)
                                                 ->where('gestion', $maxima_gestion);
                 if($maximo_semestre){
                     $materias_curricula = $materias_curricula->where('semestre', $maximo_semestre);

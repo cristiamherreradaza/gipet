@@ -35,8 +35,8 @@
                             <table id="tabla-asignaturas" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Sigla</th>
                                         <th>Carrera</th>
+                                        <th>Sigla</th>
                                         <th>Nombre</th>
                                         <th>A&ntilde;o</th>
                                         <th></th>
@@ -45,8 +45,8 @@
                                 <tbody>
                                     @foreach($asignaturas as $asignatura)
                                         <tr>
-                                            <td>{{ $asignatura->sigla }}</td>
                                             <td>{{ $asignatura->carrera->nombre }}</td>
+                                            <td class="text-nowrap">{{ $asignatura->sigla }}</td>
                                             <td>{{ $asignatura->nombre }}</td>
                                             <td class="text-center">{{ $asignatura->gestion }}</td>
                                             <td>
@@ -72,18 +72,22 @@
                             <table id="tabla-asignaturas-docente" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Sigla</th>
                                         <th>Carrera</th>
+                                        <th>Sigla</th>
                                         <th>Nombre</th>
+                                        <th>Turno</th>
+                                        <th>Paralelo</th>
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($asignaturas_docente as $asignatura)
                                     <tr>
-                                        <td>{{ $asignatura->asignatura->sigla }}</td>
                                         <td>{{ $asignatura->asignatura->carrera->nombre }}</td>
+                                        <td class="text-nowrap">{{ $asignatura->asignatura->sigla }}</td>
                                         <td>{{ $asignatura->asignatura->nombre }}</td>
+                                        <td>{{ $asignatura->turno->descripcion }}</td>
+                                        <td>{{ $asignatura->paralelo }}</td>
                                         <td>
                                             <button type="button" class="btn btn-danger" onclick="elimina_asignacion('{{ $asignatura->id }}', '{{ $asignatura->asignatura->nombre }}')">
                                                 <i class="fas fa-trash"></i>
