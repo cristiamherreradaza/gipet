@@ -89,6 +89,7 @@
         <input type="hidden" name="paralelo" id="paralelo">
         <input type="hidden" name="gestion" id="gestion">
         <input type="hidden" name="fecha_inscripcion" id="fecha_inscripcion">
+        <input type="hidden" name="anioIngreso" id="anioIngreso" value="{{ $anioIngreso }}">
         <div class="card-header bg-primary">
             <h4 class="mb-0 text-white">DETALLE DE REINSCRIPCI&Oacute;N - (Pendientes Gestion Actual)</h4>
         </div>

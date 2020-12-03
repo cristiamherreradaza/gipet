@@ -31,6 +31,7 @@ class NotasEstudiantesExport implements FromCollection, WithMapping, WithHeading
     {
         return Inscripcione::whereIn('id', $this->array_inscripciones)
                             ->orderBy('persona_id')
+                            ->orderBy('carrera_id')
                             ->orderBy('anio_vigente')
                             ->get();
     }
