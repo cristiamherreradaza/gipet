@@ -2771,7 +2771,10 @@ class InscripcionController extends Controller
                                                             ->count();
                 $cargaHoraria   = $cargaHoraria + round(($cargaGestion*$cantidadAsignaturasAprobadas)/$cantidadAsignaturasGestion);
             }
-            $pdf    = PDF::loadView('pdf.historialAcademico', compact('carrera', 'persona', 'inscripciones', 'expedido', 'cantidadCurricula', 'cantidadAprobados', 'promedio', 'cargaHoraria'))->setPaper('letter');
+            $gestionesInscritas = CarrerasPersona::where('carrera_id', $carrera->id)
+                                                ->where('persona_id', $persona->id)
+                                                ->get();
+            $pdf    = PDF::loadView('pdf.historialAcademico', compact('carrera', 'persona', 'inscripciones', 'expedido', 'cantidadCurricula', 'cantidadAprobados', 'promedio', 'cargaHoraria', 'gestionesInscritas', 'anioIngreso'))->setPaper('letter');
             // return $pdf->download('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
             return $pdf->stream('historialAcademico_'.date('Y-m-d H:i:s').'.pdf');
         }

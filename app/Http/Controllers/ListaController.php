@@ -106,7 +106,17 @@ class ListaController extends Controller
                                     ->where('anio_vigente', $gestion)
                                     ->where('vigencia', $estado)
                                     ->get();
-        $pdf    = PDF::loadView('pdf.listaAlumnoCarreraCursoTurnoParalelo', compact('listado'))->setPaper('letter');
+        $array_personas = array();
+        foreach($listado as $registro)
+        {
+            array_push($array_personas, $registro->persona_id);
+        }
+        $estudiantes    = Persona::whereIn('id', $array_personas)
+                                ->orderBy('apellido_paterno')
+                                ->orderBy('apellido_materno')
+                                ->orderBy('nombres')
+                                ->get();
+        $pdf    = PDF::loadView('pdf.listaAlumnoCarreraCursoTurnoParalelo', compact('listado', 'estudiantes', 'estado'))->setPaper('letter');
         // return $pdf->download('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
         return $pdf->stream('listaAlumnos_'.date('Y-m-d H:i:s').'.pdf');
     }

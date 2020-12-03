@@ -333,21 +333,30 @@
                         <tr>
                             <td colspan="3">PLAN DE ESTUDIOS</td>
                         </tr>
-                        <tr>
-                            <td style="width:30%;">R. M.</td>
-                            <td style="width:35%;">082/2017</td>
-                            <td style="width:35%;">2017</td>
-                        </tr>
-                        <tr>
-                            <td style="width:30%;">R. M.</td>
-                            <td style="width:35%;">082/2017</td>
-                            <td style="width:35%;">2017</td>
-                        </tr>
-                        <tr>
-                            <td style="width:30%;">R. M.</td>
-                            <td style="width:35%;">082/2017</td>
-                            <td style="width:35%;">2017</td>
-                        </tr>
+                        @foreach($gestionesInscritas as $gestion)
+                            @php
+                                $resolucion = App\Resolucione::where('anio_vigente', $anioIngreso)
+                                                            ->first();
+                                if(!$resolucion)
+                                {
+                                    for($i=1; $i<=10; $i++)
+                                    {
+                                        $anioIngreso    = $anioIngreso - 1;
+                                        $resolucion     = App\Resolucione::where('anio_vigente', $anioIngreso)
+                                                            ->first();
+                                        if($resolucion)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
+                            @endphp
+                            <tr>
+                                <td style="width:30%;">R. M.</td>
+                                <td style="width:35%;">{{ $resolucion->resolucion }}</td>
+                                <td style="width:35%;">{{ $gestion->anio_vigente }}</td>
+                            </tr>
+                        @endforeach
                     </table>
                 </td>
                 <td style="text-align:center; font-family: 'Times New Roman', Times, serif; font-size:14px;">
