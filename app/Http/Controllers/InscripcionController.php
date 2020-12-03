@@ -2699,7 +2699,39 @@ class InscripcionController extends Controller
                                         ->where('carrera_id', $carrera->id)
                                         ->orderBy('id')
                                         ->get();
-            $pdf    = PDF::loadView('pdf.historialAcademico', compact('carrera', 'persona', 'inscripciones'))->setPaper('letter');
+            switch ($persona->expedido) {
+                case 'La Paz':
+                    $expedido = 'LP';
+                    break;
+                case 'Oruro':
+                    $expedido = 'OR';
+                    break;
+                case 'Potosi':
+                    $expedido = 'PT';
+                    break;
+                case 'Cochabamba':
+                    $expedido = 'CB';
+                    break;
+                case 'Santa Cruz':
+                    $expedido = 'SC';
+                    break;
+                case 'Beni':
+                    $expedido = 'BN';
+                    break;
+                case 'Pando':
+                    $expedido = 'PA';
+                    break;
+                case 'Tarija':
+                    $expedido = 'TJ';
+                    break;
+                case 'Chuquisaca':
+                    $expedido = 'CH';
+                    break;
+                default:
+                    $expedido = '';
+            }
+            $asignaturasAprobadas   = 
+            $pdf    = PDF::loadView('pdf.historialAcademico', compact('carrera', 'persona', 'inscripciones', 'expedido'))->setPaper('letter');
             // return $pdf->download('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
             return $pdf->stream('historialAcademico_'.date('Y-m-d H:i:s').'.pdf');
         }
