@@ -2733,26 +2733,45 @@ class InscripcionController extends Controller
             $anioIngreso    = CarrerasPersona::where('persona_id', $persona->id)
                                             ->where('carrera_id', $carrera->id)
                                             ->min('anio_vigente');
-            if($anioIngreso)
+            if(!$anioIngreso)
             {
-                $cantidadCurricula  = Asignatura::where('carrera_id', $carrera->id)
-                                                ->where('anio_vigente', $anioIngreso)
-                                                ->count();
-                $cantidadAprobados  = Inscripcione::where('carrera_id', $carrera->id)
-                                                ->where('persona_id', $persona->id)
-                                                ->where('aprobo', 'Si')
-                                                ->count();
-                $totalAsignaturas   = Inscripcione::where('carrera_id', $carrera->id)
-                                                ->where('persona_id', $persona->id)
-                                                ->where('aprobo', 'Si')
-                                                ->sum('nota');
-                $promedio   = round($totalAsignaturas/$cantidadAprobados);
+                $anioIngreso    = Inscripcione::where('persona_id', $persona->id)
+                                            ->where('carrera_id', $carrera->id)
+                                            ->min('anio_vigente');
             }
-            else
+            $cantidadCurricula  = Asignatura::where('carrera_id', $carrera->id)
+                                            ->where('anio_vigente', $anioIngreso)
+                                            ->count();
+            $cantidadAprobados  = Inscripcione::where('carrera_id', $carrera->id)
+                                            ->where('persona_id', $persona->id)
+                                            ->where('aprobo', 'Si')
+                                            ->count();
+            $totalAsignaturas   = Inscripcione::where('carrera_id', $carrera->id)
+                                            ->where('persona_id', $persona->id)
+                                            ->where('aprobo', 'Si')
+                                            ->sum('nota');
+            $promedio   = round($totalAsignaturas/$cantidadAprobados);
+            // Para la carga horaria, buscaremos la gestion maxima aprobada
+            $gestionMaxima  = Inscripcione::where('carrera_id', $carrera->id)
+                                        ->where('persona_id', $persona->id)
+                                        ->where('aprobo', 'Si')
+                                        ->max('gestion');
+            $cargaGestion   = 1200;
+            $cargaHoraria   = 0;
+            for($i=1; $i<=$gestionMaxima; $i++)
             {
-
+                $cantidadAsignaturasGestion = Asignatura::where('carrera_id', $carrera->id)
+                                                        ->where('anio_vigente', $anioIngreso)
+                                                        ->where('gestion', $i)
+                                                        ->count();
+                $cantidadAsignaturasAprobadas   = Inscripcione::where('carrera_id', $carrera->id)
+                                                            ->where('persona_id', $persona->id)
+                                                            ->where('gestion', $i)
+                                                            ->where('aprobo', 'Si')
+                                                            ->count();
+                $cargaHoraria   = $cargaHoraria + round(($cargaGestion*$cantidadAsignaturasAprobadas)/$cantidadAsignaturasGestion);
             }
-            $pdf    = PDF::loadView('pdf.historialAcademico', compact('carrera', 'persona', 'inscripciones', 'expedido', 'cantidadCurricula', 'cantidadAprobados', 'promedio'))->setPaper('letter');
+            $pdf    = PDF::loadView('pdf.historialAcademico', compact('carrera', 'persona', 'inscripciones', 'expedido', 'cantidadCurricula', 'cantidadAprobados', 'promedio', 'cargaHoraria'))->setPaper('letter');
             // return $pdf->download('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
             return $pdf->stream('historialAcademico_'.date('Y-m-d H:i:s').'.pdf');
         }

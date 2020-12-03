@@ -313,7 +313,7 @@
                     <table cellpadding="1" border="1px" style="width:100%; text-align:center; font-family: 'Times New Roman', Times, serif; font-size:10px; line-height:100%">
                         <tr>
                             <td style="width:50%;">Carga Horaria</td>
-                            <td style="width:50%;">3620</td>
+                            <td style="width:50%;">{{ $cargaHoraria }}</td>
                         </tr>
                         <tr>
                             <td>Asignaturas Aprobadas</td>
