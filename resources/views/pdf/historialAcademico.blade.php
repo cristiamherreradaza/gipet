@@ -317,11 +317,11 @@
                         </tr>
                         <tr>
                             <td>Asignaturas Aprobadas</td>
-                            <td>17 / 17</td>
+                            <td>{{ $cantidadAprobados }} / {{ $cantidadCurricula }}</td>
                         </tr>
                         <tr>
                             <td rowspan="2">Promedio de Calificaciones</td>
-                            <td rowspan="2">75</td>
+                            <td rowspan="2">{{ $promedio }}</td>
                         </tr>
 
                     </table>

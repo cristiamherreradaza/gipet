@@ -2730,8 +2730,29 @@ class InscripcionController extends Controller
                 default:
                     $expedido = '';
             }
-            $asignaturasAprobadas   = 
-            $pdf    = PDF::loadView('pdf.historialAcademico', compact('carrera', 'persona', 'inscripciones', 'expedido'))->setPaper('letter');
+            $anioIngreso    = CarrerasPersona::where('persona_id', $persona->id)
+                                            ->where('carrera_id', $carrera->id)
+                                            ->min('anio_vigente');
+            if($anioIngreso)
+            {
+                $cantidadCurricula  = Asignatura::where('carrera_id', $carrera->id)
+                                                ->where('anio_vigente', $anioIngreso)
+                                                ->count();
+                $cantidadAprobados  = Inscripcione::where('carrera_id', $carrera->id)
+                                                ->where('persona_id', $persona->id)
+                                                ->where('aprobo', 'Si')
+                                                ->count();
+                $totalAsignaturas   = Inscripcione::where('carrera_id', $carrera->id)
+                                                ->where('persona_id', $persona->id)
+                                                ->where('aprobo', 'Si')
+                                                ->sum('nota');
+                $promedio   = round($totalAsignaturas/$cantidadAprobados);
+            }
+            else
+            {
+
+            }
+            $pdf    = PDF::loadView('pdf.historialAcademico', compact('carrera', 'persona', 'inscripciones', 'expedido', 'cantidadCurricula', 'cantidadAprobados', 'promedio'))->setPaper('letter');
             // return $pdf->download('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
             return $pdf->stream('historialAcademico_'.date('Y-m-d H:i:s').'.pdf');
         }
