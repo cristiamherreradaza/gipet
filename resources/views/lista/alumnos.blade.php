@@ -241,8 +241,8 @@
         var gestion     = $("#gestion").val();
         var estado      = $("#estado").val();
         // Aplicar validaciones, para cuando los campos sean vacios
-        window.open("{{ url('Lista/reporteExcelAlumnos') }}/"+carrera+'/'+curso+'/'+turno+'/'+paralelo+'/'+gestion+'/'+estado);
-        //window.location.href = "{{ url('Lista/reportePdfAlumnos') }}/"+carrera+'/'+curso+'/'+turno+'/'+paralelo+'/'+gestion+'/'+estado;
+        //window.open("{{ url('Lista/reporteExcelAlumnos') }}/"+carrera+'/'+curso+'/'+turno+'/'+paralelo+'/'+gestion+'/'+estado);
+        window.location.href = "{{ url('Lista/reporteExcelAlumnos') }}/"+carrera+'/'+curso+'/'+turno+'/'+paralelo+'/'+gestion+'/'+estado;
     }
 
 </script>
