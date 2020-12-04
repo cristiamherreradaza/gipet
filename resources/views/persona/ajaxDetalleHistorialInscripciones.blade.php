@@ -38,7 +38,7 @@
                     <td>
                         <button type="button" class="btn btn-info" title="Ver detalle" onclick="ajaxMuestraInscripcion('{{ $inscripcion->id }}')"><i class="fas fa-eye"></i></button>
                         <a class="btn btn-light" title="Descargar Boletin" href="{{ url('Inscripcion/boletin/'.$inscripcion->id) }}" target="_blank"><i class="fas fa-file-pdf"></i></a>
-                        <button type="button" class="btn btn-danger" title="Eliminar Inscripcion" disabled><i class="fas fa-trash-alt"></i></button>
+                        <button type="button" class="btn btn-danger" title="Eliminar Inscripcion" hidden><i class="fas fa-trash-alt"></i></button>
                     </td>
                 </tr>
             @endforeach

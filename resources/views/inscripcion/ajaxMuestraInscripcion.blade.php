@@ -35,7 +35,9 @@
                             <td>{{ $inscripcion->turno->descripcion }}</td>
                             <td>{{ $inscripcion->paralelo }}</td>
                             <td>{{ $inscripcion->anio_vigente }}</td>
-                            <td></td>
+                            <td>
+                                <button type="button" class="btn btn-danger" title="Eliminar Inscripcion"  onclick="eliminar('{{ $inscripcion->id }}', '{{ $inscripcion->asignatura->nombre }}')"><i class="fas fa-trash-alt"></i></button>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -43,3 +45,29 @@
         </div>
     </div>
 </div>
+
+<script>
+    function eliminar(id, nombre)
+    {
+        Swal.fire({
+            title: 'Quieres borrar ' + nombre + '?',
+            text: "Luego no podras recuperarlo!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, estoy seguro!',
+            cancelButtonText: "Cancelar",
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire(
+                    'Excelente!',
+                    'La asignatura fue eliminada',
+                    'success'
+                ).then(function() {
+                    window.location.href = "{{ url('Inscripcion/eliminaAsignatura') }}/"+id;
+                });
+            }
+        })
+    }
+</script>

@@ -83,7 +83,7 @@
                 <td style="width:50%;"><u>{{ $persona->apellido_paterno }}</u></td>
                 <td style="width:50%;"><u>{{ $persona->apellido_materno }}</u></td>
                 <td style="width:50%;"><u>{{ $persona->nombres }}</u></td>
-                <td style="width:50%;"><u>{{ $persona->cedula }}</u></td>
+                <td style="width:50%;"><u>{{ $persona->cedula }} {{ $expedido }}</u></td>
             </tr>
             <tr style="border: 1px solid black; border-collapse: collapse">
                 <td class="celdabg" style="width:50%;"><strong>Apellido Paterno</strong></td>

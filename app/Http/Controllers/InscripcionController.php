@@ -21,6 +21,7 @@ use App\CursosCorto;
 use App\CobrosTemporada;
 use App\Servicio;
 use App\ServiciosAsignatura;
+use App\SegundosTurno;
 use DB;
 
 class InscripcionController extends Controller
@@ -2683,8 +2684,39 @@ class InscripcionController extends Controller
                                     //->where('fecha_registro', $registro->fecha_inscripcion)   //fecha_inscripcion
                                     ->where('anio_vigente', $registro->anio_vigente)            //anio_vigente
                                     ->get();
+        switch ($persona->expedido) {
+            case 'La Paz':
+                $expedido = 'LP';
+                break;
+            case 'Oruro':
+                $expedido = 'OR';
+                break;
+            case 'Potosi':
+                $expedido = 'PT';
+                break;
+            case 'Cochabamba':
+                $expedido = 'CB';
+                break;
+            case 'Santa Cruz':
+                $expedido = 'SC';
+                break;
+            case 'Beni':
+                $expedido = 'BN';
+                break;
+            case 'Pando':
+                $expedido = 'PA';
+                break;
+            case 'Tarija':
+                $expedido = 'TJ';
+                break;
+            case 'Chuquisaca':
+                $expedido = 'CH';
+                break;
+            default:
+                $expedido = '';
+        }
         $gestionAcademica   = $registro->anio_vigente;
-        $pdf    = PDF::loadView('pdf.boletinCalificacionInscripcion', compact('registro', 'carrera', 'persona', 'inscripciones', 'gestionAcademica'))->setPaper('letter');
+        $pdf    = PDF::loadView('pdf.boletinCalificacionInscripcion', compact('registro', 'carrera', 'persona', 'inscripciones', 'gestionAcademica', 'expedido'))->setPaper('letter');
         // return $pdf->download('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
         return $pdf->stream('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
     }
@@ -2788,6 +2820,30 @@ class InscripcionController extends Controller
         $pdf    = PDF::loadView('pdf.users', compact('users'));
         // Nombre del pdf a exportar
         return $pdf->download('users-list.pdf');
+    }
+
+    public function eliminaAsignatura($id)
+    {
+        $inscripcion    = Inscripcione::find($id);
+        if($inscripcion)
+        {
+            $persona_id = $inscripcion->persona_id;
+            $notas  = Nota::where('inscripcion_id', $inscripcion->id)
+                        ->get();
+            $segundoTurno   = SegundosTurno::where('inscripcion_id', $inscripcion->id)
+                                            ->first();
+            ($segundoTurno ? $segundoTurno->delete() : '');
+            foreach($notas as $nota)
+            {
+                $nota->delete();
+            }
+            $inscripcion->delete();
+            return redirect('Persona/ver_detalle/'.$persona_id);
+        }
+        else
+        {
+            return redirect('Persona/listado');
+        }
     }
 
     public function pruebaMigracion()

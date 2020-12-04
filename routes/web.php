@@ -162,6 +162,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('Inscripcion/actualizaCursoCorto', 'InscripcionController@actualizaCursoCorto');
     Route::get('Inscripcion/eliminarCursoCorto/{id}', 'InscripcionController@eliminarCursoCorto');
     Route::get('Inscripcion/finalizarCalificaciones/{persona_id}/{carrera_id}', 'InscripcionController@finalizarCalificaciones');
+    Route::get('Inscripcion/eliminaAsignatura/{id}', 'InscripcionController@eliminaAsignatura');
 
     // PDFS
     Route::get('Inscripcion/reportePdfHistorialAcademico/{persona_id}/{carrera_id}', 'InscripcionController@reportePdfHistorialAcademico');
