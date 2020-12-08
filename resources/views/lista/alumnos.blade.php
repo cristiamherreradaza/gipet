@@ -105,12 +105,12 @@
                 <h4 class="card-title">RESULTADO DE BUSQUEDA</h4>
                 <div class="row">
                     <div class="col-md-12">
-                        <button class="btn btn-light" onclick="reportePdfAlumnos()">
+                        <button class="btn btn-danger" onclick="reportePdfAlumnos()">
                             <i class="fas fa-file-pdf">&nbsp; PDF</i>
                         </button>
                         
-                        <button class="btn btn-light" onclick="reporteExcelAlumnos()">
-                            <i class="fas fa-file-pdf">&nbsp; EXCEL</i>
+                        <button class="btn btn-success" onclick="reporteExcelAlumnos()">
+                            <i class="fas fa-file-excel">&nbsp; EXCEL</i>
                         </button>
                     </div>
                 </div>

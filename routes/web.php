@@ -303,6 +303,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Lista/alumnos', 'ListaController@alumnos');
     Route::get('Lista/ajaxBusquedaAlumnos', 'ListaController@ajaxBusquedaAlumnos');
     Route::get('Lista/reportePdfAlumnos/{carrera}/{curso}/{turno}/{paralelo}/{gestion}/{estado}', 'ListaController@reportePdfAlumnos');
+    Route::get('Lista/totalAlumnos', 'ListaController@totalAlumnos');
+    Route::get('Lista/ajaxTotalAlumnos', 'ListaController@ajaxTotalAlumnos');
+    Route::get('Lista/reportePdfTotalAlumnos/{carrera}', 'ListaController@reportePdfTotalAlumnos');
+    Route::get('Lista/estadistica', 'ListaController@estadistica');
 
     // EXCEL
     Route::get('Importacion/excel', 'ImportacionController@excel');
