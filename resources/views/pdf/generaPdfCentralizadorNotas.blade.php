@@ -13,77 +13,52 @@
         }
 
         body {
-            margin: 5cm 1cm 2cm;
+            margin: 1cm 1cm 2cm;
             font-size: 6pt;
             font-family: Arial, Helvetica, sans-serif;
         }
 
         header {
             position: fixed;
-            top: 1cm;
-            left: 1cm;
-            right: 1cm;
-            height: 4cm;
-            background-color: #ffffff;
+            top: 0cm;
+            left: 0cm;
+            right: 0cm;
+            height: 0cm;
+            background-color: #ff0000;
             color: black;
             text-align: center;
-            line-height: 30px;
+            line-height: 5px;
         }
+
+        /*body {
+            margin: 3cm 2cm 2cm;
+        }*/
 
         footer {
             position: fixed;
             bottom: 0cm;
             left: 1cm;
             right: 1cm;
-            height: 2cm;
+            height: 1cm;
             background-color: #fff;
             color: black;
             text-align: center;
             line-height: 35px;
         }
 
-        .bordes {
-            /* border: #24486C 1px solid; */
-            border: 1px solid;
-            border-collapse: collapse;
-        }
-
-        table {
+        table.notas {
             /* width: 100%; */
             background-color: #fff;
             /* border: 1px solid; */
             border-collapse: collapse;
         }
 
-        table.iz td{
+        .notas th, .notas td {
+            border: 1px solid #000000;
+            padding: 2px;
             text-align: left;
-            border: 1px solid black;
-            padding: 2px;
-            /* text-align: center; */
-            /* border-collapse: collapse; */
         }
 
-        .celdas th {
-            height: 10px;
-            background-color: #E0E0E0;
-            /* color: #fff; */
-        }
-
-        .celdas td {
-            /* height: 12px; */
-        }
-
-        .celdas th,
-        .celdas td {
-            border: 1px solid black;
-            padding: 2px;
-            text-align: center;
-        }
-
-        .celdabg {
-            /* background-color: #E1ECF4; */
-            background-color: #ffffff;
-        }
     </style>
 </head>
 
@@ -92,84 +67,63 @@
         holas
     </header>
     <main>
-        <table>
+         <table class="notas">
+            
             <tr>
-                <td>
-                    <table border="1">
-                        <tr><td>GESTION: 2018</td></tr>
-                        <tr><td>NIVEL: TECNICO SUPERIOR</td></tr>
-                        <tr><td>CARRERA: CONTADURIA GENERAL</td></tr>
-                        <tr><td>REGIMEN: ANUALIZADO</td></tr>
-                        <tr><td>CURSO: PRIMER ANO MANANA "A"</td></tr>
-                    </table>
+                <td style="width: 180px;">
+                    GESTION: 2018
+                    <hr>
+                    NIVEL: TECNICO SUPERIOR
+                    <hr>
+                    CARRERA: CONTADURIA GENERAL
+                    <hr>
+                    REGIMEN: ANUALIZADO
+                    <hr>
+                    CURSO: PRIMER ANO MANANA "A
+                    <hr>
+                    <b>NOMINA ESTUDIANTES</b>
                 </td>
-                <td>
-                    <table border="1">
-                        <tr>
-                            <td>CEDULA</td>
-                            <td>
-                                <table border="1">
-                                    <tr>
-                                        @foreach ($materiasCarrera as $mc)
-                                        <td>{{ $mc->sigla }}</td>
-                                        @endforeach
-                                    </tr>
-                                    <tr>
-                                        @foreach ($materiasCarrera as $mc)
-                                        <td>{{ $mc->nombre }}</td>
-                                        @endforeach
-                                    </tr>
-                                
-                                </table>
-                            </td>
-                            <td>OBSERVACIONES</td>
-                        </tr>
-                    </table>
-                    
-                </td>
+                <td style="width: 20px;">CEDULA DE IDENTIDAD</td>
+                @foreach ($materiasCarrera as $mc)
+                    <td style="width: 62px; text-transform: uppercase;vertical-align: top;">
+                        {{ $mc->sigla }}
+                        <hr>
+                        {{ $mc->nombre }}
+                    </td>
+                @endforeach
+                <td><b>OBSERVACIONES</b></td>
             </tr>
+            @foreach ($nominaEstudiantes as $k => $ne)
             <tr>
-                <td>
-                    <table border="1">
-                        
-                    </table>
-                </td>
-                <td>
-                    <table border="1">
-                        <tr>
-                            <td></td>
-                            @foreach ($materiasCarrera as $mc)
-                                <td>{{ $mc->nombre }}</td>
-                            @endforeach
-                        </tr>
-                        @foreach ($nominaEstudiantes as $k => $ne)
-                        <tr>
-                            <td>{{ $k++ }} - {{ $ne->id }} - {{ $ne->persona->apellido_paterno }}-{{ $ne->persona->apellido_materno }}-{{ $ne->persona->nombres }}</td>
-                            @foreach ($materiasCarrera as $mc)
-                                @php
-                                    $nota = App\Inscripcione::where('persona_id', $ne->persona_id)
-                                                        ->where('carrera_id', $carrera)
-                                                        ->where('anio_vigente', $gestion)
-                                                        ->where('asignatura_id', $mc->id)
-                                                        ->first();
-                                    // dd($nota);
-                                @endphp
-                                <td>
-                                    @if ($nota)
-                                        {{ $nota->nota }}
-                                    @else
-                                        0
-                                    @endif
-                                </td>
-                            @endforeach
+                {{-- <td colspan="2" style="width: 10px;"></td> --}}
+                <td style="width: 230px;">{{ ++$k }}.- {{ $ne->persona->apellido_paterno }} {{ $ne->persona->apellido_materno }} {{ $ne->persona->nombres }}</td>
+                <td>{{ $ne->persona->cedula }}</td>
+                @foreach ($materiasCarrera as $mc)
+                    @php
+                        $nota = App\Inscripcione::where('persona_id', $ne->persona_id)
+                                            ->where('carrera_id', $carrera)
+                                            ->where('anio_vigente', $gestion)
+                                            ->where('asignatura_id', $mc->id)
+                                            ->first();
 
-                        </tr>
-                        @endforeach
-                    </table>
-                </td>
+                        $estado = App\CarrerasPersona::where('persona_id', $ne->persona_id)
+                                            ->where('carrera_id', $carrera)
+                                            ->where('anio_vigente', $gestion)
+                                            ->first();
+
+                    @endphp
+                    <td>
+                        @if ($nota)
+                            {{ $nota->nota }}
+                        @else
+                            0
+                        @endif
+                    </td>
+                    @endforeach
+                    <td>{{ $estado->estado }}</td>
             </tr>
+            @endforeach
         </table>
-
     </main>
 </body>
 

@@ -136,7 +136,7 @@ class ListaController extends Controller
                             ->groupBy('persona_id')
                             ->get();
 
-        return view('pdf.generaPdfCentralizadorNotas')->with(compact(
+        /*return view('pdf.generaPdfCentralizadorNotas')->with(compact(
                     'materiasCarrera', 
                     'nominaEstudiantes',
                     'carrera',
@@ -144,9 +144,9 @@ class ListaController extends Controller
                     'turno',
                     'paralelo',
                     'gestion'
-                ));
-        // $pdf = PDF::loadView('pdf.generaPdfCentralizadorNotas', compact('materiasCarrera'))->setPaper('letter', 'landscape');
-        // return $pdf->stream('listaAlumnos_'.date('Y-m-d H:i:s').'.pdf');
+                ));*/
+        $pdf = PDF::loadView('pdf.generaPdfCentralizadorNotas', compact('materiasCarrera', 'nominaEstudiantes', 'carrera', 'curso', 'turno', 'paralelo', 'gestion'))->setPaper('letter', 'landscape');
+        return $pdf->stream('listaAlumnos_'.date('Y-m-d H:i:s').'.pdf');
 
     }
     
