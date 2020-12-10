@@ -78,11 +78,7 @@
                                 @endif
                             </td>
                             <td>
-                                @php
-                                    $resultado = App\Nota::where('inscripcion_id', $materia->id)
-                                                            ->first();
-                                @endphp
-                                {{ $resultado ? round($resultado->segundo_turno) : '-' }}
+                                {{ round($materia->segundo_turno) }}
                             </td>
                             @if($materia->aprobo == 'Si')
                                 <td class="text-success">APROBADO</td>

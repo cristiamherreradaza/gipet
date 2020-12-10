@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Reporte</title>
+    <title>Historial Academico</title>
     <style>
         @page {
             margin: 0cm 0cm;
@@ -12,7 +12,7 @@
         }
  
         body {
-            margin: 2cm 1cm 5cm;
+            margin: 2cm 1cm 1cm;
         }
  
         header {
@@ -32,7 +32,7 @@
             bottom: 1cm;
             left: 1cm;
             right: 1cm;
-            height: 5cm;
+            height: 0cm;
             background-color: #fff;
             color: black;
             text-align: center;
@@ -97,16 +97,43 @@
                 <td></td>
             </tr>
             <tr>
+                @php
+                    $anioInicial    = App\CarrerasPersona::where('carrera_id', $carrera->id)
+                                                        ->where('persona_id', $persona->id)
+                                                        ->min('anio_vigente');
+                    if($anioInicial)
+                    {
+                        $fechaAdmision  = App\CarrerasPersona::where('carrera_id', $carrera->id)
+                                                            ->where('persona_id', $persona->id)
+                                                            ->where('anio_vigente', $anioInicial)
+                                                            ->first();
+                        if($fechaAdmision->fecha_inscripcion)
+                        {
+                            $dia    = date("d", strtotime($fechaAdmision->fecha_inscripcion));
+                            $mes    = date("m", strtotime($fechaAdmision->fecha_inscripcion));
+                            $anio   = date("Y", strtotime($fechaAdmision->fecha_inscripcion));
+                            $fechaAdmision  = $dia.'/'.$mes.'/'.$anio;
+                        }
+                        else
+                        {
+                            $fechaAdmision = '-/-/-';
+                        }
+                    }
+                    else
+                    {
+                        $fechaAdmision = '-/-/-';
+                    }
+                @endphp
                 <td><strong>CARRERA:</strong></td>
                 <td>{{ strtoupper($carrera->nombre) }}</td>
                 <td><strong>FECHA DE ADMISION:</strong></td>
-                <td>20/02/2017</td>
+                <td>{{ $fechaAdmision }}</td>
             </tr>
             <tr>
                 <td><strong>NIVEL DE FORMACION:</strong></td>
                 <td>{{ strtoupper($carrera->nivel) }}</td>
                 <td><strong>FECHA DE CONCLUSION:</strong></td>
-                <td>{{ date('Y') }}/{{ date('m') }}/{{ date('d') }}</td>
+                <td>{{ date('d') }}/{{ date('m') }}/{{ date('Y') }}</td>
             </tr>
             <tr>
                 <td><strong>REGIMEN:</strong></td>
@@ -118,7 +145,7 @@
                 <td><strong>ESTUDIANTE:</strong></td>
                 <td>{{ strtoupper($persona->apellido_paterno) }} {{ strtoupper($persona->apellido_materno) }} {{ strtoupper($persona->nombres) }}</td>
                 <td><strong>CEDULA DE IDENTIDAD:</strong></td>
-                <td>{{ strtoupper($persona->cedula) }}</td>
+                <td>{{ strtoupper($persona->cedula) }} {{ $expedido }}</td>
             </tr>
         </table>
         <br>
@@ -249,7 +276,7 @@
         <p style="font: normal 12px/150% Times New Roman, Times, serif; text-align:left;">
             <strong>Lugar y fecha: </strong> La Paz - {{ $dia }}, {{ date('d') }} de {{ $mes }} de {{ date('Y') }}.
         </p>
-        <br><br><br><br><br><br>
+        <br><br><br><br>
         <table style="width:100%;">
             <tr>
                 <td style="text-align:center; font-family: 'Times New Roman', Times, serif; font-size:14px;">
@@ -261,7 +288,7 @@
         <table style="width:100%;">
             <tr>
                 <td style="width:30%;">
-                    <table cellpadding="1" border="1px" style="width:100%; text-align:center; font-family: 'Times New Roman', Times, serif; font-size:12px; line-height:100%">
+                    <table cellpadding="1" border="1px" style="width:100%; text-align:center; font-family: 'Times New Roman', Times, serif; font-size:10px; line-height:100%">
                         <tr>
                             <td colspan="2">ESCALA DE VALORACION</td>
                         </tr>
@@ -279,25 +306,64 @@
                         </tr>
                     </table>
                 </td>
-                <td style="text-align:center; font-family: 'Times New Roman', Times, serif; font-size:14px;">
-                    Sello del Instituto
+                <td style="text-align:center; vertical-align:bottom; font-family: 'Times New Roman', Times, serif; font-size:14px;">
+                    Sello de la Instituci&oacute;n
                 </td>
                 <td style="width:30%;">
-                    <table cellpadding="1" border="1px" style="width:100%; text-align:center; font-family: 'Times New Roman', Times, serif; font-size:12px; line-height:100%">
+                    <table cellpadding="1" border="1px" style="width:100%; text-align:center; font-family: 'Times New Roman', Times, serif; font-size:10px; line-height:100%">
                         <tr>
                             <td style="width:50%;">Carga Horaria</td>
-                            <td style="width:50%;">3620</td>
+                            <td style="width:50%;">{{ $cargaHoraria }}</td>
                         </tr>
                         <tr>
                             <td>Asignaturas Aprobadas</td>
-                            <td>17 / 17</td>
+                            <td>{{ $cantidadAprobados }} / {{ $cantidadCurricula }}</td>
                         </tr>
                         <tr>
                             <td rowspan="2">Promedio de Calificaciones</td>
-                            <td rowspan="2">75</td>
+                            <td rowspan="2">{{ $promedio }}</td>
                         </tr>
 
                     </table>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:30%;">
+                    <table cellpadding="1" border="1px" style="width:100%; text-align:center; font-family: 'Times New Roman', Times, serif; font-size:10px; line-height:100%">
+                        <tr>
+                            <td colspan="3">PLAN DE ESTUDIOS</td>
+                        </tr>
+                        @foreach($gestionesInscritas as $gestion)
+                            @php
+                                $resolucion = App\Resolucione::where('anio_vigente', $anioIngreso)
+                                                            ->first();
+                                if(!$resolucion)
+                                {
+                                    for($i=1; $i<=10; $i++)
+                                    {
+                                        $anioIngreso    = $anioIngreso - 1;
+                                        $resolucion     = App\Resolucione::where('anio_vigente', $anioIngreso)
+                                                            ->first();
+                                        if($resolucion)
+                                        {
+                                            break;
+                                        }
+                                    }
+                                }
+                            @endphp
+                            <tr>
+                                <td style="width:30%;">R. M.</td>
+                                <td style="width:35%;">{{ $resolucion->resolucion }}</td>
+                                <td style="width:35%;">{{ $gestion->anio_vigente }}</td>
+                            </tr>
+                        @endforeach
+                    </table>
+                </td>
+                <td style="text-align:center; font-family: 'Times New Roman', Times, serif; font-size:14px;">
+                    
+                </td>
+                <td style="width:30%;">
+                    
                 </td>
             </tr>
             <tr>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Reporte</title>
+    <title>Boletin de Calificaciones</title>
     <style>
         @page {
             margin: 0cm 0cm;
@@ -83,7 +83,7 @@
                 <td style="width:50%;"><u>{{ $persona->apellido_paterno }}</u></td>
                 <td style="width:50%;"><u>{{ $persona->apellido_materno }}</u></td>
                 <td style="width:50%;"><u>{{ $persona->nombres }}</u></td>
-                <td style="width:50%;"><u>{{ $persona->cedula }}</u></td>
+                <td style="width:50%;"><u>{{ $persona->cedula }} {{ $expedido }}</u></td>
             </tr>
             <tr style="border: 1px solid black; border-collapse: collapse">
                 <td class="celdabg" style="width:50%;"><strong>Apellido Paterno</strong></td>

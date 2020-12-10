@@ -75,34 +75,15 @@
                                 $cantidad=1
                             @endif
                             <td>{{ round($suma/$cantidad) }}</td>
-                            @foreach($notas as $nota)
-                                @if($nota->persona_id == $inscrito->persona_id)
-                                    @php
-                                        $nota_segundo = $nota_segundo + $nota->segundo_turno;
-                                    @endphp
-                                @endif
-                            @endforeach
-                            <td>{{ $nota_segundo/4 }}</td>
+                            <td>{{ round($inscrito->segundo_turno) }}</td>
                             <td>
                                 @if($bimestre != 0)
                                     <button onclick="registra_notas('{{ $inscrito->id }}', '{{ $bimestre }}', '{{ $inscrito->asignatura_id }}', '{{ $inscrito->turno_id }}', '{{ $inscrito->persona_id }}', '{{ $inscrito->paralelo }}', '{{ $inscrito->anio_vigente }}')" class="btn btn-info" title="Registrar notas"><i class="fas fa-plus"></i></button>
                                 @endif
-                                @php
-                                    $pago_segundo_turno = App\CobrosTemporada::where('persona_id', $inscrito->persona_id)
-                                                                ->where('carrera_id', $inscrito->carrera_id)
-                                                                ->where('asignatura_id', $inscrito->asignatura_id)
-                                                                ->where('servicio_id', 7)
-                                                                ->first();
-                                @endphp
-                                @if($inscrito->nota < 61 && $contador_registros == 4)
-                                    @if($pago_segundo_turno)
-                                        <button onclick="segundo_turno('{{ $inscrito->id }}')" class="btn btn-danger" title="Segundo turno"><i class="fas fa-chart-line"></i></button>
-                                    @else
-                                        <button class="btn btn-danger" title="Segundo turno" disabled><i class="fas fa-chart-line"></i></button>
-                                    @endif
-                                    
+                                @if($inscrito->nota < $inscrito->nota_aprobacion && $inscrito->nota >= 40 && $contador_registros == 4)
+                                    <button onclick="segundo_turno('{{ $inscrito->id }}', '{{ $inscrito->segundo_turno }}')" class="btn btn-danger" title="Segundo turno"><i class="fas fa-chart-line"></i></button>
                                 @endif
-                            </td>              
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -172,7 +153,7 @@
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input name="nota_segundo_turno" type="number" id="nota_segundo_turno" pattern="^[0-9]+" min="0" class="form-control" value="0" required>
+                                <input name="nota_segundo_turno" type="number" id="nota_segundo_turno" pattern="^[0-9]+" min="0" max="100" class="form-control" value="0" required>
                             </div>
                         </div>
                     </div>
@@ -237,10 +218,11 @@ $(document).ready(function() {
         }
     });
 
-    function segundo_turno(inscripcion_id)
+    function segundo_turno(inscripcion_id, segundo_turno)
     {
         //$("#nota_segundo_turno").val(0);
         $("#inscripcion_id").val(inscripcion_id);
+        $("#nota_segundo_turno").val(segundo_turno);
         $("#segundo_turno").modal('show');
     }
 

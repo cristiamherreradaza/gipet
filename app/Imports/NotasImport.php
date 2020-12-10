@@ -72,12 +72,12 @@ class NotasImport implements ToModel
                                                         ->where('trimestre', 3)
                                                         ->first();
                                 // Colocamos la nota del 3er Bimestre
-                                $segundoregistro->nota_asistencia = $row[4];
-                                $segundoregistro->nota_practicas = $row[5];
-                                $segundoregistro->nota_primer_parcial = $row[6];
-                                $segundoregistro->nota_examen_final = $row[7];
-                                $segundoregistro->nota_puntos_ganados = $row[8];   //extras
-                                $segundoregistro->nota_total = $total;
+                                $segundoregistro->nota_asistencia       = $row[4];
+                                $segundoregistro->nota_practicas        = $row[5];
+                                $segundoregistro->nota_primer_parcial   = $row[6];
+                                $segundoregistro->nota_examen_final     = $row[7];
+                                $segundoregistro->nota_puntos_ganados   = $row[8];      //extras
+                                $segundoregistro->nota_total            = $total;
                             }
                             if($nota->trimestre == 2)
                             {
@@ -91,32 +91,37 @@ class NotasImport implements ToModel
                                                         ->where('trimestre', 4)
                                                         ->first();
                                 // Colocamos la nota del 4to Bimestre
-                                $segundoregistro->nota_asistencia = $row[4];
-                                $segundoregistro->nota_practicas = $row[5];
-                                $segundoregistro->nota_primer_parcial = $row[6];
-                                $segundoregistro->nota_examen_final = $row[7];
-                                $segundoregistro->nota_puntos_ganados = $row[8];    //extras
-                                $segundoregistro->nota_total = $total;
+                                $segundoregistro->nota_asistencia       = $row[4];
+                                $segundoregistro->nota_practicas        = $row[5];
+                                $segundoregistro->nota_primer_parcial   = $row[6];
+                                $segundoregistro->nota_examen_final     = $row[7];
+                                $segundoregistro->nota_puntos_ganados   = $row[8];    //extras
+                                $segundoregistro->nota_total            = $total;
                             }
-                            $segundoregistro->fecha_registro = date('Y-m-d H:i:s');
+                            $segundoregistro->registrado        = 'Si';
+                            $segundoregistro->fecha_registro    = date('Y-m-d');
                             $segundoregistro->save();                               // Guardamos registro
 
-                            $nota->nota_asistencia = $row[4];
-                            $nota->nota_practicas = $row[5];
-                            $nota->nota_primer_parcial = $row[6];
-                            $nota->nota_examen_final = $row[7];
-                            $nota->nota_puntos_ganados = $row[8];   //extras
-                            $nota->nota_total = $total;
+                            $nota->nota_asistencia      = $row[4];
+                            $nota->nota_practicas       = $row[5];
+                            $nota->nota_primer_parcial  = $row[6];
+                            $nota->nota_examen_final    = $row[7];
+                            $nota->nota_puntos_ganados  = $row[8];      //extras
+                            $nota->nota_total           = $total;
+                            $nota->registrado           = 'Si';
+                            $nota->fecha_registro       = date('Y-m-d');
                             $nota->save();
                         }
                         else                                                        // Si es anual
                         {
-                            $nota->nota_asistencia = $row[4];
-                            $nota->nota_practicas = $row[5];
-                            $nota->nota_primer_parcial = $row[6];
-                            $nota->nota_examen_final = $row[7];
-                            $nota->nota_puntos_ganados = $row[8];   //extras
-                            $nota->nota_total = $total;
+                            $nota->nota_asistencia      = $row[4];
+                            $nota->nota_practicas       = $row[5];
+                            $nota->nota_primer_parcial  = $row[6];
+                            $nota->nota_examen_final    = $row[7];
+                            $nota->nota_puntos_ganados  = $row[8];      //extras
+                            $nota->nota_total           = $total;
+                            $nota->registrado           = 'Si';
+                            $nota->fecha_registro       = date('Y-m-d');
                             $nota->save();
                         }
                     }

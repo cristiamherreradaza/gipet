@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Reporte</title>
+    <title>Lista de Alumnos</title>
     <style>
         @page {
             margin: 0cm 0cm;
@@ -148,15 +148,15 @@
                 <th>CELULAR</th>
                 <th>ESTADO</th>
             </tr>
-            @foreach($listado as $key => $registro)
+            @foreach($estudiantes as $key => $estudiante)
                 <tr>
                     <td>{{ ($key+1) }}</td>
-                    <td>{{ strtoupper($registro->persona->cedula) }}</td>
-                    <td style="text-align:left;">{{ strtoupper($registro->persona->apellido_paterno) }}</td>
-                    <td style="text-align:left;">{{ strtoupper($registro->persona->apellido_materno) }}</td>
-                    <td style="text-align:left;">{{ strtoupper($registro->persona->nombres) }}</td>
-                    <td>{{ strtoupper($registro->persona->numero_celular) }}</td>
-                    <td>{{ strtoupper($registro->vigencia) }}</td>
+                    <td>{{ strtoupper($estudiante->cedula) }}</td>
+                    <td style="text-align:left;">{{ strtoupper($estudiante->apellido_paterno) }}</td>
+                    <td style="text-align:left;">{{ strtoupper($estudiante->apellido_materno) }}</td>
+                    <td style="text-align:left;">{{ strtoupper($estudiante->nombres) }}</td>
+                    <td>{{ strtoupper($estudiante->numero_celular) }}</td>
+                    <td>{{ strtoupper($estado) }}</td>
                 </tr>
             @endforeach
         </table>

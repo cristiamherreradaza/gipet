@@ -62,39 +62,6 @@ class ListaController extends Controller
                         );
                         //->groupBy('carreras_personas.persona_id');
         return Datatables::of($resultado)->make(true);
-        // $resultado = DB::table('inscripciones')
-        //                 ->whereNull('inscripciones.deleted_at')
-        //                 ->where('inscripciones.carrera_id', $request->carrera)
-        //                 ->where('inscripciones.gestion', $request->curso)
-        //                 ->where('inscripciones.turno_id', $request->turno)
-        //                 //->where('inscripciones.paralelo', $request->paralelo)
-        //                 ->where('inscripciones.anio_vigente', $request->gestion)
-        //                 // consulta de alumno vigente/novigente
-        //                 ->leftJoin('personas', 'inscripciones.persona_id', '=', 'personas.id')
-        //                 ->select(
-        //                     'personas.cedula as cedula',
-        //                     'personas.apellido_paterno as apellido_paterno',
-        //                     'personas.apellido_materno as apellido_materno',
-        //                     'personas.nombres as nombres',
-        //                     'personas.numero_celular as numero_celular',
-        //                     'personas.estado as estado'
-        //                 )
-        //                 ->groupBy('inscripciones.persona_id');
-        // return Datatables::of($resultado)->make(true);
-
-        // $resultado = Inscripcione::with('persona')
-        //                         ->where('carrera_id', $request->carrera)
-        //                         ->where('gestion', $request->curso)
-        //                         ->where('turno_id', $request->turno)
-        //                         //->where('paralelo', $request->paralelo)
-        //                         ->where('anio_vigente', $request->gestion)
-        //                         // consulta de alumno vigente/novigente
-        //                         ->get();
-        // //dd($resultado);
-        // // Envio de los datos a la vista
-        // return Datatables::of($resultado)
-        //                 ->addColumn('persona', function (Inscripcione $inscripcion){ $inscripcion->persona->cedula; })
-        //                 ->make(true);
     }
 
     public function reportePdfAlumnos($carrera_id, $curso_id, $turno_id, $paralelo, $gestion, $estado)
@@ -106,7 +73,17 @@ class ListaController extends Controller
                                     ->where('anio_vigente', $gestion)
                                     ->where('vigencia', $estado)
                                     ->get();
-        $pdf    = PDF::loadView('pdf.listaAlumnoCarreraCursoTurnoParalelo', compact('listado'))->setPaper('letter');
+        $array_personas = array();
+        foreach($listado as $registro)
+        {
+            array_push($array_personas, $registro->persona_id);
+        }
+        $estudiantes    = Persona::whereIn('id', $array_personas)
+                                ->orderBy('apellido_paterno')
+                                ->orderBy('apellido_materno')
+                                ->orderBy('nombres')
+                                ->get();
+        $pdf    = PDF::loadView('pdf.listaAlumnoCarreraCursoTurnoParalelo', compact('listado', 'estudiantes', 'estado'))->setPaper('letter');
         // return $pdf->download('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
         return $pdf->stream('listaAlumnos_'.date('Y-m-d H:i:s').'.pdf');
     }
@@ -170,6 +147,49 @@ class ListaController extends Controller
                 ));
         // $pdf = PDF::loadView('pdf.generaPdfCentralizadorNotas', compact('materiasCarrera'))->setPaper('letter', 'landscape');
         // return $pdf->stream('listaAlumnos_'.date('Y-m-d H:i:s').'.pdf');
+
+    }
+    
+    public function totalALumnos()
+    {
+        $carreras   = Carrera::get();
+        $gestiones  = CarrerasPersona::select('anio_vigente')
+                                ->groupBy('anio_vigente')
+                                ->get();
+        return view('lista.totalAlumnos')->with(compact('carreras', 'gestiones'));
+    }
+
+    public function ajaxTotalAlumnos(Request $request)
+    {
+        // si tiene carrera, se busca solo la carrera, si no tiene, es todas las carreras
+        $query   = Carrera::whereNull('estado')
+                        ->orderBy('id');
+        if($request->carrera)
+        {
+            $query  = $query->where('id', $request->carrera);
+        }
+        $carreras   = $query->get();
+        $turnos     = Turno::get();
+        return view('lista.ajaxTotalAlumnos')->with(compact('carreras', 'turnos'));
+    }
+
+    public function reportePdfTotalAlumnos($carrera_id)
+    {
+        $query   = Carrera::whereNull('estado')
+                        ->orderBy('id');
+        if($carrera_id != 0)
+        {
+            $query  = $query->where('id', $carrera_id);
+        }
+        $carreras   = $query->get();
+        $turnos     = Turno::get();
+        $pdf    = PDF::loadView('pdf.reportePdfTotalAlumnos', compact('carreras', 'turnos'))->setPaper('letter');
+        // return $pdf->download('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
+        return $pdf->stream('cantidadAlumnos_'.date('Y-m-d H:i:s').'.pdf');
+    }
+
+    public function estadistica()
+    {
 
     }
 

@@ -81,13 +81,7 @@
                                 @endif
                             </td>
                             <td>
-                                @if($detalle)
-                                    @php
-                                        $resultado = App\Nota::where('inscripcion_id', $detalle->id)
-                                                            ->first();
-                                    @endphp
-                                    {{ $resultado->segundo_turno ? round($resultado->segundo_turno) : '-' }}
-                                @endif
+                                {{ $detalle ? round($detalle->segundo_turno) : '' }}
                             </td>
                             <td>
                                 @if($detalle)
