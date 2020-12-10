@@ -304,15 +304,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Lista/alumnos', 'ListaController@alumnos');
     Route::get('Lista/ajaxBusquedaAlumnos', 'ListaController@ajaxBusquedaAlumnos');
     Route::get('Lista/reportePdfAlumnos/{carrera}/{curso}/{turno}/{paralelo}/{gestion}/{estado}', 'ListaController@reportePdfAlumnos');
-<<<<<<< HEAD
     Route::get('Lista/notas', 'ListaController@notas');
     Route::post('Lista/generaPdfCentralizadorNotas', 'ListaController@generaPdfCentralizadorNotas');
-=======
     Route::get('Lista/totalAlumnos', 'ListaController@totalAlumnos');
     Route::get('Lista/ajaxTotalAlumnos', 'ListaController@ajaxTotalAlumnos');
     Route::get('Lista/reportePdfTotalAlumnos/{carrera}', 'ListaController@reportePdfTotalAlumnos');
     Route::get('Lista/estadistica', 'ListaController@estadistica');
->>>>>>> d2fcd887af4eb8a65dd8c6946e6e2875b1c75094
 
     // EXCEL
     Route::get('Importacion/excel', 'ImportacionController@excel');
