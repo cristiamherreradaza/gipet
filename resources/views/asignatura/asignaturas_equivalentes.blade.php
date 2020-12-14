@@ -10,7 +10,7 @@
 @endsection
 
 @section('content')
-<div class="card border-info" id="mostrar" style="display:none;">
+<div class="card border-info" id="mostrar" style="display:block;">
     <div class="card-header bg-info">
         <h4 class="mb-0 text-white">
             Nueva Equivalencia de Asignaturas
@@ -21,59 +21,103 @@
             @csrf
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
-                            <label class="control-label">Asignatura 1</label>
+                            <label class="control-label">Carrera</label>
                             <span class="text-danger">
                                 <i class="mr-2 mdi mdi-alert-circle"></i>
                             </span>
-                            <select class="select2 form-control custom-select" name="asignatura_1" id="asignatura_1" style="width: 100%; height:36px;" required>
-                                <option value="">Buscar Asignatura</option>
-                                @foreach ($carreras as $carrera_a)
-                                <optgroup label="{{ $carrera_a->nombre }}">
-                                    @foreach($asignaturas as $asignatura_a)
-                                        @if($carrera_a->id == $asignatura_a->carrera_id)
-                                            <option value="{{ $asignatura_a->id }}">{{ $asignatura_a->sigla }} {{ $asignatura_a->nombre }}</option>
-                                        @endif
-                                    @endforeach
-                                </optgroup>
+                            <select class="select2 form-control custom-select" name="carrera_1" id="carrera_1"
+                                style="width: 100%; height:36px;" onchange="buscaCarrera1()" >
+                                @foreach ($carreras as $c)
+                                <option value="{{ $c->id }}">{{ $c->nombre }}</option>
                                 @endforeach
                             </select>
-                            
+                    
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="control-label">Asignatura 2</label>
-                            <span class="text-danger">
-                                <i class="mr-2 mdi mdi-alert-circle"></i>
-                            </span>
-                            <select class="select2 form-control custom-select" name="asignatura_2" id="asignatura_2" style="width: 100%; height:36px;" required>
-                                <option value="">Buscar Equivalencia</option>
-                                @foreach ($carreras as $carrera_b)
-                                <optgroup label="{{ $carrera_b->nombre }}">
-                                    @foreach($asignaturas as $asignatura_b)
-                                        @if($carrera_b->id == $asignatura_b->carrera_id)
-                                            <option value="{{ $asignatura_b->id }}">{{ $asignatura_b->sigla }} {{ $asignatura_b->nombre }}</option>
-                                        @endif
-                                    @endforeach
-                                </optgroup>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
+
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">Gestion</label>
                             <span class="text-danger">
                                 <i class="mr-2 mdi mdi-alert-circle"></i>
                             </span>
-                            <input name="anio_vigente" type="number" id="anio_vigente" class="form-control" value="{{ date('Y') }}" required>
+                            <select class="select2 form-control custom-select" name="gestion_1" id="gestion_1"
+                                style="width: 100%; height:36px;" onchange="buscaCarrera1()" required>
+                                @foreach ($gestiones as $g)
+                                    <option value="{{ $g->anio_vigente }}" {{ ($g->anio_vigente == $anio_vigente)?'selected':'' }}>{{ $g->anio_vigente }}</option>
+                                @endforeach
+                            </select>
+                    
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4" id="ajaxMuestraAsignatura1">
+                        <div class="form-group">
+                            <label class="control-label">Asignatura 1</label>
+                            <span class="text-danger">
+                                <i class="mr-2 mdi mdi-alert-circle"></i>
+                            </span>
+                            <select class="select2 form-control custom-select" name="asignatura_1" id="asignatura_1" style="width: 100%; height:36px;" required>
+                                    @foreach($asignaturas as $asignatura_b)
+                                        <option value="{{ $asignatura_b->id }}">{{ $asignatura_b->sigla }} {{ $asignatura_b->nombre }}</option>
+                                    @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Carrera</label>
+                            <span class="text-danger">
+                                <i class="mr-2 mdi mdi-alert-circle"></i>
+                            </span>
+                            <select class="select2 form-control custom-select" name="carrera_2" id="carrera_2"
+                                style="width: 100%; height:36px;" onchange="buscaCarrera2()" >
+                                @foreach ($carreras as $c)
+                                <option value="{{ $c->id }}">{{ $c->nombre }}</option>
+                                @endforeach
+                            </select>
+                    
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Gestion</label>
+                            <span class="text-danger">
+                                <i class="mr-2 mdi mdi-alert-circle"></i>
+                            </span>
+                            <select class="select2 form-control custom-select" name="gestion_2" id="gestion_2"
+                                style="width: 100%; height:36px;" onchange="buscaCarrera2()">
+                                @foreach ($gestiones as $g)
+                                <option value="{{ $g->anio_vigente }}" {{ ($g->anio_vigente == $anio_vigente)?'selected':'' }}>
+                                    {{ $g->anio_vigente }}</option>
+                                @endforeach
+                            </select>
+                
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4" id="ajaxMuestraAsignatura2">
+                        <div class="form-group">
+                            <label class="control-label">Asignatura 2</label>
+                            <span class="text-danger">
+                                <i class="mr-2 mdi mdi-alert-circle"></i>
+                            </span>
+                            <select class="select2 form-control custom-select" name="asignatura_2" id="asignatura_2"
+                                style="width: 100%; height:36px;" required>
+                                @foreach($asignaturas as $asignatura_b)
+                                <option value="{{ $asignatura_b->id }}">{{ $asignatura_b->sigla }} {{ $asignatura_b->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
             </div>
             <div class="row">
                 <div class="col-md-6">
@@ -198,6 +242,42 @@
     function cerrar_datos_carrera()
     {
         $('#mostrar').hide('slow');
+    }
+
+    function buscaCarrera1()
+    {
+        let gestion = $("#gestion_1").val();
+        let carrera = $("#carrera_1").val();
+
+        $.ajax({
+            url: "{{ url('Asignatura/ajax_busca_asignatura') }}",
+            data: {
+                gestion: gestion,
+                carrera: carrera,
+            },
+            type: 'get',
+            success: function(data) {
+                $("#ajaxMuestraAsignatura1").html(data);
+            }
+        });
+    }
+
+    function buscaCarrera2()
+    {
+        let gestion2 = $("#gestion_2").val();
+        let carrera2 = $("#carrera_2").val();
+
+        $.ajax({
+            url: "{{ url('Asignatura/ajax_busca_asignaturas') }}",
+            data: {
+                gestion: gestion2,
+                carrera: carrera2,
+            },
+            type: 'get',
+            success: function(data) {
+                $("#ajaxMuestraAsignatura2").html(data);
+            }
+        });
     }
 </script>
 @endsection

@@ -184,6 +184,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Asignatura/ajax_lista', 'AsignaturaController@ajax_lista');
     Route::post('Asignatura/guarda_equivalentes', 'AsignaturaController@guarda_equivalentes');
     Route::get('Asignatura/elimina_equivalentes/{id}', 'AsignaturaController@elimina_equivalentes');
+    Route::get('Asignatura/ajax_busca_asignatura', 'AsignaturaController@ajax_busca_asignatura');
+    Route::get('Asignatura/ajax_busca_asignaturas', 'AsignaturaController@ajax_busca_asignaturas');
 
     Route::get('User/nuevo', 'UserController@nuevo');
     Route::post('User/guarda', 'UserController@guarda');
