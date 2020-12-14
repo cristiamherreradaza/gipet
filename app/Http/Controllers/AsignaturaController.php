@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Carrera;
 use App\Asignatura;
 use App\Prerequisito;
-use App\Carrera;
+use App\CarrerasPersona;
+use Illuminate\Http\Request;
 use App\AsignaturasEquivalente;
+use Illuminate\Support\Facades\Auth;
 
 class AsignaturaController extends Controller
 {
@@ -152,13 +153,22 @@ class AsignaturaController extends Controller
     public function asignaturas_equivalentes()
     {
         $anio_vigente = date('Y');
-        $carreras = Carrera::orderBy('id', 'ASC')
-                            ->get();
+
+        $gestiones  = CarrerasPersona::select('anio_vigente')
+                        ->groupBy('anio_vigente')
+                        ->get();
+
+        $carreras = Carrera::where('anio_vigente', $anio_vigente)
+                        ->orderBy('id', 'ASC')
+                        ->get();
+
         $asignaturas = Asignatura::where('anio_vigente', $anio_vigente)
+                                ->where('carrera_id', 1)
                                 ->orderBy('id', 'ASC')
                                 ->get();
+
         $equivalentes = AsignaturasEquivalente::get();
-        return view('asignatura.asignaturas_equivalentes')->with(compact('carreras', 'asignaturas', 'equivalentes'));  
+        return view('asignatura.asignaturas_equivalentes')->with(compact('carreras', 'asignaturas', 'equivalentes', 'gestiones', 'anio_vigente'));  
     }
 
     public function ajax_lista(Request $request)
@@ -173,44 +183,15 @@ class AsignaturaController extends Controller
 
     public function guarda_equivalentes(Request $request)
     {
-        // Si existen los parametros enviados desde interfaz
-        if($request->asignatura_1 && $request->asignatura_2 && $request->anio_vigente){
-            // Buscaremos los valores respectivos
-            $asignatura_a = Asignatura::find($request->asignatura_1);
-            $asignatura_b = Asignatura::find($request->asignatura_2);
-            // Si existen los valores buscados, creamos la equivalencia
-            if($asignatura_a && $asignatura_b){
-                $asignatura_equivalente = new AsignaturasEquivalente();
-                $asignatura_equivalente->user_id = Auth::user()->id;
-                $asignatura_equivalente->carrera_id_1 = $asignatura_a->carrera_id;
-                $asignatura_equivalente->asignatura_id_1 = $asignatura_a->id;
-                $asignatura_equivalente->carrera_id_2 = $asignatura_b->carrera_id;
-                $asignatura_equivalente->asignatura_id_2 = $asignatura_b->id;
-                $asignatura_equivalente->anio_vigente = $request->anio_vigente;
-                $asignatura_equivalente->save();
-            }
-        }
+        $asignatura_equivalente = new AsignaturasEquivalente();
+        $asignatura_equivalente->user_id = Auth::user()->id;
+        $asignatura_equivalente->carrera_id_1 = $request->carrera_1;
+        $asignatura_equivalente->asignatura_id_1 = $request->asignatura_1;
+        $asignatura_equivalente->carrera_id_2 = $request->carrera_2;
+        $asignatura_equivalente->asignatura_id_2 = $request->asignatura_2;
+        $asignatura_equivalente->anio_vigente = $request->gestion_1;
+        $asignatura_equivalente->save();
         return redirect('Asignatura/asignaturas_equivalentes');
-        // $asig_1 = $request->asignatura_1;
-        // $asig_2 = $request->asignatura_2;
-        // $anio_vigente = $request->tipo_anio_vigente;
-
-        // $carrera_1 = Asignatura::find($request->asignatura_1);
-        // $carrera_2 = Asignatura::find($request->asignatura_2);
-
-        // $asig_equivalente                  = new AsignaturasEquivalente();
-        // $asig_equivalente->carrera_id_1    = $carrera_1->carrera_id;
-        // $asig_equivalente->asignatura_id_1 = $asig_1;
-        // $asig_equivalente->carrera_id_2    = $carrera_2->carrera_id;
-        // $asig_equivalente->asignatura_id_2 = $asig_2;
-        // $asig_equivalente->anio_vigente    = $anio_vigente;
-        // $asig_equivalente->save();
-
-        // $asignaturas = AsignaturasEquivalente::whereNull('deleted_at')
-        //                     ->orderBy('id', 'DESC')
-        //                     ->get();
-
-        // return view('asignatura.lista')->with(compact('asignaturas'));  
     }
 
     public function elimina_equivalentes($id)
@@ -225,4 +206,21 @@ class AsignaturaController extends Controller
         $asignaturas = Asignatura::where('carrera_id', 10)->get();
         return view('asignatura.listado')->with(compact('asignaturas'));
     }
+
+    public function ajax_busca_asignatura(Request $request)
+    {
+        $asignaturas = Asignatura::where('anio_vigente', $request->gestion)
+                        ->where('carrera_id', $request->carrera)
+                        ->get();
+        return view('asignatura.ajax_busca_asignatura')->with(compact('asignaturas'));
+    }
+
+    public function ajax_busca_asignaturas(Request $request)
+    {
+        $asignaturas = Asignatura::where('anio_vigente', $request->gestion)
+                        ->where('carrera_id', $request->carrera)
+                        ->get();
+        return view('asignatura.ajax_busca_asignaturas')->with(compact('asignaturas'));
+    }
+
 }
