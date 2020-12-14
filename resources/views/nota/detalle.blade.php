@@ -16,11 +16,46 @@
 @section('content')
 <div class="card">
     <div class="card-body">
-        <h3 class="card-title text-primary"><strong>{{ $asignatura->asignatura->sigla }} {{ $asignatura->asignatura->nombre }}</strong></h3>
-        <h6 class="card-subtitle text-dark">DOCENTE: {{ auth()->user()->nombres }} {{ auth()->user()->apellido_paterno }} {{ auth()->user()->apellido_materno }}</h6>
-        <h6 class="card-subtitle text-dark">TURNO: {{ $asignatura->turno->descripcion }}</h6>
-        <h6 class="card-subtitle text-dark">PARALELO: {{ $asignatura->paralelo }}</h6>
-        <h6 class="card-subtitle">Año {{ date('Y') }}</h6>
+        <h3 class="card-title text-primary"><strong>{{ $asignatura->asignatura->sigla }}
+                        {{ $asignatura->asignatura->nombre }}</strong></h3>
+
+        <div class="row">
+            <div class="col-md-4"><h4 class="text-bold">TURNO: {{ $asignatura->turno->descripcion }}</h4></div>
+            <div class="col-md-4"><h4 class="text-bold">PARALELO: {{ $asignatura->paralelo }}</h4></div>
+            <div class="col-md-4"><h4 class="text-bold">Año {{ date('Y') }}</h4></div>
+        </div>
+
+        <form action="{{ url('nota/cambiaTurnoParalelo') }}" method="POST">
+            @csrf
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="hidden" name="asignatura_id" value="{{ $asignatura->asignatura->id }}">
+                        <input type="hidden" name="anio" value="{{ $asignatura->anio_vigente }}">
+                        <select name="turno_id" id="turno_id" class="form-control" onchange="ajaxBuscaParalelo()" required>
+                            <option value="">Seleccione Turno</option>
+                            @foreach($comboTurnos as $ct)
+                            <option value="{{ $ct->turno_id }}" 
+                                    data-asignatura="{{ $ct->asignatura_id }}"
+                                    data-docente="{{ $ct->user_id }}"
+                                    data-anio="{{ $ct->anio_vigente }}"
+                                    >{{ $ct->turno->descripcion }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4" id="ajaxMuestraComboParalelo">
+                    <select name="paralelo" id="paralelo" class="form-control" required>
+                        <option value="">Seleccione Paralelo</option>
+                    </select>
+                </div>
+                <div class="col-md-4"><button type="submit" class="btn btn-block btn-info">Cambiar</button></div>
+            </div>
+        </form>
+            
+        {{-- <h6 class="card-subtitle text-dark">DOCENTE: {{ auth()->user()->nombres }} {{ auth()->user()->apellido_paterno }} {{ auth()->user()->apellido_materno }}</h6> --}}
+        
+        
         <div class="table-responsive m-t-40">
             <table id="myTable" class="table table-bordered table-striped text-center">
                 <thead class="text-primary">
@@ -348,6 +383,30 @@ $(document).ready(function() {
                 });
             }
         })
+    }
+
+    function ajaxBuscaParalelo()
+    {
+        let turno = $("#turno_id").val();
+        let asignatura = $("#turno_id").find(':selected').data("asignatura");
+        let docente = $("#turno_id").find(':selected').data("docente");
+        let anio = $("#turno_id").find(':selected').data("anio");
+
+        $.ajax({
+            url: "{{ url('nota/ajaxBuscaParalelo') }}",
+            data: {
+                turno: turno,
+                asignatura: asignatura,
+                docente: docente,
+                anio: anio,
+                },
+            type: 'post',
+            success: function(data) {
+                $("#ajaxMuestraComboParalelo").html(data);
+                // $("#modal_notas").modal('show');
+            }
+        });
+        // alert(anio);   
     }
 </script>
 

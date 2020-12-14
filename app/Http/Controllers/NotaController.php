@@ -27,23 +27,23 @@ class NotaController extends Controller
 
     public function listado()
     {
-        $arrayAsignaturas   = array();
-        $asignaturas        = NotasPropuesta::where('docente_id', Auth::user()->id)
-                                    ->where('anio_vigente', date('Y'))
-                                    ->get();
-        // foreach($asignaturas as $materia)
-        // {
-        //     array_push($arrayAsignaturas, $materia->asignatura_id);
-        // }
-        // $asignaturas    = Asignatura::whereIn('id', $arrayAsignaturas)
-        //                             ->orderBy('gestion')
-        //                             ->orderBy('semestre')
-        //                             ->get();
-        return view('nota.listado')->with(compact('asignaturas'));
+        $carrerasDocente = NotasPropuesta::where('docente_id', Auth::user()->id)
+                            ->where('anio_vigente', date('Y'))
+                            ->groupBy('asignatura_id')
+                            ->get();
+
+        return view('nota.listado')->with(compact('carrerasDocente'));
     }
 
     public function detalle($id)
     {
+        $datosNP = NotasPropuesta::where('id', $id)->first();
+        $comboTurnos = NotasPropuesta::where('asignatura_id', $datosNP->asignatura_id)
+                                    ->where('user_id', $datosNP->user_id)
+                                    ->where('anio_vigente', $datosNP->anio_vigente)
+                                    ->groupBy('turno_id')
+                                    ->get();
+        // dd($comboTurnos);
         // Buscamos los detalles de la materia a mostrar
         $asignatura = NotasPropuesta::find($id);
         // Buscamos a los estudiantes inscritos en esa materia
@@ -93,7 +93,7 @@ class NotaController extends Controller
             // $bimestre tomara el valor de 0, y en ese caso es un indicador de que finalizo todos los registros de notas
             $bimestre   = 0;
         }
-        return view('nota.detalle')->with(compact('asignatura', 'inscritos', 'notas', 'ciclo', 'bimestre'));
+        return view('nota.detalle')->with(compact('asignatura', 'inscritos', 'notas', 'ciclo', 'bimestre', 'comboTurnos'));
     }
 
     public function ajaxMuestraNota(Request $request)
@@ -792,6 +792,30 @@ class NotaController extends Controller
         //     $inscripcion->save();
         // }
         return redirect('nota/listado');
+    }
+
+    public function ajaxBuscaParalelo(Request $request)
+    {
+        // dd($request->turno);
+        $comboParalelos = NotasPropuesta::where('turno_id', $request->turno)
+                                        ->where('asignatura_id', $request->asignatura)
+                                        ->where('docente_id', Auth::user()->id)
+                                        ->where('anio_vigente', $request->anio)
+                                        ->get();
+
+        return view('nota.ajaxBuscaParalelo')->with(compact('comboParalelos'));
+    }
+
+    public function cambiaTurnoParalelo(Request $request)
+    {
+        $notasPropuestaId = NotasPropuesta::where('turno_id', $request->turno_id)
+                                        ->where('asignatura_id', $request->asignatura_id)
+                                        ->where('docente_id', Auth::user()->id)
+                                        ->where('anio_vigente', $request->anio)
+                                        ->where('paralelo', $request->paralelo)
+                                        ->first();
+        // dd($notasPropuestaId);
+        return redirect('nota/detalle/' . $notasPropuestaId->id);
     }
     
 }

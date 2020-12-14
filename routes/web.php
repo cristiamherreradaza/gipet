@@ -78,6 +78,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('nota/listado', 'NotaController@listado');
 
     Route::get('nota/detalle/{id}', 'NotaController@detalle');
+    Route::post('nota/ajaxBuscaParalelo', 'NotaController@ajaxBuscaParalelo');
+    Route::post('nota/cambiaTurnoParalelo', 'NotaController@cambiaTurnoParalelo');
 
     //Route::get('nota/exportarexcel/{id}', 'NotaController@exportarexcel');
     Route::get('nota/exportarexcel/{asignatura_id}/{bimestre}', 'NotaController@exportarexcel');
