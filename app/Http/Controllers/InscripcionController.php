@@ -266,8 +266,8 @@ class InscripcionController extends Controller
     public function reinscripcion($persona_id, $carrera_id)
     {
         $estudiante = Persona::find($persona_id);
-        $turnos     = Turno::get();
         $carrera    = Carrera::find($carrera_id);
+        $turnos     = Turno::get();
         // Buscamos el anioIngreso, para hacer seguimiento de la malla curricular de ese anioIngreso
         // $anioIngreso   = $estudiante->anio_vigente;
         $anioIngreso    = CarrerasPersona::where('persona_id', $estudiante->id)
@@ -289,30 +289,32 @@ class InscripcionController extends Controller
         $gestionActual  = CarrerasPersona::where('carrera_id', $carrera->id)
                                         ->where('persona_id', $estudiante->id)
                                         ->max('gestion');
-        $gestionActual = ($gestionActual ? $gestionActual : '1');
-        // Pare eso buscamos la cantidad de asignaturas aprobadas y comparamos con las restantes
-        $cantidadAprobadas  = Inscripcione::where('carrera_id', $carrera->id)
+        $gestionActual  = ($gestionActual ? $gestionActual : '1');
+
+        // NUEVA OPCION
+        // Vemos cual es su maximo anio_vigente de este alumno
+        $anioVigente    = CarrerasPersona::where('carrera_id', $carrera->id)
                                         ->where('persona_id', $estudiante->id)
                                         ->where('gestion', $gestionActual)
-                                        ->where('aprobo', 'Si')
-                                        ->where('estado', 'Finalizado')
-                                        ->count();
-        $cantidadCurricula  = Asignatura::where('carrera_id', $carrera->id)
-                                        ->where('anio_vigente', $anioIngreso)
+                                        ->max('anio_vigente');
+        $anioVigente    = ($anioVigente ? $anioVigente : date('Y'));
+        // Buscamos la gestion X con anio_vigente X
+        $gestion        = CarrerasPersona::where('carrera_id', $carrera->id)
+                                        ->where('persona_id', $estudiante->id)
                                         ->where('gestion', $gestionActual)
-                                        ->count();
-        if($cantidadAprobadas == $cantidadCurricula)    // Si aprobo todo
+                                        ->where('anio_vigente', $anioVigente)
+                                        ->first();
+        
+        // Ahora veremos si aprobo la gestion X con anio_vigente X
+        if($gestion->estado == 'APROBO')
         {
-            // Pasa a la siguiente gestion
-            // Buscamos las asignaturas que pertenecen a la siguiente gestion
-            // Primero subimos una gestion
             $gestionActual = $gestionActual + 1;
             // Buscamos las asignaturas que esta inscrito
             $asignaturasCursando    = Inscripcione::where('carrera_id', $carrera->id)
                                                 ->where('persona_id', $estudiante->id)
                                                 ->where('estado', 'Cursando')
                                                 ->get();
-            $arrayCursando    = array();
+            $arrayCursando  = array();
             foreach($asignaturasCursando as $cursando)
             {
                 array_push($arrayCursando, $cursando->asignatura_id);
@@ -324,28 +326,14 @@ class InscripcionController extends Controller
                                     ->whereNotIn('id', $asignaturasCursando)
                                     ->get();
         }
-        if($cantidadAprobadas < $cantidadCurricula)     // Si reprobo alguno o todo
+        else
         {
-            
-            // Se queda en la misma gestion
-            // Buscamos las asignaturas que le faltan aprobar
-            $asignaturasAprobadas   = Inscripcione::where('carrera_id', $carrera->id)
-                                                ->where('persona_id', $estudiante->id)
-                                                ->where('gestion', $gestionActual)
-                                                ->where('aprobo', 'Si')
-                                                ->where('estado', 'Finalizado')
-                                                ->get();
-            $arrayAprobadas    = array();
-            foreach($asignaturasAprobadas as $aprobada)
-            {
-                array_push($arrayAprobadas, $aprobada->asignatura_id);
-            }
             // Buscamos las asignaturas que esta inscrito
             $asignaturasCursando    = Inscripcione::where('carrera_id', $carrera->id)
                                                 ->where('persona_id', $estudiante->id)
                                                 ->where('estado', 'Cursando')
                                                 ->get();
-            $arrayCursando    = array();
+            $arrayCursando  = array();
             foreach($asignaturasCursando as $cursando)
             {
                 array_push($arrayCursando, $cursando->asignatura_id);
@@ -353,10 +341,79 @@ class InscripcionController extends Controller
             $pendientes = Asignatura::where('carrera_id', $carrera->id)
                                     ->where('gestion', $gestionActual)
                                     ->where('anio_vigente', $anioIngreso)
-                                    ->whereNotIn('id', $arrayAprobadas)
-                                    ->whereNotIn('id', $arrayCursando)
+                                    ->whereNotIn('id', $asignaturasCursando)
                                     ->get();
         }
+
+        /* OPCION 2
+            // Pare eso buscamos la cantidad de asignaturas aprobadas y comparamos con las restantes
+            $cantidadAprobadas  = Inscripcione::where('carrera_id', $carrera->id)
+                                            ->where('persona_id', $estudiante->id)
+                                            ->where('gestion', $gestionActual)
+                                            ->where('aprobo', 'Si')
+                                            ->where('estado', 'Finalizado')
+                                            ->count();
+            $cantidadCurricula  = Asignatura::where('carrera_id', $carrera->id)
+                                            ->where('anio_vigente', $anioIngreso)
+                                            ->where('gestion', $gestionActual)
+                                            ->count();
+            if($cantidadAprobadas == $cantidadCurricula)    // Si aprobo todo
+            {
+                // Pasa a la siguiente gestion
+                // Buscamos las asignaturas que pertenecen a la siguiente gestion
+                // Primero subimos una gestion
+                $gestionActual = $gestionActual + 1;
+                // Buscamos las asignaturas que esta inscrito
+                $asignaturasCursando    = Inscripcione::where('carrera_id', $carrera->id)
+                                                    ->where('persona_id', $estudiante->id)
+                                                    ->where('estado', 'Cursando')
+                                                    ->get();
+                $arrayCursando    = array();
+                foreach($asignaturasCursando as $cursando)
+                {
+                    array_push($arrayCursando, $cursando->asignatura_id);
+                }
+                // Buscaremos a las materias que pertenecen a la siguiente gestion
+                $pendientes = Asignatura::where('carrera_id', $carrera->id)
+                                        ->where('gestion', $gestionActual)
+                                        ->where('anio_vigente', $anioIngreso)
+                                        ->whereNotIn('id', $asignaturasCursando)
+                                        ->get();
+            }
+            if($cantidadAprobadas < $cantidadCurricula)     // Si reprobo alguno o todo
+            {
+                
+                // Se queda en la misma gestion
+                // Buscamos las asignaturas que le faltan aprobar
+                $asignaturasAprobadas   = Inscripcione::where('carrera_id', $carrera->id)
+                                                    ->where('persona_id', $estudiante->id)
+                                                    ->where('gestion', $gestionActual)
+                                                    ->where('aprobo', 'Si')
+                                                    ->where('estado', 'Finalizado')
+                                                    ->get();
+                $arrayAprobadas    = array();
+                foreach($asignaturasAprobadas as $aprobada)
+                {
+                    array_push($arrayAprobadas, $aprobada->asignatura_id);
+                }
+                // Buscamos las asignaturas que esta inscrito
+                $asignaturasCursando    = Inscripcione::where('carrera_id', $carrera->id)
+                                                    ->where('persona_id', $estudiante->id)
+                                                    ->where('estado', 'Cursando')
+                                                    ->get();
+                $arrayCursando    = array();
+                foreach($asignaturasCursando as $cursando)
+                {
+                    array_push($arrayCursando, $cursando->asignatura_id);
+                }
+                $pendientes = Asignatura::where('carrera_id', $carrera->id)
+                                        ->where('gestion', $gestionActual)
+                                        ->where('anio_vigente', $anioIngreso)
+                                        ->whereNotIn('id', $arrayAprobadas)
+                                        ->whereNotIn('id', $arrayCursando)
+                                        ->get();
+            }
+        */
         /*
             // Buscaremos las carreras en las que esta inscrito el Estudiante X
             $carreras_estudiante = Carrera::where('id', $carrera_id)->get();
@@ -1216,9 +1273,9 @@ class InscripcionController extends Controller
                 // Verificamos que en la nueva carrera que vaya a inscribirse, no existan los registros
                 $carreras_persona   = CarrerasPersona::where('persona_id', $request->persona_id)
                                                     ->where('carrera_id', $informacion_carrera->id)
-                                                    ->where('turno_id', $request->turno)
+                                                    // ->where('turno_id', $request->turno)
                                                     ->where('gestion', $asignatura->gestion)
-                                                    ->where('paralelo', $request->paralelo)
+                                                    // ->where('paralelo', $request->paralelo)
                                                     ->where('anio_vigente', $request->gestion)
                                                     ->first();
                 // Si no se encuentra ningun valor, se crea
@@ -3137,6 +3194,49 @@ class InscripcionController extends Controller
                 $nota->nota_aprobacion  = $inscripcion->nota_aprobacion;        // MOD
                 $nota->save();
             }
+        }
+        return redirect('Persona/ver_detalle/'.$inscripcion->persona_id);
+    }
+
+    public function convalidarAsignaturaAprobada($inscripcion_id)
+    {
+        $inscripcion    = Inscripcione::find($inscripcion_id);
+        // Comprobemos que no tiene una materia ya que compensa esta
+        $asignaturaAprobada = Inscripcione::where('carrera_id', $inscripcion->carrera_id)
+                                        ->where('asignatura_id', $inscripcion->asignatura_id)
+                                        ->where('persona_id', $inscripcion->persona_id)
+                                        ->where('estado', 'Finalizado')
+                                        ->where('aprobo', 'Si')
+                                        ->first();
+        if($asignaturaAprobada)
+        {
+            $notas  = Nota::where('inscripcion_id', $inscripcion->id)
+                        ->get();
+            foreach($notas as $nota){
+                // Buscamos el registro de notas de la anterior asignatura aprobada y copiamos sus valores
+                $registro   = Nota::where('inscripcion_id', $asignaturaAprobada->id)
+                                ->where('trimestre', $nota->trimestre)
+                                ->first();
+                if($registro)
+                {
+                    $nota->fecha_registro       = date('Y-m-d');
+                    $nota->nota_asistencia      = $registro->nota_asistencia;
+                    $nota->nota_practicas       = $registro->nota_practicas;
+                    $nota->nota_primer_parcial  = $registro->nota_primer_parcial;
+                    $nota->nota_examen_final    = $registro->nota_examen_final;
+                    $nota->nota_puntos_ganados  = $registro->nota_puntos_ganados;
+                    $nota->nota_total           = $registro->nota_total;
+                    $nota->finalizado           = $registro->finalizado;
+                    $nota->registrado           = $registro->registrado;
+                    $nota->save();
+                }
+            }
+            $inscripcion->fecha_registro    = date('Y-m-d');
+            $inscripcion->nota              = $asignaturaAprobada->nota;
+            $inscripcion->segundo_turno     = $asignaturaAprobada->segundo_turno;
+            $inscripcion->aprobo            = $asignaturaAprobada->aprobo;
+            $inscripcion->estado            = $asignaturaAprobada->estado;
+            $inscripcion->save();
         }
         return redirect('Persona/ver_detalle/'.$inscripcion->persona_id);
     }
