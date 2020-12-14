@@ -12,6 +12,7 @@ class NotasPropuesta extends Model
         'codigo_anterior',
         'user_id',
         'docente_id',
+        'carrera_id',
         'asignatura_id',
         'turno_id',
         'paralelo',
@@ -37,6 +38,12 @@ class NotasPropuesta extends Model
     {
         return $this->belongsTo('App\User', 'docente_id');
     }
+
+    public function carrera()
+    {
+        return $this->belongsTo('App\Carrera', 'carrera_id');
+    }
+
 
     public function asignatura()
     {
