@@ -93,6 +93,7 @@ class NotasEstudiantesExport implements FromCollection, WithMapping, WithHeading
             $notaCuatro->nota_examen_final,
             $notaCuatro->nota_puntos_ganados,
             $convalidado,
+            $inscripcion->nota_reprobacion,
             $inscripcion->nota,
             //$this->anio_vigente,
         ];
@@ -133,7 +134,8 @@ class NotasEstudiantesExport implements FromCollection, WithMapping, WithHeading
                 '',
                 '',
                 '',
-                '(Referencial)',
+                '(REFERENCIAL NO LLENAR)',
+                '',
                 '',
             ],
             [
@@ -168,6 +170,7 @@ class NotasEstudiantesExport implements FromCollection, WithMapping, WithHeading
                 'Nota Examen Final',
                 'Nota Puntos',
                 'Convalidado',
+                'Nota Reprobacion',
                 'Total',
             ]
         ];
@@ -186,8 +189,8 @@ class NotasEstudiantesExport implements FromCollection, WithMapping, WithHeading
         ];
         return [
             AfterSheet::class => function(AfterSheet $event) use ($styleArray) {
-                $event->sheet->getStyle('A1:AF1')->applyFromArray($styleArray);
-                $event->sheet->getStyle('A2:AF2')->applyFromArray($styleArray);
+                $event->sheet->getStyle('A1:AG1')->applyFromArray($styleArray);
+                $event->sheet->getStyle('A2:AG2')->applyFromArray($styleArray);
                 $event->sheet->getDelegate()->freezePane('F1');
                 $event->sheet->mergeCells('A1:A2');
                 $event->sheet->mergeCells('B1:B2');
@@ -204,7 +207,7 @@ class NotasEstudiantesExport implements FromCollection, WithMapping, WithHeading
                 $event->sheet->mergeCells('P1:T1');
                 $event->sheet->mergeCells('U1:Y1');
                 $event->sheet->mergeCells('Z1:AD1');
-                $event->sheet->mergeCells('AE1:AF1');
+                $event->sheet->mergeCells('AE1:AG1');
             },
         ];
     }

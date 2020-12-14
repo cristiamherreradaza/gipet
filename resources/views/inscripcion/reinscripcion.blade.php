@@ -234,13 +234,14 @@
     // Funcion para busqueda de producto en pedido input (BUSCAR PRODUCTO)
     $(document).on('keyup', '#termino', function(e) {
         termino_busqueda = $('#termino').val();
+        anioIngreso = $('#anioIngreso').val();
         //almacen_id = $('#almacen_a_pedir').val();
-        if (termino_busqueda.length > 2) {
+        if (termino_busqueda.length > 3) {
             $.ajax({
                 url: "{{ url('Inscripcion/ajaxBuscaAsignatura') }}",
                 data: {
                     termino: termino_busqueda,
-                    //almacen : almacen_id
+                    anioIngreso : anioIngreso
                     },
                 type: 'POST',
                 success: function(data) {

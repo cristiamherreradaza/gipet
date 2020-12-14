@@ -163,6 +163,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Inscripcion/eliminarCursoCorto/{id}', 'InscripcionController@eliminarCursoCorto');
     Route::get('Inscripcion/finalizarCalificaciones/{persona_id}/{carrera_id}', 'InscripcionController@finalizarCalificaciones');
     Route::get('Inscripcion/eliminaAsignatura/{id}', 'InscripcionController@eliminaAsignatura');
+    Route::get('Inscripcion/apruebaInscripcion/{id}', 'InscripcionController@apruebaInscripcion');
+    Route::get('Inscripcion/inscribeOyente/{id}', 'InscripcionController@inscribeOyente');
 
     // PDFS
     Route::get('Inscripcion/reportePdfHistorialAcademico/{persona_id}/{carrera_id}', 'InscripcionController@reportePdfHistorialAcademico');
@@ -307,6 +309,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Lista/ajaxTotalAlumnos', 'ListaController@ajaxTotalAlumnos');
     Route::get('Lista/reportePdfTotalAlumnos/{carrera}', 'ListaController@reportePdfTotalAlumnos');
     Route::get('Lista/estadistica', 'ListaController@estadistica');
+    Route::get('Lista/pruebaAleatorio', 'ListaController@pruebaAleatorio');
 
     // EXCEL
     Route::get('Importacion/excel', 'ImportacionController@excel');

@@ -132,7 +132,7 @@ class NotasEstudiantesImport implements ToModel
                                                 ->where('anio_vigente', $row[9])
                                                 ->first();
                         // Tenemos que crear notas
-                        // Preguntamos cual es el ciclo de la asignatura
+                        // Validamos en caso de que la celda se encuentre vacia
                         ($row[10] ? $row[10] = $row[10] : $row[10] = 0);
                         ($row[11] ? $row[11] = $row[11] : $row[11] = 0);
                         ($row[12] ? $row[12] = $row[12] : $row[12] = 0);
@@ -153,6 +153,7 @@ class NotasEstudiantesImport implements ToModel
                         ($row[27] ? $row[27] = $row[27] : $row[27] = 0);
                         ($row[28] ? $row[28] = $row[28] : $row[28] = 0);
                         ($row[29] ? $row[29] = $row[29] : $row[29] = 0);
+                        // Preguntamos cual es el ciclo de la asignatura
                         if($row[6] == 'Semestral')          // Si es Semestral
                         {
                             // Leera 2 bimestres y replicara 2
@@ -537,7 +538,7 @@ class NotasEstudiantesImport implements ToModel
                         // Sumamos las notas
                         $totalNotas = $notaUno->nota_total + $notaDos->nota_total + $notaTres->nota_total + $notaCuatro->nota_total;
                         $totalNotas = round($totalNotas/4);
-                        if(!$row[30] || $row[30] == 'No')
+                        if(!$row[30] || $row[30] == 'No')       // Si la casilla de convalidado esta vacia, o si esta con el valor No
                         {
                             // Comparamos con respecto a la nota de aprobacion y registramos
                             ($totalNotas >= $inscripcion->nota_aprobacion ? $aprobo = 'Si' : $aprobo = 'No');
@@ -546,13 +547,69 @@ class NotasEstudiantesImport implements ToModel
                             $inscripcion->estado    = 'Finalizado';
                             $inscripcion->save();
                         }
-                        else
+                        else        // La celda de convalidado tiene un valor diferente a NO, que es SI
                         {
                             $inscripcion->nota      = $row[31];
                             ($row[31] >= $inscripcion->nota_aprobacion ? $aprobo = 'Si' : $aprobo = 'No');
                             $inscripcion->aprobo    = $aprobo;
                             $inscripcion->estado    = 'Finalizado';
                             $inscripcion->save();
+                        }
+                        // Aqui debemos evaluar el hecho si todas las inscripciones pertenecientes a esta gestion
+                        // se aprobaron o reprobaron, por tanto debe actualizarse en carreras_personas
+                        // Ahora evaluaremos el estado de todas las asignaturas correspondientes a esta gestion
+                        // Buscamos las inscripciones correspondientes a esta gestion X
+                        $inscripciones  = Inscripcione::where('carrera_id', $inscripcion->carrera_id)
+                                                    ->where('persona_id', $inscripcion->persona_id)
+                                                    ->where('gestion', $inscripcion->gestion)
+                                                    ->where('anio_vigente', $inscripcion->anio_vigente)
+                                                    ->get();
+                        // Hallamos la cantidad de materias inscritas
+                        $cantidadInscritas  = Inscripcione::where('carrera_id', $inscripcion->carrera_id)
+                                                        ->where('persona_id', $inscripcion->persona_id)
+                                                        ->where('gestion', $inscripcion->gestion)
+                                                        ->where('anio_vigente', $inscripcion->anio_vigente)
+                                                        ->count();
+                        // Hallamos la cantidad de materias inscritas que finalizaron
+                        $cantidadFinalizadas    = Inscripcione::where('carrera_id', $inscripcion->carrera_id)
+                                                            ->where('persona_id', $inscripcion->persona_id)
+                                                            ->where('gestion', $inscripcion->gestion)
+                                                            ->where('anio_vigente', $inscripcion->anio_vigente)
+                                                            ->where('estado', 'Finalizado')
+                                                            ->count();
+                        // Verificamos que se hayan finalizado todas las materias inscritas
+                        if($cantidadInscritas == $cantidadFinalizadas)
+                        {
+                            // Crearemos una variable para contar las materias que se aprobaron
+                            $cantidadAprobadas = 0;
+                            // Iteramos sobre las inscripciones para ver cuantas se aprobaron
+                            foreach($inscripciones as $materia)
+                            {
+                                if($materia->aprobo == 'Si')
+                                {
+                                    $cantidadAprobadas++;
+                                }
+                            }
+                            // Buscaremos en la tabla carreras_personas el registro que esta asociado a estas inscripciones
+                            $carrerasPersona    = CarrerasPersona::where('carrera_id', $inscripcion->carrera_id)
+                                                                ->where('persona_id', $inscripcion->persona_id)
+                                                                ->where('gestion', $inscripcion->gestion)
+                                                                ->where('anio_vigente', $inscripcion->anio_vigente)
+                                                                ->first();
+                            // Si existe un registro que corresponda al grupo de inscripciones
+                            if($carrerasPersona)
+                            {
+                                // Evaluamos si se aprobo la gestion o no
+                                if($cantidadAprobadas == $cantidadInscritas)
+                                {
+                                    $carrerasPersona->estado    = 'APROBO';
+                                }
+                                else
+                                {
+                                    $carrerasPersona->estado    = 'REPROBO';
+                                }
+                                $carrerasPersona->save();
+                            }
                         }
                     }
                 }

@@ -18,16 +18,16 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>FECHA INSCRIPCION</th>
+                    <!-- <th>FECHA INSCRIPCION</th> -->
                     <th>GESTION ACADEMICA</th>
                     <th>SEMESTRE/A&Ntilde;O</th>
                     <th>SIGLA</th>
                     <th>ASIGNATURA</th>
-                    <th>REQUISITOS</th>
+                    <!-- <th>REQUISITOS</th> -->
                     <th>NOTA</th>
                     <th>RECUPERATORIO</th>
                     <th>OBSERVACIONES</th>
-                    <th>CONVALIDADO</th>
+                    <!-- <th>CONVALIDADO</th> -->
                     <th></th>
                 </tr>
             </thead>
@@ -36,7 +36,7 @@
                     @if($materia->carrera_id == $informacionCarrera->id && $materia->estado == 'Finalizado')
                         <tr>
                             <td>{{ $key }}</td>
-                            <td>{{ $materia->fecha_registro }}</td>
+                            <!-- <td>{{ $materia->fecha_registro }}</td> -->
                             <td>{{ $materia->anio_vigente }}</td>
                             <td>
                                 @switch($materia->gestion)
@@ -59,7 +59,7 @@
                             </td>
                             <td>{{ $materia->asignatura->sigla }}</td>
                             <td class="text-left">{{ $materia->asignatura->nombre }}</td>
-                            <td>
+                            <!-- <td>
                                 @php
                                     $prerequisito = App\Prerequisito::where('asignatura_id', $materia->asignatura_id)
                                                                     ->first();
@@ -69,10 +69,12 @@
                                 @else
                                     NINGUNO
                                 @endif
-                            </td>
+                            </td> -->
                             <td>
                                 @if($materia->convalidado == 'Si')
                                     {{ $materia->nota ? round($materia->nota) : '0' }} ({{ $materia->nota_aprobacion }})
+                                @elseif($materia->nota_reprobacion)
+                                    {{ $materia->nota ? round($materia->nota) : '0' }} ({{ $materia->nota_reprobacion }})
                                 @else
                                     {{ $materia->nota ? round($materia->nota) : '0' }}
                                 @endif
@@ -85,15 +87,39 @@
                             @else
                                 <td class="text-danger">REPROBADO</td>
                             @endif
-                            <td>
+                            <!-- <td>
                                 @if($materia->convalidado == 'Si')
                                     {{ $materia->convalidado }}
                                 @else
                                     No
                                 @endif
-                            </td>
+                            </td> -->
+                            @php
+                                $inscribir  = 'No';
+                                if($materia->nota_reprobacion)
+                                {
+                                    $inscripcion_posterior  = App\Inscripcione::where('carrera_id', $materia->carrera_id)
+                                                                            ->where('asignatura_id', $materia->asignatura_id)
+                                                                            ->where('persona_id', $materia->persona_id)
+                                                                            ->where('oyente', 'Si')
+                                                                            ->first();
+                                    if($inscripcion_posterior)
+                                    {
+                                        $inscribir  = 'No';
+                                    }
+                                    else{
+                                        $inscribir  = 'Si';
+                                    }
+                                }
+                            @endphp
                             <td>
                                 <button type="button" class="btn btn-info" title="Ver detalle" onclick="ajaxMuestraNotaInscripcion('{{ $materia->id }}')"><i class="fas fa-eye"></i></button>
+                                @if($materia->aprobo != 'Si')
+                                    <button type="button" class="btn btn-warning" title="Forzar aprobacion" onclick="apruebaInscripcion('{{ $materia->id }}')"><i class="fas fa-clipboard-check"></i></button>
+                                @endif
+                                @if($inscribir == 'Si')
+                                    <button type="button" class="btn btn-dark" title="Inscripcion pendiente" onclick="inscribeOyente('{{ $materia->id }}')"><i class="fas fa-copy"></i></button>
+                                @endif
                             </td>
                         </tr>
                         @php
@@ -130,6 +156,35 @@
                 $("#detalle_modal").modal('show');
             }
         });
+    }
+
+    function apruebaInscripcion(inscripcion_id)
+    {
+        Swal.fire({
+            title: 'Deseas forzar la aprobación de esta asignatura?',
+            text: "Las notas actuales se reemplazaran!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, estoy seguro!',
+            cancelButtonText: "Cancelar",
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire(
+                    'Excelente!',
+                    'Asignatura aprobada',
+                    'success'
+                ).then(function() {
+                    window.location.href = "{{ url('Inscripcion/apruebaInscripcion') }}/"+inscripcion_id;
+                });
+            }
+        })
+    }
+
+    function inscribeOyente(inscripcion_id)
+    {
+        window.location.href = "{{ url('Inscripcion/inscribeOyente') }}/"+inscripcion_id;
     }
 
     function reportePdfHistorialAcademico(persona_id, carrera_id)

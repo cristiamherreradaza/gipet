@@ -20,6 +20,7 @@ use App\Kardex;
 use App\CursosCorto;
 use App\CobrosTemporada;
 use App\Servicio;
+use App\Predefinida;
 use App\ServiciosAsignatura;
 use App\SegundosTurno;
 use DB;
@@ -99,7 +100,7 @@ class InscripcionController extends Controller
                     $carreras_persona->anio_vigente         = $request->$datos_gestion;
                     $carreras_persona->sexo                 = $persona->sexo;
                     $carreras_persona->vigencia             = 'Vigente';
-                    //$carreras_persona->estado             = '';   APROBO/REPROBO/ABANDONO/NULL
+                    //$carreras_persona->estado             = '';   APROBO/REPROBO/ABANDONO/AUXILIAR/CONGELADO/NULL/''
                     $carreras_persona->save();
 
                     // Buscaremos a las materias que pertenecen a la gestion 1, de la asignatura X con anio_vigente X
@@ -887,7 +888,7 @@ class InscripcionController extends Controller
                         $inscripcion->semestre          = $asignatura->semestre;
                         $inscripcion->gestion           = $asignatura->gestion;
                         $inscripcion->anio_vigente      = $request->nueva_gestion;
-                        $inscripcion->fecha_registro    = $request->fecha_inscripcion;
+                        $inscripcion->fecha_registro    = $request->nueva_fecha_inscripcion;
                         $inscripcion->nota_aprobacion   = $carrera->nota_aprobacion;        // MOD
                         $inscripcion->troncal           = $asignatura->troncal;
                         //$inscripcion->aprobo          = 'Si', 'No', 'Cursando';
@@ -915,7 +916,7 @@ class InscripcionController extends Controller
                             $nota->paralelo         = $request->nuevo_paralelo;
                             $nota->anio_vigente     = $request->nueva_gestion;
                             $nota->trimestre        = $i;
-                            $nota->fecha_registro   = $request->fecha_inscripcion;
+                            $nota->fecha_registro   = $request->nueva_fecha_inscripcion;
                             $nota->nota_aprobacion  = $carrera->nota_aprobacion;        // MOD
                             $nota->save();
                         }
@@ -1319,11 +1320,19 @@ class InscripcionController extends Controller
 
     public function ajaxBuscaAsignatura(Request $request)
     {
-        $asignaturas = Asignatura::where('nombre', 'like', "%$request->termino%")
+        $asignaturas = Asignatura::where('anio_vigente', $request->anioIngreso)
+                                ->where('nombre', 'like',  "%$request->termino%")
                                 ->orWhere('sigla', 'like', "%$request->termino%")
-                                ->where('anio_vigente', date('Y'))
                                 ->limit(8)
                                 ->get();
+        // $termino = $request->termino;
+        // $asignaturas = Asignatura::where('anio_vigente', $request->anioIngreso)
+        //                         ->where(function ($query) {
+        //                             $query->where('nombre', 'like', "%$termino%")
+        //                                 ->orWhere('sigla', 'like', "%$termino%");
+        //                         })
+        //                         ->limit(8)
+        //                         ->get();
         return view('inscripcion.ajaxBuscaAsignatura')->with(compact('asignaturas'));
     }
 
@@ -2507,6 +2516,60 @@ class InscripcionController extends Controller
             $inscripcion->aprobo = 'No';
         }
         $inscripcion->save();
+        // Ahora evaluaremos el estado de todas las asignaturas correspondientes a esta gestion
+        // Buscamos las inscripciones correspondientes a esta gestion X
+        $inscripciones  = Inscripcione::where('carrera_id', $inscripcion->carrera_id)
+                                    ->where('persona_id', $inscripcion->persona_id)
+                                    ->where('gestion', $inscripcion->gestion)
+                                    ->where('anio_vigente', $inscripcion->anio_vigente)
+                                    ->get();
+        // Hallamos la cantidad de materias inscritas
+        $cantidadInscritas  = Inscripcione::where('carrera_id', $inscripcion->carrera_id)
+                                        ->where('persona_id', $inscripcion->persona_id)
+                                        ->where('gestion', $inscripcion->gestion)
+                                        ->where('anio_vigente', $inscripcion->anio_vigente)
+                                        ->count();
+        // Hallamos la cantidad de materias inscritas que finalizaron
+        $cantidadFinalizadas    = Inscripcione::where('carrera_id', $inscripcion->carrera_id)
+                                            ->where('persona_id', $inscripcion->persona_id)
+                                            ->where('gestion', $inscripcion->gestion)
+                                            ->where('anio_vigente', $inscripcion->anio_vigente)
+                                            ->where('estado', 'Finalizado')
+                                            ->count();
+        // Verificamos que se hayan finalizado todas las materias inscritas
+        if($cantidadInscritas == $cantidadFinalizadas)
+        {
+            // Crearemos una variable para contar las materias que se aprobaron
+            $cantidadAprobadas = 0;
+            // Iteramos sobre las inscripciones para ver cuantas se aprobaron
+            foreach($inscripciones as $materia)
+            {
+                if($materia->aprobo == 'Si')
+                {
+                    $cantidadAprobadas++;
+                }
+            }
+            // Buscaremos en la tabla carreras_personas el registro que esta asociado a estas inscripciones
+            $carrerasPersona    = CarrerasPersona::where('carrera_id', $inscripcion->carrera_id)
+                                                ->where('persona_id', $inscripcion->persona_id)
+                                                ->where('gestion', $inscripcion->gestion)
+                                                ->where('anio_vigente', $inscripcion->anio_vigente)
+                                                ->first();
+            // Si existe un registro que corresponda al grupo de inscripciones
+            if($carrerasPersona)
+            {
+                // Evaluamos si se aprobo la gestion o no
+                if($cantidadAprobadas == $cantidadInscritas)
+                {
+                    $carrerasPersona->estado    = 'APROBO';
+                }
+                else
+                {
+                    $carrerasPersona->estado    = 'REPROBO';
+                }
+                $carrerasPersona->save();
+            }
+        }
         return redirect('Persona/ver_detalle/'.$persona->id);
     }
 
@@ -2664,9 +2727,65 @@ class InscripcionController extends Controller
         }
         foreach($inscripciones as $inscripcion)
         {
+            if($inscripcion->nota)
+            {
+                ($inscripcion->nota >= $inscripcion->nota_aprobacion ? $aprobo = 'Si' : $aprobo = 'No');
+                $inscripcion->aprobo    = $aprobo;
+            }
             $inscripcion->estado    = 'Finalizado';
             $inscripcion->save();
 
+        }
+        // Ahora finalizaremos y evaluaremos carreras inscripciones
+        $carrerasPersonas   = CarrerasPersona::where('carrera_id', $carrera_id)
+                                            ->where('persona_id', $persona_id)
+                                            ->get();
+        foreach($carrerasPersonas as $carreraPersona)
+        {
+            // Buscaremos sus inscripciones y evaluaremos
+            // Buscamos las inscripciones correspondientes a esta gestion X
+            $inscripciones  = Inscripcione::where('carrera_id', $carreraPersona->carrera_id)
+                                        ->where('persona_id', $carreraPersona->persona_id)
+                                        ->where('gestion', $carreraPersona->gestion)
+                                        ->where('anio_vigente', $carreraPersona->anio_vigente)
+                                        ->get();
+            // Hallamos la cantidad de materias inscritas
+            $cantidadInscritas  = Inscripcione::where('carrera_id', $carreraPersona->carrera_id)
+                                            ->where('persona_id', $carreraPersona->persona_id)
+                                            ->where('gestion', $carreraPersona->gestion)
+                                            ->where('anio_vigente', $carreraPersona->anio_vigente)
+                                            ->count();
+            // Hallamos la cantidad de materias inscritas que finalizaron
+            $cantidadFinalizadas    = Inscripcione::where('carrera_id', $carreraPersona->carrera_id)
+                                                ->where('persona_id', $carreraPersona->persona_id)
+                                                ->where('gestion', $carreraPersona->gestion)
+                                                ->where('anio_vigente', $carreraPersona->anio_vigente)
+                                                ->where('estado', 'Finalizado')
+                                                ->count();
+            // Verificamos que se hayan finalizado todas las materias inscritas
+            if($cantidadInscritas == $cantidadFinalizadas)
+            {
+                // Crearemos una variable para contar las materias que se aprobaron
+                $cantidadAprobadas = 0;
+                // Iteramos sobre las inscripciones para ver cuantas se aprobaron
+                foreach($inscripciones as $materia)
+                {
+                    if($materia->aprobo == 'Si')
+                    {
+                        $cantidadAprobadas++;
+                    }
+                }
+                // Evaluamos si se aprobo la gestion o no
+                if($cantidadAprobadas == $cantidadInscritas)
+                {
+                    $carreraPersona->estado    = 'APROBO';
+                }
+                else
+                {
+                    $carreraPersona->estado    = 'REPROBO';
+                }
+                $carreraPersona->save();
+            }
         }
         return redirect('Persona/ver_detalle/'.$persona_id);
     }
@@ -2682,6 +2801,7 @@ class InscripcionController extends Controller
                                     //->where('turno_id', $registro->turno_id)
                                     //->where('paralelo', $registro->paralelo)                  //paralelo
                                     //->where('fecha_registro', $registro->fecha_inscripcion)   //fecha_inscripcion
+                                    ->whereNull('oyente')
                                     ->where('anio_vigente', $registro->anio_vigente)            //anio_vigente
                                     ->get();
         switch ($persona->expedido) {
@@ -2729,6 +2849,7 @@ class InscripcionController extends Controller
             $carrera        = Carrera::find($carrera_id);
             $inscripciones  = Inscripcione::where('persona_id', $persona->id)
                                         ->where('carrera_id', $carrera->id)
+                                        ->whereNull('oyente')
                                         ->orderBy('id')
                                         ->get();
             switch ($persona->expedido) {
@@ -2844,6 +2965,180 @@ class InscripcionController extends Controller
         {
             return redirect('Persona/listado');
         }
+    }
+
+    public function apruebaInscripcion($inscripcion_id)
+    {
+        $inscripcion    = Inscripcione::find($inscripcion_id);
+        if($inscripcion)
+        {
+            // Hallamos al estudiante, la nota maxima para esa asignatura y las 4 notas correspondientes a esa inscripcion
+            $persona        = Persona::find($inscripcion->persona_id);
+            $notaAprobacion = $inscripcion->nota_aprobacion;
+            $asignatura     = NotasPropuesta::where('asignatura_id', $inscripcion->asignatura_id)
+                                        ->where('turno_id', $inscripcion->turno_id)
+                                        ->where('paralelo', $inscripcion->paralelo)
+                                        ->where('anio_vigente', $inscripcion->anio_vigente)
+                                        ->first();
+            if(!$asignatura)
+            {
+                $asignatura = Predefinida::where('activo', 'Si')
+                                        ->first();
+            }
+            if($notaAprobacion && $asignatura)
+            {
+                // Obtenemos los 4 registros pertenecientes a la inscripcion
+                $notas  = Nota::where('inscripcion_id', $inscripcion->id)
+                                ->get();
+                foreach($notas as $nota)
+                {
+                    // Iteramos para encontrar la nota
+                    do {
+                        $total  = 0;
+                        $aleatorio_asistencia       =  mt_rand(1, $asignatura->nota_asistencia);
+                        $aleatorio_practicas        =  mt_rand(1, $asignatura->nota_practicas);
+                        $aleatorio_primer_parcial   =  mt_rand(1, $asignatura->nota_primer_parcial);
+                        $aleatorio_examen_final     =  mt_rand(1, $asignatura->nota_examen_final);
+                        $aleatorio_extras           =  mt_rand(1, $asignatura->nota_puntos_ganados);
+                        $total = $aleatorio_asistencia + $aleatorio_practicas + $aleatorio_primer_parcial + $aleatorio_examen_final + $aleatorio_extras;
+                    } while( $total <> $notaAprobacion);
+                    $nota->nota_asistencia      = $aleatorio_asistencia;
+                    $nota->nota_practicas       = $aleatorio_practicas;
+                    $nota->nota_primer_parcial  = $aleatorio_primer_parcial;
+                    $nota->nota_examen_final    = $aleatorio_examen_final;
+                    $nota->nota_puntos_ganados  = $aleatorio_extras;
+                    $nota->nota_total           = $total;
+                    $nota->save();
+                }
+                $inscripcion->nota_reprobacion  = $inscripcion->nota;
+                $inscripcion->nota              = $inscripcion->nota_aprobacion;
+                $inscripcion->aprobo            = 'Si';
+                $inscripcion->save();
+            }
+            // Ahora evaluaremos el estado de todas las asignaturas correspondientes a esta gestion
+            // Buscamos las inscripciones correspondientes a esta gestion X
+            $inscripciones  = Inscripcione::where('carrera_id', $inscripcion->carrera_id)
+                                        ->where('persona_id', $inscripcion->persona_id)
+                                        ->where('gestion', $inscripcion->gestion)
+                                        ->where('anio_vigente', $inscripcion->anio_vigente)
+                                        ->get();
+            // Hallamos la cantidad de materias inscritas
+            $cantidadInscritas  = Inscripcione::where('carrera_id', $inscripcion->carrera_id)
+                                            ->where('persona_id', $inscripcion->persona_id)
+                                            ->where('gestion', $inscripcion->gestion)
+                                            ->where('anio_vigente', $inscripcion->anio_vigente)
+                                            ->count();
+            // Hallamos la cantidad de materias inscritas que finalizaron
+            $cantidadFinalizadas    = Inscripcione::where('carrera_id', $inscripcion->carrera_id)
+                                                ->where('persona_id', $inscripcion->persona_id)
+                                                ->where('gestion', $inscripcion->gestion)
+                                                ->where('anio_vigente', $inscripcion->anio_vigente)
+                                                ->where('estado', 'Finalizado')
+                                                ->count();
+            // Verificamos que se hayan finalizado todas las materias inscritas
+            if($cantidadInscritas == $cantidadFinalizadas)
+            {
+                // Crearemos una variable para contar las materias que se aprobaron
+                $cantidadAprobadas = 0;
+                // Iteramos sobre las inscripciones para ver cuantas se aprobaron
+                foreach($inscripciones as $materia)
+                {
+                    if($materia->aprobo == 'Si')
+                    {
+                        $cantidadAprobadas++;
+                    }
+                }
+                // Buscaremos en la tabla carreras_personas el registro que esta asociado a estas inscripciones
+                $carrerasPersona    = CarrerasPersona::where('carrera_id', $inscripcion->carrera_id)
+                                                    ->where('persona_id', $inscripcion->persona_id)
+                                                    ->where('gestion', $inscripcion->gestion)
+                                                    ->where('anio_vigente', $inscripcion->anio_vigente)
+                                                    ->first();
+                // Si existe un registro que corresponda al grupo de inscripciones
+                if($carrerasPersona)
+                {
+                    // Evaluamos si se aprobo la gestion o no
+                    if($cantidadAprobadas == $cantidadInscritas)
+                    {
+                        $carrerasPersona->estado    = 'APROBO';
+                    }
+                    else
+                    {
+                        $carrerasPersona->estado    = 'REPROBO';
+                    }
+                    $carrerasPersona->save();
+                }
+            }
+            return redirect('Persona/ver_detalle/'.$persona->id);
+        }
+        else
+        {
+            return redirect('Persona/listado');
+        }
+    }
+
+    public function inscribeOyente($inscripcion_id)
+    {
+        $inscripcion    = Inscripcione::find($inscripcion_id);
+        // Comprobemos que no tiene una materia ya que compensa esta
+        $registro       = Inscripcione::where('asignatura_id', $inscripcion->asignatura_id)
+                                    ->where('turno_id', $inscripcion->turno_id)
+                                    ->where('persona_id', $inscripcion->persona_id)
+                                    ->where('paralelo', $inscripcion->paralelo)
+                                    ->where('anio_vigente', $inscripcion->anio_vigente)
+                                    ->where('oyente', 'Si')
+                                    ->first();
+        if(!$registro)
+        {
+            // Tenemos que crear una nueva inscripcion con los datos de la anterior inscripcion, pero diferenciarlo con la columna oyente
+            $nueva_inscripcion                  = new Inscripcione();
+            $nueva_inscripcion->user_id         = Auth::user()->id;
+            $nueva_inscripcion->resolucion_id   = $inscripcion->resolucion_id;          // MOD
+            $nueva_inscripcion->carrera_id      = $inscripcion->carrera_id;
+            $nueva_inscripcion->asignatura_id   = $inscripcion->asignatura_id;
+            $nueva_inscripcion->turno_id        = $inscripcion->turno_id;
+            $nueva_inscripcion->persona_id      = $inscripcion->persona_id;
+            $nueva_inscripcion->paralelo        = $inscripcion->paralelo;
+            $nueva_inscripcion->semestre        = $inscripcion->semestre;
+            $nueva_inscripcion->gestion         = $inscripcion->gestion;
+            $nueva_inscripcion->anio_vigente    = date('Y');
+            $nueva_inscripcion->fecha_registro  = date('Y-m-d');
+            $nueva_inscripcion->nota_aprobacion = $inscripcion->nota_aprobacion;        // MOD
+            $nueva_inscripcion->oyente          = 'Si';
+            $nueva_inscripcion->troncal         = $inscripcion->troncal;
+            //$nueva_inscripcion->aprobo        = 'Si', 'No', 'Cursando';
+            $nueva_inscripcion->estado          = 'Cursando';  // Cuando acaba semestre/gestion cambiar a Finalizado
+            $nueva_inscripcion->save();
+            // Crearemos las notas correspondientes a esta inscripcion pero antes buscaremos si existe un docente ya asignado a esta asignatura
+            $docente    = NotasPropuesta::where('asignatura_id', $inscripcion->asignatura_id)
+                                        ->where('turno_id', $inscripcion->turno_id)
+                                        ->where('paralelo', $inscripcion->paralelo)
+                                        ->where('anio_vigente', date('Y'))
+                                        ->first();
+            // Por cada materia inscrita, ingresamos 4 registros correspondientes a los 4 bimestres
+            for($i=1; $i<=4; $i++)
+            {
+                // Resgistramos en la tabla notas
+                $nota                   = new Nota();
+                $nota->user_id          = Auth::user()->id;
+                $nota->resolucion_id    = $inscripcion->resolucion_id;          // MOD
+                $nota->inscripcion_id   = $nueva_inscripcion->id;
+                if($docente)
+                {
+                    $nota->docente_id   = $docente->docente_id;
+                }
+                $nota->persona_id       = $inscripcion->persona_id;
+                $nota->asignatura_id    = $inscripcion->asignatura_id;
+                $nota->turno_id         = $inscripcion->turno_id;
+                $nota->paralelo         = $inscripcion->paralelo;
+                $nota->anio_vigente     = date('Y');
+                $nota->trimestre        = $i;
+                $nota->fecha_registro   = date('Y-m-d');
+                $nota->nota_aprobacion  = $inscripcion->nota_aprobacion;        // MOD
+                $nota->save();
+            }
+        }
+        return redirect('Persona/ver_detalle/'.$inscripcion->persona_id);
     }
 
     public function pruebaMigracion()

@@ -137,4 +137,48 @@ class ListaController extends Controller
 
     }
 
+    public function pruebaAleatorio()
+    {
+        // Encontrar esa inscripcion
+        // Ver cual es la nota minima de aprobacion
+        // Ver cual es sus maximos estimados para cada puntaje, asistencia, practicas, primer_parcial, examen_final y extras
+        // Generar 5 numeros aleatorios que sumandolos hagan un total de nota_minima_aprobacion (61) en 4 ocasiones.
+
+        // TENEMOS LAS NOTAS MAXIMAS
+        $maximo_asistencia      = 10;
+        $maximo_practicas       = 20;
+        $maximo_primer_parcial  = 30;
+        $maximo_examen_final    = 40;
+        $maximo_extras          = 10;
+
+        // TENEMOS LA NOTA MINIMA DE APROBACION
+        $minimo = 61;
+
+        // ITERAMOS PARA ENCONTRAR LA NOTA
+        do {
+            $total  = 0;
+            $aleatorio_asistencia       =  mt_rand(1, $maximo_asistencia);
+            $aleatorio_practicas        =  mt_rand(1, $maximo_practicas);
+            $aleatorio_primer_parcial   =  mt_rand(1, $maximo_primer_parcial);
+            $aleatorio_examen_final     =  mt_rand(1, $maximo_examen_final);
+            $aleatorio_extras           =  mt_rand(1, $maximo_extras);
+            $total = $aleatorio_asistencia + $aleatorio_practicas + $aleatorio_primer_parcial + $aleatorio_examen_final + $aleatorio_extras;
+        } while( $total <> $minimo);
+
+        echo $total . "<br>";
+        echo 'Nota asistencia: ' . $aleatorio_asistencia . "<br>";
+        echo 'Nota practicas: ' . $aleatorio_practicas . "<br>";
+        echo 'Nota primer parcial: ' . $aleatorio_primer_parcial . "<br>";
+        echo 'Nota examen final: ' . $aleatorio_examen_final . "<br>";
+        echo 'Nota extras: ' . $aleatorio_extras . "<br>";
+        dd($total);
+
+        // TENEMOS QUE ITERARLOS HASTA LOGRAR EL MINIMO DESEADO
+        // $aleatorio_asistencia       =  mt_rand(1, $maximo_asistencia);
+        // $aleatorio_practicas        =  mt_rand(1, $maximo_practicas);
+        // $aleatorio_primer_parcial   =  mt_rand(1, $maximo_primer_parcial);
+        // $aleatorio_examen_final     =  mt_rand(1, $maximo_examen_final);
+        // $aleatorio_extras           =  mt_rand(1, $maximo_extras);
+        // dd($aleatorio);
+    }
 }

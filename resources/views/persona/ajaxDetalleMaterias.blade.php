@@ -10,12 +10,16 @@
                                                 ->where('carrera_id', $informacionCarrera->id)
                                                 ->where('estado', 'Cursando')
                                                 ->first();
-        $existenciaNota = App\Nota::where('persona_id', $persona->id)
+        if($existenciaInscripcion)
+        {
+            $existenciaNota = App\Nota::where('persona_id', $persona->id)
+                                ->where('inscripcion_id', $existenciaInscripcion->id)
                                 ->whereNull('finalizado')
                                 ->first();
-        if($existenciaInscripcion || $existenciaNota)
-        {
-            $mostrar = 'Si';
+            if($existenciaNota)
+            {
+                $mostrar = 'Si';
+            }
         }
         else
         {
