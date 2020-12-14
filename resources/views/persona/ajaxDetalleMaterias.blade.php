@@ -93,6 +93,17 @@
                             </td>
                             <td>
                                 <button type="button" class="btn btn-info" title="Ver detalle" onclick="ajaxMuestraNotaInscripcion('{{ $materia->id }}')"><i class="fas fa-eye"></i></button>
+                                @php
+                                    $asignaturaAprobada = App\Inscripcione::where('carrera_id', $materia->carrera_id)
+                                                                        ->where('asignatura_id', $materia->asignatura_id)
+                                                                        ->where('persona_id', $materia->persona_id)
+                                                                        ->where('estado', 'Finalizado')
+                                                                        ->where('aprobo', 'Si')
+                                                                        ->first();
+                                @endphp
+                                @if($asignaturaAprobada)
+                                    <button type="button" class="btn btn-success" title="Convalidar Asignatura Aprobada" onclick="convalidarAsignaturaAprobada('{{ $materia->id }}')"><i class="fas fa-check-circle"></i></button>
+                                @endif
                             </td>
                         </tr>
                         @php
@@ -150,6 +161,30 @@
                     'success'
                 ).then(function() {
                     window.location.href = "{{ url('Inscripcion/finalizarCalificaciones') }}/"+persona_id+'/'+carrera_id;
+                });
+            }
+        })
+    }
+
+    function convalidarAsignaturaAprobada(inscripcion_id)
+    {
+        Swal.fire({
+            title: 'Deseas convalidar esta asignatura?',
+            text: "Las notas se reemplazaran con las anteriores!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, estoy seguro!',
+            cancelButtonText: "Cancelar",
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire(
+                    'Excelente!',
+                    'Asignatura convalidada',
+                    'success'
+                ).then(function() {
+                    window.location.href = "{{ url('Inscripcion/convalidarAsignaturaAprobada') }}/"+inscripcion_id;
                 });
             }
         })

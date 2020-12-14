@@ -3198,6 +3198,49 @@ class InscripcionController extends Controller
         return redirect('Persona/ver_detalle/'.$inscripcion->persona_id);
     }
 
+    public function convalidarAsignaturaAprobada($inscripcion_id)
+    {
+        $inscripcion    = Inscripcione::find($inscripcion_id);
+        // Comprobemos que no tiene una materia ya que compensa esta
+        $asignaturaAprobada = Inscripcione::where('carrera_id', $inscripcion->carrera_id)
+                                        ->where('asignatura_id', $inscripcion->asignatura_id)
+                                        ->where('persona_id', $inscripcion->persona_id)
+                                        ->where('estado', 'Finalizado')
+                                        ->where('aprobo', 'Si')
+                                        ->first();
+        if($asignaturaAprobada)
+        {
+            $notas  = Nota::where('inscripcion_id', $inscripcion->id)
+                        ->get();
+            foreach($notas as $nota){
+                // Buscamos el registro de notas de la anterior asignatura aprobada y copiamos sus valores
+                $registro   = Nota::where('inscripcion_id', $asignaturaAprobada->id)
+                                ->where('trimestre', $nota->trimestre)
+                                ->first();
+                if($registro)
+                {
+                    $nota->fecha_registro       = date('Y-m-d');
+                    $nota->nota_asistencia      = $registro->nota_asistencia;
+                    $nota->nota_practicas       = $registro->nota_practicas;
+                    $nota->nota_primer_parcial  = $registro->nota_primer_parcial;
+                    $nota->nota_examen_final    = $registro->nota_examen_final;
+                    $nota->nota_puntos_ganados  = $registro->nota_puntos_ganados;
+                    $nota->nota_total           = $registro->nota_total;
+                    $nota->finalizado           = $registro->finalizado;
+                    $nota->registrado           = $registro->registrado;
+                    $nota->save();
+                }
+            }
+            $inscripcion->fecha_registro    = date('Y-m-d');
+            $inscripcion->nota              = $asignaturaAprobada->nota;
+            $inscripcion->segundo_turno     = $asignaturaAprobada->segundo_turno;
+            $inscripcion->aprobo            = $asignaturaAprobada->aprobo;
+            $inscripcion->estado            = $asignaturaAprobada->estado;
+            $inscripcion->save();
+        }
+        return redirect('Persona/ver_detalle/'.$inscripcion->persona_id);
+    }
+
     public function pruebaMigracion()
     {
         // Agarramos las inscripciones respectivas al anio X
