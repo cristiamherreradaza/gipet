@@ -1271,4 +1271,19 @@ class MigracionController extends Controller
 
     }
 
+    public function regularizaGestionAlumnos()
+    {
+        $gestiones = DB::select("SELECT persona_id, MIN(anio_vigente) AS gestion
+                                FROM inscripciones
+                                GROUP BY persona_id;");
+
+        foreach ($gestiones as $key => $g) {
+            echo $g->persona_id." - ".$g->gestion."<br />";
+            $persona = Persona::find($g->persona_id);
+            $persona->anio_vigente = $g->gestion;
+            $persona->save();
+        }
+    }
+
+
 }
