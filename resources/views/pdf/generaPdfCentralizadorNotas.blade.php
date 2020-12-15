@@ -64,18 +64,19 @@
 
 <body>
     <header>
-        holas
+        
     </header>
     <main>
+        <img src="{{ asset('assets/imagenes/cabecera_centralizador.png') }}" width="100%">
          <table class="notas">
             
             <tr>
                 <td style="width: 180px;">
-                    GESTION: 2018
+                    GESTION: {{ $gestion }}
                     <hr>
                     NIVEL: TECNICO SUPERIOR
                     <hr>
-                    CARRERA: CONTADURIA GENERAL
+                    CARRERA: {{ $carrera }}
                     <hr>
                     REGIMEN: ANUALIZADO
                     <hr>
