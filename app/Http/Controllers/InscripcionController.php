@@ -3134,15 +3134,16 @@ class InscripcionController extends Controller
         }
     }
 
-    public function inscribeOyente($inscripcion_id)
+    public function inscribeOyente(Request $request)
     {
-        $inscripcion    = Inscripcione::find($inscripcion_id);
+        $inscripcion    = Inscripcione::find($request->inscripcion_id);
         // Comprobemos que no tiene una materia ya que compensa esta
         $registro       = Inscripcione::where('asignatura_id', $inscripcion->asignatura_id)
-                                    ->where('turno_id', $inscripcion->turno_id)
                                     ->where('persona_id', $inscripcion->persona_id)
-                                    ->where('paralelo', $inscripcion->paralelo)
-                                    ->where('anio_vigente', $inscripcion->anio_vigente)
+                                    //->where('turno_id', $inscripcion->turno_id)
+                                    //->where('paralelo', $inscripcion->paralelo)
+                                    //->where('anio_vigente', $inscripcion->anio_vigente)
+                                    ->where('estado', 'Cursando')
                                     ->where('oyente', 'Si')
                                     ->first();
         if(!$registro)
@@ -3153,13 +3154,13 @@ class InscripcionController extends Controller
             $nueva_inscripcion->resolucion_id   = $inscripcion->resolucion_id;          // MOD
             $nueva_inscripcion->carrera_id      = $inscripcion->carrera_id;
             $nueva_inscripcion->asignatura_id   = $inscripcion->asignatura_id;
-            $nueva_inscripcion->turno_id        = $inscripcion->turno_id;
+            $nueva_inscripcion->turno_id        = $request->turno;
             $nueva_inscripcion->persona_id      = $inscripcion->persona_id;
-            $nueva_inscripcion->paralelo        = $inscripcion->paralelo;
+            $nueva_inscripcion->paralelo        = $request->paralelo;
             $nueva_inscripcion->semestre        = $inscripcion->semestre;
             $nueva_inscripcion->gestion         = $inscripcion->gestion;
-            $nueva_inscripcion->anio_vigente    = date('Y');
-            $nueva_inscripcion->fecha_registro  = date('Y-m-d');
+            $nueva_inscripcion->anio_vigente    = $request->gestion;
+            $nueva_inscripcion->fecha_registro  = $request->fecha_inscripcion;
             $nueva_inscripcion->nota_aprobacion = $inscripcion->nota_aprobacion;        // MOD
             $nueva_inscripcion->oyente          = 'Si';
             $nueva_inscripcion->troncal         = $inscripcion->troncal;
@@ -3167,10 +3168,10 @@ class InscripcionController extends Controller
             $nueva_inscripcion->estado          = 'Cursando';  // Cuando acaba semestre/gestion cambiar a Finalizado
             $nueva_inscripcion->save();
             // Crearemos las notas correspondientes a esta inscripcion pero antes buscaremos si existe un docente ya asignado a esta asignatura
-            $docente    = NotasPropuesta::where('asignatura_id', $inscripcion->asignatura_id)
-                                        ->where('turno_id', $inscripcion->turno_id)
-                                        ->where('paralelo', $inscripcion->paralelo)
-                                        ->where('anio_vigente', date('Y'))
+            $docente    = NotasPropuesta::where('asignatura_id', $nueva_inscripcion->asignatura_id)
+                                        ->where('turno_id', $nueva_inscripcion->turno_id)
+                                        ->where('paralelo', $nueva_inscripcion->paralelo)
+                                        ->where('anio_vigente', $nueva_inscripcion->anio_vigente)
                                         ->first();
             // Por cada materia inscrita, ingresamos 4 registros correspondientes a los 4 bimestres
             for($i=1; $i<=4; $i++)
@@ -3178,20 +3179,20 @@ class InscripcionController extends Controller
                 // Resgistramos en la tabla notas
                 $nota                   = new Nota();
                 $nota->user_id          = Auth::user()->id;
-                $nota->resolucion_id    = $inscripcion->resolucion_id;          // MOD
+                $nota->resolucion_id    = $nueva_inscripcion->resolucion_id;          // MOD
                 $nota->inscripcion_id   = $nueva_inscripcion->id;
                 if($docente)
                 {
                     $nota->docente_id   = $docente->docente_id;
                 }
-                $nota->persona_id       = $inscripcion->persona_id;
-                $nota->asignatura_id    = $inscripcion->asignatura_id;
-                $nota->turno_id         = $inscripcion->turno_id;
-                $nota->paralelo         = $inscripcion->paralelo;
-                $nota->anio_vigente     = date('Y');
+                $nota->persona_id       = $nueva_inscripcion->persona_id;
+                $nota->asignatura_id    = $nueva_inscripcion->asignatura_id;
+                $nota->turno_id         = $nueva_inscripcion->turno_id;
+                $nota->paralelo         = $nueva_inscripcion->paralelo;
+                $nota->anio_vigente     = $nueva_inscripcion->anio_vigente;
                 $nota->trimestre        = $i;
-                $nota->fecha_registro   = date('Y-m-d');
-                $nota->nota_aprobacion  = $inscripcion->nota_aprobacion;        // MOD
+                $nota->fecha_registro   = $nueva_inscripcion->fecha_registro;
+                $nota->nota_aprobacion  = $nueva_inscripcion->nota_aprobacion;        // MOD
                 $nota->save();
             }
         }

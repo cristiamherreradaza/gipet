@@ -101,13 +101,21 @@
                                     $inscripcion_posterior  = App\Inscripcione::where('carrera_id', $materia->carrera_id)
                                                                             ->where('asignatura_id', $materia->asignatura_id)
                                                                             ->where('persona_id', $materia->persona_id)
+                                                                            ->where('estado', 'Cursando')
                                                                             ->where('oyente', 'Si')
                                                                             ->first();
-                                    if($inscripcion_posterior)
+                                    $inscripcion_aprobada   = App\Inscripcione::where('carrera_id', $materia->carrera_id)
+                                                                            ->where('asignatura_id', $materia->asignatura_id)
+                                                                            ->where('persona_id', $materia->persona_id)
+                                                                            ->where('aprobo', 'Si')
+                                                                            ->where('oyente', 'Si')
+                                                                            ->first();
+                                    if($inscripcion_posterior || $inscripcion_aprobada)
                                     {
                                         $inscribir  = 'No';
                                     }
-                                    else{
+                                    else
+                                    {
                                         $inscribir  = 'Si';
                                     }
                                 }
@@ -118,7 +126,7 @@
                                     <button type="button" class="btn btn-warning" title="Forzar aprobacion" onclick="apruebaInscripcion('{{ $materia->id }}')"><i class="fas fa-clipboard-check"></i></button>
                                 @endif
                                 @if($inscribir == 'Si')
-                                    <button type="button" class="btn btn-dark" title="Inscripcion pendiente" onclick="inscribeOyente('{{ $materia->id }}')"><i class="fas fa-copy"></i></button>
+                                    <button type="button" class="btn btn-dark" title="Inscripcion pendiente" onclick="modalInscribeOyente('{{ $materia->id }}')"><i class="fas fa-copy"></i></button>
                                 @endif
                             </td>
                         </tr>
@@ -133,14 +141,72 @@
     <br>
 @endforeach
 
-<!-- inicio modal editar perfil -->
+<!-- inicio modal ver notas -->
 <div id="detalle_modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" id="contenido_modal">
         
     </div>
 </div>
-<!-- fin modal editar perfil -->
+<!-- fin modal ver notas -->
 
+<!-- inicio modal inscripcion oyente -->
+<div id="inscribe_oyente" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">INSCRIPCION OYENTE</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <form action="{{ url('Inscripcion/inscribeOyente') }}"  method="POST" >
+                @csrf
+                <div class="modal-body">        
+                    <input type="hidden" name="inscripcion_id" id="inscripcion_id" value="">
+                    <input type="hidden" name="persona_id" id="persona_id" value="{{ $persona->id }}">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Turno</label>
+                                <select name="turno" id="turno" class="form-control" required>
+                                    @foreach($turnos as $turno)
+                                        <option value="{{ $turno->id }}">{{ $turno->descripcion }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Paralelo</label>
+                                <select name="paralelo" id="paralelo" class="form-control" required>
+                                    @foreach($paralelos as $paralelo)
+                                        <option value="{{ $paralelo->paralelo }}">{{ $paralelo->paralelo }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Gestion</label>
+                                <input name="gestion" id="gestion" type="number" value="{{ date('Y') }}" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Fecha Inscripcion</label>
+                                <input name="fecha_inscripcion" id="fecha_inscripcion" type="date" value="{{ date('Y-m-d') }}" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success">INSCRIBIR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- fin modal inscripcion oyente -->
 <script>
     // Funcion que muestra los datos referentes a los una inscripcion del historial academico
     function ajaxMuestraNotaInscripcion(inscripcion_id)
@@ -156,6 +222,13 @@
                 $("#detalle_modal").modal('show');
             }
         });
+    }
+
+
+    function modalInscribeOyente(inscripcion_id)
+    {
+        $("#inscripcion_id").val(inscripcion_id);
+        $("#inscribe_oyente").modal('show');
     }
 
     function apruebaInscripcion(inscripcion_id)
@@ -180,11 +253,6 @@
                 });
             }
         })
-    }
-
-    function inscribeOyente(inscripcion_id)
-    {
-        window.location.href = "{{ url('Inscripcion/inscribeOyente') }}/"+inscripcion_id;
     }
 
     function reportePdfHistorialAcademico(persona_id, carrera_id)

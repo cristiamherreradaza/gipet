@@ -167,7 +167,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Inscripcion/finalizarCalificaciones/{persona_id}/{carrera_id}', 'InscripcionController@finalizarCalificaciones');
     Route::get('Inscripcion/eliminaAsignatura/{id}', 'InscripcionController@eliminaAsignatura');
     Route::get('Inscripcion/apruebaInscripcion/{id}', 'InscripcionController@apruebaInscripcion');
-    Route::get('Inscripcion/inscribeOyente/{id}', 'InscripcionController@inscribeOyente');
+    Route::post('Inscripcion/inscribeOyente', 'InscripcionController@inscribeOyente');
     Route::get('Inscripcion/convalidarAsignaturaAprobada/{id}', 'InscripcionController@convalidarAsignaturaAprobada');
 
     // PDFS
