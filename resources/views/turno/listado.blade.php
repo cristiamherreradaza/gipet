@@ -82,7 +82,7 @@
             </div>
             <form action="{{ url('Turno/actualizar') }}"  method="POST" >
                 @csrf
-                <div class="modal-body">        
+                <div class="modal-body">
                     <input type="hidden" name="id" id="id" value="">
                     <div class="row">
                         <div class="col-md-12">

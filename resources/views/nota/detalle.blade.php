@@ -85,39 +85,37 @@
                             <td>{{ $inscrito->persona->nombres }} {{ $inscrito->persona->apellido_paterno }} {{ $inscrito->persona->apellido_materno }}</td>
                             <td>{{ $inscrito->persona->cedula }}</td>
                             @php
-                                $suma = 0;
-                                $cantidad = 0;
-                                $contador_registros = 0;
-                                $segundo = 0;
-                                $nota_segundo = 0;
+                                $primerBimestre     = App\Nota::where('inscripcion_id', $inscrito->id)->where('trimestre', 1)->first();
+                                $primerBimestre     = ($primerBimestre ? ($primerBimestre->nota_total ? $primerBimestre->nota_total : '0') : '0');
+                                $segundoBimestre    = App\Nota::where('inscripcion_id', $inscrito->id)->where('trimestre', 2)->first();
+                                $segundoBimestre    = ($segundoBimestre ? ($segundoBimestre->nota_total ? $segundoBimestre->nota_total : '0') : '0');
+                                $tercerBimestre     = App\Nota::where('inscripcion_id', $inscrito->id)->where('trimestre', 3)->first();
+                                $tercerBimestre     = ($tercerBimestre ? ($tercerBimestre->nota_total ? $tercerBimestre->nota_total : '0') : '0');
+                                $cuartoBimestre     = App\Nota::where('inscripcion_id', $inscrito->id)->where('trimestre', 4)->first();
+                                $cuartoBimestre     = ($cuartoBimestre ? ($cuartoBimestre->nota_total ? $cuartoBimestre->nota_total : '0') : '0');
+                                $contador_registros = App\Nota::where('inscripcion_id', $inscrito->id)
+                                                            ->where('registrado', 'Si')
+                                                            ->count();
                             @endphp
-                            @foreach($notas as $nota)
-                                @if($nota->persona_id == $inscrito->persona_id)
-                                    @php
-                                        $suma = $suma + $nota->nota_total;
-                                        $cantidad = $cantidad + 1;
-                                    @endphp
-                                    <td>{{ round($nota->nota_total) }}</td>
-                                    @php
-                                        if($nota->registrado == 'Si')
-                                        {
-                                            $contador_registros = $contador_registros + 1;
-                                        }
-                                    @endphp
-                                @endif
-                            @endforeach
-                            @if($cantidad == 0)
-                                $cantidad=1
-                            @endif
-                            <td>{{ round($suma/$cantidad) }}</td>
+                            <td>{{ round($primerBimestre) }}</td>
+                            <td>{{ round($segundoBimestre) }}</td>
+                            <td>{{ round($tercerBimestre) }}</td>
+                            <td>{{ round($cuartoBimestre) }}</td>
+                            <td>{{ round($inscrito->nota) }}</td>
+                            
                             <td>{{ round($inscrito->segundo_turno) }}</td>
                             <td>
-                                @if($bimestre != 0)
-                                    <button onclick="registra_notas('{{ $inscrito->id }}', '{{ $bimestre }}', '{{ $inscrito->asignatura_id }}', '{{ $inscrito->turno_id }}', '{{ $inscrito->persona_id }}', '{{ $inscrito->paralelo }}', '{{ $inscrito->anio_vigente }}')" class="btn btn-info" title="Registrar notas"><i class="fas fa-plus"></i></button>
+                                @if($inscrito->convalidacion_externa && $inscrito->convalidacion_externa == 'Si')
+                                    Oyente
+                                @else
+                                    @if($bimestre != 0)
+                                        <button onclick="registra_notas('{{ $inscrito->id }}', '{{ $bimestre }}', '{{ $inscrito->asignatura_id }}', '{{ $inscrito->turno_id }}', '{{ $inscrito->persona_id }}', '{{ $inscrito->paralelo }}', '{{ $inscrito->anio_vigente }}')" class="btn btn-info" title="Registrar notas"><i class="fas fa-plus"></i></button>
+                                    @endif
+                                    @if($inscrito->nota < $inscrito->nota_aprobacion && $inscrito->nota >= 40 && $contador_registros == 4)
+                                        <button onclick="segundo_turno('{{ $inscrito->id }}', '{{ $inscrito->segundo_turno }}')" class="btn btn-danger" title="Segundo turno"><i class="fas fa-chart-line"></i></button>
+                                    @endif
                                 @endif
-                                @if($inscrito->nota < $inscrito->nota_aprobacion && $inscrito->nota >= 40 && $contador_registros == 4)
-                                    <button onclick="segundo_turno('{{ $inscrito->id }}', '{{ $inscrito->segundo_turno }}')" class="btn btn-danger" title="Segundo turno"><i class="fas fa-chart-line"></i></button>
-                                @endif
+                                
                             </td>
                         </tr>
                     @endforeach

@@ -169,6 +169,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Inscripcion/apruebaInscripcion/{id}', 'InscripcionController@apruebaInscripcion');
     Route::post('Inscripcion/inscribeOyente', 'InscripcionController@inscribeOyente');
     Route::get('Inscripcion/convalidarAsignaturaAprobada/{id}', 'InscripcionController@convalidarAsignaturaAprobada');
+    Route::post('Inscripcion/asignarPuntaje', 'InscripcionController@asignarPuntaje');
 
     // PDFS
     Route::get('Inscripcion/reportePdfHistorialAcademico/{persona_id}/{carrera_id}', 'InscripcionController@reportePdfHistorialAcademico');

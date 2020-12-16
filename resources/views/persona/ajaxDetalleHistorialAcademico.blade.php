@@ -153,9 +153,9 @@
 <div id="inscribe_oyente" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">INSCRIPCION OYENTE</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <div class="modal-header bg-dark">
+                <h4 class="modal-title text-white" id="myModalLabel">INSCRIPCION OYENTE</h4>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <form action="{{ url('Inscripcion/inscribeOyente') }}"  method="POST" >
                 @csrf
@@ -200,7 +200,7 @@
                     </div>                    
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success">INSCRIBIR</button>
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-dark">INSCRIBIR</button>
                 </div>
             </form>
         </div>
