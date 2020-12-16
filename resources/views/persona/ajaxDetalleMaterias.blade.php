@@ -114,7 +114,7 @@
                                                 <label class="control-label">Puntaje Final</label>
                                                 <input type="number" class="form-control" id="nota" name="nota" min="1" max="100">
                                             </div>
-                                            <button type="submit" class="btn btn-block btn-info">Confirmar</button>
+                                            <button type="submit" class="btn btn-block btn-info">CONVALIDAR</button>
                                         </form>
                                     </div>
                                 </div>

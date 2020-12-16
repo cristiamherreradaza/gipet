@@ -46,6 +46,9 @@
                                 <button type="button" class="btn btn-primary" title="Asignar materias"  onclick="asignar('{{ $usuario->id }}')"><i class="fas fa-plus-circle"></i></button>
                                 <button type="button" class="btn btn-secondary" title="Editar permisos"  onclick="permisos('{{ $usuario->id }}', '{{ $usuario->perfil_id }}')"><i class="fas fa-list"></i></button>
                                 <button type="button" class="btn btn-info" title="Cambiar contraseña"  onclick="contrasena({{ $usuario->id }})"><i class="fas fa-key"></i></button>
+                                @php
+
+                                @endphp
                                 <button type="button" class="btn btn-danger" title="Eliminar usuario"  onclick="eliminar('{{ $usuario->id }}', '{{ $usuario->name }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>

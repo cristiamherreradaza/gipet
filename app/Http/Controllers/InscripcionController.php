@@ -3294,6 +3294,7 @@ class InscripcionController extends Controller
                     $nota->nota_puntos_ganados  = $aleatorio_extras;
                     $nota->nota_total           = $total;
                     $nota->finalizado           = 'Si';
+                    $nota->registrado           = 'Si';
                     $nota->save();
                 }
                 $inscripcion->nota              = $request->nota;
@@ -3303,7 +3304,7 @@ class InscripcionController extends Controller
                     $inscripcion->aprobo        = $aprobo;
                 }
                 $inscripcion->convalidacion_externa = 'Si';
-                //$inscripcion->estado                = 'Finalizado';
+                $inscripcion->estado                = 'Finalizado';
                 $inscripcion->save();
             }
             // Ahora evaluaremos el estado de todas las asignaturas correspondientes a esta gestion

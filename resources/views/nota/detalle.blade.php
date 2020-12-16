@@ -115,7 +115,6 @@
                                         <button onclick="segundo_turno('{{ $inscrito->id }}', '{{ $inscrito->segundo_turno }}')" class="btn btn-danger" title="Segundo turno"><i class="fas fa-chart-line"></i></button>
                                     @endif
                                 @endif
-                                
                             </td>
                         </tr>
                     @endforeach
