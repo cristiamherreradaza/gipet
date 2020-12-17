@@ -210,6 +210,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('User/ajaxEditaPerfil', 'UserController@ajaxEditaPerfil');
     Route::post('User/actualizarPermisosPerfil', 'UserController@actualizarPermisosPerfil');
     Route::get('User/asigna_materias/{id}', 'UserController@asigna_materias');
+    Route::get('User/verMaterias', 'UserController@verMaterias');
+    Route::get('User/ajaxVerMaterias', 'UserController@ajaxVerMaterias');
 
     Route::get('Asignatura/ajax_muestra_prerequisitos/{asignatura_id}', 'AsignaturaController@ajax_muestra_prerequisitos');
     Route::get('Asignatura/elimina_prerequisito/{prerequisito_id}', 'AsignaturaController@elimina_prerequisito');

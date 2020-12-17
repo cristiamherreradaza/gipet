@@ -14,6 +14,7 @@
         <h4 class="mb-0 text-white">
             USUARIOS &nbsp;&nbsp;
             <button type="button" class="btn waves-effect waves-light btn-sm btn-primary" onclick="nuevo_usuario()"><i class="fas fa-plus"></i> &nbsp; NUEVO USUARIO</button>
+            <button type="button" class="btn waves-effect waves-light btn-sm btn-success" onclick="verMaterias()"><i class="fas fa-book"></i> &nbsp; BUSQUEDA</button>
         </h4>
     </div>
     <div class="card-body" id="lista">
@@ -46,9 +47,6 @@
                                 <button type="button" class="btn btn-primary" title="Asignar materias"  onclick="asignar('{{ $usuario->id }}')"><i class="fas fa-plus-circle"></i></button>
                                 <button type="button" class="btn btn-secondary" title="Editar permisos"  onclick="permisos('{{ $usuario->id }}', '{{ $usuario->perfil_id }}')"><i class="fas fa-list"></i></button>
                                 <button type="button" class="btn btn-info" title="Cambiar contraseña"  onclick="contrasena({{ $usuario->id }})"><i class="fas fa-key"></i></button>
-                                @php
-
-                                @endphp
                                 <button type="button" class="btn btn-danger" title="Eliminar usuario"  onclick="eliminar('{{ $usuario->id }}', '{{ $usuario->name }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
@@ -737,8 +735,11 @@
         window.location.href = "{{ url('User/asigna_materias') }}/"+usuario_id;
     }
 
-
-
+    // Funcion que redirige a las materias que el docente tiene asignado
+    function verMaterias(usuario_id)
+    {
+        window.location.href = "{{ url('User/verMaterias') }}";
+    }
 
     //Funcion para ocultar/mostrar y validar datos dependiendo del Tipo de perfil seleccionado
     $( function() {

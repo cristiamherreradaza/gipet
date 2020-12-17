@@ -17,6 +17,7 @@ use App\MenusPerfile;
 use App\MenusUser;
 use App\Nota;
 use App\NotasPropuesta;
+use App\CarrerasPersona;
 
 class UserController extends Controller
 {
@@ -435,5 +436,26 @@ class UserController extends Controller
             }
         }
         return redirect('User/listado');
+    }
+
+    public function verMaterias()
+    {
+        $usuarios   = User::get();
+        $turnos     = Turno::get();
+        $paralelos  = CarrerasPersona::select('paralelo')
+                                    ->groupBy('paralelo')
+                                    ->get();
+        $gestiones  = CarrerasPersona::select('anio_vigente')
+                                    ->groupBy('anio_vigente')
+                                    ->get();
+        return view('user.verMaterias')->with(compact('turnos', 'paralelos', 'gestiones', 'usuarios'));
+    }
+
+    public function ajaxVerMaterias(Request $request)
+    {
+        $asignaturas    = NotasPropuesta::where('docente_id', $request->usuario)
+                                        ->where('anio_vigente', $request->gestion)
+                                        ->get();
+        return view('user.ajaxVerMaterias')->with(compact('asignaturas'));
     }
 }
