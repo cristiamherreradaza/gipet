@@ -14,7 +14,7 @@
         <h4 class="mb-0 text-white">
             USUARIOS &nbsp;&nbsp;
             <button type="button" class="btn waves-effect waves-light btn-sm btn-primary" onclick="nuevo_usuario()"><i class="fas fa-plus"></i> &nbsp; NUEVO USUARIO</button>
-            <button type="button" class="btn waves-effect waves-light btn-sm btn-success" onclick="verMaterias()"><i class="fas fa-book"></i> &nbsp; BUSQUEDA</button>
+            <button type="button" class="btn waves-effect waves-light btn-sm btn-success" onclick="verMaterias()"><i class="fas fa-book"></i> &nbsp; ASIGNATURAS DOCENTES</button>
         </h4>
     </div>
     <div class="card-body" id="lista">

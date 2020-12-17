@@ -18,6 +18,7 @@ use App\MenusUser;
 use App\Nota;
 use App\NotasPropuesta;
 use App\CarrerasPersona;
+use App\Inscripcione;
 
 class UserController extends Controller
 {
@@ -227,7 +228,33 @@ class UserController extends Controller
         $asignaturas_docente = NotasPropuesta::where('docente_id', $id)
                                             ->where('anio_vigente', date('Y'))
                                             ->get();
-    	return view('user.asigna_materias')->with(compact('asignaturas', 'asignaturas_docente', 'docente', 'turnos'));
+        $mallasCurriculares = Asignatura::select('anio_vigente')
+                                        ->groupBy('anio_vigente')
+                                        ->get();
+        //return view('user.asigna_materias')->with(compact('asignaturas', 'asignaturas_docente', 'docente', 'turnos'));
+        return view('user.asignacion_materias')->with(compact('asignaturas', 'asignaturas_docente', 'docente', 'turnos', 'mallasCurriculares'));
+    }
+
+    public function ajaxBusquedaAsignaciones(Request $request)
+    {
+        $docente            = User::find($request->docente_id);
+        $gestion            = $request->gestion;
+        $asignaturasMalla   = Asignatura::where('anio_vigente', $gestion)
+                                        ->orderBy('carrera_id')
+                                        ->orderBy('gestion')
+                                        ->orderBy('orden_impresion')
+                                        ->get();
+        $asignaturasDocente = NotasPropuesta::where('docente_id', $docente->id)
+                                        ->where('anio_vigente', $gestion)
+                                        ->orderBy('carrera_id')
+                                        ->orderBy('asignatura_id')
+                                        ->get();
+        $turnos     = Turno::get();
+        $paralelos  = Inscripcione::whereNotNull('paralelo')
+                                ->select('paralelo')
+                                ->groupBy('paralelo')
+                                ->get();
+        return view('user.ajaxBusquedaAsignaciones')->with(compact('docente', 'asignaturasMalla', 'asignaturasDocente', 'turnos', 'paralelos', 'gestion'));
     }
 
     // Funcion que procesa la solicitud de asignacion de materias a los docentes
