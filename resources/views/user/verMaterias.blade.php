@@ -30,6 +30,16 @@
                     </div>
                     <div class="col">
                         <div class="form-group">
+                            <label class="control-label">Malla Curricular</label>
+                            <select name="malla" id="malla" class="form-control">
+                                @foreach($mallas as $malla)
+                                    <option value="{{ $malla->anio_vigente }}"> {{ $malla->anio_vigente }} </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
                             <label class="control-label">Gestion</label>
                             <select name="gestion" id="gestion" class="form-control">
                                 @foreach($gestiones as $gestion)
@@ -67,10 +77,12 @@
     function buscar(){
         gestion = $('#gestion').val();
         usuario = $('#usuario').val();
+        malla   = $('#malla').val();
         $.ajax({
             url: "{{ url('User/ajaxVerMaterias') }}",
             data: {
                 gestion : gestion,
+                malla : malla,
                 usuario : usuario
                 },
             type: 'get',
