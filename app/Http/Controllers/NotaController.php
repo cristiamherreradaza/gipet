@@ -43,7 +43,7 @@ class NotaController extends Controller
                                     ->where('anio_vigente', $datosNP->anio_vigente)
                                     ->groupBy('turno_id')
                                     ->get();
-        // dd($comboTurnos);
+                                    
         // Buscamos los detalles de la materia a mostrar
         $asignatura = NotasPropuesta::find($id);
         // Buscamos a los estudiantes inscritos en esa materia

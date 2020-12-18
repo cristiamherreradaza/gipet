@@ -237,4 +237,9 @@ class ListaController extends Controller
         // $aleatorio_extras           =  mt_rand(1, $maximo_extras);
         // dd($aleatorio);
     }
+
+    public function centralizadorAlumnos()
+    {
+        
+    }
 }

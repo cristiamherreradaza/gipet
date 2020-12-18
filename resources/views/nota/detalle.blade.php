@@ -25,7 +25,7 @@
             <div class="col-md-4"><h4 class="text-bold">Año {{ date('Y') }}</h4></div>
         </div>
 
-        <form action="{{ url('nota/cambiaTurnoParalelo') }}" method="POST">
+        <form action="{{ url('nota/cambiaTurnoParalelo') }}" method="POST" id="frmNotas">
             @csrf
             <div class="row">
                 <div class="col-md-4">
@@ -49,7 +49,12 @@
                         <option value="">Seleccione Paralelo</option>
                     </select>
                 </div>
-                <div class="col-md-4"><button type="submit" class="btn btn-block btn-info">Cambiar</button></div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-block btn-info">Cambia Curso</button>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-block btn-primary" onclick="generaCentralizador()">Genera Centralizador</button>
+                </div>
             </div>
         </form>
             
@@ -403,10 +408,14 @@ $(document).ready(function() {
             type: 'post',
             success: function(data) {
                 $("#ajaxMuestraComboParalelo").html(data);
-                // $("#modal_notas").modal('show');
             }
         });
         // alert(anio);   
+    }
+
+    function generaCentralizador()
+    {
+        
     }
 </script>
 
