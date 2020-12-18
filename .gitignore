@@ -15,5 +15,6 @@ gipet.code-workspace
 gipet.sublime-project
 gipet.sublime-workspace
 .phpintel/*
+.phpintel/index
 gipetProy.sublime-project
 gipetProy.sublime-workspace

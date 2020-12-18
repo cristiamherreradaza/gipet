@@ -669,24 +669,24 @@ class MigracionController extends Controller
             echo $n->regID . " - " . $gestion . " - " . $n->carnetID . "<br />";
 
             if ($asignatura && $alumno) {
-                $inscripcion = new Inscripcione();
+                $inscripcion                  = new Inscripcione();
                 $inscripcion->codigo_anterior = $n->regID;
-                $inscripcion->user_id = $codigoDocente;
-                $inscripcion->resolucion_id = 1;
-                $inscripcion->carrera_id = $asignatura->carrera_id;
-                $inscripcion->asignatura_id = $asignatura->id;
-                $inscripcion->turno_id = $n->turn;
-                $inscripcion->persona_id = $alumno->id;
-                $inscripcion->semestre = $n->semesn;
-                $inscripcion->gestion = $n->gestionn;
-                $inscripcion->anio_vigente = $gestion;
-                $inscripcion->fecha_registro = $n->fec_reg;
-                $inscripcion->nota = $n->nota;
+                $inscripcion->user_id         = $codigoDocente;
+                $inscripcion->resolucion_id   = 1;
+                $inscripcion->carrera_id      = $asignatura->carrera_id;
+                $inscripcion->asignatura_id   = $asignatura->id;
+                $inscripcion->turno_id        = $n->turn;
+                $inscripcion->persona_id      = $alumno->id;
+                $inscripcion->semestre        = $n->semesn;
+                $inscripcion->gestion         = $n->gestionn;
+                $inscripcion->anio_vigente    = $gestion;
+                $inscripcion->fecha_registro  = $n->fec_reg;
+                $inscripcion->nota            = $n->nota;
                 $inscripcion->nota_aprobacion = 61;
-                $inscripcion->troncal = "Si";
-                $inscripcion->aprobo = $aprobo;
-                $inscripcion->convalidado = "Si";
-                $inscripcion->estado = "Finalizado";
+                $inscripcion->troncal         = "Si";
+                $inscripcion->aprobo          = $aprobo;
+                $inscripcion->convalidado     = "Si";
+                $inscripcion->estado          = "Finalizado";
                 $inscripcion->save();
             }
         }
