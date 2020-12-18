@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Validator;
-use DataTables;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\AsignaturaNotasExport;
+use App\Imports\AsignaturaNotasImport;
 use App\User;
 use App\Predefinida;
 use App\Turno;
@@ -17,6 +18,10 @@ use App\MenusPerfile;
 use App\MenusUser;
 use App\Nota;
 use App\NotasPropuesta;
+use App\CarrerasPersona;
+use App\Inscripcione;
+use Validator;
+use DataTables;
 
 class UserController extends Controller
 {
@@ -226,7 +231,33 @@ class UserController extends Controller
         $asignaturas_docente = NotasPropuesta::where('docente_id', $id)
                                             ->where('anio_vigente', date('Y'))
                                             ->get();
-    	return view('user.asigna_materias')->with(compact('asignaturas', 'asignaturas_docente', 'docente', 'turnos'));
+        $mallasCurriculares = Asignatura::select('anio_vigente')
+                                        ->groupBy('anio_vigente')
+                                        ->get();
+        //return view('user.asigna_materias')->with(compact('asignaturas', 'asignaturas_docente', 'docente', 'turnos'));
+        return view('user.asignacion_materias')->with(compact('asignaturas', 'asignaturas_docente', 'docente', 'turnos', 'mallasCurriculares'));
+    }
+
+    public function ajaxBusquedaAsignaciones(Request $request)
+    {
+        $docente            = User::find($request->docente_id);
+        $gestion            = $request->gestion;
+        $asignaturasMalla   = Asignatura::where('anio_vigente', $gestion)
+                                        ->orderBy('carrera_id')
+                                        ->orderBy('gestion')
+                                        ->orderBy('orden_impresion')
+                                        ->get();
+        $asignaturasDocente = NotasPropuesta::where('docente_id', $docente->id)
+                                        ->where('anio_vigente', $gestion)
+                                        ->orderBy('carrera_id')
+                                        ->orderBy('asignatura_id')
+                                        ->get();
+        $turnos     = Turno::get();
+        $paralelos  = Inscripcione::whereNotNull('paralelo')
+                                ->select('paralelo')
+                                ->groupBy('paralelo')
+                                ->get();
+        return view('user.ajaxBusquedaAsignaciones')->with(compact('docente', 'asignaturasMalla', 'asignaturasDocente', 'turnos', 'paralelos', 'gestion'));
     }
 
     // Funcion que procesa la solicitud de asignacion de materias a los docentes
@@ -436,4 +467,53 @@ class UserController extends Controller
         }
         return redirect('User/listado');
     }
+
+    public function verMaterias()
+    {
+        $usuarios   = User::get();
+        $turnos     = Turno::get();
+        $paralelos  = CarrerasPersona::select('paralelo')
+                                    ->groupBy('paralelo')
+                                    ->get();
+        $gestiones  = CarrerasPersona::select('anio_vigente')
+                                    ->groupBy('anio_vigente')
+                                    ->get();
+        $mallas     = Asignatura::select('anio_vigente')
+                                ->whereNotNull('anio_vigente')
+                                ->groupBy('anio_vigente')
+                                ->get();
+        return view('user.verMaterias')->with(compact('turnos', 'paralelos', 'gestiones', 'usuarios', 'mallas'));
+    }
+
+    public function ajaxVerMaterias(Request $request)
+    {
+        // $mallaCurricular    = Asignatura::where('anio_vigente', $request->malla)
+        //                                 ->get();
+        // $arrayAsignaturas   = array();
+        // foreach($mallaCurricular as $materia)
+        // {
+        //     array_push($arrayAsignaturas, $materia->id);
+        // }
+        // $asignaturas    = NotasPropuesta::where('docente_id', $request->usuario)
+        //                                 ->where('anio_vigente', $request->gestion)
+        //                                 ->whereIn('asignatura_id', $arrayAsignaturas)
+        //                                 ->groupBy('asignatura_id')
+        //                                 ->get();
+
+        $asignaturas    = NotasPropuesta::where('notas_propuestas.docente_id', $request->usuario)
+                                        ->where('notas_propuestas.anio_vigente', $request->gestion)
+                                        ->join('asignaturas', 'asignaturas.id', '=', 'notas_propuestas.asignatura_id')
+                                        ->where('asignaturas.anio_vigente', $request->malla)
+                                        ->select('notas_propuestas.*')
+                                        //->groupBy('notas_propuestas.asignatura_id')
+                                        ->get();
+        $docente        = User::find($request->usuario);
+        return view('user.ajaxVerMaterias')->with(compact('asignaturas', 'docente'));
+    }
+    
+    public function formatoExcelAsignatura($docente_id, $asignatura_id, $anio_vigente)
+    {
+        return Excel::download(new AsignaturaNotasExport($docente_id, $asignatura_id, $anio_vigente), date('Y-m-d').'-formatoAsignaturasImportacion.xlsx');
+    }
+    
 }

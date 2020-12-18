@@ -1,105 +1,75 @@
-@extends('layouts.app')
-
-@section('metadatos')
-<meta name="csrf-token" content="{{ csrf_token() }}"/>
-@endsection
-
-@section('css')
-<link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
-<link href="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.css') }}" rel="stylesheet">
-@endsection
-
-@section('content')
-<div class="card">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-6">
-                <h3>
-                    Docente: 
-                    <span class="text-info">
-                        {{ $docente->apellido_paterno }}
-                        {{ $docente->apellido_materno }}
-                        {{ $docente->nombres }}
-                    </span>
-                </h3>
+<div class="col-md-6">
+    <div class="card border-info">
+        <div class="card-header bg-info">
+            <h4 class="mb-0 text-white">ASIGNATURAS EN MALLA CURRICULAR ({{ $gestion }})</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive m-t-40">
+                <table id="tabla-asignaturas" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Carrera</th>
+                            <th>Sigla</th>
+                            <th>Nombre</th>
+                            <th>A&ntilde;o</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($asignaturasMalla as $asignatura)
+                            <tr>
+                                <td>{{ $asignatura->carrera->nombre }}</td>
+                                <td class="text-nowrap">{{ $asignatura->sigla }}</td>
+                                <td>{{ $asignatura->nombre }}</td>
+                                <td class="text-center">{{ $asignatura->gestion }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-success" onclick="asigna_materia('{{ $asignatura->id }}', '{{ $asignatura->nombre }}', '{{ $asignatura->sigla }}', '{{ $asignatura->carrera->nombre }}')">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card border-primary">
-                    <div class="card-header bg-primary">
-                        <h4 class="mb-0 text-white">ASIGNATURAS</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive m-t-40">
-                            <table id="tabla-asignaturas" class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Carrera</th>
-                                        <th>Sigla</th>
-                                        <th>Nombre</th>
-                                        <th>A&ntilde;o</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($asignaturas as $asignatura)
-                                        <tr>
-                                            <td>{{ $asignatura->carrera->nombre }}</td>
-                                            <td class="text-nowrap">{{ $asignatura->sigla }}</td>
-                                            <td>{{ $asignatura->nombre }}</td>
-                                            <td class="text-center">{{ $asignatura->gestion }}</td>
-                                            <td>
-                                                <button type="button" class="btn btn-success" onclick="asigna_materia('{{ $asignatura->id }}', '{{ $asignatura->nombre }}', '{{ $asignatura->sigla }}', '{{ $asignatura->carrera->nombre }}')">
-                                                    <i class="fas fa-arrow-right"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card border-info">
-                    <div class="card-header bg-info">
-                        <h4 class="mb-0 text-white">ASIGNATURAS DEL DOCENTE</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive m-t-40">
-                            <table id="tabla-asignaturas-docente" class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Carrera</th>
-                                        <th>Sigla</th>
-                                        <th>Nombre</th>
-                                        <th>Turno</th>
-                                        <th>Paralelo</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($asignaturas_docente as $asignatura)
-                                    <tr>
-                                        <td>{{ $asignatura->asignatura->carrera->nombre }}</td>
-                                        <td class="text-nowrap">{{ $asignatura->asignatura->sigla }}</td>
-                                        <td>{{ $asignatura->asignatura->nombre }}</td>
-                                        <td>{{ $asignatura->turno->descripcion }}</td>
-                                        <td>{{ $asignatura->paralelo }}</td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger" onclick="elimina_asignacion('{{ $asignatura->id }}', '{{ $asignatura->asignatura->nombre }}')">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="card border-info">
+        <div class="card-header bg-info">
+            <h4 class="mb-0 text-white">MATERIAS ASIGNADAS ({{ $gestion }})</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive m-t-40">
+                <table id="tabla-asignaturas-docente" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Carrera</th>
+                            <th>Sigla</th>
+                            <th>Nombre</th>
+                            <th>Turno</th>
+                            <th>Paralelo</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($asignaturasDocente as $asignatura)
+                        <tr>
+                            <td>{{ $asignatura->asignatura->carrera->nombre }}</td>
+                            <td class="text-nowrap">{{ $asignatura->asignatura->sigla }}</td>
+                            <td>{{ $asignatura->asignatura->nombre }}</td>
+                            <td>{{ $asignatura->turno->descripcion }}</td>
+                            <td>{{ $asignatura->paralelo }}</td>
+                            <td>
+                                <button type="button" class="btn btn-danger" onclick="elimina_asignacion('{{ $asignatura->id }}', '{{ $asignatura->asignatura->nombre }}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -146,18 +116,17 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Paralelo</label>
-                                <select name="paralelo" id="paralelo" class="form-control custom-select" >
-                                    <option value="A">A</option>
-                                    <option value="B">B</option>
-                                    <option value="C">C</option>
-                                    <option value="D">D</option>
+                                <select name="paralelo" id="paralelo" class="form-control custom-select">
+                                    @foreach ($paralelos as $paralelo)
+                                        <option value="{{ $paralelo->paralelo }}">{{ $paralelo->paralelo }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">A&ntilde;o</label>
-                                <input type="number" name="anio_vigente" id="anio_vigente" class="form-control" value="{{ date('Y') }}">
+                                <input type="number" name="anio_vigente" id="anio_vigente" class="form-control" value="{{ $gestion }}">
                             </div>
                         </div>
                     </div>
@@ -170,16 +139,11 @@
     </div>
 </div>
 <!-- fin modal asigna materia -->
-@stop
 
-@section('js')
 <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
-
 <script>
-
     var tabla_asignaturas;
-
     $.ajaxSetup({
         // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
         headers: {
@@ -277,4 +241,3 @@
         })
     }
 </script>
-@endsection

@@ -14,6 +14,7 @@
         <h4 class="mb-0 text-white">
             USUARIOS &nbsp;&nbsp;
             <button type="button" class="btn waves-effect waves-light btn-sm btn-primary" onclick="nuevo_usuario()"><i class="fas fa-plus"></i> &nbsp; NUEVO USUARIO</button>
+            <button type="button" class="btn waves-effect waves-light btn-sm btn-success" onclick="verMaterias()"><i class="fas fa-book"></i> &nbsp; ASIGNATURAS DOCENTES</button>
         </h4>
     </div>
     <div class="card-body" id="lista">
@@ -734,8 +735,11 @@
         window.location.href = "{{ url('User/asigna_materias') }}/"+usuario_id;
     }
 
-
-
+    // Funcion que redirige a las materias que el docente tiene asignado
+    function verMaterias(usuario_id)
+    {
+        window.location.href = "{{ url('User/verMaterias') }}";
+    }
 
     //Funcion para ocultar/mostrar y validar datos dependiendo del Tipo de perfil seleccionado
     $( function() {

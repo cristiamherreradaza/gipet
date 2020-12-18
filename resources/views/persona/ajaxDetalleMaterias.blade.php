@@ -99,8 +99,25 @@
                                                                         ->where('persona_id', $materia->persona_id)
                                                                         ->where('estado', 'Finalizado')
                                                                         ->where('aprobo', 'Si')
+                                                                        ->whereNull('nota_reprobacion')
                                                                         ->first();
                                 @endphp
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-outline-info dropdown-toggle" title="Convalidar Asignatura" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-magic"></i>
+                                    </button>
+                                    <div class="dropdown-menu" style="">
+                                        <form action="{{ url('Inscripcion/asignarPuntaje') }}" method="POST" class="px-4 py-3">
+                                            @csrf
+                                            <input type="hidden" name="id" id="id" value="{{ $materia->id }}">
+                                            <div class="form-group">
+                                                <label class="control-label">Puntaje Final</label>
+                                                <input type="number" class="form-control" id="nota" name="nota" min="1" max="100">
+                                            </div>
+                                            <button type="submit" class="btn btn-block btn-info">CONVALIDAR</button>
+                                        </form>
+                                    </div>
+                                </div>
                                 @if($asignaturaAprobada)
                                     <button type="button" class="btn btn-success" title="Convalidar Asignatura Aprobada" onclick="convalidarAsignaturaAprobada('{{ $materia->id }}')"><i class="fas fa-check-circle"></i></button>
                                 @endif

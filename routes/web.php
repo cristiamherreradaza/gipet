@@ -167,8 +167,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Inscripcion/finalizarCalificaciones/{persona_id}/{carrera_id}', 'InscripcionController@finalizarCalificaciones');
     Route::get('Inscripcion/eliminaAsignatura/{id}', 'InscripcionController@eliminaAsignatura');
     Route::get('Inscripcion/apruebaInscripcion/{id}', 'InscripcionController@apruebaInscripcion');
-    Route::get('Inscripcion/inscribeOyente/{id}', 'InscripcionController@inscribeOyente');
+    Route::post('Inscripcion/inscribeOyente', 'InscripcionController@inscribeOyente');
     Route::get('Inscripcion/convalidarAsignaturaAprobada/{id}', 'InscripcionController@convalidarAsignaturaAprobada');
+    Route::post('Inscripcion/asignarPuntaje', 'InscripcionController@asignarPuntaje');
 
     // PDFS
     Route::get('Inscripcion/reportePdfHistorialAcademico/{persona_id}/{carrera_id}', 'InscripcionController@reportePdfHistorialAcademico');
@@ -209,6 +210,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('User/ajaxEditaPerfil', 'UserController@ajaxEditaPerfil');
     Route::post('User/actualizarPermisosPerfil', 'UserController@actualizarPermisosPerfil');
     Route::get('User/asigna_materias/{id}', 'UserController@asigna_materias');
+    Route::get('User/ajaxBusquedaAsignaciones', 'UserController@ajaxBusquedaAsignaciones');
+    Route::get('User/verMaterias', 'UserController@verMaterias');
+    Route::get('User/ajaxVerMaterias', 'UserController@ajaxVerMaterias');
+    Route::get('User/formatoExcelAsignatura/{docente_id}/{asignatura_id}/{anio_vigente}', 'UserController@formatoExcelAsignatura');
 
     Route::get('Asignatura/ajax_muestra_prerequisitos/{asignatura_id}', 'AsignaturaController@ajax_muestra_prerequisitos');
     Route::get('Asignatura/elimina_prerequisito/{prerequisito_id}', 'AsignaturaController@elimina_prerequisito');

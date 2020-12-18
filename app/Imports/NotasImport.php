@@ -18,7 +18,7 @@ class NotasImport implements ToModel
     public function model(array $row)
     {
         // Si el valor que esta en la posición 0 es numerico (id de la tabla notas)
-        if( is_numeric($row[0]) )
+        if( is_numeric($row[0]) && is_null($row[9]))
         {
             // Buscamos ese id en notas
             $nota = Nota::find($row[0]);

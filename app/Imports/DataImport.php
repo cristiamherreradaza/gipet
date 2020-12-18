@@ -183,6 +183,7 @@ class DataImport implements ToModel
                             $notaUno->nota_total            = $totalUno;
                             $notaUno->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
                             $notaUno->finalizado            = 'Si';
+                            $notaUno->registrado            = 'Si';
                             $notaUno->numero_importacion    = $numero;
                             $notaUno->save();
                             // Primero calcularemos para llenar la nota total del registro 2
@@ -234,6 +235,7 @@ class DataImport implements ToModel
                             $notaDos->nota_total            = $totalDos;
                             $notaDos->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
                             $notaDos->finalizado            = 'Si';
+                            $notaDos->registrado            = 'Si';
                             $notaDos->numero_importacion    = $numero;
                             $notaDos->save();
                             // Buscaremos si existe registro de notaTres
@@ -267,6 +269,7 @@ class DataImport implements ToModel
                             $notaTres->nota_total            = $notaUno->nota_total;
                             $notaTres->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
                             $notaTres->finalizado            = 'Si';
+                            $notaTres->registrado            = 'Si';
                             $notaTres->numero_importacion    = $numero;
                             $notaTres->save();
                             // Buscaremos si existe registro de notaCuatro
@@ -300,6 +303,7 @@ class DataImport implements ToModel
                             $notaCuatro->nota_total            = $notaDos->nota_total;
                             $notaCuatro->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
                             $notaCuatro->finalizado            = 'Si';
+                            $notaCuatro->registrado            = 'Si';
                             $notaCuatro->numero_importacion    = $numero;
                             $notaCuatro->save();
                         }
@@ -355,6 +359,7 @@ class DataImport implements ToModel
                             $notaUno->nota_total            = $totalUno;
                             $notaUno->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
                             $notaUno->finalizado            = 'Si';
+                            $notaUno->registrado            = 'Si';
                             $notaUno->numero_importacion    = $numero;
                             $notaUno->save();
                             // Primero calcularemos para llenar la nota total del registro 2
@@ -406,6 +411,7 @@ class DataImport implements ToModel
                             $notaDos->nota_total            = $totalDos;
                             $notaDos->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
                             $notaDos->finalizado            = 'Si';
+                            $notaDos->registrado            = 'Si';
                             $notaDos->numero_importacion    = $numero;
                             $notaDos->save();
                             // Primero calcularemos para llenar la nota total del registro 3
@@ -457,6 +463,7 @@ class DataImport implements ToModel
                             $notaTres->nota_total            = $totalTres;
                             $notaTres->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
                             $notaTres->finalizado            = 'Si';
+                            $notaTres->registrado            = 'Si';
                             $notaTres->numero_importacion    = $numero;
                             $notaTres->save();
                             // Primero calcularemos para llenar la nota total del registro 4
@@ -508,6 +515,7 @@ class DataImport implements ToModel
                             $notaCuatro->nota_total            = $totalCuatro;
                             $notaCuatro->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
                             $notaCuatro->finalizado            = 'Si';
+                            $notaCuatro->registrado            = 'Si';
                             $notaCuatro->numero_importacion    = $numero;
                             $notaCuatro->save();
                         }

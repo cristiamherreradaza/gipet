@@ -140,7 +140,11 @@ class PersonaController extends Controller
 
     public function ajaxDetalleHistorialAcademico(Request $request)
     {
-        $persona = Persona::find($request->persona_id);
+        $persona    = Persona::find($request->persona_id);
+        $turnos     = Turno::get();
+        $paralelos  = CarrerasPersona::select('paralelo')
+                                    ->groupBy('paralelo')
+                                    ->get();
         $array_carreras = array();
         $carreras = Inscripcione::where('persona_id', $request->persona_id)
                                 ->groupBy('carrera_id')
@@ -155,7 +159,7 @@ class PersonaController extends Controller
         $inscripciones = Inscripcione::where('persona_id', $request->persona_id)
                                     ->orderBy('anio_vigente', 'asc')
                                     ->get();
-        return view('persona.ajaxDetalleHistorialAcademico')->with(compact('persona', 'carreras', 'inscripciones'));
+        return view('persona.ajaxDetalleHistorialAcademico')->with(compact('persona', 'carreras', 'inscripciones', 'turnos', 'paralelos'));
     }
 
     public function ajaxDetallePensum(Request $request)

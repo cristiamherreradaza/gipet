@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Nota;
 use App\NotasPropuesta;
+use App\Inscripcione;
 //use Illuminate\Contracts\View\View;
 //use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -70,6 +71,17 @@ class NotasExport implements FromCollection, WithMapping, WithHeadings, ShouldAu
         /**
         * @var Invoice $invoice
         */
+        $registro   = Inscripcione::where('id', $nota->inscripcion_id)
+                                ->first();
+        if($registro){
+            if($registro->convalidacion_externa && $registro->convalidacion_externa == 'Si'){
+                $observacion    = 'No Calificar';
+            }else{
+                $observacion    = '';
+            }
+        }else{
+            $observacion    = '';
+        }
         return [
             $nota->id,
             $nota->persona->nombres. ' ' .$nota->persona->apellido_paterno. ' ' .$nota->persona->apellido_materno,
@@ -80,6 +92,7 @@ class NotasExport implements FromCollection, WithMapping, WithHeadings, ShouldAu
             $nota->nota_primer_parcial,
             $nota->nota_examen_final,
             $nota->nota_puntos_ganados,
+            $observacion,
         ];
     }
 
@@ -96,6 +109,7 @@ class NotasExport implements FromCollection, WithMapping, WithHeadings, ShouldAu
             'Primer Parcial (Max: '.round($notapropuesta->nota_primer_parcial).')',
             'Examen Final (Max: '.round($notapropuesta->nota_examen_final).')',
             'Extras (Max: '.round($notapropuesta->nota_puntos_ganados).')',
+            'Observaciones (No llenar)',
         ];
     }
 
@@ -113,7 +127,7 @@ class NotasExport implements FromCollection, WithMapping, WithHeadings, ShouldAu
         ];
         return [
             AfterSheet::class => function(AfterSheet $event) use ($styleArray) {
-                $event->sheet->getStyle('A1:I1')->applyFromArray($styleArray);
+                $event->sheet->getStyle('A1:J1')->applyFromArray($styleArray);
                 $event->sheet->getDelegate()->freezePane('E1');
             },
         ];
