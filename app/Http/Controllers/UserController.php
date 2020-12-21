@@ -499,16 +499,31 @@ class UserController extends Controller
         //                                 ->whereIn('asignatura_id', $arrayAsignaturas)
         //                                 ->groupBy('asignatura_id')
         //                                 ->get();
+        // $asignaturas    = Nota::where('notas.docente_id', $request->usuario)
+        //                     ->where('notas.anio_vigente', $request->gestion)
+        //                     ->join('asignaturas', 'asignaturas.id', '=', 'notas.asignatura_id')
+        //                     ->where('asignaturas.anio_vigente', $request->malla)
+        //                     ->select('notas.*')
+        //                     ->groupBy('notas.asignatura_id')
+        //                     ->get();
 
         $asignaturas    = NotasPropuesta::where('notas_propuestas.docente_id', $request->usuario)
+                                        ->whereNull('notas_propuestas.deleted_at')
                                         ->where('notas_propuestas.anio_vigente', $request->gestion)
                                         ->join('asignaturas', 'asignaturas.id', '=', 'notas_propuestas.asignatura_id')
                                         ->where('asignaturas.anio_vigente', $request->malla)
                                         ->select('notas_propuestas.*')
-                                        //->groupBy('notas_propuestas.asignatura_id')
+                                        ->groupBy('notas_propuestas.asignatura_id')
                                         ->get();
         $docente        = User::find($request->usuario);
-        return view('user.ajaxVerMaterias')->with(compact('asignaturas', 'docente'));
+
+        $materias       = Inscripcione::where('inscripciones.anio_vigente', $request->gestion)
+                                    ->join('asignaturas', 'asignaturas.id', '=', 'inscripciones.asignatura_id')
+                                    ->where('asignaturas.anio_vigente', $request->malla)
+                                    ->select('inscripciones.*')
+                                    ->groupBy('inscripciones.asignatura_id')
+                                    ->get();
+        return view('user.ajaxVerMaterias')->with(compact('asignaturas', 'docente', 'materias'));
     }
     
     public function formatoExcelAsignatura($docente_id, $asignatura_id, $anio_vigente)

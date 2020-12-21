@@ -11,13 +11,11 @@
                         <th>SIGLA</th>
                         <th>ASIGNATURA</th>
                         <th>GESTION</th>
-                        <!-- <th>Turno</th>
-                        <th>Paralelo</th> -->
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($asignaturas as $asignatura)
+                    <!-- @foreach($asignaturas as $asignatura)
                         <tr>
                             <td class="text-center">{{ $asignatura->asignatura->id }}</td>
                             <td class="text-center">{{ $asignatura->asignatura->anio_vigente }}</td>
@@ -25,8 +23,21 @@
                             <td class="text-center">{{ $asignatura->asignatura->sigla }}</td>
                             <td>{{ $asignatura->asignatura->nombre }}</td>
                             <td class="text-center">{{ $asignatura->anio_vigente }}</td>
-                            <!-- <td>{{ $asignatura->turno->descripcion }}</td>
-                            <td>{{ $asignatura->paralelo }}</td> -->
+                            <td class="text-center">
+                                <button class="btn btn-success" title="Exportar lista" onclick="reporteExcelAlumnos('{{ $docente->id }}', '{{ $asignatura->asignatura_id }}', '{{ $asignatura->anio_vigente }}')">
+                                    <i class="fas fa-file-excel"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    @endforeach -->
+                    @foreach($materias as $asignatura)
+                        <tr>
+                            <td class="text-center">{{ $asignatura->id }}</td>
+                            <td class="text-center">{{ $asignatura->asignatura->anio_vigente }}</td>
+                            <td>{{ $asignatura->carrera->nombre }}</td>
+                            <td class="text-center">{{ $asignatura->asignatura->sigla }}</td>
+                            <td>{{ $asignatura->asignatura->nombre }}</td>
+                            <td class="text-center">{{ $asignatura->anio_vigente }}</td>
                             <td class="text-center">
                                 <button class="btn btn-success" title="Exportar lista" onclick="reporteExcelAlumnos('{{ $docente->id }}', '{{ $asignatura->asignatura_id }}', '{{ $asignatura->anio_vigente }}')">
                                     <i class="fas fa-file-excel"></i>

@@ -122,6 +122,22 @@
                             @endphp
                             <td>
                                 <button type="button" class="btn btn-info" title="Ver detalle" onclick="ajaxMuestraNotaInscripcion('{{ $materia->id }}')"><i class="fas fa-eye"></i></button>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-outline-primary dropdown-toggle" title="Regularizar Asignatura" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-magic"></i>
+                                    </button>
+                                    <div class="dropdown-menu" style="">
+                                        <form action="{{ url('Inscripcion/regularizarAsignatura') }}" method="POST" class="px-4 py-3">
+                                            @csrf
+                                            <input type="hidden" name="id" id="id" value="{{ $materia->id }}">
+                                            <div class="form-group">
+                                                <label class="control-label">Puntaje Final</label>
+                                                <input type="number" class="form-control" id="nota" name="nota" min="0" max="100">
+                                            </div>
+                                            <button type="submit" class="btn btn-block btn-primary">REGULARIZAR</button>
+                                        </form>
+                                    </div>
+                                </div>
                                 @if($materia->aprobo != 'Si')
                                     <button type="button" class="btn btn-warning" title="Forzar aprobacion" onclick="apruebaInscripcion('{{ $materia->id }}')"><i class="fas fa-clipboard-check"></i></button>
                                 @endif

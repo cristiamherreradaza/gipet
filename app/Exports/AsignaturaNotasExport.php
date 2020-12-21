@@ -195,6 +195,7 @@ class AsignaturaNotasExport implements FromCollection, WithMapping, WithHeadings
             ],
             'alignment' => [
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
             ],  
         ];
         return [
