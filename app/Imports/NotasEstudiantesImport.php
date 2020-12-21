@@ -549,8 +549,8 @@ class NotasEstudiantesImport implements ToModel
                         }
                         else        // La celda de convalidado tiene un valor diferente a NO, que es SI
                         {
-                            $inscripcion->nota      = $row[31];
-                            ($row[31] >= $inscripcion->nota_aprobacion ? $aprobo = 'Si' : $aprobo = 'No');
+                            $inscripcion->nota      = $row[32];
+                            ($row[32] >= $inscripcion->nota_aprobacion ? $aprobo = 'Si' : $aprobo = 'No');
                             $inscripcion->aprobo    = $aprobo;
                             $inscripcion->estado    = 'Finalizado';
                             $inscripcion->save();

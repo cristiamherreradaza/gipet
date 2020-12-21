@@ -531,4 +531,53 @@ class UserController extends Controller
         return Excel::download(new AsignaturaNotasExport($docente_id, $asignatura_id, $anio_vigente), date('Y-m-d').'-formatoAsignaturasImportacion.xlsx');
     }
     
+    public function importarNotasAsignaturas(Request $request)
+    {
+        $validation = Validator::make($request->all(), [
+            'select_file' => 'required|mimes:xlsx|max:2048'
+        ]);
+        if($validation->passes())
+        {
+            // // Buscaremos el valor maximo de importacion
+            // $maximo = CarrerasPersona::max('numero_importacion');
+            // if($maximo)
+            // {
+            //     $numero = $maximo + 1;
+            // }
+            // else
+            // {
+            //     $numero = 1;
+            // }
+            // // Creamos variables de sesión para pasar al import
+            // session(['numero' => $numero]);
+            $file = $request->file('select_file');
+            Excel::import(new AsignaturaNotasImport, $file);
+            // Eliminamos variables de sesión
+            // session()->forget('numero');
+            return response()->json([
+                'message' => 'Importacion realizada con exito',
+                'sw' => 1
+            ]);
+        }
+        else
+        {
+            switch ($validation->errors()->first()) {
+                case "The select file field is required.":
+                    $mensaje = "Es necesario agregar un archivo excel.";
+                    break;
+                case "The select file must be a file of type: xlsx.":
+                    $mensaje = "El archivo debe ser del tipo: xlsx.";
+                    break;
+                default:
+                    $mensaje = "Fallo al importar el archivo seleccionado.";
+                    break;
+            }
+            return response()->json([
+                //0
+                'message' => $mensaje,
+                'sw' => 0
+            ]);
+        }
+    }
+
 }
