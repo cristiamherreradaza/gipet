@@ -10,6 +10,7 @@
                 <th>Turno</th>
                 <th>Paralelo</th>
                 <th>Gestion</th>
+                <th>Estado</th>
                 <th class="text-nowrap"></th>
             </tr>
         </thead>
@@ -35,6 +36,7 @@
                     <td>{{ $inscripcion->turno->descripcion }}</td>
                     <td>{{ $inscripcion->paralelo }}</td>
                     <td>{{ $inscripcion->anio_vigente }}</td>
+                    <td>{{ $inscripcion->estado }}</td>
                     <td>
                         <button type="button" class="btn btn-info" title="Ver detalle" onclick="ajaxMuestraInscripcion('{{ $inscripcion->id }}')"><i class="fas fa-eye"></i></button>
                         <a class="btn btn-light" title="Descargar Boletin" href="{{ url('Inscripcion/boletin/'.$inscripcion->id) }}" target="_blank"><i class="fas fa-file-pdf"></i></a>

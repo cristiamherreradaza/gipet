@@ -171,6 +171,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Inscripcion/convalidarAsignaturaAprobada/{id}', 'InscripcionController@convalidarAsignaturaAprobada');
     Route::post('Inscripcion/asignarPuntaje', 'InscripcionController@asignarPuntaje');
     Route::post('Inscripcion/regularizarAsignatura', 'InscripcionController@regularizarAsignatura');
+    Route::post('Inscripcion/actualizarEstadoInscripcionGlobal', 'InscripcionController@actualizarEstadoInscripcionGlobal');
+    Route::get('Inscripcion/congelaAsignatura/{id}', 'InscripcionController@congelaAsignatura');
 
     // PDFS
     Route::get('Inscripcion/reportePdfHistorialAcademico/{persona_id}/{carrera_id}', 'InscripcionController@reportePdfHistorialAcademico');
@@ -200,7 +202,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('User/guarda_asignacion', 'UserController@guarda_asignacion');
     Route::get('User/listado', 'UserController@listado');
     Route::get('User/ajax_listado', 'UserController@ajax_listado');
-    //Route::get('User/asigna_materias/{user_id}', 'UserController@asigna_materias');
+    // Route::get('User/asigna_materias/{user_id}', 'UserController@asigna_materias');
     Route::get('User/eliminaAsignacion/{np_id}', 'UserController@eliminaAsignacion');
     Route::get('User/perfil', 'UserController@perfil');
     Route::post('User/actualizarImagen', 'UserController@actualizarImagen');

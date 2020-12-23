@@ -2769,6 +2769,37 @@ class InscripcionController extends Controller
         return view('inscripcion.ajaxMuestraInscripcion')->with(compact('registro', 'inscripciones'));
     }
 
+    public function actualizarEstadoInscripcionGlobal(Request $request)
+    {
+        $carreraPersona             = CarrerasPersona::find($request->registro_inscripcion);
+        $persona                    = Persona::find($carreraPersona->persona_id);
+        $carreraPersona->user_id    = Auth::user()->id;
+        $carreraPersona->estado     = $request->estado_inscripcion;
+        // AQUI MODIFICAR ALGO MAS, ESTADOS DE INSCRIPCIONES, ACORDES AL ESTADO GLOBAL
+        $carreraPersona->save();
+        return redirect('Persona/ver_detalle/'.$persona->id);
+    }
+
+    public function congelaAsignatura($inscripcion_id)
+    {
+        $inscripcion            = Inscripcione::find($inscripcion_id);
+        $persona                = Persona::find($inscripcion->persona_id);
+        $inscripcion->user_id   = Auth::user()->id;
+        if($inscripcion->congelado == 'Si')
+        {
+            $inscripcion->congelado = NULL;
+            $inscripcion->aprobo    = NULL;
+        }
+        else
+        {
+            $inscripcion->congelado = 'Si';
+            $inscripcion->aprobo    = 'No';
+        }
+        $inscripcion->save();
+        // AQUI COLOCAR DE FORMA
+        return redirect('Persona/ver_detalle/'.$persona->id);
+    }
+
     public function finalizarCalificaciones($persona_id, $carrera_id)
     {
         $inscripciones  = Inscripcione::where('persona_id', $persona_id)
