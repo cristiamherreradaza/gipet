@@ -18,7 +18,7 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col">
+                    <!-- <div class="col">
                         <div class="form-group">
                             <label class="control-label">Docentes</label>
                             <select name="usuario" id="usuario" class="form-control">
@@ -34,6 +34,45 @@
                             <select name="malla" id="malla" class="form-control">
                                 @foreach($mallas as $malla)
                                     <option value="{{ $malla->anio_vigente }}"> {{ $malla->anio_vigente }} </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div> -->
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="control-label">Asignaturas</label>
+                            <select name="asignatura" id="asignatura" class="select2 form-control custom-select select2-hidden-accessible" style="width: 100%; height:36px;" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                <option>Seleccione</option>
+                                @foreach($mallas as $malla)
+                                    <optgroup label="Malla {{ $malla->anio_vigente }}">
+                                        @php
+                                            $registros  = App\Asignatura::where('anio_vigente', $malla->anio_vigente)
+                                                                        ->get();
+                                        @endphp
+                                        @foreach($registros as $asignatura)
+                                            <option value="{{ $asignatura->id }}" >{{ $asignatura->sigla }} {{ $asignatura->nombre }}</option>
+                                        @endforeach
+                                    </optgroup>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="control-label">Turno</label>
+                            <select name="turno" id="turno" class="form-control">
+                                @foreach($turnos as $turno)
+                                    <option value="{{ $turno->id }}"> {{ $turno->descripcion }} </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="control-label">Paralelo</label>
+                            <select name="paralelo" id="paralelo" class="form-control">
+                                @foreach($paralelos as $paralelo)
+                                    <option value="{{ $paralelo->paralelo }}"> {{ $paralelo->paralelo }} </option>
                                 @endforeach
                             </select>
                         </div>
@@ -76,6 +115,8 @@
         </div>
     </div>
 </form>
+
+<br>
 
 <div class="row">
     <div class="col-md-12" id="detalleAcademicoAjax" style="display:none;">
@@ -134,15 +175,17 @@
 
     // Funcion que se ejecuta al hacer clic en pensum
     function buscar(){
-        gestion = $('#gestion').val();
-        usuario = $('#usuario').val();
-        malla   = $('#malla').val();
+        asignatura  = $('#asignatura').val();
+        turno       = $('#turno').val();
+        paralelo    = $('#paralelo').val();
+        gestion     = $('#gestion').val();
         $.ajax({
             url: "{{ url('User/ajaxVerMaterias') }}",
             data: {
-                gestion : gestion,
-                malla : malla,
-                usuario : usuario
+                asignatura : asignatura,
+                turno : turno,
+                paralelo : paralelo,
+                gestion : gestion
                 },
             type: 'get',
             success: function(data) {

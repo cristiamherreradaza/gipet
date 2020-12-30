@@ -470,19 +470,22 @@ class UserController extends Controller
 
     public function verMaterias()
     {
-        $usuarios   = User::get();
-        $turnos     = Turno::get();
-        $paralelos  = CarrerasPersona::select('paralelo')
+        $usuarios       = User::get();
+        $turnos         = Turno::get();
+        $asignaturas    = Asignatura::orderBy('anio_vigente')->get();
+        $paralelos      = CarrerasPersona::select('paralelo')
                                     ->groupBy('paralelo')
                                     ->get();
         $gestiones  = CarrerasPersona::select('anio_vigente')
                                     ->groupBy('anio_vigente')
+                                    ->orderBy('anio_vigente', 'desc')
                                     ->get();
         $mallas     = Asignatura::select('anio_vigente')
                                 ->whereNotNull('anio_vigente')
                                 ->groupBy('anio_vigente')
+                                ->orderBy('anio_vigente', 'desc')
                                 ->get();
-        return view('user.verMaterias')->with(compact('turnos', 'paralelos', 'gestiones', 'usuarios', 'mallas'));
+        return view('user.verMaterias')->with(compact('asignaturas', 'turnos', 'paralelos', 'gestiones', 'usuarios', 'mallas'));
     }
 
     public function ajaxVerMaterias(Request $request)
@@ -507,28 +510,41 @@ class UserController extends Controller
         //                     ->groupBy('notas.asignatura_id')
         //                     ->get();
 
-        $asignaturas    = NotasPropuesta::where('notas_propuestas.docente_id', $request->usuario)
-                                        ->whereNull('notas_propuestas.deleted_at')
-                                        ->where('notas_propuestas.anio_vigente', $request->gestion)
-                                        ->join('asignaturas', 'asignaturas.id', '=', 'notas_propuestas.asignatura_id')
-                                        ->where('asignaturas.anio_vigente', $request->malla)
-                                        ->select('notas_propuestas.*')
-                                        ->groupBy('notas_propuestas.asignatura_id')
-                                        ->get();
-        $docente        = User::find($request->usuario);
+        // ANTIGUO
 
-        $materias       = Inscripcione::where('inscripciones.anio_vigente', $request->gestion)
-                                    ->join('asignaturas', 'asignaturas.id', '=', 'inscripciones.asignatura_id')
-                                    ->where('asignaturas.anio_vigente', $request->malla)
-                                    ->select('inscripciones.*')
-                                    ->groupBy('inscripciones.asignatura_id')
-                                    ->get();
+        // $asignaturas    = NotasPropuesta::where('notas_propuestas.docente_id', $request->usuario)
+        //                                 ->whereNull('notas_propuestas.deleted_at')
+        //                                 ->where('notas_propuestas.anio_vigente', $request->gestion)
+        //                                 ->join('asignaturas', 'asignaturas.id', '=', 'notas_propuestas.asignatura_id')
+        //                                 ->where('asignaturas.anio_vigente', $request->malla)
+        //                                 ->select('notas_propuestas.*')
+        //                                 ->groupBy('notas_propuestas.asignatura_id')
+        //                                 ->get();
+        // $docente        = User::find($request->usuario);
+
+        // $materias       = Inscripcione::where('inscripciones.anio_vigente', $request->gestion)
+        //                             ->join('asignaturas', 'asignaturas.id', '=', 'inscripciones.asignatura_id')
+        //                             ->where('asignaturas.anio_vigente', $request->malla)
+        //                             ->select('inscripciones.*')
+        //                             ->groupBy('inscripciones.asignatura_id')
+        //                             ->get();
+
+        // Busqueda de las notas
+
+        $materias  = Inscripcione::where('asignatura_id', $request->asignatura)
+                                ->where('turno_id', $request->turno)
+                                ->where('paralelo', $request->paralelo)
+                                ->where('anio_vigente', $request->gestion)
+                                ->groupBy('asignatura_id')
+                                ->get();
+
+        //dd($materias);
         return view('user.ajaxVerMaterias')->with(compact('asignaturas', 'docente', 'materias'));
     }
     
-    public function formatoExcelAsignatura($docente_id, $asignatura_id, $anio_vigente)
+    public function formatoExcelAsignatura($asignatura_id, $turno_id, $paralelo, $anio_vigente)
     {
-        return Excel::download(new AsignaturaNotasExport($docente_id, $asignatura_id, $anio_vigente), date('Y-m-d').'-formatoAsignaturasImportacion.xlsx');
+        return Excel::download(new AsignaturaNotasExport($asignatura_id, $turno_id, $paralelo, $anio_vigente), date('Y-m-d').'-formatoAsignaturasImportacion.xlsx');
     }
     
     public function importarNotasAsignaturas(Request $request)

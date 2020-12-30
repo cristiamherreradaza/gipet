@@ -204,7 +204,7 @@ class AsignaturaNotasImport implements ToModel
                             $notaUno->nota_total            = $totalUno;
                             $notaUno->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
                             $notaUno->finalizado            = 'Si';
-                            $notaUno->numero_importacion    = $numero;
+                            //$notaUno->numero_importacion    = $numero;
                             $notaUno->save();
                             // Primero calcularemos para llenar la nota total del registro 2
                             $totalDos = $row[16] + $row[17] + $row[18] + $row[19];
@@ -255,7 +255,7 @@ class AsignaturaNotasImport implements ToModel
                             $notaDos->nota_total            = $totalDos;
                             $notaDos->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
                             $notaDos->finalizado            = 'Si';
-                            $notaDos->numero_importacion    = $numero;
+                            //$notaDos->numero_importacion    = $numero;
                             $notaDos->save();
                             // Buscaremos si existe registro de notaTres
                             $notaTres    = Nota::where('inscripcion_id', $inscripcion->id)
@@ -288,7 +288,7 @@ class AsignaturaNotasImport implements ToModel
                             $notaTres->nota_total            = $notaUno->nota_total;
                             $notaTres->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
                             $notaTres->finalizado            = 'Si';
-                            $notaTres->numero_importacion    = $numero;
+                            //$notaTres->numero_importacion    = $numero;
                             $notaTres->save();
                             // Buscaremos si existe registro de notaCuatro
                             $notaCuatro     = Nota::where('inscripcion_id', $inscripcion->id)
@@ -321,7 +321,7 @@ class AsignaturaNotasImport implements ToModel
                             $notaCuatro->nota_total            = $notaDos->nota_total;
                             $notaCuatro->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
                             $notaCuatro->finalizado            = 'Si';
-                            $notaCuatro->numero_importacion    = $numero;
+                            //$notaCuatro->numero_importacion    = $numero;
                             $notaCuatro->save();
                         }
                         if($row[7] == 'Anual')              // Si es Anual
@@ -376,7 +376,7 @@ class AsignaturaNotasImport implements ToModel
                             $notaUno->nota_total            = $totalUno;
                             $notaUno->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
                             $notaUno->finalizado            = 'Si';
-                            $notaUno->numero_importacion    = $numero;
+                            //$notaUno->numero_importacion    = $numero;
                             $notaUno->save();
                             // Primero calcularemos para llenar la nota total del registro 2
                             $totalDos = $row[16] + $row[17] + $row[18] + $row[19];
@@ -427,7 +427,7 @@ class AsignaturaNotasImport implements ToModel
                             $notaDos->nota_total            = $totalDos;
                             $notaDos->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
                             $notaDos->finalizado            = 'Si';
-                            $notaDos->numero_importacion    = $numero;
+                            //$notaDos->numero_importacion    = $numero;
                             $notaDos->save();
                             // Primero calcularemos para llenar la nota total del registro 3
                             $totalTres = $row[21] + $row[22] + $row[23] + $row[24];
@@ -478,7 +478,7 @@ class AsignaturaNotasImport implements ToModel
                             $notaTres->nota_total            = $totalTres;
                             $notaTres->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
                             $notaTres->finalizado            = 'Si';
-                            $notaTres->numero_importacion    = $numero;
+                            //$notaTres->numero_importacion    = $numero;
                             $notaTres->save();
                             // Primero calcularemos para llenar la nota total del registro 4
                             $totalCuatro = $row[26] + $row[27] + $row[28] + $row[29];
@@ -529,7 +529,7 @@ class AsignaturaNotasImport implements ToModel
                             $notaCuatro->nota_total            = $totalCuatro;
                             $notaCuatro->nota_aprobacion       = $carrera->resolucion->nota_aprobacion;
                             $notaCuatro->finalizado            = 'Si';
-                            $notaCuatro->numero_importacion    = $numero;
+                            //$notaCuatro->numero_importacion    = $numero;
                             $notaCuatro->save();
                         }
                         // Actualizamos inscripcion

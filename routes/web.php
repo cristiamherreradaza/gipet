@@ -216,7 +216,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('User/ajaxBusquedaAsignaciones', 'UserController@ajaxBusquedaAsignaciones');
     Route::get('User/verMaterias', 'UserController@verMaterias');
     Route::get('User/ajaxVerMaterias', 'UserController@ajaxVerMaterias');
-    Route::get('User/formatoExcelAsignatura/{docente_id}/{asignatura_id}/{anio_vigente}', 'UserController@formatoExcelAsignatura');
+    Route::get('User/formatoExcelAsignatura/{asignatura_id}/{turno_id}/{paralelo}/{anio_vigente}', 'UserController@formatoExcelAsignatura');
     Route::post('User/importarNotasAsignaturas', 'UserController@importarNotasAsignaturas');
 
     Route::get('Asignatura/ajax_muestra_prerequisitos/{asignatura_id}', 'AsignaturaController@ajax_muestra_prerequisitos');

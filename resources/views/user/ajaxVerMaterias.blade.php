@@ -15,7 +15,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- @foreach($asignaturas as $asignatura)
+                    @foreach($materias as $asignatura)
                         <tr>
                             <td class="text-center">{{ $asignatura->asignatura->id }}</td>
                             <td class="text-center">{{ $asignatura->asignatura->anio_vigente }}</td>
@@ -24,22 +24,7 @@
                             <td>{{ $asignatura->asignatura->nombre }}</td>
                             <td class="text-center">{{ $asignatura->anio_vigente }}</td>
                             <td class="text-center">
-                                <button class="btn btn-success" title="Exportar lista" onclick="reporteExcelAlumnos('{{ $docente->id }}', '{{ $asignatura->asignatura_id }}', '{{ $asignatura->anio_vigente }}')">
-                                    <i class="fas fa-file-excel"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    @endforeach -->
-                    @foreach($materias as $asignatura)
-                        <tr>
-                            <td class="text-center">{{ $asignatura->id }}</td>
-                            <td class="text-center">{{ $asignatura->asignatura->anio_vigente }}</td>
-                            <td>{{ $asignatura->carrera->nombre }}</td>
-                            <td class="text-center">{{ $asignatura->asignatura->sigla }}</td>
-                            <td>{{ $asignatura->asignatura->nombre }}</td>
-                            <td class="text-center">{{ $asignatura->anio_vigente }}</td>
-                            <td class="text-center">
-                                <button class="btn btn-success" title="Exportar lista" onclick="reporteExcelAlumnos('{{ $docente->id }}', '{{ $asignatura->asignatura_id }}', '{{ $asignatura->anio_vigente }}')">
+                                <button class="btn btn-success" title="Exportar lista" onclick="reporteExcelAlumnos('{{ $asignatura->asignatura_id }}', '{{ $asignatura->turno_id }}', '{{ $asignatura->paralelo }}', '{{ $asignatura->anio_vigente }}')">
                                     <i class="fas fa-file-excel"></i>
                                 </button>
                             </td>
@@ -52,11 +37,12 @@
 </div>
 
 <script>
-function reporteExcelAlumnos(docente_id, asignatura_id, anio_vigente)
+function reporteExcelAlumnos(asignatura_id, turno, paralelo, anio_vigente)
 {
-    var docente_id      = docente_id
     var asignatura_id   = asignatura_id
+    var turno           = turno
+    var paralelo        = paralelo
     var anio_vigente    = anio_vigente
-    window.location.href = "{{ url('User/formatoExcelAsignatura') }}/"+docente_id+'/'+asignatura_id+'/'+anio_vigente;
+    window.location.href = "{{ url('User/formatoExcelAsignatura') }}/"+asignatura_id+'/'+turno+'/'+paralelo+'/'+anio_vigente;
 }
 </script>

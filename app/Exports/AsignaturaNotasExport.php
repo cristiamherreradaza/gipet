@@ -19,20 +19,24 @@ class AsignaturaNotasExport implements FromCollection, WithMapping, WithHeadings
     */
 
     use Exportable;
-    protected $docente_id;
     protected $asignatura_id;
+    protected $turno;
+    protected $paralelo;
     protected $anio_vigente;
 
-    public function __construct($docente_id, $asignatura_id, $anio_vigente)
+    public function __construct($asignatura_id, $turno_id, $paralelo, $anio_vigente)
     {
-        $this->docente_id       = $docente_id;
         $this->asignatura_id    = $asignatura_id;
+        $this->turno_id         = $turno_id;
+        $this->paralelo         = $paralelo;
         $this->anio_vigente     = $anio_vigente;
     }
 
     public function collection()
     {
         return Inscripcione::where('inscripciones.asignatura_id', $this->asignatura_id)
+                            ->where('inscripciones.turno_id', $this->turno_id)
+                            ->where('inscripciones.paralelo', $this->paralelo)
                             ->where('inscripciones.anio_vigente', $this->anio_vigente)
                             // ->where('inscripciones.docente_id', $this->docente_id)
                             ->join('personas', 'personas.id', '=', 'inscripciones.persona_id')
