@@ -20,11 +20,12 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label class="control-label">Estado</label>
-                        <select name="estado_inscripcion" id="estado_inscripcion" class="form-control custom-select" required>
+                        <select name="estado_inscripcion" id="estado_inscripcion" class="form-control custom-select">
                             <option value=""></option>
                             <option value="APROBO" {{ (($registro->estado && $registro->estado == 'APROBO') ? 'selected' : '') }}>APROBO</option>
                             <option value="REPROBO" {{ (($registro->estado && $registro->estado == 'REPROBO') ? 'selected' : '') }}>REPROBO</option>
                             <option value="CONGELADO" {{ (($registro->estado && $registro->estado == 'CONGELADO') ? 'selected' : '') }}>CONGELADO</option>
+                            <option value="ABANDONO" {{ (($registro->estado && $registro->estado == 'ABANDONO') ? 'selected' : '') }}>ABANDONO</option>
                         </select>
                     </div>
                 </div>
@@ -68,7 +69,7 @@
                                 @endif
                             </td>
                             <td class="text-nowrap">
-                                <button type="button" class="btn btn-info" title="Congelar Asignatura" onclick="congelar('{{ $inscripcion->id }}', '{{ $inscripcion->asignatura->nombre }}', '{{ $inscripcion->congelado }}')"><i class="fas fa-snowflake"></i></button>
+                                <!-- <button type="button" class="btn btn-info" title="Congelar Asignatura" onclick="congelar('{{ $inscripcion->id }}', '{{ $inscripcion->asignatura->nombre }}', '{{ $inscripcion->congelado }}')"><i class="fas fa-snowflake"></i></button> -->
                                 <button type="button" class="btn btn-danger" title="Eliminar Asignatura" onclick="eliminar('{{ $inscripcion->id }}', '{{ $inscripcion->asignatura->nombre }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
