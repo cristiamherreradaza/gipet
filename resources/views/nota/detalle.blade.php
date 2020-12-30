@@ -49,11 +49,8 @@
                         <option value="">Seleccione Paralelo</option>
                     </select>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-4">
                     <button type="submit" class="btn btn-block btn-info">Cambia Curso</button>
-                </div>
-                <div class="col-md-2">
-                    <button type="button" class="btn btn-block btn-primary" onclick="generaCentralizador()">Genera Centralizador</button>
                 </div>
             </div>
         </form>

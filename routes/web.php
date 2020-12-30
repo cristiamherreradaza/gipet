@@ -117,6 +117,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Migracion/llenaParalelos', 'MigracionController@llenaParalelos');
     Route::get('Migracion/llenaNotas', 'MigracionController@llenaNotas');
     Route::get('Migracion/regularizaGestionAlumnos', 'MigracionController@regularizaGestionAlumnos');
+    Route::get('Migracion/regularizaDocentesMaterias', 'MigracionController@regularizaDocentesMaterias');
 
     //INSCRIPCIONES
     Route::get('Inscripcion/inscripcion', 'InscripcionController@inscripcion');
@@ -327,6 +328,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Lista/reportePdfTotalAlumnos/{carrera}', 'ListaController@reportePdfTotalAlumnos');
     Route::get('Lista/estadistica', 'ListaController@estadistica');
     Route::get('Lista/pruebaAleatorio', 'ListaController@pruebaAleatorio');
+    Route::get('Lista/centralizadorAlumnos', 'ListaController@centralizadorAlumnos');
 
     // EXCEL
     Route::get('Importacion/excel', 'ImportacionController@excel');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Turno;
 use DataTables;
 use App\Carrera;
@@ -240,6 +241,8 @@ class ListaController extends Controller
 
     public function centralizadorAlumnos()
     {
-        
+        $docentes = User::all();
+        // dd($docente);
+        return view('lista.centralizadorAlumnos')->with(compact('docentes'));
     }
 }

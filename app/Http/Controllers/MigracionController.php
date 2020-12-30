@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Asignatura;
-use App\CarrerasPersona;
-use App\Inscripcione;
-use App\Nota;
-use App\Persona;
-use App\User;
 use DB;
+use App\Nota;
+use App\User;
+use App\Persona;
+use App\Asignatura;
+use App\Inscripcione;
+use App\NotasPropuesta;
+use App\CarrerasPersona;
 
 class MigracionController extends Controller
 {
@@ -1283,6 +1284,37 @@ class MigracionController extends Controller
             $persona->anio_vigente = $g->gestion;
             $persona->save();
         }
+    }
+
+    public function regularizaDocentesMaterias()
+    {
+        $notas = Nota::groupBy('docente_id', 'asignatura_id', 'paralelo', 'turno_id', 'anio_vigente')
+                    ->get();
+
+        foreach($notas as $n){
+            if ($n->docente_id != null) {
+                $asignatura = Asignatura::where('id', $n->asignatura_id)->first();
+                echo $n->docente_id." - ".$asignatura->carrera_id." - ".$n->asignatura_id." - ".$n->turno_id." - ".$n->paralelo." - ".$n->anio_vigente."<br />";
+
+                $materia = new NotasPropuesta();
+                $materia->user_id = 36;
+                $materia->docente_id = $n->docente_id;
+                $materia->carrera_id = $asignatura->carrera_id;
+                $materia->asignatura_id = $n->asignatura_id;
+                $materia->turno_id = $n->turno_id;
+                $materia->paralelo = $n->paralelo;
+                $materia->anio_vigente = $n->anio_vigente;
+                $materia->save();
+            }
+        }
+
+        // dd($notas);
+
+        /*
+        SET sql_mode = ''; 
+SELECT *
+  FROM notas n
+  GROUP BY n.docente_id, n.asignatura_id, n.paralelo, n.turno_id, n.anio_vigente;*/
     }
 
 
