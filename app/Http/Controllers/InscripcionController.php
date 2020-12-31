@@ -2937,6 +2937,7 @@ class InscripcionController extends Controller
             $carrera        = Carrera::find($carrera_id);
             $inscripciones  = Inscripcione::where('persona_id', $persona->id)
                                         ->where('carrera_id', $carrera->id)
+                                        ->where('aprobo', 'Si')
                                         ->whereNull('oyente')
                                         ->orderBy('id')
                                         ->get();
@@ -2986,10 +2987,12 @@ class InscripcionController extends Controller
             $cantidadAprobados  = Inscripcione::where('carrera_id', $carrera->id)
                                             ->where('persona_id', $persona->id)
                                             ->where('aprobo', 'Si')
+                                            ->whereNull('oyente')
                                             ->count();
             $totalAsignaturas   = Inscripcione::where('carrera_id', $carrera->id)
                                             ->where('persona_id', $persona->id)
                                             ->where('aprobo', 'Si')
+                                            ->whereNull('oyente')
                                             ->sum('nota');
             $promedio   = round($totalAsignaturas/$cantidadAprobados);
             // Para la carga horaria, buscaremos la gestion maxima aprobada
@@ -3001,16 +3004,28 @@ class InscripcionController extends Controller
             $cargaHoraria   = 0;
             for($i=1; $i<=$gestionMaxima; $i++)
             {
+                // Contamos las asignaturas existentes en la malla curricular
                 $cantidadAsignaturasGestion = Asignatura::where('carrera_id', $carrera->id)
                                                         ->where('anio_vigente', $anioIngreso)
                                                         ->where('gestion', $i)
                                                         ->count();
+                // Contamos las asignaturas aprobadas en la gestion de la malla curricular
                 $cantidadAsignaturasAprobadas   = Inscripcione::where('carrera_id', $carrera->id)
                                                             ->where('persona_id', $persona->id)
                                                             ->where('gestion', $i)
                                                             ->where('aprobo', 'Si')
+                                                            ->whereNull('oyente')
                                                             ->count();
-                $cargaHoraria   = $cargaHoraria + round(($cargaGestion*$cantidadAsignaturasAprobadas)/$cantidadAsignaturasGestion);
+                if($cantidadAsignaturasGestion == $cantidadAsignaturasAprobadas)
+                {
+                    // Si se aprobaron todas las materias de la gestion, se le sumara automaticamente 1200 en carga horaria
+                    $cargaHoraria   = $cargaHoraria + $cargaGestion;
+                }
+                else
+                {
+                    // Si no se aprobaron todas las materias de la gestion, se hace el promedio de las aprobadas entre las existentes
+                    $cargaHoraria   = $cargaHoraria + round(($cargaGestion*$cantidadAsignaturasAprobadas)/$cantidadAsignaturasGestion);
+                }
             }
             $gestionesInscritas = CarrerasPersona::where('carrera_id', $carrera->id)
                                                 ->where('persona_id', $persona->id)
