@@ -35,6 +35,7 @@
                             <td>{{ $resolucion->semestre }}</td>
                             <td>
                                 <button type="button" class="btn btn-info" title="Editar resolucion" onclick="editar('{{ $resolucion->id }}', '{{ $resolucion->resolucion }}', '{{ $resolucion->nota_aprobacion }}', '{{ $resolucion->anio_vigente }}', '{{ $resolucion->semestre }}')"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-primary" title="Editar resolucion" onclick="editar('{{ $resolucion->id }}', '{{ $resolucion->resolucion }}', '{{ $resolucion->nota_aprobacion }}', '{{ $resolucion->anio_vigente }}', '{{ $resolucion->semestre }}')"><i class="fas fa-edit"></i></button>
                                 <button type="button" class="btn btn-danger" title="Eliminar resolucion" onclick="eliminar('{{ $resolucion->id }}', '{{ $resolucion->resolucion }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
