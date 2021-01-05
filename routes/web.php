@@ -229,7 +229,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('Carrera/guardar', 'CarreraController@guardar');
     Route::post('Carrera/actualizar', 'CarreraController@actualizar');
     Route::get('Carrera/eliminar/{id}', 'CarreraController@eliminar');
-    Route::get('Carrera/vista_impresion/{id}', 'CarreraController@vista_impresion');
+    Route::get('Carrera/vista_impresion/{id}/{gestion}', 'CarreraController@vista_impresion');
     Route::get('Carrera/ajaxEditaCarrera', 'CarreraController@ajaxEditaCarrera');
 
     Route::get('Descuento/listado', 'DescuentoController@listado');
@@ -252,6 +252,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('Resolucion/guardar', 'ResolucionController@guardar');
     Route::post('Resolucion/actualizar', 'ResolucionController@actualizar');
     Route::get('Resolucion/eliminar/{id}', 'ResolucionController@eliminar');
+    Route::post('Resolucion/generaResolucion', 'ResolucionController@generaResolucion');
 
     Route::get('Turno/listado', 'TurnoController@listado');
     Route::post('Turno/guardar', 'TurnoController@guardar');

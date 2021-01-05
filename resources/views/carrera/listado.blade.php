@@ -607,8 +607,9 @@
     function vista_impresion()
     {
         var carrera_id = $("#c_carrera_id").val();
+        var gestion = $("#c_gestion").val();
         if(carrera_id.length >0){
-            window.open("{{ url('Carrera/vista_impresion') }}/"+carrera_id, '_blank');
+            window.open("{{ url('Carrera/vista_impresion') }}/"+carrera_id+"/"+gestion, '_blank');
         }else{
             Swal.fire(
                 'Seleccione una carrera!',

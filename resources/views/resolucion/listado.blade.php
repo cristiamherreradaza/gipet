@@ -35,7 +35,7 @@
                             <td>{{ $resolucion->semestre }}</td>
                             <td>
                                 <button type="button" class="btn btn-info" title="Editar resolucion" onclick="editar('{{ $resolucion->id }}', '{{ $resolucion->resolucion }}', '{{ $resolucion->nota_aprobacion }}', '{{ $resolucion->anio_vigente }}', '{{ $resolucion->semestre }}')"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-primary" title="Editar resolucion" onclick="editar('{{ $resolucion->id }}', '{{ $resolucion->resolucion }}', '{{ $resolucion->nota_aprobacion }}', '{{ $resolucion->anio_vigente }}', '{{ $resolucion->semestre }}')"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-primary" title="Adicionar Curricula" onclick="nuevaCurricula('{{ $resolucion->id }}', '{{ $resolucion->resolucion }}', '{{ $resolucion->nota_aprobacion }}', '{{ $resolucion->anio_vigente }}', '{{ $resolucion->semestre }}')"><i class="fas fa-clipboard-list"></i></button>
                                 <button type="button" class="btn btn-danger" title="Eliminar resolucion" onclick="eliminar('{{ $resolucion->id }}', '{{ $resolucion->resolucion }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
@@ -46,6 +46,47 @@
     </div>
 </div>
 
+<!-- inicio modal nueva curricula -->
+<div id="nueva_curricula" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">NUEVA CURRICULA</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <form action="{{ url('Resolucion/generaResolucion') }}"  method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="row">
+                        
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label class="control-label">Resolucion Ministerial</label>
+                                <input type="text" id="resolucion_curricula_nombre" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Gestion</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="gestion_curricula" type="number" id="gestion_curricula" value="{{ date('Y') }}"
+                                    class="form-control" required>
+                                <input type="hidden" name="resolucion_curricula" id="resolucion_curricula">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar_resolucion()">GENERAR CURRICULA</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- fin modal nueva curricula -->
 
 <!-- inicio modal nueva resolucion -->
 <div id="nueva_resolucion" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -181,6 +222,13 @@
     function nueva_resolucion()
     {
         $("#nueva_resolucion").modal('show');
+    }
+
+    function nuevaCurricula(id, nombre, nota_aprobacion, anio_vigente, semestre)
+    {
+        $("#resolucion_curricula_nombre").val(nombre);
+        $("#resolucion_curricula").val(id);
+        $("#nueva_curricula").modal('show');
     }
 
     function guardar_resolucion()

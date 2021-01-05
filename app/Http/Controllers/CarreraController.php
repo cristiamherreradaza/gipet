@@ -69,10 +69,12 @@ class CarreraController extends Controller
         return redirect('Carrera/listado');
     }
 
-    public function vista_impresion($id)
+    public function vista_impresion($id, $gestion)
     {
         $carrera = Carrera::find($id);
-        $asignaturas = Asignatura::where('carrera_id', $carrera->id)->get();
+        $asignaturas = Asignatura::where('carrera_id', $carrera->id)
+                                ->where('anio_vigente', $gestion)
+                                ->get();
         return view('carrera.vista_impresion')->with(compact('carrera', 'asignaturas'));
     }
 
@@ -99,8 +101,7 @@ class CarreraController extends Controller
     public function listado(Request $request)
     {
         $gestion = date('Y');
-        $carreras = Carrera::where('anio_vigente', $gestion)
-                        ->get();
+        $carreras = Carrera::get();
         $resoluciones = Resolucione::get();
         return view('carrera.listado', compact('carreras', 'gestion', 'resoluciones'));
     }

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Carrera;
+use App\Asignatura;
+use App\Resolucione;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Resolucione;
 
 class ResolucionController extends Controller
 {
@@ -43,5 +45,40 @@ class ResolucionController extends Controller
         $resolucion = Resolucione::find($id);
         $resolucion->delete();
         return redirect('Resolucion/listado');
+    }
+
+    public function generaResolucion(Request $request){
+
+        // dd($request->all());
+        $gestionAsignatura = Asignatura::where('resolucion_id', $request->resolucion_curricula)->max('anio_vigente');
+        $asignaturas = Asignatura::where('resolucion_id', $request->resolucion_curricula)
+                                ->where('anio_vigente', $gestionAsignatura)
+                                ->get();
+        // dd($asignaturas);
+        foreach ($asignaturas as $key => $a) {
+            // echo $a->nombre."<br />";
+            $materia = new Asignatura();
+            $materia->user_id = Auth::user()->id;
+            $materia->resolucion_id = $request->resolucion_curricula;
+            $materia->carrera_id = $a->carrera_id;
+            $materia->gestion = $a->gestion;
+            $materia->sigla = $a->sigla;
+            $materia->nombre = $a->nombre;
+            $materia->troncal = $a->troncal;
+            $materia->ciclo = $a->ciclo;
+            $materia->semestre = $a->semestre;
+            $materia->carga_horaria_virtual = $a->carga_horaria_virtual;
+            $materia->carga_horaria = $a->carga_horaria;
+            $materia->teorico = $a->teorico;
+            $materia->practico = $a->practico;
+            $materia->nivel = $a->nivel;
+            $materia->periodo = $a->periodo;
+            $materia->anio_vigente = $request->gestion_curricula;
+            $materia->orden_impresion = $a->orden_impresion;
+            $materia->save();
+        }
+
+        return redirect('Carrera/listado');
+
     }
 }
