@@ -115,7 +115,7 @@
                     @endphp
                     <td>
                         @if ($nota)
-                            {{ $nota->nota }}
+                            {{ intval($nota->nota) }}
                         @else
                             0
                         @endif
