@@ -21,7 +21,6 @@
                         <th>Resolucion Ministerial</th>
                         <th>Nota Aprobacion</th>
                         <th>Año Vigente</th>
-                        <th>Semestre</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
@@ -32,7 +31,6 @@
                             <td>{{ $resolucion->resolucion }}</td>
                             <td>{{ $resolucion->nota_aprobacion }}</td>
                             <td>{{ $resolucion->anio_vigente }}</td>
-                            <td>{{ $resolucion->semestre }}</td>
                             <td>
                                 <button type="button" class="btn btn-info" title="Editar resolucion" onclick="editar('{{ $resolucion->id }}', '{{ $resolucion->resolucion }}', '{{ $resolucion->nota_aprobacion }}', '{{ $resolucion->anio_vigente }}', '{{ $resolucion->semestre }}')"><i class="fas fa-edit"></i></button>
                                 <button type="button" class="btn btn-primary" title="Adicionar Curricula" onclick="nuevaCurricula('{{ $resolucion->id }}', '{{ $resolucion->resolucion }}', '{{ $resolucion->nota_aprobacion }}', '{{ $resolucion->anio_vigente }}', '{{ $resolucion->semestre }}')"><i class="fas fa-clipboard-list"></i></button>
@@ -55,8 +53,18 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
             <form action="{{ url('Resolucion/generaResolucion') }}"  method="POST">
+                @php
+                    $gestionActual = date('Y');
+                    $validaGestion = App\Asignatura::where('anio_vigente', $gestionActual)->count();   
+                @endphp
                 @csrf
                 <div class="modal-body">
+                    @if ($validaGestion > 0)
+                        <div class="row">
+                            <div class="col-md-12 text-danger">La gestion actual ya tiene una Curricula</div>
+                        </div>
+                    @endif
+                    
                     <div class="row">
                         
                         <div class="col-md-9">
@@ -72,8 +80,15 @@
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input name="gestion_curricula" type="number" id="gestion_curricula" value="{{ date('Y') }}"
-                                    class="form-control" required>
+                               
+                                @if ($validaGestion > 0)
+                                    @php
+                                        $gestionSiguiente = $gestionActual + 1;
+                                    @endphp
+                                    <input name="gestion_curricula" type="number" id="gestion_curricula" min="{{ $gestionSiguiente }}" value="{{ $gestionSiguiente }}" class="form-control" required>
+                                @else
+                                    <input name="gestion_curricula" type="number" id="gestion_curricula" value="{{ date('Y') }}" class="form-control" required>
+                                @endif
                                 <input type="hidden" name="resolucion_curricula" id="resolucion_curricula">
                             </div>
                         </div>
