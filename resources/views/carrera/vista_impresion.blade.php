@@ -117,7 +117,7 @@
         <br>
         CARRERA DE {{ strtoupper($carrera->nombre) }}
         <br>
-        MALLA CURRICULAR {{ $carrera->anio_vigente }}
+        MALLA CURRICULAR {{ $gestion }}
         <br>
         APROBADA EN JORNADAS ACADEMICAS DOCENTE-ESTUDIANTIL
         <br>

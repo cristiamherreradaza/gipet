@@ -75,7 +75,7 @@ class CarreraController extends Controller
         $asignaturas = Asignatura::where('carrera_id', $carrera->id)
                                 ->where('anio_vigente', $gestion)
                                 ->get();
-        return view('carrera.vista_impresion')->with(compact('carrera', 'asignaturas'));
+        return view('carrera.vista_impresion')->with(compact('carrera', 'asignaturas', 'gestion'));
     }
 
     protected $gestion_actual = 'a';
