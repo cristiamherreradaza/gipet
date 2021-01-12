@@ -26,20 +26,25 @@ class AsignaturaController extends Controller
         } else {
         	$asignatura = new Asignatura();
         }
-        $asignatura->user_id = Auth::user()->id;
-        $asignatura->carrera_id = $request->carrera_id;
-        $asignatura->gestion = $request->gestion;
-        $asignatura->sigla = $request->codigo_asignatura;
-        $asignatura->nombre = $request->nombre_asignatura;
-        $asignatura->troncal = $request->troncal;
-        $asignatura->ciclo = $request->ciclo;
-        $asignatura->semestre = $request->semestre;
-        $asignatura->carga_horaria_virtual = $request->carga_virtual;
-        $asignatura->carga_horaria = $request->carga_horaria;
-        $asignatura->teorico = $request->teorico;
-        $asignatura->practico = $request->practico;
-        $asignatura->anio_vigente = $request->anio_vigente;
-        $asignatura->orden_impresion = $request->orden_impresion;
+        $asignatura->user_id                = Auth::user()->id;
+        $asignatura->carrera_id             = $request->carrera_id;
+        $asignatura->resolucion_id          = $request->resolucion_asignatura;
+        $asignatura->gestion                = $request->gestion;
+        $asignatura->sigla                  = $request->codigo_asignatura;
+        $asignatura->nombre                 = $request->nombre_asignatura;
+        $asignatura->troncal                = $request->troncal;
+        $asignatura->ciclo                  = $request->ciclo;
+        if($request->ciclo == 'Semestral')
+        {
+            $asignatura->semestre           = $request->semestre;
+        }
+        $asignatura->carga_horaria_virtual  = $request->carga_virtual;
+        $asignatura->carga_horaria          = $request->carga_horaria;
+        $asignatura->teorico                = $request->teorico;
+        $asignatura->practico               = $request->practico;
+        $asignatura->anio_vigente           = $request->anio_vigente;
+        $asignatura->orden_impresion        = $request->orden_impresion;
+        $asignatura->troncal                = $request->troncal;
         $asignatura->save();
 
         // Buscar en la tabla prerequisitos si existe este id de asignatura

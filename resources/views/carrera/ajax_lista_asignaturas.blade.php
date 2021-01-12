@@ -9,7 +9,7 @@
         </div>
     @else
         <div class="card-header bg-info">
-            <h4 class="mb-0 text-white">NO EXISTE LA CARRERA EN ESA GESTION</h4>
+            <h4 class="mb-0 text-white">NO EXISTEN ASIGNATURAS EN ESTA GESTION</h4>
         </div>
     @endif                                
     <div class="card-body">

@@ -237,12 +237,12 @@
                                 <div class="form-group">
                                     <label class="control-label">Ciclo</label>
                                     <select name="ciclo" id="ciclo" class="form-control custom-select">
+                                        <option value="Anual" selected>Anual</option>
                                         <option value="Semestral">Semestral</option>
-                                        <option value="Anual">Anual</option>
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-4" id="detalle_semestre">
                                 <div class="form-group">
                                     <label class="control-label">Semestre</label>
                                     <select name="semestre" id="semestre" class="form-control">
@@ -253,12 +253,22 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="control-label">Troncal</label>
                                     <select name="troncal" id="troncal" class="form-control">
                                         <option value="Si" selected>Si</option>
                                         <option value="No">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label class="control-label">Resolucion Ministerial</label>
+                                    <select name="resolucion_asignatura" id="resolucion_asignatura" class="form-control" required>
+                                        @foreach($resoluciones as $resolucion)
+                                            <option value="{{ $resolucion->id }}">{{ $resolucion->resolucion }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -390,20 +400,21 @@
     // Funcion que guarda una asignatura nueva/existente y recarga los datos creados
     function guarda_asignatura() {
         // Capturamos todas las variables que se encuentran en el formulario de asignatura y las que necesitemos
-        carrera_id = $("#c_carrera_id").val();
-        asignatura_id = $("#asignatura_id").val();
-        codigo_asignatura = $("#codigo_asignatura").val();
-        nombre_asignatura = $("#nombre_asignatura").val();
-        orden_impresion = $("#orden_impresion").val();
-        anio_vigente = $("#anio_vigente").val();
-        gestion = $("#gestion").val();
-        ciclo = $("#ciclo").val();
-        carga_horaria = $("#carga_horaria").val();
-        carga_virtual = $("#carga_virtual").val();
-        teorico = $("#teorico").val();
-        practico = $("#practico").val();
-        semestre = $("#semestre").val();
-        troncal = $("#troncal").val();
+        carrera_id              = $("#c_carrera_id").val();
+        asignatura_id           = $("#asignatura_id").val();
+        codigo_asignatura       = $("#codigo_asignatura").val();
+        nombre_asignatura       = $("#nombre_asignatura").val();
+        orden_impresion         = $("#orden_impresion").val();
+        anio_vigente            = $("#anio_vigente").val();
+        gestion                 = $("#gestion").val();
+        ciclo                   = $("#ciclo").val();
+        carga_horaria           = $("#carga_horaria").val();
+        carga_virtual           = $("#carga_virtual").val();
+        teorico                 = $("#teorico").val();
+        practico                = $("#practico").val();
+        semestre                = $("#semestre").val();
+        troncal                 = $("#troncal").val();
+        resolucion_asignatura   = $("#resolucion_asignatura").val();
         // Utilizamos Ajax
         $.ajax({
             url: "{{ url('Asignatura/guarda') }}",
@@ -421,7 +432,8 @@
                 teorico: teorico,
                 practico: practico,
                 semestre: semestre,
-                troncal: troncal
+                troncal: troncal,
+                resolucion_asignatura: resolucion_asignatura
                 },
             cache: false,
             type: 'post',
@@ -676,5 +688,18 @@
             }
         })
     }
+
+    //Funcion para ocultar/mostrar datos de semestre en base al ciclo
+    $( function() {
+        $("#detalle_semestre").hide();
+        $("#ciclo").change( function() {
+            if ($(this).val() == "Anual") {
+                $("#detalle_semestre").hide();
+            }
+            if ($(this).val() == "Semestral") {
+                $("#detalle_semestre").show();
+            }
+        });
+    });
 </script>
 @endsection

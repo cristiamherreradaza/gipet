@@ -110,7 +110,7 @@ class CarreraController extends Controller
     public function ajax_lista_asignaturas(Request $request)
     {
         $datos_carrera = Carrera::where('id', $request->c_carrera_id)
-                                ->where('anio_vigente', $request->c_gestion)
+                                //->where('anio_vigente', $request->c_gestion)
                                 ->first();
         $asignaturas = Asignatura::where('carrera_id', $request->c_carrera_id)
                                 ->where('anio_vigente', $request->c_gestion)

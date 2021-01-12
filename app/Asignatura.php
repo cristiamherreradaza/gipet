@@ -11,6 +11,7 @@ class Asignatura extends Model
     protected $fillable = [
         'codigo_anterior',
         'user_id',
+        'resolucion_id',
         'carrera_id',
         'gestion',
         'sigla',
@@ -33,6 +34,11 @@ class Asignatura extends Model
     public function user()
     {
         return $this->belongsTo('App\User', 'user_id');
+    }
+
+    public function resolucion()
+    {
+        return $this->belongsTo('App\Resolucione', 'resolucion_id');
     }
 
     public function carrera()

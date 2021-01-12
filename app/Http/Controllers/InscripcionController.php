@@ -126,7 +126,8 @@ class InscripcionController extends Controller
                             // Resgistramos en la tabla inscripciones
                             $inscripcion                    = new Inscripcione();
                             $inscripcion->user_id           = Auth::user()->id;
-                            $inscripcion->resolucion_id     = $carrera->resolucion_id;          // MOD
+                            // $inscripcion->resolucion_id     = $carrera->resolucion_id;          // MOD
+                            $inscripcion->resolucion_id     = $asignatura->resolucion_id;
                             $inscripcion->carrera_id        = $request->$datos_carrera;
                             $inscripcion->asignatura_id     = $asignatura->id;
                             $inscripcion->turno_id          = $request->$datos_turno;
@@ -136,7 +137,8 @@ class InscripcionController extends Controller
                             $inscripcion->gestion           = $asignatura->gestion;
                             $inscripcion->anio_vigente      = $request->$datos_gestion;
                             $inscripcion->fecha_registro    = $request->fecha_inscripcion;
-                            $inscripcion->nota_aprobacion   = $carrera->nota_aprobacion;        // MOD
+                            // $inscripcion->nota_aprobacion   = $carrera->nota_aprobacion;        // MOD
+                            $inscripcion->nota_aprobacion   = $asignatura->resolucion->nota_aprobacion;
                             $inscripcion->troncal           = $asignatura->troncal;
                             //$inscripcion->aprobo          = 'Si', 'No', 'Cursando';
                             $inscripcion->estado            = 'Cursando';  // Cuando acaba semestre/gestion cambiar a Finalizado
@@ -152,7 +154,8 @@ class InscripcionController extends Controller
                                 // Resgistramos en la tabla notas
                                 $nota                   = new Nota();
                                 $nota->user_id          = Auth::user()->id;
-                                $nota->resolucion_id    = $carrera->resolucion_id;          // MOD
+                                // $nota->resolucion_id    = $carrera->resolucion_id;
+                                $nota->resolucion_id    = $asignatura->resolucion_id;           // MOD
                                 $nota->inscripcion_id   = $inscripcion->id;
                                 if($docente){
                                     $nota->docente_id   = $docente->docente_id;
@@ -164,7 +167,8 @@ class InscripcionController extends Controller
                                 $nota->anio_vigente     = $request->$datos_gestion;
                                 $nota->trimestre        = $i;
                                 $nota->fecha_registro   = $request->fecha_inscripcion;
-                                $nota->nota_aprobacion  = $carrera->nota_aprobacion;        // MOD
+                                // $nota->nota_aprobacion  = $carrera->nota_aprobacion;            // MOD
+                                $nota->nota_aprobacion  = $asignatura->resolucion->nota_aprobacion;
                                 $nota->save();
                             }
                         }
@@ -936,7 +940,8 @@ class InscripcionController extends Controller
                         // Resgistramos en la tabla inscripciones
                         $inscripcion                    = new Inscripcione();
                         $inscripcion->user_id           = Auth::user()->id;
-                        $inscripcion->resolucion_id     = $carrera->resolucion_id;          // MOD
+                        // $inscripcion->resolucion_id     = $carrera->resolucion_id;          // MOD
+                        $inscripcion->resolucion_id     = $asignatura->resolucion_id;
                         $inscripcion->carrera_id        = $request->nueva_carrera;
                         $inscripcion->asignatura_id     = $asignatura->id;
                         $inscripcion->turno_id          = $request->nuevo_turno;
@@ -946,7 +951,8 @@ class InscripcionController extends Controller
                         $inscripcion->gestion           = $asignatura->gestion;
                         $inscripcion->anio_vigente      = $request->nueva_gestion;
                         $inscripcion->fecha_registro    = $request->nueva_fecha_inscripcion;
-                        $inscripcion->nota_aprobacion   = $carrera->nota_aprobacion;        // MOD
+                        // $inscripcion->nota_aprobacion   = $carrera->nota_aprobacion;        // MOD
+                        $inscripcion->nota_aprobacion   = $asignatura->resolucion->nota_aprobacion;
                         $inscripcion->troncal           = $asignatura->troncal;
                         //$inscripcion->aprobo          = 'Si', 'No', 'Cursando';
                         $inscripcion->estado            = 'Cursando';  // Cuando acaba semestre/gestion cambiar a Finalizado
@@ -962,7 +968,8 @@ class InscripcionController extends Controller
                             // Resgistramos en la tabla notas
                             $nota                   = new Nota();
                             $nota->user_id          = Auth::user()->id;
-                            $nota->resolucion_id    = $carrera->resolucion_id;          // MOD
+                            // $nota->resolucion_id    = $carrera->resolucion_id;          // MOD
+                            $nota->resolucion_id    = $asignatura->resolucion_id;
                             $nota->inscripcion_id   = $inscripcion->id;
                             if($docente){
                                 $nota->docente_id   = $docente->docente_id;
@@ -974,7 +981,8 @@ class InscripcionController extends Controller
                             $nota->anio_vigente     = $request->nueva_gestion;
                             $nota->trimestre        = $i;
                             $nota->fecha_registro   = $request->nueva_fecha_inscripcion;
-                            $nota->nota_aprobacion  = $carrera->nota_aprobacion;        // MOD
+                            // $nota->nota_aprobacion  = $carrera->nota_aprobacion;        // MOD
+                            $nota->nota_aprobacion  = $asignatura->resolucion->nota_aprobacion;
                             $nota->save();
                         }
                     }
@@ -1263,6 +1271,7 @@ class InscripcionController extends Controller
             // Por cada asignatura
             foreach($llaves as $ll)
             {
+                // En esta variable $asignatura guardamos la informacion de la asignatura a inscribirse
                 $asignatura = Asignatura::find($request->asignatura[$ll]);
                 // Almacenaremos en un array su info
                 array_push($array_carreras, $asignatura->carrera_id);
@@ -1311,7 +1320,8 @@ class InscripcionController extends Controller
                     // Inscripcion en la tabla inscripciones
                     $inscripcion                    = new Inscripcione();
                     $inscripcion->user_id           = Auth::user()->id;
-                    $inscripcion->resolucion_id     = $informacion_carrera->resolucion_id;
+                    // $inscripcion->resolucion_id     = $informacion_carrera->resolucion_id;
+                    $inscripcion->resolucion_id     = $asignatura->resolucion_id;
                     $inscripcion->carrera_id        = $asignatura->carrera_id;
                     $inscripcion->asignatura_id     = $asignatura->id;
                     $inscripcion->turno_id          = $request->turno;
@@ -1321,7 +1331,8 @@ class InscripcionController extends Controller
                     $inscripcion->gestion           = $asignatura->gestion;
                     $inscripcion->anio_vigente      = $request->gestion;
                     $inscripcion->fecha_registro    = $request->fecha_inscripcion;
-                    $inscripcion->nota_aprobacion   = $informacion_carrera->nota_aprobacion;
+                    // $inscripcion->nota_aprobacion   = $informacion_carrera->nota_aprobacion;
+                    $inscripcion->nota_aprobacion   = $asignatura->resolucion->nota_aprobacion;
                     $inscripcion->troncal           = $asignatura->troncal;
                     $inscripcion->estado            = 'Cursando';  // Cuando acaba semestre/gestion cambiar a Finalizado
                     $inscripcion->save();
@@ -1337,7 +1348,8 @@ class InscripcionController extends Controller
                         // Inscripcion en la tabla notas
                         $nota                   = new Nota();
                         $nota->user_id          = Auth::user()->id;
-                        $nota->resolucion_id    = $informacion_carrera->resolucion_id;
+                        // $nota->resolucion_id    = $informacion_carrera->resolucion_id;
+                        $nota->resolucion_id    = $asignatura->resolucion_id;
                         $nota->inscripcion_id   = $inscripcion->id;
                         if($docente)
                         {
@@ -1350,7 +1362,8 @@ class InscripcionController extends Controller
                         $nota->anio_vigente     = $request->gestion;
                         $nota->trimestre        = $i;
                         $nota->fecha_registro   = $request->fecha_inscripcion;
-                        $nota->nota_aprobacion  = $informacion_carrera->nota_aprobacion;
+                        // $nota->nota_aprobacion  = $informacion_carrera->nota_aprobacion;
+                        $nota->nota_aprobacion  = $asignatura->resolucion->nota_aprobacion;
                         $nota->save();
                     }
                 }
@@ -2654,21 +2667,24 @@ class InscripcionController extends Controller
                 // Registramos en inscripciones
                 $inscripcion = new Inscripcione();
                 $inscripcion->user_id = Auth::user()->id;
-                $inscripcion->resolucion_id = $asignatura->carrera->resolucion_id;
+                // $inscripcion->resolucion_id = $asignatura->carrera->resolucion_id;
+                $inscripcion->resolucion_id = $asignatura->resolucion_id;
                 $inscripcion->carrera_id = $asignatura->carrera->id;
                 $inscripcion->asignatura_id = $asignatura->id;
                 $inscripcion->persona_id = $persona->id;
                 $inscripcion->gestion = $asignatura->gestion;
                 $inscripcion->anio_vigente = date('Y');
                 $inscripcion->fecha_registro = date('Y-m-d');
-                $inscripcion->nota_aprobacion = $asignatura->carrera->nota_aprobacion;
+                // $inscripcion->nota_aprobacion = $asignatura->carrera->nota_aprobacion;
+                $inscripcion->nota_aprobacion = $asignatura->resolucion->nota_aprobacion;
                 //$inscripcion->aprobo = 'Si', 'No', 'Cursando';
                 $inscripcion->estado = 'Cursando';  // Cuando acaba semestre/gestion cambiar a Finalizado
                 $inscripcion->save();
                 // Registramos en cursos_cortos
                 $curso_corto = new CursosCorto();
                 $curso_corto->user_id = Auth::user()->id;
-                $curso_corto->resolucion_id = $asignatura->carrera->resolucion_id;
+                // $curso_corto->resolucion_id = $asignatura->carrera->resolucion_id;
+                $curso_corto->resolucion_id = $asignatura->resolucion_id;
                 $curso_corto->inscripcion_id = $inscripcion->id;
                 if($docente){
                     $curso_corto->docente_id = $docente->docente_id;
@@ -2678,7 +2694,8 @@ class InscripcionController extends Controller
                 $curso_corto->anio_vigente = date('Y');
                 //$curso_corto->trimestre = $i;
                 $curso_corto->fecha_registro = date('Y-m-d');
-                $curso_corto->nota_aprobacion = $asignatura->carrera->nota_aprobacion;
+                // $curso_corto->nota_aprobacion = $asignatura->carrera->nota_aprobacion;
+                $curso_corto->nota_aprobacion = $asignatura->resolucion->nota_aprobacion;
                 $curso_corto->save();
             }
             return redirect('Persona/ver_detalle/'.$persona_id);
