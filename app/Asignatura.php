@@ -60,10 +60,4 @@ class Asignatura extends Model
     {
         return $this->hasMany('App\SegundosTurno');
     }
-
-    public function resolucion()
-    {
-        return $this->belongsTo('App\Resolucione', 'resolucion_id');
-    }
-
 }
