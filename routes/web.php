@@ -330,6 +330,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Lista/estadistica', 'ListaController@estadistica');
     Route::get('Lista/pruebaAleatorio', 'ListaController@pruebaAleatorio');
     Route::get('Lista/centralizadorAlumnos', 'ListaController@centralizadorAlumnos');
+    Route::get('Lista/ajax_centralizador_docente', 'ListaController@ajax_centralizador_docente');
+    Route::get('Lista/ajax_centralizador_materia', 'ListaController@ajax_centralizador_materia');
+    Route::get('Lista/ajax_centralizador_turno', 'ListaController@ajax_centralizador_turno');
+    Route::get('Lista/ajax_centralizador_paralelo', 'ListaController@ajax_centralizador_paralelo');
 
     // EXCEL
     Route::get('Importacion/excel', 'ImportacionController@excel');

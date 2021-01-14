@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Nota;
 use App\User;
 use App\Turno;
 use DataTables;
@@ -241,8 +242,57 @@ class ListaController extends Controller
 
     public function centralizadorAlumnos()
     {
-        $docentes = User::all();
-        // dd($docente);
-        return view('lista.centralizadorAlumnos')->with(compact('docentes'));
+        $gestiones = Nota::select('anio_vigente')
+                    ->groupBy('anio_vigente')
+                    ->orderBy('anio_vigente', 'desc')
+                    ->get();
+
+        // dd($gestiones);
+        return view('lista.centralizadorAlumnos')->with(compact('gestiones'));
+    }
+
+    public function ajax_centralizador_docente(Request $request)
+    {
+        $docentes = Nota::where('anio_vigente', $request->gestion)
+                    ->groupBy('docente_id')
+                    ->get();
+
+        return view('lista.ajax_centralizador_docente')->with(compact('docentes'));
+        // dd($docentes);
+
+    }
+
+    public function ajax_centralizador_materia(Request $request)
+    {
+        // dd($request->all());
+        $materias = Nota::where('anio_vigente', $request->gestion)
+                    ->where('docente_id', $request->docente)
+                    ->groupBy('asignatura_id')
+                    ->get();
+
+        return view('lista.ajax_centralizador_materia')->with(compact('materias'));
+    }
+
+    public function ajax_centralizador_turno(Request $request)
+    {
+        $turnos = Nota::where('anio_vigente', $request->gestion)
+                    ->where('docente_id', $request->docente)
+                    ->where('asignatura_id', $request->materia)
+                    ->groupBy('turno_id')
+                    ->get();
+        // dd($turnos);
+        return view('lista.ajax_centralizador_turno')->with(compact('turnos'));
+    }
+
+    public function ajax_centralizador_paralelo(Request $request)
+    {
+        $paralelos = Nota::where('anio_vigente', $request->gestion)
+                    ->where('docente_id', $request->docente)
+                    ->where('asignatura_id', $request->materia)
+                    ->where('turno_id', $request->turno)
+                    ->groupBy('paralelo')
+                    ->get();
+        // dd($paralelos);
+        return view('lista.ajax_centralizador_paralelo')->with(compact('paralelos'));
     }
 }
