@@ -123,18 +123,18 @@
                             <td>
                                 <button type="button" class="btn btn-info" title="Ver detalle" onclick="ajaxMuestraNotaInscripcion('{{ $materia->id }}')"><i class="fas fa-eye"></i></button>
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-outline-primary dropdown-toggle" title="Regularizar Asignatura" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <button type="button" class="btn btn-outline-primary dropdown-toggle" title="Regularizar Asignatura" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="datos_regularizacion('{{ $materia->id }}', '{{ round($materia->nota) }}')">
                                         <i class="fas fa-magic"></i>
                                     </button>
                                     <div class="dropdown-menu" style="">
-                                        <form action="{{ url('Inscripcion/regularizarAsignatura') }}" method="POST" class="px-4 py-3">
+                                        <form action="#" method="POST" class="px-4 py-3">
                                             @csrf
-                                            <input type="hidden" name="id" id="id" value="{{ $materia->id }}">
+                                            <input type="hidden" name="materia_regularizacion_id" id="materia_regularizacion_id">
                                             <div class="form-group">
                                                 <label class="control-label">Puntaje Final</label>
-                                                <input type="number" class="form-control" id="nota" name="nota" min="0" max="100">
+                                                <input type="number" class="form-control" id="nota_{{ $materia->id }}" name="nota" min="0" max="100">
                                             </div>
-                                            <button type="submit" class="btn btn-block btn-primary">REGULARIZAR</button>
+                                            <button type="button" class="btn btn-block btn-primary" onclick="guarda_regularizacion('{{ $materia->id }}')">REGULARIZAR</button>
                                         </form>
                                     </div>
                                 </div>
@@ -224,6 +224,52 @@
 </div>
 <!-- fin modal inscripcion oyente -->
 <script>
+    // Funcion que al hacer clic sobre el boton de regularizacion, se llenan los valores para el formulario
+    function datos_regularizacion(asignatura_id, nota) {
+        $("#materia_regularizacion_id").val(asignatura_id);
+        $("#nota_"+asignatura_id).val(nota);
+    }
+
+    // Funcion Ajax de regularizacion de Notas, no debe recargase la pagina
+    function guarda_regularizacion(materia_id) {
+        // Capturamos todas las variables que se encuentran en el formulario de regularizacion
+        asignatura_id   = $("#materia_regularizacion_id").val();
+        persona_id      = $("#persona_id").val();
+        nota            = $("#nota_"+materia_id).val();
+        // Utilizamos Ajax
+        $.ajax({
+            // Se ejecutara la modificacion de la nota
+            url:    "{{ url('Inscripcion/regularizarAsignatura') }}",
+            data:   {
+                asignatura_id: asignatura_id,
+                persona_id: persona_id,
+                nota: nota
+            },
+            cache:  false,
+            type:   'post',
+            // Posteriormente, si no hubo ningun conflicto con la ejecucion del proceso, se recargara utilizando otro ajax
+            success: function(data) {
+                $.ajax({
+                    url:    "{{ url('Persona/ajaxDetalleHistorialAcademico') }}",
+                    data:   {
+                        persona_id : persona_id
+                    },
+                    cache:  false,
+                    type:   'get',
+                    success: function (data) {
+                        $("#detalleAcademicoAjax").show('slow');
+                        $("#detalleAcademicoAjax").html(data);
+                    }
+                });
+                Swal.fire(
+                    'Excelente!',
+                    'La nota fue actualizada',
+                    'success'
+                )
+            }
+        });
+    }
+
     // Funcion que muestra los datos referentes a los una inscripcion del historial academico
     function ajaxMuestraNotaInscripcion(inscripcion_id)
     {
@@ -231,7 +277,7 @@
             url: "{{ url('Inscripcion/ajaxMuestraNotaInscripcion') }}",
             data: {
                 inscripcion_id: inscripcion_id
-                },
+            },
             type: 'get',
             success: function(data) {
                 $("#contenido_modal").html(data);

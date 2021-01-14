@@ -3291,7 +3291,7 @@ class InscripcionController extends Controller
 
     public function asignarPuntaje(Request $request)
     {
-        $inscripcion    = Inscripcione::find($request->id);
+        $inscripcion    = Inscripcione::find($request->asignatura_id);
         if($inscripcion)
         {
             // Hallamos al estudiante, la nota maxima para esa asignatura y las 4 notas correspondientes a esa inscripcion
@@ -3424,11 +3424,11 @@ class InscripcionController extends Controller
                     $carrerasPersona->save();
                 }
             }
-            return redirect('Persona/ver_detalle/'.$persona->id);
+            // return redirect('Persona/ver_detalle/'.$persona->id);
         }
         else
         {
-            return redirect('Persona/listado');
+            // return redirect('Persona/listado');
         }
     }
 
@@ -3477,7 +3477,7 @@ class InscripcionController extends Controller
 
     public function regularizarAsignatura(Request $request)
     {
-        $inscripcion    = Inscripcione::find($request->id);
+        $inscripcion    = Inscripcione::find($request->asignatura_id);
         if($inscripcion)
         {
             // Hallamos al estudiante, la nota maxima para esa asignatura y las 4 notas correspondientes a esa inscripcion
@@ -3698,11 +3698,11 @@ class InscripcionController extends Controller
                     $carrerasPersona->save();
                 }
             }
-            return redirect('Persona/ver_detalle/'.$persona->id);
+            //return redirect('Persona/ver_detalle/'.$persona->id);
         }
         else
         {
-            return redirect('Persona/listado');
+            //return redirect('Persona/listado');
         }
     }
 
