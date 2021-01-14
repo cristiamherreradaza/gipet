@@ -107,14 +107,15 @@
                                         <i class="fas fa-magic"></i>
                                     </button>
                                     <div class="dropdown-menu" style="">
-                                        <form action="{{ url('Inscripcion/asignarPuntaje') }}" method="POST" class="px-4 py-3">
+                                        <form action="#" method="POST" class="px-4 py-3">
                                             @csrf
+                                            <input type="hidden" name="persona_id" id="persona_id" value="{{ $materia->persona_id }}">
                                             <input type="hidden" name="id" id="id" value="{{ $materia->id }}">
                                             <div class="form-group">
                                                 <label class="control-label">Puntaje Final</label>
-                                                <input type="number" class="form-control" id="nota" name="nota" min="1" max="100">
+                                                <input type="number" class="form-control" id="nota_{{ $materia->id }}" name="nota" min="1" max="100">
                                             </div>
-                                            <button type="submit" class="btn btn-block btn-info">CONVALIDAR</button>
+                                            <button type="button" class="btn btn-block btn-info" onclick="convalida_asignatura('{{ $materia->id }}')">CONVALIDAR</button>
                                         </form>
                                     </div>
                                 </div>
@@ -143,6 +144,47 @@
 <!-- fin modal editar perfil -->
 
 <script>
+    // Funcion ajax que convalida asignatura
+    function convalida_asignatura(inscripcion_id)
+    {
+        // Capturamos todas las variables que se encuentran en el formulario de regularizacion
+        asignatura_id   = $("#id").val();
+        persona_id      = $("#persona_id").val();
+        nota            = $("#nota_"+inscripcion_id).val();
+        // Utilizamos Ajax
+        $.ajax({
+            // Se ejecutara la modificacion de la nota
+            url:    "{{ url('Inscripcion/asignarPuntaje') }}",
+            data:   {
+                asignatura_id: asignatura_id,
+                persona_id: persona_id,
+                nota: nota
+            },
+            cache:  false,
+            type:   'post',
+            // Posteriormente, si no hubo ningun conflicto con la ejecucion del proceso, se recargara utilizando otro ajax
+            success: function(data) {
+                $.ajax({
+                    url:    "{{ url('Persona/ajaxDetalleMaterias') }}",
+                    data:   {
+                        persona_id : persona_id
+                    },
+                    cache:  false,
+                    type:   'get',
+                    success: function (data) {
+                        $("#detalleAcademicoAjax").show('slow');
+                        $("#detalleAcademicoAjax").html(data);
+                    }
+                });
+                Swal.fire(
+                    'Excelente!',
+                    'La asignatura fue convalidada',
+                    'success'
+                )
+            }
+        });
+    }
+
     // Funcion que muestra los datos referentes a los una inscripcion del historial academico
     function ajaxMuestraNotaInscripcion(inscripcion_id)
     {
