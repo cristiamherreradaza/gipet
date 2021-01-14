@@ -1,3 +1,4 @@
+@if ($docentes->count() > 0)
 <input list="docentes" id="docente_id" class="form-control">
 <datalist id="docentes">
   	@foreach ($docentes as $docente)
@@ -31,3 +32,6 @@
 	}).change();
 
 </script>
+@else
+	No hay
+@endif

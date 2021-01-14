@@ -1,5 +1,5 @@
 <select name="turno_id" id="turno_id" class="form-control" onchange="ajaxBuscaParalelo()">
-	<option value="">Seleccione</option>
+	<option value="">Selec</option>
     @foreach ($turnos as $t)
         <option value="{{ $t->turno_id }}">{{ $t->turno->descripcion }}</option>
     @endforeach

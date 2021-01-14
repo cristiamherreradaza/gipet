@@ -13,7 +13,7 @@
     <div class="col-md-12">
         <div class="card border-info">
             <div class="card-header bg-info">
-                <h4 class="mb-0 text-white">LISTA DE ALUMNOS</h4>
+                <h4 class="mb-0 text-white">CENTRALIZADOR DE CALIFICACIONES BIMESTRAL</h4>
             </div>
             <div class="card-body">
                 <div class="row">
@@ -61,6 +61,21 @@
                         <div class="form-group">
                             <label class="control-label">Semestre</label>
                             <div id="ajaxMuestraSemestre"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <label class="control-label">Bimestre</label>
+                            <div id="ajaxMuestraTrimestre"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <label class="control-label">&nbsp;</label>
+                            <button type="button" class="btn waves-effect waves-light btn-block btn-success"
+                                onclick="validaItems()" id="btnGenera" style="display: none;">Generar</button>
                         </div>
                     </div>
 

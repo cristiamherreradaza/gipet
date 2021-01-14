@@ -334,6 +334,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Lista/ajax_centralizador_materia', 'ListaController@ajax_centralizador_materia');
     Route::get('Lista/ajax_centralizador_turno', 'ListaController@ajax_centralizador_turno');
     Route::get('Lista/ajax_centralizador_paralelo', 'ListaController@ajax_centralizador_paralelo');
+    Route::get('Lista/ajax_centralizador_semestre', 'ListaController@ajax_centralizador_semestre');
+    Route::get('Lista/ajax_centralizador_trimestre', 'ListaController@ajax_centralizador_trimestre');
 
     // EXCEL
     Route::get('Importacion/excel', 'ImportacionController@excel');
