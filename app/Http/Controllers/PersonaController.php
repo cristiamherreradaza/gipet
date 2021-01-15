@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Carrera;
@@ -103,8 +104,9 @@ class PersonaController extends Controller
         //$estudiantes = Persona::select('id', 'apellido_paterno', 'apellido_materno', 'nombres', 'carnet', 'telefono_celular', 'razon_social_cliente', 'nit');
         return Datatables::of($estudiantes)
             ->addColumn('action', function ($estudiantes) {
-                return '<button onclick="ver_persona('.$estudiantes->id.')" type="button" class="btn btn-info" title="Ver"><i class="fas fa-eye"></i></button>
-                        <button onclick="eliminar_persona('.$estudiantes->id.', '.$estudiantes->cedula.')" type="button" class="btn btn-danger" title="Eliminar Estudiante"><i class="fas fa-trash"></i></button>';
+                return '<button onclick="ver_persona('.$estudiantes->id.')"        type="button" class="btn btn-info"      title="Ver"><i class="fas fa-eye"></i></button>
+                        <button onclick="eliminar_persona('.$estudiantes->id.', '.$estudiantes->cedula.')" type="button" class="btn btn-danger" title="Eliminar Estudiante"><i class="fas fa-trash"></i></button>
+                        <button onclick="contrato(' .  $estudiantes->id . ')"        type="button" class="btn btn-dark"    title="Contrato" ><i class="fas fa-file-alt"></i></button>';
             })
             ->make(true);
 
@@ -454,6 +456,16 @@ class PersonaController extends Controller
                 ]); 
         }                
         
+    }
+
+    public function contrato(Request $request)
+    {
+        $persona = Persona::where('id', $request->personaId)->first();
+        $pdf = PDF::loadView('pdf.contrato', compact('persona'))->setPaper('letter');
+        return $pdf->stream('contrato.pdf');
+
+        // dd($persona);
+        // echo "holas";
     }
    
 }

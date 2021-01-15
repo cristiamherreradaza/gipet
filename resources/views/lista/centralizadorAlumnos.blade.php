@@ -13,60 +13,78 @@
     <div class="col-md-12">
         <div class="card border-info">
             <div class="card-header bg-info">
-                <h4 class="mb-0 text-white">LISTA DE ALUMNOS</h4>
+                <h4 class="mb-0 text-white">CENTRALIZADOR DE CALIFICACIONES BIMESTRAL</h4>
             </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label class="control-label">Gestion</label>
-                            <select name="gestion" id="gestion" class="form-control" onchange="buscaDocentes();">
-                                <option value=""> Seleccione </option>
-                                @foreach($gestiones as $g)
-                                    <option value="{{ $g->anio_vigente }}"> {{ $g->anio_vigente }} </option>
-                                @endforeach
-                            </select>
+            <form action="{{ url('Lista/genera_centralizador') }}" method="POST">
+                @csrf
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label">Gestion</label>
+                                <select name="gestion" id="gestion" class="form-control" onchange="buscaDocentes();">
+                                    <option value=""> Seleccione </option>
+                                    @foreach($gestiones as $g)
+                                        <option value="{{ $g->anio_vigente }}"> {{ $g->anio_vigente }} </option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label class="control-label">Docente</label>
-                            <div id="ajaxMuestraDocente"></div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Docente</label>
+                                <div id="ajaxMuestraDocente"></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-md-2">
-                        <div class="form-group">
-                            <label class="control-label">Asignaturas</label>
-                            <div id="ajaxMuestraMateria"></div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label">Asignaturas</label>
+                                <div id="ajaxMuestraMateria"></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-md-1">
-                        <div class="form-group">
-                            <label class="control-label">Turno</label>
-                            <div id="ajaxMuestraTurno"></div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label class="control-label">Turno</label>
+                                <div id="ajaxMuestraTurno"></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-md-1">
-                        <div class="form-group">
-                            <label class="control-label">Paralelo</label>
-                            <div id="ajaxMuestraParalelo"></div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label class="control-label">Paralelo</label>
+                                <div id="ajaxMuestraParalelo"></div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-md-1">
-                        <div class="form-group">
-                            <label class="control-label">Semestre</label>
-                            <div id="ajaxMuestraSemestre"></div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label class="control-label">Semestre</label>
+                                <div id="ajaxMuestraSemestre"></div>
+                            </div>
                         </div>
-                    </div>
 
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label class="control-label">Bimestre</label>
+                                <div id="ajaxMuestraTrimestre"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label class="control-label">&nbsp;</label>
+                                <button type="submit" class="btn waves-effect waves-light btn-block btn-success"
+                                    id="btnGenera" style="display: none;">Generar</button>
+                            </div>
+                        </div>
+
+                    </div>
+                    
                 </div>
-                
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -128,6 +146,39 @@
                 type: 'get',
                 success: function(data) {
                     $("#ajaxMuestraDocente").html(data);
+                }
+            });
+
+        }
+
+        function generaCentralizador()
+        {
+
+            let docente = $('#docentes option[value="' + $('#docente_id').val() + '"]').data('valor');
+            let gestion = $("#gestion").val();
+            let materia = $("#materia_id").val();
+            let turno = $("#turno_id").val();
+            let paralelo = $("#paralelo").val();
+            let semestre = $("#semestre").val();
+            let trimestre = $("#trimestre").val();
+
+            // console.log(trimestre);
+
+            $.ajax({
+                url: "{{ url('Lista/ajax_genera_centralizador') }}",
+                data: {
+                    docente: docente,
+                    gestion: gestion,
+                    materia: materia,
+                    turno: turno,
+                    paralelo: paralelo,
+                    semestre: semestre,
+                    trimestre: trimestre,
+                    },
+                type: 'get',
+                success: function(data) {
+                    
+                    // $("#ajaxMuestraTrimestre").html(data);
                 }
             });
 

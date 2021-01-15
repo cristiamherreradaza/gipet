@@ -129,6 +129,10 @@
         alert('estado');
     }
 
+    function contrato(persona_id){
+        window.open("{{ url('Persona/contrato') }}/" + persona_id, "_blank");
+    }
+
     /*
     $( function() {
         $("#cliente").prop("disabled", true);

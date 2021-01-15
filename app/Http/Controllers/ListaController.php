@@ -254,11 +254,12 @@ class ListaController extends Controller
     public function ajax_centralizador_docente(Request $request)
     {
         $docentes = Nota::where('anio_vigente', $request->gestion)
+                    ->whereNotNull('docente_id')
                     ->groupBy('docente_id')
                     ->get();
 
+                    // dd($docentes);
         return view('lista.ajax_centralizador_docente')->with(compact('docentes'));
-        // dd($docentes);
 
     }
 
@@ -267,6 +268,7 @@ class ListaController extends Controller
         // dd($request->all());
         $materias = Nota::where('anio_vigente', $request->gestion)
                     ->where('docente_id', $request->docente)
+                    ->whereNotNull('asignatura_id')
                     ->groupBy('asignatura_id')
                     ->get();
 
@@ -278,6 +280,7 @@ class ListaController extends Controller
         $turnos = Nota::where('anio_vigente', $request->gestion)
                     ->where('docente_id', $request->docente)
                     ->where('asignatura_id', $request->materia)
+                    ->whereNotNull('turno_id')
                     ->groupBy('turno_id')
                     ->get();
         // dd($turnos);
@@ -290,9 +293,68 @@ class ListaController extends Controller
                     ->where('docente_id', $request->docente)
                     ->where('asignatura_id', $request->materia)
                     ->where('turno_id', $request->turno)
+                    ->whereNotNull('paralelo')
                     ->groupBy('paralelo')
                     ->get();
         // dd($paralelos);
         return view('lista.ajax_centralizador_paralelo')->with(compact('paralelos'));
     }
+
+    public function ajax_centralizador_semestre(Request $request)
+    {
+        $semestre = Nota::where('anio_vigente', $request->gestion)
+                    ->where('docente_id', $request->docente)
+                    ->where('asignatura_id', $request->materia)
+                    ->where('turno_id', $request->turno)
+                    ->where('paralelo', $request->paralelo)
+                    ->whereNotNull('semestre')
+                    ->groupBy('semestre')
+                    ->get();
+        // dd($semestre);
+        return view('lista.ajax_centralizador_semestre')->with(compact('semestre'));
+    }
+
+    public function ajax_centralizador_trimestre(Request $request)
+    {
+        $trimestre = Nota::where('anio_vigente', $request->gestion)
+                    ->where('docente_id', $request->docente)
+                    ->where('asignatura_id', $request->materia)
+                    ->where('turno_id', $request->turno)
+                    ->where('paralelo', $request->paralelo)
+                    ->where('semestre', $request->semestre)
+                    ->whereNotNull('trimestre')
+                    ->groupBy('trimestre')
+                    ->get();
+
+        return view('lista.ajax_centralizador_trimestre')->with(compact('trimestre'));
+    }
+
+    public function genera_centralizador(Request $request)
+    {
+        // print_r($request->all());
+        $alumnos = Nota::where('anio_vigente', $request->gestion)
+                    ->where('docente_id', $request->cod_docente)
+                    ->where('asignatura_id', $request->materia_id)
+                    ->where('turno_id', $request->turno_id)
+                    ->where('paralelo', $request->paralelo)
+                    ->where('semestre', $request->semestre)
+                    ->where('trimestre', $request->trimestre)
+                    // ->whereNotNull('trimestre')
+                    // ->groupBy('trimestre')
+                    ->get();
+        // dd($alumnos);
+        return view('lista.genera_centralizador')->with(compact('alumnos'));
+    }
+
+    public function genera_centralizador_asistencia(Request $request)
+    {
+        dd($request->all());
+        $inscritos  = Inscripcione::where('asignatura_id', $asignatura->asignatura_id)
+                                ->where('turno_id', $asignatura->turno_id)
+                                ->where('paralelo', $asignatura->paralelo)
+                                ->where('anio_vigente', $asignatura->anio_vigente)
+                                ->get();
+        dd($inscritos);
+    }
+
 }
