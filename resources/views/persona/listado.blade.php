@@ -77,6 +77,38 @@
         window.location.href = "{{ url('Persona/ver_detalle') }}/" + persona_id;
     }
 
+    function eliminar_persona(persona_id, cedula){
+        Swal.fire({
+            title: 'Desea eliminar al estudiante con cedula ' + cedula + '?',
+            text: "Luego no podras recuperarlo!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, estoy seguro!',
+            cancelButtonText: "Cancelar",
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: "{{ url('Persona/eliminar_persona') }}",
+                    data: {
+                        persona_id: persona_id
+                        },
+                    cache: false,
+                    type: 'post',
+                    success: function(data) {
+                        Swal.fire(
+                            'Excelente!',
+                            'El estudiante fue eliminado',
+                            'success'
+                        )
+                        window.location.href = "{{ url('Persona/listado') }}/";
+                    }
+                });
+            }
+        })
+    }
+
     function inscripcion(persona_id){
         alert('inscribir');
     }
