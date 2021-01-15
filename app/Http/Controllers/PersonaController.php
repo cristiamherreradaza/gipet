@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Carrera;
@@ -415,6 +416,14 @@ class PersonaController extends Controller
         
     }
 
-    
+    public function contrato(Request $request)
+    {
+        $persona = Persona::where('id', $request->personaId)->get();
+        $pdf = PDF::loadView('pdf.contrato', compact('persona'))->setPaper('letter');
+        return $pdf->stream('listaAlumnos_' . date('Y-m-d H:i:s') . '.pdf');
+
+        // dd($persona);
+        // echo "holas";
+    }
    
 }

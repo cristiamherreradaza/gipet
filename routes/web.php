@@ -71,6 +71,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Persona/ajaxDetalleCertificados', 'PersonaController@ajaxDetalleCertificados');
     Route::get('Persona/ajaxDetalleMensualidades', 'PersonaController@ajaxDetalleMensualidades');
     Route::get('Persona/ajaxDetalleExtras', 'PersonaController@ajaxDetalleExtras');
+    Route::get('Persona/contrato/{personaId}', 'PersonaController@contrato');
 
     Route::get('user/asignar', 'UserController@asignar');
 

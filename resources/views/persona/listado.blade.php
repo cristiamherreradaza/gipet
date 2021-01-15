@@ -98,7 +98,7 @@
     }
 
     function contrato(persona_id){
-        window.location.href = "{{ url('Inscripcion/reinscripcion') }}/" + persona_id;
+        window.open("{{ url('Persona/contrato') }}/" + persona_id, "_blank");
     }
 
     /*
