@@ -1,5 +1,6 @@
 @if ($docentes->count() > 0)
-<input list="docentes" id="docente_id" class="form-control">
+<input list="docentes" name="docente_id" id="docente_id" class="form-control">
+<input type="hidden" name="cod_docente" id="cod_docente">
 <datalist id="docentes">
   	@foreach ($docentes as $docente)
   	    <option data-valor="{{ $docente->docente_id }}" value="{{ $docente->docente->nombres }} {{ $docente->docente->apellido_paterno }} {{ $docente->docente->apellido_materno }}">
@@ -16,6 +17,7 @@
 	$("#docente_id").change(function() 
 	{
 	  let docente = $('#docentes option[value="' + $('#docente_id').val() + '"]').data('valor');
+	  $("#cod_docente").val(docente);
 	  let gestion = $("#gestion").val();
 
 	  $.ajax({

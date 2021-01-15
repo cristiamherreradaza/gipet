@@ -329,4 +329,21 @@ class ListaController extends Controller
         return view('lista.ajax_centralizador_trimestre')->with(compact('trimestre'));
     }
 
+    public function genera_centralizador(Request $request)
+    {
+        // print_r($request->all());
+        $alumnos = Nota::where('anio_vigente', $request->gestion)
+                    ->where('docente_id', $request->cod_docente)
+                    ->where('asignatura_id', $request->materia_id)
+                    ->where('turno_id', $request->turno_id)
+                    ->where('paralelo', $request->paralelo)
+                    ->where('semestre', $request->semestre)
+                    ->where('trimestre', $request->trimestre)
+                    // ->whereNotNull('trimestre')
+                    // ->groupBy('trimestre')
+                    ->get();
+        // dd($alumnos);
+        return view('lista.genera_centralizador')->with(compact('alumnos'));
+    }
+
 }
