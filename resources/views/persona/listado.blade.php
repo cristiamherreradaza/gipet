@@ -97,6 +97,10 @@
         alert('estado');
     }
 
+    function contrato(persona_id){
+        window.location.href = "{{ url('Inscripcion/reinscripcion') }}/" + persona_id;
+    }
+
     /*
     $( function() {
         $("#cliente").prop("disabled", true);

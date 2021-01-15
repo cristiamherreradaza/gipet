@@ -101,7 +101,8 @@ class PersonaController extends Controller
         return Datatables::of($estudiantes)
             ->addColumn('action', function ($estudiantes) {
                 return '<button onclick="ver_persona('.$estudiantes->id.')"        type="button" class="btn btn-info"      title="Ver"><i class="fas fa-eye"></i></button>
-                        <button onclick="estado(' .  $estudiantes->id . ')"        type="button" class="btn btn-danger"    title="Estado(Activo/Inactivo)" ><i class="fas fa-user"></i></button>';
+                        <button onclick="estado(' .  $estudiantes->id . ')"        type="button" class="btn btn-danger"    title="Estado(Activo/Inactivo)" ><i class="fas fa-user"></i></button>
+                        <button onclick="contrato(' .  $estudiantes->id . ')"        type="button" class="btn btn-dark"    title="Contrato" ><i class="fas fa-file-alt"></i></button>';
             })
             ->make(true);
 
@@ -413,5 +414,7 @@ class PersonaController extends Controller
         }                
         
     }
+
+    
    
 }

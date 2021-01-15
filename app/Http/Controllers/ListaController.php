@@ -346,4 +346,15 @@ class ListaController extends Controller
         return view('lista.genera_centralizador')->with(compact('alumnos'));
     }
 
+    public function genera_centralizador_asistencia(Request $request)
+    {
+        dd($request->all());
+        $inscritos  = Inscripcione::where('asignatura_id', $asignatura->asignatura_id)
+                                ->where('turno_id', $asignatura->turno_id)
+                                ->where('paralelo', $asignatura->paralelo)
+                                ->where('anio_vigente', $asignatura->anio_vigente)
+                                ->get();
+        dd($inscritos);
+    }
+
 }

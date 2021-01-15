@@ -49,8 +49,12 @@
                         <option value="">Seleccione Paralelo</option>
                     </select>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-2">
                     <button type="submit" class="btn btn-block btn-info">Cambia Curso</button>
+                </div>
+
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-block btn-primary" onclick="generaCentralizadorAsistencia()">Centralizador Asistencia</button>
                 </div>
             </div>
         </form>
@@ -141,6 +145,7 @@
                         <input type="hidden" name="turno_id" id="turno_id" value="{{ $asignatura->turno_id }}">
                         <input type="hidden" name="paralelo" id="paralelo" value="{{ $asignatura->paralelo }}">
                         <input type="hidden" name="anio_vigente" id="anio_vigente" value="{{ $asignatura->anio_vigente }}">
+                        <input type="hidden" name="docente_id" id="docente_id" value="{{ auth()->user()->id }}">
                         <div class="input-group">
                             <a class="btn btn-block btn-success" href="{{ url('nota/exportarexcel/'.$asignatura->id.'/'.$bimestre) }}" style="width: 200px;">Exportar Formato</a>
                             <div class="custom-file">
@@ -407,9 +412,29 @@ $(document).ready(function() {
         // alert(anio);   
     }
 
-    function generaCentralizador()
+    function generaCentralizadorAsistencia()
     {
-        
+        let turno      = $("#turno_id").val();
+        let paralelo   = $("#paralelo").val();
+        let asignatura = $("#asignatura_id").val();
+        let anio       = $("#anio_vigente").val();
+        let docente    = $("#docente_id").val();
+
+        $.ajax({
+            url: "{{ url('Lista/genera_centralizador_asistencia') }}",
+            data: {
+                turno: turno,
+                paralelo: paralelo,
+                asignatura: asignatura,
+                anio: anio,
+                docente: docente,
+                },
+            type: 'post'
+            /*success: function(data) {
+                $("#ajaxMuestraComboParalelo").html(data);
+            }*/
+        });
+
     }
 </script>
 
