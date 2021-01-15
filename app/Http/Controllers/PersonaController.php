@@ -418,9 +418,9 @@ class PersonaController extends Controller
 
     public function contrato(Request $request)
     {
-        $persona = Persona::where('id', $request->personaId)->get();
+        $persona = Persona::where('id', $request->personaId)->first();
         $pdf = PDF::loadView('pdf.contrato', compact('persona'))->setPaper('letter');
-        return $pdf->stream('listaAlumnos_' . date('Y-m-d H:i:s') . '.pdf');
+        return $pdf->stream('contrato.pdf');
 
         // dd($persona);
         // echo "holas";

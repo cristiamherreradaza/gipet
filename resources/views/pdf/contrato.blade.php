@@ -24,7 +24,7 @@
             background-color: #fff;
             position: absolute;
             top: 320px;
-            left: 300px;
+            left: 150px;
             padding: 20px;
             border: 1px solid black;
             -moz-border-radius:10px;
@@ -71,42 +71,42 @@
             </tr>
             <tr>
                 <td><b>Apellidos:</b></td>
-                <td>ENCINAS SIRPA</td>
+                <td>{{ $persona->apellido_paterno }} {{ $persona->apellido_materno }}</td>
                 <td></td>
                 <td></td>
             </tr>
 
             <tr>
                 <td><b>Nombres:</b></td>
-                <td>YHAMIL OMAR</td>
+                <td>{{ $persona->nombres }}</td>
                 <td><b>Sexo</b>:</td>
                 <td>M</td>
             </tr>
 
             <tr>
                 <td><b>Fecha Nacimiento: </b></td>
-                <td>08/08/2999</td>
+                <td>{{ $persona->fecha_nacimiento }}</td>
                 <td>Carnet:</td>
-                <td>23465789</td>
+                <td>{{ $persona->cedula }}</td>
             </tr>
 
             <tr>
                 <td><b>Direccion:</b></td>
-                <td>Calle yanacocha #123 dsfa </td>
+                <td>{{ $persona->direccion }} </td>
                 <td></td>
                 <td></td>
             </tr>
 
             <tr>
                 <td><b>Telefono Fijo: </b></td>
-                <td>12345678</td>
+                <td>{{ $persona->numero_fijo }}</td>
                 <td><b>Celular:</b></td>
-                <td>23465789</td>
+                <td>{{ $persona->numero_celular }}</td>
             </tr>
 
             <tr>
                 <td><b>Correo Electronico: </b></td>
-                <td>12345678</td>
+                <td>{{ $persona->email }}</td>
                 <td></td>
                 <td></td>
             </tr>
@@ -116,16 +116,16 @@
             </tr>
             <tr>
                 <td><b>Familiar:</b></td>
-                <td>CLAUDIA SIRPA</td>
+                <td>{{ $persona->nombre_madre }}</td>
                 <td><b>Telf:</b></td>
-                <td>65498745</td>
+                <td>{{ $persona->celular_madre }}</td>
             </tr>
 
             <tr>
                 <td><b>Laboral:</b></td>
-                <td>YHAMIL OMAR</td>
+                <td>{{ $persona->empresa }}</td>
                 <td><b>Telf:</b>:</td>
-                <td>3654789</td>
+                <td>{{ $persona->numero_empresa }}</td>
             </tr>
         </table>
     </main>
