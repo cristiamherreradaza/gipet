@@ -27,12 +27,26 @@ class NotaController extends Controller
 
     public function listado()
     {
-        $carrerasDocente = NotasPropuesta::where('docente_id', Auth::user()->id)
-                            ->where('anio_vigente', date('Y'))
-                            ->groupBy('asignatura_id')
-                            ->get();
+        $asignaturasDocente = NotasPropuesta::where('docente_id', Auth::user()->id)
+                                            ->where('anio_vigente', date('Y'))
+                                            ->groupBy('asignatura_id')
+                                            ->get();
 
-        return view('nota.listado')->with(compact('carrerasDocente'));
+        $gestiones          = NotasPropuesta::select('anio_vigente')
+                                            ->groupBy('anio_vigente')
+                                            ->orderBy('anio_vigente', 'desc')
+                                            ->get();
+        return view('nota.listado')->with(compact('asignaturasDocente', 'gestiones'));
+    }
+
+    public function ajaxAsignaturasGestion(Request $request)
+    {
+        //dd($request->gestion);
+        $asignaturasDocente = NotasPropuesta::where('docente_id', Auth::user()->id)
+                                            ->where('anio_vigente', $request->gestion)
+                                            ->groupBy('asignatura_id')
+                                            ->get();
+        return view('nota.ajaxAsignaturasGestion')->with(compact('asignaturasDocente'));
     }
 
     public function detalle($id)
