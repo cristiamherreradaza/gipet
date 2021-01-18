@@ -331,30 +331,63 @@ class ListaController extends Controller
 
     public function genera_centralizador(Request $request)
     {
-        // print_r($request->all());
-        $alumnos = Nota::where('anio_vigente', $request->gestion)
+        $alumnos = Nota::select(
+                            'personas.apellido_paterno', 
+                            'personas.apellido_materno', 
+                            'personas.nombres',
+                            'notas.nota_asistencia',
+                            'notas.nota_practicas',
+                            'notas.nota_primer_parcial',
+                            'notas.nota_examen_final',
+                            'notas.nota_puntos_ganados',
+                            'notas.nota_total'
+                            )
+                            ->where('notas.anio_vigente', $request->gestion)
+                            ->where('notas.docente_id', $request->cod_docente)
+                            ->where('notas.asignatura_id', $request->materia_id)
+                            ->where('notas.turno_id', $request->turno_id)
+                            ->where('notas.paralelo', $request->paralelo)
+                            ->where('notas.semestre', $request->semestre)
+                            ->where('notas.trimestre', $request->trimestre)
+                            ->leftJoin('personas', 'notas.persona_id', '=', 'personas.id')
+                            ->orderBy('personas.apellido_paterno', 'asc')
+                            ->get();
+
+        // dd($alumnos);
+
+        /*$alumnos = Nota::where('anio_vigente', $request->gestion)
                     ->where('docente_id', $request->cod_docente)
                     ->where('asignatura_id', $request->materia_id)
                     ->where('turno_id', $request->turno_id)
                     ->where('paralelo', $request->paralelo)
                     ->where('semestre', $request->semestre)
                     ->where('trimestre', $request->trimestre)
-                    // ->whereNotNull('trimestre')
-                    // ->groupBy('trimestre')
-                    ->get();
-        // dd($alumnos);
-        return view('lista.genera_centralizador')->with(compact('alumnos'));
+                    ->get();*/
+
+        $datos = Nota::where('anio_vigente', $request->gestion)
+                    ->where('docente_id', $request->cod_docente)
+                    ->where('asignatura_id', $request->materia_id)
+                    ->where('turno_id', $request->turno_id)
+                    ->where('paralelo', $request->paralelo)
+                    ->where('semestre', $request->semestre)
+                    ->where('trimestre', $request->trimestre)
+                    ->first();
+
+        $pdf = PDF::loadView('pdf.centralizadorBimestral', compact('alumnos', 'datos'))->setPaper('letter');
+        return $pdf->stream('centralizador_bimestral.pdf');
+
     }
 
     public function genera_centralizador_asistencia(Request $request)
     {
-        dd($request->all());
         $inscritos  = Inscripcione::where('asignatura_id', $asignatura->asignatura_id)
                                 ->where('turno_id', $asignatura->turno_id)
                                 ->where('paralelo', $asignatura->paralelo)
                                 ->where('anio_vigente', $asignatura->anio_vigente)
                                 ->get();
-        dd($inscritos);
+
+        $pdf = PDF::loadView('pdf.centralizadorBimestral', compact('inscritos'))->setPaper('letter');
+        return $pdf->stream('centralizador_bimestral.pdf');
     }
 
 }
