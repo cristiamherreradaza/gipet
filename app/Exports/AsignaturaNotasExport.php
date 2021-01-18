@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Inscripcione;
 use App\Nota;
+use App\NotasPropuesta;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -53,6 +54,14 @@ class AsignaturaNotasExport implements FromCollection, WithMapping, WithHeadings
         * @var Invoice $invoice
         */
         //$turno = Turno::find($this->turno);
+        $docente    = NotasPropuesta::where('asignatura_id', $inscripcion->asignatura->id)
+                                    ->where('turno_id', $inscripcion->turno_id)
+                                    ->where('paralelo', $inscripcion->paralelo)
+                                    ->where('anio_vigente', $inscripcion->anio_vigente)
+                                    ->first();
+        if(!$docente){
+            $docente    = new NotasPropuesta();
+        }
         $notaUno    = Nota::where('inscripcion_id', $inscripcion->id)->where('trimestre', 1)->first();
         if(!$notaUno){
             $notaUno    = new Nota();
@@ -81,6 +90,7 @@ class AsignaturaNotasExport implements FromCollection, WithMapping, WithHeadings
             $inscripcion->asignatura->nombre,
             $inscripcionGestion,
             $inscripcion->asignatura->ciclo,
+            $docente->docente->apellido_paterno . ' ' . $docente->docente->apellido_materno . ' ' . $docente->docente->nombres, 
             $inscripcion->turno->descripcion,
             $inscripcion->paralelo,
             $inscripcion->anio_vigente,
@@ -124,6 +134,7 @@ class AsignaturaNotasExport implements FromCollection, WithMapping, WithHeadings
                 'Nombre',
                 'Gestion',
                 'Ciclo',
+                'Docente',
                 'Turno',
                 'Paralelo',
                 'Año Vigente',
@@ -152,6 +163,7 @@ class AsignaturaNotasExport implements FromCollection, WithMapping, WithHeadings
                 '',
             ],
             [
+                '',
                 '',
                 '',
                 '',
@@ -204,8 +216,8 @@ class AsignaturaNotasExport implements FromCollection, WithMapping, WithHeadings
         ];
         return [
             AfterSheet::class => function(AfterSheet $event) use ($styleArray) {
-                $event->sheet->getStyle('A1:AH1')->applyFromArray($styleArray);
-                $event->sheet->getStyle('A2:AH2')->applyFromArray($styleArray);
+                $event->sheet->getStyle('A1:AI1')->applyFromArray($styleArray);
+                $event->sheet->getStyle('A2:AI2')->applyFromArray($styleArray);
                 $event->sheet->getDelegate()->freezePane('D1');
                 $event->sheet->mergeCells('A1:A2');
                 $event->sheet->mergeCells('B1:B2');
@@ -218,12 +230,13 @@ class AsignaturaNotasExport implements FromCollection, WithMapping, WithHeadings
                 $event->sheet->mergeCells('I1:I2');
                 $event->sheet->mergeCells('J1:J2');
                 $event->sheet->mergeCells('K1:K2');
+                $event->sheet->mergeCells('L1:L2');
 
-                $event->sheet->mergeCells('L1:P1');
-                $event->sheet->mergeCells('Q1:U1');
-                $event->sheet->mergeCells('V1:Z1');
-                $event->sheet->mergeCells('AA1:AE1');
-                $event->sheet->mergeCells('AF1:AH1');
+                $event->sheet->mergeCells('M1:Q1');
+                $event->sheet->mergeCells('R1:V1');
+                $event->sheet->mergeCells('W1:AA1');
+                $event->sheet->mergeCells('AB1:AF1');
+                $event->sheet->mergeCells('AG1:AI1');
             },
         ];
     }

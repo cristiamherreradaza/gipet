@@ -10,7 +10,10 @@ use App\Carrera;
 use App\CarrerasPersona;
 use App\Certificado;
 use App\Inscripcione;
+use App\CursosCorto;
 use App\Nota;
+use App\SegundosTurno;
+use App\EstudiantesCertificado;
 use App\Turno;
 use App\Kardex;
 use DataTables;
@@ -102,7 +105,7 @@ class PersonaController extends Controller
         return Datatables::of($estudiantes)
             ->addColumn('action', function ($estudiantes) {
                 return '<button onclick="ver_persona('.$estudiantes->id.')"        type="button" class="btn btn-info"      title="Ver"><i class="fas fa-eye"></i></button>
-                        <button onclick="estado(' .  $estudiantes->id . ')"        type="button" class="btn btn-danger"    title="Estado(Activo/Inactivo)" ><i class="fas fa-user"></i></button>
+                        <button onclick="eliminar_persona('.$estudiantes->id.', '.$estudiantes->cedula.')" type="button" class="btn btn-danger" title="Eliminar Estudiante"><i class="fas fa-trash"></i></button>
                         <button onclick="contrato(' .  $estudiantes->id . ')"        type="button" class="btn btn-dark"    title="Contrato" ><i class="fas fa-file-alt"></i></button>';
             })
             ->make(true);
@@ -138,6 +141,45 @@ class PersonaController extends Controller
         // }
         
         return view('persona.ver_detalle')->with(compact('estudiante', 'carreras'));
+    }
+
+    public function eliminar_persona(Request $request)
+    {
+        // Aqui debe eliminarse todo registro de la persona en el sistema
+        // Su usuario
+        $persona = Persona::find($request->persona_id);
+        $carrerasPersonas           = CarrerasPersona::where('persona_id', $persona->id)->get();
+        foreach($carrerasPersonas as $registro){
+            $registro->delete();
+        }
+        // Sus notas
+        $notas                      = Nota::where('persona_id', $persona->id)->get();
+        foreach($notas as $registro){
+            $registro->delete();
+        }
+        // Sus recuperatorios
+        $segundosTurnos             = SegundosTurno::where('persona_id', $persona->id)->get();
+        foreach($segundosTurnos as $registro){
+            $registro->delete();
+        }
+        // Sus cursos varios
+        $cursosCortos               = CursosCorto::where('persona_id', $persona->id)->get();
+        foreach($cursosCortos as $registro){
+            $registro->delete();
+        }
+        // Sus inscripciones
+        $inscripciones              = Inscripcione::where('persona_id', $persona->id)->get();
+        foreach($inscripciones as $registro){
+            $registro->delete();
+        }
+        // Sus certificados
+        $estudiantesCertificados    = EstudiantesCertificado::where('persona_id', $persona->id)->get();
+        foreach($estudiantesCertificados as $registro){
+            $registro->delete();
+        }
+        // Finalmente se elimina a la persona
+        $persona->delete();
+        return redirect('Persona/listado');
     }
 
     public function ajaxDetalleHistorialAcademico(Request $request)
