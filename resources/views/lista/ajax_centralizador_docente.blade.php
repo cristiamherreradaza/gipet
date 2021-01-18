@@ -3,7 +3,7 @@
 <input type="hidden" name="cod_docente" id="cod_docente">
 <datalist id="docentes">
   	@foreach ($docentes as $docente)
-  	    <option data-valor="{{ $docente->docente_id }}" value="{{ $docente->docente->nombres }} {{ $docente->docente->apellido_paterno }} {{ $docente->docente->apellido_materno }}">
+  	    <option data-valor="{{ $docente->docente_id }}" value="{{ $docente->docente['nombres'] }} {{ $docente->docente['apellido_paterno'] }} {{ $docente->docente['apellido_materno'] }}">
   	@endforeach
 
 </datalist>
