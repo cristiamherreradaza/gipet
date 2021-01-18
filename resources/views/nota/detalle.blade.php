@@ -22,7 +22,7 @@
         <div class="row">
             <div class="col-md-4"><h4 class="text-bold">TURNO: {{ $asignatura->turno->descripcion }}</h4></div>
             <div class="col-md-4"><h4 class="text-bold">PARALELO: {{ $asignatura->paralelo }}</h4></div>
-            <div class="col-md-4"><h4 class="text-bold">Año {{ date('Y') }}</h4></div>
+            <div class="col-md-4"><h4 class="text-bold">Año {{ $asignatura->anio_vigente }}</h4></div>
         </div>
 
         <form action="{{ url('nota/cambiaTurnoParalelo') }}" method="POST" id="frmNotas">
