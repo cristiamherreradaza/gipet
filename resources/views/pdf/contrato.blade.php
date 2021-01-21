@@ -116,9 +116,9 @@
             </tr>
             <tr>
                 <td><b>Familiar:</b></td>
-                <td>{{ $persona->nombre_madre }}</td>
+                <td>{{ $persona->nombre_padre }}</td>
                 <td><b>Telf:</b></td>
-                <td>{{ $persona->celular_madre }}</td>
+                <td>{{ $persona->celular_padre }}</td>
             </tr>
 
             <tr>
