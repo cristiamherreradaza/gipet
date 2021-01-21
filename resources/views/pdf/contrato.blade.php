@@ -24,7 +24,7 @@
             background-color: #fff;
             position: absolute;
             top: 425px;
-            left: 200px;
+            left: 170px;
             padding: 20px;
             border: 1px solid black;
             -moz-border-radius:10px;
