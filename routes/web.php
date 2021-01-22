@@ -76,7 +76,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('user/asignar', 'UserController@asignar');
 
-    //NOTAS
+    //NOTASasd
     Route::get('nota/listado', 'NotaController@listado');
     Route::get('Nota/ajaxAsignaturasGestion', 'NotaController@ajaxAsignaturasGestion');
     Route::get('nota/detalle/{id}', 'NotaController@detalle');
