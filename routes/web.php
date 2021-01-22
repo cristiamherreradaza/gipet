@@ -351,4 +351,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('Importacion/importar_3', 'ImportacionController@importar_3');
     Route::post('Importacion/ajaxBuscaAlumno', 'ImportacionController@ajaxBuscaAlumno');
     Route::get('Lista/reporteExcelAlumnos/{carrera_id}/{curso_id}/{turno_id}/{paralelo}/{gestion}/{estado}', 'ListaController@reporteExcelAlumnos');
+
+    // FACTURAS
+    Route::get('Factura/listadoPersonas', 'FacturaController@listadoPersonas');
+    Route::get('Factura/ajaxListadoPersonas', 'FacturaController@ajaxListadoPersonas');
+
 });
