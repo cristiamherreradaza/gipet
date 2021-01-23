@@ -7,7 +7,7 @@
             <div class="form-body">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-5">
                             <div class="form-group">
                                 <label>Carrera
                                     <span class="text-danger">
@@ -25,7 +25,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label>Turno
                                     <span class="text-danger">
@@ -43,7 +43,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-1">
                             <div class="form-group">
                                 <label>Paralelo
                                     <span class="text-danger">
@@ -62,26 +62,30 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Gesti&oacute;n</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input type="number" class="form-control" id="nueva_gestion" name="nueva_gestion" value="{{ date('Y') }}" required>
+                                <input type="number" class="form-control" id="nueva_gestion" name="nueva_gestion" value="{{ date('Y') }}"
+                                    required>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Fecha de Inscripcion</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input type="date" name="nueva_fecha_inscripcion" id="nueva_fecha_inscripcion" class="form-control" value="{{ date('Y-m-d') }}" required>
-                            </div> 
+                                <input type="date" name="nueva_fecha_inscripcion" id="nueva_fecha_inscripcion" class="form-control"
+                                    value="{{ date('Y-m-d') }}" required>
+                            </div>
                         </div>
+                    </div>
+                    <div class="row">
+                        
+                        
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">&nbsp;</label>
