@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Barryvdh\DomPDF\Facade as PDF;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use App\Carrera;
-use App\CarrerasPersona;
-use App\Certificado;
-use App\Inscripcione;
-use App\CursosCorto;
 use App\Nota;
-use App\SegundosTurno;
-use App\EstudiantesCertificado;
 use App\Turno;
 use App\Kardex;
 use DataTables;
+use App\Carrera;
 use App\Persona;
+use App\Certificado;
+use App\CursosCorto;
+use App\Inscripcione;
+use App\SegundosTurno;
+use App\CarrerasPersona;
+use App\TiposMensualidade;
+use Illuminate\Http\Request;
+use App\EstudiantesCertificado;
+use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class PersonaController extends Controller
 {
@@ -245,6 +246,11 @@ class PersonaController extends Controller
 
     public function ajaxDetalleCarreras(Request $request)
     {
+        $gestionActual = date('Y');
+        // dd($gestionActual);
+        $tiposMensualidades = TiposMensualidade::where('anio_vigente', $gestionActual)
+                            ->get();
+        // dd($tiposMensualidades);
         $persona = Persona::find($request->persona_id);
         $carreras = Inscripcione::where('persona_id', $persona->id)
                                 ->select('carrera_id')
@@ -261,7 +267,7 @@ class PersonaController extends Controller
         $disponibles = Carrera::whereNotIn('id', $array_carreras)->get();
         $turnos = Turno::get();
         // Posteriormente enviaremos esa coleccion a interfaz
-        return view('persona.ajaxDetalleCarreras')->with(compact('carreras', 'persona', 'disponibles', 'turnos'));
+        return view('persona.ajaxDetalleCarreras')->with(compact('carreras', 'persona', 'disponibles', 'turnos', 'tiposMensualidades'));
     }
 
     public function ajaxDetalleHistorialInscripciones(Request $request)

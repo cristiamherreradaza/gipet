@@ -84,7 +84,27 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Paralelo
+                                    <span class="text-danger">
+                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                    </span>
+                                </label>
                         
+                                <select class="form-control custom-select" id="nuevo_turno" name="nuevo_turno" required>
+                                    @if($tiposMensualidades->count() > 0)
+                                        @foreach($tiposMensualidades as $tm)
+                                            <option value="{{ $tm->id }}">{{ $tm->nombre }} ({{ $tm->numero_maximo }})</option>
+                                        @endforeach
+                                    @else
+                                        <option value="">No Disponible</option>
+                                    @endif
+                                </select>
+
+                            </div>
+
+                        </div>
                         
                         <div class="col-md-4">
                             <div class="form-group">
