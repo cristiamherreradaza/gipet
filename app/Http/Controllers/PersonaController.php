@@ -8,6 +8,7 @@ use App\Kardex;
 use DataTables;
 use App\Carrera;
 use App\Persona;
+use App\Descuento;
 use App\Certificado;
 use App\CursosCorto;
 use App\Inscripcione;
@@ -247,11 +248,16 @@ class PersonaController extends Controller
     public function ajaxDetalleCarreras(Request $request)
     {
         $gestionActual = date('Y');
-        // dd($gestionActual);
+
         $tiposMensualidades = TiposMensualidade::where('anio_vigente', $gestionActual)
                             ->get();
-        // dd($tiposMensualidades);
+
+        $descuentos = Descuento::where('anio_vigente', $gestionActual)
+                                ->where('servicio_id', 2)
+                                ->get();
+
         $persona = Persona::find($request->persona_id);
+
         $carreras = Inscripcione::where('persona_id', $persona->id)
                                 ->select('carrera_id')
                                 ->groupBy('carrera_id')
@@ -267,7 +273,7 @@ class PersonaController extends Controller
         $disponibles = Carrera::whereNotIn('id', $array_carreras)->get();
         $turnos = Turno::get();
         // Posteriormente enviaremos esa coleccion a interfaz
-        return view('persona.ajaxDetalleCarreras')->with(compact('carreras', 'persona', 'disponibles', 'turnos', 'tiposMensualidades'));
+        return view('persona.ajaxDetalleCarreras')->with(compact('carreras', 'persona', 'disponibles', 'turnos', 'tiposMensualidades', 'descuentos'));
     }
 
     public function ajaxDetalleHistorialInscripciones(Request $request)
@@ -472,6 +478,11 @@ class PersonaController extends Controller
 
         // dd($persona);
         // echo "holas";
+    }
+
+    public function ajaxMuestraMontos(Request $request)
+    {
+        dd($request->all());
     }
    
 }

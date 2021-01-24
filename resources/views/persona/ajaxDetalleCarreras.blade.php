@@ -86,13 +86,13 @@
                     <div class="row">
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label>Paralelo
+                                <label>Cantidad Mensualidades
                                     <span class="text-danger">
                                         <i class="mr-2 mdi mdi-alert-circle"></i>
                                     </span>
                                 </label>
                         
-                                <select class="form-control custom-select" id="nuevo_turno" name="nuevo_turno" required>
+                                <select class="form-control custom-select" id="cantidad_mensualidad" name="cantidad_mensualidad" required>
                                     @if($tiposMensualidades->count() > 0)
                                         @foreach($tiposMensualidades as $tm)
                                             <option value="{{ $tm->id }}">{{ $tm->nombre }} ({{ $tm->numero_maximo }})</option>
@@ -102,6 +102,33 @@
                                     @endif
                                 </select>
 
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Descuento
+                                    <span class="text-danger">
+                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                    </span>
+                                </label>
+                        
+                                <select class="form-control custom-select" id="descuento" name="descuento" required onchange="ajaxMuestraMontos()">
+                                    <option value="ninguno">NINGUNO</option>
+                                    @if($descuentos->count() > 0)
+                                        @foreach($descuentos as $d)
+                                            <option value="{{ $d->id }}">{{ $d->nombre }}</option>
+                                        @endforeach
+                                    @else
+                                        <option value="">No Disponible</option>
+                                    @endif
+                                </select>
+
+                            </div>
+
+                            <div id="ajaxMuestraMontos">
+                                
                             </div>
 
                         </div>
@@ -199,5 +226,23 @@
                 text: 'Tienes que adicionar al menos un producto.'
             })
         }
+    }
+
+    function ajaxMuestraMontos()
+    {
+        let descuento = $('#descuento').val();
+
+        $.ajax({
+            url: "{{ url('Persona/ajaxMuestraMontos') }}",
+            data: {
+                descuento : descuento
+                },
+            type: 'get',
+            success: function(data) {
+                // $("#detalleAcademicoAjax").show('slow');
+                $("#ajaxMuestraMontos").html(data);
+            }
+        });
+
     }
 </script>
