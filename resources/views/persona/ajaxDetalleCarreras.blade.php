@@ -92,15 +92,15 @@
                                     </span>
                                 </label>
                         
-                                <select class="form-control custom-select" id="cantidad_mensualidad" name="cantidad_mensualidad" required>
-                                    @if($tiposMensualidades->count() > 0)
+                                @if($tiposMensualidades->count() > 0)
+                                    <select class="form-control custom-select" id="cantidad_mensualidad" name="cantidad_mensualidad" required>
                                         @foreach($tiposMensualidades as $tm)
                                             <option value="{{ $tm->id }}">{{ $tm->nombre }} ({{ $tm->numero_maximo }})</option>
                                         @endforeach
-                                    @else
-                                        <option value="">No Disponible</option>
-                                    @endif
-                                </select>
+                                    </select>
+                                @else
+                                    <option value="">No Disponible</option>
+                                @endif
 
                             </div>
 
@@ -114,23 +114,31 @@
                                     </span>
                                 </label>
                         
-                                <select class="form-control custom-select" id="descuento" name="descuento" required onchange="ajaxMuestraMontos()">
-                                    <option value="ninguno">NINGUNO</option>
-                                    @if($descuentos->count() > 0)
+                                @if($descuentos->count() > 0)
+                                    <select class="form-control custom-select" id="descuento" name="descuento" required onchange="ajaxMuestraMontos()">
                                         @foreach($descuentos as $d)
                                             <option value="{{ $d->id }}">{{ $d->nombre }}</option>
                                         @endforeach
-                                    @else
-                                        <option value="">No Disponible</option>
-                                    @endif
-                                </select>
-
+                                    </select>
+                                @else
+                                    <option value="">No Disponible</option>
+                                @endif
                             </div>
 
-                            <div id="ajaxMuestraMontos">
-                                
-                            </div>
+                        </div>
 
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Descuento </label>
+                                <input type="text" class="form-control" name="monto" id="monto" value="0" readonly>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>A Pagar </label>
+                                <input type="text" class="form-control" name="pagar" id="pagar" value="{{ $montoSinDescuento->a_pagar }}" readonly>
+                            </div>
                         </div>
                         
                         <div class="col-md-4">
@@ -232,17 +240,28 @@
     {
         let descuento = $('#descuento').val();
 
-        $.ajax({
-            url: "{{ url('Persona/ajaxMuestraMontos') }}",
-            data: {
-                descuento : descuento
-                },
-            type: 'get',
-            success: function(data) {
-                // $("#detalleAcademicoAjax").show('slow');
-                $("#ajaxMuestraMontos").html(data);
-            }
-        });
+        if(descuento != 9 && descuento != 'ninguno')
+        {
+            $.ajax({
+                url: "{{ url('Persona/ajaxMuestraMontos') }}",
+                data: {
+                    descuento : descuento
+                    },
+                type: 'get',
+                success: function(data) {
+                    let objMontos = JSON.parse(data);
+                    $("#monto").val(objMontos.monto);
+                    $("#pagar").val(objMontos.a_pagar);
+                    // $("#ajaxMuestraMontos").html(data);
+                    // console.log(objMontos.monto);
+                }
+            });
 
+        }else{
+
+            // alert("sip");
+            $("#monto").removeAttr("readonly");
+            // $("#monto").removeAttr("readonly");​​​​​
+        }
     }
 </script>

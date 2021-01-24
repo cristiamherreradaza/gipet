@@ -255,6 +255,11 @@ class PersonaController extends Controller
         $descuentos = Descuento::where('anio_vigente', $gestionActual)
                                 ->where('servicio_id', 2)
                                 ->get();
+        
+        $montoSinDescuento = Descuento::where('anio_vigente', $gestionActual)
+                                ->where('servicio_id', 2)
+                                ->where('nombre', 'NINGUNO')
+                                ->first();
 
         $persona = Persona::find($request->persona_id);
 
@@ -273,7 +278,7 @@ class PersonaController extends Controller
         $disponibles = Carrera::whereNotIn('id', $array_carreras)->get();
         $turnos = Turno::get();
         // Posteriormente enviaremos esa coleccion a interfaz
-        return view('persona.ajaxDetalleCarreras')->with(compact('carreras', 'persona', 'disponibles', 'turnos', 'tiposMensualidades', 'descuentos'));
+        return view('persona.ajaxDetalleCarreras')->with(compact('carreras', 'persona', 'disponibles', 'turnos', 'tiposMensualidades', 'descuentos', 'montoSinDescuento'));
     }
 
     public function ajaxDetalleHistorialInscripciones(Request $request)
@@ -482,7 +487,13 @@ class PersonaController extends Controller
 
     public function ajaxMuestraMontos(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
+        // $datosDescuentos = Descuento::where('id', $request->descuento)->toJson();
+        $datosDescuentos = Descuento::find($request->descuento)->toJson();
+        // dd($datosDescuentos);
+
+        return response()->json($datosDescuentos);
+        // return view('persona.ajaxMuestraMontos')->with(compact('datosDescuentos'));
     }
    
 }
