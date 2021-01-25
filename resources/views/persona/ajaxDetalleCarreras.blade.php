@@ -130,14 +130,14 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label>Descuento </label>
-                                <input type="text" class="form-control" name="monto" id="monto" value="0" readonly>
+                                <input type="number" class="form-control" name="monto" id="monto" value="0" readonly max="{{ $montoSinDescuento->a_pagar }}" min="1" onkeyup="calculaMensualidad()">
                             </div>
                         </div>
                         
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label>A Pagar </label>
-                                <input type="text" class="form-control" name="pagar" id="pagar" value="{{ $montoSinDescuento->a_pagar }}" readonly>
+                                <input type="number" class="form-control" name="pagar" id="pagar" value="{{ $montoSinDescuento->a_pagar }}" readonly>
                             </div>
                         </div>
                         
@@ -217,6 +217,8 @@
 </div>
 
 <script>
+
+
     function validaItems()
     {
         var nueva_carrera           = $("#nueva_carrera").val();
@@ -239,6 +241,7 @@
     function ajaxMuestraMontos()
     {
         let descuento = $('#descuento').val();
+        let montoPension = Number({{ $montoSinDescuento->a_pagar }});
 
         if(descuento != 9 && descuento != 'ninguno')
         {
@@ -259,9 +262,20 @@
 
         }else{
 
-            // alert("sip");
             $("#monto").removeAttr("readonly");
-            // $("#monto").removeAttr("readonly");​​​​​
+            $("#monto").val("");
+            $("#monto").focus();
+            $("#pagar").val(montoPension);
         }
+    }
+
+    function calculaMensualidad()
+    {
+        // alert("Entro");
+        let descuento = Number($('#monto').val());
+        let montoPension = Number({{ $montoSinDescuento->a_pagar }});
+        let montoMensualidad = montoPension - descuento;
+        console.log(descuento);
+        $("#pagar").val(montoMensualidad);
     }
 </script>
