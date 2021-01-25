@@ -19,7 +19,7 @@
                     <tr>
                         <th>#</th>
                         <th>Nombre</th>
-                        <th>Porcentaje</th>
+                        <th>Monto</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
@@ -28,9 +28,9 @@
                         <tr>
                             <td>{{ ($key+1) }}</td>
                             <td>{{ $descuento->nombre }}</td>
-                            <td>{{ $descuento->porcentaje }} %</td>
+                            <td>{{ $descuento->monto }}</td>
                             <td>
-                                <button type="button" class="btn btn-info" title="Editar descuento"  onclick="editar('{{ $descuento->id }}', '{{ $descuento->nombre }}', '{{ $descuento->porcentaje }}')"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-info" title="Editar descuento"  onclick="editar('{{ $descuento->id }}', '{{ $descuento->nombre }}', '{{ $descuento->monto }}')"><i class="fas fa-edit"></i></button>
                                 <button type="button" class="btn btn-danger" title="Eliminar descuento"  onclick="eliminar('{{ $descuento->id }}', '{{ $descuento->nombre }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
@@ -64,11 +64,11 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label">Porcentaje</label>
+                                <label class="control-label">Monto</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input name="porcentaje_descuento" type="number" id="porcentaje_descuento" pattern="^[0-9]+" min="0" max="100" class="form-control" required>
+                                <input name="monto_descuento" type="number" id="monto_descuento" pattern="^[0-9]+" min="0" class="form-control" required>
                             </div>
                         </div>
                     </div>
@@ -106,11 +106,11 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label">Descuento</label>
+                                <label class="control-label">Monto</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input name="porcentaje" type="number" id="porcentaje" pattern="^[0-9]+" min="0" max="100" class="form-control" required>
+                                <input name="monto" type="number" id="monto" pattern="^[0-9]+" min="0" class="form-control" required>
                             </div>
                         </div>
                     </div>
@@ -148,9 +148,9 @@
     function guardar_descuento()
     {
         var nombre_descuento = $("#nombre_descuento").val();
-        var porcentaje_descuento = $("#porcentaje_descuento").val();
-        if(porcentaje_descuento>=0 && porcentaje_descuento<=100){
-            if(nombre_descuento.length>0 && porcentaje_descuento.length>0){
+        var monto_descuento = $("#monto_descuento").val();
+        if(monto_descuento>=0){
+            if(nombre_descuento.length>0 && monto_descuento.length>0){
                 Swal.fire(
                     'Excelente!',
                     'Un nuevo descuento fue registrado.',
@@ -160,11 +160,11 @@
         }
     }
 
-    function editar(id, nombre, porcentaje)
+    function editar(id, nombre, monto)
     {
         $("#id").val(id);
         $("#nombre").val(nombre);
-        $("#porcentaje").val(porcentaje);
+        $("#monto").val(monto);
         $("#editar_descuentos").modal('show');
     }
 
@@ -172,9 +172,9 @@
     {
         var id = $("#id").val();
         var nombre = $("#nombre").val();
-        var porcentaje = $("#porcentaje").val();
-        if(porcentaje>=0 && porcentaje<=100){
-            if(nombre.length>0 && porcentaje.length>0){
+        var monto = $("#monto").val();
+        if(monto>=0){
+            if(nombre.length>0 && monto.length>0){
                 Swal.fire(
                     'Excelente!',
                     'Descuento actualizado correctamente.',

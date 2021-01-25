@@ -8,8 +8,8 @@
 <div class="card border-info">
     <div class="card-header bg-info">
         <h4 class="mb-0 text-white">
-            SERVICIOS &nbsp;&nbsp;
-            <button type="button" class="btn waves-effect waves-light btn-sm btn-primary" onclick="nuevo_servicio()"><i class="fas fa-plus"></i> &nbsp; NUEVO SERVICIO</button>
+            PERIODOS DE {{ strtoupper($servicio->nombre) }} &nbsp;&nbsp;
+            <button type="button" class="btn waves-effect waves-light btn-sm btn-primary" onclick="nuevo_periodo()"><i class="fas fa-plus"></i> &nbsp; NUEVO PERIODO</button>
         </h4>
     </div>
     <div class="card-body" id="lista">
@@ -18,23 +18,22 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Codigo</th>
                         <th>Nombre</th>
-                        <th>Costo</th>
+                        <th>Numero Mensualidades</th>
+                        <th>An&tilde;o Vigente</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($servicios as $key => $servicio)
+                    @foreach($periodos as $key => $periodo)
                         <tr>
                             <td>{{ ($key+1) }}</td>
-                            <td>{{ $servicio->sigla }}</td>
-                            <td>{{ $servicio->nombre }}</td>
-                            <td>{{ $servicio->precio }}</td>
+                            <td>{{ $periodo->nombre }}</td>
+                            <td>{{ $periodo->numero_maximo }}</td>
+                            <td>{{ $periodo->anio_vigente }}</td>
                             <td>
-                                <button type="button" class="btn btn-info" title="Editar servicio"  onclick="editar('{{ $servicio->id }}', '{{ $servicio->nombre }}', '{{ $servicio->sigla }}', '{{ $servicio->precio }}')"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-dark" title="Ver periodos"  onclick="ver_periodos('{{ $servicio->id }}', '{{ $servicio->nombre }}')"><i class="fas fa-bullseye"></i></button>
-                                <button type="button" class="btn btn-danger" title="Eliminar servicio"  onclick="eliminar('{{ $servicio->id }}', '{{ $servicio->nombre }}')"><i class="fas fa-trash-alt"></i></button>
+                                <button type="button" class="btn btn-info" title="Editar periodo"  onclick="editar('{{ $periodo->id }}', '{{ $periodo->nombre }}', '{{ $periodo->numero_maximo }}', '{{ $periodo->anio_vigente }}')"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-danger" title="Eliminar periodo"  onclick="eliminar('{{ $periodo->id }}', '{{ $periodo->nombre }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
                     @endforeach
@@ -46,15 +45,16 @@
 
 
 <!-- inicio modal nuevo servicio -->
-<div id="nuevo_servicio" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="nuevo_periodo" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">NUEVO SERVICIO</h4>
+                <h4 class="modal-title" id="myModalLabel">NUEVO PERIODO</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <form action="{{ url('Servicio/guardar') }}"  method="POST">
+            <form action="{{ url('Servicio/guardar_periodo') }}"  method="POST">
                 @csrf
+                <input type="hidden" name="id_servicio" id="id_servicio" value="{{ $servicio->id }}">
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
@@ -70,26 +70,26 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label">Sigla</label>
+                                <label class="control-label">Numero mensualidades</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input name="sigla_servicio" type="text" id="sigla_servicio" maxlength="30" class="form-control" required>
+                                <input name="numero_mensualidad_servicio" type="text" id="numero_mensualidad_servicio" maxlength="30" class="form-control" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label">Costo</label>
+                                <label class="control-label">A&ntilde;o Vigente</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input name="precio_servicio" type="number" id="precio_servicio" pattern="^[0-9]+" min="0" class="form-control" required>
+                                <input name="anio_vigente_servicio" type="number" id="anio_vigente_servicio" value="{{ date('Y') }}" min="0" class="form-control" required>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar_servicio()">GUARDAR SERVICIO</button>
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar_servicio()">GUARDAR PERIODO</button>
                 </div>
             </form>
         </div>
@@ -98,16 +98,17 @@
 <!-- fin modal nuevo servicio -->
 
 <!-- inicio modal editar servicio -->
-<div id="editar_servicios" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="editar_periodo" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">EDITAR SERVICIO</h4>
+                <h4 class="modal-title" id="myModalLabel">EDITAR PERIODO</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <form action="{{ url('Servicio/actualizar') }}"  method="POST" >
+            <form action="{{ url('Servicio/actualizar_periodo') }}"  method="POST" >
                 @csrf
-                <div class="modal-body">        
+                <div class="modal-body">       
+                    <input type="hidden" name="id_servicio_actualizar" id="id_servicio_actualizar" value="{{ $servicio->id }}"> 
                     <input type="hidden" name="id" id="id" value="">
                     <div class="row">
                         <div class="col-md-12">
@@ -123,7 +124,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label">Sigla</label>
+                                <label class="control-label">Numero mensualidades</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
@@ -132,7 +133,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label">Costo</label>
+                                <label class="control-label">A&ntilde;o Vigente</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
@@ -142,21 +143,13 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="actualizar_turno()">ACTUALIZAR SERVICIO</button>
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="actualizar_turno()">ACTUALIZAR PERIODO</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 <!-- fin modal editar servicio -->
-
-<!-- inicio modal ver periodos -->
-<div id="editar_perfiles" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" id="editaPerfilAjax">
-        
-    </div>
-</div>
-<!-- fin modal ver periodos -->
 @stop
 
 @section('js')
@@ -173,24 +166,24 @@
     });
 </script>
 <script>
-    function nuevo_servicio()
+    function nuevo_periodo()
     {
-        $("#nuevo_servicio").modal('show');
+        $("#nuevo_periodo").modal('show');
     }
 
-    function guardar_servicio()
-    {
-        var nombre_servicio = $("#nombre_servicio").val();
-        var sigla_servicio = $("#sigla_servicio").val();
-        var precio_servicio = $("#precio_servicio").val();
-        if(nombre_servicio.length>0 && sigla_servicio.length>0 && precio_servicio.length>0){
-            Swal.fire(
-                'Excelente!',
-                'Un nuevo servicio fue registrado.',
-                'success'
-            )
-        }
-    }
+    // function guardar_servicio()
+    // {
+    //     var nombre_servicio = $("#nombre_servicio").val();
+    //     var numero_mensualidad_servicio = $("#numero_mensualidad_servicio").val();
+    //     var anio_vigente_servicio = $("#anio_vigente_servicio").val();
+    //     if(nombre_servicio.length>0 && numero_mensualidad_servicio.length>0 && anio_vigente_servicio.length>0){
+    //         Swal.fire(
+    //             'Excelente!',
+    //             'Un nuevo servicio fue registrado.',
+    //             'success'
+    //         )
+    //     }
+    // }
 
     function editar(id, nombre, sigla, precio)
     {
@@ -198,28 +191,23 @@
         $("#nombre").val(nombre);
         $("#sigla").val(sigla);
         $("#precio").val(precio);
-        $("#editar_servicios").modal('show');
+        $("#editar_periodo").modal('show');
     }
 
-    function actualizar_turno()
-    {
-        var id = $("#id").val();
-        var nombre = $("#nombre").val();
-        var sigla = $("#sigla").val();
-        var precio = $("#precio").val();
-        if(nombre.length>0 && sigla.length>0 && precio.length>0){
-            Swal.fire(
-                'Excelente!',
-                'Servicio actualizado correctamente.',
-                'success'
-            )
-        }
-    }
-
-    function ver_periodos(id, nombre)
-    {
-        window.location.href = "{{ url('Servicio/periodo') }}/"+id;
-    }
+    // function actualizar_turno()
+    // {
+    //     var id = $("#id").val();
+    //     var nombre = $("#nombre").val();
+    //     var sigla = $("#sigla").val();
+    //     var precio = $("#precio").val();
+    //     if(nombre.length>0 && sigla.length>0 && precio.length>0){
+    //         Swal.fire(
+    //             'Excelente!',
+    //             'Servicio actualizado correctamente.',
+    //             'success'
+    //         )
+    //     }
+    // }
 
     function eliminar(id, nombre)
     {
@@ -236,10 +224,10 @@
             if (result.value) {
                 Swal.fire(
                     'Excelente!',
-                    'El servicio fue eliminado',
+                    'El periodo fue eliminado',
                     'success'
                 ).then(function() {
-                    window.location.href = "{{ url('Servicio/eliminar') }}/"+id;
+                    window.location.href = "{{ url('Servicio/eliminar_periodo') }}/"+id;
                 });
             }
         })

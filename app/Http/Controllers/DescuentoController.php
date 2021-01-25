@@ -19,7 +19,7 @@ class DescuentoController extends Controller
         $descuento = new Descuento();
         $descuento->user_id = Auth::user()->id;
         $descuento->nombre = $request->nombre_descuento;
-        $descuento->porcentaje = $request->porcentaje_descuento;
+        $descuento->monto = $request->monto_descuento;
         $descuento->save();
         return redirect('Descuento/listado');
     }
@@ -29,7 +29,7 @@ class DescuentoController extends Controller
         $descuento = Descuento::find($request->id);
         $descuento->user_id = Auth::user()->id;
         $descuento->nombre = $request->nombre;
-        $descuento->porcentaje = $request->porcentaje;
+        $descuento->monto = $request->monto;
         $descuento->save();
         return redirect('Descuento/listado');
     }

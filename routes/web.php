@@ -249,7 +249,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('Servicio/ajax_guardar_servicio_asignatura', 'ServicioController@ajax_guardar_servicio_asignatura');
     Route::get('Servicio/ajax_verifica_codigo_asignatura', 'ServicioController@ajax_verifica_codigo_asignatura');
     Route::get('Servicio/ajax_verifica_nombre_asignatura', 'ServicioController@ajax_verifica_nombre_asignatura');
-
+    Route::get('Servicio/periodo/{id}', 'ServicioController@periodo');
+    Route::post('Servicio/guardar_periodo', 'ServicioController@guardar_periodo');
+    Route::post('Servicio/actualizar_periodo', 'ServicioController@actualizar_periodo');
+    Route::get('Servicio/eliminar_periodo/{id}', 'ServicioController@eliminar_periodo');
 
     Route::get('Resolucion/listado', 'ResolucionController@listado');
     Route::post('Resolucion/guardar', 'ResolucionController@guardar');
