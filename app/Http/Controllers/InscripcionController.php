@@ -2,28 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Barryvdh\DomPDF\Facade as PDF;
-use App\Inscripcione;
-use App\Carrera;
-use App\Asignatura;
-use App\Materia;
-use App\Turno;
-use App\User;
-use App\Persona;
+use DB;
 use App\Nota;
+use App\User;
+use App\Turno;
+use App\Kardex;
+use App\Carrera;
+use App\Materia;
+use App\Persona;
+use App\Servicio;
+use App\Asignatura;
+use App\CursosCorto;
+use App\Predefinida;
+use App\Inscripcione;
+use App\Prerequisito;
+use App\SegundosTurno;
 use App\NotasPropuesta;
 use App\CarrerasPersona;
-use App\Prerequisito;
-use App\Kardex;
-use App\CursosCorto;
 use App\CobrosTemporada;
-use App\Servicio;
-use App\Predefinida;
+use App\DescuentosPersona;
 use App\ServiciosAsignatura;
-use App\SegundosTurno;
-use DB;
+use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Facades\Auth;
 
 class InscripcionController extends Controller
 {
@@ -882,6 +883,23 @@ class InscripcionController extends Controller
         // Verificaremos que todos los elementos necesarios existan para la inscripcion del alumno
         if($request->persona_id && $request->nueva_carrera && $request->nuevo_turno && $request->nuevo_paralelo && $request->nueva_gestion && $request->nueva_fecha_inscripcion)
         {
+            // Guardamos los datos para las mensualidades
+            $descuento                     = new DescuentosPersona();
+            $descuento->user_id            = Auth::user()->id;
+            $descuento->persona_id         = $request->persona_id;
+            $descuento->servicio_id        = 2;
+            $descuento->descuento_id       = $request->descuento;
+            $descuento->monto_director     = $request->monto;
+            $descuento->numero_mensualidad = $request->comienza;
+            $descuento->a_pagar            = $request->pagar;
+            $descuento->fecha              = $request->nueva_fecha_inscripcion;
+            $descuento->cantidad_cuotas    = $request->cantidadCuotas;
+            $descuento->anio_vigente       = $request->nueva_gestion;
+            $descuento->vigente            = "Si";
+            $descuento->save();
+            // Fin uardamos los datos para las mensualidades
+            dd($descuento);
+
             $persona = Persona::find($request->persona_id);
             // Verificamos que en la nueva carrera que vaya a inscribirse, no existan los registros
             $carreras_persona   = CarrerasPersona::where('carrera_id', $request->nueva_carrera)

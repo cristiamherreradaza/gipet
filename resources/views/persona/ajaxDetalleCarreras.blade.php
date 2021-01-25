@@ -93,9 +93,9 @@
                                 </label>
                         
                                 @if($tiposMensualidades->count() > 0)
-                                    <select class="form-control custom-select" id="cantidad_mensualidad" name="cantidad_mensualidad" required>
+                                    <select class="form-control custom-select" id="cantidad_mensualidad" name="cantidad_mensualidad" onchange="cambiaCantidadCuotas()">
                                         @foreach($tiposMensualidades as $tm)
-                                            <option value="{{ $tm->id }}">{{ $tm->nombre }} ({{ $tm->numero_maximo }})</option>
+                                            <option value="{{ $tm->id }}" data-mensualidades="{{ $tm->numero_maximo }}">{{ $tm->nombre }} ({{ $tm->numero_maximo }})</option>
                                         @endforeach
                                     </select>
                                 @else
@@ -127,21 +127,35 @@
 
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                             <div class="form-group">
                                 <label>Descuento </label>
-                                <input type="number" class="form-control" name="monto" id="monto" value="0" readonly max="{{ $montoSinDescuento->a_pagar }}" min="1" onkeyup="calculaMensualidad()">
+                                <input type="number" class="form-control" name="monto" id="monto" value="0" max="{{ $montoSinDescuento->a_pagar }}" min="0" onkeyup="calculaMensualidad()">
                             </div>
                         </div>
                         
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                             <div class="form-group">
                                 <label>A Pagar </label>
                                 <input type="number" class="form-control" name="pagar" id="pagar" value="{{ $montoSinDescuento->a_pagar }}" readonly>
                             </div>
                         </div>
+
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label>Cant. Cuotas</label>
+                                <input type="number" class="form-control" name="cantidadCuotas" id="cantidadCuotas" min="1" value="10">
+                            </div>
+                        </div>
+
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label>Comienza</label>
+                                <input type="number" class="form-control" name="comienza" id="comienza" min="1" value="1">
+                            </div>
+                        </div>
                         
-                        <div class="col-md-4">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">&nbsp;</label>
                                 <button type="submit" class="btn btn-block btn-info">Inscribir</button>
@@ -277,5 +291,11 @@
         let montoMensualidad = montoPension - descuento;
         console.log(descuento);
         $("#pagar").val(montoMensualidad);
+    }
+
+    function cambiaCantidadCuotas()
+    {
+        let mensualidades = $("#cantidad_mensualidad").find(':selected').data('mensualidades');
+        $("#cantidadCuotas").val(mensualidades);
     }
 </script>
