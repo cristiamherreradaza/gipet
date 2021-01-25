@@ -898,7 +898,7 @@ class InscripcionController extends Controller
             $descuento->vigente            = "Si";
             $descuento->save();
             // Fin uardamos los datos para las mensualidades
-            dd($descuento);
+            // dd($descuento);
 
             $persona = Persona::find($request->persona_id);
             // Verificamos que en la nueva carrera que vaya a inscribirse, no existan los registros

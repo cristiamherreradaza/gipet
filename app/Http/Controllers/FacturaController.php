@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Persona;
 use DataTables;
+use App\Persona;
+use App\Servicio;
+use App\CarrerasPersona;
 use Illuminate\Http\Request;
 
 class FacturaController extends Controller
@@ -19,10 +21,21 @@ class FacturaController extends Controller
         //$estudiantes = Persona::select('id', 'apellido_paterno', 'apellido_materno', 'nombres', 'carnet', 'telefono_celular', 'razon_social_cliente', 'nit');
         return Datatables::of($estudiantes)
             ->addColumn('action', function ($estudiantes) {
-                return '<button onclick="ver_persona('.$estudiantes->id.')"        type="button" class="btn btn-info"      title="Ver"><i class="fas fa-eye"></i></button>
-                        <button onclick="eliminar_persona('.$estudiantes->id.', '.$estudiantes->cedula.')" type="button" class="btn btn-danger" title="Eliminar Estudiante"><i class="fas fa-trash"></i></button>
-                        <button onclick="contrato(' .  $estudiantes->id . ')"        type="button" class="btn btn-dark"    title="Contrato" ><i class="fas fa-file-alt"></i></button>';
+                return '<button onclick="facturar('.$estudiantes->id.')" type="button" class="btn btn-info" title="Facturar"><i class="fas fa-eye"></i></button>';
             })
             ->make(true);
+    }
+
+    public function formularioFacturacion(Request $request)
+    {
+        $gestionActual = date('Y');
+        $servicios = Servicio::get();
+        $datosPersona = Persona::find($request->personaId);
+        $carreras = CarrerasPersona::where('persona_id', $request->personaId)
+                                    ->where('anio_vigente', $gestionActual)
+                                    ->get();
+
+        // dd($datosPersona);
+        return view('factura.formularioFacturacion')->with(compact('datosPersona', 'carreras', 'servicios'));
     }
 }
