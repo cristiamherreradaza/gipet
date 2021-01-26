@@ -360,5 +360,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Factura/listadoPersonas', 'FacturaController@listadoPersonas');
     Route::get('Factura/ajaxListadoPersonas', 'FacturaController@ajaxListadoPersonas');
     Route::get('Factura/formularioFacturacion/{personaId}', 'FacturaController@formularioFacturacion');
+    Route::get('Factura/imprimeFactura', 'FacturaController@imprimeFactura');
 
 });

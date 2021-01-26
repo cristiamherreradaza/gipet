@@ -84,6 +84,13 @@
         </div>
         <div class="card-body">
             <div class="row">
+                @if ($pagos->count() > 0)
+                    <input type="hidden" value="">
+                @else
+                    <input type="hidden" value="No" name="pago_antes">
+                @endif
+
+
 
                 <div class="col-3">
                     <div class="form-group">
@@ -93,6 +100,7 @@
                             </span>
                         </label>
                         <select name="servicio_id" id="servicio_id" class="form-control" required>
+                            <option value="">SELECCIONE</option>
                             @foreach ($servicios as $s)
                                 <option value="{{ $s->id }}">{{ $s->nombre }}</option>
                             @endforeach
@@ -111,7 +119,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         <label>NIT 
                             <span class="text-danger">
@@ -122,7 +130,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         <label>RAZON SOCIAL 
                             <span class="text-danger">
@@ -133,8 +141,43 @@
                     </div>
                 </div>
 
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>&nbsp;</label>
+                        <button type="button" class="btn btn-block btn-info" onclick="adicionaItem()">Adicionar</button>
+                    </div>
+                </div>
+
             </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive m-t-40">
+                        <table id="pensiones" class="table table-bordered table-striped text-center">
+                            <thead>
+                                <tr>
+                                    <th>Cantidad</th>
+                                    <th>Descripcion</th>                        
+                                    <th>Precio Unitario</th>                        
+                                    <th>Subtotal</th>                        
+                                    <th>Opciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="{{ url('Factura/imprimeFactura') }}" class="btn btn-block btn-success">FACTURAR</a>
+                </div>
+            </div>
+
         </div>
+
+        
     </div>
 </div>
 
@@ -156,96 +199,33 @@
         }
     });
 
-    $(function () {
-        $('#myTable').DataTable({
-            language: {
-                url: '{{ asset('datatableEs.json') }}'
-            },
-        });
-
+    var t = $('#pensiones').DataTable({
+        paging: false,
+        searching: false,
+        ordering:  false,
+        info: false,
+        language: {
+            url: '{{ asset('datatableEs.json') }}'
+        },
     });
 
-    function guardar_asignatura_equivalente(){
-        var asignatura_1 = $("#asignatura_1").val();
-        var asignatura_2 = $("#asignatura_2").val();
-        var anio_vigente = $("#anio_vigente").val();
-        if(asignatura_1.length>0 && asignatura_2.length>0 && anio_vigente.length>0){
-            Swal.fire(
-                'Excelente!',
-                'Se guardo Correctamente.',
-                'success'
-            )
+    function adicionaItem()
+    {
+        let cantidad = Number($("#cantidad").val());
+        let c = 1;
+        for (let i = 0; i < cantidad; i++) {
+            
+            t.row.add([
+                '1',
+                c+'&#186; Mensualidad',
+                '200.00',
+                '200.00',
+                '<button type="button" class="btnElimina btn btn-danger" title="Elimina Producto"><i class="fas fa-trash-alt"></i></button>'
+            ]).draw(false);
+
+            c++;
         }
     }
 
-    function eliminar(id, nombre)
-    {
-        Swal.fire({
-            title: 'Quieres borrar la equivalencia?',
-            text: "Luego no podras recuperarlo!",
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Si, estoy seguro!',
-            cancelButtonText: "Cancelar",
-        }).then((result) => {
-            if (result.value) {
-                Swal.fire(
-                    'Excelente!',
-                    'La equivalencia fue eliminada',
-                    'success'
-                ).then(function() {
-                    window.location.href = "{{ url('Asignatura/elimina_equivalentes') }}/"+id;
-                });
-            }
-        })
-    }
-
-    function nueva_carrera()
-    {
-        $('#mostrar').show('slow');
-    }
-
-    function cerrar_datos_carrera()
-    {
-        $('#mostrar').hide('slow');
-    }
-
-    function buscaCarrera1()
-    {
-        let gestion = $("#gestion_1").val();
-        let carrera = $("#carrera_1").val();
-
-        $.ajax({
-            url: "{{ url('Asignatura/ajax_busca_asignatura') }}",
-            data: {
-                gestion: gestion,
-                carrera: carrera,
-            },
-            type: 'get',
-            success: function(data) {
-                $("#ajaxMuestraAsignatura1").html(data);
-            }
-        });
-    }
-
-    function buscaCarrera2()
-    {
-        let gestion2 = $("#gestion_2").val();
-        let carrera2 = $("#carrera_2").val();
-
-        $.ajax({
-            url: "{{ url('Asignatura/ajax_busca_asignaturas') }}",
-            data: {
-                gestion: gestion2,
-                carrera: carrera2,
-            },
-            type: 'get',
-            success: function(data) {
-                $("#ajaxMuestraAsignatura2").html(data);
-            }
-        });
-    }
 </script>
 @endsection
