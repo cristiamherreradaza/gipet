@@ -67,7 +67,21 @@
         
     </header>
     <main>
-        <img src="{{ asset('assets/imagenes/cabecera_centralizador.png') }}" width="100%">
+        {{-- <img src="{{ asset('assets/imagenes/cabecera_centralizador.png') }}" width="100%"> --}}
+        <table width="100%">
+            <tr>
+                <td width="25%"><img src="{{ asset('assets/imagenes/portal_uno_R.png') }}" height="80"></td>
+                <td width="50%" style="text-align: center;"><span style="font-size: 18pt;">CETRALIZADOR DE CALIFICACIONES</span></td>
+                <td width="25%" style="text-align: right;"><span style="font-size: 8pt;"> FECHA: {{ date('d/m/Y') }}</span></td>
+            </tr>
+
+            <tr>
+                <td><span style="font-size: 7pt;"><b>INSTITUCION: </b> INSTITUTO TECNICO "EF GIPET" SRL</span></td>
+                <td style="text-align: center;"><span style="font-size: 7pt;"><b>RM: </b> 252/75 - 081/02 - 889/12 - 210/14</span></td>
+                <td><span style="font-size: 7pt;"><b>CARACTER: </b> PRIVADO</span></td>
+            </tr>
+        </table>
+        
          <table class="notas">
             
             <tr>
@@ -80,7 +94,7 @@
                     <hr>
                     REGIMEN: ANUALIZADO
                     <hr>
-                    CURSO: PRIMER ANO MANANA "A
+                    CURSO: {{ $curso }} A&Ntilde;O {{ $datosTurno->descripcion }} paralelo "{{ $paralelo }}"
                     <hr>
                     <b>NOMINA ESTUDIANTES</b>
                 </td>
@@ -97,7 +111,7 @@
             @foreach ($nominaEstudiantes as $k => $ne)
             <tr>
                 {{-- <td colspan="2" style="width: 10px;"></td> --}}
-                <td style="width: 230px;">{{ $ne->persona->apellido_paterno }} {{ $ne->persona->apellido_materno }} {{ $ne->persona->nombres }}</td>
+                <td style="width: 190px;">{{ $ne->persona->apellido_paterno }} {{ $ne->persona->apellido_materno }} {{ $ne->persona->nombres }}</td>
                 <td>{{ $ne->persona->cedula }}</td>
                 @foreach ($materiasCarrera as $mc)
                     @php

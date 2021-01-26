@@ -124,6 +124,8 @@ class ListaController extends Controller
         $turno    = $request->turno;
         $paralelo = $request->paralelo;
         $gestion  = $request->gestion;
+
+        $datosTurno = Turno::find($request->turno);
         
         $materiasCarrera = Asignatura::where('anio_vigente', $request->gestion)
                             ->where('carrera_id', $request->carrera)
@@ -172,7 +174,7 @@ class ListaController extends Controller
                     'paralelo',
                     'gestion'
                 ));*/
-        $pdf = PDF::loadView('pdf.generaPdfCentralizadorNotas', compact('materiasCarrera', 'nominaEstudiantes', 'carrera', 'curso', 'turno', 'paralelo', 'gestion'))->setPaper('letter', 'landscape');
+        $pdf = PDF::loadView('pdf.generaPdfCentralizadorNotas', compact('materiasCarrera', 'nominaEstudiantes', 'carrera', 'curso', 'turno', 'paralelo', 'gestion', 'datosTurno'))->setPaper('letter', 'landscape');
         return $pdf->stream('listaAlumnos_'.date('Y-m-d H:i:s').'.pdf');
 
     }
