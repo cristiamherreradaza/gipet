@@ -131,12 +131,37 @@ class ListaController extends Controller
                             ->orderBy('orden_impresion', 'asc')
                             ->get();
 
-        $nominaEstudiantes = CarrerasPersona::where('anio_vigente', $request->gestion)
+        /*$nominaEstudiantes = CarrerasPersona::where('anio_vigente', $request->gestion)
                             ->where('carrera_id', $request->carrera)
                             ->where('gestion', $request->curso)
                             ->where('turno_id', $request->turno)
                             ->groupBy('persona_id')
+                            ->get();*/
+
+        $nominaEstudiantes = CarrerasPersona::select(
+                                'personas.apellido_paterno',
+                                'personas.apellido_materno',
+                                'personas.nombres',
+                                'carreras_personas.id',
+                                'carreras_personas.carrera_id',
+                                'carreras_personas.persona_id',
+                                'carreras_personas.turno_id',
+                                'carreras_personas.gestion',
+                                'carreras_personas.paralelo',
+                                'carreras_personas.fecha_inscripcion',
+                                'carreras_personas.anio_vigente',
+                                'carreras_personas.estado'
+                            )
+                            ->where('carreras_personas.anio_vigente', $request->gestion)
+                            ->where('carreras_personas.carrera_id', $request->carrera)
+                            ->where('carreras_personas.gestion', $request->curso)
+                            ->where('carreras_personas.turno_id', $request->turno)
+                            ->leftJoin('personas', 'carreras_personas.persona_id' , '=', 'personas.id')
+                            ->orderBy('personas.apellido_paterno', 'ASC')
+                            ->groupBy('carreras_personas.persona_id')
                             ->get();
+
+        // dd($nominaEstudiantes);
 
         /*return view('pdf.generaPdfCentralizadorNotas')->with(compact(
                     'materiasCarrera', 

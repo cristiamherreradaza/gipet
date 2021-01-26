@@ -97,7 +97,7 @@
             @foreach ($nominaEstudiantes as $k => $ne)
             <tr>
                 {{-- <td colspan="2" style="width: 10px;"></td> --}}
-                <td style="width: 230px;">{{ ++$k }}.- {{ $ne->persona->apellido_paterno }} {{ $ne->persona->apellido_materno }} {{ $ne->persona->nombres }}</td>
+                <td style="width: 230px;">{{ $ne->persona->apellido_paterno }} {{ $ne->persona->apellido_materno }} {{ $ne->persona->nombres }}</td>
                 <td>{{ $ne->persona->cedula }}</td>
                 @foreach ($materiasCarrera as $mc)
                     @php
