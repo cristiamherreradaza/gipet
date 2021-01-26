@@ -150,7 +150,7 @@
 
                         <div class="col-md-1">
                             <div class="form-group">
-                                <label>Comienza</label>
+                                <label>Inicio/Promo</label>
                                 <input type="number" class="form-control" name="comienza" id="comienza" min="1" value="1">
                             </div>
                         </div>

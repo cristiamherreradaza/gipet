@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Pago;
 use DataTables;
 use App\Persona;
 use App\Servicio;
 use App\CarrerasPersona;
+use App\DescuentosPersona;
 use Illuminate\Http\Request;
 
 class FacturaController extends Controller
@@ -34,8 +36,25 @@ class FacturaController extends Controller
         $carreras = CarrerasPersona::where('persona_id', $request->personaId)
                                     ->where('anio_vigente', $gestionActual)
                                     ->get();
+        $pagos = Pago::where('persona_id', $request->personaId)
+                    ->where('anio_vigente', $gestionActual)
+                    ->get();
+
+        $descuento = DescuentosPersona::where('persona_id', $request->personaId)
+                    ->where('anio_vigente', $gestionActual)
+                    ->get();
+
+        /*$descuentosCobrados = Pago::where('persona_id', $request->personaId)
+                            ->where('descuento_persona_id', '<>', )
+                            ->where('anio_vigente', $gestionActual)
+                            ->get();*/
 
         // dd($datosPersona);
-        return view('factura.formularioFacturacion')->with(compact('datosPersona', 'carreras', 'servicios'));
+        return view('factura.formularioFacturacion')->with(compact('datosPersona', 'carreras', 'servicios', 'pagos', 'descuento'));
+    }
+
+    public function imprimeFactura()
+    {
+        return view('factura.imprimeFactura');
     }
 }
