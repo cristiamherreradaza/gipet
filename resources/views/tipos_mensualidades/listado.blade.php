@@ -20,7 +20,7 @@
                         <th>#</th>
                         <th>Nombre</th>
                         <th>Numero Mensualidades</th>
-                        <th>An&tilde;o Vigente</th>
+                        <th>A&ntilde;o Vigente</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>

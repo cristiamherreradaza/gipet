@@ -3724,6 +3724,42 @@ class InscripcionController extends Controller
         }
     }
 
+    public function ajaxEliminaInscripcion(Request $request)
+    {
+        // Buscamos el registro carreras_personas
+        $carrerasPersona    = CarrerasPersona::find($request->inscripcion_id);
+        // Buscamos los registros de inscripciones que corresponden a este registro de carreras_personas
+        $inscripciones      = Inscripcione::where('persona_id', $carrerasPersona->persona_id)
+                                        ->where('turno_id', $carrerasPersona->turno_id)
+                                        ->where('paralelo', $carrerasPersona->paralelo)
+                                        ->where('gestion', $carrerasPersona->gestion)
+                                        ->where('anio_vigente', $carrerasPersona->anio_vigente)
+                                        ->get();
+        foreach($inscripciones as $inscripcion)
+        {
+            // Buscamos los Segundos Turnos pertenecientes a esta inscripcion
+            $segundosTurnos = SegundosTurno::where('inscripcion_id', $inscripcion->id)
+                                            ->get();
+            foreach($segundosTurnos as $registro)
+            {
+                // Eliminar Segundos Turnos
+                $registro->delete();
+            }
+            // Buscamos las notas pertenecientes a esta inscripcion
+            $notas          = Nota::where('inscripcion_id', $inscripcion->id)
+                                    ->get();
+            foreach($notas as $registro)
+            {
+                // Eliminar notas
+                $registro->delete();
+            }
+            // Eliminamos Inscripciones
+            $inscripcion->delete();
+        }
+        // Eliminamos el registro carreras_personas
+        $carrerasPersona->delete();
+    }
+
     public function pruebaMigracion()
     {
         // Agarramos las inscripciones respectivas al anio X
