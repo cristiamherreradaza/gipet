@@ -175,9 +175,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Inscripcion/convalidarAsignaturaAprobada/{id}', 'InscripcionController@convalidarAsignaturaAprobada');
     Route::post('Inscripcion/asignarPuntaje', 'InscripcionController@asignarPuntaje');
     Route::post('Inscripcion/regularizarAsignatura', 'InscripcionController@regularizarAsignatura');
-    Route::post('Inscripcion/actualizarEstadoInscripcionGlobal', 'InscripcionController@actualizarEstadoInscripcionGlobal');
+    // Route::post('Inscripcion/actualizarEstadoInscripcionGlobal', 'InscripcionController@actualizarEstadoInscripcionGlobal');
     Route::get('Inscripcion/congelaAsignatura/{id}', 'InscripcionController@congelaAsignatura');
     Route::post('Inscripcion/ajaxEliminaInscripcion', 'InscripcionController@ajaxEliminaInscripcion');
+    Route::post('Inscripcion/ajaxEditaInscripcion', 'InscripcionController@ajaxEditaInscripcion');
 
     // PDFS
     Route::get('Inscripcion/reportePdfHistorialAcademico/{persona_id}/{carrera_id}', 'InscripcionController@reportePdfHistorialAcademico');

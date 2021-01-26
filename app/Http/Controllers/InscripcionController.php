@@ -2795,25 +2795,77 @@ class InscripcionController extends Controller
     {
         // capturamos las variables
         $registro = CarrerasPersona::find($request->inscripcion_id);
+        $turnos     = Turno::get();
+        $paralelos  = CarrerasPersona::select('paralelo')
+                                    ->groupBy('paralelo')
+                                    ->get();
         $inscripciones = Inscripcione::where('carrera_id', $registro->carrera_id)
                                     ->where('persona_id', $registro->persona_id)
                                     //->where('turno_id', $registro->turno_id)
                                     //->where('fecha_registro', $registro->fecha_inscripcion)
                                     ->where('anio_vigente', $registro->anio_vigente)
                                     ->get();
-        return view('inscripcion.ajaxMuestraInscripcion')->with(compact('registro', 'inscripciones'));
+        return view('inscripcion.ajaxMuestraInscripcion')->with(compact('registro', 'inscripciones', 'turnos', 'paralelos'));
     }
 
-    public function actualizarEstadoInscripcionGlobal(Request $request)
+    public function ajaxEditaInscripcion(Request $request)
     {
-        $carreraPersona             = CarrerasPersona::find($request->registro_inscripcion);
-        $persona                    = Persona::find($carreraPersona->persona_id);
-        $carreraPersona->user_id    = Auth::user()->id;
-        $carreraPersona->estado     = $request->estado_inscripcion;
-        // AQUI MODIFICAR ALGO MAS, ESTADOS DE INSCRIPCIONES, ACORDES AL ESTADO GLOBAL
-        $carreraPersona->save();
-        return redirect('Persona/ver_detalle/'.$persona->id);
+        $carrerasPersona            = CarrerasPersona::find($request->inscripcion_id);
+        // Buscamos los registros de inscripciones que corresponden a este registro de carreras_personas
+        $inscripciones      = Inscripcione::where('persona_id', $carrerasPersona->persona_id)
+                                        ->where('turno_id', $carrerasPersona->turno_id)
+                                        ->where('paralelo', $carrerasPersona->paralelo)
+                                        ->where('gestion', $carrerasPersona->gestion)
+                                        ->where('anio_vigente', $carrerasPersona->anio_vigente)
+                                        ->get();
+        foreach($inscripciones as $inscripcion)
+        {
+            // Buscamos los Segundos Turnos pertenecientes a esta inscripcion
+            $segundosTurnos = SegundosTurno::where('inscripcion_id', $inscripcion->id)
+                                            ->get();
+            foreach($segundosTurnos as $registro)
+            {
+                // Actualizamos Segundos Turnos
+                $registro->user_id  = Auth::user()->id;
+                $registro->turno_id = $request->turno_id;
+                // $registro->paralelo = $request->paralelo;
+                $registro->save();
+            }
+            // Buscamos las notas pertenecientes a esta inscripcion
+            $notas          = Nota::where('inscripcion_id', $inscripcion->id)
+                                    ->get();
+            foreach($notas as $registro)
+            {
+                // Actualizamos notas
+                $registro->user_id  = Auth::user()->id;
+                $registro->turno_id = $request->turno_id;
+                $registro->paralelo = $request->paralelo;
+                $registro->save();
+            }
+            // Actualizamos Inscripciones
+            $inscripcion->user_id   = Auth::user()->id;
+            $inscripcion->turno_id  = $request->turno_id;
+            $inscripcion->paralelo  = $request->paralelo;
+            $inscripcion->save();
+        }
+        // Actualizamos el registro carreras_personas
+        $carrerasPersona->user_id   = Auth::user()->id;
+        $carrerasPersona->turno_id  = $request->turno_id;
+        $carrerasPersona->paralelo  = $request->paralelo;
+        $carrerasPersona->estado    = $request->estado;
+        $carrerasPersona->save();
     }
+
+    // public function actualizarEstadoInscripcionGlobal(Request $request)
+    // {
+    //     $carreraPersona             = CarrerasPersona::find($request->registro_inscripcion);
+    //     $persona                    = Persona::find($carreraPersona->persona_id);
+    //     $carreraPersona->user_id    = Auth::user()->id;
+    //     $carreraPersona->estado     = $request->estado_inscripcion;
+    //     // AQUI MODIFICAR ALGO MAS, ESTADOS DE INSCRIPCIONES, ACORDES AL ESTADO GLOBAL
+    //     $carreraPersona->save();
+    //     return redirect('Persona/ver_detalle/'.$persona->id);
+    // }
 
     public function congelaAsignatura($inscripcion_id)
     {

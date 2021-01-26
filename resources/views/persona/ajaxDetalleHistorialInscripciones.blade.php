@@ -39,6 +39,7 @@
                     <td>{{ $inscripcion->estado }}</td>
                     <td>
                         <button type="button" class="btn btn-info" title="Ver detalle" onclick="ajaxMuestraInscripcion('{{ $inscripcion->id }}')"><i class="fas fa-eye"></i></button>
+                        <!-- <button type="button" class="btn btn-warning" title="Editar Inscripcion" onclick="ajaxEditaInscripcion('{{ $inscripcion->id }}')"><i class="fas fa-book"></i></button> -->
                         <a class="btn btn-light" title="Descargar Boletin" href="{{ url('Inscripcion/boletin/'.$inscripcion->id) }}" target="_blank"><i class="fas fa-file-pdf"></i></a>
                         <button type="button" class="btn btn-danger" title="Eliminar Inscripcion" onclick="ajaxEliminaInscripcion('{{ $inscripcion->id }}', '{{ $inscripcion->anio_vigente }}', '{{ $inscripcion->persona_id }}')"><i class="fas fa-trash-alt"></i></button>
                     </td>
@@ -48,13 +49,13 @@
     </table>
 </div>
 
-<!-- inicio modal editar perfil -->
+<!-- inicio modal detalle inscripcion -->
 <div id="detalle_modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" id="contenido_modal">
         
     </div>
 </div>
-<!-- fin modal editar perfil -->
+<!-- fin modal detalle inscripcion -->
 
 <script>
     // Funcion que muestra los datos referentes a los una inscripcion del historial academico
@@ -117,17 +118,6 @@
                     }
                 });
             }
-
-
-            // if (result.value) {
-            //     Swal.fire(
-            //         'Excelente!',
-            //         'El turno fue eliminado',
-            //         'success'
-            //     ).then(function() {
-            //         window.location.href = "{{ url('Inscripcion/ajaxeliminaInscripcion') }}/"+id;
-            //     });
-            // }
         })
     }
 </script>
