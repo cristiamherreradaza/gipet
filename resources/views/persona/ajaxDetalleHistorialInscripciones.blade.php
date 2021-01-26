@@ -40,7 +40,7 @@
                     <td>
                         <button type="button" class="btn btn-info" title="Ver detalle" onclick="ajaxMuestraInscripcion('{{ $inscripcion->id }}')"><i class="fas fa-eye"></i></button>
                         <a class="btn btn-light" title="Descargar Boletin" href="{{ url('Inscripcion/boletin/'.$inscripcion->id) }}" target="_blank"><i class="fas fa-file-pdf"></i></a>
-                        <button type="button" class="btn btn-danger" title="Eliminar Inscripcion" hidden><i class="fas fa-trash-alt"></i></button>
+                        <button type="button" class="btn btn-danger" title="Eliminar Inscripcion" onclick="ajaxEliminaInscripcion('{{ $inscripcion->id }}', '{{ $inscripcion->anio_vigente }}', '{{ $inscripcion->persona_id }}')"><i class="fas fa-trash-alt"></i></button>
                     </td>
                 </tr>
             @endforeach
@@ -71,5 +71,63 @@
                 $("#detalle_modal").modal('show');
             }
         });
+    }
+
+    function ajaxEliminaInscripcion(inscripcion_id, anio_vigente, persona_id)
+    {
+        Swal.fire({
+            title: 'Desea eliminar la gestion ' + anio_vigente + '?',
+            text: "Luego no podras recuperarlo!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, estoy seguro!',
+            cancelButtonText: "Cancelar",
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    // Se ejecutara la modificacion de la nota
+                    url:    "{{ url('Inscripcion/ajaxEliminaInscripcion') }}",
+                    data:   {
+                        persona_id: persona_id,
+                        inscripcion_id: inscripcion_id
+                    },
+                    cache:  false,
+                    type:   'post',
+                    // Posteriormente, si no hubo ningun conflicto con la ejecucion del proceso, se recargara utilizando otro ajax
+                    success: function(data) {
+                        $.ajax({
+                            url:    "{{ url('Persona/ajaxDetalleHistorialInscripciones') }}",
+                            data:   {
+                                persona_id : persona_id
+                            },
+                            cache:  false,
+                            type:   'get',
+                            success: function (data) {
+                                $("#detalleAcademicoAjax").show('slow');
+                                $("#detalleAcademicoAjax").html(data);
+                            }
+                        });
+                        Swal.fire(
+                            'Excelente!',
+                            'La gestión fue eliminada',
+                            'success'
+                        )
+                    }
+                });
+            }
+
+
+            // if (result.value) {
+            //     Swal.fire(
+            //         'Excelente!',
+            //         'El turno fue eliminado',
+            //         'success'
+            //     ).then(function() {
+            //         window.location.href = "{{ url('Inscripcion/ajaxeliminaInscripcion') }}/"+id;
+            //     });
+            // }
+        })
     }
 </script>
