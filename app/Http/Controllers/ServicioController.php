@@ -21,6 +21,7 @@ class ServicioController extends Controller
         return view('tipos_mensualidades.listado')->with(compact('servicio', 'periodos'));
     }
 
+    // Linea de comando
     public function guardar_periodo(Request $request)
     {
         $tipos_mensualidad = new TiposMensualidade();
