@@ -268,7 +268,7 @@ class UserController extends Controller
         $duplicado = 'No';
         // Busca en la tabla notaspropuesta, si existe un registro que coincida con los request
         $asignatura = NotasPropuesta::where('asignatura_id', $request->asignatura_id)
-                                    ->where('docente_id', $request->user_id)
+                                    // ->where('docente_id', $request->user_id)
                                     ->where('turno_id', $request->turno_id)
                                     ->where('paralelo', $request->paralelo)
                                     ->where('anio_vigente', $request->anio_vigente)
@@ -325,6 +325,31 @@ class UserController extends Controller
         return response()->json([
             'duplicado' => $duplicado
         ]);
+    }
+
+    public function ajaxReasignaDocente(Request $request)
+    {
+        // Reasignamos la asignatura al nuevo docente
+        // Busca en la tabla notaspropuesta, el registro que coincida con los request
+        $asignatura = NotasPropuesta::where('asignatura_id', $request->asignatura_id)
+                                    ->where('turno_id', $request->turno_id)
+                                    ->where('paralelo', $request->paralelo)
+                                    ->where('anio_vigente', $request->anio_vigente)
+                                    ->first();
+        // Modificaremos el id del nuevo docente en notas
+        // Si se hubieran registrado alumnos en esta materia, asignarles al docente en la tabla notas
+        $notas = Nota::where('asignatura_id', $asignatura->id)
+                    ->where('turno_id', $asignatura->turno_id)
+                    ->where('paralelo', $asignatura->paralelo)
+                    ->where('anio_vigente', $asignatura->anio_vigente)
+                    ->get();
+        foreach($notas as $nota){
+            $nota->docente_id = $request->docente_id;
+            $nota->save();
+        }
+        // Modificaremos el id del nuevo docente en notas_propuestas
+        $asignatura->docente_id = $request->docente_id;
+        $asignatura->save();
     }
 
     // Funcion que elimina la asignacion de un docente a la materia que tenia asignada

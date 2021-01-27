@@ -190,13 +190,82 @@
             {
                 if (data.duplicado == 'Si') 
                 {
-                    Swal.fire(
-                        'Error!',
-                        'La materia ya esta asignada al docente.',
-                        'warning'
-                    ).then(function() {
-                        $("#modal_asigna").modal('hide');
-                    });
+
+                    // Ya existe una coincidencia, preguntaremos si desea reemplazar
+
+                    // Swal.fire(
+                    //     'Error!',
+                    //     'La materia ya esta asignada al docente.',
+                    //     'warning'
+                    // ).then(function() {
+                    //     $("#modal_asignacion").modal('hide');
+                    // });
+                    var asignatura_id = $("#asignatura_id").val();
+                    var docente_id = $("#user_id").val();
+                    var turno_id = $("#turno_id").val();
+                    var paralelo = $("#paralelo").val();
+                    var anio_vigente = $("#anio_vigente").val();
+                    Swal.fire({
+                        title: 'La materia ya esta asignada!',
+                        text: 'Desea reemplazar al docente?',
+                        type: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Si',
+                        cancelButtonText: 'No',
+                    }).then((result) => {
+                        if (result.value) {
+                            $.ajax({
+                                // Se ejecutara la modificacion de la nota
+                                url:    "{{ url('User/ajaxReasignaDocente') }}",
+                                data:   {
+                                    asignatura_id: asignatura_id,
+                                    docente_id: docente_id,
+                                    turno_id: turno_id,
+                                    paralelo: paralelo,
+                                    anio_vigente: anio_vigente
+                                },
+                                cache:  false,
+                                type:   'post',
+                                // Posteriormente, si no hubo ningun conflicto con la ejecucion del proceso, se recargara utilizando otro ajax
+                                success: function(data) {
+                                    // $.ajax({
+                                    //     url:    "{{ url('User/asigna_materias') }}/"+ {{ $docente->id }},
+                                    //     data:   {
+                                    //         persona_id : persona_id
+                                    //     },
+                                    //     cache:  false,
+                                    //     type:   'get',
+                                    //     success: function (data) {
+                                    //         $("#detalleAcademicoAjax").show('slow');
+                                    //         $("#detalleAcademicoAjax").html(data);
+                                    //     }
+                                    // });
+                                    Swal.fire(
+                                        'Bien!',
+                                        'La materia esta asignada al docente',
+                                        'success'
+                                    )
+                                    $("#modal_asignacion").modal('hide');
+                                    $.ajax({
+                                        url: "{{ url('User/ajaxBusquedaAsignaciones') }}",
+                                        data: {
+                                            gestion : anio_vigente,
+                                            docente_id : docente_id
+                                            },
+                                        type: 'get',
+                                        success: function(data) {
+                                            $("#detalleAsignaciones").show('slow');
+                                            $("#detalleAsignaciones").html(data);
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    })
+
+
                 } else {
                     Swal.fire(
                         'Bien!',
