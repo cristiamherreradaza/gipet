@@ -233,6 +233,7 @@ class UserController extends Controller
                                             ->get();
         $mallasCurriculares = Asignatura::select('anio_vigente')
                                         ->groupBy('anio_vigente')
+                                        ->orderBy('anio_vigente', 'desc')
                                         ->get();
         //return view('user.asigna_materias')->with(compact('asignaturas', 'asignaturas_docente', 'docente', 'turnos'));
         return view('user.asignacion_materias')->with(compact('asignaturas', 'asignaturas_docente', 'docente', 'turnos', 'mallasCurriculares'));

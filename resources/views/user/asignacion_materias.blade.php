@@ -30,7 +30,7 @@
                             <label class="control-label">Malla Curricular</label>
                             <select name="gestion" id="gestion" class="form-control">
                                 @foreach($mallasCurriculares as $mallaCurricular)
-                                    <option value="{{ $mallaCurricular->anio_vigente }}"> {{ $mallaCurricular->anio_vigente }} </option>
+                                    <option value="{{ $mallaCurricular->anio_vigente }}" {{ (( $mallaCurricular->anio_vigente == date('Y')) ? 'selected' : '') }}> {{ $mallaCurricular->anio_vigente }} </option>
                                 @endforeach
                             </select>
                         </div>
@@ -58,6 +58,9 @@
 <script src="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/datatable-advanced.init.js') }}"></script>
 <script>
+    // Para que cargue de inicio la funcion que elegimos
+    $(window).on("load", buscar);
+
     // Funcion que se ejecuta al hacer clic en buscar
     function buscar(){
         gestion     = $('#gestion').val();
