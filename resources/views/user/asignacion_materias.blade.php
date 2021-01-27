@@ -19,15 +19,15 @@
             <div class="card-body">
                 <div class="row">
                     <input type="hidden" name="docente_id" id="docente_id" value="{{ $docente->id }}">
-                    <div class="col">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">Docente</label>
                             <h1 class="form-control">{{ $docente->nombres }} {{ $docente->apellido_paterno }} {{ $docente->apellido_materno }}</h1>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col-md-4">
                         <div class="form-group">
-                            <label class="control-label">Malla Curricular</label>
+                            <label class="control-label">Gesti&oacute;n</label>
                             <select name="gestion" id="gestion" class="form-control">
                                 @foreach($mallasCurriculares as $mallaCurricular)
                                     <option value="{{ $mallaCurricular->anio_vigente }}" {{ (( $mallaCurricular->anio_vigente == date('Y')) ? 'selected' : '') }}> {{ $mallaCurricular->anio_vigente }} </option>
@@ -35,12 +35,12 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col">
+                    <!-- <div class="col">
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
                             <button type="button" onclick="buscar()" class="btn btn-block btn-primary">Buscar</button>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -78,5 +78,26 @@
             }
         });
     }
+
+    //Funcion para mostrar datos de la gestion escogida
+    $( function() {
+        $("#gestion").change( function() {
+            gestion     = $('#gestion').val();
+            docente_id  = $('#docente_id').val();
+            $.ajax({
+                url: "{{ url('User/ajaxBusquedaAsignaciones') }}",
+                data: {
+                    gestion : gestion,
+                    docente_id : docente_id
+                    },
+                type: 'get',
+                success: function(data) {
+                    $("#detalleAsignaciones").show('slow');
+                    $("#detalleAsignaciones").html(data);
+                }
+            });
+        });
+    });
+    
 </script>
 @endsection

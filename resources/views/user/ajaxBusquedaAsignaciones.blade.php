@@ -1,7 +1,7 @@
 <div class="col-md-6">
     <div class="card border-info">
         <div class="card-header bg-info">
-            <h4 class="mb-0 text-white">ASIGNATURAS EN MALLA CURRICULAR ({{ $gestion }})</h4>
+            <h4 class="mb-0 text-white">ASIGNATURAS EN GESTI&Oacute;N ({{ $gestion }})</h4>
         </div>
         <div class="card-body">
             <div class="table-responsive m-t-40">
@@ -59,7 +59,7 @@
                             <td>{{ $asignatura->asignatura->carrera->nombre }}</td>
                             <td class="text-nowrap">{{ $asignatura->asignatura->sigla }}</td>
                             <td>{{ $asignatura->asignatura->nombre }}</td>
-                            <td>{{ $asignatura->turno->descripcion }}</td>
+                            <td>{{ ($asignatura->turno ? ($asignatura->turno->descripcion ? $asignatura->turno->descripcion : '') : '') }}</td>
                             <td>{{ $asignatura->paralelo }}</td>
                             <td>
                                 <button type="button" class="btn btn-danger" onclick="elimina_asignacion('{{ $asignatura->id }}', '{{ $asignatura->asignatura->nombre }}')">

@@ -232,6 +232,7 @@ class UserController extends Controller
                                             ->where('anio_vigente', date('Y'))
                                             ->get();
         $mallasCurriculares = Asignatura::select('anio_vigente')
+                                        ->whereNotNull('anio_vigente')
                                         ->groupBy('anio_vigente')
                                         ->orderBy('anio_vigente', 'desc')
                                         ->get();
