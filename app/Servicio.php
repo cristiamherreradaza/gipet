@@ -27,21 +27,21 @@ class Servicio extends Model
 
     public function descuentos()
     {
-        return $this->hasMany('App/Descuento');
+        return $this->hasMany('App\Descuento');
     }
 
     public function transacciones()
     {
-        return $this->hasMany('App/Transaccion');
+        return $this->hasMany('App\Transaccion');
     }
 
     public function descuentopersonas()
     {
-        return $this->hasMany('App/DescuentoPersona');
+        return $this->hasMany('App\DescuentoPersona');
     }
 
     public function cobrostemporadas()
     {
-        return $this->hasMany('App/CobrosTemporada');
+        return $this->hasMany('App\CobrosTemporada');
     }
 }

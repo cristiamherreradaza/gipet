@@ -886,6 +886,7 @@ class InscripcionController extends Controller
             // Guardamos los datos para las mensualidades
             $descuento                     = new DescuentosPersona();
             $descuento->user_id            = Auth::user()->id;
+            $descuento->carrera_id         = $request->nueva_carrera;
             $descuento->persona_id         = $request->persona_id;
             $descuento->servicio_id        = 2;
             $descuento->descuento_id       = $request->descuento;
