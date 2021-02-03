@@ -79,19 +79,24 @@ class FacturaController extends Controller
     public function ajaxPersona(Request $request)
     {
         $gestionActual = date('Y');
+
+        $servicios = Servicio::get();
+
         $datosPersona = Persona::find($request->personaId);
 
         $inscripciones = CarrerasPersona::where('persona_id', $request->personaId)
                                         ->where('anio_vigente', $gestionActual)
+                                        ->orderBy('id', 'asc')
                                         ->get();
 
         $descuentos = DescuentosPersona::where('persona_id', $request->personaId)
                                     ->where('anio_vigente', $gestionActual)
                                     ->get();
 
-        
+        $pagos = Pago::where('persona_id', $request->personaId)
+                        ->where('anio_vigente', $gestionActual)
+                        ->get();
 
-        return view('factura.ajaxPersona')->with(compact('datosPersona', 'inscripciones', 'descuentos'));
-
+        return view('factura.ajaxPersona')->with(compact('datosPersona', 'inscripciones', 'descuentos', 'servicios'));
     }
 }

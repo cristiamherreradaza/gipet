@@ -44,9 +44,7 @@
                 </div>
             </div>
 
-            <hr>
-
-            <div class="row">
+            {{-- <div class="row">
 
                 <div class="col-3">
                     <div class="form-group">
@@ -100,11 +98,11 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>&nbsp;</label>
-                        <button type="button" class="btn btn-block btn-info" onclick="adicionaItem()">Adicionar</button>
+                        <button type="button" class="btn btn-block btn-info">Adicionar</button>
                     </div>
                 </div>
 
-            </div>
+            </div> --}}
 
             <div class="row">
                 <div class="col-md-12">
@@ -115,7 +113,6 @@
                                     <th>Cantidad</th>
                                     <th>Descripcion</th>                        
                                     <th>Precio Unitario</th>                        
-                                    <th>Subtotal</th>                        
                                     <th>Opciones</th>
                                 </tr>
                             </thead>
@@ -186,23 +183,7 @@
         },
     });
 
-    function adicionaItem()
-    {
-        let cantidad = Number($("#cantidad").val());
-        let c = 1;
-        for (let i = 0; i < cantidad; i++) {
-            
-            t.row.add([
-                '1',
-                c+'&#186; Mensualidad',
-                '200.00',
-                '200.00',
-                '<button type="button" class="btnElimina btn btn-danger" title="Elimina Producto"><i class="fas fa-trash-alt"></i></button>'
-            ]).draw(false);
-
-            c++;
-        }
-    }
+    
 
 </script>
 @endsection

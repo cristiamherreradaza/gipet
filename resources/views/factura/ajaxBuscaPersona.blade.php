@@ -34,7 +34,7 @@
             data: {personaId: personaId},
             type: 'POST',
             success: function(data) {
-                $("#ajaxPersonas").hide('slow');
+                // $("#ajaxPersonas").hide('slow');
                 $("#ajaxDatosPersona").html(data);
             }
         });

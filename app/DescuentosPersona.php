@@ -46,4 +46,10 @@ class DescuentosPersona extends Model
         return $this->belongsTo('App\Carrera', 'carrera_id');
     }
 
+    public function tipo_mensualidad()
+    {
+        return $this->belongsTo('App\TiposMensualidade', 'tipos_mensualidades_id');
+    }
+
+
 }
