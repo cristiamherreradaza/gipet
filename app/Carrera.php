@@ -57,4 +57,10 @@ class Carrera extends Model
     {
         return $this->hasMany('App\SegundosTurno');
     }
+
+    public function descuentospersonas()
+    {
+        return $this->hasMany('App\DescuentosPersona');
+    }
+
 }

@@ -884,18 +884,20 @@ class InscripcionController extends Controller
         if($request->persona_id && $request->nueva_carrera && $request->nuevo_turno && $request->nuevo_paralelo && $request->nueva_gestion && $request->nueva_fecha_inscripcion)
         {
             // Guardamos los datos para las mensualidades
-            $descuento                     = new DescuentosPersona();
-            $descuento->user_id            = Auth::user()->id;
-            $descuento->persona_id         = $request->persona_id;
-            $descuento->servicio_id        = 2;
-            $descuento->descuento_id       = $request->descuento;
-            $descuento->monto_director     = $request->monto;
-            $descuento->numero_mensualidad = $request->comienza;
-            $descuento->a_pagar            = $request->pagar;
-            $descuento->fecha              = $request->nueva_fecha_inscripcion;
-            $descuento->cantidad_cuotas    = $request->cantidadCuotas;
-            $descuento->anio_vigente       = $request->nueva_gestion;
-            $descuento->vigente            = "Si";
+            $descuento                         = new DescuentosPersona();
+            $descuento->user_id                = Auth::user()->id;
+            $descuento->tipos_mensualidades_id = $request->cantidad_mensualidad;
+            $descuento->carrera_id             = $request->nueva_carrera;
+            $descuento->persona_id             = $request->persona_id;
+            $descuento->servicio_id            = 2;
+            $descuento->descuento_id           = $request->descuento;
+            $descuento->monto_director         = $request->monto;
+            $descuento->numero_mensualidad     = $request->comienza;
+            $descuento->a_pagar                = $request->pagar;
+            $descuento->fecha                  = $request->nueva_fecha_inscripcion;
+            $descuento->cantidad_cuotas        = $request->cantidadCuotas;
+            $descuento->anio_vigente           = $request->nueva_gestion;
+            $descuento->vigente                = "Si";
             $descuento->save();
             // Fin uardamos los datos para las mensualidades
             // dd($descuento);

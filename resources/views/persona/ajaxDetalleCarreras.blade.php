@@ -143,15 +143,15 @@
 
                         <div class="col-md-1">
                             <div class="form-group">
-                                <label>Cant. Cuotas</label>
-                                <input type="number" class="form-control" name="cantidadCuotas" id="cantidadCuotas" min="1" value="10">
+                                <label>Cuot./Promo</label>
+                                <input type="number" class="form-control" name="cantidadCuotas" id="cantidadCuotas" min="0" value="0">
                             </div>
                         </div>
 
                         <div class="col-md-1">
                             <div class="form-group">
                                 <label>Inicio/Promo</label>
-                                <input type="number" class="form-control" name="comienza" id="comienza" min="1" value="1">
+                                <input type="number" class="form-control" name="comienza" id="comienza" min="0" value="0">
                             </div>
                         </div>
                         

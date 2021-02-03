@@ -29,4 +29,10 @@ class TiposMensualidade extends Model
         return $this->belongsTo('App\Servicio', 'servicio_id');
     }
 
+    public function descuentos_persona()
+    {
+        return $this->hasMany('App\DescuentosPersona');
+    }
+
+
 }
