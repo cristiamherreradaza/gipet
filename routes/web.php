@@ -225,6 +225,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('User/formatoExcelAsignatura/{asignatura_id}/{turno_id}/{paralelo}/{anio_vigente}', 'UserController@formatoExcelAsignatura');
     Route::post('User/importarNotasAsignaturas', 'UserController@importarNotasAsignaturas');
     Route::post('User/ajaxReasignaDocente', 'UserController@ajaxReasignaDocente');
+    Route::get('User/ajaxBuscaAsignaturas', 'UserController@ajaxBuscaAsignaturas');
+    Route::get('User/ajaxBuscaTurnos', 'UserController@ajaxBuscaTurnos');
+    Route::get('User/ajaxBuscaParalelos', 'UserController@ajaxBuscaParalelos');
 
     Route::get('Asignatura/ajax_muestra_prerequisitos/{asignatura_id}', 'AsignaturaController@ajax_muestra_prerequisitos');
     Route::get('Asignatura/elimina_prerequisito/{prerequisito_id}', 'AsignaturaController@elimina_prerequisito');

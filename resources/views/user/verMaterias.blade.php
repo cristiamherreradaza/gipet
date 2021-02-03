@@ -3,6 +3,7 @@
 @section('css')
 <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 <link href="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.css') }}" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/libs/select2/dist/css/select2.min.css') }}">
 @endsection
 
 @section('metadatos')
@@ -18,27 +19,36 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <!-- <div class="col">
+                    <div class="col-md-3">
                         <div class="form-group">
-                            <label class="control-label">Docentes</label>
-                            <select name="usuario" id="usuario" class="form-control">
-                                @foreach($usuarios as $usuario)
-                                    <option value="{{ $usuario->id }}"> {{ $usuario->nombres }} {{ $usuario->apellido_paterno }} {{ $usuario->apellido_materno }}</option>
+                            <label class="control-label">Gestion</label>
+                            <select name="gestion" id="gestion" class="form-control" onchange="buscaAsignaturas();">
+                                <option value="" selected> Seleccione </option>
+                                @foreach($gestiones as $gestion)
+                                    <option value="{{ $gestion->anio_vigente }}"> {{ $gestion->anio_vigente }} </option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col-md-3">
                         <div class="form-group">
-                            <label class="control-label">Malla Curricular</label>
-                            <select name="malla" id="malla" class="form-control">
-                                @foreach($mallas as $malla)
-                                    <option value="{{ $malla->anio_vigente }}"> {{ $malla->anio_vigente }} </option>
-                                @endforeach
-                            </select>
+                            <label class="control-label">Asignatura</label>
+                            <div id="ajaxMuestraAsignatura"></div>
                         </div>
-                    </div> -->
-                    <div class="col">
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Turno</label>
+                            <div id="ajaxMuestraTurno"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <label class="control-label">Paralelo</label>
+                            <div id="ajaxMuestraParalelo"></div>
+                        </div>
+                    </div>
+                    <!-- <div class="col">
                         <div class="form-group">
                             <label class="control-label">Asignaturas</label>
                             <select name="asignatura" id="asignatura" class="select2 form-control custom-select select2-hidden-accessible" style="width: 100%; height:36px;" data-select2-id="1" tabindex="-1" aria-hidden="true">
@@ -92,7 +102,7 @@
                             <label class="control-label">&nbsp;</label>
                             <button type="button" onclick="buscar()" class="btn btn-block btn-primary">Buscar</button>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -130,6 +140,10 @@
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script src="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/datatable-advanced.init.js') }}"></script>
+
+<script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('assets/libs/select2/dist/js/select2.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('dist/js/pages/forms/select2/select2.init.js') }}" type="text/javascript"></script>
 <script>
     // Funcion para el uso de ajax
     $.ajaxSetup({
@@ -137,6 +151,21 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    function buscaAsignaturas(){
+        let gestion = $("#gestion").val();
+        $.ajax({
+            url: "{{ url('User/ajaxBuscaAsignaturas') }}",
+            data: {
+                gestion: gestion,
+            },
+            type: 'get',
+            success: function(data) {
+                $("#ajaxMuestraAsignatura").html(data);
+            }
+        });
+    }
+
 
     // Script de importacion de excel
     $(document).ready(function() {
@@ -175,10 +204,10 @@
 
     // Funcion que se ejecuta al hacer clic en pensum
     function buscar(){
+        gestion     = $('#gestion').val();
         asignatura  = $('#asignatura').val();
         turno       = $('#turno').val();
         paralelo    = $('#paralelo').val();
-        gestion     = $('#gestion').val();
         $.ajax({
             url: "{{ url('User/ajaxVerMaterias') }}",
             data: {
