@@ -104,6 +104,13 @@
                         $numeroCuota = 1;
                     }
 
+                    $datosDescuentos = App\DescuentosPersona::where('persona_id', $d->persona_id)
+                        ->where('carrera_id', $d->carrera_id)
+                        ->where('persona_id', $d->persona_id)
+                        ->where('anio_vigente', $d->anio_vigente)
+                        ->where('vigente', 'Si')
+                        ->first();
+
                     $cuotasPagadasPromo = App\Pago::where('persona_id', $d->persona_id)
                         ->where('carrera_id', $d->carrera_id)
                         ->where('anio_vigente', $d->anio_vigente)
@@ -121,6 +128,7 @@
                     <td style="text-align: left;">
                         {{ $d->carrera->nombre }}
                         <input type="hidden" name="carrera_id_{{ $d->carrera->id }}" id="carrera_id_{{ $d->carrera->id }}" value="{{ $d->carrera->id }}">
+                        <input type="hidden" name="dia_inicio_descuento_{{ $d->carrera->id }}" id="dia_inicio_descuento_{{ $d->carrera->id }}" value="{{ $datosDescuentos->numero_mensualidad }}">
                     </td>
                     <td>
                         {{ $d->servicio->nombre }}
@@ -239,18 +247,18 @@
 
     function adicionaItem()
     {
-        let carrera               = Number($("#carrera_id").val());
-        let numeroCouta           = {{ $numeroCuota }}
-        let cuotasPagadasPromo    = {{ $cuotasPagadasPromo }};
-        let cantidadMensualidades = Number($("#cantidadMensualidades").val());
-        let cuotasPromo           = Number($("#cuotas_descuento_"+carrera).val());
-        let cuotasParaPromo       = cuotasPromo - cuotasPagadasPromo;
-        let precioCuotaPromo      = Number($("#pagar_"+carrera).val());
-        let precioCuotaSinPromo   = {{ $cuotaSinDescuento->precio }}
-        let cuotasSinPromo        = cantidadMensualidades - cuotasParaPromo;
-        
+        let carrera                = Number($("#carrera_id").val());
+        let numeroCuotaInicioPromo = Number($("#dia_inicio_descuento_"+carrera).val());
+        let numeroCouta            = {{ $numeroCuota }}
+        let cuotasPagadasPromo     = {{ $cuotasPagadasPromo }};
+        let cantidadMensualidades  = Number($("#cantidadMensualidades").val());
+        let cuotasPromo            = Number($("#cuotas_descuento_"+carrera).val());
+        let cuotasParaPromo        = cuotasPromo - cuotasPagadasPromo;
+        let precioCuotaPromo       = Number($("#pagar_"+carrera).val());
+        let precioCuotaSinPromo    = {{ $cuotaSinDescuento->precio }}
+        let cuotasSinPromo         = cantidadMensualidades - cuotasParaPromo;
 
-        // console.log(cuotasSinPromo);
+        console.log(numeroCuotaInicioPromo);
 
         // para llenar la tabla con las cuotas de promocion
         var c = numeroCouta;
