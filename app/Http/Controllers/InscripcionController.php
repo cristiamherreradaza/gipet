@@ -1293,6 +1293,23 @@ class InscripcionController extends Controller
             {
                 // En esta variable $asignatura guardamos la informacion de la asignatura a inscribirse
                 $asignatura = Asignatura::find($request->asignatura[$ll]);
+                // El dato que se encuentra en la variable asignatura, corresponde a la malla curricular con la que se inscribio
+                // debemos actualizar la asignatura, primero verificando con que resolucion se encuentra, luego a la gestion actual
+                // a la que se le esta inscribiendo
+                // Saquemos las variables que necesitamos sigla, nombre y resolucion_id
+                $sigla          = $asignatura->sigla;
+                $nombre         = $asignatura->nombre;
+                $resolucion_id  = $asignatura->resolucion_id;
+                // Buscaremos la asignatura con la sigla, nombre, resolucion_id y gestion que se envio desde interfaz
+                $nuevaAsignatura    = Asignatura::where('sigla', $sigla)
+                                                ->where('nombre', $nombre)
+                                                ->where('anio_vigente', $request->gestion)
+                                                ->where('resolucion_id', $resolucion_id)
+                                                ->first();
+                // Si encuentra reeemplaza a la asignatura solicitada
+                if($nuevaAsignatura){
+                    $asignatura = $nuevaAsignatura;
+                }
                 // Almacenaremos en un array su info
                 array_push($array_carreras, $asignatura->carrera_id);
                 $informacion_carrera = Carrera::find($asignatura->carrera_id);
