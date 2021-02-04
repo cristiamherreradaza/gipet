@@ -104,12 +104,12 @@ class InscripcionController extends Controller
                     //$carreras_persona->estado             = '';   APROBO/REPROBO/ABANDONO/AUXILIAR/CONGELADO/NULL/''
                     $carreras_persona->save();
 
-                    // Buscaremos a las materias que pertenecen a la gestion 1, de la asignatura X con anio_vigente X
+                    // Buscaremos a las materias que pertenecen a la gestion 1, de la carrera X con anio_vigente X
                     $asignaturas    = Asignatura::where('carrera_id', $request->$datos_carrera)
                                                 ->where('gestion', 1)
                                                 ->where('anio_vigente', $request->$datos_gestion)
                                                 ->get();
-                    // Inscribiremos a las asignaturas que se capturaron en la 
+                    // Inscribiremos a las asignaturas que se capturaron en la consulta anterior
                     foreach($asignaturas as $asignatura)
                     {
                         // Verificamos que no este inscrito, e inscribimos

@@ -518,66 +518,79 @@ class UserController extends Controller
     public function ajaxBuscaAsignaturas(Request $request)
     {
         // Tenemos la gestion buscada
-        $gestion        = $request->gestion;
-        // Encontrar la resolucion a la que pertenece esta gestion
-        $asignatura = Asignatura::where('anio_vigente', $gestion)->first();
-        $resolucion_id  = ($asignatura->resolucion_id ? $asignatura->resolucion_id : NULL);
+        // $gestion        = $request->gestion;
+        // // Encontrar la resolucion a la que pertenece esta gestion
+        // $asignatura = Asignatura::where('anio_vigente', $gestion)->first();
+        // $resolucion_id  = ($asignatura->resolucion_id ? $asignatura->resolucion_id : NULL);
         // Agarramos todas las asignaturas que pertenecen a esa resolucion ministerial
-        $docentes    = Asignatura::where('resolucion_id', $resolucion_id)
-                                    ->groupBy('sigla')
-                                    ->get();
+        // $docentes    = Asignatura::where('resolucion_id', $resolucion_id)
+        //                             ->groupBy('sigla')
+        //                             ->get();
+        $asignaturas = Asignatura::where('anio_vigente', $request->gestion)
+                            ->get();
                     // dd($docentes);
-        return view('user.ajaxMuestraAsignatura')->with(compact('docentes'));
+        return view('user.ajaxMuestraAsignatura')->with(compact('asignaturas'));
     }
 
     public function ajaxBuscaTurnos(Request $request)
     {
-        // Mediante la gestion sacaremos la resolucion_id que debemos buscar
-        $gestion        = $request->gestion;
-        // Encontrar la resolucion a la que pertenece esta gestion                  402 442 481
-        $asignatura = Asignatura::where('anio_vigente', $gestion)->first();
-        $resolucion_id  = ($asignatura->resolucion_id ? $asignatura->resolucion_id : NULL);
-        // Buscamos en la tabla asignaturas las coincidencias con la sigla
-        $asignaturas    = Asignatura::where('sigla', $request->docente)
-                                    ->where('resolucion_id', $resolucion_id)
-                                    ->get();
-        // Hasta aqui tenemos a las asignaturas con la sigla X y resolucion_id que pertenece a la gestion X
-        // Ahora guardaremos estos ids en un array
-        $arrayAsignaturas   = array();
-        foreach($asignaturas as $asignatura){
-            array_push($arrayAsignaturas, $asignatura->id);
-        }
-        // Teniendo los ids de las asignaturas que buscamos, ahora procederemos a la consulta de los turnos en la gestion X
-        $materias = Inscripcione::where('anio_vigente', $request->gestion)
-                                ->whereIn('asignatura_id', $arrayAsignaturas)
-                                // ->whereNotNull('asignatura_id')
+        // // Mediante la gestion sacaremos la resolucion_id que debemos buscar
+        // $gestion        = $request->gestion;
+        // // Encontrar la resolucion a la que pertenece esta gestion                  402 442 481
+        // $asignatura = Asignatura::where('anio_vigente', $gestion)->first();
+        // $resolucion_id  = ($asignatura->resolucion_id ? $asignatura->resolucion_id : NULL);
+        // // Buscamos en la tabla asignaturas las coincidencias con la sigla
+        // $asignaturas    = Asignatura::where('sigla', $request->docente)
+        //                             ->where('resolucion_id', $resolucion_id)
+        //                             ->get();
+        // // Hasta aqui tenemos a las asignaturas con la sigla X y resolucion_id que pertenece a la gestion X
+        // // Ahora guardaremos estos ids en un array
+        // $arrayAsignaturas   = array();
+        // foreach($asignaturas as $asignatura){
+        //     array_push($arrayAsignaturas, $asignatura->id);
+        // }
+        // // Teniendo los ids de las asignaturas que buscamos, ahora procederemos a la consulta de los turnos en la gestion X
+        // $turnos = Inscripcione::where('anio_vigente', $request->gestion)
+        //                         // ->whereIn('asignatura_id', $arrayAsignaturas)
+        //                         // ->whereNotNull('asignatura_id')
+        //                         ->where('asignatura_id', $request->asignatura)
+        //                         ->groupBy('turno_id')
+        //                         ->get();
+        
+        $turnos = Inscripcione::where('anio_vigente', $request->gestion)
+                                ->where('asignatura_id', $request->asignatura)
                                 ->groupBy('turno_id')
                                 ->get();
-        return view('user.ajaxMuestraTurno')->with(compact('materias'));
+        return view('user.ajaxMuestraTurno')->with(compact('turnos'));
     }
 
     public function ajaxBuscaParalelos(Request $request)
     {
-        // Mediante la gestion sacaremos la resolucion_id que debemos buscar
-        $gestion        = $request->gestion;
-        // Encontrar la resolucion a la que pertenece esta gestion                  402 442 481
-        $asignatura = Asignatura::where('anio_vigente', $gestion)->first();
-        $resolucion_id  = ($asignatura->resolucion_id ? $asignatura->resolucion_id : NULL);
-        // Buscamos en la tabla asignaturas las coincidencias con la sigla
-        $asignaturas    = Asignatura::where('sigla', $request->docente)
-                                    ->where('resolucion_id', $resolucion_id)
-                                    ->get();
-        // Hasta aqui tenemos a las asignaturas con la sigla X y resolucion_id que pertenece a la gestion X
-        // Ahora guardaremos estos ids en un array
-        $arrayAsignaturas   = array();
-        foreach($asignaturas as $asignatura){
-            array_push($arrayAsignaturas, $asignatura->id);
-        }
-        // Teniendo los ids de las asignaturas que buscamos, ahora procederemos a la consulta de los turnos en la gestion X
+        // // Mediante la gestion sacaremos la resolucion_id que debemos buscar
+        // $gestion        = $request->gestion;
+        // // Encontrar la resolucion a la que pertenece esta gestion                  402 442 481
+        // $asignatura = Asignatura::where('anio_vigente', $gestion)->first();
+        // $resolucion_id  = ($asignatura->resolucion_id ? $asignatura->resolucion_id : NULL);
+        // // Buscamos en la tabla asignaturas las coincidencias con la sigla
+        // $asignaturas    = Asignatura::where('sigla', $request->docente)
+        //                             ->where('resolucion_id', $resolucion_id)
+        //                             ->get();
+        // // Hasta aqui tenemos a las asignaturas con la sigla X y resolucion_id que pertenece a la gestion X
+        // // Ahora guardaremos estos ids en un array
+        // $arrayAsignaturas   = array();
+        // foreach($asignaturas as $asignatura){
+        //     array_push($arrayAsignaturas, $asignatura->id);
+        // }
+        // // Teniendo los ids de las asignaturas que buscamos, ahora procederemos a la consulta de los turnos en la gestion X
+        // $paralelos  = Inscripcione::where('anio_vigente', $request->gestion)
+        //                         ->whereIn('asignatura_id', $arrayAsignaturas)
+        //                         ->where('turno_id', $request->materia)
+        //                         // ->whereNotNull('asignatura_id')
+        //                         ->groupBy('paralelo')
+        //                         ->get();
         $paralelos  = Inscripcione::where('anio_vigente', $request->gestion)
-                                ->whereIn('asignatura_id', $arrayAsignaturas)
-                                ->where('turno_id', $request->materia)
-                                // ->whereNotNull('asignatura_id')
+                                ->where('asignatura_id', $request->asignatura)
+                                ->where('turno_id', $request->turno)
                                 ->groupBy('paralelo')
                                 ->get();
         return view('user.ajaxMuestraParalelo')->with(compact('paralelos'));

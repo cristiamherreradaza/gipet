@@ -6,7 +6,7 @@
                 <thead class="text-center">
                     <tr>
                         <th>ID</th>
-                        <th>MALLA CURRICULAR</th>
+                        <!-- <th>MALLA CURRICULAR</th> -->
                         <th>CARRERA</th>
                         <th>SIGLA</th>
                         <th>ASIGNATURA</th>
@@ -18,7 +18,7 @@
                     @foreach($materias as $asignatura)
                         <tr>
                             <td class="text-center">{{ $asignatura->asignatura->id }}</td>
-                            <td class="text-center">{{ $asignatura->asignatura->anio_vigente }}</td>
+                            <!-- <td class="text-center">{{ $asignatura->asignatura->anio_vigente }}</td> -->
                             <td>{{ $asignatura->carrera->nombre }}</td>
                             <td class="text-center">{{ $asignatura->asignatura->sigla }}</td>
                             <td>{{ $asignatura->asignatura->nombre }}</td>

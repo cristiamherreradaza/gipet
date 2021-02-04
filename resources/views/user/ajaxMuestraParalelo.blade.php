@@ -1,34 +1,46 @@
-<select name="paralelo" id="paralelo" class="form-control" onchange="ajaxBuscaSemestre()">
-	<option value="">Selec</option>
-    @foreach ($paralelos as $paralelo)
-        <option value="{{ $paralelo->paralelo }}">{{ $paralelo->paralelo }}</option>
-    @endforeach
+<select name="paralelo" id="paralelo" style="width: 100%; height:36px;" class="form-control">
+	<option value=""> Seleccione </option>
+	@foreach($paralelos as $paralelo)
+		<option value="{{ $paralelo->paralelo }}"> {{ $paralelo->paralelo }} </option>
+	@endforeach
 </select>
 
-<script type="text/javascript">
+<script>
+	//Funcion para ocultar/mostrar datos de semestre en base al ciclo
+    $( function() {
+        $("#paralelo").change( function() {
+			let gestion = $("#gestion").val();
+			let asignatura = $("#asignatura").val();
+			let turno = $("#turno").val();
+			let paralelo = $("#paralelo").val();
 
-	function ajaxBuscaSemestre(){
+			$.ajax({
+				url: "{{ url('User/ajaxVerMaterias') }}",
+				data: {
+					gestion		: gestion,
+					asignatura	: asignatura,
+					turno 		: turno,
+					paralelo 	: paralelo
+					},
+				type: 'get',
+				success: function(data) {
+					$("#detalleAcademicoAjax").show('slow');
+					$("#detalleAcademicoAjax").html(data);
+				}
+			});
+			// $.ajax({
+			// 	url: "{{ url('User/ajaxBuscaTurnos') }}",
+			// 	data: {
+			// 		gestion		: gestion,
+			// 		asignatura	: asignatura,
+			// 		turno		: turno
+			// 		},
+			// 	type: 'get',
+			// 	success: function(data) {
+			// 		$("#ajaxMuestraParalelo").html(data);
+			// 	}
+			// });
 
-		let docente = $('#docentes option[value="' + $('#docente_id').val() + '"]').data('valor');
-		let gestion = $("#gestion").val();
-		let materia = $("#materia_id").val();
-		let turno = $("#turno_id").val();
-		let paralelo = $("#paralelo").val();
-
-		$.ajax({
-			url: "{{ url('Lista/ajax_centralizador_semestre') }}",
-			data: {
-				docente: docente,
-				gestion: gestion,
-				materia: materia,
-				turno: turno,
-				paralelo: paralelo,
-				},
-			type: 'get',
-			success: function(data) {
-				$("#ajaxMuestraSemestre").html(data);
-			}
-		});
-	}
-
+        });
+    });
 </script>

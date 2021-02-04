@@ -42,7 +42,7 @@
                             <div id="ajaxMuestraTurno"></div>
                         </div>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label">Paralelo</label>
                             <div id="ajaxMuestraParalelo"></div>
@@ -154,6 +154,12 @@
 
     function buscaAsignaturas(){
         let gestion = $("#gestion").val();
+        $("#asignatura").val('');
+        $("#ajaxMuestraTurno").hide();
+        $("#turno").val('');
+        $("#ajaxMuestraParalelo").hide();
+        $("#paralelo").val('');
+        $("#detalleAcademicoAjax").hide();
         $.ajax({
             url: "{{ url('User/ajaxBuscaAsignaturas') }}",
             data: {
