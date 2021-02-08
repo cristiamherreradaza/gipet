@@ -110,10 +110,11 @@
                         <table id="pensiones" class="table table-bordered table-striped text-center">
                             <thead>
                                 <tr>
-                                    <th>Cantidad</th>
-                                    <th>Descripcion</th>                        
-                                    <th>Precio Unitario</th>                        
-                                    <th>Opciones</th>
+                                    <th>Carrera</th>
+                                    <th>Cuota</th>                        
+                                    <th>Descuento</th>                        
+                                    <th>Importe</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -182,8 +183,6 @@
             url: '{{ asset('datatableEs.json') }}'
         },
     });
-
-    
 
 </script>
 @endsection

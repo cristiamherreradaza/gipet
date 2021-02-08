@@ -369,5 +369,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Factura/imprimeFactura', 'FacturaController@imprimeFactura');
     Route::post('Factura/ajaxBuscaPersona', 'FacturaController@ajaxBuscaPersona');
     Route::post('Factura/ajaxPersona', 'FacturaController@ajaxPersona');
+    Route::post('Factura/ajaxMuestraCuotasPagar', 'FacturaController@ajaxMuestraCuotasPagar');
 
 });

@@ -926,16 +926,15 @@ class InscripcionController extends Controller
                     $pagos->mensualidad = $i;
                     $pagos->anio_vigente = $request->nueva_gestion;
                     $pagos->save();
-                // guardamos si no tienen promocion
                 }else{
-                    // echo $i."-".$datosServicios->precio." - normal <br>";
+                    // guardamos las que no tienen promocion
                     $pagos = new Pago();
                     $pagos->user_id = Auth::user()->id;
                     $pagos->carrera_id = $request->nueva_carrera;
                     $pagos->persona_id = $request->persona_id;
                     $pagos->servicio_id = 2;
                     $pagos->tipo_mensualidad_id = $request->tipo_mensualidad_id;
-                    $pagos->descuento_persona_id = $descuentoId;
+                    $pagos->descuento_persona_id = null;
                     $pagos->a_pagar = $datosServicios->precio;
                     $pagos->importe = 0;
                     $pagos->faltante = 0;

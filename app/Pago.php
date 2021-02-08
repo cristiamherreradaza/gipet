@@ -11,6 +11,7 @@ class Pago extends Model
     protected $fillable = [
         'codigo_anterior',
         'user_id',
+        'carrera_id',
         'persona_id',
         'servicio_id',
         'tipo_mensualidad_id',
@@ -28,27 +29,32 @@ class Pago extends Model
 
     public function user()
     {
-        return $this->belongsTo('App/User', 'user_id');
+        return $this->belongsTo('App\User', 'user_id');
+    }
+
+    public function carrera()
+    {
+        return $this->belongsTo('App\Carrera', 'carrera_id');
     }
 
     public function persona()
     {
-        return $this->belongsTo('App/Persona', 'persona_id');
+        return $this->belongsTo('App\Persona', 'persona_id');
     }
 
     public function servicio()
     {
-        return $this->belongsTo('App/Servicio', 'servicio_id');
+        return $this->belongsTo('App\Servicio', 'servicio_id');
     }
 
     public function tipo()
     {
-        return $this->belongsTo('App/TiposMensualidades', 'tipo_mensualidad_id');
+        return $this->belongsTo('App\TiposMensualidades', 'tipo_mensualidad_id');
     }
 
     public function descuento()
     {
-        return $this->belongsTo('App/DescuentosPersona', 'descuento_persona_id');
+        return $this->belongsTo('App\DescuentosPersona', 'descuento_persona_id');
     }
 
 

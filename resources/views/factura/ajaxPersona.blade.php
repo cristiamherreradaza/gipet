@@ -116,7 +116,6 @@
                         ->where('anio_vigente', $d->anio_vigente)
                         ->whereNotNull('descuento_persona_id')
                         ->get();
-
                     
                     // dd($pagos);
                     $cuotaSinDescuento = App\Servicio::find(2); 
@@ -210,7 +209,7 @@
                     <i class="mr-2 mdi mdi-alert-circle"></i>
                 </span>
             </label>
-            <input type="text" class="form-control" name="cantidadMensualidades" id="cantidadMensualidades" value="" required>
+            <input type="text" class="form-control" name="cantidadMensualidadesParaPagar" id="cantidadMensualidadesParaPagar" value="" required>
         </div>
     </div>
 
@@ -237,6 +236,7 @@
 </div>
 
 <script>
+
     function cambiaServicio()
     {
         let servicio = $('#servicio_id').val();
@@ -247,21 +247,39 @@
 
     function adicionaItem()
     {
-        let carrera                = Number($("#carrera_id").val());
-        let numeroCuotaInicioPromo = Number($("#dia_inicio_descuento_"+carrera).val());
-        let numeroCouta            = {{ $numeroCuota }}
-        let cuotasPagadasPromo     = {{ $cuotasPagadasPromo }};
-        let cantidadMensualidades  = Number($("#cantidadMensualidades").val());
-        let cuotasPromo            = Number($("#cuotas_descuento_"+carrera).val());
-        let cuotasParaPromo        = cuotasPromo - cuotasPagadasPromo;
-        let precioCuotaPromo       = Number($("#pagar_"+carrera).val());
-        let precioCuotaSinPromo    = {{ $cuotaSinDescuento->precio }}
-        let cuotasSinPromo         = cantidadMensualidades - cuotasParaPromo;
+        let persona_id = {{ $datosPersona->id }}
+        let carrera_id = $("#carrera_id").val();
+        let mensualidades_a_pagar = $("#cantidadMensualidadesParaPagar").val();
 
-        console.log(numeroCuotaInicioPromo);
+        $.ajax({
+            url: "{{ url('Factura/ajaxMuestraCuotasPagar') }}",
+            data: {
+                persona_id: persona_id,
+                carrera_id: carrera_id,
+                mensualidades_a_pagar: mensualidades_a_pagar
+                },
+            type: 'POST',
+            success: function(data) {
+                objetoPagos = JSON.parse(data.paraPagar);
+                // console.log(objetoPagos);
+
+                for (let [key, value] of Object.entries(objetoPagos)) {
+                    console.log(value.id);
+                    t.row.add([
+                        value.carrera,
+                        value.cuota+'&#186; Mensualidad',
+                        value.descuento,
+                        value.pagar,
+                        '<button type="button" class="btnElimina btn btn-danger" title="Elimina Producto"><i class="fas fa-trash-alt"></i></button>'
+                    ]).draw(false);                }
+
+                
+            
+            }
+        });
 
         // para llenar la tabla con las cuotas de promocion
-        var c = numeroCouta;
+        /*var c = numeroCouta;
         for (let i = 0; i < cuotasPromo; i++) {
             t.row.add([
                 '1',
@@ -270,13 +288,13 @@
                 '<button type="button" class="btnElimina btn btn-danger" title="Elimina Producto"><i class="fas fa-trash-alt"></i></button>'
             ]).draw(false);
             c++;
-        }
+        }*/
         // fin para llenar la tabla con las cuotas de promocion
         // console.log(c);
 
         // para llenar la tabla con las cuotas de normales
         // let c = numeroCouta;
-        for (let j = c; j <= cantidadMensualidades; j++) {
+        /*for (let j = c; j <= cantidadMensualidades; j++) {
             t.row.add([
                 '1',
                 c+'&#186; Mensualidad',
@@ -284,7 +302,7 @@
                 '<button type="button" class="btnElimina btn btn-danger" title="Elimina Producto"><i class="fas fa-trash-alt"></i></button>'
             ]).draw(false);
             c++;
-        }
+        }*/
 
         // console.log(c);
 

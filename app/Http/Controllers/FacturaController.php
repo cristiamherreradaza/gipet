@@ -99,4 +99,44 @@ class FacturaController extends Controller
 
         return view('factura.ajaxPersona')->with(compact('datosPersona', 'inscripciones', 'descuentos', 'servicios'));
     }
+
+    public function ajaxMuestraCuotasPagar(Request $request)
+    {
+        $gestionActual = date('Y');
+        // dd($request->all());
+        $paraPagar = Pago::where('persona_id', $request->persona_id)
+                    ->where('carrera_id', $request->carrera_id)
+                    ->where('anio_vigente', $gestionActual)
+                    ->orderBy('mensualidad')
+                    ->whereNull('estado')
+                    ->limit($request->mensualidades_a_pagar)
+                    ->get();
+        
+        // $jsonPagos = $paraPagar->toJson();
+
+        $arrayPagos = [];
+
+        foreach ($paraPagar as $key => $pp) {
+
+            if($pp->descuento_persona_id == null){
+                $descuento = 'NINGUNO';
+            }else{
+                $descuento = $pp->descuento->descuento->nombre;
+            }
+
+            $arrayPagos[] = [
+                'id'        => $pp->id,
+                'carrera'   => $pp->carrera->nombre,
+                'pagar'     => $pp->a_pagar,
+                'cuota'     => $pp->mensualidad,
+                'descuento' => $descuento,
+            ];
+        }
+
+        $jsonPagos = json_encode($arrayPagos);
+
+        return response()->json([
+            'paraPagar' => $jsonPagos,
+        ]);
+    }
 }
