@@ -93,7 +93,7 @@
                                 </label>
                         
                                 @if($tiposMensualidades->count() > 0)
-                                    <select class="form-control custom-select" id="cantidad_mensualidad" name="cantidad_mensualidad" onchange="cambiaCantidadCuotas()">
+                                    <select class="form-control custom-select" id="tipo_mensualidad_id" name="tipo_mensualidad_id" onchange="cambiaCantidadCuotas()">
                                         @foreach($tiposMensualidades as $tm)
                                             <option value="{{ $tm->id }}" data-mensualidades="{{ $tm->numero_maximo }}">{{ $tm->nombre }} ({{ $tm->numero_maximo }})</option>
                                         @endforeach
@@ -144,14 +144,15 @@
                         <div class="col-md-1">
                             <div class="form-group">
                                 <label>Cuot./Promo</label>
-                                <input type="number" class="form-control" name="cantidadCuotas" id="cantidadCuotas" min="0" value="0">
+                                <input type="number" class="form-control" name="cantidadCuotasPromo" id="cantidadCuotasPromo" min="0" value="0">
+                                <input type="hidden" name="cantidadMensualidades" id="cantidadMensualidades" value="10">
                             </div>
                         </div>
 
                         <div class="col-md-1">
                             <div class="form-group">
                                 <label>Inicio/Promo</label>
-                                <input type="number" class="form-control" name="comienza" id="comienza" min="0" value="0">
+                                <input type="number" class="form-control" name="cuotaInicioPromo" id="cuotaInicioPromo" min="0" value="0">
                             </div>
                         </div>
                         
@@ -295,7 +296,7 @@
 
     function cambiaCantidadCuotas()
     {
-        let mensualidades = $("#cantidad_mensualidad").find(':selected').data('mensualidades');
-        $("#cantidadCuotas").val(mensualidades);
+        let mensualidades = $("#tipo_mensualidad_id").find(':selected').data('mensualidades');
+        $("#cantidadMensualidades").val(mensualidades);
     }
 </script>

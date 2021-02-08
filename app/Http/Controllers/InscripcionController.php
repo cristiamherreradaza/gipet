@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use App\Nota;
+use App\Pago;
 use App\User;
 use App\Turno;
 use App\Kardex;
@@ -883,23 +884,70 @@ class InscripcionController extends Controller
         // Verificaremos que todos los elementos necesarios existan para la inscripcion del alumno
         if($request->persona_id && $request->nueva_carrera && $request->nuevo_turno && $request->nuevo_paralelo && $request->nueva_gestion && $request->nueva_fecha_inscripcion)
         {
+            $datosServicios = Servicio::find(2);
             // Guardamos los datos para las mensualidades
             $descuento                         = new DescuentosPersona();
             $descuento->user_id                = Auth::user()->id;
-            $descuento->tipos_mensualidades_id = $request->cantidad_mensualidad;
+            $descuento->tipos_mensualidades_id = $request->tipo_mensualidad_id;
             $descuento->carrera_id             = $request->nueva_carrera;
             $descuento->persona_id             = $request->persona_id;
             $descuento->servicio_id            = 2;
             $descuento->descuento_id           = $request->descuento;
             $descuento->monto_director         = $request->monto;
-            $descuento->numero_mensualidad     = $request->comienza;
+            $descuento->numero_mensualidad     = $request->cuotaInicioPromo;
             $descuento->a_pagar                = $request->pagar;
             $descuento->fecha                  = $request->nueva_fecha_inscripcion;
-            $descuento->cantidad_cuotas        = $request->cantidadCuotas;
+            $descuento->cantidad_cuotas        = $request->cantidadCuotasPromo;
             $descuento->anio_vigente           = $request->nueva_gestion;
             $descuento->vigente                = "Si";
             $descuento->save();
+            $descuentoId = $descuento->id;
             // Fin uardamos los datos para las mensualidades
+            
+            $inicioPromo = $request->cuotaInicioPromo;
+            $finalPromo = ($inicioPromo + $request->cantidadCuotasPromo)-1;
+
+            // guardamos los futuros pagos
+            for ($i = 1; $i <= $request->cantidadMensualidades; $i++) {
+
+                // guardamos si tienen promocion
+                if($i >= $inicioPromo && $i <= $finalPromo){
+                    $pagos = new Pago();
+                    $pagos->user_id = Auth::user()->id;
+                    $pagos->carrera_id = $request->nueva_carrera;
+                    $pagos->persona_id = $request->persona_id;
+                    $pagos->servicio_id = 2;
+                    $pagos->tipo_mensualidad_id = $request->tipo_mensualidad_id;
+                    $pagos->descuento_persona_id = $descuentoId;
+                    $pagos->a_pagar = $request->pagar;
+                    $pagos->importe = 0;
+                    $pagos->faltante = 0;
+                    $pagos->total = 0;
+                    $pagos->mensualidad = $i;
+                    $pagos->anio_vigente = $request->nueva_gestion;
+                    $pagos->save();
+                // guardamos si no tienen promocion
+                }else{
+                    // echo $i."-".$datosServicios->precio." - normal <br>";
+                    $pagos = new Pago();
+                    $pagos->user_id = Auth::user()->id;
+                    $pagos->carrera_id = $request->nueva_carrera;
+                    $pagos->persona_id = $request->persona_id;
+                    $pagos->servicio_id = 2;
+                    $pagos->tipo_mensualidad_id = $request->tipo_mensualidad_id;
+                    $pagos->descuento_persona_id = $descuentoId;
+                    $pagos->a_pagar = $datosServicios->precio;
+                    $pagos->importe = 0;
+                    $pagos->faltante = 0;
+                    $pagos->total = 0;
+                    $pagos->mensualidad = $i;
+                    $pagos->anio_vigente = $request->nueva_gestion;
+                    $pagos->save();
+                }
+            }
+
+            // guardamos las mensualidades
+            // fin guardamos las mensualidades
             // dd($descuento);
 
             $persona = Persona::find($request->persona_id);
