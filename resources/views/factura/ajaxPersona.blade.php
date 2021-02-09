@@ -70,9 +70,6 @@
                 <tr>
                     <th>Carrera</th>
                     <th>Tipo</th>
-                    <th>Descuento</th>
-                    <th>Pago</th>
-                    <th>Cuotas Promo</th>
                     <th>Cuotas Pagadas</th>
                     <th>Total Cuotas</th>
                     <th>Cuotas Pendientes</th>
@@ -81,82 +78,26 @@
             <tbody>
                 @foreach ($descuentos as $d)
                 @php
-                    $pagos = App\Pago::where('persona_id', $d->persona_id)
+                    $cantidadCuotas = App\Pago::where('persona_id', $d->persona_id)
                         ->where('carrera_id', $d->carrera_id)
                         ->where('anio_vigente', $d->anio_vigente)
                         ->count();
 
-                    $pagosPromo = App\Pago::where('persona_id', $d->persona_id)
+                    $cuotasPagadas = App\Pago::where('persona_id', $d->persona_id)
                         ->where('carrera_id', $d->carrera_id)
                         ->where('anio_vigente', $d->anio_vigente)
-                        ->whereNotNull('descuento_persona_id')
+                        ->where('estado', 'Pagado')
                         ->count();
-                    
-                    $siguienteCuota = App\Pago::where('persona_id', $d->persona_id)
-                        ->where('carrera_id', $d->carrera_id)
-                        ->where('anio_vigente', $d->anio_vigente)
-                        ->where('faltante', '>', 0)
-                        ->get();
-                    
-                    if($siguienteCuota->count() > 0){
-                        $numeroCouta = $siguienteCouta->mensualidad;
-                    }else{
-                        $numeroCuota = 1;
-                    }
 
-                    $datosDescuentos = App\DescuentosPersona::where('persona_id', $d->persona_id)
-                        ->where('carrera_id', $d->carrera_id)
-                        ->where('persona_id', $d->persona_id)
-                        ->where('anio_vigente', $d->anio_vigente)
-                        ->where('vigente', 'Si')
-                        ->first();
-
-                    $cuotasPagadasPromo = App\Pago::where('persona_id', $d->persona_id)
-                        ->where('carrera_id', $d->carrera_id)
-                        ->where('anio_vigente', $d->anio_vigente)
-                        ->whereNotNull('descuento_persona_id')
-                        ->get();
-                    
-                    // dd($pagos);
-                    $cuotaSinDescuento = App\Servicio::find(2); 
-
-                    $cuotasPendientes = $d->tipo_mensualidad->numero_maximo - $pagos
-
+                    $cuotasSinPagar = $cantidadCuotas - $cuotasPagadas;
+                
                 @endphp
                 <tr>
-                    <td style="text-align: left;">
-                        {{ $d->carrera->nombre }}
-                        <input type="hidden" name="carrera_id_{{ $d->carrera->id }}" id="carrera_id_{{ $d->carrera->id }}" value="{{ $d->carrera->id }}">
-                        <input type="hidden" name="dia_inicio_descuento_{{ $d->carrera->id }}" id="dia_inicio_descuento_{{ $d->carrera->id }}" value="{{ $datosDescuentos->numero_mensualidad }}">
-                    </td>
-                    <td>
-                        {{ $d->servicio->nombre }}
-                        <input type="hidden" name="servicio_id_{{ $d->carrera->id }}" id="servicio_id_{{ $d->carrera->id }}" value="{{ $d->servicio->id }}">
-                    </td>
-                    <td>
-                        {{ $d->descuento->nombre }}
-                        <input type="hidden" name="descuento_id_{{ $d->carrera->id }}" id="descuento_id_{{ $d->carrera->id }}" value="{{ $d->descuento->id }}">
-                    </td>
-                    <td>
-                        {{ $d->a_pagar }}
-                        <input type="hidden" name="pagar_{{ $d->carrera->id }}" id="pagar_{{ $d->carrera->id }}" value="{{ $d->a_pagar }}">
-                    </td>
-                    <td>
-                        {{ $d->cantidad_cuotas }}
-                        <input type="hidden" name="cuotas_descuento_{{ $d->carrera->id }}" id="cuotas_descuento_{{ $d->carrera->id }}" value="{{ $d->cantidad_cuotas }}">
-                    </td>
-                    <td>
-                        {{ $pagos }}
-                        <input type="hidden" name="pagados_{{ $d->carrera->id }}" id="pagados_{{ $d->carrera->id }}" value="{{ $pagos }}">
-                    </td>
-                    <td>
-                        {{ $d->tipo_mensualidad->numero_maximo }}
-                        <input type="hidden" name="total_cuotas_{{ $d->carrera->id }}" id="total_cuotas_{{ $d->carrera->id }}" value="{{ $d->tipo_mensualidad->numero_maximo }}">
-                    </td>
-                    <td>
-                        {{ $cuotasPendientes }}
-                        <input type="hidden" name="cuotas_pendientes_{{ $d->carrera->id }}" id="cuotas_pendientes_{{ $d->carrera->id }}" value="{{ $cuotasPendientes }}">
-                    </td>
+                    <td style="text-align: left;">{{ $d->carrera->nombre }}</td>
+                    <td>{{ $d->servicio->nombre }}</td>
+                    <td>{{ $cuotasPagadas }}</td>
+                    <td>{{ $cantidadCuotas }}</td>
+                    <td><h2 class="text-info">{{ $cuotasSinPagar }}</h2></td>
                 </tr>
                 @endforeach
 
@@ -266,7 +207,8 @@
                 for (let [key, value] of Object.entries(objetoPagos)) {
                     console.log(value.id);
                     t.row.add([
-                        value.carrera,
+                        value.carrera+`<input type="hidden" name="carrera_id[]" value="`+value.carrera_id+`">
+                        <input type="hidden" name="pago_id[]" value="`+value.id+`">`,
                         value.cuota+'&#186; Mensualidad',
                         value.descuento,
                         value.pagar,

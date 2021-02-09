@@ -125,11 +125,13 @@ class FacturaController extends Controller
             }
 
             $arrayPagos[] = [
-                'id'        => $pp->id,
-                'carrera'   => $pp->carrera->nombre,
-                'pagar'     => $pp->a_pagar,
-                'cuota'     => $pp->mensualidad,
-                'descuento' => $descuento,
+                'id'         => $pp->id,
+                'carrera_id' => $pp->carrera_id,
+                'persona_id' => $pp->persona_id,
+                'carrera'    => $pp->carrera->nombre,
+                'pagar'      => $pp->a_pagar,
+                'cuota'      => $pp->mensualidad,
+                'descuento'  => $descuento,
             ];
         }
 
@@ -138,5 +140,18 @@ class FacturaController extends Controller
         return response()->json([
             'paraPagar' => $jsonPagos,
         ]);
+    }
+
+    public function guardaFactura(Request $request)
+    {
+        $fechaPago = date('Y-m-d');
+        for ($i=0; $i < count($request->carrera_id); $i++) { 
+            // echo $request->carrera_id[$i]." - ".$request->cuota[$i]."<br />";
+            $pago = Pago::find($request->pago_id[$i]);
+            $pago->fecha = $fechaPago;
+            $pago->estado = 'Pagado';
+            $pago->save();
+        }
+        dd($request->all());
     }
 }

@@ -103,7 +103,8 @@
                 </div>
 
             </div> --}}
-
+            <form action="{{ url('Factura/guardaFactura') }}" method="POST">
+                @csrf
             <div class="row">
                 <div class="col-md-12">
                     <div class="table-responsive m-t-40">
@@ -125,9 +126,11 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <a href="{{ url('Factura/imprimeFactura') }}" class="btn btn-block btn-success">FACTURAR</a>
+                    {{-- <a href="{{ url('Factura/imprimeFactura') }}" class="btn btn-block btn-success">FACTURAR</a> --}}
+                    <button type="submit" class="btn btn-block btn-success">FACTURAR</button>
                 </div>
             </div>
+            </form>
 
         </div>
 
