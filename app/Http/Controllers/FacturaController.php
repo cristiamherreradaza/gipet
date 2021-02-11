@@ -94,10 +94,16 @@ class FacturaController extends Controller
                                     ->get();
 
         $pagos = Pago::where('persona_id', $request->personaId)
-                        ->where('anio_vigente', $gestionActual)
+                        // ->where('anio_vigente', $gestionActual)
                         ->get();
 
-        return view('factura.ajaxPersona')->with(compact('datosPersona', 'inscripciones', 'descuentos', 'servicios'));
+        $siguienteCuota = Pago::where('persona_id', $request->personaId)
+                            ->where('anio_vigente', $gestionActual)
+                            ->whereNull('estado')
+                            ->orderBy('mensualidad', 'asc')
+                            ->first();
+
+        return view('factura.ajaxPersona')->with(compact('datosPersona', 'inscripciones', 'descuentos', 'servicios', 'siguienteCuota'));
     }
 
     public function ajaxMuestraCuotasPagar(Request $request)

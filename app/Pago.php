@@ -52,7 +52,7 @@ class Pago extends Model
         return $this->belongsTo('App\TiposMensualidades', 'tipo_mensualidad_id');
     }
 
-    public function descuento()
+    public function descuento_persona()
     {
         return $this->belongsTo('App\DescuentosPersona', 'descuento_persona_id');
     }

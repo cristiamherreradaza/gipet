@@ -95,9 +95,9 @@
                 <tr>
                     <td style="text-align: left;">{{ $d->carrera->nombre }}</td>
                     <td>{{ $d->servicio->nombre }}</td>
-                    <td>{{ $cuotasPagadas }}</td>
-                    <td>{{ $cantidadCuotas }}</td>
-                    <td><h2 class="text-info">{{ $cuotasSinPagar }}</h2></td>
+                    <td><h2 class="text-primary">{{ $cuotasPagadas }}</h2></td>
+                    <td><h2 class="text-success">{{ $cantidadCuotas }}</h2></td>
+                    <td><h2 class="text-danger">{{ $cuotasSinPagar }}</h2></td>
                 </tr>
                 @endforeach
 
@@ -116,6 +116,7 @@
                     <i class="mr-2 mdi mdi-alert-circle"></i>
                 </span>
             </label>
+            <input type="hidden" value="{{ $siguienteCuota->id }}" name="pago_id">
             <select name="servicio_id" id="servicio_id" class="form-control" onchange="cambiaServicio()" required>
                 <option value="">SELECCIONE</option>
                 @foreach ($servicios as $s)
@@ -127,6 +128,104 @@
 </div>
 
 <div class="row" id="formularioMensualidad" style="display: none;">
+
+    <div class="col-2">
+        <div class="form-group">
+            <label>Carrera
+                <span class="text-danger">
+                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                </span>
+            </label>
+            <select name="carrera_id" id="carrera_id" class="form-control" required>
+                @foreach ($inscripciones as $i)
+                <option value="{{ $i->carrera->id }}">{{ $i->carrera->nombre }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="form-group">
+            <label>CUOTA
+                <span class="text-danger">
+                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                </span>
+            </label>
+            <input type="text" class="form-control" name="numeroCuota" id="numeroCuota" value="{{ $siguienteCuota->mensualidad }}&#176; Mensualidad" required>
+        </div>
+    </div>
+
+    <div class="col-md-1">
+        <div class="form-group">
+            <label>MONTO
+                <span class="text-danger">
+                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                </span>
+            </label>
+            <input type="text" class="form-control" name="cuotaParaPagar" id="cuotaParaPagar" value="{{ $siguienteCuota->a_pagar }}" required>
+        </div>
+    </div>
+
+    <div class="col-md-1">
+        <div class="form-group">
+            <label>DESCUENTO</label>
+            @php
+                if($siguienteCuota->descuento_persona_id == null){
+                    $nombreDescuento = 'NINGUNO';
+                }else{
+                    $nombreDescuento = $siguienteCuota->descuento_persona->descuento->nombre;
+                }
+            @endphp
+            <input type="text" class="form-control" name="descuentoMensualidad" id="descuentoMensualidad" value="0" required>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="form-group">
+            <label>TIPO DESCUENTO
+                <span class="text-danger">
+                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                </span>
+            </label>
+            <input type="text" class="form-control" name="tipoDescuento" id="tipoDescuento" value="{{ $nombreDescuento }}" required>
+        </div>
+    </div>
+
+    <div class="col-md-1">
+        <div class="form-group">
+            <label>PAGO
+                <span class="text-danger">
+                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                </span>
+            </label>
+            <input type="text" class="form-control" name="tipoDescuento" id="tipoDescuento" value="" required>
+        </div>
+    </div>
+
+    <div class="col-1">
+        <div class="form-group">
+            <label>
+                <span class="text-danger">
+                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                </span>
+            </label>
+            <select name="carrera_id" id="carrera_id" class="form-control" required>
+                <option value="total">Total</option>
+                <option value="parcial">Parcial</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="form-group">
+            <label>&nbsp;</label>
+            <button type="button" class="btn btn-block btn-info" onclick="adicionaItem()">Adicionar</button>
+        </div>
+    </div>
+
+</div>
+
+<div class="row" id="formularioParcial" style="display: none;">
 
     <div class="col-3">
         <div class="form-group">
@@ -145,7 +244,7 @@
 
     <div class="col-md-3">
         <div class="form-group">
-            <label>CANTIDAD CUOTAS
+            <label>IMPORTE
                 <span class="text-danger">
                     <i class="mr-2 mdi mdi-alert-circle"></i>
                 </span>
@@ -161,11 +260,9 @@
                     <i class="mr-2 mdi mdi-alert-circle"></i>
                 </span>
             </label>
-            <input type="text" class="form-control" name="descripcionMensualidad" id="descripcionMensualidad" value="Mensualidad" required>
+            <input type="text" class="form-control" name="descripcionMensualidad" id="descripcionMensualidad" value="Parcial" required>
         </div>
     </div>
-
-</div>
 
     <div class="col-md-2">
         <div class="form-group">
@@ -176,6 +273,10 @@
 
 </div>
 
+    
+
+</div>
+
 <script>
 
     function cambiaServicio()
@@ -183,6 +284,10 @@
         let servicio = $('#servicio_id').val();
         if(servicio == 2){
             $('#formularioMensualidad').show('slow');
+            // $('#formularioParcial').toggle('slow');
+        }else if(servicio == 8){
+            $('#formularioMensualidad').hide('slow');
+            $('#formularioParcial').show('slow');
         }
     }
 
@@ -208,7 +313,8 @@
                     console.log(value.id);
                     t.row.add([
                         value.carrera+`<input type="hidden" name="carrera_id[]" value="`+value.carrera_id+`">
-                        <input type="hidden" name="pago_id[]" value="`+value.id+`">`,
+                        <input type="hidden" name="pago_id[]" value="`+value.id+`">
+                        <input type="hidden" name="cuota[]" value="`+value.cuota+`">`,
                         value.cuota+'&#186; Mensualidad',
                         value.descuento,
                         value.pagar,
@@ -219,37 +325,6 @@
             
             }
         });
-
-        // para llenar la tabla con las cuotas de promocion
-        /*var c = numeroCouta;
-        for (let i = 0; i < cuotasPromo; i++) {
-            t.row.add([
-                '1',
-                c+'&#186; Mensualidad',
-                precioCuotaPromo,
-                '<button type="button" class="btnElimina btn btn-danger" title="Elimina Producto"><i class="fas fa-trash-alt"></i></button>'
-            ]).draw(false);
-            c++;
-        }*/
-        // fin para llenar la tabla con las cuotas de promocion
-        // console.log(c);
-
-        // para llenar la tabla con las cuotas de normales
-        // let c = numeroCouta;
-        /*for (let j = c; j <= cantidadMensualidades; j++) {
-            t.row.add([
-                '1',
-                c+'&#186; Mensualidad',
-                precioCuotaSinPromo,
-                '<button type="button" class="btnElimina btn btn-danger" title="Elimina Producto"><i class="fas fa-trash-alt"></i></button>'
-            ]).draw(false);
-            c++;
-        }*/
-
-        // console.log(c);
-
-        // fin para llenar la tabla con las cuotas de normales
-
 
     }
 </script>

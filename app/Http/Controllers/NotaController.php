@@ -52,6 +52,7 @@ class NotaController extends Controller
     public function detalle($id)
     {
         $datosNP = NotasPropuesta::where('id', $id)->first();
+        
         $comboTurnos = NotasPropuesta::where('asignatura_id', $datosNP->asignatura_id)
                                     ->where('user_id', $datosNP->user_id)
                                     ->where('anio_vigente', $datosNP->anio_vigente)

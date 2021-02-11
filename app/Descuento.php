@@ -32,7 +32,7 @@ class Descuento extends Model
         return $this->belongsTo('App/Servicio', 'servicio_id');
     }
 
-    public function descuentopersonas()
+    public function descuento_persona()
     {
         return $this->hasMany('App/DescuentoPersona');
     }

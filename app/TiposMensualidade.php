@@ -24,6 +24,11 @@ class TiposMensualidade extends Model
         return $this->belongsTo('App\User', 'user_id');
     }
 
+    public function carrera()
+    {
+        return $this->belongsTo('App\Carrera', 'carrera_id');
+    }
+
     public function servicio()
     {
         return $this->belongsTo('App\Servicio', 'servicio_id');
