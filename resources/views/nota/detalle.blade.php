@@ -52,10 +52,7 @@
                 <div class="col-md-2">
                     <button type="submit" class="btn btn-block btn-info">Cambia Curso</button>
                 </div>
-
-                <div class="col-md-2">
-                    <button type="button" class="btn btn-block btn-primary" onclick="generaCentralizadorAsistencia()">Centralizador Asistencia</button>
-                </div>
+                
             </div>
         </form>
             

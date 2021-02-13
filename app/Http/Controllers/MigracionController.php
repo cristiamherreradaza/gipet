@@ -1317,5 +1317,80 @@ SELECT *
   GROUP BY n.docente_id, n.asignatura_id, n.paralelo, n.turno_id, n.anio_vigente;*/
     }
 
+    // para regularizar las materias de los alumnos 2020
+    public function regularizaAlumnosMaterias()
+    {
+        $fecha = date('Y-m-d');
+        // vemos a todos los alumnos que esten inscritos en la gestion 2020
+        $alumnos = CarrerasPersona::where('anio_vigente', 2020)
+                    ->get();
+
+        foreach ($alumnos as $key => $a) {
+
+            echo $a->id.' - '.$a->persona->nombres.' - '.$a->carrera_id.'<br />';
+
+            // buscamos las materias que pertenescan a la carrera
+            $materias = Asignatura::where('carrera_id', $a->carrera_id)
+                        ->where('anio_vigente', 2020)
+                        ->where('gestion', $a->gestion)
+                        ->get();
+            
+            foreach($materias as $m){
+
+                $inscripcion                  = new Inscripcione();
+                $inscripcion->user_id         = 36;
+                $inscripcion->resolucion_id   = 1;
+                $inscripcion->carrera_id      = $a->carrera_id;
+                $inscripcion->asignatura_id   = $m->id;
+                $inscripcion->turno_id        = $a->turno_id;
+                $inscripcion->persona_id      = $a->persona_id;
+                $inscripcion->paralelo        = $a->paralelo;
+                $inscripcion->semestre        = $m->semestre;
+                $inscripcion->gestion         = $a->gestion;
+                $inscripcion->anio_vigente    = 2020;
+                $inscripcion->fecha_registro  = $fecha;
+                $inscripcion->nota            = 0;
+                $inscripcion->convalidado     = 'No';
+                $inscripcion->nota_aprobacion = 61;
+                $inscripcion->troncal         = 'Si';
+                $inscripcion->estado          = 'Cursando';
+                $inscripcion->save();
+                $inscripcionId = $inscripcion->id;
+
+                echo $m->nombre.'<br />';
+                for ($i=1; $i <= 4; $i++) { 
+                    $docente = NotasPropuesta::where('anio_vigente', 2020)
+                        ->where('turno_id', $a->turno_id)
+                        ->where('paralelo', $a->paralelo)
+                        ->where('asignatura_id', $m->id)
+                        ->first();
+
+                    if($docente){
+                        $nombreDocente = $docente->docente_id;
+                    }else{
+                        $nombreDocente = null;
+                    }
+                    echo 'Bimestre '.$i.'-' .$nombreDocente. '<br />';
+                    $notas                  = new Nota();
+                    $notas->user_id         = 36;
+                    $notas->resolucion_id   = 1;
+                    $notas->inscripcion_id  = $inscripcionId;
+                    $notas->docente_id      = $nombreDocente;
+                    $notas->persona_id      = $a->persona_id;
+                    $notas->asignatura_id   = $m->id;
+                    $notas->turno_id        = $a->turno_id;
+                    $notas->paralelo        = $a->paralelo;
+                    $notas->anio_vigente    = 2020;
+                    $notas->semestre        = $m->semestre;
+                    $notas->trimestre       = $i;
+                    $notas->fecha_registro  = $fecha;
+                    $notas->nota_aprobacion = 61;
+                    $notas->save();
+                }
+            }
+        }
+        // dd($alumnos);
+    }
+
 
 }

@@ -46,6 +46,7 @@ class NotaController extends Controller
                                             ->where('anio_vigente', $request->gestion)
                                             ->groupBy('asignatura_id')
                                             ->get();
+                                            
         return view('nota.ajaxAsignaturasGestion')->with(compact('asignaturasDocente'));
     }
 
@@ -823,6 +824,7 @@ class NotaController extends Controller
 
     public function cambiaTurnoParalelo(Request $request)
     {
+        // dd($request->all());
         $notasPropuestaId = NotasPropuesta::where('turno_id', $request->turno_id)
                                         ->where('asignatura_id', $request->asignatura_id)
                                         ->where('docente_id', Auth::user()->id)
