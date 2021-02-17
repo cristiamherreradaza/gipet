@@ -18,6 +18,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>Carrera</th>
                         <th>Nombre</th>
                         <th>Numero Mensualidades</th>
                         <th>A&ntilde;o Vigente</th>
@@ -28,6 +29,7 @@
                     @foreach($periodos as $key => $periodo)
                         <tr>
                             <td>{{ ($key+1) }}</td>
+                            <td class="text-left">{{ $periodo->carrera->nombre }}</td>
                             <td>{{ $periodo->nombre }}</td>
                             <td>{{ $periodo->numero_maximo }}</td>
                             <td>{{ $periodo->anio_vigente }}</td>
@@ -57,7 +59,34 @@
                 <input type="hidden" name="id_servicio" id="id_servicio" value="{{ $servicio->id }}">
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label">Carreras</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <select name="carrera_id" id="carrera_id" class="form-control">
+                                    @foreach ($carreras as $c)
+                                        <option value="{{ $c->id }}">{{ $c->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Cuotas</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input name="numero_mensualidad_servicio" type="number" id="numero_mensualidad_servicio" min="1" value="1" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+
+                        <div class="col-md-8">
                             <div class="form-group">
                                 <label class="control-label">Nombre</label>
                                 <span class="text-danger">
@@ -65,19 +94,9 @@
                                 </span>
                                 <input name="nombre_servicio" type="text" id="nombre_servicio" maxlength="30" class="form-control" required>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">Numero mensualidades</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <input name="numero_mensualidad_servicio" type="text" id="numero_mensualidad_servicio" maxlength="30" class="form-control" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
+                        </div> 
+
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">A&ntilde;o Vigente</label>
                                 <span class="text-danger">
