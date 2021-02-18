@@ -15,35 +15,29 @@ class ServicioController extends Controller
 {
     public function periodo($id)
     {
-        //dd($id);
-        $servicio   = Servicio::find($id);
-        $periodos   = TiposMensualidade::where('servicio_id', $servicio->id)->get();
-        return view('tipos_mensualidades.listado')->with(compact('servicio', 'periodos'));
+        $carreras = Carrera::get();
+        $servicio = Servicio::find($id);
+        $periodos = TiposMensualidade::where('servicio_id', $servicio->id)->get();
+        return view('tipos_mensualidades.listado')->with(compact('servicio', 'periodos', 'carreras'));
     }
 
     // Linea de comando
     public function guardar_periodo(Request $request)
     {
-        $tipos_mensualidad = new TiposMensualidade();
-        $tipos_mensualidad->user_id = Auth::user()->id;
-        $tipos_mensualidad->servicio_id  = $request->id_servicio;
-        $tipos_mensualidad->nombre = $request->nombre_servicio;
+        // dd($request->all());
+        if($request->tipo_mensualidad == null){
+            $tipos_mensualidad = new TiposMensualidade();
+        }else{
+            $tipos_mensualidad = TiposMensualidade::find($request->tipo_mensualidad);
+        }
+        $tipos_mensualidad->user_id       = Auth::user()->id;
+        $tipos_mensualidad->servicio_id   = $request->id_servicio;
+        $tipos_mensualidad->carrera_id    = $request->carrera_id;
+        $tipos_mensualidad->nombre        = $request->nombre_servicio;
         $tipos_mensualidad->numero_maximo = $request->numero_mensualidad_servicio;
-        $tipos_mensualidad->anio_vigente = $request->anio_vigente_servicio;
+        $tipos_mensualidad->anio_vigente  = $request->anio_vigente_servicio;
         $tipos_mensualidad->save();
         return redirect('Servicio/periodo/'.$request->id_servicio);
-    }
-
-    public function actualizar_periodo(Request $request)
-    {
-        $tipos_mensualidad = TiposMensualidade::find($request->id);
-        $tipos_mensualidad->user_id = Auth::user()->id;
-        $tipos_mensualidad->servicio_id  = $request->id_servicio_actualizar;
-        $tipos_mensualidad->nombre = $request->nombre;
-        $tipos_mensualidad->numero_maximo = $request->sigla;
-        $tipos_mensualidad->anio_vigente = $request->precio;
-        $tipos_mensualidad->save();
-        return redirect('Servicio/periodo/'.$request->id_servicio_actualizar);
     }
 
     public function eliminar_periodo($id)

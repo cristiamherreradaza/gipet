@@ -210,20 +210,15 @@ class PersonaController extends Controller
 
     public function ajaxDetallePensum(Request $request)
     {
-        // En la variable $persona encontramos al estudiante enviado por ajax
         $persona = Persona::find($request->persona_id);
-        // Creamos una variable array
         $array_carreras = array();
-        // En la variable $carreras almacenaremos todas las carreras en las que esta inscrito el estudiante
         $carreras = Inscripcione::where('persona_id', $request->persona_id)
                                 ->groupBy('carrera_id')
                                 ->select('carrera_id')
                                 ->get();
-        // Guardaremos en la variable $array_carreras los id de las carreras en las que esta inscrito el estudiante
         foreach($carreras as $carrera){
             array_push($array_carreras, $carrera->carrera_id);
         }
-        // En la variable $carreras buscaremos y almacenaremos las carreras con los id's de las carreras que se encuentran en el array
         $carreras = Carrera::whereIn('id', $array_carreras)
                             ->whereNull('estado')
                             ->get();
