@@ -5,6 +5,7 @@
 @endsection
 
 @section('css')
+<link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 <style>
     input { 
         text-align: center;
@@ -60,10 +61,12 @@
         
         
         <div class="table-responsive m-t-40">
-            <table id="myTable" class="table table-bordered table-striped text-center">
+            <table id="tablaAlumnos" class="table table-bordered table-striped text-center">
                 <thead class="text-primary">
                     <tr>
-                        <th>Estudiante</th>
+                        <th>Apellido Paterno</th>
+                        <th>Apellido Materno</th>
+                        <th>Nombres</th>
                         <th>CI</th>
                         <th>
                             1er Bim
@@ -85,8 +88,10 @@
                 <tbody>
                     @foreach($inscritos as $inscrito)
                         <tr>
-                            <td>{{ $inscrito->persona->nombres }} {{ $inscrito->persona->apellido_paterno }} {{ $inscrito->persona->apellido_materno }}</td>
-                            <td>{{ $inscrito->persona->cedula }}</td>
+                            <td class="text-left">{{ $inscrito->persona->apellido_paterno }}</td>
+                            <td class="text-left">{{ $inscrito->persona->apellido_materno }}</td>
+                            <td class="text-left">{{ $inscrito->persona->nombres }}</td>
+                            <td class="text-left">{{ $inscrito->persona->cedula }}</td>
                             @php
                                 $primerBimestre     = App\Nota::where('inscripcion_id', $inscrito->id)->where('trimestre', 1)->first();
                                 $primerBimestre     = ($primerBimestre ? ($primerBimestre->nota_total ? $primerBimestre->nota_total : '0') : '0');
@@ -206,6 +211,8 @@
 
 
 @section('js')
+<script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <!-- Sweet-Alert  -->
 <!-- <script src="{{ asset('assets/plugins/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/sweetalert2/sweet-alert.init.js') }}"></script> -->
@@ -247,11 +254,21 @@ $(document).ready(function() {
 </script>
 
 <script type="text/javascript">
+
     // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
+    });
+
+    $(document).ready(function() {
+        $('#tablaAlumnos').DataTable( {
+            "order": [[ 0, "asc" ]],
+            language: {
+                url: '{{ asset('datatableEs.json') }}'
+            },
+        });
     });
 
     function segundo_turno(inscripcion_id, segundo_turno)
