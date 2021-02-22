@@ -1392,5 +1392,221 @@ SELECT *
         // dd($alumnos);
     }
 
+    public function migracion2021()
+    {
+        $c = 1;
+        $arrayAlumnos = array();
+        $inscripciones = DB::table('datos_kardex')
+                        ->where('anio_act', 2021)
+                        ->get();
+
+        foreach ($inscripciones as $key => $i) {
+            $alumnos = Persona::where('cedula', $i->carnetIDA)
+                        ->count();
+
+            if($alumnos < 1){
+                // echo "No esta $c -".$i->carnetIDA."<br />";
+                $arrayAlumnos[] = $i->carnetIDA; 
+                $c++;
+            }
+            
+        }
+
+        $alumnosNuevos = DB::table('alumno_nuevo')
+                        ->whereIn('carnetIda', $arrayAlumnos)
+                        ->get();
+
+        // dd($alumnosNuevos);
+        foreach ($alumnosNuevos as $a) {
+            // modificamos para las ciudades
+            $primeraLetra = $a->ciu_a;
+            if ($primeraLetra[0] == "L" || $primeraLetra[0] == "l") {
+                $ciudad = "La Paz";
+            } elseif ($primeraLetra[0] == "B") {
+                $ciudad = "Beni";
+            } elseif ($primeraLetra[0] == "C") {
+                $ciudad = "Cochabamba";
+            } elseif ($primeraLetra[0] == "O") {
+                $ciudad = "Oruro";
+            } elseif ($primeraLetra[0] == "P") {
+                $ciudad = "Potosi";
+            } elseif ($primeraLetra[0] == "S") {
+                $ciudad = "Santa Cruz";
+            } elseif ($primeraLetra[0] == "T") {
+                $ciudad = "Tarija";
+            } elseif ($primeraLetra[0] == null) {
+                $ciudad = "La Paz";
+            }
+            // fin modificamos para las ciudades
+
+            // para el genero
+            $sexoPersona = $a->sexo;
+            if ($sexoPersona == "F") {
+                $genero = "Femenino";
+            } elseif ($sexoPersona == "M") {
+                $genero = "Masculino";
+            } elseif ($sexoPersona == "") {
+                $genero = null;
+            }
+
+            // para trabaja
+            $trabajaPersona = $a->trabaja;
+            if ($trabajaPersona == "S") {
+                $chambea = "Si";
+            } elseif ($trabajaPersona == "N") {
+                $chambea = "No";
+            } elseif ($trabajaPersona == "Y") {
+                $chambea = "Si";
+            } elseif ($trabajaPersona == "") {
+                $chambea = "No";
+            }
+
+            // fecha nacimiento
+            $fechaNacimiento = $a->fec_nac;
+            if ($fechaNacimiento == "0000-00-00") {
+                $fechaN = null;
+            } else {
+                $fechaN = $a->fec_nac;
+            }
+
+            echo $a->alumnoID . " - " . $a->nombres . " - " . $ciudad . " - " . $genero . "<br />";
+            DB::table('personas')->insert([
+                'codigo_anterior' => $a->alumnoID,
+                'user_id' => 1,
+                'apellido_paterno' => $a->a_paterno,
+                'apellido_materno' => $a->a_materno,
+                'nombres' => $a->nombres,
+                'cedula' => $a->carnetIDA,
+                'expedido' => $ciudad,
+                'fecha_nacimiento' => $fechaN,
+                'sexo' => $genero,
+                'direccion' => $a->direc_a,
+                'numero_fijo' => $a->telf_fijo,
+                'numero_celular' => $a->telf_cel,
+                'email' => $a->email,
+                'trabaja' => $chambea,
+                'empresa' => $a->empresa,
+                'direccion_empresa' => $a->direc_emp,
+                'numero_empresa' => $a->telf_emp,
+                'fax' => $a->fax,
+                'email_empresa' => $a->email_emp,
+                'nombre_padre' => $a->nomb_pa,
+                'celular_padre' => $a->tel_pa,
+                'nombre_madre' => $a->nom_ma,
+                'celular_madre' => $a->tel_ma,
+                'nombre_tutor' => $a->nom_tut,
+                'celular_tutor' => $a->tel_tut,
+                'nombre_pareja' => $a->nom_esp,
+                'celular_pareja' => $a->tel_esp,
+                'nit' => $a->nit,
+                'razon_social_cliente' => $a->raz_cli,
+            ]);
+        }
+
+    }
+
+    public function migracionInscripciones2021()
+    {
+        $karadex = DB::table('datos_kardex')
+                            ->where('anio_act', 2021)
+                            ->get();
+
+        foreach ($karadex as $key => $k) {
+
+            $alumno = Persona::where('cedula', $k->carnetIDA)
+                        ->first();
+            
+            $cp = new CarrerasPersona();
+            $cp->codigo_anterior = $k->kardexID;
+            $cp->user_id = 36;
+            $cp->carrera_id = $k->carreraID;
+            $cp->persona_id = $alumno->id;
+            $cp->turno_id = $k->turnoID;
+            $cp->gestion = $k->gestionk;
+            $cp->paralelo = "A";
+            $cp->fecha_inscripcion = $k->fecha_ins;
+            $cp->anio_vigente = '2021';
+            $cp->vigencia = 'Vigente';
+            $cp->save();
+            
+        }
+
+        // dd($inscripciones);
+        
+    }
+
+    public function regularizaAlumnosMaterias2021()
+    {
+        $fecha = date('Y-m-d');
+        // vemos a todos los alumnos que esten inscritos en la gestion 2020
+        $alumnos = CarrerasPersona::where('anio_vigente', 2021)
+                    ->get();
+
+        foreach ($alumnos as $key => $a) {
+
+            echo $a->id.' - '.$a->persona->nombres.' - '.$a->carrera_id.'<br />';
+
+            // buscamos las materias que pertenescan a la carrera
+            $materias = Asignatura::where('carrera_id', $a->carrera_id)
+                        ->where('anio_vigente', 2021)
+                        ->where('gestion', $a->gestion)
+                        ->get();
+            
+            foreach($materias as $m){
+
+                $inscripcion                  = new Inscripcione();
+                $inscripcion->user_id         = 36;
+                $inscripcion->resolucion_id   = 1;
+                $inscripcion->carrera_id      = $a->carrera_id;
+                $inscripcion->asignatura_id   = $m->id;
+                $inscripcion->turno_id        = $a->turno_id;
+                $inscripcion->persona_id      = $a->persona_id;
+                $inscripcion->paralelo        = $a->paralelo;
+                $inscripcion->semestre        = $m->semestre;
+                $inscripcion->gestion         = $a->gestion;
+                $inscripcion->anio_vigente    = 2021;
+                $inscripcion->fecha_registro  = $fecha;
+                $inscripcion->nota            = 0;
+                $inscripcion->convalidado     = 'No';
+                $inscripcion->nota_aprobacion = 61;
+                $inscripcion->troncal         = 'Si';
+                $inscripcion->estado          = 'Cursando';
+                $inscripcion->save();
+                $inscripcionId = $inscripcion->id;
+
+                echo $m->nombre.'<br />';
+                for ($i=1; $i <= 4; $i++) { 
+                    $docente = NotasPropuesta::where('anio_vigente', 2021)
+                        ->where('turno_id', $a->turno_id)
+                        ->where('paralelo', $a->paralelo)
+                        ->where('asignatura_id', $m->id)
+                        ->first();
+
+                    if($docente){
+                        $nombreDocente = $docente->docente_id;
+                    }else{
+                        $nombreDocente = null;
+                    }
+                    echo 'Bimestre '.$i.'-' .$nombreDocente. '<br />';
+                    $notas                  = new Nota();
+                    $notas->user_id         = 36;
+                    $notas->resolucion_id   = 1;
+                    $notas->inscripcion_id  = $inscripcionId;
+                    $notas->docente_id      = $nombreDocente;
+                    $notas->persona_id      = $a->persona_id;
+                    $notas->asignatura_id   = $m->id;
+                    $notas->turno_id        = $a->turno_id;
+                    $notas->paralelo        = $a->paralelo;
+                    $notas->anio_vigente    = 2021;
+                    $notas->semestre        = $m->semestre;
+                    $notas->trimestre       = $i;
+                    $notas->fecha_registro  = $fecha;
+                    $notas->nota_aprobacion = 61;
+                    $notas->save();
+                }
+            }
+        }
+        // dd($alumnos);
+    }
 
 }
