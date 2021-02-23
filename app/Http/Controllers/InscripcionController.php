@@ -975,6 +975,7 @@ class InscripcionController extends Controller
                 //$carreras_persona->estado             = '';   APROBO/REPROBO/ABANDONO/NULL
                 $carreras_persona->save();
             }
+            
             // Verificaremos que el alumno no este inscrito en la carrera deseada
             $verificacion = Inscripcione::where('carrera_id', $request->nueva_carrera)
                                         ->where('turno_id', $request->nuevo_turno)
@@ -985,7 +986,7 @@ class InscripcionController extends Controller
             if(!$verificacion)
             {
                 // Buscaremos a las materias que pertenecen a la gestion 1, de la asignatura X con anio_vigente X
-                $asignaturas    = Asignatura::where('carrera_id', $request->nueva_carrera)
+                $asignaturas = Asignatura::where('carrera_id', $request->nueva_carrera)
                                             ->where('gestion', 1)
                                             ->where('anio_vigente', $request->nueva_gestion)
                                             ->get();

@@ -14,8 +14,9 @@
                                         <i class="mr-2 mdi mdi-alert-circle"></i>
                                     </span>
                                 </label>
-                                <select class="form-control custom-select" id="nueva_carrera" name="nueva_carrera" required>
+                                <select class="form-control custom-select" id="nueva_carrera" name="nueva_carrera" onchange="cambiaCarrera()" required>
                                     @if(count($disponibles) > 0)
+                                        <option value="">Seleccione</option>
                                         @foreach($disponibles as $carrera)
                                             <option value="{{ $carrera->id }}">{{ $carrera->nombre }}</option>
                                         @endforeach
@@ -91,17 +92,11 @@
                                         <i class="mr-2 mdi mdi-alert-circle"></i>
                                     </span>
                                 </label>
-                        
-                                @if($tiposMensualidades->count() > 0)
-                                    <select class="form-control custom-select" id="tipo_mensualidad_id" name="tipo_mensualidad_id" onchange="cambiaCantidadCuotas()">
-                                        @foreach($tiposMensualidades as $tm)
-                                            <option value="{{ $tm->id }}" data-mensualidades="{{ $tm->numero_maximo }}">{{ $tm->nombre }} ({{ $tm->numero_maximo }})</option>
-                                        @endforeach
-                                    </select>
-                                @else
-                                    <option value="">No Disponible</option>
-                                @endif
 
+                                <div id="ajaxTiposMensualidades">
+
+                                </div>
+                        
                             </div>
 
                         </div>
@@ -232,8 +227,6 @@
 </div>
 
 <script>
-
-
     function validaItems()
     {
         var nueva_carrera           = $("#nueva_carrera").val();
@@ -298,5 +291,25 @@
     {
         let mensualidades = $("#tipo_mensualidad_id").find(':selected').data('mensualidades');
         $("#cantidadMensualidades").val(mensualidades);
+    }
+
+    function cambiaCarrera()
+    {
+        let carrera = $("#nueva_carrera").val();
+        
+        $.ajax({
+            url: "{{ url('Persona/ajaxMuestraMensualidades') }}",
+            data: {
+                carrera : carrera
+                },
+            type: 'get',
+            success: function(data) {
+                // let objMontos = JSON.parse(data);
+                $("#ajaxTiposMensualidades").html(data);
+                // $("#pagar").val(objMontos.a_pagar);
+                // $("#ajaxMuestraMontos").html(data);
+                // console.log(objMontos.monto);
+            }
+        });
     }
 </script>

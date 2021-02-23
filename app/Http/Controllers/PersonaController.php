@@ -432,7 +432,7 @@ class PersonaController extends Controller
 
     public function crear_persona()
     {
-        return view('persona.crear_persona');
+        // return view('persona.crear_persona');
     }
 
     public function guardar_nuevos(Request $request)
@@ -494,6 +494,14 @@ class PersonaController extends Controller
 
         return response()->json($datosDescuentos);
         // return view('persona.ajaxMuestraMontos')->with(compact('datosDescuentos'));
+    }
+
+    public function ajaxMuestraMensualidades(Request $request)
+    {
+        $tiposMensualidades = TiposMensualidade::where('carrera_id', $request->carrera)
+                                ->get();
+
+        return view('persona.ajaxMuestraMensualidades')->with(compact('tiposMensualidades'));
     }
    
 }
