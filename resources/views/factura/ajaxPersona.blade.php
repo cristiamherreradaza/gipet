@@ -119,7 +119,7 @@
 <div class="card border-secondary">
     <div class="card-header bg-secondary">
         <h4 class="mb-0 text-white">ITEMS A FACTURAR</h4></div>
-        <div class="card-body">
+        <div class="card-body" id="ajaxMuestraItemsAPagar">
             
 
         </div>
@@ -251,7 +251,6 @@
             type: 'GET',
             success: function(data) {
                 $("#ajaxNumeroCuota").html(data);
-                // $("#ajaxDatosPersona").html(data);
             }
         });
 

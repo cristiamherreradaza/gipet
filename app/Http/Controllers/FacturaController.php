@@ -191,7 +191,7 @@ class FacturaController extends Controller
             ->orderBy('mensualidad', 'asc')
             ->get(); 
 
-        return view('factura.ajaxMuestraCuotaAPagar')->with(compact('siguienteCuota', 'cuotasParaPagar'));
+        return view('factura.ajaxAdicionaItem')->with(compact('siguienteCuota', 'cuotasParaPagar'));
 
     }
 

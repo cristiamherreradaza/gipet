@@ -97,6 +97,7 @@
             type: 'GET',
             success: function(data) {
                 cambiaCarreraPension();
+                $("#ajaxMuestraItemsAPagar").html(data);
                 // $("#ajaxPersonas").show('slow');
                 // $("#ajaxPersonas").html(data);
             }
