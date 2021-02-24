@@ -44,65 +44,6 @@
                 </div>
             </div>
 
-            {{-- <div class="row">
-
-                <div class="col-3">
-                    <div class="form-group">
-                        <label>Servicio 
-                            <span class="text-danger">
-                                <i class="mr-2 mdi mdi-alert-circle"></i>
-                            </span>
-                        </label>
-                        <select name="servicio_id" id="servicio_id" class="form-control" required>
-                            <option value="">SELECCIONE</option>
-                            @foreach ($servicios as $s)
-                                <option value="{{ $s->id }}">{{ $s->nombre }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label>CANTIDAD 
-                            <span class="text-danger">
-                                <i class="mr-2 mdi mdi-alert-circle"></i>
-                            </span>
-                        </label>
-                        <input type="text" class="form-control" name="cantidad" id="cantidad" value="" required>
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label>NIT 
-                            <span class="text-danger">
-                                <i class="mr-2 mdi mdi-alert-circle"></i>
-                            </span>
-                        </label>
-                        <input type="text" class="form-control" name="nit" id="nit" value="" required>
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label>RAZON SOCIAL 
-                            <span class="text-danger">
-                                <i class="mr-2 mdi mdi-alert-circle"></i>
-                            </span>
-                        </label>
-                        <input type="text" class="form-control" name="razon_social" id="razon_social" value="" required>
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label>&nbsp;</label>
-                        <button type="button" class="btn btn-block btn-info">Adicionar</button>
-                    </div>
-                </div>
-
-            </div> --}}
             <form action="{{ url('Factura/guardaFactura') }}" method="POST">
                 @csrf
             <div class="row">

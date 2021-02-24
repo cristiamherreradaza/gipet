@@ -1,26 +1,32 @@
 <div class="row">
-    <div class="col-md-3">
+    <div class="col">
+        <h4>
+            <span class="text-info">CARNET: </span>
+            {{ $datosPersona->cedula }}
+        </h4>
+    </div>
+    <div class="col">
         <h4>
             <span class="text-info">APELLIDO PATERNO: </span>
             {{ $datosPersona->apellido_paterno }}
         </h4>
     </div>
 
-    <div class="col-md-3">
+    <div class="col">
         <h4>
             <span class="text-info">APELLIDO MATERNO: </span>
             {{ $datosPersona->apellido_materno }}
         </h4>
     </div>
 
-    <div class="col-md-3">
+    <div class="col">
         <h4>
             <span class="text-info">NOMBRES: </span>
             {{ $datosPersona->nombres }}
         </h4>
     </div>
 
-    <div class="col-md-3">
+    <div class="col">
         <h4>
             <span class="text-info">FECHA NACIMIENTO: </span>
             {{ $datosPersona->fecha_nacimiento }}
@@ -28,44 +34,18 @@
     </div>
 
 </div>
-
 <div class="row">
-    <div class="col-md-3">
-        <h4>
-            <span class="text-info">CARNET: </span>
-            {{ $datosPersona->cedula }}
-        </h4>
+    <div class="col-md-12">
+        <button type="submit" class="btn btn-block btn-primary">RESUMEN PAGOS</button>
     </div>
-
-    <div class="col-md-3">
-        <h4>
-            <span class="text-info">EXPEDIDO: </span>
-            {{ $datosPersona->expedido }}
-        </h4>
-    </div>
-
-    <div class="col-md-3">
-        <h4>
-            <span class="text-info">CELULAR: </span>
-            {{ $datosPersona->celular }}
-        </h4>
-    </div>
-
-    <div class="col-md-3">
-        <h4>
-            <span class="text-info">EMAIL: </span>
-            {{ $datosPersona->email }}
-        </h4>
-    </div>
-
 </div>
 
 @if ($descuentos->count() > 0)
     
-<div class="row">
+<div class="row" style="display: none;">
     <div class="col-md-12">
         
-        <table class="table table-bordered table-striped text-center">
+        <table class="table table-sm mb-0">
             <thead>
                 <tr>
                     <th>Carrera</th>
@@ -107,7 +87,50 @@
 </div>
 
 @endif
+<br>
+<div class="card border-secondary">
+    <div class="card-header bg-secondary">
+        <h4 class="mb-0 text-white">REGISTRAR PENSIONES</h4></div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>Carrera
+                        <span class="text-danger">
+                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                        </span>
+                    </label>
+                    <select name="carrera_id" id="carrera_id" class="form-control" onchange="cambiaCarreraPension();">
+                        <option value="">Seleccione</option>
+                        @foreach ($inscripciones as $i)
+                        <option value="{{ $i->carrera->id }}">{{ $i->carrera->nombre }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="row" id="ajaxNumeroCuota"></div>
+            </div>
+        </div>
 
+    </div>
+</div>
+
+<div class="card border-secondary">
+    <div class="card-header bg-secondary">
+        <h4 class="mb-0 text-white">ITEMS A FACTURAR</h4></div>
+        <div class="card-body">
+            
+
+        </div>
+</div>
+
+<hr>
+<div class="row">
+    <div class="col-md-12">
+        <h3>Registrar Pensiones</h3>
+    </div>
+</div>
 <div class="row">
     <div class="col-3">
         <div class="form-group">
@@ -125,6 +148,7 @@
             </select>
         </div>
     </div>
+    
 </div>
 
 <div class="row" id="formularioMensualidad" style="display: none;">
@@ -144,84 +168,6 @@
         </div>
     </div>
 
-    <div class="col-md-2">
-        <div class="form-group">
-            <label>CUOTA
-                <span class="text-danger">
-                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                </span>
-            </label>
-            <input type="text" class="form-control" name="numeroCuota" id="numeroCuota" value="{{ $siguienteCuota->mensualidad }}&#176; Mensualidad" required>
-        </div>
-    </div>
-
-    <div class="col-md-1">
-        <div class="form-group">
-            <label>MONTO
-                <span class="text-danger">
-                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                </span>
-            </label>
-            <input type="text" class="form-control" name="cuotaParaPagar" id="cuotaParaPagar" value="{{ $siguienteCuota->a_pagar }}" required>
-        </div>
-    </div>
-
-    <div class="col-md-1">
-        <div class="form-group">
-            <label>DESCUENTO</label>
-            @php
-                if($siguienteCuota->descuento_persona_id == null){
-                    $nombreDescuento = 'NINGUNO';
-                }else{
-                    $nombreDescuento = $siguienteCuota->descuento_persona->descuento->nombre;
-                }
-            @endphp
-            <input type="text" class="form-control" name="descuentoMensualidad" id="descuentoMensualidad" value="0" required>
-        </div>
-    </div>
-
-    <div class="col-md-2">
-        <div class="form-group">
-            <label>TIPO DESCUENTO
-                <span class="text-danger">
-                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                </span>
-            </label>
-            <input type="text" class="form-control" name="tipoDescuento" id="tipoDescuento" value="{{ $nombreDescuento }}" required>
-        </div>
-    </div>
-
-    <div class="col-md-1">
-        <div class="form-group">
-            <label>PAGO
-                <span class="text-danger">
-                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                </span>
-            </label>
-            <input type="text" class="form-control" name="tipoDescuento" id="tipoDescuento" value="" required>
-        </div>
-    </div>
-
-    <div class="col-1">
-        <div class="form-group">
-            <label>
-                <span class="text-danger">
-                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                </span>
-            </label>
-            <select name="carrera_id" id="carrera_id" class="form-control" required>
-                <option value="total">Total</option>
-                <option value="parcial">Parcial</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="col-md-2">
-        <div class="form-group">
-            <label>&nbsp;</label>
-            <button type="button" class="btn btn-block btn-info" onclick="adicionaItem()">Adicionar</button>
-        </div>
-    </div>
 
 </div>
 
@@ -291,40 +237,24 @@
         }
     }
 
-    function adicionaItem()
+    function cambiaCarreraPension()
     {
-        let persona_id = {{ $datosPersona->id }}
-        let carrera_id = $("#carrera_id").val();
-        let mensualidades_a_pagar = $("#cantidadMensualidadesParaPagar").val();
+        let carrera = $("#carrera_id").val();
+        let persona_id = {{ $datosPersona->id }};
 
         $.ajax({
-            url: "{{ url('Factura/ajaxMuestraCuotasPagar') }}",
+            url: "{{ url('Factura/ajaxMuestraCuotaAPagar') }}",
             data: {
-                persona_id: persona_id,
-                carrera_id: carrera_id,
-                mensualidades_a_pagar: mensualidades_a_pagar
-                },
-            type: 'POST',
+                carrera_id: carrera,
+                persona_id: persona_id
+            },
+            type: 'GET',
             success: function(data) {
-                objetoPagos = JSON.parse(data.paraPagar);
-                // console.log(objetoPagos);
-
-                for (let [key, value] of Object.entries(objetoPagos)) {
-                    console.log(value.id);
-                    t.row.add([
-                        value.carrera+`<input type="hidden" name="carrera_id[]" value="`+value.carrera_id+`">
-                        <input type="hidden" name="pago_id[]" value="`+value.id+`">
-                        <input type="hidden" name="cuota[]" value="`+value.cuota+`">`,
-                        value.cuota+'&#186; Mensualidad',
-                        value.descuento,
-                        value.pagar,
-                        '<button type="button" class="btnElimina btn btn-danger" title="Elimina Producto"><i class="fas fa-trash-alt"></i></button>'
-                    ]).draw(false);                }
-
-                
-            
+                $("#ajaxNumeroCuota").html(data);
+                // $("#ajaxDatosPersona").html(data);
             }
         });
 
+        
     }
 </script>

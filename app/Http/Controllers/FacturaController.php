@@ -160,4 +160,39 @@ class FacturaController extends Controller
         }
         dd($request->all());
     }
+
+    public function ajaxMuestraCuotaAPagar(Request $request)
+    {
+        $siguienteCuota = Pago::where('persona_id', $request->persona_id)
+                        ->where('carrera_id', $request->carrera_id)
+                        ->whereNull('estado')
+                        ->orderBy('mensualidad', 'asc')
+                        ->first();
+
+        return view('factura.ajaxMuestraCuotaAPagar')->with(compact('siguienteCuota'));
+    }
+
+    public function ajaxAdicionaItem(Request $request)
+    {
+        // dd($request->all());
+        $cuotaAPagar = Pago::find($request->pago_id);
+        $cuotaAPagar->estado = 'paraPagar';
+        $cuotaAPagar->save();
+
+        $siguienteCuota = Pago::where('persona_id', $request->persona_id)
+            ->where('carrera_id', $request->carrera_id)
+            ->whereNull('estado')
+            ->orderBy('mensualidad', 'asc')
+            ->first();
+
+        $cuotasParaPagar = Pago::where('persona_id', $request->persona_id)
+            ->where('carrera_id', $request->carrera_id)
+            ->where('estado', 'paraPagar')
+            ->orderBy('mensualidad', 'asc')
+            ->get(); 
+
+        return view('factura.ajaxMuestraCuotaAPagar')->with(compact('siguienteCuota', 'cuotasParaPagar'));
+
+    }
+
 }

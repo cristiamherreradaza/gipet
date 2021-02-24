@@ -376,5 +376,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('Factura/ajaxPersona', 'FacturaController@ajaxPersona');
     Route::post('Factura/ajaxMuestraCuotasPagar', 'FacturaController@ajaxMuestraCuotasPagar');
     Route::post('Factura/guardaFactura', 'FacturaController@guardaFactura');
+    Route::get('Factura/ajaxMuestraCuotaAPagar', 'FacturaController@ajaxMuestraCuotaAPagar');
+    Route::get('Factura/ajaxAdicionaItem', 'FacturaController@ajaxAdicionaItem');
 
 });
