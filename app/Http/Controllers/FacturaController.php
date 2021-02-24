@@ -174,9 +174,10 @@ class FacturaController extends Controller
 
     public function ajaxAdicionaItem(Request $request)
     {
-        // dd($request->all());
+
         $cuotaAPagar = Pago::find($request->pago_id);
         $cuotaAPagar->estado = 'paraPagar';
+        $cuotaAPagar->a_pagar = $request->cuotaAPagar;
         $cuotaAPagar->save();
 
         $siguienteCuota = Pago::where('persona_id', $request->persona_id)
@@ -186,12 +187,34 @@ class FacturaController extends Controller
             ->first();
 
         $cuotasParaPagar = Pago::where('persona_id', $request->persona_id)
-            ->where('carrera_id', $request->carrera_id)
+            // ->where('carrera_id', $request->carrera_id)
             ->where('estado', 'paraPagar')
-            ->orderBy('mensualidad', 'asc')
+            // ->orderBy('mensualidad', 'asc')
+            ->orderBy('carrera_id', 'asc')
             ->get(); 
 
-        return view('factura.ajaxAdicionaItem')->with(compact('siguienteCuota', 'cuotasParaPagar'));
+        $ultimaCuota = Pago::where('persona_id', $request->persona_id)
+                        ->orderBy('updated_at', 'desc')
+                        ->first();
+
+        return view('factura.ajaxAdicionaItem')->with(compact('siguienteCuota', 'cuotasParaPagar', 'ultimaCuota'));
+
+    }
+
+    public function ajaxFacturar(Request $request)
+    {
+        $cuotasParaFacturar = Pago::where('persona_id', $request->persona_id)
+            ->where('estado', 'paraPagar')
+            ->orderBy('carrera_id', 'asc')
+            ->get(); 
+
+        foreach ($cuotasParaFacturar as $cf) {
+            $cuotasPagadas = Pago::find($cf->id);
+            $cuotasPagadas->estado = "Pagado";
+            $cuotasPagadas->save();
+        }
+
+        dd($cuotasParaFacturar);
 
     }
 

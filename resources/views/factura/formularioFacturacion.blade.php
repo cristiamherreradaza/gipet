@@ -64,13 +64,7 @@
                     </div>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="col-md-12">
-                    {{-- <a href="{{ url('Factura/imprimeFactura') }}" class="btn btn-block btn-success">FACTURAR</a> --}}
-                    <button type="submit" class="btn btn-block btn-success">FACTURAR</button>
-                </div>
-            </div>
+            
             </form>
 
         </div>

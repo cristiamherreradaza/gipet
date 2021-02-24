@@ -6,6 +6,7 @@
         </h4>
     </div>
     <div class="col">
+        <input type="hidden" name="persona_id" value="{{ $datosPersona->id }}">
         <h4>
             <span class="text-info">APELLIDO PATERNO: </span>
             {{ $datosPersona->apellido_paterno }}
