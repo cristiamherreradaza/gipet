@@ -213,11 +213,11 @@
                     <td>{{ $anio }}</td>
                     <td>{{ $resultado->estado }}</td>
                     <td>
-                        <a href="{{ url('Inscripcion/reinscripcion/'.$persona->id.'/'.$detalle->id) }}" class="btn btn-inverse" title="Reinscribir"><i class="fas fa-plus"></i></a>
+                        <a href="{{ url('Inscripcion/reinscripcion/'.$persona->id.'/'.$detalle->id) }}" class="btn btn-success" title="Reinscribir"><i class="fas fa-plus"></i>&nbsp; REINSCRIBIR</a>
                         @if($parametro == $comparacion)
-                        <a href="{{ url('Inscripcion/convalidar/'.$persona->id.'/'.$detalle->id) }}" class="btn btn-warning" title="Convalidar"><i class="fas fa-arrows-alt-h"></i></a>
+                        {{-- <a href="{{ url('Inscripcion/convalidar/'.$persona->id.'/'.$detalle->id) }}" class="btn btn-warning" title="Convalidar"><i class="fas fa-arrows-alt-h"></i></a> --}}
                         @else
-                        <button class="btn btn-warning" title="Convalidar" disabled><i class="fas fa-arrows-alt-h"></i></button>
+                        {{-- <button class="btn btn-warning" title="Convalidar" disabled><i class="fas fa-arrows-alt-h"></i></button> --}}
                         @endif
                     </td>
                 </tr>
