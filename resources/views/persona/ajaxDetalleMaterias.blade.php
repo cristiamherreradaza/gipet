@@ -110,7 +110,7 @@
                                         <form action="#" method="POST" class="px-4 py-3">
                                             @csrf
                                             <input type="hidden" name="persona_id" id="persona_id" value="{{ $materia->persona_id }}">
-                                            <input type="hidden" name="id" id="id" value="{{ $materia->id }}">
+                                            <input type="hidden" name="id" id="id_{{ $materia->id }}" value="{{ $materia->id }}">
                                             <div class="form-group">
                                                 <label class="control-label">Puntaje Final</label>
                                                 <input type="number" class="form-control" id="nota_{{ $materia->id }}" name="nota" min="1" max="100">
@@ -148,7 +148,7 @@
     function convalida_asignatura(inscripcion_id)
     {
         // Capturamos todas las variables que se encuentran en el formulario de regularizacion
-        asignatura_id   = $("#id").val();
+        asignatura_id   = $("#id_"+inscripcion_id).val();
         persona_id      = $("#persona_id").val();
         nota            = $("#nota_"+inscripcion_id).val();
         // Utilizamos Ajax

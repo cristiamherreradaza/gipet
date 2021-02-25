@@ -214,8 +214,10 @@ class FacturaController extends Controller
             $cuotasPagadas->save();
         }
 
-        dd($cuotasParaFacturar);
+        // dd($cuotasParaFacturar);
 
     }
+
+
 
 }
