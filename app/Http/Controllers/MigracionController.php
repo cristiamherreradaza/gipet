@@ -1609,4 +1609,22 @@ SELECT *
         // dd($alumnos);
     }
 
+    public function regularizaInscripcionesSemestre()
+    {
+        $inscripciones = Inscripcione::where('anio_vigente', 2019)
+                        ->whereNull('semestre')
+                        ->get();
+
+        foreach ($inscripciones as $i) {
+            echo $i->id.'<br />';
+            $asignatura = Asignatura::find($i->asignatura_id);
+
+            $modInscripcion = Inscripcione::find($i->id);
+            $modInscripcion->semestre = $asignatura->semestre;
+            $modInscripcion->save();    
+        }
+
+        dd($inscripciones);
+    }
+
 }

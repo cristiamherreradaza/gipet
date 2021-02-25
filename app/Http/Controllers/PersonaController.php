@@ -267,6 +267,7 @@ class PersonaController extends Controller
                                 ->select('carrera_id')
                                 ->groupBy('carrera_id')
                                 ->get();
+                                
         $array_carreras = array();
         foreach($carreras as $carrera){
             array_push($array_carreras, $carrera->carrera_id);
