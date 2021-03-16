@@ -39,7 +39,6 @@
 
 @section('js')
 <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script>
     // Funcion para usar ajax
     $.ajaxSetup({
