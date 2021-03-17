@@ -108,28 +108,29 @@ class AsignaturaController extends Controller
 
     public function guarda_prerequisito(Request $request)
     {
+        $valida = 0;
+        // dd($request->all());
         $asignatura = Asignatura::find($request->fp_materia);
         $prerequisito = Prerequisito::where('asignatura_id', $request->fp_asignatura_id)
                                     ->first();
-        if($prerequisito->prerequisito_id == NULL){
-            //sobreescribir
-            $prerequisito->prerequisito_id = $request->fp_materia;
-            $prerequisito->sigla           = $asignatura->codigo_asignatura;
-            $prerequisito->save();
+        
+        $validaPrerequisito = Prerequisito::where('asignatura_id', $request->fp_asignatura_id)
+                                            ->where('prerequisito_id', $request->fp_materia)
+                                            ->where('anio_vigente', $request->gestion)
+                                            ->count();
+        if ($validaPrerequisito > 0) {
+            $valida = 1;
         }else{
-            //crear otro prerequisito
+            $valida                        = 0;
             $prerequisito                  = new Prerequisito();
+            $prerequisito->user_id         = Auth::user()->id;
             $prerequisito->asignatura_id   = $request->fp_asignatura_id;
             $prerequisito->prerequisito_id = $request->fp_materia;
-            $prerequisito->sigla           = $asignatura->codigo_asignatura;
+            $prerequisito->sigla           = $asignatura->sigla;
+            $prerequisito->anio_vigente    = $request->gestion;
             $prerequisito->save();
         }
-        // $asignatura = Asignatura::find($request->fp_materia);
-        // $nPrerequisito                  = new Prerequisito();
-        // $nPrerequisito->asignatura_id   = $request->fp_asignatura_id;
-        // $nPrerequisito->prerequisito_id = $request->fp_materia;
-        // $nPrerequisito->sigla           = $asignatura->codigo_asignatura;
-        // $nPrerequisito->save();
+
         return response()->json([
             'asignatura_id' => $request->fp_asignatura_id
         ]);

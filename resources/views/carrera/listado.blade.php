@@ -289,10 +289,10 @@
 
 <!-- inicio modal prerequisitos -->
 <div id="modal_prerequisitos" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">VER PREREQUISITOS</h4>
+                    <h4 class="modal-title" id="myModalLabel">PREREQUISITOS</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
@@ -316,7 +316,14 @@
                             </div>
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label class="control-label">&nbsp;</label>
+                                    <label class="control-label">Gestion</label>
+                                    <input type="number" class="form-control" name="gestion" value="{{ date('Y') }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
                                     <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="guarda_prerequisito()">AGREGAR</button>
                                 </div>
                             </div>
