@@ -1,3 +1,7 @@
+@section('css')
+<link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
+@endsection
+
 <h1 class="text-center text-dark-info"><strong>Historial Academico</strong></h1>
 @foreach($carreras as $carrera)
     @php
@@ -14,7 +18,7 @@
         </button>
     </h3>
     <div class="table-responsive">
-        <table class="table table-striped no-wrap text-center" id="tablaProductosEncontrados">
+        <table class="table table-striped no-wrap text-center" id="tablaHistorialAcdemico">
             <thead>
                 <tr>
                     <th>#</th>
@@ -223,7 +227,19 @@
     </div>
 </div>
 <!-- fin modal inscripcion oyente -->
+<script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script>
+
+    // Funcion que establece la configuracion para el datatable
+    $(function () {
+        $('#tablaHistorialAcdemico').DataTable({
+            language: {
+                url: '{{ asset('datatableEs.json') }}'
+            },
+        });
+    });
+
     // Funcion que al hacer clic sobre el boton de regularizacion, se llenan los valores para el formulario
     function datos_regularizacion(asignatura_id, nota) {
         $("#materia_regularizacion_id").val(asignatura_id);
