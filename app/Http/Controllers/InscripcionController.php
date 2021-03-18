@@ -3136,7 +3136,9 @@ class InscripcionController extends Controller
 
     public function asignarPuntaje(Request $request)
     {
-        $inscripcion    = Inscripcione::find($request->asignatura_id);
+        dd($request->all());
+        // buscamos la inscripcion
+        $inscripcion = Inscripcione::find($request->asignatura_id);
         if($inscripcion)
         {
             // Hallamos al estudiante, la nota maxima para esa asignatura y las 4 notas correspondientes a esa inscripcion
