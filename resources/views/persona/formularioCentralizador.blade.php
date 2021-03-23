@@ -107,7 +107,11 @@
 
 <script>
     $(function () {
-        $('#tablaAlumnos').DataTable();
+        $('#tablaAlumnos').DataTable({
+            language: {
+                url: '{{ asset('datatableEs.json') }}'
+            },
+        });
     });
 
 function enviaDatos(numero) {

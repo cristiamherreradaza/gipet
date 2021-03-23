@@ -573,6 +573,9 @@ class PersonaController extends Controller
 
     public function ajaxGuardaNota(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
+        $inscripcion = Inscripcione::find($request->inscripcion_id);
+        $inscripcion->nota = $request->nota;
+        $inscripcion->save();
     }
 }
