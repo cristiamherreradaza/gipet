@@ -44,35 +44,34 @@
                             <td>{{ $ne->persona->nombres }}</td>
                             <td>{{ $ne->persona->cedula }}</td>
                             @foreach ($materiasCarrera as $mc)
-                            @php
-                            $nota = App\Inscripcione::where('persona_id', $ne->persona_id)
-                            ->where('carrera_id', $carrera)
-                            ->where('anio_vigente', $gestion)
-                            ->where('asignatura_id', $mc->id)
-                            ->first();
-                    
-                            $estado = App\CarrerasPersona::where('persona_id', $ne->persona_id)
-                            ->where('carrera_id', $carrera)
-                            ->where('anio_vigente', $gestion)
-                            ->first();
-                    
-                            @endphp
-                            <td>
-                                <form action="{{ url('Persona/ajaxGuardaNota') }}" id="formulario_{{ $contador }}">
-                                    @csrf
-                                    <input type="hidden" name="persona_id" id="persona_id" value="{{ $ne->persona->id }}">
-                                    <input type="hidden" name="asignatura_id" id="asignatura_id" value="{{ $nota->asignatura_id }}">
-                                    <input type="hidden" name="anio_vigente" id="anio_vigente" value="{{ $nota->anio_vigente }}">
-                                @if ($nota)
-                                    <input type="number" style="width: 80px;" class="form-control" name="nota" id="nota" value="{{ intval($nota->nota) }}" onchange="enviaDatos({{ $contador }})">
-                                @else
-                                    <input type="number" style="width: 80px;" class="form-control" name="nota" id="nota" value="0">
-                                @endif
-                                </form>
-                            </td>
-                            @php
-                                $contador++;
-                            @endphp
+                                @php
+                                    $nota = App\Inscripcione::where('persona_id', $ne->persona_id)
+                                    ->where('carrera_id', $carrera)
+                                    ->where('anio_vigente', $gestion)
+                                    ->where('asignatura_id', $mc->id)
+                                    ->first();
+                            
+                                    $estado = App\CarrerasPersona::where('persona_id', $ne->persona_id)
+                                    ->where('carrera_id', $carrera)
+                                    ->where('anio_vigente', $gestion)
+                                    ->first();
+                                @endphp
+                                <td>
+                                    <form action="{{ url('Persona/ajaxGuardaNota') }}" id="formulario_{{ $contador }}">
+                                        @csrf
+                                        <input type="hidden" name="persona_id" id="persona_id" value="{{ $ne->persona->id }}">
+                                        <input type="hidden" name="asignatura_id" id="asignatura_id" value="{{ $nota['asignatura_id'] }}">
+                                        <input type="hidden" name="anio_vigente" id="anio_vigente" value="{{ $nota['anio_vigente'] }}">
+                                    @if ($nota)
+                                        <input type="number" style="width: 80px;" class="form-control" name="nota" id="nota" value="{{ intval($nota->nota) }}" onchange="enviaDatos({{ $contador }})">
+                                    @else
+                                        <input type="number" style="width: 80px;" class="form-control" name="nota" id="nota" value="0">
+                                    @endif
+                                    </form>
+                                </td>
+                                @php
+                                    $contador++;
+                                @endphp
                             @endforeach
                             <td>{{ $estado->estado }}</td>
                         </tr>
