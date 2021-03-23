@@ -17,6 +17,16 @@
                 <h4 class="mb-0 text-white">REGULARIZA CENTRALIZADOR DE NOTAS</h4>
             </div>
             <div class="card-body">
+                <div class="row">
+                    <div class="col"><h3><span class="text-info">Carrera: </span> {{ $datosCarrera->nombre }}</h3></div>
+                    <div class="col"><h3><span class="text-info">Curso: </span> {{ $curso }}° A&ntilde;o</h3></div>
+                    <div class="col"><h3><span class="text-info">Turno: </span> {{ $datosTurno->descripcion }}</h3></div>
+                </div>
+                <div class="row">
+                    <div class="col"><h3><span class="text-info">Paralelo: </span> {{ $paralelo }}</h3></div>
+                    <div class="col"><h3><span class="text-info">Gestion: </span> {{ $gestion }}</h3></div>
+                </div>
+                <br>
                 <div class="table-responsive m-t-40">
                     <table id="tablaAlumnos" class="table table-bordered table-striped table-hover" border="1">
                         <thead>

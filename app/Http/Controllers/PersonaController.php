@@ -535,6 +535,8 @@ class PersonaController extends Controller
         $gestion  = $request->gestion;
 
         $datosTurno = Turno::find($request->turno);
+
+        $datosCarrera = Carrera::find($carrera);
         
         $materiasCarrera = Asignatura::where('anio_vigente', $request->gestion)
                             ->where('carrera_id', $request->carrera)
@@ -565,7 +567,7 @@ class PersonaController extends Controller
                             ->groupBy('carreras_personas.persona_id')
                             ->get();
 
-        return view('persona.formularioCentralizador')->with(compact('carrera', 'curso', 'paralelo', 'turno', 'gestion', 'datosTurno', 'materiasCarrera', 'nominaEstudiantes'));
+        return view('persona.formularioCentralizador')->with(compact('carrera', 'curso', 'paralelo', 'turno', 'gestion', 'datosTurno', 'materiasCarrera', 'nominaEstudiantes', 'datosCarrera'));
     }
 
     public function ajaxGuardaNota(Request $request)
