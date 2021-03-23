@@ -9,6 +9,7 @@ use DataTables;
 use App\Carrera;
 use App\Persona;
 use App\Descuento;
+use App\Asignatura;
 use App\Certificado;
 use App\CursosCorto;
 use App\Inscripcione;
@@ -504,5 +505,71 @@ class PersonaController extends Controller
 
         return view('persona.ajaxMuestraMensualidades')->with(compact('tiposMensualidades'));
     }
-   
+
+    public function regularizaFinales(Request $request)
+    {
+        $carreras   = Carrera::whereNull('estado')->get();
+        $cursos     = Asignatura::select('gestion')
+                                ->groupBy('gestion')
+                                ->get();
+        $turnos     = Turno::get();
+        $paralelos  = CarrerasPersona::select('paralelo')
+                                ->groupBy('paralelo')
+                                ->get();
+        $gestiones  = CarrerasPersona::select('anio_vigente')
+                                ->groupBy('anio_vigente')
+                                ->get();
+        $estados    = CarrerasPersona::select('vigencia')
+                                    ->groupBy('vigencia')
+                                    ->orderBy('vigencia', 'desc')
+                                    ->get();
+        return view('persona.regularizaFinales')->with(compact('carreras', 'cursos', 'gestiones', 'paralelos', 'turnos', 'estados'));
+    }
+
+    public function formularioCentralizador(Request $request)
+    {
+        $carrera  = $request->carrera;
+        $curso    = $request->curso;
+        $turno    = $request->turno;
+        $paralelo = $request->paralelo;
+        $gestion  = $request->gestion;
+
+        $datosTurno = Turno::find($request->turno);
+        
+        $materiasCarrera = Asignatura::where('anio_vigente', $request->gestion)
+                            ->where('carrera_id', $request->carrera)
+                            ->where('gestion', $request->curso)
+                            ->orderBy('orden_impresion', 'asc')
+                            ->get();
+
+        $nominaEstudiantes = CarrerasPersona::select(
+                                'personas.apellido_paterno',
+                                'personas.apellido_materno',
+                                'personas.nombres',
+                                'carreras_personas.id',
+                                'carreras_personas.carrera_id',
+                                'carreras_personas.persona_id',
+                                'carreras_personas.turno_id',
+                                'carreras_personas.gestion',
+                                'carreras_personas.paralelo',
+                                'carreras_personas.fecha_inscripcion',
+                                'carreras_personas.anio_vigente',
+                                'carreras_personas.estado'
+                            )
+                            ->where('carreras_personas.anio_vigente', $request->gestion)
+                            ->where('carreras_personas.carrera_id', $request->carrera)
+                            ->where('carreras_personas.gestion', $request->curso)
+                            ->where('carreras_personas.turno_id', $request->turno)
+                            ->leftJoin('personas', 'carreras_personas.persona_id' , '=', 'personas.id')
+                            ->orderBy('personas.apellido_paterno', 'ASC')
+                            ->groupBy('carreras_personas.persona_id')
+                            ->get();
+
+        return view('persona.formularioCentralizador')->with(compact('carrera', 'curso', 'paralelo', 'turno', 'gestion', 'datosTurno', 'materiasCarrera', 'nominaEstudiantes'));
+    }
+
+    public function ajaxGuardaNota(Request $request)
+    {
+        dd($request->all());
+    }
 }

@@ -118,7 +118,7 @@ class ListaController extends Controller
 
     public function generaPdfCentralizadorNotas(Request $request)
     {
-        // dd($request->all());
+
         $carrera  = $request->carrera;
         $curso    = $request->curso;
         $turno    = $request->turno;
@@ -132,13 +132,6 @@ class ListaController extends Controller
                             ->where('gestion', $request->curso)
                             ->orderBy('orden_impresion', 'asc')
                             ->get();
-
-        /*$nominaEstudiantes = CarrerasPersona::where('anio_vigente', $request->gestion)
-                            ->where('carrera_id', $request->carrera)
-                            ->where('gestion', $request->curso)
-                            ->where('turno_id', $request->turno)
-                            ->groupBy('persona_id')
-                            ->get();*/
 
         $nominaEstudiantes = CarrerasPersona::select(
                                 'personas.apellido_paterno',
@@ -163,20 +156,8 @@ class ListaController extends Controller
                             ->groupBy('carreras_personas.persona_id')
                             ->get();
 
-        // dd($nominaEstudiantes);
-
-        /*return view('pdf.generaPdfCentralizadorNotas')->with(compact(
-                    'materiasCarrera', 
-                    'nominaEstudiantes',
-                    'carrera',
-                    'curso',
-                    'turno',
-                    'paralelo',
-                    'gestion'
-                ));*/
         $pdf = PDF::loadView('pdf.generaPdfCentralizadorNotas', compact('materiasCarrera', 'nominaEstudiantes', 'carrera', 'curso', 'turno', 'paralelo', 'gestion', 'datosTurno'))->setPaper('letter', 'landscape');
         return $pdf->stream('listaAlumnos_'.date('Y-m-d H:i:s').'.pdf');
-
     }
     
     public function totalALumnos()

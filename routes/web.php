@@ -56,6 +56,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Persona/verifica', 'PersonaController@verifica');
     Route::get('Persona/ver_detalle/{id}', 'PersonaController@ver_detalle');
     Route::post('Persona/eliminar_persona', 'PersonaController@eliminar_persona');
+    Route::get('Persona/regularizaFinales', 'PersonaController@regularizaFinales');
+    Route::post('Persona/formularioCentralizador', 'PersonaController@formularioCentralizador');
+    Route::post('Persona/ajaxGuardaNota', 'PersonaController@ajaxGuardaNota');
     // Route::get('persona/ajax_datos', function () {
         // return datatables()->query(DB::table('personas'))->toJson();
     // });

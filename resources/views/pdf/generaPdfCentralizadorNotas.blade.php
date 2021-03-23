@@ -82,7 +82,7 @@
             </tr>
         </table>
         
-         <table class="notas">
+        <table class="notas">
             
             <tr>
                 <td style="width: 180px;">
