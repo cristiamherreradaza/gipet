@@ -576,6 +576,10 @@ class PersonaController extends Controller
         // dd($request->all());
         $inscripcion = Inscripcione::find($request->inscripcion_id);
         $inscripcion->nota = $request->nota;
-        $inscripcion->save();
+        if($inscripcion->save()){
+            return response()->json(['sw'=>1]);
+        }else{
+            return response()->json(['sw'=>0]);
+        }
     }
 }

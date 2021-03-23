@@ -69,15 +69,12 @@
                                 @endphp
                                 <td>
                                     <form action="{{ url('Persona/ajaxGuardaNota') }}" id="formulario_{{ $contador }}">
+                                        
                                         @csrf
                                         <input type="hidden" name="inscripcion_id" id="inscripcion_id" value="{{ $nota['id'] }}">
-                                        <input type="hidden" name="persona_id" id="persona_id" value="{{ $ne->persona->id }}">
-                                        <input type="hidden" name="turno_id" id="turno_id" value="{{ $ne->turno_id }}">
-                                        <input type="hidden" name="paralelo" id="paralelo" value="{{ $ne->paralelo }}">
-                                        <input type="hidden" name="asignatura_id" id="asignatura_id" value="{{ $nota['asignatura_id'] }}">
-                                        <input type="hidden" name="anio_vigente" id="anio_vigente" value="{{ $nota['anio_vigente'] }}">
                                     @if ($nota)
                                         <input type="number" style="width: 80px;" class="form-control" name="nota" id="nota" value="{{ intval($nota->nota) }}" onchange="enviaDatos({{ $contador }})">
+                                        <small id="msg_{{ $contador }}" class="form-control-feedback text-success" style="display: none;">Guardado</small>
                                     @else
                                         <input type="number" style="width: 80px;" class="form-control" name="nota" id="nota" value="0">
                                     @endif
@@ -120,9 +117,12 @@ function enviaDatos(numero) {
     $.ajax({
         type: "POST",
         url: "{{ url('Persona/ajaxGuardaNota') }}",
-        data: formulario, // serializes the form's elements.
+        data: formulario,
         success: function (data) {
-            // alert(data); // show response from the php script.
+            // console.log(data.sw);
+            if(data.sw == 1){
+                $("#msg_"+numero).show();
+            }
         }
     });
 }
