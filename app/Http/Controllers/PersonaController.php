@@ -562,6 +562,7 @@ class PersonaController extends Controller
                             ->where('carreras_personas.carrera_id', $request->carrera)
                             ->where('carreras_personas.gestion', $request->curso)
                             ->where('carreras_personas.turno_id', $request->turno)
+                            ->where('carreras_personas.paralelo', $request->paralelo)
                             ->leftJoin('personas', 'carreras_personas.persona_id' , '=', 'personas.id')
                             ->orderBy('personas.apellido_paterno', 'ASC')
                             ->groupBy('carreras_personas.persona_id')

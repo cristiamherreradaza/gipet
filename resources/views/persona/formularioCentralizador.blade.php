@@ -57,6 +57,7 @@
                                 @php
                                     $nota = App\Inscripcione::where('persona_id', $ne->persona_id)
                                     ->where('carrera_id', $carrera)
+                                    ->where('paralelo', $paralelo)
                                     ->where('anio_vigente', $gestion)
                                     ->where('asignatura_id', $mc->id)
                                     ->first();
@@ -69,7 +70,10 @@
                                 <td>
                                     <form action="{{ url('Persona/ajaxGuardaNota') }}" id="formulario_{{ $contador }}">
                                         @csrf
+                                        <input type="hidden" name="inscripcion_id" id="inscripcion_id" value="{{ $nota['id'] }}">
                                         <input type="hidden" name="persona_id" id="persona_id" value="{{ $ne->persona->id }}">
+                                        <input type="hidden" name="turno_id" id="turno_id" value="{{ $ne->turno_id }}">
+                                        <input type="hidden" name="paralelo" id="paralelo" value="{{ $ne->paralelo }}">
                                         <input type="hidden" name="asignatura_id" id="asignatura_id" value="{{ $nota['asignatura_id'] }}">
                                         <input type="hidden" name="anio_vigente" id="anio_vigente" value="{{ $nota['anio_vigente'] }}">
                                     @if ($nota)
