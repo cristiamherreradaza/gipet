@@ -85,31 +85,66 @@
     <form action="{{ url('Inscripcion/guarda_reinscripcion') }}" method="POST">
         @csrf
         <input type="hidden" name="persona_id" id="persona_id" value="{{ $estudiante->id }}">
-        <input type="hidden" name="turno" id="turno">
-        <input type="hidden" name="paralelo" id="paralelo">
-        <input type="hidden" name="gestion" id="gestion">
+        {{-- <input type="hidden" name="turno" id="turno"> --}}
+        {{-- <input type="hidden" name="paralelo" id="paralelo"> --}}
+        {{-- <input type="hidden" name="gestion" id="gestion"> --}}
         <input type="hidden" name="fecha_inscripcion" id="fecha_inscripcion">
         <input type="hidden" name="anioIngreso" id="anioIngreso" value="{{ $anioIngreso }}">
         <div class="card-header bg-primary">
             <h4 class="mb-0 text-white">DETALLE DE REINSCRIPCI&Oacute;N - (Pendientes Gestion Actual)</h4>
         </div>
         <div class="card-body">
+
             <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Gestion</label>
+                        <input type="number" class="form-control" name="gestion" id="gestion" value="{{ date('Y') }}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Turno </label>
+                        <select name="turno" id="turno" class="form-control">
+                            @foreach ($turnos as $t)
+                                <option value="{{ $t->id }}" {{ ($ultimaInscripcion->turno_id==$t->id)?'selected':'' }}>{{ $t->descripcion }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Paralelo </label>
+                        <select class="form-control custom-select" id="paralelo" name="paralelo">
+                            <option value="A" {{ ($ultimaInscripcion->paralelo=="A")?'selected':'' }}>A</option>
+                            <option value="B" {{ ($ultimaInscripcion->paralelo=="B")?'selected':'' }}>B</option>
+                            <option value="C" {{ ($ultimaInscripcion->paralelo=="C")?'selected':'' }}>C</option>
+                            <option value="D" {{ ($ultimaInscripcion->paralelo=="D")?'selected':'' }}>D</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
                 <div class="col-md-4">
                     <h4><span class="text-info">Estudiante:</span>
                         {{ $estudiante->nombres }} {{ $estudiante->apellido_paterno }} {{ $estudiante->apellido_materno }}
                     </h4>
                 </div>
+
                 <div class="col-md-4">
                     <h4><span class="text-info">CI:</span>
                         {{ $estudiante->cedula }}
                     </h4>
                 </div>
+
                 <div class="col-md-4">
                     <h4><span class="text-info">Fecha:</span>
                         {{ date('d-m-Y') }}
                     </h4>
                 </div>
+
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -148,7 +183,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <!-- <button class="btn btn-info btn-block" type="submit" onclick="validaItems()"><span><i class="fa fa-print"></i> CONFIRMAR REINSCRIPCION </span></button> -->
-                    <button type="submit" id="botonSubmit" class="btn waves-effect waves-light btn-block btn-inverse" onclick="validaItems()">CONFIRMAR REINSCRIPCION</button>
+                    <button type="submit" id="botonSubmit" class="btn waves-effect waves-light btn-block btn-success" onclick="validaItems()">CONFIRMAR REINSCRIPCION</button>
                 </div>
                 <div class="col-md-6">
                     <a href="{{ url('Persona/ver_detalle/'.$estudiante->id) }}" type="button" class="btn waves-effect waves-light btn-block btn-inverse">VOLVER</a>
@@ -252,6 +287,7 @@
         }
     });
 
+    /*
     //Funcion de para turno
     $( function() {
         $("#turno").val($('#turno_reinscripcion').val());
@@ -283,6 +319,7 @@
             $("#fecha_inscripcion").val($('#fecha_reinscripcion').val());
         });
     });
+    */
 
     function adicionaPedido(item)
     {

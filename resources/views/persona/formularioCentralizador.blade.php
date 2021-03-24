@@ -72,11 +72,11 @@
                                         
                                         @csrf
                                         <input type="hidden" name="inscripcion_id" id="inscripcion_id" value="{{ $nota['id'] }}">
-                                    @if ($nota)
+                                    @if ($nota != null)
                                         <input type="number" style="width: 80px;" class="form-control" name="nota" id="nota" value="{{ intval($nota->nota) }}" onchange="enviaDatos({{ $contador }})">
                                         <small id="msg_{{ $contador }}" class="form-control-feedback text-success" style="display: none;">Guardado</small>
                                     @else
-                                        <input type="number" style="width: 80px;" class="form-control" name="nota" id="nota" value="0">
+                                        <input type="number" style="width: 80px;" class="form-control" name="nota" id="nota" value="0" onchange="enviaDatos({{ $contador }})">
                                     @endif
                                     </form>
                                 </td>
