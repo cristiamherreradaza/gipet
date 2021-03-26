@@ -37,7 +37,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label class="control-label">Gestion </label>
-                        <input type="number" name="c_gestion" id="c_gestion" class="form-control" value="{{ $gestion }}" min="2011">
+                        <input type="number" name="c_gestion" id="c_gestion" class="form-control" value="{{ date('Y') }}" min="2011" max="{{ date('Y') }}">
                     </div>
                 </div>
                 <div class="col-md-3">

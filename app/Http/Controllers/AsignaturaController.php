@@ -44,7 +44,7 @@ class AsignaturaController extends Controller
         $asignatura->practico               = $request->practico;
         $asignatura->anio_vigente           = $request->anio_vigente;
         $asignatura->orden_impresion        = $request->orden_impresion;
-        $asignatura->troncal                = $request->troncal;q
+        $asignatura->troncal                = $request->troncal;
         $asignatura->save();
 
         // Buscar en la tabla prerequisitos si existe este id de asignatura
