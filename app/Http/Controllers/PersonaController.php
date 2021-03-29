@@ -12,6 +12,7 @@ use App\Descuento;
 use App\Asignatura;
 use App\Certificado;
 use App\CursosCorto;
+use App\Resolucione;
 use App\Inscripcione;
 use App\SegundosTurno;
 use App\CarrerasPersona;
@@ -508,41 +509,54 @@ class PersonaController extends Controller
 
     public function regularizaFinales(Request $request)
     {
+        $resoluciones  = Resolucione::orderBy('anio_vigente', 'desc')
+                        ->get();
+        
         $carreras   = Carrera::whereNull('estado')->get();
+
         $cursos     = Asignatura::select('gestion')
                                 ->groupBy('gestion')
                                 ->get();
+
         $turnos     = Turno::get();
+
         $paralelos  = CarrerasPersona::select('paralelo')
                                 ->groupBy('paralelo')
                                 ->get();
+
         $gestiones  = CarrerasPersona::select('anio_vigente')
                                 ->groupBy('anio_vigente')
+                                ->orderBy('anio_vigente', 'desc')
                                 ->get();
         $estados    = CarrerasPersona::select('vigencia')
                                     ->groupBy('vigencia')
                                     ->orderBy('vigencia', 'desc')
                                     ->get();
-        return view('persona.regularizaFinales')->with(compact('carreras', 'cursos', 'gestiones', 'paralelos', 'turnos', 'estados'));
+
+        return view('persona.regularizaFinales')->with(compact('carreras', 'cursos', 'gestiones', 'paralelos', 'turnos', 'estados', 'resoluciones'));
     }
 
     public function formularioCentralizador(Request $request)
     {
-        $carrera  = $request->carrera;
-        $curso    = $request->curso;
-        $turno    = $request->turno;
-        $paralelo = $request->paralelo;
-        $gestion  = $request->gestion;
+        // dd($request->all());
+        $carrera    = $request->carrera;
+        $curso      = $request->curso;
+        $turno      = $request->turno;
+        $paralelo   = $request->paralelo;
+        $gestion    = $request->gestion;
+        $resolucion = $request->resolucion;
 
         $datosTurno = Turno::find($request->turno);
 
         $datosCarrera = Carrera::find($carrera);
         
-        $materiasCarrera = Asignatura::where('anio_vigente', $request->gestion)
-                            ->where('carrera_id', $request->carrera)
+        $materiasCarrera = Asignatura::where('carrera_id', $request->carrera)
+                            ->where('resolucion_id', $request->resolucion)
                             ->where('gestion', $request->curso)
                             ->orderBy('orden_impresion', 'asc')
                             ->get();
+
+        // dd($materiasCarrera);
 
         $nominaEstudiantes = CarrerasPersona::select(
                                 'personas.apellido_paterno',

@@ -84,7 +84,7 @@
                                     $contador++;
                                 @endphp
                             @endforeach
-                            <td>{{ $estado->estado }}</td>
+                            <td></td>
                         </tr>
                         @endforeach
                         </tbody>

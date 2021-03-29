@@ -23,7 +23,7 @@
                 @csrf
                 <div class="card-body">
                     <div class="row">
-                        <div class="col">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Carrera</label>
                                 <select name="carrera" id="carrera" class="form-control">
@@ -33,7 +33,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Curso</label>
                                 <select name="curso" id="curso" class="form-control">
@@ -43,7 +43,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Turno</label>
                                 <select name="turno" id="turno" class="form-control">
@@ -53,7 +53,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-md-1">
                             <div class="form-group">
                                 <label class="control-label">Paralelo</label>
                                 <select name="paralelo" id="paralelo" class="form-control">
@@ -63,7 +63,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Gestion</label>
                                 <select name="gestion" id="gestion" class="form-control">
@@ -73,7 +73,19 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col">
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label">Resoluciones</label>
+                                <select name="resolucion" id="resolucion" class="form-control">
+                                    @foreach($resoluciones as $r)
+                                    <option value="{{ $r->id }}"> {{ $r->resolucion }} </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-1">
                             <div class="form-group">
                                 <label class="control-label">&nbsp;</label>
                                 <button type="submit" class="btn btn-block btn-primary">Buscar</button>
