@@ -30,7 +30,7 @@
                     <td>{{ $inscripcion->fecha_inscripcion }}</td>
                     <td>
                         @if($registro)
-                            {{ $registro->gestion }} A&ntilde;o
+                            {{ $registro->gestion }}&ordm; A&ntilde;o
                         @endif
                     </td>
                     <td>{{ $inscripcion->turno->descripcion }}</td>

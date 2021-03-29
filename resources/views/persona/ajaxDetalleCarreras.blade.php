@@ -170,6 +170,8 @@
                 <th>#</th>
                 <th>Carrera</th>
                 <th>A&ntilde;o</th>
+                <th>Turno</th>
+                <th>Paralelo</th>
                 {{-- <th>Semestre</th> --}}
                 <th>Gestion</th>
                 <th>Estado</th>
@@ -191,9 +193,13 @@
                                             ->where('persona_id', $persona->id)
                                             ->where('gestion', $gestion)
                                             ->max('anio_vigente');
+
                     $estado = App\Inscripcione::where('carrera_id', $detalle->id)
                                                 ->where('persona_id', $persona->id)
                                                 ->where('gestion', $gestion);
+
+                    // $datosCarera = App\Inscripcione
+
                     if($semestre){
                         $estado = $estado->where('semestre', $semestre);
                     }
@@ -209,6 +215,8 @@
                     <td>{{ ($key+1) }}</td>
                     <td>{{ $detalle->nombre }}</td>
                     <td>{{ $gestion }}&ordm;</td>
+                    <td>{{ $resultado->turno->descripcion }}</td>
+                    <td>{{ $resultado->paralelo }}</td>
                     {{-- <td>{{ $semestre }}</td> --}}
                     <td>{{ $anio }}</td>
                     <td>{{ $resultado->estado }}</td>
