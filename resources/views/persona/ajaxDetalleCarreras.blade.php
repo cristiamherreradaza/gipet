@@ -169,9 +169,9 @@
             <tr>
                 <th>#</th>
                 <th>Carrera</th>
-                <th>Gestion</th>
-                <th>Semestre</th>
                 <th>A&ntilde;o</th>
+                {{-- <th>Semestre</th> --}}
+                <th>Gestion</th>
                 <th>Estado</th>
                 <th class="text-nowrap"></th>
             </tr>
@@ -208,8 +208,8 @@
                 <tr>
                     <td>{{ ($key+1) }}</td>
                     <td>{{ $detalle->nombre }}</td>
-                    <td>{{ $gestion }}</td>
-                    <td>{{ $semestre }}</td>
+                    <td>{{ $gestion }}&ordm;</td>
+                    {{-- <td>{{ $semestre }}</td> --}}
                     <td>{{ $anio }}</td>
                     <td>{{ $resultado->estado }}</td>
                     <td>
