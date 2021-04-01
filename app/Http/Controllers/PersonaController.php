@@ -550,12 +550,6 @@ class PersonaController extends Controller
 
         $datosCarrera = Carrera::find($carrera);
         
-        $materiasCarrera = Asignatura::where('carrera_id', $request->carrera)
-                            ->where('resolucion_id', $request->resolucion)
-                            ->where('gestion', $request->curso)
-                            ->orderBy('orden_impresion', 'asc')
-                            ->get();
-
         // dd($materiasCarrera);
 
         $nominaEstudiantes = CarrerasPersona::select(
@@ -581,6 +575,18 @@ class PersonaController extends Controller
                             ->orderBy('personas.apellido_paterno', 'ASC')
                             ->groupBy('carreras_personas.persona_id')
                             ->get();
+
+        // buscamos el anio de inscripcion del primer estudiante
+        // para buscar las materias de esa gestion
+        // dd($nominaEstudiantes[0]->id);
+
+        $materiasCarrera = Asignatura::where('carrera_id', $request->carrera)
+                            // ->where('resolucion_id', $request->resolucion)
+                            ->where('gestion', $request->curso)
+                            ->where('anio_vigente', $nominaEstudiantes[0]->anio_vigente)
+                            ->orderBy('orden_impresion', 'asc')
+                            ->get();
+
 
         return view('persona.formularioCentralizador')->with(compact('carrera', 'curso', 'paralelo', 'turno', 'gestion', 'datosTurno', 'materiasCarrera', 'nominaEstudiantes', 'datosCarrera'));
     }
