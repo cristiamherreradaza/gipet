@@ -23,7 +23,7 @@
                 @csrf
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Carrera</label>
                                 <select name="carrera" id="carrera" class="form-control">
@@ -57,44 +57,31 @@
                             <div class="form-group">
                                 <label class="control-label">Paralelo</label>
                                 <select name="paralelo" id="paralelo" class="form-control">
-                                    @foreach($paralelos as $paralelo)
-                                    <option value="{{ $paralelo->paralelo }}"> {{ $paralelo->paralelo }} </option>
-                                    @endforeach
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Gestion</label>
-                                <select name="gestion" id="gestion" class="form-control">
-                                    @foreach($gestiones as $gestion)
-                                    <option value="{{ $gestion->anio_vigente }}"> {{ $gestion->anio_vigente }} </option>
-                                    @endforeach
-                                </select>
+                                <input type="number" 
+                                        min="2014"
+                                        max="{{ date('Y') }}" 
+                                        name="anio_vigente" 
+                                        id="anio_vigente" 
+                                        value="{{ date('Y') }}" 
+                                        class="form-control">
                             </div>
                         </div>
 
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label class="control-label">Resoluciones</label>
-                                <select name="resolucion" id="resolucion" class="form-control">
-                                    @foreach($resoluciones as $r)
-                                    <option value="{{ $r->id }}"> {{ $r->resolucion }} </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-md-1">
-                            <div class="form-group">
                                 <label class="control-label">&nbsp;</label>
-                                <button type="submit" class="btn btn-block btn-primary">Buscar</button>
+                                <button type="submit" class="btn btn-block btn-primary">GENERAR FORMULARIO</button>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div id="listadoProductosAjax"></div>
                         </div>
                     </div>
                 </div>

@@ -543,7 +543,7 @@ class PersonaController extends Controller
         $curso      = $request->curso;
         $turno      = $request->turno;
         $paralelo   = $request->paralelo;
-        $gestion    = $request->gestion;
+        $gestion    = $request->anio_vigente;
         $resolucion = $request->resolucion;
 
         $datosTurno = Turno::find($request->turno);
@@ -553,6 +553,8 @@ class PersonaController extends Controller
         $materiasCarrera = Asignatura::where('carrera_id', $request->carrera)
                             ->where('resolucion_id', $request->resolucion)
                             ->where('gestion', $request->curso)
+                            
+                            // ->where('anio_vigente', $request->anio_vigente)
                             ->orderBy('orden_impresion', 'asc')
                             ->get();
 
@@ -572,7 +574,7 @@ class PersonaController extends Controller
                                 'carreras_personas.anio_vigente',
                                 'carreras_personas.estado'
                             )
-                            ->where('carreras_personas.anio_vigente', $request->gestion)
+                            ->where('carreras_personas.anio_vigente', $request->anio_vigente)
                             ->where('carreras_personas.carrera_id', $request->carrera)
                             ->where('carreras_personas.gestion', $request->curso)
                             ->where('carreras_personas.turno_id', $request->turno)
@@ -596,5 +598,13 @@ class PersonaController extends Controller
         }else{
             return response()->json(['sw'=>0]);
         }
+    }
+
+    public function ajaxInscribe(Request $request)
+    {
+        $persona = Persona::where('cedula', $request->carnet)
+                    ->first();
+
+        return view('persona.ajaxPersona')->with(compact('persona'));
     }
 }

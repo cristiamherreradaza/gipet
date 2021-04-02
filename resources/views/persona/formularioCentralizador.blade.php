@@ -18,6 +18,8 @@
             </div>
             <div class="card-body">
                 <div class="row">
+                    <input type="text">
+
                     <div class="col"><h3><span class="text-info">Carrera: </span> {{ $datosCarrera->nombre }}</h3></div>
                     <div class="col"><h3><span class="text-info">Curso: </span> {{ $curso }}° A&ntilde;o</h3></div>
                     <div class="col"><h3><span class="text-info">Turno: </span> {{ $datosTurno->descripcion }}</h3></div>
@@ -25,6 +27,22 @@
                 <div class="row">
                     <div class="col"><h3><span class="text-info">Paralelo: </span> {{ $paralelo }}</h3></div>
                     <div class="col"><h3><span class="text-info">Gestion: </span> {{ $gestion }}</h3></div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label">Carnet</label>
+                            <input type="number" name="buscaCarnet" id="buscaCarnet" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <label class="control-label">&nbsp;</label>
+                        <button type="submit" class="btn btn-block btn-primary" onclick="buscaAlumno();">BUSCAR</button>
+                    </div>
+                    <div class="col-md-8" id="ajaxAlumno">
+
+                    </div>
                 </div>
                 <br>
                 <div class="table-responsive m-t-40">
@@ -103,6 +121,13 @@
 <script src="{{ asset('dist/js/pages/datatable/datatable-advanced.init.js') }}"></script>
 
 <script>
+    $.ajaxSetup({
+        // definimos cabecera donde estarra el token y poder hacer nuestras operaciones de put,post...
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
     $(function () {
         $('#tablaAlumnos').DataTable({
             language: {
@@ -111,20 +136,40 @@
         });
     });
 
-function enviaDatos(numero) {
-    let formulario = $("#formulario_"+numero).serializeArray();
+    function enviaDatos(numero) {
+        let formulario = $("#formulario_"+numero).serializeArray();
 
-    $.ajax({
-        type: "POST",
-        url: "{{ url('Persona/ajaxGuardaNota') }}",
-        data: formulario,
-        success: function (data) {
-            // console.log(data.sw);
-            if(data.sw == 1){
-                $("#msg_"+numero).show();
+        $.ajax({
+            type: "POST",
+            url: "{{ url('Persona/ajaxGuardaNota') }}",
+            data: formulario,
+            success: function (data) {
+                // console.log(data.sw);
+                if(data.sw == 1){
+                    $("#msg_"+numero).show();
+                }
             }
-        }
-    });
-}
+        });
+    }
+
+    function buscaAlumno()
+    {
+        let carnet = $("#buscaCarnet").val();
+
+        $.ajax({
+            type: "POST",
+            url: "{{ url('Persona/ajaxInscribe') }}",
+            data: {carnet: carnet},
+            success: function (data) {
+                $("#ajaxAlumno").html(data);
+            }
+        });
+    }
+
+    function inscribeAlumno()
+    {
+        let persona_id;
+    }
+
 </script>
 @endsection
