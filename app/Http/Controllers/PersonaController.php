@@ -588,14 +588,6 @@ class PersonaController extends Controller
         // para buscar las materias de esa gestion
         // dd($nominaEstudiantes[0]->id);
 
-        $materiasCarrera = Asignatura::where('carrera_id', $request->carrera)
-                            // ->where('resolucion_id', $request->resolucion)
-                            ->where('gestion', $request->curso)
-                            ->where('anio_vigente', $nominaEstudiantes[0]->anio_vigente)
-                            ->orderBy('orden_impresion', 'asc')
-                            ->get();
-
-
         return view('persona.formularioCentralizador')->with(compact('carrera', 'curso', 'paralelo', 'turno', 'gestion', 'datosTurno', 'materiasCarrera', 'nominaEstudiantes', 'datosCarrera'));
     }
 
