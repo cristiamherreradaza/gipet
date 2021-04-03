@@ -18,7 +18,11 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <input type="text">
+                    <input type="hidden" name="carrera_id" id="carrera_id" value="{{ $datosCarrera->id }}">
+                    <input type="hidden" name="gestion" id="gestion" value="{{ $curso }}">
+                    <input type="hidden" name="turno_id" id="turno_id" value="{{ $datosTurno->id }}">
+                    <input type="hidden" name="paralelo" id="paralelo" value="{{ $paralelo }}">
+                    <input type="hidden" name="anio_vigente" id="anio_vigente" value="{{ $gestion }}">
 
                     <div class="col"><h3><span class="text-info">Carrera: </span> {{ $datosCarrera->nombre }}</h3></div>
                     <div class="col"><h3><span class="text-info">Curso: </span> {{ $curso }}° A&ntilde;o</h3></div>
@@ -45,7 +49,7 @@
                     </div>
                 </div>
                 <br>
-                <div class="table-responsive m-t-40">
+                <div class="table-responsive m-t-40" id="ajaxAlumnosRegularizacion">
                     <table id="tablaAlumnos" class="table table-bordered table-striped table-hover" border="1">
                         <thead>
                         <tr>
@@ -158,7 +162,7 @@
 
         $.ajax({
             type: "POST",
-            url: "{{ url('Persona/ajaxInscribe') }}",
+            url: "{{ url('Persona/ajaxBusca') }}",
             data: {carnet: carnet},
             success: function (data) {
                 $("#ajaxAlumno").html(data);
@@ -168,7 +172,31 @@
 
     function inscribeAlumno()
     {
-        let persona_id;
+        let persona_id   = $("#persona_id").val();
+        let sexo         = $("#sexo").val();
+        let carrera_id   = $("#carrera_id").val();
+        let gestion      = $("#gestion").val();
+        let turno_id     = $("#turno_id").val();
+        let paralelo     = $("#paralelo").val();
+        let anio_vigente = $("#anio_vigente").val();
+
+        $.ajax({
+            type: "POST",
+            url: "{{ url('Persona/ajaxInscribe') }}",
+            data: {
+                    persona_id: persona_id,
+                    sexo: sexo,
+                    carrera_id: carrera_id,
+                    gestion: gestion,
+                    turno_id: turno_id,
+                    paralelo: paralelo,
+                    anio_vigente: anio_vigente,
+                },
+            success: function (data) {
+                $("#ajaxAlumnosRegularizacion").html(data);
+            }
+        });
+
     }
 
 </script>
