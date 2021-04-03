@@ -50,7 +50,7 @@
                 </div>
                 <br>
                 <div class="table-responsive m-t-40" id="ajaxAlumnosRegularizacion">
-                    <table id="tablaAlumnos" class="table table-bordered table-striped table-hover" border="1">
+                    <table id="tablaAlumnos" class="table table-bordered table-striped table-hover">
                         <thead>
                         <tr>
                             <th style="font-size: 10pt;">Paterno</th>

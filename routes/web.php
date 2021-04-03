@@ -61,6 +61,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('Persona/ajaxGuardaNota', 'PersonaController@ajaxGuardaNota');
     Route::post('Persona/ajaxBusca', 'PersonaController@ajaxBusca');
     Route::post('Persona/ajaxInscribe', 'PersonaController@ajaxInscribe');
+    // Route::get('Persona/ajaxFormularioCentralizador', 'PersonaController@ajaxFormularioCentralizador');
     // Route::get('persona/ajax_datos', function () {
         // return datatables()->query(DB::table('personas'))->toJson();
     // });
