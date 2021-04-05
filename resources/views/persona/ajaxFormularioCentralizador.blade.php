@@ -1,5 +1,5 @@
-<link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
-<link href="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.css') }}" rel="stylesheet">
+{{-- <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
+<link href="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.css') }}" rel="stylesheet"> --}}
 
 <table id="tablaAlumnosAjax" class="table table-bordered table-striped table-hover" border="1">
     <thead>
@@ -63,10 +63,10 @@
     </tbody>
 </table>
 
-<script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
+{{-- <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script src="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.js') }}"></script>
-<script src="{{ asset('dist/js/pages/datatable/datatable-advanced.init.js') }}"></script>
+<script src="{{ asset('dist/js/pages/datatable/datatable-advanced.init.js') }}"></script> --}}
 
 <script>
     $(function () {

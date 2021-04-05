@@ -180,6 +180,12 @@
         let paralelo     = $("#paralelo").val();
         let anio_vigente = $("#anio_vigente").val();
 
+        Swal.fire(
+            'Excelente!',
+            'La persona fue inscrita',
+            'success'
+        );
+
         $.ajax({
             type: "POST",
             url: "{{ url('Persona/ajaxInscribe') }}",
