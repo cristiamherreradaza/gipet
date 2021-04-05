@@ -57,7 +57,9 @@
                 $contador++;
             @endphp
         @endforeach
-        <td></td>
+        <td>
+            <button onclick="eliminar()" type="button" class="btn btn-danger" title="Eliminar Estudiante"><i class="fas fa-trash"></i></button>
+        </td>
     </tr>
     @endforeach
     </tbody>

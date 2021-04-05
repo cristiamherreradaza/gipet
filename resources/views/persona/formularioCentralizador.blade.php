@@ -106,7 +106,9 @@
                                     $contador++;
                                 @endphp
                             @endforeach
-                            <td></td>
+                            <td>
+                                <button onclick="elimina('{{ $ne->persona_id }}', '{{ $ne->persona->cedula }}')" type="button" class="btn btn-danger" title="Eliminar Estudiante"><i class="fas fa-trash"></i></button>
+                            </td>
                         </tr>
                         @endforeach
                         </tbody>
@@ -202,6 +204,54 @@
                 $("#ajaxAlumnosRegularizacion").html(data);
             }
         });
+    }
+
+    function elimina(id, carnet)
+    {
+        let persona_id   = id;
+        let sexo         = $("#sexo").val();
+        let carrera_id   = $("#carrera_id").val();
+        let gestion      = $("#gestion").val();
+        let turno_id     = $("#turno_id").val();
+        let paralelo     = $("#paralelo").val();
+        let anio_vigente = $("#anio_vigente").val();
+
+        Swal.fire({
+            title: 'Estas seguro de eliminar al alumno con carnet '+carnet+' ?',
+            text: "Luego no podras recuperarlo!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, estoy seguro!',
+            cancelButtonText: "Cancelar",
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire(
+                    'Excelente!',
+                    'El alumno fue eliminado',
+                    'success'
+                );
+
+                $.ajax({
+                    type: "POST",
+                    url: "{{ url('Persona/ajaxEliminaInscripcion') }}",
+                    data: {
+                            persona_id: persona_id,
+                            sexo: sexo,
+                            carrera_id: carrera_id,
+                            gestion: gestion,
+                            turno_id: turno_id,
+                            paralelo: paralelo,
+                            anio_vigente: anio_vigente,
+                        },
+                    success: function (data) {
+                        // $("#ajaxAlumnosRegularizacion").html(data);
+                    }
+                });
+
+            }
+        })
 
     }
 
