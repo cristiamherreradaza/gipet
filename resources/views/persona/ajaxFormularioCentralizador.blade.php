@@ -14,6 +14,7 @@
         </th>
         @endforeach
         <th></th>
+        <th></th>
     </tr>
     </thead>
     <tbody>
@@ -57,8 +58,9 @@
                 $contador++;
             @endphp
         @endforeach
+        <td>Estado</td>
         <td>
-            <button onclick="eliminar()" type="button" class="btn btn-danger" title="Eliminar Estudiante"><i class="fas fa-trash"></i></button>
+            <button onclick="elimina('{{ $ne->persona_id }}', '{{ $ne->persona->cedula }}')" type="button" class="btn btn-danger" title="Eliminar Estudiante"><i class="fas fa-trash"></i></button>
         </td>
     </tr>
     @endforeach

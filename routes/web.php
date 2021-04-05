@@ -82,6 +82,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Persona/ajaxMuestraMontos', 'PersonaController@ajaxMuestraMontos');
     Route::get('Persona/ajaxMuestraMensualidades', 'PersonaController@ajaxMuestraMensualidades');
     Route::post('Persona/ajaxEliminaInscripcion', 'PersonaController@ajaxEliminaInscripcion');
+    Route::post('Persona/ajaxCambiaEstado', 'PersonaController@ajaxCambiaEstado');
 
     Route::get('user/asignar', 'UserController@asignar');
 
