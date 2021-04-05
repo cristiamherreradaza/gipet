@@ -13,7 +13,7 @@
             {{ $mc->nombre }}<br /> {{ $mc->sigla }}
         </th>
         @endforeach
-        <th></th>
+        <th>Estado</th>
         <th></th>
     </tr>
     </thead>
@@ -58,7 +58,16 @@
                 $contador++;
             @endphp
         @endforeach
-        <td>Estado</td>
+        <td>
+            <select name="estado_inscripcion_{{ $ne->persona_id }}" id="estado_inscripcion_{{ $ne->persona_id }}" class="form-control custom-select" onchange="cambiaEstado('{{ $ne->persona_id }}');">
+                <option value=""></option>
+                <option value="APROBO" {{ (($estado->estado == 'APROBO') ? 'selected' : '') }}>APROBO</option>
+                <option value="REPROBO" {{ (($estado->estado == 'REPROBO') ? 'selected' : '') }}>REPROBO</option>
+                <option value="CONGELADO" {{ (($estado->estado == 'CONGELADO') ? 'selected' : '') }}>CONGELADO</option>
+                <option value="ABANDONO" {{ (($estado->estado == 'ABANDONO') ? 'selected' : '') }}>ABANDONO</option>
+            </select>
+            <small id="select_{{ $ne->persona_id }}" class="form-control-feedback text-success" style="display: none;">Guardado</small>
+        </td>
         <td>
             <button onclick="elimina('{{ $ne->persona_id }}', '{{ $ne->persona->cedula }}')" type="button" class="btn btn-danger" title="Eliminar Estudiante"><i class="fas fa-trash"></i></button>
         </td>
