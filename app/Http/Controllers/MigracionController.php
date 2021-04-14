@@ -1632,7 +1632,7 @@ SELECT *
 
     public function migracionj2021()
     {
-        $archivo = public_path("cen.xlsx");
+        $archivo = public_path("sec2.xlsx");
         // dd($archivo);
         Excel::import(new InscripcionesImport, $archivo);
     }

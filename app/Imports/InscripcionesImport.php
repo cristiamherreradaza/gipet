@@ -2,6 +2,7 @@
 
 namespace App\Imports;
 
+use App\Nota;
 use App\Persona;
 use App\Asignatura;
 use App\Inscripcione;
@@ -27,28 +28,29 @@ class InscripcionesImport implements ToModel, WithStartRow
             echo $alumno->nombres."<br />";
             $carrera = new CarrerasPersona();
             $carrera->user_id           = 36;
-            $carrera->carrera_id        = 1;
+            $carrera->carrera_id        = 2;
             $carrera->persona_id        = $alumno->id;
-            $carrera->turno_id          = $row[15];
-            $carrera->gestion           = 1;
-            $carrera->paralelo          = $row[16];
+            $carrera->turno_id          = $row[13];
+            $carrera->gestion           = 2;
+            $carrera->paralelo          = $row[14];
             $carrera->anio_vigente      = 2020;
             $carrera->sexo              = $alumno->sexo;
             $carrera->vigencia          = "Finalizado";
             $carrera->fecha_inscripcion = $hoy;
-            $carrera->estado            = $row[14];
+            $carrera->estado            = $row[12];
             $carrera->save();
 
             // definimos las materias
             $arrayMaterias = array();
-            $arrayMaterias[1]=442;
-            $arrayMaterias[2]=443;
-            $arrayMaterias[3]=444;
-            $arrayMaterias[4]=445;
-            $arrayMaterias[5]=446;
-            $arrayMaterias[6]=447;
-            $arrayMaterias[7]=448;
-            $arrayMaterias[8]=449;
+
+            // sec 2
+            $arrayMaterias[1]=519;
+            $arrayMaterias[2]=520;
+            $arrayMaterias[3]=521;
+            $arrayMaterias[4]=522;
+            $arrayMaterias[5]=523;
+            $arrayMaterias[6]=524;
+            $arrayMaterias[7]=525;
 
             $contadorMaterias = 5;
             foreach ($arrayMaterias as $key => $m) {
@@ -60,14 +62,13 @@ class InscripcionesImport implements ToModel, WithStartRow
 
                 $inscripcion->user_id         = 36;
                 $inscripcion->resolucion_id   = $datosMateria->resolucion_id;
-                $inscripcion->carrera_id      = 1;
+                $inscripcion->carrera_id      = 2;
                 $inscripcion->asignatura_id   = $m;
-                $inscripcion->turno_id        = $row[15];
-                $inscripcion->turno_id        = $row[15];
+                $inscripcion->turno_id        = $row[13];
                 $inscripcion->persona_id      = $alumno->id;
-                $inscripcion->paralelo        = $row[16];
+                $inscripcion->paralelo        = $row[14];
                 $inscripcion->semestre        = $datosMateria->semestre;
-                $inscripcion->gestion         = 1;
+                $inscripcion->gestion         = 2;
                 $inscripcion->anio_vigente    = 2020;
                 $inscripcion->fecha_registro  = $hoy;
                 $inscripcion->nota            = $row[$contadorMaterias];
@@ -77,7 +78,40 @@ class InscripcionesImport implements ToModel, WithStartRow
                 
                 $inscripcion->save();
 
+                $inscripcionId = $inscripcion->id;
+
                 $contadorMaterias++;
+
+                // verificamos si es semestral o anual
+                if ($datosMateria->ciclo == "Anual") {
+                    $cantidadBimestres = 2;
+                }else{
+                    $cantidadBimestres = 4;
+                }
+
+                // guardamos para el registro de notas
+                for ($i=1; $i <= $cantidadBimestres ; $i++) { 
+
+                    $nota = new Nota();
+
+                    $nota->user_id         = 36;
+                    $nota->resolucion_id   = $datosMateria->resolucion_id;
+                    $nota->carrera_id      = $datosMateria->carrera_id;
+                    $nota->inscripcion_id  = $inscripcionId;
+                    $nota->persona_id      = $alumno->id;
+                    $nota->asignatura_id   = $datosMateria->id;
+                    $nota->gestion         = $datosMateria->gestion;
+                    $nota->turno_id        = $row[13];
+                    $nota->paralelo        = $row[14];
+                    $nota->anio_vigente    = 2020;
+                    $nota->semestre        = $datosMateria->semestre;
+                    $nota->trimestre       = $i;
+                    $nota->fecha_registro  = $hoy;
+                    $nota->nota_aprobacion = $datosMateria->resolucion->nota_aprobacion;
+
+                    $nota->save();
+        
+                }
     
             }
         }
