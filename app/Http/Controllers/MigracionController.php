@@ -10,6 +10,9 @@ use App\Asignatura;
 use App\Inscripcione;
 use App\NotasPropuesta;
 use App\CarrerasPersona;
+use App\Imports\InscripcionesImport;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class MigracionController extends Controller
 {
@@ -1627,4 +1630,10 @@ SELECT *
         dd($inscripciones);
     }
 
+    public function migracionj2021()
+    {
+        $archivo = public_path("cen.xlsx");
+        // dd($archivo);
+        Excel::import(new InscripcionesImport, $archivo);
+    }
 }

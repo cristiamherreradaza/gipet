@@ -642,7 +642,7 @@ class PersonaController extends Controller
             $carreraPersona->fecha_inscripcion = $fecha;
             $carreraPersona->anio_vigente      = $request->anio_vigente;
             $carreraPersona->sexo              = $request->sexo;
-            $carreraPersona->vigencia          = "Vigente";
+            $carreraPersona->vigencia          = "Finalizado";
 
             $carreraPersona->save();
 
