@@ -373,7 +373,7 @@
     });
 
     // Funcion para que cargue de inicio la funcion ajax historial_academico
-    $(window).on("load", materias);
+    $(window).on("load", carreras);
 
     // Funcion que se ejecuta al hacer clic en Historial Academico
     function historial_academico(){
