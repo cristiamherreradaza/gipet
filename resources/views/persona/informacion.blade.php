@@ -129,7 +129,8 @@
                                         <i class="mr-2 mdi mdi-alert-circle"></i>
                                     </span>
                                 </label>
-                                <select class="form-control custom-select" id="nueva_carrera" name="nueva_carrera" onchange="cambiaCarrera()" required>
+                                <input type="hidden" name="persona_id" value="{{ $estudiante->id }}">
+                                <select class="form-control custom-select" id="carrera_id" name="carrera_id" onchange="cambiaCarrera()" required>
                                     @foreach($carreras as $carrera)
                                         <option value="{{ $carrera->id }}">{{ $carrera->nombre }}</option>
                                     @endforeach
@@ -143,7 +144,7 @@
                                         <i class="mr-2 mdi mdi-alert-circle"></i>
                                     </span>
                                 </label>
-                                <select class="form-control custom-select" id="nuevo_paralelo" name="nuevo_paralelo" required>
+                                <select class="form-control custom-select" id="gestion" name="gestion" required>
                                     <option value="1">1&ordm; A&ntilde;o</option>
                                     <option value="2">2&ordm; A&ntilde;o</option>
                                     <option value="3">3&ordm; A&ntilde;o</option>
@@ -157,7 +158,7 @@
                                         <i class="mr-2 mdi mdi-alert-circle"></i>
                                     </span>
                                 </label>
-                                <select class="form-control custom-select" id="nuevo_turno" name="nuevo_turno" required>
+                                <select class="form-control custom-select" id="turno_id" name="turno_id" required>
                                     @foreach($turnos as $turno)
                                         <option value="{{ $turno->id }}">{{ $turno->descripcion }}</option>
                                     @endforeach
@@ -171,7 +172,7 @@
                                         <i class="mr-2 mdi mdi-alert-circle"></i>
                                     </span>
                                 </label>
-                                <select class="form-control custom-select" id="nuevo_paralelo" name="nuevo_paralelo" required>
+                                <select class="form-control custom-select" id="paralelo" name="paralelo" required>
                                         <option value="A">A</option>
                                         <option value="B">B</option>
                                         <option value="C">C</option>
@@ -185,13 +186,13 @@
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input type="number" class="form-control" id="nueva_gestion" name="nueva_gestion" value="{{ date('Y') }}"
+                                <input type="number" class="form-control" id="anio_vigente" name="anio_vigente" value="{{ date('Y') }}"
                                     required>
                             </div>
                         </div>                        
                         <div class="col-md-2">
                             <label class="control-label">&nbsp;</label>
-                            <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="muestraFormularioInscripcion()">INSCRIBIR</button>
+                            <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="ajaxInscribeAlumno()">INSCRIBIR</button>
                         </div>
                     </div>
                 </form>
@@ -220,6 +221,20 @@
     function muestraFormularioInscripcion()
     {
         $("#bloqueInscripcion").toggle('slow');
+    }
+
+    function ajaxInscribeAlumno()
+    {
+        let formulario = $("#formularioInscripcion").serializeArray();
+        console.log(formulario);
+        $.ajax({
+            type: "POST",
+            url: "{{ url('Persona/ajaxInscribeAlumno') }}",
+            data: formulario,
+            success: function (data) {
+                // $("#ajaxAlumno").html(data);
+            }
+        });
     }
     
 </script>

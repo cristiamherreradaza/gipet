@@ -593,107 +593,16 @@ class PersonaController extends Controller
 
     public function ajaxInscribe(Request $request)
     {
-        $sw = 0;
-        // verificamos si el alumnos ya esta inscrito
-        $verifica = CarrerasPersona::where('persona_id', $request->persona_id)
-                    ->where('anio_vigente', $request->anio_vigente)
-                    ->where('gestion', $request->gestion)
-                    ->where('turno_id', $request->turno_id)
-                    ->where('carrera_id', $request->carrera_id)
-                    ->where('paralelo', $request->paralelo)
-                    ->count();
-
-        if($verifica == 0){       
-
-            $sw = 1;
-
-            // guardamos los datos en carreras personas
-            $fecha = date('Y-m-d');
-
-            $carreraPersona = new CarrerasPersona();
-
-            $carreraPersona->user_id           = Auth::user()->id;
-            $carreraPersona->carrera_id        = $request->carrera_id;
-            $carreraPersona->persona_id        = $request->persona_id;
-            $carreraPersona->turno_id          = $request->turno_id;
-            $carreraPersona->gestion           = $request->gestion;
-            $carreraPersona->paralelo          = $request->paralelo;
-            $carreraPersona->fecha_inscripcion = $fecha;
-            $carreraPersona->anio_vigente      = $request->anio_vigente;
-            $carreraPersona->sexo              = $request->sexo;
-            $carreraPersona->vigencia          = "Finalizado";
-
-            $carreraPersona->save();
-
-            // buscamos las materias de la gestion a inscribir
-            $asignaturas = Asignatura::where('anio_vigente', $request->anio_vigente)
-                            ->where('gestion', $request->gestion)
-                            ->where('carrera_id', $request->carrera_id)
-                            ->get();
-
-            // por cada asignatura guardamos un registro en la
-            // tabla inscripciones
-            foreach($asignaturas as $a)
-            {
-                $inscripcion = new Inscripcione();
-
-                $inscripcion->user_id         = Auth::user()->id;
-                $inscripcion->resolucion_id   = $a->resolucion_id;
-                $inscripcion->carrera_id      = $request->carrera_id;
-                $inscripcion->asignatura_id   = $a->id;
-                $inscripcion->turno_id        = $request->turno_id;
-                $inscripcion->persona_id      = $request->persona_id;
-                $inscripcion->paralelo        = $request->paralelo;
-                $inscripcion->semestre        = $a->semestre;
-                $inscripcion->gestion         = $a->gestion;
-                $inscripcion->anio_vigente    = $request->anio_vigente;
-                $inscripcion->fecha_registro  = $fecha;
-                $inscripcion->nota_aprobacion = $a->resolucion->nota_aprobacion;
-                $inscripcion->troncal         = "Si";
-                $inscripcion->estado          = "Finalizado";
-
-                $inscripcion->save();
-
-                $inscripcionId = $inscripcion->id;
-
-                // verificamos si es semestral o anual
-                if ($a->ciclo == "Anual") {
-                    $cantidadBimestres = 2;
-                }else{
-                    $cantidadBimestres = 4;
-                }
-
-                // guardamos para el registro de notas
-                for ($i=1; $i <= $cantidadBimestres ; $i++) { 
-
-                    $nota = new Nota();
-
-                    $nota->user_id         = Auth::user()->id;
-                    $nota->resolucion_id   = $a->resolucion_id;
-                    $nota->carrera_id      = $a->carrera_id;
-                    $nota->inscripcion_id  = $inscripcionId;
-                    $nota->persona_id      = $request->persona_id;
-                    $nota->asignatura_id   = $a->id;
-                    $nota->gestion         = $a->gestion;
-                    $nota->turno_id        = $request->turno_id;
-                    $nota->paralelo        = $request->paralelo;
-                    $nota->anio_vigente    = $request->anio_vigente;
-                    $nota->semestre        = $a->semestre;
-                    $nota->trimestre       = $i;
-                    $nota->fecha_registro  = $fecha;
-                    $nota->nota_aprobacion = $a->resolucion->nota_aprobacion;
-
-                    $nota->save();
-        
-                }
-            }
-        }else{
-            $sw = 1;
-        }
-
+        $this->inscripcion(
+            $request->persona_id, 
+            $request->carrera_id, 
+            $request->turno_id, 
+            $request->paralelo, 
+            $request->gestion, 
+            $request->anio_vigente);
+            
         // realizamos las consultas para mostar 
         // el datatable de los alumnos
-
         $carrera    = $request->carrera_id;
         $curso      = $request->gestion;
         $turno      = $request->turno_id;
@@ -741,15 +650,6 @@ class PersonaController extends Controller
 
     public function ajaxEliminaInscripcion(Request $request)
     {
-        // dd($request->all());
-        // $persona = CarrerasPersona::where('persona_id', $request->persona_id)
-        //     ->where('anio_vigente', $request->anio_vigente)
-        //     ->where('gestion', $request->gestion)
-        //     ->where('turno_id', $request->turno_id)
-        //     ->where('carrera_id', $request->carrera_id)
-        //     ->where('paralelo', $request->paralelo)
-        //     ->first();
-
         $eliminaNotas = Nota::where('persona_id', $request->persona_id)
             ->where('anio_vigente', $request->anio_vigente)
             ->where('gestion', $request->gestion)
@@ -854,4 +754,111 @@ class PersonaController extends Controller
         return view('persona.informacion')->with(compact('estudiante', 'inscripciones', 'carreras', 'turnos'));
 
     }
+
+    public function ajaxInscribeAlumno(Request $request)
+    {
+        // $this->inscripcion('Juan', 'Conta');
+        dd($request->all());
+    }
+
+    // funcion privada para inscribir a un alumno
+    private function inscripcion($persona_id, $carrera_id, $turno_id, $paralelo, $gestion, $anio_vigente)
+    {
+        $sw = 0;
+        // verificamos si el alumnos ya esta inscrito
+        $verifica = CarrerasPersona::where('persona_id', $persona_id)
+                    ->where('anio_vigente', $anio_vigente)
+                    ->where('gestion', $gestion)
+                    ->where('turno_id', $turno_id)
+                    ->where('carrera_id', $carrera_id)
+                    ->where('paralelo', $paralelo)
+                    ->count();
+
+        $datosPersona = Persona::find($persona_id);
+
+        if($verifica == 0){       
+
+            $fecha = date('Y-m-d');
+
+            // guardamos los datos en carreras personas
+            $carreraPersona = new CarrerasPersona();
+
+            $carreraPersona->user_id = Auth::user()->id;
+            $carreraPersona->carrera_id = $carrera_id;
+            $carreraPersona->persona_id = $persona_id;
+            $carreraPersona->turno_id = $turno_id;
+            $carreraPersona->gestion = $gestion;
+            $carreraPersona->paralelo = $paralelo;
+            $carreraPersona->fecha_inscripcion = $fecha;
+            $carreraPersona->anio_vigente = $anio_vigente;
+            $carreraPersona->sexo = $datosPersona->sexo;
+            $carreraPersona->vigencia = "Finalizado";
+
+            $carreraPersona->save();
+
+            // buscamos las materias de la gestion a inscribir
+            $asignaturas = Asignatura::where('anio_vigente', $anio_vigente)
+                ->where('gestion', $gestion)
+                ->where('carrera_id', $carrera_id)
+                ->get();
+
+            // por cada asignatura guardamos un registro en la
+            // tabla inscripciones
+            foreach ($asignaturas as $a) {
+                $inscripcion = new Inscripcione();
+
+                $inscripcion->user_id = Auth::user()->id;
+                $inscripcion->resolucion_id = $a->resolucion_id;
+                $inscripcion->carrera_id = $carrera_id;
+                $inscripcion->asignatura_id = $a->id;
+                $inscripcion->turno_id = $turno_id;
+                $inscripcion->persona_id = $persona_id;
+                $inscripcion->paralelo = $paralelo;
+                $inscripcion->semestre = $a->semestre;
+                $inscripcion->gestion = $a->gestion;
+                $inscripcion->anio_vigente = $anio_vigente;
+                $inscripcion->fecha_registro = $fecha;
+                $inscripcion->nota_aprobacion = $a->resolucion->nota_aprobacion;
+                $inscripcion->troncal = "Si";
+                $inscripcion->estado = "Finalizado";
+
+                $inscripcion->save();
+
+                $inscripcionId = $inscripcion->id;
+
+                // verificamos si es semestral o anual
+                if ($a->ciclo == "Anual") {
+                    $cantidadBimestres = 2;
+                } else {
+                    $cantidadBimestres = 4;
+                }
+
+                // guardamos para el registro de notas
+                for ($i = 1; $i <= $cantidadBimestres; $i++) {
+
+                    $nota = new Nota();
+
+                    $nota->user_id = Auth::user()->id;
+                    $nota->resolucion_id = $a->resolucion_id;
+                    $nota->carrera_id = $a->carrera_id;
+                    $nota->inscripcion_id = $inscripcionId;
+                    $nota->persona_id = $persona_id;
+                    $nota->asignatura_id = $a->id;
+                    $nota->gestion = $a->gestion;
+                    $nota->turno_id = $turno_id;
+                    $nota->paralelo = $paralelo;
+                    $nota->anio_vigente = $anio_vigente;
+                    $nota->semestre = $a->semestre;
+                    $nota->trimestre = $i;
+                    $nota->fecha_registro = $fecha;
+                    $nota->nota_aprobacion = $a->resolucion->nota_aprobacion;
+
+                    $nota->save();
+
+                }
+            }
+        }
+
+    }
+    
 }
