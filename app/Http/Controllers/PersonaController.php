@@ -593,6 +593,7 @@ class PersonaController extends Controller
 
     public function ajaxInscribe(Request $request)
     {
+        // funcion para inscribir un alumno
         $this->inscripcion(
             $request->persona_id, 
             $request->carrera_id, 
@@ -650,30 +651,13 @@ class PersonaController extends Controller
 
     public function ajaxEliminaInscripcion(Request $request)
     {
-        $eliminaNotas = Nota::where('persona_id', $request->persona_id)
-            ->where('anio_vigente', $request->anio_vigente)
-            ->where('gestion', $request->gestion)
-            ->where('turno_id', $request->turno_id)
-            ->where('carrera_id', $request->carrera_id)
-            ->where('paralelo', $request->paralelo)
-            ->delete();
-
-        $eliminaInscripcion = Inscripcione::where('persona_id', $request->persona_id)
-            ->where('anio_vigente', $request->anio_vigente)
-            ->where('gestion', $request->gestion)
-            ->where('turno_id', $request->turno_id)
-            ->where('carrera_id', $request->carrera_id)
-            ->where('paralelo', $request->paralelo)
-            ->delete();
-
-        $eliminaCarrerasPersona = CarrerasPersona::where('persona_id', $request->persona_id)
-            ->where('anio_vigente', $request->anio_vigente)
-            ->where('gestion', $request->gestion)
-            ->where('turno_id', $request->turno_id)
-            ->where('carrera_id', $request->carrera_id)
-            ->where('paralelo', $request->paralelo)
-            ->delete();
-
+        $this->eliminaInscripcion(
+            $request->persona_id, 
+            $request->carrera_id, 
+            $request->turno_id, 
+            $request->paralelo, 
+            $request->gestion, 
+            $request->anio_vigente);
         // Hacemos las consultas para mostrar los 
         // alumnos inscritos
 
@@ -757,14 +741,20 @@ class PersonaController extends Controller
 
     public function ajaxInscribeAlumno(Request $request)
     {
-        // $this->inscripcion('Juan', 'Conta');
-        dd($request->all());
+        $this->inscripcion(
+            $request->persona_id, 
+            $request->carrera_id, 
+            $request->turno_id, 
+            $request->paralelo, 
+            $request->gestion, 
+            $request->anio_vigente);
+
+        // return redirect("Persona/informacion/$request->persona_id");
     }
 
     // funcion privada para inscribir a un alumno
     private function inscripcion($persona_id, $carrera_id, $turno_id, $paralelo, $gestion, $anio_vigente)
     {
-        $sw = 0;
         // verificamos si el alumnos ya esta inscrito
         $verifica = CarrerasPersona::where('persona_id', $persona_id)
                     ->where('anio_vigente', $anio_vigente)
@@ -858,6 +848,44 @@ class PersonaController extends Controller
                 }
             }
         }
+    }
+
+    public function ajaxEliminaInscripcionAlumno(Request $request)
+    {
+        $this->eliminaInscripcion(
+            $request->persona_id, 
+            $request->carrera_id, 
+            $request->turno_id, 
+            $request->paralelo, 
+            $request->gestion, 
+            $request->anio_vigente);
+    }
+
+    private function eliminaInscripcion($persona_id, $carrera_id, $turno_id, $paralelo, $gestion, $anio_vigente)
+    {
+        $eliminaNotas = Nota::where('persona_id', $persona_id)
+            ->where('anio_vigente', $anio_vigente)
+            ->where('gestion', $gestion)
+            ->where('turno_id', $turno_id)
+            ->where('carrera_id', $carrera_id)
+            ->where('paralelo', $paralelo)
+            ->delete();
+
+        $eliminaInscripcion = Inscripcione::where('persona_id', $persona_id)
+            ->where('anio_vigente', $anio_vigente)
+            ->where('gestion', $gestion)
+            ->where('turno_id', $turno_id)
+            ->where('carrera_id', $carrera_id)
+            ->where('paralelo', $paralelo)
+            ->delete();
+
+        $eliminaCarrerasPersona = CarrerasPersona::where('persona_id', $persona_id)
+            ->where('anio_vigente', $anio_vigente)
+            ->where('gestion', $gestion)
+            ->where('turno_id', $turno_id)
+            ->where('carrera_id', $carrera_id)
+            ->where('paralelo', $paralelo)
+            ->delete();
 
     }
     

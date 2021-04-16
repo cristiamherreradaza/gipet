@@ -94,7 +94,7 @@
                                                 <button type="button" class="btn btn-info" title="Ver detalle" onclick="ajaxMuestraInscripcion('{{ $inscripcion->id }}')"><i class="fas fa-eye"></i></button>
                                                 <!-- <button type="button" class="btn btn-warning" title="Editar Inscripcion" onclick="ajaxEditaInscripcion('{{ $inscripcion->id }}')"><i class="fas fa-book"></i></button> -->
                                                 <a class="btn btn-light" title="Descargar Boletin" href="{{ url('Inscripcion/boletin/'.$inscripcion->id) }}" target="_blank"><i class="fas fa-file-pdf"></i></a>
-                                                <button type="button" class="btn btn-danger" title="Eliminar Inscripcion" onclick="ajaxEliminaInscripcion('{{ $inscripcion->id }}', '{{ $inscripcion->anio_vigente }}', '{{ $inscripcion->persona_id }}')"><i class="fas fa-trash-alt"></i></button>
+                                                <button type="button" class="btn btn-danger" title="Eliminar Inscripcion" onclick="ajaxEliminaInscripcion('{{ $inscripcion->persona_id }}', '{{ $inscripcion->carrera_id }}', '{{ $inscripcion->turno_id }}', '{{ $inscripcion->paralelo }}', '{{ $inscripcion->gestion }}', '{{ $inscripcion->anio_vigente }}', '{{ $inscripcion->carrera->nombre }}')"><i class="fas fa-trash-alt"></i></button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -225,16 +225,69 @@
 
     function ajaxInscribeAlumno()
     {
+        Swal.fire(
+            'Excelente!',
+            'El alumno fue inscrito',
+            'success'
+        );
+
         let formulario = $("#formularioInscripcion").serializeArray();
-        console.log(formulario);
+
         $.ajax({
             type: "POST",
             url: "{{ url('Persona/ajaxInscribeAlumno') }}",
             data: formulario,
             success: function (data) {
-                // $("#ajaxAlumno").html(data);
+                location.reload()
             }
         });
+    }
+
+    function ajaxEliminaInscripcion(alumno_id, carrera, turno, paral, ges, anio, carrera_nombre)
+    {
+        let persona_id   = alumno_id;
+        let carrera_id   = carrera;
+        let gestion      = ges;
+        let turno_id     = turno;
+        let paralelo     = paral;
+        let anio_vigente = anio;
+
+        Swal.fire({
+            title: 'Estas seguro de eliminar '+carrera_nombre+' '+gestion+'&ordm; A&ntilde;o del '+anio_vigente+' ?',
+            text: "Luego no podras recuperarlo!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, estoy seguro!',
+            cancelButtonText: "Cancelar",
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire(
+                    'Excelente!',
+                    'La inscripcion fue eliminada',
+                    'success'
+                );
+
+                $.ajax({
+                    type: "POST",
+                    url: "{{ url('Persona/ajaxEliminaInscripcionAlumno') }}",
+                    data: {
+                            persona_id: persona_id,
+                            carrera_id: carrera_id,
+                            gestion: gestion,
+                            turno_id: turno_id,
+                            paralelo: paralelo,
+                            anio_vigente: anio_vigente,
+                        },
+                    success: function (data) {
+                        location.reload();
+                    }
+                });
+
+            }
+        })
+
     }
     
 </script>
