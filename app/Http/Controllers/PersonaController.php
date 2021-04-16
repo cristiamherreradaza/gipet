@@ -130,7 +130,6 @@ class PersonaController extends Controller
 
     public function ver_detalle($id)
     {
-        //dd('hola');
         $estudiante = Persona::find($id);
         $inscripciones = Inscripcione::where('persona_id', $estudiante->id)->get();
         $carreras = Inscripcione::where('persona_id', $estudiante->id)
@@ -251,37 +250,17 @@ class PersonaController extends Controller
     {
         $gestionActual = date('Y');
 
-        $tiposMensualidades = TiposMensualidade::where('anio_vigente', $gestionActual)
-                            ->get();
-
-        $descuentos = Descuento::where('anio_vigente', $gestionActual)
-                                ->where('servicio_id', 2)
-                                ->get();
-        
-        $montoSinDescuento = Descuento::where('anio_vigente', $gestionActual)
-                                ->where('servicio_id', 2)
-                                ->where('nombre', 'NINGUNO')
-                                ->first();
-
         $persona = Persona::find($request->persona_id);
 
-        $carreras = Inscripcione::where('persona_id', $persona->id)
-                                ->select('carrera_id')
-                                ->groupBy('carrera_id')
-                                ->get();
-                                
-        $array_carreras = array();
-        foreach($carreras as $carrera){
-            array_push($array_carreras, $carrera->carrera_id);
-        }
-        $carreras = Carrera::whereIn('id', $array_carreras)
-                            ->whereNull('estado')
-                            ->get();
-        // Enviamos las carreras disponibles para inscribirse
-        $disponibles = Carrera::whereNotIn('id', $array_carreras)->get();
+        $carreras = Carrera::get();
+
+        $inscripciones = CarrerasPersona::where('persona_id', $request->persona_id)
+                        ->orderBy('anio_vigente', 'desc')
+                        ->get();
+
         $turnos = Turno::get();
         // Posteriormente enviaremos esa coleccion a interfaz
-        return view('persona.ajaxDetalleCarreras')->with(compact('carreras', 'persona', 'disponibles', 'turnos', 'tiposMensualidades', 'descuentos', 'montoSinDescuento'));
+        return view('persona.ajaxDetalleCarreras')->with(compact('carreras', 'persona', 'turnos', 'inscripciones'));
     }
 
     public function ajaxDetalleHistorialInscripciones(Request $request)
@@ -857,5 +836,22 @@ class PersonaController extends Controller
         $modificaEstado = CarrerasPersona::find($carreraPersona->id);
         $modificaEstado->estado = $request->estado;
         $modificaEstado->save();
+    }
+
+    public function informacion(Request $request, $id)
+    {
+        $estudiante = Persona::find($id);
+
+        $inscripciones = CarrerasPersona::where('persona_id', $id)
+                        ->orderBy('anio_vigente', 'desc')
+                        ->get();
+
+        $carreras = Carrera::get();
+
+        $turnos = Turno::get();
+
+        
+        return view('persona.informacion')->with(compact('estudiante', 'inscripciones', 'carreras', 'turnos'));
+
     }
 }
