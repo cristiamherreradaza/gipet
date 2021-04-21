@@ -72,8 +72,6 @@
     } );
 
     function ver_persona(persona_id){
-        //window.location.href = "{{ url('Persona/ver_persona') }}";
-        //window.location.href = "{{ url('Kardex/detalle_estudiante') }}/" + persona_id;
         window.location.href = "{{ url('Persona/informacion') }}/" + persona_id;
     }
 

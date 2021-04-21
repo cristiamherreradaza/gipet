@@ -3,8 +3,8 @@
 @section('content')
 
 <div class="card-body">
-    <h1 class="text-center text-info">Inicio de Sesión</h1>
-    <img class="card-img-top img-responsive" src="{{ asset('assets/images/background/logo_trans.png') }}" alt="Card image cap">
+    {{-- <h1 class="text-center text-info">Inicio de Sesión</h1> --}}
+    <img class="card-img-top img-responsive" src="{{ asset('assets/imagenes/logo.png') }}" alt="Card image cap">
     <form class="form-horizontal form-material" method="POST" action="{{ route('login') }}">
         @csrf
         <br>
