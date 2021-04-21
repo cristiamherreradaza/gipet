@@ -24,8 +24,16 @@ class AsignaturaController extends Controller
         if ($request->asignatura_id) {
             $asignatura = Asignatura::find($request->asignatura_id);
         } else {
-        	$asignatura = new Asignatura();
+            $asignatura = new Asignatura();
         }
+
+        if($request->muestra_curricula == "No"){
+            $enCurricula = "No curricula";
+        }else{
+            $enCurricula = null;
+        }
+
+        
         $asignatura->user_id                = Auth::user()->id;
         $asignatura->carrera_id             = $request->carrera_id;
         $asignatura->resolucion_id          = $request->resolucion_asignatura;
@@ -45,6 +53,7 @@ class AsignaturaController extends Controller
         $asignatura->anio_vigente           = $request->anio_vigente;
         $asignatura->orden_impresion        = $request->orden_impresion;
         $asignatura->troncal                = $request->troncal;
+        $asignatura->estado                 = $enCurricula;
         $asignatura->save();
 
         // Buscar en la tabla prerequisitos si existe este id de asignatura

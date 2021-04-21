@@ -53,7 +53,7 @@
                             <!-- ============================================================== -->
                             <!-- Logo -->
                             <!-- ============================================================== -->
-                            <a class="navbar-brand" href="{{ url('home') }}">
+                            <a class="navbar-brand" href="{{ url('home') }}" style="background-color: #fff;">
                                 <!-- Logo icon -->
                                 <b class="logo-icon">
                                     <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->

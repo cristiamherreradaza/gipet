@@ -262,9 +262,10 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-8">
+
+                            <div class="col-md-4">
                                 <div class="form-group">
-                                    <label class="control-label">Resolucion Ministerial</label>
+                                    <label class="control-label">Resol. Min.</label>
                                     <select name="resolucion_asignatura" id="resolucion_asignatura" class="form-control" required>
                                         @foreach($resoluciones as $resolucion)
                                             <option value="{{ $resolucion->id }}">{{ $resolucion->resolucion }}</option>
@@ -272,6 +273,17 @@
                                     </select>
                                 </div>
                             </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label">Muestra Curricula</label>
+                                    <select name="muestra_curricula" id="muestra_curricula" class="form-control">
+                                        <option value="Si">Si</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+                            </div>
+
                         </div>
                     </form>
                 </div>
@@ -407,21 +419,22 @@
     // Funcion que guarda una asignatura nueva/existente y recarga los datos creados
     function guarda_asignatura() {
         // Capturamos todas las variables que se encuentran en el formulario de asignatura y las que necesitemos
-        carrera_id              = $("#c_carrera_id").val();
-        asignatura_id           = $("#asignatura_id").val();
-        codigo_asignatura       = $("#codigo_asignatura").val();
-        nombre_asignatura       = $("#nombre_asignatura").val();
-        orden_impresion         = $("#orden_impresion").val();
-        anio_vigente            = $("#anio_vigente").val();
-        gestion                 = $("#gestion").val();
-        ciclo                   = $("#ciclo").val();
-        carga_horaria           = $("#carga_horaria").val();
-        carga_virtual           = $("#carga_virtual").val();
-        teorico                 = $("#teorico").val();
-        practico                = $("#practico").val();
-        semestre                = $("#semestre").val();
-        troncal                 = $("#troncal").val();
-        resolucion_asignatura   = $("#resolucion_asignatura").val();
+        carrera_id            = $("#c_carrera_id").val();
+        asignatura_id         = $("#asignatura_id").val();
+        codigo_asignatura     = $("#codigo_asignatura").val();
+        nombre_asignatura     = $("#nombre_asignatura").val();
+        orden_impresion       = $("#orden_impresion").val();
+        anio_vigente          = $("#anio_vigente").val();
+        gestion               = $("#gestion").val();
+        ciclo                 = $("#ciclo").val();
+        carga_horaria         = $("#carga_horaria").val();
+        carga_virtual         = $("#carga_virtual").val();
+        teorico               = $("#teorico").val();
+        practico              = $("#practico").val();
+        semestre              = $("#semestre").val();
+        troncal               = $("#troncal").val();
+        resolucion_asignatura = $("#resolucion_asignatura").val();
+        muestra_curricula     = $("#muestra_curricula").val();
         // Utilizamos Ajax
         $.ajax({
             url: "{{ url('Asignatura/guarda') }}",
@@ -440,7 +453,8 @@
                 practico: practico,
                 semestre: semestre,
                 troncal: troncal,
-                resolucion_asignatura: resolucion_asignatura
+                resolucion_asignatura: resolucion_asignatura,
+                muestra_curricula: muestra_curricula
                 },
             cache: false,
             type: 'post',
@@ -466,41 +480,6 @@
                 });
             }
         });
-
-        // formulario_asignatura = $("#formulario_modal_asignatura").serializeArray();
-        // alert(formulario_asignatura);
-        // carrera_id            = $("#carrera_id").val();
-        // gestion               = $("#anio_vigente").val();
-        // console.log(gestion);
-        // $.ajax({
-        //     url: "{{ url('Asignatura/guarda') }}",
-        //     method: "POST",
-        //     data: formulario_asignatura,
-        //     cache: false,
-        //     success: function(data)
-        //     {
-        //         if (data.sw == 1) 
-        //         {
-        //             $.ajax({
-        //                 url: "{{ url('Carrera/ajax_lista_asignaturas') }}",
-        //                 method: "GET",
-        //                 data: {c_carrera_id: carrera_id, c_gestion: gestion},
-        //                 cache: false,
-        //                 success: function (data) {
-        //                     $("#carga_ajax_lista_asignaturas").html(data);
-        //                 }
-        //             });
-
-        //             Swal.fire(
-        //                 'Excelente!',
-        //                 'Los datos fueron guardados',
-        //                 'success'
-        //             ).then(function() {
-        //                 $("#modal_asignaturas").modal('hide');
-        //             });
-        //         }
-        //     }
-        // })
     }
 
     function elimina_asignatura(asignatura_id, nombre)
