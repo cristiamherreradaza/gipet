@@ -6,10 +6,12 @@ use DB;
 use App\Nota;
 use App\User;
 use App\Persona;
+use App\Inscritos;
 use App\Asignatura;
 use App\Inscripcione;
 use App\NotasPropuesta;
 use App\CarrerasPersona;
+use App\Imports\InscritosImport;
 use App\Imports\InscripcionesImport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -1633,7 +1635,12 @@ SELECT *
     public function migracionj2021()
     {
         $archivo = public_path("sec2.xlsx");
-        // dd($archivo);
         Excel::import(new InscripcionesImport, $archivo);
+    }
+
+    public function migracionInscripcionj()
+    {   
+        $archivo = public_path("fni2021.xlsx");
+        Excel::import(new InscritosImport, $archivo);
     }
 }

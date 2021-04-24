@@ -140,6 +140,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Migracion/regularizaAlumnosMaterias2021', 'MigracionController@regularizaAlumnosMaterias2021');
     Route::get('Migracion/regularizaInscripcionesSemestre', 'MigracionController@regularizaInscripcionesSemestre');
     Route::get('Migracion/migracionj2021', 'MigracionController@migracionj2021');
+    Route::get('Migracion/migracionInscripcionj', 'MigracionController@migracionInscripcionj');
 
     //INSCRIPCIONES
     Route::get('Inscripcion/inscripcion', 'InscripcionController@inscripcion');
