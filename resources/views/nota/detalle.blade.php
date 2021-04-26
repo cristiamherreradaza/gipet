@@ -256,7 +256,7 @@ $(document).ready(function() {
 
     function ajaxRegistraTotal(id, numero, tipo)
     {   
-        alert('entro');
+        // alert('entro');
         let nota = $("#extras_"+id).val();
         sumaNotas(id);
 
