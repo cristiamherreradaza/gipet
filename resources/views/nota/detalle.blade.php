@@ -68,61 +68,44 @@
                         <th>Apellido Materno</th>
                         <th>Nombres</th>
                         <th>CI</th>
-                        <th>
-                            1er Bim
-                        </th>
-                        <th>
-                            2do Bim
-                        </th>
-                        <th>
-                            3er Bim
-                        </th>
-                        <th>
-                            4to Bim
-                        </th>
-                        <th>Promedio</th>
-                        <th>Segundo Turno</th>
-                        <th></th>
+                        <th>Asistencia</th>
+                        <th>Practicas</th>
+                        <th>Parcial</th>
+                        <th>Examen</th>
+                        <th>Extras</th>
+                        <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($inscritos as $inscrito)
+                    @php
+                        $nota = App\Nota::where('inscripcion_id', $inscrito->id)
+                                        ->where('trimestre', 1)
+                                        ->first();
+                    @endphp 
                         <tr>
                             <td class="text-left">{{ $inscrito->persona->apellido_paterno }}</td>
                             <td class="text-left">{{ $inscrito->persona->apellido_materno }}</td>
                             <td class="text-left">{{ $inscrito->persona->nombres }}</td>
                             <td class="text-left">{{ $inscrito->persona->cedula }}</td>
-                            @php
-                                $primerBimestre     = App\Nota::where('inscripcion_id', $inscrito->id)->where('trimestre', 1)->first();
-                                $primerBimestre     = ($primerBimestre ? ($primerBimestre->nota_total ? $primerBimestre->nota_total : '0') : '0');
-                                $segundoBimestre    = App\Nota::where('inscripcion_id', $inscrito->id)->where('trimestre', 2)->first();
-                                $segundoBimestre    = ($segundoBimestre ? ($segundoBimestre->nota_total ? $segundoBimestre->nota_total : '0') : '0');
-                                $tercerBimestre     = App\Nota::where('inscripcion_id', $inscrito->id)->where('trimestre', 3)->first();
-                                $tercerBimestre     = ($tercerBimestre ? ($tercerBimestre->nota_total ? $tercerBimestre->nota_total : '0') : '0');
-                                $cuartoBimestre     = App\Nota::where('inscripcion_id', $inscrito->id)->where('trimestre', 4)->first();
-                                $cuartoBimestre     = ($cuartoBimestre ? ($cuartoBimestre->nota_total ? $cuartoBimestre->nota_total : '0') : '0');
-                                $contador_registros = App\Nota::where('inscripcion_id', $inscrito->id)
-                                                            ->where('registrado', 'Si')
-                                                            ->count();
-                            @endphp
-                            <td>{{ round($primerBimestre) }}</td>
-                            <td>{{ round($segundoBimestre) }}</td>
-                            <td>{{ round($tercerBimestre) }}</td>
-                            <td>{{ round($cuartoBimestre) }}</td>
-                            <td>{{ round($inscrito->nota) }}</td>
-                            
-                            <td>{{ round($inscrito->segundo_turno) }}</td>
                             <td>
-                                @if($inscrito->convalidacion_externa && $inscrito->convalidacion_externa == 'Si')
-                                    Oyente
-                                @else
-                                    @if($bimestre != 0)
-                                        <button onclick="registra_notas('{{ $inscrito->id }}', '{{ $bimestre }}', '{{ $inscrito->asignatura_id }}', '{{ $inscrito->turno_id }}', '{{ $inscrito->persona_id }}', '{{ $inscrito->paralelo }}', '{{ $inscrito->anio_vigente }}')" class="btn btn-info" title="Registrar notas"><i class="fas fa-plus"></i></button>
-                                    @endif
-                                    @if($inscrito->nota < $inscrito->nota_aprobacion && $inscrito->nota >= 40 && $contador_registros == 4)
-                                        <button onclick="segundo_turno('{{ $inscrito->id }}', '{{ $inscrito->segundo_turno }}')" class="btn btn-danger" title="Segundo turno"><i class="fas fa-chart-line"></i></button>
-                                    @endif
-                                @endif
+                                <input type="number" name="asistencia_{{ $inscrito->id }}" id="asistencia_{{ $inscrito->id }}" class="form-control" style="width: 80px;" value="{{ round($nota->nota_asistencia, 0) }}" onchange="ajaxRegistraNotaAsistencia('{{ $inscrito->id }}', '1', 'asistencia')" />
+                            </td>
+                            <td>
+                                <input type="number" name="practicas_{{ $inscrito->id }}" id="practicas_{{ $inscrito->id }}" class="form-control" style="width: 80px;" value="{{ round($nota->nota_practicas, 0) }}" onchange="ajaxRegistraNotaPractica('{{ $inscrito->id }}', '1', 'practica')" />
+                            </td>
+                            <td>
+                                <input type="number" name="parcial_{{ $inscrito->id }}" id="parcial_{{ $inscrito->id }}" class="form-control" style="width: 80px;" value="{{ round($nota->nota_primer_parcial, 0) }}" onchange="ajaxRegistraNotaParcial('{{ $inscrito->id }}', '1', 'parcial')" />
+                            </td>
+                            <td>
+                                <input type="number" name="examen_{{ $inscrito->id }}" id="examen_{{ $inscrito->id }}" class="form-control" style="width: 80px;" value="{{ round($nota->nota_examen_final, 0) }}" onchange="ajaxRegistraNotaExamen('{{ $inscrito->id }}', '1', 'examen')" />
+                            </td>
+                            <td>
+                                <input type="number" name="extras_{{ $inscrito->id }}" id="extras_{{ $inscrito->id }}" class="form-control" style="width: 80px;" value="{{ round($nota->nota_puntos_ganados, 0) }}" onchange="ajaxRegistraNotaExtras('{{ $inscrito->id }}', '1', 'extras')" />
+                            </td>
+
+                            <td>
+                                <input type="text" id="total_{{ $inscrito->id }}" class="form-control" style="width: 80px;" value="{{ round($nota->nota_total, 0) }}" onfocus="ajaxRegistraTotal('{{ $inscrito->id }}', '1', 'total')">
                             </td>
                         </tr>
                     @endforeach
@@ -270,6 +253,134 @@ $(document).ready(function() {
             },
         });
     });
+
+    function ajaxRegistraTotal(id, numero, tipo)
+    {   
+        alert('entro');
+        let nota = $("#extras_"+id).val();
+        sumaNotas(id);
+
+        $.ajax({
+            url: "{{ url('Nota/ajaxRegistraNota') }}",
+            data: {
+                nota: nota,
+                id: id,
+                numero: numero,
+                tipo: tipo,
+            },
+            type: 'POST',
+            success: function(data) {
+            }
+        }); 
+    }
+
+    function ajaxRegistraNotaExtras(id, numero, tipo)
+    {
+        let nota = $("#extras_"+id).val();
+        sumaNotas(id);
+
+        $.ajax({
+            url: "{{ url('Nota/ajaxRegistraNota') }}",
+            data: {
+                nota: nota,
+                id: id,
+                numero: numero,
+                tipo: tipo,
+            },
+            type: 'POST',
+            success: function(data) {
+            }
+        }); 
+    }
+
+    function ajaxRegistraNotaExamen(id, numero, tipo)
+    {
+        let nota = $("#examen_"+id).val();
+        sumaNotas(id);
+
+        $.ajax({
+            url: "{{ url('Nota/ajaxRegistraNota') }}",
+            data: {
+                nota: nota,
+                id: id,
+                numero: numero,
+                tipo: tipo,
+            },
+            type: 'POST',
+            success: function(data) {
+            }
+        }); 
+    }
+
+    function ajaxRegistraNotaParcial(id, numero, tipo)
+    {
+        let nota = $("#parcial_"+id).val();
+        sumaNotas(id);
+
+        $.ajax({
+            url: "{{ url('Nota/ajaxRegistraNota') }}",
+            data: {
+                nota: nota,
+                id: id,
+                numero: numero,
+                tipo: tipo,
+            },
+            type: 'POST',
+            success: function(data) {
+            }
+        }); 
+    }
+
+    function ajaxRegistraNotaAsistencia(id, numero, tipo)
+    {
+        let nota = $("#asistencia_"+id).val();
+        sumaNotas(id);
+
+        $.ajax({
+            url: "{{ url('Nota/ajaxRegistraNota') }}",
+            data: {
+                nota: nota,
+                id: id,
+                numero: numero,
+                tipo: tipo,
+            },
+            type: 'POST',
+            success: function(data) {
+            }
+        }); 
+    }
+
+    function ajaxRegistraNotaPractica(id, numero, tipo)
+    {
+        let nota = $("#practicas_"+id).val();
+        sumaNotas(id);
+
+        $.ajax({
+            url: "{{ url('Nota/ajaxRegistraNota') }}",
+            data: {
+                nota: nota,
+                id: id,
+                numero: numero,
+                tipo: tipo,
+            },
+            type: 'POST',
+            success: function(data) {
+            }
+        }); 
+    }
+
+    function sumaNotas(id)
+    {
+        let asistencia = $("#asistencia_"+id).val();
+        let practicas = $("#practicas_"+id).val();
+        let parcial = $("#parcial_"+id).val();
+        let examen = $("#examen_"+id).val();
+        let extras = $("#extras_"+id).val();
+
+        suma = Number(asistencia) + Number(practicas) + Number(parcial) + Number(examen) + Number(extras);
+
+        $("#total_"+id).val(suma);
+    }
 
     function segundo_turno(inscripcion_id, segundo_turno)
     {

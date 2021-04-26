@@ -44,14 +44,12 @@ class InscritosImport implements ToModel, WithStartRow
             $carrera->save();
 
             // definimos las materias
-            $arrayMaterias = array();
-
             $materias = Asignatura::where('carrera_id', $row[5])
                         ->where('anio_vigente', 2021)
-                        ->where('gestion', 2021)
+                        ->where('gestion', $row[8])
                         ->get();
 
-            foreach ($arrayMaterias as $key => $m) {
+            foreach ($materias as $key => $m) {
 
                 echo $m."<br />";
 
@@ -78,7 +76,7 @@ class InscritosImport implements ToModel, WithStartRow
                 $inscripcionId = $inscripcion->id;
 
                 // verificamos si es semestral o anual
-                if ($datosMateria->ciclo == "Anual") {
+                if ($m->ciclo == "Anual") {
                     $cantidadBimestres = 2;
                 }else{
                     $cantidadBimestres = 4;

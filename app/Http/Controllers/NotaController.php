@@ -127,6 +127,7 @@ class NotaController extends Controller
                     ->where('anio_vigente', $request->anio_vigente)
                     ->where('trimestre', $request->bimestre)
                     ->get();
+                    
         if($asignatura->asignatura->ciclo == 'Semestral')
         {
             // Enviar a la vista donde registrará las notas correspondientes a 2 bimestres
@@ -833,6 +834,48 @@ class NotaController extends Controller
                                         ->first();
         // dd($notasPropuestaId);
         return redirect('nota/detalle/' . $notasPropuestaId->id);
+    }
+
+    public function ajaxRegistraNota(Request $request)
+    {
+        // dd($request->all());
+
+        $nota = Nota::where('inscripcion_id', $request->id)
+                    ->where('trimestre', $request->numero)
+                    ->first();
+        
+        $registro = Nota::find($nota->id);
+
+        switch ($request->tipo) {
+            case 'asistencia':
+                $registro->nota_asistencia = $request->nota;
+                break;
+
+            case 'practica':
+                $registro->nota_practicas = $request->nota;
+                break;
+
+            case 'parcial':
+                $registro->nota_primer_parcial = $request->nota;
+                break;
+
+            case 'examen':
+                $registro->nota_examen_final = $request->nota;
+                break;
+
+            case 'extras':
+                $registro->nota_puntos_ganados = $request->nota;
+                break;
+
+
+            default:
+                # code...
+                break;
+        }
+
+        $registro->save();
+
+        // dd($registro);
     }
     
 }

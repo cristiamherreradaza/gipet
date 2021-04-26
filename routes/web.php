@@ -101,12 +101,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('nota/exportarexcel/{asignatura_id}/{bimestre}', 'NotaController@exportarexcel');
     Route::get('Nota/finalizarBimestre/{nota_propuesta_id}/{bimestre}', 'NotaController@finalizarBimestre');
     Route::post('Nota/segundoTurno', 'NotaController@segundoTurno');
-
     Route::post('nota/actualizar', 'NotaController@actualizar');
-
     Route::post('nota/ajax_importar', 'NotaController@ajax_importar');
-
     Route::get('Nota/ajaxMuestraNota', 'NotaController@ajaxMuestraNota');
+    Route::post('Nota/ajaxRegistraNota', 'NotaController@ajaxRegistraNota');
+
     //NOTAS PROPUESTA
     Route::get('notaspropuesta/listado', 'NotasPropuestaController@listado');
 
