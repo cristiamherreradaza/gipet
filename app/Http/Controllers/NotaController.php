@@ -867,6 +867,9 @@ class NotaController extends Controller
                 $registro->nota_puntos_ganados = $request->nota;
                 break;
 
+            case 'total':
+                $registro->nota_total = $request->nota;
+                break;
 
             default:
                 # code...

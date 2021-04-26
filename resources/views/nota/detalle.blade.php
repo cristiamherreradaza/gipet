@@ -105,7 +105,7 @@
                             </td>
 
                             <td>
-                                <input type="text" id="total_{{ $inscrito->id }}" class="form-control" style="width: 80px;" value="{{ round($nota->nota_total, 0) }}" onfocus="ajaxRegistraTotal('{{ $inscrito->id }}', '1', 'total')">
+                                <input type="text" id="total_{{ $inscrito->id }}" class="form-control" style="width: 80px;" value="{{ round($nota->nota_total, 0) }}" onfocus="ajaxRegistraTotal('{{ $inscrito->id }}', '1', 'total')" readonly>
                             </td>
                         </tr>
                     @endforeach
@@ -254,30 +254,10 @@ $(document).ready(function() {
         });
     });
 
-    function ajaxRegistraTotal(id, numero, tipo)
-    {   
-        // alert('entro');
-        let nota = $("#extras_"+id).val();
-        sumaNotas(id);
-
-        $.ajax({
-            url: "{{ url('Nota/ajaxRegistraNota') }}",
-            data: {
-                nota: nota,
-                id: id,
-                numero: numero,
-                tipo: tipo,
-            },
-            type: 'POST',
-            success: function(data) {
-            }
-        }); 
-    }
-
     function ajaxRegistraNotaExtras(id, numero, tipo)
     {
         let nota = $("#extras_"+id).val();
-        sumaNotas(id);
+        sumaNotas(id, numero, 'total');
 
         $.ajax({
             url: "{{ url('Nota/ajaxRegistraNota') }}",
@@ -296,7 +276,7 @@ $(document).ready(function() {
     function ajaxRegistraNotaExamen(id, numero, tipo)
     {
         let nota = $("#examen_"+id).val();
-        sumaNotas(id);
+        sumaNotas(id, numero, 'total');
 
         $.ajax({
             url: "{{ url('Nota/ajaxRegistraNota') }}",
@@ -315,7 +295,7 @@ $(document).ready(function() {
     function ajaxRegistraNotaParcial(id, numero, tipo)
     {
         let nota = $("#parcial_"+id).val();
-        sumaNotas(id);
+        sumaNotas(id, numero, 'total');
 
         $.ajax({
             url: "{{ url('Nota/ajaxRegistraNota') }}",
@@ -334,7 +314,7 @@ $(document).ready(function() {
     function ajaxRegistraNotaAsistencia(id, numero, tipo)
     {
         let nota = $("#asistencia_"+id).val();
-        sumaNotas(id);
+        sumaNotas(id, numero, 'total');
 
         $.ajax({
             url: "{{ url('Nota/ajaxRegistraNota') }}",
@@ -353,7 +333,7 @@ $(document).ready(function() {
     function ajaxRegistraNotaPractica(id, numero, tipo)
     {
         let nota = $("#practicas_"+id).val();
-        sumaNotas(id);
+        sumaNotas(id, numero, 'total');
 
         $.ajax({
             url: "{{ url('Nota/ajaxRegistraNota') }}",
@@ -369,7 +349,7 @@ $(document).ready(function() {
         }); 
     }
 
-    function sumaNotas(id)
+    function sumaNotas(id, numero, tipo)
     {
         let asistencia = $("#asistencia_"+id).val();
         let practicas = $("#practicas_"+id).val();
@@ -380,6 +360,22 @@ $(document).ready(function() {
         suma = Number(asistencia) + Number(practicas) + Number(parcial) + Number(examen) + Number(extras);
 
         $("#total_"+id).val(suma);
+
+        // let nota = $("#extras_"+id).val();
+        // sumaNotas(id);
+
+        $.ajax({
+            url: "{{ url('Nota/ajaxRegistraNota') }}",
+            data: {
+                nota: suma,
+                id: id,
+                numero: numero,
+                tipo: tipo,
+            },
+            type: 'POST',
+            success: function(data) {
+            }
+        }); 
     }
 
     function segundo_turno(inscripcion_id, segundo_turno)
