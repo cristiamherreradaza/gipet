@@ -64,7 +64,7 @@
             <table id="tablaAlumnos" class="table table-bordered table-striped text-center">
                 <thead class="text-primary">
                     <tr>
-                        <th>Apellido Paterno</th>
+                        <th>Apellido Paterno </th>
                         <th>Apellido Materno</th>
                         <th>Nombres</th>
                         <th>CI</th>
@@ -77,7 +77,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($inscritos as $inscrito)
+                    @foreach($inscritos as $contador => $inscrito)
                     @php
                         $nota = App\Nota::where('inscripcion_id', $inscrito->id)
                                         ->where('trimestre', 1)
@@ -89,19 +89,29 @@
                             <td class="text-left">{{ $inscrito->persona->nombres }}</td>
                             <td class="text-left">{{ $inscrito->persona->cedula }}</td>
                             <td>
-                                <input type="number" name="asistencia_{{ $inscrito->id }}" id="asistencia_{{ $inscrito->id }}" class="form-control" style="width: 80px;" value="{{ round($nota->nota_asistencia, 0) }}" onchange="ajaxRegistraNotaAsistencia('{{ $inscrito->id }}', '1', 'asistencia')" />
+                                <input type="number" name="asistencia_{{ $inscrito->id }}" id="asistencia_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_asistencia, 0) }}" onchange="ajaxRegistraNotaAsistencia('{{ $inscrito->id }}', '1', 'asistencia')" />
+                                <small id="msgAsistencia_{{ $inscrito->id }}" class="form-control-feedback text-success" style="display: none;">Guardado</small>
+                                <small class="form-control-feedback text-warning msgAlumno_{{ $inscrito->id }}" style="display: none;">Alerta</small>
                             </td>
                             <td>
-                                <input type="number" name="practicas_{{ $inscrito->id }}" id="practicas_{{ $inscrito->id }}" class="form-control" style="width: 80px;" value="{{ round($nota->nota_practicas, 0) }}" onchange="ajaxRegistraNotaPractica('{{ $inscrito->id }}', '1', 'practica')" />
+                                <input type="number" name="practicas_{{ $inscrito->id }}" id="practicas_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_practicas, 0) }}" onchange="ajaxRegistraNotaPractica('{{ $inscrito->id }}', '1', 'practica')" />
+                                <small id="msgPractica_{{ $inscrito->id }}" class="form-control-feedback text-success" style="display: none;">Guardado</small>
+                                <small class="form-control-feedback text-warning msgAlumno_{{ $inscrito->id }}" style="display: none;">Alerta</small>
                             </td>
                             <td>
-                                <input type="number" name="parcial_{{ $inscrito->id }}" id="parcial_{{ $inscrito->id }}" class="form-control" style="width: 80px;" value="{{ round($nota->nota_primer_parcial, 0) }}" onchange="ajaxRegistraNotaParcial('{{ $inscrito->id }}', '1', 'parcial')" />
+                                <input type="number" name="parcial_{{ $inscrito->id }}" id="parcial_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_primer_parcial, 0) }}" onchange="ajaxRegistraNotaParcial('{{ $inscrito->id }}', '1', 'parcial')" />
+                                <small id="msgParcial_{{ $inscrito->id }}" class="form-control-feedback text-success" style="display: none;">Guardado</small>
+                                <small class="form-control-feedback text-warning msgAlumno_{{ $inscrito->id }}" style="display: none;">Alerta</small>
                             </td>
                             <td>
-                                <input type="number" name="examen_{{ $inscrito->id }}" id="examen_{{ $inscrito->id }}" class="form-control" style="width: 80px;" value="{{ round($nota->nota_examen_final, 0) }}" onchange="ajaxRegistraNotaExamen('{{ $inscrito->id }}', '1', 'examen')" />
+                                <input type="number" name="examen_{{ $inscrito->id }}" id="examen_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_examen_final, 0) }}" onchange="ajaxRegistraNotaExamen('{{ $inscrito->id }}', '1', 'examen')" />
+                                <small id="msgExamen_{{ $inscrito->id }}" class="form-control-feedback text-success" style="display: none;">Guardado</small>
+                                <small class="form-control-feedback text-warning msgAlumno_{{ $inscrito->id }}" style="display: none;">Alerta</small>
                             </td>
                             <td>
-                                <input type="number" name="extras_{{ $inscrito->id }}" id="extras_{{ $inscrito->id }}" class="form-control" style="width: 80px;" value="{{ round($nota->nota_puntos_ganados, 0) }}" onchange="ajaxRegistraNotaExtras('{{ $inscrito->id }}', '1', 'extras')" />
+                                <input type="number" name="extras_{{ $inscrito->id }}" id="extras_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_puntos_ganados, 0) }}" onchange="ajaxRegistraNotaExtras('{{ $inscrito->id }}', '1', 'extras')" />
+                                <small id="msgExtras_{{ $inscrito->id }}" class="form-control-feedback text-success" style="display: none;">Guardado</small>
+                                <small class="form-control-feedback text-warning msgAlumno_{{ $inscrito->id }}" style="display: none;">Alerta</small>
                             </td>
 
                             <td>
@@ -257,6 +267,7 @@ $(document).ready(function() {
     function ajaxRegistraNotaExtras(id, numero, tipo)
     {
         let nota = $("#extras_"+id).val();
+
         sumaNotas(id, numero, 'total');
 
         $.ajax({
@@ -269,6 +280,7 @@ $(document).ready(function() {
             },
             type: 'POST',
             success: function(data) {
+                $("#msgExtras_"+id).show();
             }
         }); 
     }
@@ -288,6 +300,7 @@ $(document).ready(function() {
             },
             type: 'POST',
             success: function(data) {
+                $("#msgExamen_"+id).show();
             }
         }); 
     }
@@ -307,11 +320,12 @@ $(document).ready(function() {
             },
             type: 'POST',
             success: function(data) {
+                $("#msgParcial_"+id).show();
             }
         }); 
     }
 
-    function ajaxRegistraNotaAsistencia(id, numero, tipo)
+    function ajaxRegistraNotaAsistencia(id, numero, tipo, contador)
     {
         let nota = $("#asistencia_"+id).val();
         sumaNotas(id, numero, 'total');
@@ -326,6 +340,7 @@ $(document).ready(function() {
             },
             type: 'POST',
             success: function(data) {
+                $("#msgAsistencia_"+id).show();
             }
         }); 
     }
@@ -345,6 +360,7 @@ $(document).ready(function() {
             },
             type: 'POST',
             success: function(data) {
+                $("#msgPractica_"+id).show();
             }
         }); 
     }
@@ -352,30 +368,38 @@ $(document).ready(function() {
     function sumaNotas(id, numero, tipo)
     {
         let asistencia = $("#asistencia_"+id).val();
-        let practicas = $("#practicas_"+id).val();
-        let parcial = $("#parcial_"+id).val();
-        let examen = $("#examen_"+id).val();
-        let extras = $("#extras_"+id).val();
+        let practicas  = $("#practicas_"+id).val();
+        let parcial    = $("#parcial_"+id).val();
+        let examen     = $("#examen_"+id).val();
+        let extras     = $("#extras_"+id).val();
 
         suma = Number(asistencia) + Number(practicas) + Number(parcial) + Number(examen) + Number(extras);
 
-        $("#total_"+id).val(suma);
+        if(suma > 100)
+        {
+            alert('El promedio total sobrepasa los 100 puntos');
+            $(".msgAlumno_"+id).show();
+        }else{
 
-        // let nota = $("#extras_"+id).val();
-        // sumaNotas(id);
+            $(".msgAlumno_"+id).hide();
 
-        $.ajax({
-            url: "{{ url('Nota/ajaxRegistraNota') }}",
-            data: {
-                nota: suma,
-                id: id,
-                numero: numero,
-                tipo: tipo,
-            },
-            type: 'POST',
-            success: function(data) {
-            }
-        }); 
+            $("#total_"+id).val(suma);
+
+            $.ajax({
+                url: "{{ url('Nota/ajaxRegistraNota') }}",
+                data: {
+                    nota: suma,
+                    id: id,
+                    numero: numero,
+                    tipo: tipo,
+                },
+                type: 'POST',
+                success: function(data) {
+                }
+            }); 
+
+        }
+
     }
 
     function segundo_turno(inscripcion_id, segundo_turno)
@@ -550,10 +574,10 @@ $(document).ready(function() {
                 anio: anio,
                 docente: docente,
                 },
-            type: 'post'
-            /*success: function(data) {
-                $("#ajaxMuestraComboParalelo").html(data);
-            }*/
+            type: 'post',
+            success: function(data) {
+                // $("#msgAsistencia_"+).show();
+            }
         });
 
     }
