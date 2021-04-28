@@ -52,7 +52,22 @@ class NotaController extends Controller
 
     public function detalle($id)
     {
+        
         $datosNP = NotasPropuesta::where('id', $id)->first();
+        
+        // buscamos el bimestre actual
+        $notaBimestre  = Nota::where('asignatura_id', $datosNP->asignatura_id)
+                    ->where('turno_id', $datosNP->turno_id)
+                    ->where('paralelo', $datosNP->paralelo)
+                    ->where('anio_vigente', $datosNP->anio_vigente)
+                    ->first();
+        // dd($notaBimestre);
+        if($notaBimestre->finalizado == "Si"){
+            $bimestreActual = 2;
+        }else{
+            $bimestreActual = 1;
+        }
+    
         
         $comboTurnos = NotasPropuesta::where('asignatura_id', $datosNP->asignatura_id)
                                     ->where('user_id', $datosNP->user_id)
@@ -109,7 +124,7 @@ class NotaController extends Controller
             // $bimestre tomara el valor de 0, y en ese caso es un indicador de que finalizo todos los registros de notas
             $bimestre   = 0;
         }
-        return view('nota.detalle')->with(compact('asignatura', 'inscritos', 'notas', 'ciclo', 'bimestre', 'comboTurnos'));
+        return view('nota.detalle')->with(compact('asignatura', 'inscritos', 'notas', 'ciclo', 'bimestre', 'comboTurnos', 'bimestreActual'));
     }
 
     public function ajaxMuestraNota(Request $request)
@@ -878,10 +893,9 @@ class NotaController extends Controller
                 # code...
                 break;
         }
-
+        $registro->docente_id = Auth::user()->id;
         $registro->save();
 
-        // dd($registro);
     }
     
 }

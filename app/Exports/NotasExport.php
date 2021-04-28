@@ -92,7 +92,6 @@ class NotasExport implements FromCollection, WithMapping, WithHeadings, ShouldAu
             $nota->nota_primer_parcial,
             $nota->nota_examen_final,
             $nota->nota_puntos_ganados,
-            $observacion,
         ];
     }
 
@@ -109,7 +108,6 @@ class NotasExport implements FromCollection, WithMapping, WithHeadings, ShouldAu
             'Primer Parcial (Max: '.round($notapropuesta->nota_primer_parcial).')',
             'Examen Final (Max: '.round($notapropuesta->nota_examen_final).')',
             'Extras (Max: '.round($notapropuesta->nota_puntos_ganados).')',
-            'Observaciones (No llenar)',
         ];
     }
 
