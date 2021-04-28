@@ -5,10 +5,12 @@ namespace App\Imports;
 use App\Nota;
 use App\Kardex;
 use App\Inscripcion;
+use App\Inscripcione;
 use App\NotasPropuesta;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+
 class NotasImport implements ToModel, WithStartRow
 {
     /**
@@ -22,7 +24,7 @@ class NotasImport implements ToModel, WithStartRow
 
         $nota = Nota::find($row[0]);
 
-        $total = $row[4] + $row[5] + $row[6] + $row[7];
+        $total = $row[4] + $row[5] + $row[6] + $row[7] + $row[8];
 
         $notapropuesta = NotasPropuesta::where('asignatura_id', $nota->asignatura_id)
                                         ->where('turno_id', $nota->turno_id)
@@ -45,7 +47,6 @@ class NotasImport implements ToModel, WithStartRow
         $registraNota->nota_puntos_ganados   = $row[8];      //extras
         $registraNota->nota_total            = $total;
         $registraNota->save();
-
     }
 
     public function startRow(): int

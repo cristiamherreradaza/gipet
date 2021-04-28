@@ -563,11 +563,6 @@ class NotaController extends Controller
             Excel::import(new NotasImport, $file);
             // Una vez cargado los datos de los estudiantes de la materia, actualizar sus datos, en la tabla inscripciones
             // Capturar todas las notas correspondientes a esa materia
-            // $notas = Nota::where('asignatura_id', $request->asignatura_id)
-            //             ->where('turno_id', $request->turno_id)
-            //             ->where('paralelo', $request->paralelo)
-            //             ->where('anio_vigente', $request->anio_vigente)
-            //             ->get();
             // Sumar sus notas totales en un registro           REVISAR
             $notas = Nota::groupBy('persona_id')
                         ->selectRaw('persona_id, sum(nota_total) as total')
@@ -576,7 +571,7 @@ class NotaController extends Controller
                         ->where('paralelo', $request->paralelo)
                         ->where('anio_vigente', $request->anio_vigente)
                         ->get();
-            // dd($notas);
+
             // Por cada registro guardar en inscripcion
             foreach($notas as $nota){
                 $inscripcion = Inscripcione::where('asignatura_id', $request->asignatura_id)
@@ -585,9 +580,10 @@ class NotaController extends Controller
                                             ->where('paralelo', $request->paralelo)
                                             ->where('anio_vigente', $request->anio_vigente)
                                             ->first();
-                $inscripcion->nota = round($nota->total/4);
+                $inscripcion->nota = round($nota->total/2, 0);
                 $inscripcion->save();
             }
+
             return response()->json([
                 'message' => 'Importacion realizada con exito',
                 'sw' => 1
