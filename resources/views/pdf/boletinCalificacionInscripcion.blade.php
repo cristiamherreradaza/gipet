@@ -128,9 +128,6 @@
                 <th nowrap>1° B</th>
                 <th nowrap>2° B</th>
                 <th nowrap>PROM</th>
-                <th nowrap>3° B</th>
-                <th nowrap>4° B</th>
-                <th nowrap>PROM</th>
                 <th nowrap>HAB</th>
                 <th nowrap>FINAL</th>
             </tr>
@@ -157,9 +154,6 @@
                     <td>{{ $notaUno ? round($notaUno->nota_total) : '' }}</td>
                     <td>{{ $notaDos ? round($notaDos->nota_total) : '' }}</td>
                     <td style="background-color: #e5e5e5;">{{ $notaUno && $notaDos ? round(($notaUno->nota_total+$notaDos->nota_total)/2) : '' }}</td>
-                    <td>{{ $notaTres ? round($notaTres->nota_total) : '' }}</td>
-                    <td>{{ $notaCuatro ? round($notaCuatro->nota_total) : '' }}</td>
-                    <td style="background-color: #e5e5e5;">{{ $notaTres && $notaCuatro ? round(($notaTres->nota_total+$notaCuatro->nota_total)/2) : '' }}</td>
                     <td></td>
                     <td style="background-color: #e5e5e5;">{{ $inscripcion->nota ? round($inscripcion->nota) : '0' }}</td>
                 </tr>
