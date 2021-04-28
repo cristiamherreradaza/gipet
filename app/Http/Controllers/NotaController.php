@@ -856,8 +856,6 @@ class NotaController extends Controller
 
     public function ajaxRegistraNota(Request $request)
     {
-        // dd($request->all());
-
         $nota = Nota::where('inscripcion_id', $request->id)
                     ->where('trimestre', $request->numero)
                     ->first();
@@ -893,9 +891,38 @@ class NotaController extends Controller
                 # code...
                 break;
         }
+
         $registro->docente_id = Auth::user()->id;
         $registro->save();
 
+        $this->registraInscripcionTotal($request->id);
+
+    }
+
+    protected function registraInscripcionTotal($inscripcionId)
+    {
+        $notaTotal = 0;
+
+        $primeraNota = Nota::where('inscripcion_id', $inscripcionId)
+                ->where('trimestre', 1)
+                ->first();
+
+        $segundaNota = Nota::where('inscripcion_id', $inscripcionId)
+                ->where('trimestre', 2)
+                ->first();
+
+        $notaTotal = $primeraNota->nota_total + $segundaNota->nota_total;
+        // dd($notaTotal);
+
+        if($notaTotal > 0 && $segundaNota->nota_total){
+            $notaTotalFinal = round($notaTotal/2, 0);
+        }else{
+            $notaTotalFinal = 0;
+        }
+
+        $inscripcion = Inscripcione::find($inscripcionId);
+        $inscripcion->nota = $notaTotalFinal;
+        $inscripcion->save();
     }
     
 }

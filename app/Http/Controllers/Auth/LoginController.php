@@ -54,6 +54,8 @@ class LoginController extends Controller
     {
         if ( Auth::user()->tipo_usuario == 'Docente' ) {
             return route('inicioDocente');
+        }else if( Auth::user()->tipo_usuario == 'Director' ){
+            return route('home');
         }
 
         // return redirect('/home');

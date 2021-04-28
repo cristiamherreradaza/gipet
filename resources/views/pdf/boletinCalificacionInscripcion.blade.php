@@ -125,8 +125,8 @@
             <tr style="border: 1px solid black; border-collapse: collapse; background-color: #e5e5e5;">
                 <th nowrap>CODIGO</th>
                 <th nowrap>ASIGNATURA</th>
-                <th nowrap>1° B</th>
-                <th nowrap>2° B</th>
+                <th nowrap>1°</th>
+                <th nowrap>2°</th>
                 <th nowrap>PROM</th>
                 <th nowrap>HAB</th>
                 <th nowrap>FINAL</th>
