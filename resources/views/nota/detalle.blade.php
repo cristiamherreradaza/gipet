@@ -51,7 +51,7 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-block btn-info">Cambia Curso</button>
+                    <button type="button" class="btn btn-block btn-info" onclick="enviaDatosCambiaCurso()">Cambia Curso</button>
                 </div>
                 
             </div>
@@ -263,6 +263,16 @@ $(document).ready(function() {
             },
         });
     });
+
+    function enviaDatosCambiaCurso()
+    {
+        if($("#frmNotas")[0].checkValidity()){
+            $("#frmNotas").submit();
+        }else{
+            $("#frmNotas")[0].reportValidity();
+        }
+
+    }
 
     function ajaxRegistraNotaExtras(id, numero, tipo)
     {
