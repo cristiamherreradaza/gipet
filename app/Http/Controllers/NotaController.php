@@ -67,7 +67,6 @@ class NotaController extends Controller
         }else{
             $bimestreActual = 1;
         }
-    
         
         $comboTurnos = NotasPropuesta::where('asignatura_id', $datosNP->asignatura_id)
                                     ->where('user_id', $datosNP->user_id)
