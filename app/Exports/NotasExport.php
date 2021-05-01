@@ -37,6 +37,9 @@ class NotasExport implements FromCollection, WithMapping, WithHeadings, ShouldAu
         $bimestre       = $this->bimestre;
         return Nota::select(
                     'notas.id',
+                    'personas.apellido_paterno',
+                    'personas.apellido_materno',
+                    'personas.nombres',
                     'notas.carrera_id',
                     'notas.inscripcion_id',
                     'notas.docente_id',
@@ -64,28 +67,6 @@ class NotasExport implements FromCollection, WithMapping, WithHeadings, ShouldAu
                     ->leftJoin('personas', 'notas.persona_id', '=', 'personas.id')
                     ->orderBy('personas.apellido_paterno', 'ASC')
                     ->get();
-        // if($notapropuesta->asignatura->ciclo == 'Semestral')
-        // {
-        //     return Nota::where('asignatura_id', $notapropuesta->asignatura_id)
-        //                 ->where('turno_id', $notapropuesta->turno_id)
-        //                 ->where('user_id', $notapropuesta->user_id)
-        //                 ->where('paralelo', $notapropuesta->paralelo)
-        //                 ->where('anio_vigente', $notapropuesta->anio_vigente)
-        //                 ->where(function ($query) {
-        //                     $query->where('trimestre', 1)
-        //                         ->orWhere('trimestre', 2);
-        //                 })
-        //                 ->get();
-        // }
-        // else
-        // {
-        //     return Nota::where('asignatura_id', $notapropuesta->asignatura_id)
-        //                 ->where('turno_id', $notapropuesta->turno_id)
-        //                 ->where('user_id', $notapropuesta->user_id)
-        //                 ->where('paralelo', $notapropuesta->paralelo)
-        //                 ->where('anio_vigente', $notapropuesta->anio_vigente)
-        //                 ->get();
-        // }
     }
 
     public function map($nota): array
