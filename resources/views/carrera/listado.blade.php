@@ -416,9 +416,11 @@
         })
     });
 
-    // Funcion que guarda una asignatura nueva/existente y recarga los datos creados
+    // Funcion que guarda una asignatura nueva/existente 
+    // y recarga los datos creados
     function guarda_asignatura() {
-        // Capturamos todas las variables que se encuentran en el formulario de asignatura y las que necesitemos
+        // Capturamos todas las variables que se encuentran 
+        // en el formulario de asignatura y las que necesitemos
         carrera_id            = $("#c_carrera_id").val();
         asignatura_id         = $("#asignatura_id").val();
         codigo_asignatura     = $("#codigo_asignatura").val();

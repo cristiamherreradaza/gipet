@@ -128,4 +128,10 @@ class CarreraController extends Controller
         return view('carrera.ajax_combo_materias')->with(compact('asignaturas'));
     }
 
+    public function cierraRegistroNotas(Request $request)
+    {
+        $carreras = Carrera::get();
+        return view('carrera.cierraRegistroNotas')->with(compact('carreras'));
+    }
+
 }

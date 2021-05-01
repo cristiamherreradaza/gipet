@@ -209,6 +209,7 @@ Route::middleware(['auth'])->group(function () {
     // ADMINISTRACION
     Route::post('Asignatura/guarda', 'AsignaturaController@guarda');
     Route::get('Carrera/listado', 'CarreraController@listado');
+    Route::get('Carrera/cierraRegistroNotas', 'CarreraController@cierraRegistroNotas');
     Route::get('Carrera/ajax_lista_asignaturas', 'CarreraController@ajax_lista_asignaturas');
     Route::get('Asignatura/listado_malla/{carrera_id}', 'AsignaturaController@listado_malla');
     Route::get('Asignatura/eliminar/{asignatura_id}', 'AsignaturaController@eliminar');

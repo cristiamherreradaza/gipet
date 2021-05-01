@@ -35,12 +35,34 @@ class NotasExport implements FromCollection, WithMapping, WithHeadings, ShouldAu
     {
         $notapropuesta  = NotasPropuesta::find($this->asignatura_id);
         $bimestre       = $this->bimestre;
-        return Nota::where('asignatura_id', $notapropuesta->asignatura_id)
-                    ->where('turno_id', $notapropuesta->turno_id)
-                    ->where('paralelo', $notapropuesta->paralelo)
-                    //->where('docente_id', $notapropuesta->docente_id)
-                    ->where('anio_vigente', $notapropuesta->anio_vigente)
-                    ->where('trimestre', $bimestre)
+        return Nota::select(
+                    'notas.id',
+                    'notas.carrera_id',
+                    'notas.inscripcion_id',
+                    'notas.docente_id',
+                    'notas.persona_id',
+                    'notas.asignatura_id',
+                    'notas.gestion',
+                    'notas.turno_id',
+                    'notas.paralelo',
+                    'notas.anio_vigente',
+                    'notas.semestre',
+                    'notas.trimestre',
+                    'notas.nota_asistencia',
+                    'notas.nota_practicas',
+                    'notas.nota_puntos_ganados',
+                    'notas.nota_primer_parcial',
+                    'notas.nota_examen_final',
+                    'notas.nota_total'
+                    )
+                    ->where('notas.asignatura_id', $notapropuesta->asignatura_id)
+                    ->where('notas.turno_id', $notapropuesta->turno_id)
+                    ->where('notas.paralelo', $notapropuesta->paralelo)
+                    //->where('notas.docente_id', $notapropuesta->docente_id)
+                    ->where('notas.anio_vigente', $notapropuesta->anio_vigente)
+                    ->where('notas.trimestre', $bimestre)
+                    ->leftJoin('personas', 'notas.persona_id', '=', 'personas.id')
+                    ->orderBy('personas.apellido_paterno', 'ASC')
                     ->get();
         // if($notapropuesta->asignatura->ciclo == 'Semestral')
         // {
