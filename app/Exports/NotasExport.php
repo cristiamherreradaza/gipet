@@ -106,7 +106,7 @@ class NotasExport implements FromCollection, WithMapping, WithHeadings, ShouldAu
         }
         return [
             $nota->id,
-            $nota->persona->apellido_materno. ' ' .$nota->persona->apellido_paterno. ' ' .$nota->persona->nombres,
+            $nota->persona->apellido_paterno. ' ' .$nota->persona->apellido_materno. ' ' .$nota->persona->nombres,
             $nota->persona->cedula,
             $nota->trimestre,
             $nota->nota_asistencia,
