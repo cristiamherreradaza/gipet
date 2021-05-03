@@ -276,7 +276,7 @@
 
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label class="control-label">Muestra Curricula</label>
+                                    <label class="control-label">En Centralizador</label>
                                     <select name="muestra_curricula" id="muestra_curricula" class="form-control">
                                         <option value="Si">Si</option>
                                         <option value="No">No</option>

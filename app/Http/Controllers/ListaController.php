@@ -134,6 +134,7 @@ class ListaController extends Controller
         $materiasCarrera = Asignatura::where('carrera_id', $request->carrera_id)
                             ->where('anio_vigente', $request->anio_vigente)
                             ->where('gestion', $request->gestion)
+                            ->whereNull('estado')
                             ->orderBy('orden_impresion', 'asc')
                             ->get();
 
