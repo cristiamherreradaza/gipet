@@ -80,8 +80,16 @@
                 <td><span style="font-size: 7pt;"><b>CARRERA: </b> {{ $datosCarrera->nombre }}</span></td>
                 <td style="text-align: center;">
                     <span style="font-size: 7pt;">
-                        <b>CURSO: </b>{{ $curso }}&deg; a&ntilde;o {{ $datosTurno->descripcion }} paralelo "{{ $paralelo }}" 
-                        
+                        <b>CURSO: </b>{{ $curso }}&deg; A&ntilde;o
+                        <b>TURNO: </b>{{ $datosTurno->descripcion }}
+                        <b>PARALELO: </b>"{{ $paralelo }}" -
+                        @if ($tipo == 'primero')
+                            1&deg; Bim
+                        @elseif ($tipo == 'segundo')    
+                            2&deg; Bim
+                        @else
+                            Anual
+                        @endif
                     </span>
                 </td>
                 <td><span style="font-size: 7pt;"><b>GESTION: </b> {{ $gestion }}</span></td>
@@ -117,7 +125,7 @@
                         {{ $mc->nombre }}
                     </td>
                 @endforeach
-                <td><b>OBSERVACIONES</b></td>
+                {{-- <td><b>OBSERVACIONES</b></td> --}}
             </tr>
             @foreach ($nominaEstudiantes as $k => $ne)
             <tr>
