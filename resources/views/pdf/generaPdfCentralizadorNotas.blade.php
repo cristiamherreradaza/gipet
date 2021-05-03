@@ -51,12 +51,17 @@
             background-color: #fff;
             /* border: 1px solid; */
             border-collapse: collapse;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .notas th, .notas td {
             border: 1px solid #000000;
             padding: 2px;
             text-align: left;
+        }
+        .notas tr:nth-child(even) {
+            background-color: #c4c4c4;
         }
 
     </style>
@@ -165,7 +170,7 @@
                                             ->where('anio_vigente', $gestion)
                                             ->first();
                     @endphp
-                    <td>
+                    <td style="text-align: center;">
                         @if ($nota)
                             @if ($tipo == 'primero' || $tipo == 'segundo')
                                 {{ intval($nota->nota_total) }}
@@ -181,6 +186,7 @@
             </tr>
             @endforeach
         </table>
+        
     </main>
 </body>
 
