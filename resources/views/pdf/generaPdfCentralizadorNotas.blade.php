@@ -177,7 +177,7 @@
                         @endif
                     </td>
                     @endforeach
-                    <td>{{ $estado->estado }}</td>
+                    {{-- <td>{{ $estado->estado }}</td> --}}
             </tr>
             @endforeach
         </table>
