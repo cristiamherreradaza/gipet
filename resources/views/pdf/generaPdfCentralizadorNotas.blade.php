@@ -71,6 +71,21 @@
         <table width="100%">
             <tr>
                 <td width="25%"><img src="{{ asset('assets/imagenes/portal_uno_R.png') }}" height="80"></td>
+                <td width="50%" style="text-align: center;"><span style="font-size: 18pt;">CETRALIZADOR DE CALIFICACIONES</span>
+                </td>
+                <td width="25%" style="text-align: right;"><span style="font-size: 8pt;"> FECHA: {{ date('d/m/Y') }}</span></td>
+            </tr>
+        
+            <tr>
+                <td><span style="font-size: 7pt;"><b>CARRERA: </b> {{ $datosCarrera->nombre }}</span></td>
+                <td style="text-align: center;">
+                    <span style="font-size: 7pt;"><b>CURSO: </b>{{ $curso }}&deg; a&ntilde;o {{ $datosTurno->descripcion }} paralelo "{{ $paralelo }}" </span></td>
+                <td><span style="font-size: 7pt;"><b>CARACTER: </b> PRIVADO</span></td>
+            </tr>
+        </table>
+        {{-- <table width="100%">
+            <tr>
+                <td width="25%"><img src="{{ asset('assets/imagenes/portal_uno_R.png') }}" height="80"></td>
                 <td width="50%" style="text-align: center;"><span style="font-size: 18pt;">CETRALIZADOR DE CALIFICACIONES</span></td>
                 <td width="25%" style="text-align: right;"><span style="font-size: 8pt;"> FECHA: {{ date('d/m/Y') }}</span></td>
             </tr>
@@ -80,25 +95,17 @@
                 <td style="text-align: center;"><span style="font-size: 7pt;"><b>RM: </b> 252/75 - 081/02 - 889/12 - 210/14</span></td>
                 <td><span style="font-size: 7pt;"><b>CARACTER: </b> PRIVADO</span></td>
             </tr>
-        </table>
+        </table> --}}
         
         <table class="notas">
             
             <tr>
-                <td style="width: 180px;">
-                    GESTION: {{ $gestion }}
-                    <hr>
-                    NIVEL: TECNICO SUPERIOR
-                    <hr>
-                    CARRERA: {{ $carrera }}
-                    <hr>
-                    REGIMEN: ANUALIZADO
-                    <hr>
-                    CURSO: {{ $curso }} A&Ntilde;O {{ $datosTurno->descripcion }} paralelo "{{ $paralelo }}"
-                    <hr>
-                    <b>NOMINA ESTUDIANTES</b>
-                </td>
-                <td style="width: 20px;">CEDULA DE IDENTIDAD</td>
+                @if ($imp_nombre == 'Si')
+                    <td style="width: 180px;">
+                        <b>NOMINA ESTUDIANTES</b>
+                    </td>
+                @endif
+                <td style="width: 20px;">CARNET</td>
                 @foreach ($materiasCarrera as $mc)
                     <td style="width: 62px; text-transform: uppercase;vertical-align: top;">
                         {{ $mc->sigla }}
@@ -110,26 +117,49 @@
             </tr>
             @foreach ($nominaEstudiantes as $k => $ne)
             <tr>
-                {{-- <td colspan="2" style="width: 10px;"></td> --}}
-                <td style="width: 190px;">{{ $ne->persona->apellido_paterno }} {{ $ne->persona->apellido_materno }} {{ $ne->persona->nombres }}</td>
+                @if ($imp_nombre == 'Si')
+                    <td style="width: 190px;">{{ $ne->persona->apellido_paterno }} {{ $ne->persona->apellido_materno }} {{ $ne->persona->nombres }}</td>
+                @endif
                 <td>{{ $ne->persona->cedula }}</td>
                 @foreach ($materiasCarrera as $mc)
                     @php
-                        $nota = App\Inscripcione::where('persona_id', $ne->persona_id)
-                                            ->where('carrera_id', $carrera)
-                                            ->where('anio_vigente', $gestion)
-                                            ->where('asignatura_id', $mc->id)
-                                            ->first();
+
+                        if($tipo == 'primero'){
+                            $nota = App\Nota::where('persona_id', $ne->persona_id)
+                                                    ->where('carrera_id', $carrera)
+                                                    ->where('anio_vigente', $gestion)
+                                                    ->where('paralelo', $paralelo)
+                                                    ->where('asignatura_id', $mc->id)
+                                                    ->where('trimestre', 1)
+                                                    ->first();
+                        }elseif ($tipo == 'segundo') {
+                            $nota = App\Nota::where('persona_id', $ne->persona_id)
+                                                    ->where('carrera_id', $carrera)
+                                                    ->where('anio_vigente', $gestion)
+                                                    ->where('paralelo', $paralelo)
+                                                    ->where('asignatura_id', $mc->id)
+                                                    ->where('trimestre', 2)
+                                                    ->first();
+                        }else{
+                            $nota = App\Inscripcione::where('persona_id', $ne->persona_id)
+                                                    ->where('carrera_id', $carrera)
+                                                    ->where('anio_vigente', $gestion)
+                                                    ->where('asignatura_id', $mc->id)
+                                                    ->first();
+                        }
 
                         $estado = App\CarrerasPersona::where('persona_id', $ne->persona_id)
                                             ->where('carrera_id', $carrera)
                                             ->where('anio_vigente', $gestion)
                                             ->first();
-
                     @endphp
                     <td>
                         @if ($nota)
-                            {{ intval($nota->nota) }}
+                            @if ($tipo == 'primero' || $tipo == 'segundo')
+                                {{ intval($nota->nota_total) }}
+                            @else
+                                {{ intval($nota->nota) }}
+                            @endif
                         @else
                             0
                         @endif

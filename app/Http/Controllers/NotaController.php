@@ -162,8 +162,9 @@ class NotaController extends Controller
     public function exportarexcel($asignatura_id, $bimestre)
     {
         $asignatura = NotasPropuesta::find($asignatura_id);
+
         $nombreAsignatura = $asignatura->asignatura->nombre;
-        // dd($nombreAsignatura);
+        
         return Excel::download(new NotasExport($asignatura_id, $bimestre), date('Y-m-d')."-$nombreAsignatura.xlsx");
     }
 

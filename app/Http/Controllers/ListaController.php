@@ -118,20 +118,26 @@ class ListaController extends Controller
 
     public function generaPdfCentralizadorNotas(Request $request)
     {
+       // dd($request->all());
+        $carrera    = $request->carrera_id;
+        $curso      = $request->gestion;
+        $turno      = $request->turno_id;
+        $paralelo   = $request->paralelo;
+        $gestion    = $request->anio_vigente;
+        $tipo       = $request->tipo;
+        $imp_nombre = $request->imprime_nombre;
 
-        $carrera  = $request->carrera;
-        $curso    = $request->curso;
-        $turno    = $request->turno;
-        $paralelo = $request->paralelo;
-        $gestion  = $request->gestion;
+        $datosTurno = Turno::find($request->turno_id);
 
-        $datosTurno = Turno::find($request->turno);
+        $datosCarrera = Carrera::find($request->carrera_id);
         
-        $materiasCarrera = Asignatura::where('anio_vigente', $request->gestion)
-                            ->where('carrera_id', $request->carrera)
-                            ->where('gestion', $request->curso)
+        $materiasCarrera = Asignatura::where('carrera_id', $request->carrera_id)
+                            ->where('anio_vigente', $request->anio_vigente)
+                            ->where('gestion', $request->gestion)
                             ->orderBy('orden_impresion', 'asc')
                             ->get();
+
+        // dd($materiasCarrera);
 
         $nominaEstudiantes = CarrerasPersona::select(
                                 'personas.apellido_paterno',
@@ -147,17 +153,24 @@ class ListaController extends Controller
                                 'carreras_personas.anio_vigente',
                                 'carreras_personas.estado'
                             )
-                            ->where('carreras_personas.anio_vigente', $request->gestion)
-                            ->where('carreras_personas.carrera_id', $request->carrera)
-                            ->where('carreras_personas.gestion', $request->curso)
-                            ->where('carreras_personas.turno_id', $request->turno)
+                            ->where('carreras_personas.anio_vigente', $request->anio_vigente)
+                            ->where('carreras_personas.carrera_id', $request->carrera_id)
+                            ->where('carreras_personas.gestion', $request->gestion)
+                            ->where('carreras_personas.turno_id', $request->turno_id)
+                            ->where('carreras_personas.paralelo', $request->paralelo)
                             ->leftJoin('personas', 'carreras_personas.persona_id' , '=', 'personas.id')
                             ->orderBy('personas.apellido_paterno', 'ASC')
                             ->groupBy('carreras_personas.persona_id')
                             ->get();
 
-        $pdf = PDF::loadView('pdf.generaPdfCentralizadorNotas', compact('materiasCarrera', 'nominaEstudiantes', 'carrera', 'curso', 'turno', 'paralelo', 'gestion', 'datosTurno'))->setPaper('letter', 'landscape');
-        return $pdf->stream('listaAlumnos_'.date('Y-m-d H:i:s').'.pdf');
+        // buscamos el anio de inscripcion del primer estudiante
+        // para buscar las materias de esa gestion
+        // dd($nominaEstudiantes[0]->id);
+
+        return view('pdf.generaPdfCentralizadorNotas')->with(compact('carrera', 'curso', 'paralelo', 'turno', 'gestion', 'datosTurno', 'materiasCarrera', 'nominaEstudiantes', 'datosCarrera', 'tipo', 'imp_nombre'));
+
+        // $pdf = PDF::loadView('pdf.generaPdfCentralizadorNotas', compact('carrera', 'curso', 'paralelo', 'turno', 'gestion', 'datosTurno', 'materiasCarrera', 'nominaEstudiantes', 'datosCarrera'))->setPaper('letter', 'landscape');
+        // return $pdf->stream('listaAlumnos_'.date('Y-m-d H:i:s').'.pdf');
     }
     
     public function totalALumnos()
@@ -396,6 +409,67 @@ class ListaController extends Controller
 
         $pdf = PDF::loadView('pdf.centralizadorBimestral', compact('inscritos'))->setPaper('letter');
         return $pdf->stream('centralizador_bimestral.pdf');
+    }
+
+    public function generaExcelCentralizador(Request $request)
+    {
+        dd($request->all());
+        return Excel::download(new NotasExport($request->carrera_id, $request->gestion, $request->turno_id, $request->paralelo, $request->tipo, $request->anio_vigente), date('Y-m-d') . "-$nombreAsignatura.xlsx");
+    }
+
+    public function generaCentralizador(Request $request)
+    {
+        // dd($request->all());
+        $carrera    = $request->carrera;
+        $curso      = $request->curso;
+        $turno      = $request->turno;
+        $paralelo   = $request->paralelo;
+        $gestion    = $request->anio_vigente;
+        $resolucion = $request->resolucion;
+
+        $datosTurno = Turno::find($request->turno);
+
+        $datosCarrera = Carrera::find($carrera);
+        
+        $materiasCarrera = Asignatura::where('carrera_id', $request->carrera)
+                            ->where('anio_vigente', $request->anio_vigente)
+                            ->where('gestion', $request->curso)
+                            
+                            // ->where('anio_vigente', $request->anio_vigente)
+                            ->orderBy('orden_impresion', 'asc')
+                            ->get();
+
+        // dd($materiasCarrera);
+
+        $nominaEstudiantes = CarrerasPersona::select(
+                                'personas.apellido_paterno',
+                                'personas.apellido_materno',
+                                'personas.nombres',
+                                'carreras_personas.id',
+                                'carreras_personas.carrera_id',
+                                'carreras_personas.persona_id',
+                                'carreras_personas.turno_id',
+                                'carreras_personas.gestion',
+                                'carreras_personas.paralelo',
+                                'carreras_personas.fecha_inscripcion',
+                                'carreras_personas.anio_vigente',
+                                'carreras_personas.estado'
+                            )
+                            ->where('carreras_personas.anio_vigente', $request->anio_vigente)
+                            ->where('carreras_personas.carrera_id', $request->carrera)
+                            ->where('carreras_personas.gestion', $request->curso)
+                            ->where('carreras_personas.turno_id', $request->turno)
+                            ->where('carreras_personas.paralelo', $request->paralelo)
+                            ->leftJoin('personas', 'carreras_personas.persona_id' , '=', 'personas.id')
+                            ->orderBy('personas.apellido_paterno', 'ASC')
+                            ->groupBy('carreras_personas.persona_id')
+                            ->get();
+
+        // buscamos el anio de inscripcion del primer estudiante
+        // para buscar las materias de esa gestion
+        // dd($nominaEstudiantes[0]->id);
+
+        return view('persona.formularioCentralizador')->with(compact('carrera', 'curso', 'paralelo', 'turno', 'gestion', 'datosTurno', 'materiasCarrera', 'nominaEstudiantes', 'datosCarrera'));
     }
 
 }

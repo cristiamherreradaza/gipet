@@ -23,37 +23,37 @@
                 @csrf
                 <div class="card-body">
                     <div class="row">
-                        <div class="col">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Carrera</label>
-                                <select name="carrera" id="carrera" class="form-control">
+                                <select name="carrera_id" id="carrera_id" class="form-control">
                                     @foreach($carreras as $carrera)
                                     <option value="{{ $carrera->id }}"> {{ $carrera->nombre }} </option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-md-1">
                             <div class="form-group">
                                 <label class="control-label">Curso</label>
-                                <select name="curso" id="curso" class="form-control">
+                                <select name="gestion" id="gestion" class="form-control">
                                     @foreach($cursos as $curso)
                                     <option value="{{ $curso->gestion }}"> {{ $curso->gestion }}° A&ntilde;o </option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Turno</label>
-                                <select name="turno" id="turno" class="form-control">
+                                <select name="turno_id" id="turno_id" class="form-control">
                                     @foreach($turnos as $turno)
                                     <option value="{{ $turno->id }}"> {{ $turno->descripcion }} </option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-md-1">
                             <div class="form-group">
                                 <label class="control-label">Paralelo</label>
                                 <select name="paralelo" id="paralelo" class="form-control">
@@ -63,20 +63,39 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label">Etapa</label>
+                                <select name="tipo" id="tipo" class="form-control">
+                                    <option value="primero"> Primera </option>
+                                    <option value="segundo"> Segunda </option>
+                                    <option value="anual"> Anual </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label class="control-label">Imp. Nombre</label>
+                                <select name="imprime_nombre" id="imprime_nombre" class="form-control">
+                                    <option value="Si">Si</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
                             <div class="form-group">
                                 <label class="control-label">Gestion</label>
-                                <select name="gestion" id="gestion" class="form-control">
+                                <select name="anio_vigente" id="anio_vigente" class="form-control">
                                     @foreach($gestiones as $gestion)
                                     <option value="{{ $gestion->anio_vigente }}"> {{ $gestion->anio_vigente }} </option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-md-1">
                             <div class="form-group">
                                 <label class="control-label">&nbsp;</label>
-                                <button type="submit" class="btn btn-block btn-primary">Buscar</button>
+                                <button type="submit" class="btn btn-block btn-primary">GENERAR</button>
                             </div>
                         </div>
                     </div>
