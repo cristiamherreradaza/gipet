@@ -167,10 +167,11 @@ class ListaController extends Controller
         // para buscar las materias de esa gestion
         // dd($nominaEstudiantes[0]->id);
 
-        return view('pdf.generaPdfCentralizadorNotas')->with(compact('carrera', 'curso', 'paralelo', 'turno', 'gestion', 'datosTurno', 'materiasCarrera', 'nominaEstudiantes', 'datosCarrera', 'tipo', 'imp_nombre'));
+        // return view('pdf.generaPdfCentralizadorNotas')->with(compact('carrera', 'curso', 'paralelo', 'turno', 'gestion', 'datosTurno', 'materiasCarrera', 'nominaEstudiantes', 'datosCarrera', 'tipo', 'imp_nombre'));
 
-        // $pdf = PDF::loadView('pdf.generaPdfCentralizadorNotas', compact('carrera', 'curso', 'paralelo', 'turno', 'gestion', 'datosTurno', 'materiasCarrera', 'nominaEstudiantes', 'datosCarrera'))->setPaper('letter', 'landscape');
+        $pdf = PDF::loadView('pdf.generaPdfCentralizadorNotas', compact('carrera', 'curso', 'paralelo', 'turno', 'gestion', 'datosTurno', 'materiasCarrera', 'nominaEstudiantes', 'datosCarrera', 'tipo', 'imp_nombre'))->setPaper('letter', 'landscape');
         // return $pdf->stream('listaAlumnos_'.date('Y-m-d H:i:s').'.pdf');
+        return $pdf->download('centralizador.pdf');
     }
     
     public function totalALumnos()

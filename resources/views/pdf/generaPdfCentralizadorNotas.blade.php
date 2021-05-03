@@ -79,8 +79,12 @@
             <tr>
                 <td><span style="font-size: 7pt;"><b>CARRERA: </b> {{ $datosCarrera->nombre }}</span></td>
                 <td style="text-align: center;">
-                    <span style="font-size: 7pt;"><b>CURSO: </b>{{ $curso }}&deg; a&ntilde;o {{ $datosTurno->descripcion }} paralelo "{{ $paralelo }}" </span></td>
-                <td><span style="font-size: 7pt;"><b>CARACTER: </b> PRIVADO</span></td>
+                    <span style="font-size: 7pt;">
+                        <b>CURSO: </b>{{ $curso }}&deg; a&ntilde;o {{ $datosTurno->descripcion }} paralelo "{{ $paralelo }}" 
+                        
+                    </span>
+                </td>
+                <td><span style="font-size: 7pt;"><b>GESTION: </b> {{ $gestion }}</span></td>
             </tr>
         </table>
         {{-- <table width="100%">
