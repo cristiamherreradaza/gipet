@@ -45,13 +45,13 @@
     @csrf
     <div class="row" id="tabsEstudiante">
         <div class="col-md-4">
-            <button type="button" id="tab1" class="btn btn-block btn-info activo">DATOS PERSONALES</button>
+            <button type="button" id="tab1" class="btn waves-effect waves-light btn-outline-info btn-block activo">DATOS PERSONALES</button>
         </div>
         <div class="col-md-4">
-            <button type="button" id="tab2" class="btn btn-block btn-info inactivo">DATOS PROFESIONALES</button>
+            <button type="button" id="tab2" class="btn waves-effect waves-light btn-outline-info btn-block inactivo">DATOS PROFESIONALES</button>
         </div>
         <div class="col-md-4">
-            <button type="button" id="tab3" class="btn btn-block btn-info inactivo">REFERENCIA PERSONAL</button>
+            <button type="button" id="tab3" class="btn waves-effect waves-light btn-outline-info btn-block inactivo">REFERENCIA PERSONAL</button>
         </div>
     </div>
     <div class="row">

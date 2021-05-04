@@ -47,16 +47,301 @@
                 <h4 class="mb-0 text-white">INFORMACION DEL ESTUDIANTE</h4>
             </div>
             <div class="card-body">
-                <div class="row">
-                    <div class="col-md-3"><h3><span class="text-info"> Ap. Paterno:</span> {{ $estudiante->apellido_paterno }}</h3></div>
-                    <div class="col-md-3"><h3><span class="text-info"> Ap. Materno:</span> {{ $estudiante->apellido_materno }}</h3></div>
-                    <div class="col-md-3"><h3><span class="text-info"> Nombres:</span> {{ $estudiante->nombres }}</h3></div>
-                    <div class="col-md-3"><h3><span class="text-info"> Carnet:</span> {{ $estudiante->cedula }}</h3></div>
-                </div>
-                <div class="row">
-                    <col-md-6></col-md-6>
-                    <col-md-6></col-md-6>
-                </div>
+
+                <form action="{{ url('Persona/actualizar') }}" method="POST">
+                    @csrf
+                    <div class="row" id="tabsEstudiante">
+                        <div class="col-md-4">
+                            <button type="button" id="tab1" class="btn waves-effect waves-light btn-outline-info btn-block activo">DATOS
+                                PERSONALES</button>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="button" id="tab2" class="btn waves-effect waves-light btn-outline-info btn-block inactivo">DATOS
+                                PROFESIONALES</button>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="button" id="tab3" class="btn waves-effect waves-light btn-outline-info btn-block inactivo">REFERENCIA
+                                PERSONAL</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 tabContenido" id="tab1C">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                    <div class="form-body">
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label>Cedula de Identidad
+                                                        <span class="text-danger">
+                                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                        </span>
+                                                    </label>
+                                                    <input type="text" class="form-control" name="carnet" id="carnet"
+                                                        value="{{ $estudiante->cedula }}" required>
+                                                </div>
+                                            </div>
+                                            <input type="text" class="form-control" hidden name="persona_id" id="persona_id"
+                                                value="{{ $estudiante->id }}">
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label>Expedido
+                                                        <span class="text-danger">
+                                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                        </span>
+                                                    </label>
+                                                    <select name="expedido" id="expedido" class="form-control">
+                                                        <option value="La Paz" {{ $estudiante->expedido=='La Paz' ? 'selected' : '' }}>
+                                                            La Paz</option>
+                                                        <option value="Cochabamba"
+                                                            {{ $estudiante->expedido=='Cochabamba' ? 'selected' : '' }}>Cochabamba
+                                                        </option>
+                                                        <option value="Santa Cruz"
+                                                            {{ $estudiante->expedido=='Santa Cruz' ? 'selected' : '' }}>Santa Cruz
+                                                        </option>
+                                                        <option value="Oruro" {{ $estudiante->expedido=='Oruro' ? 'selected' : '' }}>
+                                                            Oruro</option>
+                                                        <option value="Potosi" {{ $estudiante->expedido=='Potosi' ? 'selected' : '' }}>
+                                                            Potosi</option>
+                                                        <option value="Tarija" {{ $estudiante->expedido=='Tarija' ? 'selected' : '' }}>
+                                                            Tarija</option>
+                                                        <option value="Sucre" {{ $estudiante->expedido=='Sucre' ? 'selected' : '' }}>
+                                                            Sucre</option>
+                                                        <option value="Beni" {{ $estudiante->expedido=='Beni' ? 'selected' : '' }}>Beni
+                                                        </option>
+                                                        <option value="Pando" {{ $estudiante->expedido=='Pando' ? 'selected' : '' }}>
+                                                            Pando</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label>Apellido Paterno </label>
+                                                    <input type="text" class="form-control" name="apellido_paterno"
+                                                        id="apellido_paterno" value="{{ $estudiante->apellido_paterno }}">
+                                                </div>
+                                            </div>
+                
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label>Apellido Materno </label>
+                                                    <input type="text" class="form-control" name="apellido_materno"
+                                                        id="apellido_materno" value="{{ $estudiante->apellido_materno }}">
+                                                </div>
+                                            </div>
+                
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label>Nombres
+                                                        <span class="text-danger">
+                                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                        </span>
+                                                    </label>
+                                                    <input type="text" class="form-control" name="nombres" id="nombres"
+                                                        value="{{ $estudiante->nombres }}" required>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label>Fecha Nacimiento
+                                                        <span class="text-danger">
+                                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                        </span>
+                                                    </label>
+                                                    <input type="date" class="form-control" name="fecha_nacimiento"
+                                                        id="fecha_nacimiento" value="{{ $estudiante->fecha_nacimiento }}" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 tabContenido" id="tab2C" style="display: none;">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                    <div class="form-body">
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <div class="form-group">
+                                                    <label>Email </label>
+                                                    <input type="text" class="form-control" name="email" id="email" value="{{ $estudiante->email }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="form-group">
+                                                    <label>Direccion </label>
+                                                    <input type="text" class="form-control" name="direccion" id="direccion"
+                                                        value="{{ $estudiante->direccion }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="form-group">
+                                                    <label>Celular
+                                                        <span class="text-danger">
+                                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                        </span>
+                                                    </label>
+                                                    <input type="text" class="form-control" name="telefono_celular" id="telefono_celular"
+                                                        value="{{ $estudiante->numero_celular }}" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="form-group">
+                                                    <label>Genero
+                                                        <span class="text-danger">
+                                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                        </span>
+                                                    </label>
+                                                    <select name="sexo" id="sexo" class="form-control" required>
+                                                        <option value="Masculino" {{ $estudiante->sexo=='Masculino' ? 'selected' : '' }}>Masculino</option>
+                                                        <option value="Femenino" {{ $estudiante->sexo=='Femenino' ? 'selected' : '' }}>
+                                                            Femenino</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-1">
+                                                <div class="form-group">
+                                                    <label class="control-label">Trabaja
+                                                        <span class="text-danger">
+                                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                        </span>
+                                                    </label>
+                                                    <select class="form-control" id="trabaja" name="trabaja" required>
+                                                        <option value="Si" {{ $estudiante->trabaja=='Si' ? 'selected' : '' }}>Si
+                                                        </option>
+                                                        <option value="No" {{ $estudiante->trabaja=='No' ? 'selected' : '' }}>No
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">Nombre de la Empresa</label>
+                                                    <input type="text" id="empresa" class="form-control" name="empresa"
+                                                        value="{{ $estudiante->empresa }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="control-label">Direcci&oacute;n</label>
+                                                    <input type="text" id="direccion_empresa" class="form-control"
+                                                        name="direccion_empresa" value="{{ $estudiante->direccion_empresa }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">Telefono</label>
+                                                    <input type="text" id="telefono_empresa" class="form-control"
+                                                        name="telefono_empresa" value="{{ $estudiante->numero_empresa }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <div class="form-group">
+                                                    <label class="control-label">Fax</label>
+                                                    <input type="text" id="fax" class="form-control" name="fax"
+                                                        value="{{ $estudiante->fax }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">Email Empresa</label>
+                                                    <input type="email" id="email_empresa" class="form-control" name="email_empresa"
+                                                        value="{{ $estudiante->email_empresa }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 tabContenido" id="tab3C" style="display: none;">
+                            <div class="card border-info">
+                                <div class="card-body">
+                                    <div class="form-body">
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <div class="form-group">
+                                                    <label>Nombre Padre </label>
+                                                    <input type="text" class="form-control" name="nombre_padre" id="nombre_padre"
+                                                        value="{{ $estudiante->nombre_padre }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="form-group">
+                                                    <label>Celular Padre </label>
+                                                    <input type="text" class="form-control" name="celular_padre" id="celular_padre"
+                                                        value="{{ $estudiante->celular_padre }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="form-group">
+                                                    <label>Nombre Madre </label>
+                                                    <input type="text" class="form-control" name="nombre_madre" id="nombre_madre"
+                                                        value="{{ $estudiante->nombre_madre }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="form-group">
+                                                    <label>Celular Madre </label>
+                                                    <input type="text" class="form-control" name="celular_madre" id="celular_madre"
+                                                        value="{{ $estudiante->celular_madre }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-3">
+                                                <div class="form-group">
+                                                    <label>Nombre Tutor </label>
+                                                    <input type="text" class="form-control" name="nombre_tutor" id="nombre_tutor"
+                                                        value="{{ $estudiante->nombre_tutor }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="form-group">
+                                                    <label>Celular Tutor </label>
+                                                    <input type="text" class="form-control" name="telefono_tutor" id="telefono_tutor"
+                                                        value="{{ $estudiante->celular_tutor }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="form-group">
+                                                    <label>Nombre Esposo </label>
+                                                    <input type="text" class="form-control" name="nombre_esposo" id="nombre_esposo"
+                                                        value="{{ $estudiante->nombre_pareja }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-3">
+                                                <div class="form-group">
+                                                    <label>Celular Esposo </label>
+                                                    <input type="text" class="form-control" name="telefono_esposo" id="telefono_esposo"
+                                                        value="{{ $estudiante->celular_pareja }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="submit" class="btn waves-effect waves-light btn-block btn-inverse">Actualizar Perfil</button>
+                        </div>
+                        <!-- <div class="col-md-4">
+                            <a href="{{ url('Inscripcion/reinscripcion/'.$estudiante->id) }}" type="button" class="btn waves-effect waves-light btn-block btn-inverse">Reinscribir</a>
+                        </div> -->
+                        <div class="col-md-6">
+                            <a href="{{ url('Persona/listado') }}" type="button"
+                                class="btn waves-effect waves-light btn-block btn-inverse">Volver</a>
+                        </div>
+                    </div>
+                </form>
+
                 <div class="row">
                     <div class="col-md-12">
                         @if ($inscripciones->count()>0)
@@ -215,6 +500,18 @@
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    // Tabs para Informacion Personal del Estudiante
+    $('#tabsEstudiante div .btn').click(function () {
+        var t = $(this).attr('id');
+        if ($(this).hasClass('inactivo')) { //preguntamos si tiene la clase inactivo 
+            $('#tabsEstudiante div .btn').addClass('inactivo');
+            $(this).removeClass('inactivo');
+
+            $('.tabContenido').hide();
+            $('#' + t + 'C').fadeIn('slow');
         }
     });
 
