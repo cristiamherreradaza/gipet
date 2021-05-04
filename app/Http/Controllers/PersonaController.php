@@ -66,6 +66,7 @@ class PersonaController extends Controller
 
     public function actualizar(Request $request)
     {
+        // dd($request->all());
         $persona                    = Persona::find($request->persona_id);
         $persona->user_id           = Auth::user()->id;
         $persona->apellido_paterno  = $request->apellido_paterno;
@@ -94,7 +95,7 @@ class PersonaController extends Controller
         $persona->nombre_pareja     = $request->nombre_esposo;
         $persona->celular_pareja    = $request->telefono_esposo;
         $persona->save();
-        return redirect('Persona/ver_detalle/'.$persona->id);
+        // return redirect('Persona/ver_detalle/'.$persona->id);
     }
 
     public function listado()

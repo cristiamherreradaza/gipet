@@ -48,7 +48,7 @@
             </div>
             <div class="card-body">
 
-                <form action="{{ url('Persona/actualizar') }}" method="POST">
+                <form action="{{ url('Persona/actualizar') }}" method="POST" id="formularioAlumno">
                     @csrf
                     <div class="row" id="tabsEstudiante">
                         <div class="col-md-4">
@@ -329,16 +329,13 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
-                            <button type="submit" class="btn waves-effect waves-light btn-block btn-inverse">Actualizar Perfil</button>
+                        <div class="col-md-12">
+                            <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="actualizaPerfilEstudiante();">ACTUALIZAR PERFIL</button>
                         </div>
-                        <!-- <div class="col-md-4">
-                            <a href="{{ url('Inscripcion/reinscripcion/'.$estudiante->id) }}" type="button" class="btn waves-effect waves-light btn-block btn-inverse">Reinscribir</a>
-                        </div> -->
-                        <div class="col-md-6">
+                        {{-- <div class="col-md-6">
                             <a href="{{ url('Persona/listado') }}" type="button"
                                 class="btn waves-effect waves-light btn-block btn-inverse">Volver</a>
-                        </div>
+                        </div> --}}
                     </div>
                 </form>
 
@@ -514,6 +511,31 @@
             $('#' + t + 'C').fadeIn('slow');
         }
     });
+
+    function actualizaPerfilEstudiante()
+    {
+        if ($("#formularioAlumno")[0].checkValidity()) {
+
+            let datosAlumno = $("#formularioAlumno").serializeArray();
+            console.log(datosAlumno);
+
+            $.ajax({
+                url: "{{ url('Persona/actualizar') }}",
+                data: datosAlumno,
+                type: 'POST',
+                success: function(data) {
+                    Swal.fire(
+                        'Excelente!',
+                        'Datos del alumno actualizados',
+                        'success'
+                    );
+                }
+            });
+
+        }else{
+            $("#formularioAlumno")[0].reportValidity();
+        }
+    }
 
     function muestraFormularioInscripcion()
     {

@@ -126,6 +126,11 @@
                 $("#practico").val(element['practico']);
                 $("#anio_vigente").val(element['anio_vigente']);
                 $("#ciclo").val(element['ciclo']);
+                if(element['estado'] == null){
+                    $('#muestra_curricula').val('Si');
+                }else{
+                    $('#muestra_curricula').val('No');
+                }
             }
         });
     }
