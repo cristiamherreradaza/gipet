@@ -254,12 +254,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Carrera/ajax_combo_materias/{carrera_id}/{anio_vigente}', 'CarreraController@ajax_combo_materias');
     Route::post('Asignatura/guarda_prerequisito', 'AsignaturaController@guarda_prerequisito');
 
+    // CARRERAS 
     Route::get('Carrera/listado_nuevo', 'CarreraController@listado_nuevo');
     Route::post('Carrera/guardar', 'CarreraController@guardar');
     Route::post('Carrera/actualizar', 'CarreraController@actualizar');
     Route::get('Carrera/eliminar/{id}', 'CarreraController@eliminar');
     Route::get('Carrera/vista_impresion/{id}/{gestion}', 'CarreraController@vista_impresion');
     Route::get('Carrera/ajaxEditaCarrera', 'CarreraController@ajaxEditaCarrera');
+    Route::get('Carrera/cierraRegistroNotas', 'CarreraController@cierraRegistroNotas');
 
     Route::get('Descuento/listado', 'DescuentoController@listado');
     Route::post('Descuento/guardar', 'DescuentoController@guardar');
