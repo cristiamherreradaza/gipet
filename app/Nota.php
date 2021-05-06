@@ -67,4 +67,10 @@ class Nota extends Model
     {
         return $this->belongsTo('App\Turno', 'turno_id');
     }
+
+    public function carrera()
+    {
+        return $this->belongsTo('App\Carrera', 'carrera_id');
+    }
+
 }

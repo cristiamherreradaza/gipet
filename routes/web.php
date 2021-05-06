@@ -262,6 +262,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Carrera/vista_impresion/{id}/{gestion}', 'CarreraController@vista_impresion');
     Route::get('Carrera/ajaxEditaCarrera', 'CarreraController@ajaxEditaCarrera');
     Route::get('Carrera/cierraRegistroNotas', 'CarreraController@cierraRegistroNotas');
+    Route::get('Carrera/actualizaCierraNotas/{carrera_id}/{anio_vigente}/{tipo}/{turno}/{bimestre}', 'CarreraController@actualizaCierraNotas');
 
     Route::get('Descuento/listado', 'DescuentoController@listado');
     Route::post('Descuento/guardar', 'DescuentoController@guardar');

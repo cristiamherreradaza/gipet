@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Nota;
+use DataTables;
+use App\Carrera;
+use App\Asignatura;
+use App\Resolucione;
+use App\NotasPropuesta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Asignatura;
-use App\Carrera;
-use App\Resolucione;
-use DataTables;
 
 class CarreraController extends Controller
 {
@@ -130,8 +132,38 @@ class CarreraController extends Controller
 
     public function cierraRegistroNotas(Request $request)
     {
-        $carreras = Carrera::get();
-        return view('carrera.cierraRegistroNotas')->with(compact('carreras'));
+        $anio_vigente = date('Y');
+        $carrerasNotasPropuestas = Nota::where('anio_vigente', $anio_vigente)
+                    ->groupBy('carrera_id')
+                    ->groupBy('turno_id')
+                    ->get();
+
+        return view('carrera.cierraRegistroNotas')->with(compact('carrerasNotasPropuestas'));
+    }
+
+    public function actualizaCierraNotas(Request $request, $carrera_id, $anio_vigente, $turno, $estado, $bimestre)
+    {
+        if($estado == 'cerrado'){
+            $modificaNotas = Nota::where('carrera_id', $carrera_id)
+                    ->where('anio_vigente', $anio_vigente)
+                    ->where('trimestre', $bimestre)
+                    ->where('turno_id', $turno)
+                    ->update(
+                        ['finalizado' => 'Si']
+                    );
+
+        }else{
+            $modificaNotas = Nota::where('carrera_id', $carrera_id)
+                    ->where('anio_vigente', $anio_vigente)
+                    ->where('trimestre', $bimestre)
+                    ->where('turno_id', $turno)
+                    ->update(
+                        ['finalizado' => null]
+                    );
+
+        }
+
+        return redirect('Carrera/cierraRegistroNotas');
     }
 
 }
