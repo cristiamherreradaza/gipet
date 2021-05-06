@@ -69,7 +69,7 @@ class NotaController extends Controller
         }
         
         $comboTurnos = NotasPropuesta::where('asignatura_id', $datosNP->asignatura_id)
-                                    ->where('user_id', $datosNP->user_id)
+                                    // ->where('user_id', $datosNP->user_id)
                                     ->where('anio_vigente', $datosNP->anio_vigente)
                                     ->groupBy('turno_id')
                                     ->get();
