@@ -22,19 +22,7 @@
     <form action="#" method="GET" id="formulario_carreras">
         <div class="card-body">
             <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label class="control-label">Carreras </label>
-
-                        <select name="c_carrera_id" id="c_carrera_id" class="form-control" required>
-                            <option value="">Seleccione</option>
-                            @foreach ($carreras as $c)
-                            <option value="{{ $c->id }}">{{ $c->nombre }}</option>
-                            @endforeach
-                        </select>
-
-                    </div>
-                </div>
+                
                 <div class="col-md-3">
                     <div class="form-group">
                         <label class="control-label">Gestion </label>
@@ -44,14 +32,54 @@
                 </div>
                 <div class="col-md-3">
                     <br>
-                    <button type="submit" class="btn btn-info" title="Ver Asignaturas de Carrera"><i
-                            class="fas fa-eye"></i></button>
-                    <button type="button" class="btn btn-light" title="Vista Impresion Carrera"
-                        onclick="vista_impresion()"><i class="fas fa-print"></i></button>
-                    <button type="button" class="btn btn-warning" title="Editar carrera" onclick="edita_carrera()"><i
-                            class="fas fa-edit"></i></button>
-                    <button type="button" class="btn btn-danger" title="Eliminar carrera" onclick="elimina_carrera()"><i
-                            class="fas fa-trash-alt"></i></button>
+                    <button type="submit" class="btn btn-info" title="Ver Asignaturas de Carrera"><i class="fas fa-eye"></i></button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-striped no-wrap">
+                            <thead>
+                                <tr>
+                                    <th>CARRERA</th>
+                                    <th>TURNO</th>
+                                    <th>1 BIM</th>
+                                    <th>2 BIM</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($carrerasNotasPropuestas as $c)
+                                    @php
+                                        $primerBimestre = App\Nota::where('carrera_id', $c->carrera_id)
+                                                                ->where('anio_vigente', $c->anio_vigente)
+                                                                ->where('turno_id', $c->turno_id)
+                                                                ->first();
+                                    @endphp
+                                    <tr>
+                                        <td>{{ $c->carrera->nombre }}</td>
+                                        <td>{{ $c->turno->descripcion }}</td>
+                                        <td>
+                                            @if ($primerBimestre->finalizado == null)
+                                                <a href="{{ url("Carrera/actualizaCierraNotas/$c->carrera_id/$c->anio_vigente/$c->turno_id/cerrado/1") }}" type="button" class="btn waves-effect waves-light btn-danger">CERRADO</a>
+                                            @else
+                                                <a href="{{ url("Carrera/actualizaCierraNotas/$c->carrera_id/$c->anio_vigente/$c->turno_id/abierto/1") }}" type="button" class="btn waves-effect waves-light btn-success">ABIERTO</a>
+
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($primerBimestre->finalizado == null)
+                                                NO
+                                            @else
+                                                SI
+                                            @endif
+
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
