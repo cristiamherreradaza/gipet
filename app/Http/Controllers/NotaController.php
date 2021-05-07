@@ -73,6 +73,11 @@ class NotaController extends Controller
                                     ->where('anio_vigente', $datosNP->anio_vigente)
                                     ->groupBy('turno_id')
                                     ->get();
+
+        $datosMateria = Inscripcione::where('asignatura_id', $datosNP->asignatura_id)
+                                    ->where('paralelo', $datosNP->paralelo)
+                                    ->where('anio_vigente', $datosNP->anio_vigente)
+                                    ->first();
                                     
         // Buscamos los detalles de la materia a mostrar
         $asignatura = NotasPropuesta::find($id);
@@ -123,7 +128,7 @@ class NotaController extends Controller
             // $bimestre tomara el valor de 0, y en ese caso es un indicador de que finalizo todos los registros de notas
             $bimestre   = 0;
         }
-        return view('nota.detalle')->with(compact('asignatura', 'inscritos', 'notas', 'ciclo', 'bimestre', 'comboTurnos', 'bimestreActual'));
+        return view('nota.detalle')->with(compact('asignatura', 'inscritos', 'notas', 'ciclo', 'bimestre', 'comboTurnos', 'bimestreActual', 'datosMateria'));
     }
 
     public function ajaxMuestraNota(Request $request)

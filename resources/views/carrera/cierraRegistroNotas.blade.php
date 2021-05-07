@@ -43,7 +43,6 @@
                             <thead>
                                 <tr>
                                     <th>CARRERA</th>
-                                    <th>TURNO</th>
                                     <th>A&Nacute;O</th>
                                     <th>1 BIM</th>
                                     <th>2 BIM</th>
@@ -54,18 +53,17 @@
                                     @php
                                         $primerBimestre = App\Nota::where('carrera_id', $c->carrera_id)
                                                                 ->where('anio_vigente', $c->anio_vigente)
-                                                                ->where('turno_id', $c->turno_id)
+                                                                ->where('gestion', $c->gestion)
                                                                 ->first();
                                     @endphp
                                     <tr>
                                         <td>{{ $c->carrera->nombre }}</td>
-                                        <td>{{ $c->turno->descripcion }}</td>
-                                        <td>{{ $c->gestion }}</td>
+                                        <td>{{ $c->gestion }}&deg; a&ntilde;o</td>
                                         <td>
                                             @if ($primerBimestre->finalizado == null)
-                                                <a href="{{ url("Carrera/actualizaCierraNotas/$c->carrera_id/$c->anio_vigente/$c->turno_id/cerrado/1") }}" type="button" class="btn waves-effect waves-light btn-danger">CERRADO</a>
+                                                <a href="{{ url("Carrera/actualizaCierraNotas/$c->carrera_id/$c->anio_vigente/$c->gestion/cerrado/1") }}" type="button" class="btn waves-effect waves-light btn-danger">CERRADO</a>
                                             @else
-                                                <a href="{{ url("Carrera/actualizaCierraNotas/$c->carrera_id/$c->anio_vigente/$c->turno_id/abierto/1") }}" type="button" class="btn waves-effect waves-light btn-success">ABIERTO</a>
+                                                <a href="{{ url("Carrera/actualizaCierraNotas/$c->carrera_id/$c->anio_vigente/$c->gestion/abierto/1") }}" type="button" class="btn waves-effect waves-light btn-success">ABIERTO</a>
 
                                             @endif
                                         </td>

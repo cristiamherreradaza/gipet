@@ -21,11 +21,11 @@
                         {{ $asignatura->asignatura->nombre }}</strong></h3>
 
         <div class="row">
-            <div class="col-md-4"><h4 class="text-bold">TURNO: <span class="text-info">{{ $asignatura->turno->descripcion }}</span></h4></div>
-            <div class="col-md-4"><h4 class="text-bold">PARALELO: <span class="text-info">{{ $asignatura->paralelo }}</span></h4></div>
-            <div class="col-md-4"><h4 class="text-bold">Año <span class="text-info">{{ $asignatura->anio_vigente }}</span></h4></div>
+            <div class="col-md-3"><h4 class="text-bold">TURNO: <span class="text-info">{{ $asignatura->turno->descripcion }}</span></h4></div>
+            <div class="col-md-3"><h4 class="text-bold">PARALELO: <span class="text-info">{{ $asignatura->paralelo }}</span></h4></div>
+            <div class="col-md-3"><h4 class="text-bold">CURSO: <span class="text-info">{{ $datosMateria->gestion }} &deg; A&ntilde;o</span></h4></div>
+            <div class="col-md-3"><h4 class="text-bold">GESTION: <span class="text-info">{{ $asignatura->anio_vigente }}</span></h4></div>
         </div>
-
         <form action="{{ url('nota/cambiaTurnoParalelo') }}" method="POST" id="frmNotas">
             @csrf
             <div class="row">
@@ -82,6 +82,12 @@
                         $nota = App\Nota::where('inscripcion_id', $inscrito->id)
                                         ->where('trimestre', 1)
                                         ->first();
+
+                        if($nota->finalizado != null){
+                            $estado = 'readonly';
+                        }else{
+                            $estado = '';
+                        }
                     @endphp 
                         <tr>
                             <td class="text-left">{{ $inscrito->persona->apellido_paterno }}</td>
@@ -89,27 +95,27 @@
                             <td class="text-left">{{ $inscrito->persona->nombres }}</td>
                             <td class="text-left">{{ $inscrito->persona->cedula }}</td>
                             <td>
-                                <input type="number" name="asistencia_{{ $inscrito->id }}" id="asistencia_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_asistencia, 0) }}" onchange="ajaxRegistraNotaAsistencia('{{ $inscrito->id }}', '{{ $bimestreActual }}', 'asistencia')" />
+                                <input type="number" name="asistencia_{{ $inscrito->id }}" id="asistencia_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_asistencia, 0) }}" onchange="ajaxRegistraNotaAsistencia('{{ $inscrito->id }}', '{{ $bimestreActual }}', 'asistencia')" {{ $estado }} />
                                 <small id="msgAsistencia_{{ $inscrito->id }}" class="form-control-feedback text-success" style="display: none;">Guardado</small>
                                 <small class="form-control-feedback text-warning msgAlumno_{{ $inscrito->id }}" style="display: none;">Alerta</small>
                             </td>
                             <td>
-                                <input type="number" name="practicas_{{ $inscrito->id }}" id="practicas_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_practicas, 0) }}" onchange="ajaxRegistraNotaPractica('{{ $inscrito->id }}', '{{ $bimestreActual }}', 'practica')" />
+                                <input type="number" name="practicas_{{ $inscrito->id }}" id="practicas_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_practicas, 0) }}" onchange="ajaxRegistraNotaPractica('{{ $inscrito->id }}', '{{ $bimestreActual }}', 'practica')" {{ $estado }} />
                                 <small id="msgPractica_{{ $inscrito->id }}" class="form-control-feedback text-success" style="display: none;">Guardado</small>
                                 <small class="form-control-feedback text-warning msgAlumno_{{ $inscrito->id }}" style="display: none;">Alerta</small>
                             </td>
                             <td>
-                                <input type="number" name="parcial_{{ $inscrito->id }}" id="parcial_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_primer_parcial, 0) }}" onchange="ajaxRegistraNotaParcial('{{ $inscrito->id }}', '{{ $bimestreActual }}', 'parcial')" />
+                                <input type="number" name="parcial_{{ $inscrito->id }}" id="parcial_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_primer_parcial, 0) }}" onchange="ajaxRegistraNotaParcial('{{ $inscrito->id }}', '{{ $bimestreActual }}', 'parcial')" {{ $estado }} />
                                 <small id="msgParcial_{{ $inscrito->id }}" class="form-control-feedback text-success" style="display: none;">Guardado</small>
                                 <small class="form-control-feedback text-warning msgAlumno_{{ $inscrito->id }}" style="display: none;">Alerta</small>
                             </td>
                             <td>
-                                <input type="number" name="examen_{{ $inscrito->id }}" id="examen_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_examen_final, 0) }}" onchange="ajaxRegistraNotaExamen('{{ $inscrito->id }}', '{{ $bimestreActual }}', 'examen')" />
+                                <input type="number" name="examen_{{ $inscrito->id }}" id="examen_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_examen_final, 0) }}" onchange="ajaxRegistraNotaExamen('{{ $inscrito->id }}', '{{ $bimestreActual }}', 'examen')" {{ $estado }} />
                                 <small id="msgExamen_{{ $inscrito->id }}" class="form-control-feedback text-success" style="display: none;">Guardado</small>
                                 <small class="form-control-feedback text-warning msgAlumno_{{ $inscrito->id }}" style="display: none;">Alerta</small>
                             </td>
                             <td>
-                                <input type="number" name="extras_{{ $inscrito->id }}" id="extras_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_puntos_ganados, 0) }}" onchange="ajaxRegistraNotaExtras('{{ $inscrito->id }}', '{{ $bimestreActual }}', 'extras')" />
+                                <input type="number" name="extras_{{ $inscrito->id }}" id="extras_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_puntos_ganados, 0) }}" onchange="ajaxRegistraNotaExtras('{{ $inscrito->id }}', '{{ $bimestreActual }}', 'extras')" {{ $estado }} />
                                 <small id="msgExtras_{{ $inscrito->id }}" class="form-control-feedback text-success" style="display: none;">Guardado</small>
                                 <small class="form-control-feedback text-warning msgAlumno_{{ $inscrito->id }}" style="display: none;">Alerta</small>
                             </td>

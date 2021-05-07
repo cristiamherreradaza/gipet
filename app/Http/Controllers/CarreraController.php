@@ -135,20 +135,20 @@ class CarreraController extends Controller
         $anio_vigente = date('Y');
         $carrerasNotasPropuestas = Nota::where('anio_vigente', $anio_vigente)
                     ->groupBy('carrera_id')
-                    ->groupBy('turno_id')
+                    // ->groupBy('turno_id')
                     ->groupBy('gestion')
                     ->get();
 
         return view('carrera.cierraRegistroNotas')->with(compact('carrerasNotasPropuestas'));
     }
 
-    public function actualizaCierraNotas(Request $request, $carrera_id, $anio_vigente, $turno, $estado, $bimestre)
+    public function actualizaCierraNotas(Request $request, $carrera_id, $anio_vigente, $gestion, $estado, $bimestre)
     {
         if($estado == 'cerrado'){
             $modificaNotas = Nota::where('carrera_id', $carrera_id)
                     ->where('anio_vigente', $anio_vigente)
                     ->where('trimestre', $bimestre)
-                    ->where('turno_id', $turno)
+                    ->where('gestion', $gestion)
                     ->update(
                         ['finalizado' => 'Si']
                     );
@@ -157,7 +157,7 @@ class CarreraController extends Controller
             $modificaNotas = Nota::where('carrera_id', $carrera_id)
                     ->where('anio_vigente', $anio_vigente)
                     ->where('trimestre', $bimestre)
-                    ->where('turno_id', $turno)
+                    ->where('gestion', $gestion)
                     ->update(
                         ['finalizado' => null]
                     );
