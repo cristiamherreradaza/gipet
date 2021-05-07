@@ -136,6 +136,7 @@ class CarreraController extends Controller
         $carrerasNotasPropuestas = Nota::where('anio_vigente', $anio_vigente)
                     ->groupBy('carrera_id')
                     ->groupBy('turno_id')
+                    ->groupBy('gestion')
                     ->get();
 
         return view('carrera.cierraRegistroNotas')->with(compact('carrerasNotasPropuestas'));
