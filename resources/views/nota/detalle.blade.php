@@ -139,28 +139,36 @@
                         </div>
                     </div>
                 </div>
-                @if($bimestre != 0)
-                    <div class="col-md-8">
-                        <input type="hidden" name="nota_propuesta" id="nota_propuesta" value="{{ $asignatura->id }}">
-                        <input type="hidden" name="asignatura_id" id="asignatura_id" value="{{ $asignatura->asignatura_id }}">
-                        <input type="hidden" name="turno_id" id="turno_id" value="{{ $asignatura->turno_id }}">
-                        <input type="hidden" name="paralelo" id="paralelo" value="{{ $asignatura->paralelo }}">
-                        <input type="hidden" name="anio_vigente" id="anio_vigente" value="{{ $asignatura->anio_vigente }}">
-                        <input type="hidden" name="docente_id" id="docente_id" value="{{ auth()->user()->id }}">
-                        <div class="input-group">
-                            <a class="btn btn-block btn-success" href="{{ url('nota/exportarexcel/'.$asignatura->id.'/'.$bimestre) }}" style="width: 200px;">Exportar Formato</a>
+                @php
+                    $nota = App\Nota::where('inscripcion_id', $inscritos[0]->id)
+                                    ->where('trimestre', 1)
+                                    ->first();
+                @endphp 
+                <div class="col-md-8">
+                    <input type="hidden" name="nota_propuesta" id="nota_propuesta" value="{{ $asignatura->id }}">
+                    <input type="hidden" name="asignatura_id" id="asignatura_id" value="{{ $asignatura->asignatura_id }}">
+                    <input type="hidden" name="turno_id" id="turno_id" value="{{ $asignatura->turno_id }}">
+                    <input type="hidden" name="paralelo" id="paralelo" value="{{ $asignatura->paralelo }}">
+                    <input type="hidden" name="anio_vigente" id="anio_vigente" value="{{ $asignatura->anio_vigente }}">
+                    <input type="hidden" name="docente_id" id="docente_id" value="{{ auth()->user()->id }}">
+                    <div class="input-group">
+                        <a class="btn btn-block btn-success" href="{{ url('nota/exportarexcel/'.$asignatura->id.'/'.$bimestre) }}" style="width: 200px;">Exportar Formato</a>
+                        @if ($nota->finalizado == null)
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" name="select_file" id="select_file">
                                 <label class="custom-file-label" for="inputGroupFile04">Elegir archivo</label>
                             </div>
+
                             <div class="input-group-append">
                                 <input type="submit" name="upload" id="upload" class="btn btn-success" value="Importar" style="width: 200px;">
-                                <button type="button" class="btn btn-block btn-danger" onclick="finalizarBimestre()" style="width: 200px;">Finalizar Bimestre</button>
+                                <button type="button" class="btn btn-block btn-danger" onclick="finalizarBimestre()" style="width: 200px;">Finalizar
+                                    Bimestre</button>
                                 <!-- <a class="btn btn-block btn-danger" href="{{ url('nota/finalizarBimestre/'.$asignatura->id.'/'.$bimestre) }}" style="width: 200px;"></a> -->
                             </div>
-                        </div>
+                        @endif
                     </div>
-                @endif
+                </div>
+
             </div>
         </form>        
     </div>

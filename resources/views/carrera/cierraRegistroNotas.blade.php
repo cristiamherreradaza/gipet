@@ -15,8 +15,6 @@
     <div class="card-header bg-info">
         <h4 class="mb-0 text-white">
             CARRERAS &nbsp;&nbsp;
-            <button type="button" class="btn waves-effect waves-light btn-sm btn-primary" onclick="nueva_carrera()"><i
-                    class="fas fa-plus"></i> &nbsp; NUEVA CARRERA</button>
         </h4>
     </div>
     <form action="#" method="GET" id="formulario_carreras">
@@ -60,10 +58,10 @@
                                         <td>{{ $c->carrera->nombre }}</td>
                                         <td>{{ $c->gestion }}&deg; a&ntilde;o</td>
                                         <td>
-                                            @if ($primerBimestre->finalizado == null)
-                                                <a href="{{ url("Carrera/actualizaCierraNotas/$c->carrera_id/$c->anio_vigente/$c->gestion/cerrado/1") }}" type="button" class="btn waves-effect waves-light btn-danger">CERRADO</a>
+                                            @if ($primerBimestre->finalizado != null)
+                                                <a href="{{ url("Carrera/actualizaCierraNotas/$c->carrera_id/$c->anio_vigente/$c->gestion/abierto/1") }}" type="button" class="btn waves-effect waves-light btn-danger">CERRADO</a>
                                             @else
-                                                <a href="{{ url("Carrera/actualizaCierraNotas/$c->carrera_id/$c->anio_vigente/$c->gestion/abierto/1") }}" type="button" class="btn waves-effect waves-light btn-success">ABIERTO</a>
+                                                <a href="{{ url("Carrera/actualizaCierraNotas/$c->carrera_id/$c->anio_vigente/$c->gestion/cerrado/1") }}" type="button" class="btn waves-effect waves-light btn-success">ABIERTO</a>
 
                                             @endif
                                         </td>
