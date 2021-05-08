@@ -457,7 +457,8 @@ class UserController extends Controller
         $usuario = User::find($request->id_password);
         $usuario->password = Hash::make($request->password);
         $usuario->save();
-        return redirect('User/listado');
+        // return redirect('User/listado');
+        return back()->withInput();
     }
 
     public function actualizarPermisosPerfil(Request $request)
