@@ -67,9 +67,9 @@
                                         </td>
                                         <td>
                                             @if ($primerBimestre->finalizado == null)
-                                                NO
+                                                -
                                             @else
-                                                SI
+                                                -
                                             @endif
 
                                         </td>
