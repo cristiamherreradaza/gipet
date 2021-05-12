@@ -813,6 +813,11 @@
             }
         })
 
+        function ajaxEditaNotas(inscripcionId)
+        {
+            $("#modal-notas").modal("show");
+        }
+
     }
     
 </script>
