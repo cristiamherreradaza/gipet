@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Nota;
 use App\Carrera;
 use App\Asignatura;
 use App\Prerequisito;
@@ -236,6 +237,17 @@ class AsignaturaController extends Controller
                         ->where('carrera_id', $request->carrera)
                         ->get();
         return view('asignatura.ajax_busca_asignaturas')->with(compact('asignaturas'));
+    }
+
+    public function ajaxEditaNotas(Request $request)
+    {
+        // dd($request->all());
+        $notas = Nota::where('inscripcion_id', $request->inscripcionId)
+                        ->get();
+
+        return view('asignatura.ajaxEditaNotas')->with(compact('asignaturas'));
+
+        dd($notas);
     }
 
 }

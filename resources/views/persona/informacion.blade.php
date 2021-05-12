@@ -443,7 +443,7 @@
                                     <td class="text-center">{{ $m->paralelo }}</td>
                                     <td class="text-center">{{ $m->anio_vigente }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-warning" title="Editar carrera" onclick="ajaxEditaNotas({{ $m->id }})"><i class="fas fa-edit"></i></button>
+                                        <button type="button" class="btn btn-warning" title="Edita Notas" onclick="ajaxEditaNotas('{{ $m->id }}')"><i class="fas fa-edit"></i></button>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -576,19 +576,8 @@
 {{-- modal acciones --}}
 <div id="modal-notas" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
     aria-hidden="true" style="display: none;">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myLargeModalLabel">Extra Large modal</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            </div>
-            <div class="modal-body" id="ajaxContenidoMaterias">
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger waves-effect text-left" data-dismiss="modal">Close</button>
-            </div>
-        </div>
+    <div class="modal-dialog modal-xl" id="ajaxContenidoMaterias">
+        
         <!-- /.modal-content -->
     </div>
     <!-- /.modal-dialog -->
@@ -812,13 +801,25 @@
 
             }
         })
+    }
 
-        function ajaxEditaNotas(inscripcionId)
-        {
-            $("#modal-notas").modal("show");
-        }
+    function ajaxEditaNotas(inscripcionId)
+    {
+        $("#modal-notas").modal("show");
+
+        $.ajax({
+            type: "GET",
+            url: "{{ url('Inscripcion/ajaxMuestraNotaInscripcion') }}",
+            data: {
+                inscripcion_id: inscripcionId,
+            },
+            success: function (data) {
+                $("#ajaxContenidoMaterias").html(data);
+            }
+        });
 
     }
+
     
 </script>
 @endsection

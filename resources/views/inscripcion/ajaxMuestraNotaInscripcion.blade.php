@@ -2,7 +2,7 @@
     <form action="{{ url('Inscripcion/actualizaNotaInscripcion') }}" method="post">
         @csrf
         <input type="hidden" name="inscripcion_id" id="inscripcion_id" value="{{ $inscripcion->id }}">
-        <div class="modal-header bg-info">
+        <div class="modal-header bg-warning">
             <h4 class="modal-title text-white" id="myModalLabel">
                 <strong>Asignatura: {{ $inscripcion->asignatura->nombre }}</strong>
             </h4>
@@ -45,12 +45,12 @@
                                 @if($nota->trimestre == 1 || $nota->trimestre == 2)
                                     <tr>
                                         <td>{{ $nota->trimestre }}</td>
-                                        <td><input size="10" min="0" max="{{ $predefinida->nota_asistencia }}" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-asistencia="{{ $nota->nota_asistencia }}" type="number" id="asistencia-{{ $nota->id }}" name="asistencia-{{ $nota->id }}" value="{{ round($nota->nota_asistencia) }}" step="any" style="text-align: center; width: 100px;"></td>
-                                        <td><input size="10" min="0" max="{{ $predefinida->nota_practicas }}" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-practicas="{{ $nota->nota_practicas }}" type="number" id="practicas-{{ $nota->id }}" name="practicas-{{ $nota->id }}" value="{{ round($nota->nota_practicas) }}" step="any" style="text-align: center; width: 100px;"></td>
-                                        <td><input size="10" min="0" max="{{ $predefinida->nota_primer_parcial }}" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-parcial="{{ $nota->nota_primer_parcial }}" type="number" id="parcial-{{ $nota->id }}" name="parcial-{{ $nota->id }}" value="{{ round($nota->nota_primer_parcial) }}" step="any" style="text-align: center; width: 100px;"></td>
-                                        <td><input size="10" min="0" max="{{ $predefinida->nota_examen_final }}" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-final="{{ $nota->nota_examen_final }}" type="number" id="final-{{ $nota->id }}" name="final-{{ $nota->id }}" value="{{ round($nota->nota_examen_final) }}" step="any" style="text-align: center; width: 100px;"></td>
-                                        <td id="totalsuma{{ $nota->id }}"><input value="{{ round($nota->nota_total) }}" style="text-align: center; width: 100px;" readonly></td>
-                                        <td><input size="10" min="0" max="{{ $predefinida->nota_puntos_ganados }}" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-puntos="{{ $nota->nota_puntos_ganados }}" type="number" id="puntos-{{ $nota->id }}" name="puntos-{{ $nota->id }}" value="{{ round($nota->nota_puntos_ganados) }}" step="any" style="text-align: center; width: 100px;"></td>
+                                        <td><input size="10" min="0" onchange="calcula( {{ $nota->id }} )" data-asistencia="{{ $nota->nota_asistencia }}" type="number" id="asistencia-{{ $nota->id }}" name="asistencia-{{ $nota->id }}" value="{{ round($nota->nota_asistencia) }}" step="any" style="text-align: center; width: 100px;" class="form-control"></td>
+                                        <td><input size="10" min="0" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-practicas="{{ $nota->nota_practicas }}" type="number" id="practicas-{{ $nota->id }}" name="practicas-{{ $nota->id }}" value="{{ round($nota->nota_practicas) }}" step="any" style="text-align: center; width: 100px;" class="form-control"></td>
+                                        <td><input size="10" min="0" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-parcial="{{ $nota->nota_primer_parcial }}" type="number" id="parcial-{{ $nota->id }}" name="parcial-{{ $nota->id }}" value="{{ round($nota->nota_primer_parcial) }}" step="any" style="text-align: center; width: 100px;" class="form-control"></td>
+                                        <td><input size="10" min="0" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-final="{{ $nota->nota_examen_final }}" type="number" id="final-{{ $nota->id }}" name="final-{{ $nota->id }}" value="{{ round($nota->nota_examen_final) }}" step="any" style="text-align: center; width: 100px;" class="form-control"></td>
+                                        <td id="totalsuma{{ $nota->id }}"><input value="{{ round($nota->nota_total) }}" style="text-align: center; width: 100px;" class="form-control" readonly></td>
+                                        <td><input size="10" min="0" pattern="^[0-9]+" onchange="calcula( {{ $nota->id }} )" data-puntos="{{ $nota->nota_puntos_ganados }}" type="number" id="puntos-{{ $nota->id }}" name="puntos-{{ $nota->id }}" value="{{ round($nota->nota_puntos_ganados) }}" step="any" style="text-align: center; width: 100px;" class="form-control"></td>
                                     </tr>
                                 @endif
                             @else
