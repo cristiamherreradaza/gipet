@@ -17,7 +17,7 @@
     </div>
     <div class="card-body" id="lista">
         <div class="table-responsive m-t-40">
-            <table id="tabla-usuarios" class="table table-striped table-bordered no-wrap">
+            <table id="tabla-usuarios" class="table table-striped table-bordered no-wrap table-hover">
                 <thead>
                     <tr>
                         <th>#</th>

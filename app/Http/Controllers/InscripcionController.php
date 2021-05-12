@@ -3420,4 +3420,5 @@ class InscripcionController extends Controller
         // 5. si le falta 4 registros.... pendiente de evaluacion
         dd($inscripciones);
     }
+
 }

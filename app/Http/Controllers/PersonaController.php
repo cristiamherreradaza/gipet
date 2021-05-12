@@ -727,16 +727,19 @@ class PersonaController extends Controller
     {
         $estudiante = Persona::find($id);
 
-        $inscripciones = CarrerasPersona::where('persona_id', $id)
+        $carrerasPersona = CarrerasPersona::where('persona_id', $id)
                         ->orderBy('anio_vigente', 'desc')
                         ->get();
+
+        $materiasInscripcion = Inscripcione::where('persona_id', $request->id)
+                                ->get();
 
         $carreras = Carrera::get();
 
         $turnos = Turno::get();
 
         
-        return view('persona.informacion')->with(compact('estudiante', 'inscripciones', 'carreras', 'turnos'));
+        return view('persona.informacion')->with(compact('estudiante', 'carrerasPersona', 'carreras', 'turnos', 'materiasInscripcion'));
 
     }
 
@@ -889,5 +892,5 @@ class PersonaController extends Controller
             ->delete();
 
     }
-    
+
 }

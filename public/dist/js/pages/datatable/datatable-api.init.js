@@ -59,7 +59,7 @@ $('.datatable-select-inputs').DataTable({
 // Setup - add a text input to each footer cell
 $('.text-inputs-searching tfoot th').each(function() {
     var title = $(this).text();
-    $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+    $(this).html('<input type="text" class="form-control" placeholder="Busca ' + title + '" />');
 });
 
 // DataTable
