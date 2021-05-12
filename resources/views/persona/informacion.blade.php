@@ -438,12 +438,12 @@
                                     <td>{{ $m->carrera->nombre }}</td>
                                     <td>{{ $m->asignatura->nombre }}</td>
                                     <td class="text-center">{{ $m->asignatura->sigla }}</td>
-                                    <td class="text-center">{{ $m->gestion }}</td>
+                                    <td class="text-center">{{ $m->gestion }}&deg; A&ntilde;o</td>
                                     <td class="text-center">{{ $m->turno->descripcion }}</td>
                                     <td class="text-center">{{ $m->paralelo }}</td>
                                     <td class="text-center">{{ $m->anio_vigente }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-warning" title="Editar carrera" onclick="edita_carrera()"><i class="fas fa-edit"></i></button>
+                                        <button type="button" class="btn btn-warning" title="Editar carrera" onclick="ajaxEditaNotas({{ $m->id }})"><i class="fas fa-edit"></i></button>
                                     </td>
                                 </tr>
                                 @endforeach
