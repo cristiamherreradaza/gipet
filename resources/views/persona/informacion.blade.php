@@ -355,7 +355,7 @@
                 <li class="nav-item">
                     <a href="#settings1" data-toggle="tab" aria-expanded="false" class="nav-link rounded-0">
                         <i class="mdi mdi-settings-outline d-lg-none d-block mr-1"></i>
-                        <span class="d-none d-lg-block">Settings</span>
+                        <span class="d-none d-lg-block">MENSUALIDADES</span>
                     </a>
                 </li>
             </ul>
@@ -393,9 +393,9 @@
                                             <td>{{ $cp->anio_vigente }}</td>
                                             <td>{{ $cp->estado }}</td>
                                             <td>
-                                                <button type="button" class="btn btn-info" title="Ver materias"
-                                                    onclick="ajaxVerMaterias('{{ $cp->persona_id }}', '{{ $cp->carrera_id }}', '{{ $cp->turno_id }}', '{{ $cp->paralelo }}', '{{ $cp->gestion }}', '{{ $cp->anio_vigente }}')"><i
-                                                        class="fas fa-clipboard-list"></i></button>
+                                                <button type="button" class="btn btn-warning" title="Edita Inscripcion"
+                                                    onclick="ajaxEditaInscripcion('{{ $cp->persona_id }}', '{{ $cp->carrera_id }}', '{{ $cp->turno_id }}', '{{ $cp->paralelo }}', '{{ $cp->gestion }}', '{{ $cp->anio_vigente }}')"><i
+                                                        class="fas fa-edit"></i></button>
 
                                                 <a class="btn btn-light" title="Descargar Boletin"
                                                     href="{{ url('Inscripcion/boletin/'.$cp->id) }}" target="_blank"><i
@@ -464,16 +464,7 @@
                     </div>
                 </div>
                 <div class="tab-pane" id="settings1">
-                    <p>Food truck quinoa dolor sit amet, consectetuer adipiscing elit. Aenean
-                        commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et
-                        magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis,
-                        ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa
-                        quis enim.</p>
-                    <p class="mb-0">Donec pede justo, fringilla vel, aliquet nec, vulputate eget,
-                        arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam
-                        dictum felis eu pede mollis pretium. Integer tincidunt.Cras dapibus. Vivamus
-                        elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula,
-                        porttitor eu, consequat vitae, eleifend ac, enim.</p>
+                    EN CONSTRUCCION
                 </div>
             </div>
 
@@ -652,30 +643,6 @@
             });
         });
 
-        // Setup - add a text input to each footer cell
-        /*$('#tabla-materias thead th').each( function () {
-            var title = $(this).text();
-            $(this).html( '<input type="text" class="form-control" placeholder="Buscar '+title+'" />' );
-        } );
-    
-        // DataTable
-        var table = $('#tabla-materias').DataTable({
-            initComplete: function () {
-                // Apply the search
-                this.api().columns().every( function () {
-                    var that = this;
-    
-                    $( 'input', this.footer() ).on( 'keyup change clear', function () {
-                        if ( that.search() !== this.value ) {
-                            that
-                                .search( this.value )
-                                .draw();
-                        }
-                    } );
-                } );
-            }
-        });*/
-
     });
 
     function actualizaPerfilEstudiante()
@@ -708,7 +675,7 @@
         $("#bloqueInscripcion").toggle('slow');
     }
 
-    function ajaxVerMaterias(alumno_id, carrera, turno, paral, ges, anio)
+    function ajaxEditaInscripcion(alumno_id, carrera, turno, paral, ges, anio)
     {
         let persona_id   = alumno_id;
         let carrera_id   = carrera;
@@ -721,7 +688,7 @@
         // console.log(inscripcionId);
         $.ajax({
             type: "POST",
-            url: "{{ url('Persona/ajaxEditaInscripcion') }}",
+            url: "{{ url('Inscripcion/ajaxEditaInscripcionAlumno') }}",
             data: {
                 persona_id: persona_id,
                 carrera_id: carrera_id,

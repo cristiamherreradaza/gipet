@@ -3412,7 +3412,7 @@ class InscripcionController extends Controller
             }
         }
         // de todas las inscripciones del 2011, verificar por cada inscripcione
-        // que tenga sus respectivos 4 registros por inscripcion
+        // que tenga sus respectivos 4 registros por inscripcion                                    
         
         
         
@@ -3421,4 +3421,76 @@ class InscripcionController extends Controller
         dd($inscripciones);
     }
 
+    public function ajaxEditaInscripcionAlumno(Request $request)
+    {
+
+        // dd($request->all());
+        $turnos = Turno::get();
+        $datosInscripcion = Inscripcione::where('persona_id', $request->persona_id)
+                                        ->where('carrera_id', $request->carrera_id)        
+                                        ->where('gestion', $request->gestion)        
+                                        ->where('turno_id', $request->turno_id)        
+                                        ->where('paralelo', $request->paralelo)        
+                                        ->where('anio_vigente', $request->anio_vigente)        
+                                        ->first();
+
+        $datosCarrerasPersona = CarrerasPersona::where('persona_id', $request->persona_id)
+                                        ->where('carrera_id', $request->carrera_id)        
+                                        ->where('gestion', $request->gestion)        
+                                        ->where('turno_id', $request->turno_id)        
+                                        ->where('paralelo', $request->paralelo)        
+                                        ->where('anio_vigente', $request->anio_vigente)        
+                                        ->first();
+
+
+        // dd($datosInscripcion);
+
+        return view('inscripcion.ajaxEditaInscripcionAlumno')->with(compact('datosInscripcion', 'turnos', 'datosCarrerasPersona'));
+    }
+
+    public function ajaxActualizaInscripcionAlumno(Request $request)
+    {
+
+        $carrerasPersona = CarrerasPersona::where('persona_id', $request->persona_id)
+                                        ->where('carrera_id', $request->carrera_id)        
+                                        ->where('gestion', $request->gestion)        
+                                        ->where('turno_id', $request->turno_id_ante)        
+                                        ->where('paralelo', $request->paralelo_ante)        
+                                        ->where('anio_vigente', $request->anio_vigente)        
+                                        ->update(
+                                            [
+                                            'turno_id'=>$request->turno_id,
+                                            'paralelo'=>$request->paralelo,
+                                            'estado'=>$request->estado_inscripcion,
+                                            ]
+                                        );
+
+        $inscripcion = Inscripcione::where('persona_id', $request->persona_id)
+                                        ->where('carrera_id', $request->carrera_id)        
+                                        ->where('gestion', $request->gestion)        
+                                        ->where('turno_id', $request->turno_id_ante)        
+                                        ->where('paralelo', $request->paralelo_ante)        
+                                        ->where('anio_vigente', $request->anio_vigente)        
+                                        ->update(
+                                            [
+                                                'turno_id'=>$request->turno_id,
+                                                'paralelo'=>$request->paralelo,
+                                            ]
+                                        );
+
+        $notas = Nota::where('persona_id', $request->persona_id)
+                                        ->where('carrera_id', $request->carrera_id)        
+                                        ->where('gestion', $request->gestion)        
+                                        ->where('turno_id', $request->turno_id_ante)        
+                                        ->where('paralelo', $request->paralelo_ante)        
+                                        ->where('anio_vigente', $request->anio_vigente)        
+                                        ->update(
+                                            [
+                                                'turno_id'=>$request->turno_id,
+                                                'paralelo'=>$request->paralelo,
+                                            ]
+                                        );
+
+        return redirect('Persona/informacion/'.$request->persona_id);
+    }
 }
