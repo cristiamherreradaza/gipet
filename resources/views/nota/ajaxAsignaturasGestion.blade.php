@@ -14,7 +14,12 @@
                     <td>{{ $asignatura->carrera->nombre }}</td>
                     <td>{{ $asignatura->asignatura->nombre }}</td>
                     <td>{{ $asignatura->anio_vigente }}</td>
-                    <td><a href="{{ url('nota/detalle/'.$asignatura->id) }}" class="btn btn-info btn-rounded btn-sm"><i class="mdi mdi-note-text"></i> Notas</a></td>
+                    <td>
+                        <a href="{{ url('nota/detalle/'.$asignatura->id.'/1') }}" class="btn waves-effect waves-light btn-primary"> 1er BIM</a>
+                        &nbsp;
+                        <a href="{{ url('nota/detalle/'.$asignatura->id.'/2') }}" class="btn waves-effect waves-light btn-dark"> 2do BIM</a>
+
+                    </td>
                 </tr>
             @endforeach
         </tbody>

@@ -93,7 +93,7 @@ Route::middleware(['auth'])->group(function () {
     //NOTASasd
     Route::get('nota/listado', 'NotaController@listado')->name('inicioDocente');
     Route::get('Nota/ajaxAsignaturasGestion', 'NotaController@ajaxAsignaturasGestion');
-    Route::get('nota/detalle/{id}', 'NotaController@detalle');
+    Route::get('nota/detalle/{id}/{bimestre}', 'NotaController@detalle');
     Route::post('nota/ajaxBuscaParalelo', 'NotaController@ajaxBuscaParalelo');
     Route::post('nota/cambiaTurnoParalelo', 'NotaController@cambiaTurnoParalelo');
 

@@ -152,7 +152,7 @@
                     <input type="hidden" name="anio_vigente" id="anio_vigente" value="{{ $asignatura->anio_vigente }}">
                     <input type="hidden" name="docente_id" id="docente_id" value="{{ auth()->user()->id }}">
                     <div class="input-group">
-                        <a class="btn btn-block btn-success" href="{{ url('nota/exportarexcel/'.$asignatura->id.'/'.$bimestre) }}" style="width: 200px;">Exportar Formato</a>
+                        <a class="btn btn-block btn-success" href="{{ url('nota/exportarexcel/'.$asignatura->id.'/'.$bimestreActual) }}" style="width: 200px;">Exportar Formato</a>
                         @if ($nota->finalizado == null)
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" name="select_file" id="select_file">
@@ -163,7 +163,7 @@
                                 <input type="submit" name="upload" id="upload" class="btn btn-success" value="Importar" style="width: 200px;">
                                 <button type="button" class="btn btn-block btn-danger" onclick="finalizarBimestre()" style="width: 200px;">Finalizar
                                     Bimestre</button>
-                                <!-- <a class="btn btn-block btn-danger" href="{{ url('nota/finalizarBimestre/'.$asignatura->id.'/'.$bimestre) }}" style="width: 200px;"></a> -->
+                                <!-- <a class="btn btn-block btn-danger" href="{{ url('nota/finalizarBimestre/'.$asignatura->id.'/'.$bimestreActual) }}" style="width: 200px;"></a> -->
                             </div>
                         @endif
                     </div>

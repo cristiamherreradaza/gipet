@@ -40,6 +40,28 @@
 
 @section('content')
 
+{{-- modal acciones --}}
+<div id="inscribe_oyente" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h4 class="modal-title text-white" id="myModalLabel">INSCRIPCION OYENTE</h4>
+                <button type="button" class="close text-white" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <form action="{{ url('Inscripcion/inscribeOyente') }}" method="POST">
+                @csrf
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn waves-effect waves-light btn-block btn-dark">INSCRIBIR</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{-- fin modal acciones --}}
+
 <div class="row">
     <div class="col-md-12">
         <div class="card card-info">
@@ -373,7 +395,7 @@
                                             <td>{{ $inscripcion->anio_vigente }}</td>
                                             <td>{{ $inscripcion->estado }}</td>
                                             <td>
-                                                {{-- <button type="button" class="btn btn-info" title="Ver detalle" onclick="ajaxMuestraInscripcion('{{ $inscripcion->id }}')"><i class="fas fa-eye"></i></button> --}}
+                                                <button type="button" class="btn btn-info" title="Ver materias" onclick="ajaxVerMaterias('{{ $inscripcion->id }}')"><i class="fas fa-clipboard-list"></i></button>
                                                 <!-- <button type="button" class="btn btn-warning" title="Editar Inscripcion" onclick="ajaxEditaInscripcion('{{ $inscripcion->id }}')"><i class="fas fa-book"></i></button> -->
                                                 <a class="btn btn-light" title="Descargar Boletin" href="{{ url('Inscripcion/boletin/'.$inscripcion->id) }}" target="_blank"><i class="fas fa-file-pdf"></i></a>
                                                 <button type="button" class="btn btn-danger" title="Eliminar Inscripcion" onclick="ajaxEliminaInscripcion('{{ $inscripcion->persona_id }}', '{{ $inscripcion->carrera_id }}', '{{ $inscripcion->turno_id }}', '{{ $inscripcion->paralelo }}', '{{ $inscripcion->gestion }}', '{{ $inscripcion->anio_vigente }}', '{{ $inscripcion->carrera->nombre }}')"><i class="fas fa-trash-alt"></i></button>
@@ -540,6 +562,11 @@
     function muestraFormularioInscripcion()
     {
         $("#bloqueInscripcion").toggle('slow');
+    }
+
+    function ajaxVerMaterias(inscripcionId)
+    {
+        
     }
 
     function ajaxInscribeAlumno()
