@@ -2,13 +2,18 @@
     <form action="{{ url('Inscripcion/actualizaNotaInscripcion') }}" method="post">
         @csrf
         <input type="hidden" name="inscripcion_id" id="inscripcion_id" value="{{ $inscripcion->id }}">
-        <div class="modal-header bg-warning">
+        <div class="modal-header bg-info">
             <h4 class="modal-title text-white" id="myModalLabel">
-                <strong>Asignatura: {{ $inscripcion->asignatura->nombre }}</strong>
+                <strong>ASIGNATURA: <span style="text-transform: uppercase;">{{ $inscripcion->asignatura->nombre }}</span></strong>
             </h4>
             <button type="button" class="close text-white" data-dismiss="modal" aria-hidden="true">×</button>
         </div>
         <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <h6>ESTUDIANTE: <span></span></h6>
+                </div>    
+            </div>
             <h6>
                 <strong class="text-danger">Estudiante: </strong>
                 {{ $inscripcion->persona->nombres }} {{ $inscripcion->persona->apellido_paterno }} {{ $inscripcion->persona->apellido_materno }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 

@@ -33,6 +33,7 @@
                     <div class="form-group">
                         <input type="hidden" name="asignatura_id" value="{{ $asignatura->asignatura->id }}">
                         <input type="hidden" name="anio" value="{{ $asignatura->anio_vigente }}">
+                        <input type="hidden" name="bimestre" value="{{ $bimestreActual }}">
                         <select name="turno_id" id="turno_id" class="form-control" onchange="ajaxBuscaParalelo()" required>
                             <option value="">Seleccione Turno</option>
                             @foreach($comboTurnos as $ct)

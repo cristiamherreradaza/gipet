@@ -802,7 +802,7 @@ class NotaController extends Controller
                                         ->where('paralelo', $request->paralelo)
                                         ->first();
         // dd($notasPropuestaId);
-        return redirect('nota/detalle/' . $notasPropuestaId->id);
+        return redirect('nota/detalle/' . $notasPropuestaId->id."/$request->bimestre");
     }
 
     public function ajaxRegistraNota(Request $request)
