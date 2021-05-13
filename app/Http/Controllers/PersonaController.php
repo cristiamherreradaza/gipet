@@ -725,7 +725,7 @@ class PersonaController extends Controller
 
     public function informacion(Request $request, $id)
     {
-        $estudiante = P123ersona::find($id);
+        $estudiante = Persona::find($id);
 
         $carrerasPersona = CarrerasPersona::where('persona_id', $id)
                         ->orderBy('anio_vigente', 'desc')

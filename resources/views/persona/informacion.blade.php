@@ -444,6 +444,7 @@
                                     <td class="text-center">{{ $m->anio_vigente }}</td>
                                     <td>
                                         <button type="button" class="btn btn-warning" title="Edita Notas" onclick="ajaxEditaNotas('{{ $m->id }}')"><i class="fas fa-edit"></i></button>
+                                        <button type="button" class="btn btn-danger" title="Elimina Materia" onclick="eliminaMateria('{{ $m->id }}', '{{ $m->asignatura->nombre }}')"><i class="fas fa-trash-alt"></i></button>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -787,6 +788,38 @@
 
     }
 
-    
+    function eliminaMateria(inscripcionId, nombre)
+    {
+        /*let persona_id   = alumno_id;
+        let carrera_id   = carrera;
+        let gestion      = ges;
+        let turno_id     = turno;
+        let paralelo     = paral;
+        let anio_vigente = anio;*/
+
+        Swal.fire({
+            title: 'Estas seguro de eliminar la materia '+nombre+' ?',
+            text: "Luego no podras recuperarlo!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, estoy seguro!',
+            cancelButtonText: "Cancelar",
+        }).then((result) => {
+
+            if (result.value) {
+
+                window.location.href = "{{ url('Asignatura/eliminaMateriaAlumno') }}/"+inscripcionId;
+
+                Swal.fire(
+                    'Excelente!',
+                    'La inscripcion fue eliminada',
+                    'success'
+                );
+            }
+        })
+    }
+
 </script>
 @endsection

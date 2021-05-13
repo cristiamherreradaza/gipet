@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Nota;
 use App\Carrera;
 use App\Asignatura;
+use App\Inscripcione;
 use App\Prerequisito;
 use App\CarrerasPersona;
 use Illuminate\Http\Request;
@@ -248,6 +249,19 @@ class AsignaturaController extends Controller
         return view('asignatura.ajaxEditaNotas')->with(compact('asignaturas'));
 
         dd($notas);
+    }
+
+    public function eliminaMateriaAlumno(Request $request)
+    {
+        $datosInscripcion = Inscripcione::find($request->inscripcionId);
+
+        $eliminaInscripcion = Inscripcione::where('id', $request->inscripcionId)
+                                            ->delete();
+
+        $eliminaNotas = Nota::where('inscripcion_id', $request->inscripcionId)
+                                    ->delete();
+
+        return redirect("Persona/informacion/$datosInscripcion->persona_id");
     }
 
 }
