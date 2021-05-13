@@ -264,4 +264,10 @@ class AsignaturaController extends Controller
         return redirect("Persona/informacion/$datosInscripcion->persona_id");
     }
 
+    public function ajaxBuscaMateria(Request $request)
+    {
+        dd($request->materia);
+        // $materiasInscripcion = Inscripcione::where('')
+    }
+
 }

@@ -145,6 +145,37 @@
                     </tbody>
                 </table>
             </div>
+
+            <h4 class="text-center text-info">CONVALIDACION</h4>
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Materia a Convalidar </label>
+                        <input type="text" class="form-control" name="materia_convalidar" id="materia_convalidar">
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label>Nota Final </label>
+                        <input type="number" class="form-control" name="materia_convalidar" id="materia_convalidar">
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    &nbsp;<br />
+                    <div class="form-check form-check-inline">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="customCheck1">
+                            <label class="custom-control-label" for="customCheck1">CONVALIDAR MATERIA</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
         <div class="modal-footer">
             <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="enviaFormulario()">ACTUALIZAR</button>
@@ -153,6 +184,22 @@
 </div>
 
 <script>
+
+    $(document).on('keyup', '#materia_convalidar', function(e) {
+        nombre_materia = $('#materia_convalidar').val();
+        if (nombre_materia.length > 3) {
+            // alert('entro');
+            $.ajax({
+                url: "{{ url('Asignatura/ajaxBuscaMateria') }}/" + nombre_materia+"/{{ $inscripcion->persona_id }}",
+                type: 'GET',
+                success: function(data) {
+                    // $("#datos_cliente_ajax").html(data);
+                }
+            });
+        }
+
+    });
+    
     function checkCampos(numero) {
         if(numero.length <= 0){
             return 0;
