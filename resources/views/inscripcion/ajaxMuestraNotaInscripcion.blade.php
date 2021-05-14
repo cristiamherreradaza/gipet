@@ -175,6 +175,11 @@
                 </div>
 
             </div>
+            <div class="row">
+                <div class="col-md-12" id="ajaxMuestraMateriasCursadas">
+
+                </div>
+            </div>
 
         </div>
         <div class="modal-footer">
@@ -193,7 +198,7 @@
                 url: "{{ url('Asignatura/ajaxBuscaMateria') }}/" + nombre_materia+"/{{ $inscripcion->persona_id }}",
                 type: 'GET',
                 success: function(data) {
-                    // $("#datos_cliente_ajax").html(data);
+                    $("#ajaxMuestraMateriasCursadas").html(data);
                 }
             });
         }

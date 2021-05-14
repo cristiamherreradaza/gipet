@@ -248,7 +248,7 @@ class AsignaturaController extends Controller
 
         return view('asignatura.ajaxEditaNotas')->with(compact('asignaturas'));
 
-        dd($notas);
+        // dd($notas);
     }
 
     public function eliminaMateriaAlumno(Request $request)
@@ -266,8 +266,13 @@ class AsignaturaController extends Controller
 
     public function ajaxBuscaMateria(Request $request)
     {
-        dd($request->materia);
-        // $materiasInscripcion = Inscripcione::where('')
+        $materiasInscripcion = Inscripcione::where('inscripciones.persona_id', $request->persona_id)
+                                            ->where('asignaturas.nombre', 'like', "%$request->materia%")
+                                            ->leftJoin('asignaturas', 'inscripciones.asignatura_id', '=', 'asignaturas.id')
+                                            ->limit(5)
+                                            ->get();                                            
+
+        return view('asignatura.ajaxBuscaMateria')->with(compact('materiasInscripcion'));
     }
 
 }
