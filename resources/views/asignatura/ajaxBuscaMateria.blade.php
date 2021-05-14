@@ -14,14 +14,22 @@
             <tr>
                 <td>{{ $mi->asignatura->nombre }}</td>
                 <td>{{ $mi->asignatura->sigla }}</td>
-                <td>{{ $mi->gestion }}</td>
+                <td>{{ $mi->gestion }}&deg; A&ntilde;o</td>
                 <td class="text-center"><h4>{{ round($mi->nota, 0) }}</h4></td>
                 <td>
-                    <button type="button" class="btn btn-success" title="Edita Notas" onclick="ajaxEscoger()">
-                        <i class="fas fa-check"></i></button>
+                    <button type="button" class="btn btn-info" title="Edita Notas" onclick="ajaxEscoger('{{ $mi->id }}', '{{ round($mi->nota, 0) }}')">
+                        <i class="fas fa-check"></i>
+                    </button>
                 </td>
             </tr>
             @endforeach
         </tbody>
     </table>
 </div>
+<script>
+    function ajaxEscoger(inscripcion_id, nota)
+    {
+        $("#nota_convalidar").val(nota);
+        $("#ajaxMuestraMateriasCursadas").toggle('slow');
+    }
+</script>

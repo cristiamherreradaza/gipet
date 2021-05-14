@@ -160,7 +160,7 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label>Nota Final </label>
-                        <input type="number" class="form-control" name="materia_convalidar" id="materia_convalidar">
+                        <input type="number" class="form-control" name="nota_convalidar" id="nota_convalidar">
                     </div>
                 </div>
 
@@ -168,7 +168,7 @@
                     &nbsp;<br />
                     <div class="form-check form-check-inline">
                         <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="customCheck1">
+                            <input type="checkbox" class="custom-control-input" id="customCheck1" name="convalidar">
                             <label class="custom-control-label" for="customCheck1">CONVALIDAR MATERIA</label>
                         </div>
                     </div>
@@ -198,6 +198,7 @@
                 url: "{{ url('Asignatura/ajaxBuscaMateria') }}/" + nombre_materia+"/{{ $inscripcion->persona_id }}",
                 type: 'GET',
                 success: function(data) {
+                    $("#ajaxMuestraMateriasCursadas").show('slow');
                     $("#ajaxMuestraMateriasCursadas").html(data);
                 }
             });
