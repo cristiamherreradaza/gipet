@@ -19,7 +19,7 @@
                 <td class="text-center">{{ $mi->anio_vigente }}</td>
                 <td class="text-center"><h4>{{ round($mi->nota, 0) }}</h4></td>
                 <td>
-                    <button type="button" class="btn btn-info" title="Edita Notas" onclick="ajaxEscoger('{{ $mi->id }}', '{{ round($mi->nota, 0) }}')">
+                    <button type="button" class="btn btn-info" title="Edita Notas" onclick="ajaxEscoger('{{ $mi->id }}', '{{ round($mi->nota, 0) }}', '{{ $mi->nombre }}')">
                         <i class="fas fa-check"></i>
                     </button>
                 </td>
@@ -29,8 +29,9 @@
     </table>
 </div>
 <script>
-    function ajaxEscoger(inscripcion_id, nota)
+    function ajaxEscoger(inscripcion_id, nota, nombre)
     {
+        $("#materia_convalidar").val(nombre);
         $("#nota_convalidar").val(nota);
         $("#id_materia_convalidar").val(inscripcion_id);
         $("#ajaxMuestraMateriasCursadas").toggle('slow');
