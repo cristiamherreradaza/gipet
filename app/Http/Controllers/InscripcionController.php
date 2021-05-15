@@ -1932,7 +1932,8 @@ class InscripcionController extends Controller
 
     public function actualizaNotaInscripcion(Request $request)
     {
-        // dd($request->all());
+        dd($request->all());
+
         $datosNota = Nota::find($request->notaIdP);
 
         $asistencia = 'asistencia-'.$request->notaIdP;
@@ -1968,6 +1969,10 @@ class InscripcionController extends Controller
         $notaS->nota_puntos_ganados = $request->$puntosS;
         $notaS->nota_total          = $request->$totalsumaS;
         $notaS->save();
+
+        if($request->has('convalidar')){
+                    
+        }
 
         // $nota->nota_asistencia = $request->asistencia.$request->notaIdP;
         return redirect('Persona/informacion/'.$datosNota->persona_id);

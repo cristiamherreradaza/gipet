@@ -150,27 +150,26 @@
 
             <div class="row">
 
-                <div class="col-md-6">
+                <div class="col-md-2">
+                    <label>Convalidar</label>
+                    <select name="convalidar" id="convalidar" class="form-control" onchange="validaNotaFinal()">
+                        <option value="No">No</option>
+                        <option value="Si">Si</option>
+                    </select>
+                </div>
+
+                <div class="col-md-8" style="display: none;" id="campo_materia_convalidar">
                     <div class="form-group">
                         <label>Materia a Convalidar </label>
-                        <input type="text" class="form-control" name="materia_convalidar" id="materia_convalidar">
+                        <input type="text" class="form-control" name="materia_convalidar" id="materia_convalidar" autocomplete="off">
                     </div>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-2" style="display: none;" id="campo_nota_convalidar">
                     <div class="form-group">
                         <label>Nota Final </label>
-                        <input type="number" class="form-control" name="nota_convalidar" id="nota_convalidar">
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    &nbsp;<br />
-                    <div class="form-check form-check-inline">
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="customCheck1" name="convalidar">
-                            <label class="custom-control-label" for="customCheck1">CONVALIDAR MATERIA</label>
-                        </div>
+                        <input type="number" class="form-control" name="nota_convalidar" id="nota_convalidar" max="100">
+                        <input type="hidden" name="id_materia_convalidar" id="id_materia_convalidar">
                     </div>
                 </div>
 
@@ -250,6 +249,24 @@
 
         }else{
             $("#formularioNotas")[0].reportValidity();
+        }
+
+    }
+
+    function validaNotaFinal()
+    {
+        let valorConvalidacion = $("#convalidar").val()
+        if(valorConvalidacion == 'Si'){
+            $("#campo_materia_convalidar").toggle('slow');
+            $("#campo_nota_convalidar").toggle('slow');
+
+            $("#nota_convalidar").attr('required', true);
+
+        }else{
+            $("#campo_materia_convalidar").toggle('slow');
+            $("#campo_nota_convalidar").toggle('slow');
+            
+            $("#nota_convalidar").removeAttr('required');
         }
 
     }

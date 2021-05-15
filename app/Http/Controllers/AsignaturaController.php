@@ -266,7 +266,15 @@ class AsignaturaController extends Controller
 
     public function ajaxBuscaMateria(Request $request)
     {
-        $materiasInscripcion = Inscripcione::where('inscripciones.persona_id', $request->persona_id)
+        $materiasInscripcion = Inscripcione::select(
+                                                'inscripciones.id',
+                                                'asignaturas.nombre',
+                                                'asignaturas.sigla',
+                                                'inscripciones.gestion',
+                                                'inscripciones.nota',
+                                                'inscripciones.anio_vigente'
+                                            )
+                                            ->where('inscripciones.persona_id', $request->persona_id)
                                             ->where('asignaturas.nombre', 'like', "%$request->materia%")
                                             ->leftJoin('asignaturas', 'inscripciones.asignatura_id', '=', 'asignaturas.id')
                                             ->limit(5)

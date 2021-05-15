@@ -429,6 +429,7 @@
                                     <th class="text-center">Turno</th>
                                     <th class="text-center">Paralelo</th>
                                     <th class="text-center">Gestion</th>
+                                    <th class="text-center">Nota</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
@@ -442,6 +443,7 @@
                                     <td class="text-center">{{ $m->turno->descripcion }}</td>
                                     <td class="text-center">{{ $m->paralelo }}</td>
                                     <td class="text-center">{{ $m->anio_vigente }}</td>
+                                    <td class="text-center"><h4>{{ round($m->nota, 0) }}</h4></td>
                                     <td>
                                         <button type="button" class="btn btn-warning" title="Edita Notas" onclick="ajaxEditaNotas('{{ $m->id }}')"><i class="fas fa-edit"></i></button>
                                         <button type="button" class="btn btn-danger" title="Elimina Materia" onclick="eliminaMateria('{{ $m->id }}', '{{ $m->asignatura->nombre }}')"><i class="fas fa-trash-alt"></i></button>
