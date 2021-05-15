@@ -1970,7 +1970,7 @@ class InscripcionController extends Controller
         $notaS->nota_total          = $request->$totalsumaS;
         $notaS->save();
 
-        if($request->convalidar == 'Si' && $request->materia_convalidar == null){
+        if($request->materia_convalidar == null){
             $inscripcion = Inscripcione::find($request->inscripcion_id);
             $inscripcion->nota = $request->nota_convalidar;
             $inscripcion->save();

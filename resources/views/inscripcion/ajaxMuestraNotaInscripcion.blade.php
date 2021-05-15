@@ -138,7 +138,7 @@
                                                 id="totalsuma-{{ $nota->id }}" 
                                                 name="total-{{ $nota->id }}" 
                                                 style="text-align: center; width: 100px;" 
-                                                class="form-control" />
+                                                class="form-control total_bimestres" />
                                         </td>
                                     </tr>
                         @endforeach
@@ -146,7 +146,7 @@
                 </table>
             </div>
 
-            <h4 class="text-center text-info">CONVALIDACION</h4>
+            <h4 class="text-center text-info">CONVALIDACION / NOTA CENTRALIZADOR</h4>
 
             <div class="row">
 
@@ -158,17 +158,17 @@
                     </select>
                 </div>
 
-                <div class="col-md-8" style="display: none;" id="campo_materia_convalidar">
+                <div class="col-md-8">
                     <div class="form-group">
                         <label>Materia a Convalidar </label>
                         <input type="text" class="form-control" name="materia_convalidar" id="materia_convalidar" autocomplete="off">
                     </div>
                 </div>
 
-                <div class="col-md-2" style="display: none;" id="campo_nota_convalidar">
+                <div class="col-md-2">
                     <div class="form-group">
-                        <label>Nota Final </label>
-                        <input type="number" class="form-control" name="nota_convalidar" id="nota_convalidar" max="100">
+                        <label class="text-danger">Nota Centralizador</label>
+                        <input type="number" class="form-control" name="nota_convalidar" id="nota_convalidar" max="100" value="{{ round($inscripcion->nota, 0) }}">
                         <input type="hidden" name="id_materia_convalidar" id="id_materia_convalidar">
                     </div>
                 </div>
@@ -257,14 +257,10 @@
     {
         let valorConvalidacion = $("#convalidar").val()
         if(valorConvalidacion == 'Si'){
-            $("#campo_materia_convalidar").toggle('slow');
-            $("#campo_nota_convalidar").toggle('slow');
 
             $("#nota_convalidar").attr('required', true);
 
         }else{
-            $("#campo_materia_convalidar").toggle('slow');
-            $("#campo_nota_convalidar").toggle('slow');
             
             $("#nota_convalidar").removeAttr('required');
         }
