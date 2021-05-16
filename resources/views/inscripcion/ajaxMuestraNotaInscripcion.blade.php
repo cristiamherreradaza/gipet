@@ -66,7 +66,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($notas as $nota)
+                        @foreach($notas as $key => $nota)
                                     <tr>
                                         <td>{{ $nota->trimestre }}</td>
                                         <td>
@@ -138,7 +138,7 @@
                                                 id="totalsuma-{{ $nota->id }}" 
                                                 name="total-{{ $nota->id }}" 
                                                 style="text-align: center; width: 100px;" 
-                                                class="form-control total_bimestres" />
+                                                class="form-control total_bimestres_{{ $key }}" />
                                         </td>
                                     </tr>
                         @endforeach
@@ -169,7 +169,7 @@
                     <div class="form-group">
                         <label class="text-danger">Nota Centralizador</label>
                         <input type="number" class="form-control" name="nota_convalidar" id="nota_convalidar" max="100" value="{{ round($inscripcion->nota, 0) }}">
-                        <input type="hidden" name="id_materia_convalidar" id="id_materia_convalidar">
+                        <input type="hidden" name="id_materia_inscripcion" id="id_materia_convalidar">
                     </div>
                 </div>
 
@@ -219,11 +219,10 @@
         let sum = 0;
         let notaCentralizador = 0;
 
-        $('.total_bimestres').each(function(){
-            sum += parseFloat(this.value);
-        });
-
-        notaCentralizador = Math.round(sum/2);
+        // $('.total_bimestres').each(function(){
+        //     sum += parseFloat($('.total_bimestres').val());
+        // });
+        // notaCentralizador = sum/2;
 
         //tenemos que enviar el id de la nota que se esta modificando y los valores insertados, ó que se encuentran en ese momento en los campos
         var identificador = id;
@@ -243,8 +242,11 @@
         var total = parseFloat(asistencia)+parseFloat(practicas)+parseFloat(parcial)+parseFloat(final)+parseFloat(puntos);
 
         $('#totalsuma-'+id).val(total);
-        $("#nota_convalidar").val(notaCentralizador);
+        
+        sum = parseInt($('.total_bimestres_0').val())+parseInt($('.total_bimestres_1').val());
 
+        // $("#nota_convalidar").val(notaCentralizador);
+        $("#nota_convalidar").val(sum);
     }
 
     function enviaFormulario()

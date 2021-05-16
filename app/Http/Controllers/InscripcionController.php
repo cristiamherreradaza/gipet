@@ -1970,10 +1970,51 @@ class InscripcionController extends Controller
         $notaS->nota_total          = $request->$totalsumaS;
         $notaS->save();
 
+        // preguntamos si va a convalidar con una materia pasada
         if($request->materia_convalidar == null){
+            // si no solo modifica la nota final
             $inscripcion = Inscripcione::find($request->inscripcion_id);
             $inscripcion->nota = $request->nota_convalidar;
             $inscripcion->save();
+        }else{
+            // copiamos todos los datos de la materia a convalidar
+
+            $inscripcion = Inscripcione::find($request->id_materia_inscripcion);
+
+            // extraemos las notas del primer bimestre
+            $nota1 = Nota::where('inscripcion_id', $request->id_materia_inscripcion)
+                            ->where('trimestre', 1)
+                            ->first();
+
+            // extraemos las notas del segundo bimestre
+            $nota2 = Nota::where('inscripcion_id', $request->id_materia_inscripcion)
+                            ->where('trimestre', 2)
+                            ->first();
+
+            // cambiamos la nota para el centralizador
+            $modificaInscripcion = Inscripcione::find($request->inscripcion_id);
+            $modificaInscripcion->nota = $request->nota_convalidar;
+            $modificaInscripcion->save();
+
+            // cambiamos las notas del primer bimestre
+            $primerBimestre = Nota::find($request->notaIdP);
+            $primerBimestre->nota_asistencia     = $nota1->$asistencia;
+            $primerBimestre->nota_practicas      = $nota1->$practicas;
+            $primerBimestre->nota_primer_parcial = $nota1->$parcial;
+            $primerBimestre->nota_examen_final   = $nota1->$final;
+            $primerBimestre->nota_puntos_ganados = $nota1->$puntos;
+            $primerBimestre->nota_total          = $nota1->$total;
+            $primerBimestre->save();
+
+            // cambiamos las notas del segundo bimestre
+            $segundoBimestre = Nota::find($request->notaIdS);
+            $segundoBimestre->nota_asistencia     = $nota2->$asistencia;
+            $segundoBimestre->nota_practicas      = $nota2->$practicas;
+            $segundoBimestre->nota_primer_parcial = $nota2->$parcial;
+            $segundoBimestre->nota_examen_final   = $nota2->$final;
+            $segundoBimestre->nota_puntos_ganados = $nota2->$puntos;
+            $segundoBimestre->nota_total          = $nota2->$total;
+            $segundoBimestre->save();
         }
 
         // $nota->nota_asistencia = $request->asistencia.$request->notaIdP;
