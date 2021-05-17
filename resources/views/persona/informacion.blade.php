@@ -443,7 +443,13 @@
                                     <td class="text-center">{{ $m->turno->descripcion }}</td>
                                     <td class="text-center">{{ $m->paralelo }}</td>
                                     <td class="text-center">{{ $m->anio_vigente }}</td>
-                                    <td class="text-center"><h4>{{ round($m->nota, 0) }}</h4></td>
+                                    <td class="text-center">
+                                        @if ($m->convalidado == null)
+                                            <h4>{{ round($m->nota, 0) }}</h4>
+                                        @else
+                                            <h4 class="text-primary">{{ round($m->nota, 0) }}*</h4>
+                                        @endif
+                                    </td>
                                     <td>
                                         <button type="button" class="btn btn-warning" title="Edita Notas" onclick="ajaxEditaNotas('{{ $m->id }}')"><i class="fas fa-edit"></i></button>
                                         <button type="button" class="btn btn-danger" title="Elimina Materia" onclick="eliminaMateria('{{ $m->id }}', '{{ $m->asignatura->nombre }}')"><i class="fas fa-trash-alt"></i></button>

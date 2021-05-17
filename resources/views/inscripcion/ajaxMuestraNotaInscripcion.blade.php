@@ -154,7 +154,7 @@
                     <label>Convalidar</label>
                     <select name="convalidar" id="convalidar" class="form-control" onchange="validaNotaFinal()">
                         <option value="No">No</option>
-                        <option value="Si">Si</option>
+                        <option value="Si" {{ ($inscripcion->convalidado=='Si')?'selected':'' }}>Si</option>
                     </select>
                 </div>
 

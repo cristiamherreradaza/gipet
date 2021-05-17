@@ -77,6 +77,7 @@ class NotaController extends Controller
                                 ->where('turno_id', $asignatura->turno_id)
                                 ->where('paralelo', $asignatura->paralelo)
                                 ->where('anio_vigente', $asignatura->anio_vigente)
+                                ->whereNull('convalidado')
                                 ->get();
 
         return view('nota.detalle')->with(compact('asignatura', 'inscritos', 'comboTurnos', 'bimestreActual', 'datosMateria'));
