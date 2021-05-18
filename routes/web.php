@@ -200,6 +200,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('Inscripcion/ajaxEditaInscripcion', 'InscripcionController@ajaxEditaInscripcion');
     Route::post('Inscripcion/ajaxEditaInscripcionAlumno', 'InscripcionController@ajaxEditaInscripcionAlumno');
     Route::post('Inscripcion/ajaxActualizaInscripcionAlumno', 'InscripcionController@ajaxActualizaInscripcionAlumno');
+    Route::post('Inscripcion/inscribeMateriaAlumno', 'InscripcionController@inscribeMateriaAlumno');
 
     // PDFS
     Route::get('Inscripcion/reportePdfHistorialAcademico/{persona_id}/{carrera_id}', 'InscripcionController@reportePdfHistorialAcademico');

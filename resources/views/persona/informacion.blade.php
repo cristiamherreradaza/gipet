@@ -425,13 +425,15 @@
                         </div>
                     </div>
                     <br />
-                    <form action="">
+                    <form action="{{ url('Inscripcion/inscribeMateriaAlumno') }}" method="POST">
+                        @csrf
+                        
                         <div class="row" id="bloqueAdicionaMateria" style="display: none;">
 
                             <div class="col-md-2">
                                 <div class="col">
                                     <div class="form-group">
-                                        <label>GESTION
+                                        <label class="text-primary">GESTION
                                             <span class="text-danger">
                                                 <i class="mr-2 mdi mdi-alert-circle"></i>
                                             </span>
@@ -441,22 +443,92 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-7">
+                            <div class="col-md-3">
                                 <div class="col">
                                     <div class="form-group">
-                                        <label>NOMBRE DE LA MATERIA
+                                        <label class="text-primary">NOMBRE MATERIA
                                             <span class="text-danger">
                                                 <i class="mr-2 mdi mdi-alert-circle"></i>
                                             </span>
                                         </label>
                                         <input type="text" class="form-control" name="buscaMateriaAdicionar" id="buscaMateriaAdicionar" required>
+                                        <input type="hidden" name="adiciona_asignatura_id" id="adiciona_asignatura_id" >
+                                        <input type="hidden" name="adiciona_persona_id" id="adiciona_persona_id" value="{{ $estudiante->id }}">
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Carrera
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                    </label>
+                                    <input type="hidden" name="persona_id" value="{{ $estudiante->id }}">
+                                    <select class="form-control custom-select" id="adiciona_carrera_id" name="adiciona_carrera_id" onchange="cambiaCarrera()" required>
+                                        @foreach($carreras as $carrera)
+                                            <option value="{{ $carrera->id }}">{{ $carrera->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label>Curso
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                    </label>
+                                    <select class="form-control custom-select" id="adiciona_gestion" name="adiciona_gestion" required>
+                                        <option value="1">1&ordm; A&ntilde;o</option>
+                                        <option value="2">2&ordm; A&ntilde;o</option>
+                                        <option value="3">3&ordm; A&ntilde;o</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label>Turno
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                    </label>
+                                    <select class="form-control custom-select" id="adiciona_turno_id" name="adiciona_turno_id" required>
+                                        @foreach($turnos as $turno)
+                                            <option value="{{ $turno->id }}">{{ $turno->descripcion }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label>Paralelo
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                    </label>
+                                    <select class="form-control custom-select" id="adiciona_paralelo" name="adiciona_paralelo" required>
+                                            <option value="A">A</option>
+                                            <option value="B">B</option>
+                                            <option value="C">C</option>
+                                            <option value="D">D</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label class="control-label">Gesti&oacute;n</label>
+                                    <span class="text-danger">
+                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                    </span>
+                                    <input type="number" class="form-control" id="adiciona_anio_vigente" name="adiciona_anio_vigente" value="{{ date('Y') }}" required>
+                                </div>
+                            </div>                        
+
+                            <div class="col-md-1">
                                 <label>&nbsp;</label>
-                                <button type="button" class="btn waves-effect waves-light btn-block btn-success"
-                                    onclick="adicionarMateriaAlumno()">ADICIONA MATERIA</button>
+                                <button type="submit" class="btn waves-effect waves-light btn-block btn-success">ADICIONA</button>
                             </div>
                         </div>
 
@@ -466,6 +538,7 @@
                             </div>
                         </div>
                     </form>
+                    <hr>
                     <div class="table-responsive m-t-40">
                         <table id="tabla-materias" class="table table-striped table-bordered no-wrap table-hover">
                             <thead>
