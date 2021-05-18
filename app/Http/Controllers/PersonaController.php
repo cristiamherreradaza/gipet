@@ -893,4 +893,9 @@ class PersonaController extends Controller
 
     }
 
+    public function adicionaMateriaAlumno()
+    {
+        
+    }
+
 }

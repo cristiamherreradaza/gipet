@@ -418,6 +418,54 @@
                     </div>
                 </div>
                 <div class="tab-pane" id="profile1">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="button" class="btn waves-effect waves-light btn-block btn-primary" onclick="muestraBloqueAdicionaMaterias();">ADICIONAR MATERIAS</button>
+                        </div>
+                    </div>
+                    <br />
+                    <form action="">
+                        <div class="row" id="bloqueAdicionaMateria" style="display: none;">
+
+                            <div class="col-md-2">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label>GESTION
+                                            <span class="text-danger">
+                                                <i class="mr-2 mdi mdi-alert-circle"></i>
+                                            </span>
+                                        </label>
+                                        <input type="number" class="form-control" name="gestionMateriaBuscar" id="gestionMateriaBuscar" value="{{ date('Y') }}" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-7">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label>NOMBRE DE LA MATERIA
+                                            <span class="text-danger">
+                                                <i class="mr-2 mdi mdi-alert-circle"></i>
+                                            </span>
+                                        </label>
+                                        <input type="text" class="form-control" name="buscaMateriaAdicionar" id="buscaMateriaAdicionar" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label>&nbsp;</label>
+                                <button type="button" class="btn waves-effect waves-light btn-block btn-success"
+                                    onclick="adicionarMateriaAlumno()">ADICIONA MATERIA</button>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12" id="ajaxCargaMateriasAdicionar">
+                                
+                            </div>
+                        </div>
+                    </form>
                     <div class="table-responsive m-t-40">
                         <table id="tabla-materias" class="table table-striped table-bordered no-wrap table-hover">
                             <thead>
@@ -457,18 +505,7 @@
                                 </tr>
                                 @endforeach
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>Carrera</th>
-                                    <th>Materia</th>
-                                    <th>Sigla</th>
-                                    <th>Curso</th>
-                                    <th>Turno</th>
-                                    <th>Paralelo</th>
-                                    <th>Gestion</th>
-                                    <th></th>
-                                </tr>
-                            </tfoot>
+                            
                         </table>
                     </div>
                 </div>
@@ -600,10 +637,10 @@
     // Funcion que establece la configuracion para el datatable
     $(function () {
 
-        $('#tabla-materias tfoot th').each(function() {
+        /*$('#tabla-materias tfoot th').each(function() {
             var title = $(this).text();
             $(this).html('<input type="text" class="form-control" placeholder="Busca ' + title + '" />');
-        });
+        });*/
 
         // DataTable
         var tableSearching = $('#tabla-materias').DataTable({
@@ -640,7 +677,7 @@
         });
 
         // Apply the search
-        tableSearching.columns().every(function() {
+        /*tableSearching.columns().every(function() {
             var that = this;
 
             $('input', this.footer()).on('keyup change', function() {
@@ -650,9 +687,11 @@
                         .draw();
                 }
             });
-        });
+        });*/
 
     });
+
+
 
     function actualizaPerfilEstudiante()
     {
@@ -828,6 +867,35 @@
             }
         })
     }
+
+    function muestraBloqueAdicionaMaterias()
+    {
+        $("#bloqueAdicionaMateria").toggle('slow');
+    }
+
+    function adicionarMateriaAlumno()
+    {
+
+    }
+
+     $(document).on('keyup', '#buscaMateriaAdicionar', function(e) {
+
+        nombre_materia_buscar = $('#buscaMateriaAdicionar').val();
+        gestion_materia_buscar  = $('#gestionMateriaBuscar').val();
+
+        if (nombre_materia_buscar.length > 3) {
+
+            $.ajax({
+                url: "{{ url('Asignatura/ajaxBuscaMateriaAdicionar') }}/" + nombre_materia_buscar+"/"+gestion_materia_buscar,
+                type: 'GET',
+                success: function(data) {
+                    // $("#ajaxMuestraMateriasCursadas").show('slow');
+                    $("#ajaxCargaMateriasAdicionar").html(data);
+                }
+            });
+        }
+
+    });
 
 </script>
 @endsection

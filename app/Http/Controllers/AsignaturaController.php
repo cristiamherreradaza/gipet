@@ -283,4 +283,15 @@ class AsignaturaController extends Controller
         return view('asignatura.ajaxBuscaMateria')->with(compact('materiasInscripcion'));
     }
 
+    public function ajaxBuscaMateriaAdicionar(Request $request)
+    {
+        // dd($request->materia);   
+        $asignaturas = Asignatura::where('anio_vigente', $request->gestion)
+                                ->where('nombre', 'like', "%$request->materia%")
+                                ->limit(5)
+                                ->get(); 
+
+        return view('asignatura.ajaxBuscaMateriaAdicionar')->with(compact('asignaturas'));
+    }
+
 }
