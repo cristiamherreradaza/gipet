@@ -448,7 +448,7 @@
                                             <i class="mr-2 mdi mdi-alert-circle"></i>
                                         </span>
                                     </label>
-                                    <input type="text" class="form-control" name="buscaMateriaAdicionar" id="buscaMateriaAdicionar" required>
+                                    <input type="text" class="form-control" name="buscaMateriaAdicionar" id="buscaMateriaAdicionar" autocomplete="off" required>
                                     <input type="hidden" name="adiciona_asignatura_id" id="adiciona_asignatura_id" >
                                     <input type="hidden" name="adiciona_persona_id" id="adiciona_persona_id" value="{{ $estudiante->id }}">
                                 </div>
@@ -573,7 +573,7 @@
                                         @if ($m->estado != 'Regularizado')
                                             <h4>{{ $m->asignatura->nombre }}</h4>
                                         @else
-                                            <h4 class="text-warning">{{ $m->asignatura->nombre }}*</h4>
+                                            <h4 class="text-primary">{{ $m->asignatura->nombre }}*</h4>
                                         @endif
                                     </td>
                                     <td class="text-center">{{ $m->asignatura->sigla }}</td>
