@@ -2571,7 +2571,12 @@ class InscripcionController extends Controller
         }else{
             $estado = 'Cursando';
         }
-        // dd($request->input());
+
+        if ($request->adiciona_oyente == 'Si') {
+            $oyente = 'Si';
+        }else{
+            $oyente = null;
+        }
 
         $asignatura = Asignatura::find($request->adiciona_asignatura_id);
 
@@ -2588,7 +2593,7 @@ class InscripcionController extends Controller
         $adiciona_inscripcion->anio_vigente    = $request->adiciona_anio_vigente;
         $adiciona_inscripcion->fecha_registro  = $hoy;
         $adiciona_inscripcion->nota_aprobacion = $asignatura->nota_aprobacion;   
-        $adiciona_inscripcion->oyente          = 'Si';
+        $adiciona_inscripcion->oyente          = $oyente;
         $adiciona_inscripcion->troncal         = 'Si';
         $adiciona_inscripcion->estado          = $estado;
 
@@ -2609,9 +2614,10 @@ class InscripcionController extends Controller
             $nota->turno_id        = $request->adiciona_turno_id;
             $nota->paralelo        = $request->adiciona_turno_id;
             $nota->anio_vigente    = $request->adiciona_anio_vigente;
+            $nota->gestion         = $request->adiciona_gestion;
             $nota->trimestre       = $i;
             $nota->fecha_registro  = $hoy;
-            $nota->nota_aprobacion = $asignatura->nota_aprobacion;
+            $nota->nota_aprobacion = $asignatura->resolucion->nota_aprobacion;
 
             $nota->save();
 

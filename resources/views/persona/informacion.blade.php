@@ -441,7 +441,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label class="text-primary">NOMBRE MATERIA
                                         <span class="text-danger">
@@ -538,6 +538,20 @@
                             </div>
 
                             <div class="col-md-1">
+                                <div class="form-group">
+                                    <label>Oyente
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                    </label>
+                                    <select class="form-control custom-select" id="adiciona_oyente" name="adiciona_oyente" required>
+                                        <option value="No">No</option>
+                                        <option value="Si">Si</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-1">
                                 <label>&nbsp;</label>
                                 <button type="submit" class="btn waves-effect waves-light btn-block btn-success">ADICIONA</button>
                             </div>
@@ -573,10 +587,16 @@
                                         @if ($m->estado != 'Regularizado')
                                             <h4>{{ $m->asignatura->nombre }}</h4>
                                         @else
-                                            <h4 class="text-primary">{{ $m->asignatura->nombre }}*</h4>
+                                            <h4 class="text-info">{{ $m->asignatura->nombre }}*</h4>
                                         @endif
                                     </td>
-                                    <td class="text-center">{{ $m->asignatura->sigla }}</td>
+                                    <td class="text-center">
+                                        @if ($m->oyente != 'Si')
+                                            <h4>{{ $m->asignatura->sigla }}</h4>
+                                        @else
+                                            <h4 class="text-warning">{{ $m->asignatura->sigla }}*</h4>
+                                        @endif
+                                    </td>
                                     <td class="text-center">{{ $m->gestion }}&deg; A&ntilde;o</td>
                                     <td class="text-center">{{ $m->turno->descripcion }}</td>
                                     <td class="text-center">{{ $m->paralelo }}</td>
@@ -597,6 +617,10 @@
                             </tbody>
                             
                         </table>
+                        <span class="font-weight-bold">Informacion colores:</span>
+                        <span class="text-info font-weight-bold">Materia para regularizacion</span>,
+                        <span class="text-warning font-weight-bold">Solo oyente</span>,
+                        <span class="text-primary font-weight-bold">Materia convalidada</span>
                     </div>
                 </div>
                 <div class="tab-pane" id="settings1">
