@@ -15,7 +15,7 @@
                     <td>{{ $asignatura->asignatura->nombre }}</td>
                     <td>{{ $asignatura->anio_vigente }}</td>
                     <td>
-                        <a href="{{ url('nota/detalle/'.$asignatura->id.'/1') }}" class="btn waves-effect waves-light btn-primary"> 1er BIM</a>
+                        <a href="{{ url('nota/detalle/'.$asignatura->id.'/1') }}" class="btn waves-effect waves-light btn-info"> 1er BIM</a>
                         &nbsp;
                         <a href="{{ url('nota/detalle/'.$asignatura->id.'/2') }}" class="btn waves-effect waves-light btn-dark"> 2do BIM</a>
 

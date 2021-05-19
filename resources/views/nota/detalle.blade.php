@@ -17,8 +17,26 @@
 @section('content')
 <div class="card">
     <div class="card-body">
-        <h3 class="card-title text-primary"><strong>{{ $asignatura->asignatura->sigla }}
-                        {{ $asignatura->asignatura->nombre }}</strong></h3>
+        <div class="row">
+            <div class="col-md-6">
+                <h3 class="card-title font-weight-bold">
+                    MATERIA:
+                    <span class="text-info" style="text-transform: uppercase;">{{ $asignatura->asignatura->nombre }}</span>
+                    ({{ $asignatura->asignatura->sigla }})
+                </h3>
+            </div>
+            <div class="col-md-6">
+                <h3 class="card-title font-weight-bold">
+                    BIMESTRE:
+                    @if ($bimestreActual == 1)
+                        <span class="text-info">PRIMERO</span>
+                    @else
+                        <span class="text-info">SEGUNDO</span>
+                    @endif
+                </h3>
+            </div>
+        </div>
+        
 
         <div class="row">
             <div class="col-md-3"><h4 class="text-bold">TURNO: <span class="text-info">{{ $asignatura->turno->descripcion }}</span></h4></div>
@@ -63,7 +81,7 @@
         
         <div class="table-responsive m-t-40">
             <table id="tablaAlumnos" class="table table-bordered table-striped text-center">
-                <thead class="text-primary">
+                <thead class="text-info">
                     <tr>
                         <th>Apellido Paterno </th>
                         <th>Apellido Materno</th>
@@ -81,7 +99,7 @@
                     @foreach($inscritos as $contador => $inscrito)
                     @php
                         $nota = App\Nota::where('inscripcion_id', $inscrito->id)
-                                        ->where('trimestre', 1)
+                                        ->where('trimestre', $bimestreActual)
                                         ->first();
 
                         if($nota->finalizado != null){
@@ -142,7 +160,7 @@
                 </div>
                 @php
                     $nota = App\Nota::where('inscripcion_id', $inscritos[0]->id)
-                                    ->where('trimestre', 1)
+                                    ->where('trimestre', $bimestreActual)
                                     ->first();
                 @endphp 
                 <div class="col-md-8">
@@ -157,14 +175,11 @@
                         @if ($nota->finalizado == null)
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" name="select_file" id="select_file">
-                                <label class="custom-file-label" for="inputGroupFile04">Elegir archivo</label>
+                                <label class="custom-file-label" for="inputGroupFile04">Elegir archivo para subir notas</label>
                             </div>
-
                             <div class="input-group-append">
                                 <input type="submit" name="upload" id="upload" class="btn btn-success" value="Importar" style="width: 200px;">
-                                <button type="button" class="btn btn-block btn-danger" onclick="finalizarBimestre()" style="width: 200px;">Finalizar
-                                    Bimestre</button>
-                                <!-- <a class="btn btn-block btn-danger" href="{{ url('nota/finalizarBimestre/'.$asignatura->id.'/'.$bimestreActual) }}" style="width: 200px;"></a> -->
+                                {{-- <button type="button" class="btn btn-block btn-danger" onclick="finalizarBimestre()" style="width: 200px;">Finalizar Bimestre</button> --}}
                             </div>
                         @endif
                     </div>
