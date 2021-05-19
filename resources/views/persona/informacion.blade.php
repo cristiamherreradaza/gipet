@@ -430,31 +430,27 @@
                         
                         <div class="row" id="bloqueAdicionaMateria" style="display: none;">
 
-                            <div class="col-md-2">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label class="text-primary">GESTION
-                                            <span class="text-danger">
-                                                <i class="mr-2 mdi mdi-alert-circle"></i>
-                                            </span>
-                                        </label>
-                                        <input type="number" class="form-control" name="gestionMateriaBuscar" id="gestionMateriaBuscar" value="{{ date('Y') }}" required>
-                                    </div>
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label class="text-primary">GESTION
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                    </label>
+                                    <input type="number" class="form-control" name="gestionMateriaBuscar" id="gestionMateriaBuscar" value="{{ date('Y') }}" required>
                                 </div>
                             </div>
 
                             <div class="col-md-3">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label class="text-primary">NOMBRE MATERIA
-                                            <span class="text-danger">
-                                                <i class="mr-2 mdi mdi-alert-circle"></i>
-                                            </span>
-                                        </label>
-                                        <input type="text" class="form-control" name="buscaMateriaAdicionar" id="buscaMateriaAdicionar" required>
-                                        <input type="hidden" name="adiciona_asignatura_id" id="adiciona_asignatura_id" >
-                                        <input type="hidden" name="adiciona_persona_id" id="adiciona_persona_id" value="{{ $estudiante->id }}">
-                                    </div>
+                                <div class="form-group">
+                                    <label class="text-primary">NOMBRE MATERIA
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                    </label>
+                                    <input type="text" class="form-control" name="buscaMateriaAdicionar" id="buscaMateriaAdicionar" required>
+                                    <input type="hidden" name="adiciona_asignatura_id" id="adiciona_asignatura_id" >
+                                    <input type="hidden" name="adiciona_persona_id" id="adiciona_persona_id" value="{{ $estudiante->id }}">
                                 </div>
                             </div>
 
@@ -516,6 +512,7 @@
                                     </select>
                                 </div>
                             </div>
+
                             <div class="col-md-1">
                                 <div class="form-group">
                                     <label class="control-label">Gesti&oacute;n</label>
@@ -525,6 +522,20 @@
                                     <input type="number" class="form-control" id="adiciona_anio_vigente" name="adiciona_anio_vigente" value="{{ date('Y') }}" required>
                                 </div>
                             </div>                        
+
+                            <div class="col-md-1">
+                                <div class="form-group">
+                                    <label>Regular.
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                    </label>
+                                    <select class="form-control custom-select" id="adiciona_regularizacion" name="adiciona_regularizacion" required>
+                                            <option value="No">No</option>
+                                            <option value="Si">Si</option>
+                                    </select>
+                                </div>
+                            </div>
 
                             <div class="col-md-1">
                                 <label>&nbsp;</label>
@@ -558,7 +569,13 @@
                                 @foreach ($materiasInscripcion as $m)
                                 <tr>
                                     <td>{{ $m->carrera->nombre }}</td>
-                                    <td>{{ $m->asignatura->nombre }}</td>
+                                    <td>
+                                        @if ($m->estado != 'Regularizado')
+                                            <h4>{{ $m->asignatura->nombre }}</h4>
+                                        @else
+                                            <h4 class="text-warning">{{ $m->asignatura->nombre }}*</h4>
+                                        @endif
+                                    </td>
                                     <td class="text-center">{{ $m->asignatura->sigla }}</td>
                                     <td class="text-center">{{ $m->gestion }}&deg; A&ntilde;o</td>
                                     <td class="text-center">{{ $m->turno->descripcion }}</td>

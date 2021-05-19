@@ -2565,6 +2565,12 @@ class InscripcionController extends Controller
     public function inscribeMateriaAlumno(Request $request)
     {
         $hoy = date('Y-m-d');
+
+        if ($request->adiciona_regularizacion == 'Si') {
+            $estado = 'Regularizado';
+        }else{
+            $estado = 'Cursando';
+        }
         // dd($request->input());
 
         $asignatura = Asignatura::find($request->adiciona_asignatura_id);
@@ -2584,8 +2590,33 @@ class InscripcionController extends Controller
         $adiciona_inscripcion->nota_aprobacion = $asignatura->nota_aprobacion;   
         $adiciona_inscripcion->oyente          = 'Si';
         $adiciona_inscripcion->troncal         = 'Si';
-        $adiciona_inscripcion->estado          = 'Cursando';  // Cuando acaba semestre/gestion cambiar a finalizado
+        $adiciona_inscripcion->estado          = $estado;
+
         $adiciona_inscripcion->save();
 
+        $inscripcionId = $adiciona_inscripcion->id;
+
+
+        for ($i=1; $i <= 2; $i++) { 
+
+            $nota = new Nota();
+
+            $nota->user_id         = Auth::user()->id;
+            $nota->resolucion_id   = $asignatura->resolucion_id;
+            $nota->inscripcion_id  = $inscripcionId;
+            $nota->persona_id      = $request->adiciona_persona_id;
+            $nota->asignatura_id   = $request->adiciona_asignatura_id;
+            $nota->turno_id        = $request->adiciona_turno_id;
+            $nota->paralelo        = $request->adiciona_turno_id;
+            $nota->anio_vigente    = $request->adiciona_anio_vigente;
+            $nota->trimestre       = $i;
+            $nota->fecha_registro  = $hoy;
+            $nota->nota_aprobacion = $asignatura->nota_aprobacion;
+
+            $nota->save();
+
+        }
+
+        return redirect('Persona/informacion/'.$request->adiciona_persona_id);
     }
 }
