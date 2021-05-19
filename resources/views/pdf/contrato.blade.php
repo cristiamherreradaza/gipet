@@ -24,7 +24,7 @@
             background-color: #fff;
             position: absolute;
             top: 425px;
-            left: 200px;
+            left: 150px;
             padding: 20px;
             border: 1px solid black;
             -moz-border-radius:10px;
@@ -56,15 +56,32 @@
             </tr>
             <tr>
                 <td><b>Carrera:</b></td>
-                <td>Contaduria General</td>
+                <td>{{ $datosCarrera->carrera->nombre }}</td>
                 <td></td>
                 <td></td>
             </tr>
             <tr>
                 <td><b>Curso:</b></td>
-                <td>Primero</td>
+                <td>
+                    @switch($datosCarrera->gestion)
+                        @case('1')
+                            Primero
+                            @break
+                        
+                        @case('2')
+                            Segundo
+                            @break
+
+                        @case('3')
+                            Tercero
+                            @break
+                    
+                        @default
+                            
+                    @endswitch
+                </td>
                 <td><b>Turno:</b></td>
-                <td>Manana</td>
+                <td>{{ $datosCarrera->turno->descripcion }}</td>
             </tr>
             <tr>
                 <td colspan="4"><div style="text-align: center; font-size: 12pt; padding: 10 0 6 0;">DATOS PERSONALES</div></td>

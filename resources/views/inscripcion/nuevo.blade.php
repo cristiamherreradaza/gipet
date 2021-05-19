@@ -53,17 +53,14 @@
                         </div>
                         <div class="card-body">
                             <div class="row" id="tabsProductos">
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <button type="button" id="tab1" class="btn btn-block btn-info activo">DATOS PERSONALES</button>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <button type="button" id="tab2" class="btn btn-block btn-info inactivo">DATOS PROFESIONALES</button>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <button type="button" id="tab3" class="btn btn-block btn-info inactivo">REFERENCIA PERSONAL</button>
-                                </div>
-                                <div class="col-md-3">
-                                    <button type="button" id="tab4" class="btn btn-block btn-info inactivo">DATOS DE LA CARRERA</button>
                                 </div>
                             </div>
                             <div class="row">
@@ -188,12 +185,8 @@
                                                 <div class="row">
                                                     <div class="col-md-3">
                                                         <div class="form-group">
-                                                            <label class="control-label">Trabaja 
-                                                                <span class="text-danger">
-                                                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                                                </span>
-                                                            </label>
-                                                            <select class="form-control" id="trabaja" name="trabaja" required>
+                                                            <label class="control-label">Trabaja</label>
+                                                            <select class="form-control" id="trabaja" name="trabaja">
                                                                 <option value="Si">Si</option>
                                                                 <option value="No" selected>No</option>
                                                             </select>
@@ -306,102 +299,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12 tabContenido" id="tab4C" style="display: none;">
-                                    <div class="card border-info">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <label class="control-label">Fecha de Inscripcion</label>
-                                                        <span class="text-danger">
-                                                            <i class="mr-2 mdi mdi-alert-circle"></i>
-                                                        </span>
-                                                        <input type="date" name="fecha_inscripcion" id="fecha_inscripcion" class="form-control" value="{{ date('Y-m-d') }}" required>
-                                                    </div> 
-                                                </div>
-                                                <div class="col-md-6"></div>
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <label class="control-label">&nbsp;</label>
-                                                        <button class="form-control btn btn-success" type="button" onclick="education_fields();"><i class="fas fa-plus"></i>&nbsp;ADICIONAR CARRERA</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-3">
-                                                    <div class="form-group">
-                                                        <label>Carrera
-                                                            <span class="text-danger">
-                                                                <i class="mr-2 mdi mdi-alert-circle"></i>
-                                                            </span>
-                                                        </label>
-                                                        <select class="form-control custom-select" tabindex="1" id="carrera_1" name="carrera_1">
-                                                            <option value="0">Seleccionar</option>
-                                                            @foreach($carreras as $carrera)
-                                                                <option value="{{ $carrera->id }}">{{ $carrera->nombre }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-3">
-                                                    <div class="form-group">
-                                                        <label>Turno
-                                                            <span class="text-danger">
-                                                                <i class="mr-2 mdi mdi-alert-circle"></i>
-                                                            </span>
-                                                        </label>
-                                                        <select class="form-control custom-select" tabindex="1" id="turno_1" name="turno_1">
-                                                            <option value="">Seleccionar</option>
-                                                            @foreach($turnos as $turno)
-                                                                <option value="{{ $turno->id }}">{{ $turno->descripcion }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="form-group">
-                                                        <label>Paralelo
-                                                            <span class="text-danger">
-                                                                <i class="mr-2 mdi mdi-alert-circle"></i>
-                                                            </span>
-                                                        </label>
-                                                        <select class="form-control custom-select" tabindex="1" id="paralelo_1" name="paralelo_1">
-                                                            <option value="">Seleccionar</option>
-                                                            <option value="A">A</option>
-                                                            <option value="B">B</option>
-                                                            <option value="C">C</option>
-                                                            <option value="D">D</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col">
-                                                    <div class="form-group">
-                                                        <label class="control-label">Gesti&oacute;n</label>
-                                                        <input type="number" class="form-control" id="gestion_1" name="gestion_1" value="{{ $anio_actual }}">
-                                                    </div>
-                                                </div>
-                                                <div class="col-1">
-                                                </div>
-                                                <input type="text" hidden name="cantidad" id="cantidad" value="1">
-                                                <input type="text" hidden name="numero[]" id="numero" value="1">    
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-2 col-md-12">
-                                                    <!-- <div class="form-group">
-                                                        <button class="btn btn-success" type="button" onclick="education_fields();">ADICIONAR CARRERA</button>
-                                                    </div> -->
-                                                </div>
-                                            </div>
-                                            <div id="education_fields">
-                                                {{-- content --}}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <button type="submit" class="btn waves-effect waves-light btn-block btn-inverse">GUARDAR</button>
+                                    <button type="submit" class="btn waves-effect waves-light btn-block btn-success">GUARDAR</button>
                                 </div>
                                 <div class="col-md-6">
                                     <a href="{{ url('Persona/listado') }}">

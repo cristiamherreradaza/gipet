@@ -397,13 +397,17 @@
                                                     onclick="ajaxEditaInscripcion('{{ $cp->persona_id }}', '{{ $cp->carrera_id }}', '{{ $cp->turno_id }}', '{{ $cp->paralelo }}', '{{ $cp->gestion }}', '{{ $cp->anio_vigente }}')"><i
                                                         class="fas fa-edit"></i></button>
 
+                                                <a href="{{ url('Persona/contrato') }}/{{ $cp->persona_id }}/{{ $cp->carrera_id }}/{{ $cp->gestion }}/{{ $cp->turno_id }}/{{ $cp->anio_vigente }}" class="btn btn-dark" title="Contrato" target="blank"><i class="fas fa-file-alt"></i></a>
+
                                                 <a class="btn btn-light" title="Descargar Boletin"
                                                     href="{{ url('Inscripcion/boletin/'.$cp->id) }}" target="_blank"><i
                                                         class="fas fa-file-pdf"></i></a>
+
                                                 <button type="button" class="btn btn-danger"
                                                     title="Eliminar Inscripcion"
                                                     onclick="ajaxEliminaInscripcion('{{ $cp->persona_id }}', '{{ $cp->carrera_id }}', '{{ $cp->turno_id }}', '{{ $cp->paralelo }}', '{{ $cp->gestion }}', '{{ $cp->anio_vigente }}', '{{ $cp->carrera->nombre }}')"><i
                                                         class="fas fa-trash-alt"></i></button>
+
                                             </td>
                                         </tr>
                                         @endforeach

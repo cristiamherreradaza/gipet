@@ -109,24 +109,10 @@ class PersonaController extends Controller
         //$estudiantes = Persona::select('id', 'apellido_paterno', 'apellido_materno', 'nombres', 'carnet', 'telefono_celular', 'razon_social_cliente', 'nit');
         return Datatables::of($estudiantes)
             ->addColumn('action', function ($estudiantes) {
-                return '<button onclick="ver_persona('.$estudiantes->id.')"        type="button" class="btn btn-info"      title="Ver"><i class="fas fa-eye"></i></button>
-                        <button onclick="eliminar_persona('.$estudiantes->id.', '.$estudiantes->cedula.')" type="button" class="btn btn-danger" title="Eliminar Estudiante"><i class="fas fa-trash"></i></button>
-                        <button onclick="contrato(' .  $estudiantes->id . ')"        type="button" class="btn btn-dark"    title="Contrato" ><i class="fas fa-file-alt"></i></button>';
+                return '<button onclick="ver_persona('.$estudiantes->id.')"        type="button" class="btn btn-info"      title="Ver"><i class="fas fa-list"></i></button>
+                        <button onclick="eliminar_persona('.$estudiantes->id.', '.$estudiantes->cedula.')" type="button" class="btn btn-danger" title="Eliminar Estudiante"><i class="fas fa-trash"></i></button>';
             })
             ->make(true);
-
-        /*
-        return Datatables::of($estudiantes)
-            ->addColumn('action', function ($estudiantes) {
-                return '<button onclick="ver_persona('.$estudiantes->id.')"        type="button" class="btn btn-info"      title="Ver"><i class="fas fa-eye"></i></button>
-                        <button onclick="inscripcion(' . $estudiantes->id . ')"    type="button" class="btn btn-warning"   title="Nueva Carrera"  ><i class="fas fa-address-book"></i></button>
-                        <button onclick="reinscripcion(' .  $estudiantes->id . ')" type="button" class="btn btn-secondary" title="ReInscripcion"  ><i class="fas fa-address-card"></i></button>
-                        <button onclick="varios(' .  $estudiantes->id . ')"        type="button" class="btn btn-dark"      title="Cursos Varios"  ><i class="fas fa-file-alt"></i></button>
-                        <button onclick="recuperatorio(' .  $estudiantes->id . ')" type="button" class="btn btn-success"   title="Recuperatorio" ><i class="fas fa-reply"></i></button>
-                        <button onclick="estado(' .  $estudiantes->id . ')"        type="button" class="btn btn-danger"    title="Estado(Activo/Inactivo)" ><i class="fas fa-user"></i></button>';
-            })
-            ->make(true);
-        */
     }
 
     public function ver_detalle($id)
@@ -460,12 +446,19 @@ class PersonaController extends Controller
 
     public function contrato(Request $request)
     {
+        // dd($request->personaId);
         $persona = Persona::where('id', $request->personaId)->first();
-        $pdf = PDF::loadView('pdf.contrato', compact('persona'))->setPaper('letter');
-        return $pdf->stream('contrato.pdf');
 
-        // dd($persona);
-        // echo "holas";
+        $datosCarrera = Inscripcione::where('persona_id', $request->personaId)
+                                    ->where('carrera_id', $request->carreraId)
+                                    ->where('gestion', $request->curso)
+                                    ->where('turno_id', $request->turnoId)
+                                    ->where('anio_vigente', $request->anio_vigente)
+                                    ->first();
+        // dd($datosCarrera);
+
+        $pdf = PDF::loadView('pdf.contrato', compact('persona', 'datosCarrera'))->setPaper('letter');
+        return $pdf->stream('contrato.pdf');
     }
 
     public function ajaxMuestraMontos(Request $request)

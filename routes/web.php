@@ -79,7 +79,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Persona/ajaxDetalleCertificados', 'PersonaController@ajaxDetalleCertificados');
     Route::get('Persona/ajaxDetalleMensualidades', 'PersonaController@ajaxDetalleMensualidades');
     Route::get('Persona/ajaxDetalleExtras', 'PersonaController@ajaxDetalleExtras');
-    Route::get('Persona/contrato/{personaId}', 'PersonaController@contrato');
+    Route::get('Persona/contrato/{personaId}/{carreraId}/{curso}/{turnoId}/{anio_vigente}', 'PersonaController@contrato');
     Route::get('Persona/ajaxMuestraMontos', 'PersonaController@ajaxMuestraMontos');
     Route::get('Persona/ajaxMuestraMensualidades', 'PersonaController@ajaxMuestraMensualidades');
     Route::post('Persona/ajaxEliminaInscripcion', 'PersonaController@ajaxEliminaInscripcion');
