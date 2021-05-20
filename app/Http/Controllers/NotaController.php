@@ -837,6 +837,20 @@ class NotaController extends Controller
 
             case 'total':
                 $registro->nota_total = $request->nota;
+
+                if($request->numero == 2){
+
+                    $notaPrimerBimestre = Nota::where('inscripcion_id', $request->id)
+                                        ->where('trimestre', 1)
+                                        ->first();
+
+                    $promedio = ($notaPrimerBimestre->nota_total+$registro->nota_total)/2;
+
+                    $inscripcion = Inscripcione::find($request->id);
+                    $inscripcion->nota = $promedio;
+                    $inscripcion->save();
+                }
+
                 break;
 
             default:
