@@ -1856,7 +1856,9 @@ class InscripcionController extends Controller
     public function boletin($id)
     {
         $registro   = CarrerasPersona::find($id);
+
         $persona    = Persona::find($registro->persona_id);
+        
         $carrera    = Carrera::find($registro->carrera_id);
         // En la variable inscripciones hallaremos la relacion entre el registro de la tabla carreras_personas e inscripciones
         $inscripciones  = Inscripcione::where('carrera_id', $registro->carrera_id)
@@ -1909,13 +1911,16 @@ class InscripcionController extends Controller
         if($persona_id && $carrera_id)
         {
             $persona        = Persona::find($persona_id);
+
             $carrera        = Carrera::find($carrera_id);
+
             $inscripciones  = Inscripcione::where('persona_id', $persona->id)
                                         ->where('carrera_id', $carrera->id)
-                                        ->where('aprobo', 'Si')
+                                        // ->where('aprobo', 'Si')
                                         ->whereNull('oyente')
                                         ->orderBy('id')
                                         ->get();
+
             switch ($persona->expedido) {
                 case 'La Paz':
                     $expedido = 'LP';
@@ -1947,6 +1952,7 @@ class InscripcionController extends Controller
                 default:
                     $expedido = '';
             }
+
             $anioIngreso    = CarrerasPersona::where('persona_id', $persona->id)
                                             ->where('carrera_id', $carrera->id)
                                             ->min('anio_vigente');
