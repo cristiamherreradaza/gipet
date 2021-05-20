@@ -47,6 +47,24 @@ class NotasImport implements ToModel, WithStartRow
         $registraNota->nota_puntos_ganados   = $row[8];      //extras
         $registraNota->nota_total            = $total;
         $registraNota->save();
+
+        if($row[3] == 2){
+
+            $notaPrimerBimestre = Nota::where('asignatura_id', $nota->asignatura_id)
+                                        ->where('turno_id', $nota->turno_id)
+                                        ->where('persona_id', $nota->persona_id)
+                                        ->where('paralelo', $nota->paralelo)
+                                        ->where('anio_vigente', $nota->anio_vigente)
+                                        ->where('trimestre', 1)
+                                        ->first();
+
+            $sumaNotas  = $notaPrimerBimestre->nota_total+$total;
+            $promedio = $sumaNotas/2;
+
+            $inscripcion = Inscripcione::find($notaPrimerBimestre->inscripcion_id);
+            $inscripcion->nota = $promedio;
+            $inscripcion->save();
+        }
     }
 
     public function startRow(): int
