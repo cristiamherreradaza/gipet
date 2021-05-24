@@ -742,24 +742,36 @@
                                     <h5 class="m-0">
                                         <a class="custom-accordion-title d-block pt-2 pb-2" data-toggle="collapse" href="#collapseOne"
                                             aria-expanded="true" aria-controls="collapseOne">
-                                            Collapsible Group Item #1 <span class="float-right"><i
+                                            PENSUM DEL ALUMNO <span class="float-right"><i
                                                     class="mdi mdi-chevron-down accordion-arrow"></i></span>
                                         </a>
                                     </h5>
                                 </div>
                                 <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                                     <div class="card-body">
-                                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-                                        richardson ad squid. 3 wolf moon officia aute,
-                                        non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum
-                                        eiusmod. Brunch 3 wolf moon
-                                        tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda
-                                        shoreditch et. Nihil
-                                        anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente
-                                        ea proident. Ad vegan
-                                        excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw
-                                        denim aesthetic synth nesciunt
-                                        you probably haven't heard of them accusamus labore sustainable VHS.
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-hover no-wrap text-center">
+                                                <thead class="bg-light">
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Carrera</th>
+                                                        <th class="text-nowrap"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($carrerasPensum as $key => $cp)
+                                                    <tr>
+                                                        <td>{{ ($key+1) }}</td>
+                                                        <td class="text-left">{{ $cp->carrera->nombre }}</td>
+                                                        <td>
+                                                            <a href="{{ url('Inscripcion/reportePdfHistorialAcademico') }}/{{ $cp->persona_id }}/{{ $cp->carrera_id }}"
+                                                                class="btn btn-light" title="Contrato" target="blank"><i class="fas fa-file-alt"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div> <!-- end card-->
@@ -1090,9 +1102,9 @@
         $("#bloqueAdicionaMateria").toggle('slow');
     }
 
-    function adicionarMateriaAlumno()
+    function muestraFormularioReportes()
     {
-
+        $("#bloqueReportes").toggle('slow');
     }
 
     $(document).on('keyup', '#buscaMateriaAdicionar', function(e) {
@@ -1113,12 +1125,6 @@
         }
 
     });
-
-    function muestraBloqueAdicionaMaterias()
-    {
-        $("#bloqueReportes").toggle('slow');
-    }
-
 
 </script>
 @endsection

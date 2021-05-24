@@ -8,11 +8,11 @@
     <style>
         @page {
             margin: 0cm 0cm;
-            font-family: Arial;
         }
  
         body {
             margin: 2cm 1cm 1cm;
+            font-family: Arial, Helvetica, sans-serif;
         }
  
         header {
@@ -81,7 +81,7 @@
         <table style="width:100%">
             <tr>
                 <td style="width:65%; text-align:center;">
-                    <p style="font-family: 'Times New Roman', Times, serif; font-size:20px; line-height:1%">
+                    <p style="font-size:20px; line-height:1%">
                         <strong>HISTORIAL ACAD&Eacute;MICO</strong>
                     </p>
                 </td>
@@ -89,7 +89,7 @@
         </table> 
     </header>
     <main>
-        <table style="width:100%; font-family: 'Times New Roman', Times, serif; font-size:12px;">
+        <table style="width:100%; font-size:12px;">
             <tr>
                 <td><strong>INSTITUTO:</strong></td>
                 <td>INSTITUTO TÉCNICO EF-GIPET S.R.L.</td>
@@ -149,8 +149,7 @@
             </tr>
         </table>
         <br>
-        <hr>
-        <table cellpadding="1" class="celdas" style="font-family: 'Times New Roman', Times, serif; font-size:10px; text-align:center">
+        <table cellpadding="1" class="celdas" style="font-size:10px; text-align:center">
             <tr>
                 <th>N°</th>
                 <th>GESTION ACADEMICA</th>
@@ -164,6 +163,9 @@
                 <!-- <th>N° DE LIBRO</th>
                 <th>N° DE FOLIO</th> -->
             </tr>
+            @php
+                $contadorMateriasAprobadas = 0;
+            @endphp
             @foreach($inscripciones as $key => $inscripcion)
                 <tr>
                     <td>{{ ($key+1) }}</td>
@@ -193,8 +195,9 @@
                         @php
                             $prerequisito = App\Prerequisito::where('asignatura_id', $inscripcion->asignatura_id)
                                                             ->first();
+                            // dd($prerequisito);
                         @endphp
-                        @if($prerequisito->prerequisito_id)
+                        @if($prerequisito && $prerequisito->prerequisito_id != null)
                             {{ $prerequisito->prerequisito->sigla }}
                         @else
                             NINGUNO
@@ -202,7 +205,19 @@
                     </td>
                     <td>{{ $inscripcion->nota ? round($inscripcion->nota) : '0' }}</td>
                     <td>{{ $inscripcion->segundo_turno ? round($inscripcion->segundo_turno) : '' }}</td>
-                    <td>{{ $inscripcion->aprobo ? 'APROBADO' : 'REPROBADO' }}</td>
+                    <td>
+                        @php
+                            // $resolucion = Resolucione::
+                            $asignatura = App\Asignatura::find($inscripcion->asignatura_id);
+
+                            if($inscripcion->nota >= $asignatura->resolucion->nota_aprobacion){
+                                $contadorMateriasAprobadas++;
+                                echo 'APROBADO';
+                            }else{
+                                echo 'REPROBO';
+                            }
+                        @endphp
+                    </td>
                     <!-- <td></td>
                     <td></td> -->
                 </tr>
@@ -273,13 +288,13 @@
                     break;
             }
         @endphp
-        <p style="font: normal 12px/150% Times New Roman, Times, serif; text-align:left;">
+        <p style="font-size: 9pt;">
             <strong>Lugar y fecha: </strong> La Paz - {{ $dia }}, {{ date('d') }} de {{ $mes }} de {{ date('Y') }}.
         </p>
         <br><br><br><br>
         <table style="width:100%;">
             <tr>
-                <td style="text-align:center; font-family: 'Times New Roman', Times, serif; font-size:14px;">
+                <td style="text-align:center; font-size:14px;">
                     <strong>Firma Autoridad Academica</strong>
                 </td>
             </tr>
@@ -288,7 +303,7 @@
         <table style="width:100%;">
             <tr>
                 <td style="width:30%;">
-                    <table cellpadding="1" border="1px" style="width:100%; text-align:center; font-family: 'Times New Roman', Times, serif; font-size:10px; line-height:100%">
+                    <table class="celdas" style="width:100%; text-align:center; font-size:10px; line-height:100%">
                         <tr>
                             <td colspan="2">ESCALA DE VALORACION</td>
                         </tr>
@@ -306,30 +321,32 @@
                         </tr>
                     </table>
                 </td>
-                <td style="text-align:center; vertical-align:bottom; font-family: 'Times New Roman', Times, serif; font-size:14px;">
+                <td style="text-align:center; vertical-align:bottom; font-size:14px;">
                     Sello de la Instituci&oacute;n
                 </td>
                 <td style="width:30%;">
-                    <table cellpadding="1" border="1px" style="width:100%; text-align:center; font-family: 'Times New Roman', Times, serif; font-size:10px; line-height:100%">
+                    <table class="celdas" style="width:100%; text-align:center; font-size:10px; line-height:100%">
                         <tr>
                             <td style="width:50%;">Carga Horaria</td>
-                            <td style="width:50%;">{{ $cargaHoraria }}</td>
+                            {{-- <td style="width:50%;">{{ $cargaHoraria }}</td> --}}
+                            <td style="width:50%;">3600</td>
                         </tr>
                         <tr>
                             <td>Asignaturas Aprobadas</td>
-                            <td>{{ $cantidadAprobados }} / {{ $cantidadCurricula }}</td>
+                            <td>{{ $contadorMateriasAprobadas }} / {{ $cantidadCurricula }}</td>
                         </tr>
                         <tr>
                             <td rowspan="2">Promedio de Calificaciones</td>
-                            <td rowspan="2">{{ $promedio }}</td>
+                            <td rowspan="2">{{ round($promedioCalificaciones, 0) }}</td>
                         </tr>
 
                     </table>
                 </td>
             </tr>
+            
             <tr>
                 <td style="width:30%;">
-                    <table cellpadding="1" border="1px" style="width:100%; text-align:center; font-family: 'Times New Roman', Times, serif; font-size:10px; line-height:100%">
+                    <table class="celdas" style="width:100%; text-align:center; font-size:10px; line-height:100%">
                         <tr>
                             <td colspan="3">PLAN DE ESTUDIOS</td>
                         </tr>
@@ -359,7 +376,7 @@
                         @endforeach
                     </table>
                 </td>
-                <td style="text-align:center; font-family: 'Times New Roman', Times, serif; font-size:14px;">
+                <td style="text-align:center; font-size:14px;">
                     
                 </td>
                 <td style="width:30%;">
@@ -367,7 +384,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="3" style="border: 1px solid; border-collapse: collapse; width:100%; text-align:center; font-family: 'Times New Roman', Times, serif; font-size:12px; line-height:100%">
+                <td colspan="3" style="border: 1px solid; border-collapse: collapse; width:100%; text-align:center; font-size:12px; line-height:100%">
                     Cualquier raspadura o enmienda invalida el presente documento
                 </td>
             </tr>
@@ -378,7 +395,7 @@
     <!-- <footer>
         <table style="width:100%;">
             <tr>
-                <td style="text-align:center; font-family: 'Times New Roman', Times, serif; font-size:14px;">
+                <td style="text-align:center; font-size:14px;">
                     <strong>Firma Autoridad Academica</strong>
                 </td>
             </tr>
@@ -386,7 +403,7 @@
         <table style="width:100%;">
             <tr>
                 <td style="width:30%;">
-                    <table cellpadding="1" border="1px" style="width:100%; text-align:center; font-family: 'Times New Roman', Times, serif; font-size:12px; line-height:100%">
+                    <table cellpadding="1" border="1px" style="width:100%; text-align:center; font-size:12px; line-height:100%">
                         <tr>
                             <td colspan="2">ESCALA DE VALORACION</td>
                         </tr>
@@ -404,11 +421,11 @@
                         </tr>
                     </table>
                 </td>
-                <td style="text-align:center; font-family: 'Times New Roman', Times, serif; font-size:14px;">
+                <td style="text-align:center; font-size:14px;">
                     Sello del Instituto
                 </td>
                 <td style="width:30%;">
-                    <table cellpadding="1" border="1px" style="width:100%; text-align:center; font-family: 'Times New Roman', Times, serif; font-size:12px; line-height:100%">
+                    <table cellpadding="1" border="1px" style="width:100%; text-align:center; font-size:12px; line-height:100%">
                         <tr>
                             <td style="width:50%;">Carga Horaria</td>
                             <td style="width:50%;">3620</td>
@@ -426,7 +443,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="3" style="border: 1px solid; border-collapse: collapse; width:100%; text-align:center; font-family: 'Times New Roman', Times, serif; font-size:12px; line-height:100%">
+                <td colspan="3" style="border: 1px solid; border-collapse: collapse; width:100%; text-align:center; font-size:12px; line-height:100%">
                     Cualquier raspadura o enmienda invalida el presente documento
                 </td>
             </tr>
