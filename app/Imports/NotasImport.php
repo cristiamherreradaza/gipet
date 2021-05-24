@@ -61,8 +61,17 @@ class NotasImport implements ToModel, WithStartRow
             $sumaNotas  = $notaPrimerBimestre->nota_total+$total;
             $promedio = $sumaNotas/2;
 
+            $datosAsignatura = Asignatura::find($nota->asignatura_id);
+
+            if($promedio >= $datosAsignatura->resolucion->nota_aprobacion){
+                $aprobo = 'Si';
+            }else{
+                $aprobo = null;
+            }
+
             $inscripcion = Inscripcione::find($notaPrimerBimestre->inscripcion_id);
             $inscripcion->nota = $promedio;
+            $inscripcion->aprobo = $aprobo;
             $inscripcion->save();
         }
     }

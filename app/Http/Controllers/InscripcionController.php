@@ -1514,8 +1514,6 @@ class InscripcionController extends Controller
                             ->where('trimestre', 2)
                             ->first();
 
-            // dd($nota2);
-
             // cambiamos la nota para el centralizador
             $modificaInscripcion = Inscripcione::find($request->inscripcion_id);
 
@@ -1970,6 +1968,7 @@ class InscripcionController extends Controller
             $cantidadCurricula  = Asignatura::where('carrera_id', $carrera->id)
                                             ->where('anio_vigente', $anioIngreso)
                                             ->count();
+                                            
             $cantidadAprobados  = Inscripcione::where('carrera_id', $carrera->id)
                                             ->where('persona_id', $persona->id)
                                             ->where('aprobo', 'Si')
