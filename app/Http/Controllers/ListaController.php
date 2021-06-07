@@ -174,9 +174,11 @@ class ListaController extends Controller
     public function totalALumnos()
     {
         $carreras   = Carrera::get();
+
         $gestiones  = CarrerasPersona::select('anio_vigente')
                                 ->groupBy('anio_vigente')
                                 ->get();
+                                
         return view('lista.totalAlumnos')->with(compact('carreras', 'gestiones'));
     }
 

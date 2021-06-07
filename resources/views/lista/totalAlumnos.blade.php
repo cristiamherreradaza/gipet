@@ -16,42 +16,40 @@
             <div class="card-header bg-info">
                 <h4 class="mb-0 text-white">CANTIDAD TOTAL DE ALUMNOS</h4>
             </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group">
-                            <label class="control-label">Carrera</label>
-                            <select name="carrera" id="carrera" class="form-control">
-                                <option value="">Todos</option>
-                                @foreach($carreras as $carrera)
-                                    <option value="{{ $carrera->id }}"> {{ $carrera->nombre }} </option>
-                                @endforeach
-                            </select>
+            <form action="#" id="formularioTotalAlumnos" method="GET">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Carrera</label>
+                                <select name="carrera" id="carrera" class="form-control">
+                                    <option value="">Todos</option>
+                                    @foreach($carreras as $carrera)
+                                        <option value="{{ $carrera->id }}"> {{ $carrera->nombre }} </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="form-group">
+                                <label class="control-label">Gestion</label>
+                                <input type="number" class="form-control" name="anio_vigente" id="anio_vigente" value="{{ date('Y') }}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label">&nbsp;</label>
+                                <button type="button" onclick="buscar()" class="btn btn-block btn-primary">Buscar</button>
+                            </div>
                         </div>
                     </div>
-                    <!-- <div class="col">
-                        <div class="form-group">
-                            <label class="control-label">Gestion</label>
-                            <select name="gestion" id="gestion" class="form-control">
-                                @foreach($gestiones as $gestion)
-                                    <option value="{{ $gestion->anio_vigente }}"> {{ $gestion->anio_vigente }} </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div> -->
-                    <div class="col">
-                        <div class="form-group">
-                            <label class="control-label">&nbsp;</label>
-                            <button type="button" onclick="buscar()" class="btn btn-block btn-primary">Buscar</button>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="listadoProductosAjax"></div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div id="listadoProductosAjax"></div>
-                    </div>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -68,10 +66,14 @@
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script src="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/datatable-advanced.init.js') }}"></script>
+<script src="{{ asset('js/utilidades.js') }}"></script>
 <script>
     // Funcion que se ejecuta al hacer clic en pensum
     function buscar(){
-        carrera = $('#carrera').val();
+
+        // carrera = $('#carrera').val();
+        let formulario = document.getElementById('formularioTotalAlumnos');
+
         $.ajax({
             url: "{{ url('Lista/ajaxTotalAlumnos') }}",
             data: {
