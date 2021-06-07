@@ -81,6 +81,7 @@
                             <option value="REPROBO" {{ ($datosCarrerasPersona->estado=='REPROBO')?'selected':'' }}>REPROBO</option>
                             <option value="CONGELADO" {{ ($datosCarrerasPersona->estado=='CONGELADO')?'selected':'' }}>CONGELADO</option>
                             <option value="ABANDONO" {{ ($datosCarrerasPersona->estado=='ABANDONO')?'selected':'' }}>ABANDONO</option>
+                            <option value="ABANDONO TEMPORAL" {{ ($datosCarrerasPersona->estado=='ABANDONO TEMPORAL')?'selected':'' }}>ABANDONO TEMPORAL</option>
                         </select>
                     </div>
                 </div>
