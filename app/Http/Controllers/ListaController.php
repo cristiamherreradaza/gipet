@@ -23,33 +23,29 @@ class ListaController extends Controller
     public function alumnos()
     {
         $carreras   = Carrera::whereNull('estado')->get();
+
         $cursos     = Asignatura::select('gestion')
                                 ->groupBy('gestion')
                                 ->get();
+
         $turnos     = Turno::get();
+
         $paralelos  = CarrerasPersona::select('paralelo')
                                 ->groupBy('paralelo')
                                 ->get();
-        $gestiones  = CarrerasPersona::select('anio_vigente')
-                                ->groupBy('anio_vigente')
-                                ->get();
-        $estados    = CarrerasPersona::select('vigencia')
-                                    ->groupBy('vigencia')
-                                    ->orderBy('vigencia', 'desc')
-                                    ->get();
+
         return view('lista.alumnos')->with(compact('carreras', 'cursos', 'gestiones', 'paralelos', 'turnos', 'estados'));
     }
 
     public function ajaxBusquedaAlumnos(Request $request)
     {
-        $resultado = DB::table('carreras_personas')
-                        ->whereNull('carreras_personas.deleted_at')
-                        ->where('carreras_personas.carrera_id', $request->carrera)
-                        ->where('carreras_personas.gestion', $request->curso)
+        // dd($request->all());
+        $resultado = CarrerasPersona::where('carreras_personas.carrera_id', $request->carrera)
+                        ->where('carreras_personas.gestion', $request->gestion)
                         ->where('carreras_personas.turno_id', $request->turno)
                         ->where('carreras_personas.paralelo', $request->paralelo)
-                        ->where('carreras_personas.anio_vigente', $request->gestion)
-                        ->where('carreras_personas.vigencia', $request->estado)
+                        ->where('carreras_personas.anio_vigente', $request->anio_vigente)
+                        ->where('carreras_personas.estado', $request->estado)
                         ->leftJoin('personas', 'carreras_personas.persona_id', '=', 'personas.id')
                         ->orderBy('personas.apellido_paterno')
                         ->orderBy('personas.apellido_materno')
@@ -60,7 +56,7 @@ class ListaController extends Controller
                             'personas.apellido_materno as apellido_materno',
                             'personas.nombres as nombres',
                             'personas.numero_celular as numero_celular',
-                            'carreras_personas.vigencia as estado'
+                            'carreras_personas.estado as estado'
                         );
                         //->groupBy('carreras_personas.persona_id');
         return Datatables::of($resultado)->make(true);

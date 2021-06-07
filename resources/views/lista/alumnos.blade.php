@@ -21,7 +21,7 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label">Carrera</label>
                             <select name="carrera" id="carrera" class="form-control">
@@ -31,17 +31,17 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col-md-1">
                         <div class="form-group">
                             <label class="control-label">Curso</label>
-                            <select name="curso" id="curso" class="form-control">
+                            <select name="gestion" id="gestion" class="form-control">
                                 @foreach($cursos as $curso)
                                     <option value="{{ $curso->gestion }}"> {{ $curso->gestion }}° A&ntilde;o </option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label class="control-label">Turno</label>
                             <select name="turno" id="turno" class="form-control">
@@ -51,7 +51,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col-md-1">
                         <div class="form-group">
                             <label class="control-label">Paralelo</label>
                             <select name="paralelo" id="paralelo" class="form-control">
@@ -61,27 +61,28 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col-md-1">
                         <div class="form-group">
                             <label class="control-label">Gestion</label>
-                            <select name="gestion" id="gestion" class="form-control">
-                                @foreach($gestiones as $gestion)
-                                    <option value="{{ $gestion->anio_vigente }}"> {{ $gestion->anio_vigente }} </option>
-                                @endforeach
-                            </select>
+                            <input type="number" name="anio_vigente" id="anio_vigente" value="{{ date('Y') }}" class="form-control">
                         </div>
                     </div>
-                    <div class="col">
+
+                    <div class="col-md-2">
                         <div class="form-group">
-                            <label class="control-label">Estado</label>
-                            <select name="estado" id="estado" class="form-control">
-                                @foreach($estados as $estado)
-                                    <option value="{{ $estado->vigencia }}"> {{ $estado->vigencia }} </option>
-                                @endforeach
+                            <label>Estado</label>
+                            <select name="estado" id="estado" class="form-control custom-select">
+                                <option value="APROBO">APROBO</option>
+                                <option value="REPROBO">REPROBO</option>
+                                <option value="CONGELADO">CONGELADO
+                                </option>
+                                <option value="ABANDONO">ABANDONO</option>
+                                <option value="ABANDONO TEMPORAL">ABANDONO TEMPORAL</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col">
+
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label class="control-label">&nbsp;</label>
                             <button type="button" onclick="buscar()" class="btn btn-block btn-primary">Buscar</button>
@@ -103,17 +104,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">RESULTADO DE BUSQUEDA</h4>
-                <div class="row">
-                    <div class="col-md-12">
-                        <button class="btn btn-danger" onclick="reportePdfAlumnos()">
-                            <i class="fas fa-file-pdf">&nbsp; PDF</i>
-                        </button>
-                        
-                        <button class="btn btn-success" onclick="reporteExcelAlumnos()">
-                            <i class="fas fa-file-excel">&nbsp; EXCEL</i>
-                        </button>
-                    </div>
-                </div>
+                
                 <div class="table-responsive">
                     <table id="tabla-tienda" class="table table-bordered table-striped no-wrap">
                         <thead class="text-center">
@@ -131,6 +122,15 @@
                         </tbody>
                     </table>
                 </div>
+                <br />
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <button class="btn btn-success btn-block" onclick="reporteExcelAlumnos()">
+                            <i class="fas fa-file-excel">&nbsp; </i> GENERAR EXCEL
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -142,13 +142,14 @@
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script src="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.js') }}"></script>
 
-<!-- <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+{{-- <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script> -->
+<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script> --}}
+
 <script src="{{ asset('dist/js/pages/datatable/datatable-advanced.init.js') }}"></script>
 
 <script>
@@ -157,10 +158,10 @@
         $("#mostrar").show('slow');
         table.destroy();
         var carrera = $("#carrera").val();
-        var curso = $("#curso").val();
+        var gestion = $("#gestion").val();
         var turno = $("#turno").val();
         var paralelo = $("#paralelo").val();
-        var gestion = $("#gestion").val();
+        var anio_vigente = $("#anio_vigente").val();
         var estado = $("#estado").val();
 
         // $("#tabla-tienda thead th").each(function() {
@@ -170,10 +171,10 @@
 
         // DataTable
         table = $('#tabla-tienda').DataTable( {
-            // dom: 'Bfrtip',
-            // buttons: [
-            //     'copy', 'csv', 'excel', 'pdf', 'print'
-            // ],
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
             iDisplayLength: 10,
             processing: true,
             serverSide: true,
@@ -182,10 +183,10 @@
                 type: "GET",
                 data: {
                     carrera : carrera,
-                    curso : curso,
+                    gestion : gestion,
                     turno : turno,
                     paralelo : paralelo,
-                    gestion : gestion,
+                    anio_vigente : anio_vigente,
                     estado : estado
                     } 
                 },
@@ -202,21 +203,7 @@
                 url: '{{ asset('datatableEs.json') }}'
             },
         } );
-
-        // table.columns().every(function(index) {
-        //     var that = this;
-        //     $("input", this.header()).on("keyup change clear", function() {
-        //         if (that.search() !== this.value) {
-        //             that.search(this.value).draw();
-        //             table
-        //             .rows()
-        //             .$("tr", { filter: "applied" })
-        //             .each(function() {
-        //                 // console.log(table.row(this).data());
-        //             });
-        //         }
-        //     });
-        // });
+        
     }
 
     function reportePdfAlumnos()

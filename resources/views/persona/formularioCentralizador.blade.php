@@ -114,6 +114,7 @@
                                     <option value="REPROBO" {{ (($estado->estado == 'REPROBO') ? 'selected' : '') }}>REPROBO</option>
                                     <option value="CONGELADO" {{ (($estado->estado == 'CONGELADO') ? 'selected' : '') }}>CONGELADO</option>
                                     <option value="ABANDONO" {{ (($estado->estado == 'ABANDONO') ? 'selected' : '') }}>ABANDONO</option>
+                                    <option value="ABANDONO TEMPORAL" {{ ($estado->estado=='ABANDONO TEMPORAL')?'selected':'' }}>ABANDONO TEMPORAL</option>
                                 </select>
                                 <small id="select_{{ $ne->persona_id }}" class="form-control-feedback text-success" style="display: none;">Guardado</small>
                             </td>
