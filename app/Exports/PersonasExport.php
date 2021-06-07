@@ -21,32 +21,37 @@ class PersonasExport implements FromCollection, WithMapping, WithHeadings, Shoul
 
     use Exportable;
     protected $carrera_id;
-    protected $curso_id;
+    protected $gestion;
     protected $turno_id;
     protected $paralelo;
-    protected $gestion;
+    protected $anio_vigente;
     protected $estado;
     
-    public function __construct($carrera_id, $curso_id, $turno_id, $paralelo, $gestion, $estado)
+    public function __construct($carrera_id, $gestion, $turno_id, $paralelo, $anio_vigente, $estado)
     {
-        $this->carrera  = $carrera_id;
-        $this->turno    = $turno_id;
-        $this->curso    = $curso_id;
-        $this->paralelo = $paralelo;
-        $this->gestion  = $gestion;
-        $this->estado   = $estado;
+        $this->carrera      = $carrera_id;
+        $this->gestion      = $gestion;
+        $this->turno        = $turno_id;
+        $this->curso        = $gestion;
+        $this->paralelo     = $paralelo;
+        $this->anio_vigente = $anio_vigente;
+        $this->estado       = $estado;
     }
 
     public function collection()
     {
         $listado    = CarrerasPersona::where('carrera_id', $this->carrera)
-                                    ->where('gestion', $this->curso)
+                                    ->where('gestion', $this->gestion)
                                     ->where('turno_id', $this->turno)
                                     ->where('paralelo', $this->paralelo)
-                                    ->where('anio_vigente', $this->gestion)
-                                    ->where('vigencia', $this->estado)
+                                    ->where('anio_vigente', $this->anio_vigente)
+                                    ->where('estado', $this->estado)
                                     ->get();
+        // dd($this->gestion);
+
+        // dd($listado);
         $array_personas = array();
+
         foreach($listado as $registro)
         {
             array_push($array_personas, $registro->persona_id);
@@ -89,7 +94,7 @@ class PersonasExport implements FromCollection, WithMapping, WithHeadings, Shoul
         $styleArray = [
             'font' => [
                 'bold' => true,
-                'color' => array('rgb' => 'FF0000'),
+                'color' => array('rgb' => '0000FF'),
             ],
             'alignment' => [
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,

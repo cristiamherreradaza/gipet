@@ -203,7 +203,7 @@
                 url: '{{ asset('datatableEs.json') }}'
             },
         } );
-        
+
     }
 
     function reportePdfAlumnos()
@@ -221,15 +221,15 @@
 
     function reporteExcelAlumnos()
     {
-        var carrera     = $("#carrera").val();
-        var curso       = $("#curso").val();
-        var turno       = $("#turno").val();
-        var paralelo    = $("#paralelo").val();
-        var gestion     = $("#gestion").val();
-        var estado      = $("#estado").val();
+        var carrera      = $("#carrera").val();
+        var gestion      = $("#gestion").val();
+        var turno        = $("#turno").val();
+        var paralelo     = $("#paralelo").val();
+        var anio_vigente = $("#anio_vigente").val();
+        var estado       = $("#estado").val();
         // Aplicar validaciones, para cuando los campos sean vacios
         //window.open("{{ url('Lista/reporteExcelAlumnos') }}/"+carrera+'/'+curso+'/'+turno+'/'+paralelo+'/'+gestion+'/'+estado);
-        window.location.href = "{{ url('Lista/reporteExcelAlumnos') }}/"+carrera+'/'+curso+'/'+turno+'/'+paralelo+'/'+gestion+'/'+estado;
+        window.location.href = "{{ url('Lista/reporteExcelAlumnos') }}/"+carrera+'/'+gestion+'/'+turno+'/'+paralelo+'/'+anio_vigente+'/'+estado;
     }
 
 </script>
