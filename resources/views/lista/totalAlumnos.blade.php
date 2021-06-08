@@ -23,7 +23,6 @@
                             <div class="form-group">
                                 <label class="control-label">Carrera</label>
                                 <select name="carrera" id="carrera" class="form-control">
-                                    <option value="">Todos</option>
                                     @foreach($carreras as $carrera)
                                         <option value="{{ $carrera->id }}"> {{ $carrera->nombre }} </option>
                                     @endforeach
@@ -39,7 +38,7 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">&nbsp;</label>
-                                <button type="button" onclick="buscar()" class="btn btn-block btn-primary">Buscar</button>
+                                <button type="button" onclick="buscar()" class="btn btn-block btn-primary">Generar Reporte</button>
                             </div>
                         </div>
                     </div>
@@ -66,25 +65,34 @@
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script src="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/datatable-advanced.init.js') }}"></script>
-<script src="{{ asset('js/utilidades.js') }}"></script>
 <script>
     // Funcion que se ejecuta al hacer clic en pensum
     function buscar(){
 
-        // carrera = $('#carrera').val();
-        let formulario = document.getElementById('formularioTotalAlumnos');
+        let formularioTotalAlumnos = $('#formularioTotalAlumnos');
 
-        $.ajax({
-            url: "{{ url('Lista/ajaxTotalAlumnos') }}",
-            data: {
-                carrera : carrera
-                },
-            type: 'get',
-            success: function(data) {
-                $("#detalleAcademicoAjax").show('slow');
-                $("#detalleAcademicoAjax").html(data);
-            }
-        });
+        if(formularioTotalAlumnos[0].checkValidity())
+        {
+
+            carrera = $('#carrera').val();
+            anio_vigente = $('#anio_vigente').val();
+
+            $.ajax({
+                url: "{{ url('Lista/ajaxTotalAlumnos') }}",
+                data: {
+                    carrera: carrera,
+                    anio_vigente: anio_vigente
+                    },
+                type: 'get',
+                success: function(data) {
+                    $("#detalleAcademicoAjax").show('slow');
+                    $("#detalleAcademicoAjax").html(data);
+                }
+            });
+
+        }else{
+            formularioTotalAlumnos[0].reportValidity()
+        }
     }
 
     /*

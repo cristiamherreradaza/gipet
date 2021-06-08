@@ -184,6 +184,7 @@ class ListaController extends Controller
 
     public function ajaxTotalAlumnos(Request $request)
     {
+        $anio_vigente = $request->anio_vigente;
         // si tiene carrera, se busca solo la carrera, si no tiene, es todas las carreras
         $query   = Carrera::whereNull('estado')
                         ->orderBy('id');
@@ -193,7 +194,7 @@ class ListaController extends Controller
         }
         $carreras   = $query->get();
         $turnos     = Turno::get();
-        return view('lista.ajaxTotalAlumnos')->with(compact('carreras', 'turnos'));
+        return view('lista.ajaxTotalAlumnos')->with(compact('carreras', 'turnos', 'anio_vigente'));
     }
 
     public function reportePdfTotalAlumnos($carrera_id)

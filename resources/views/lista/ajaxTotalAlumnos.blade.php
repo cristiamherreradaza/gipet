@@ -1,23 +1,12 @@
 <div class="card">
     <div class="card-body">
         <h4 class="card-title">RESULTADO DE BUSQUEDA</h4>
-        <div class="row">
-            <div class="col-md-12">
-                <button class="btn btn-danger" onclick="reportePdfTotalAlumnos()">
-                    <i class="fas fa-file-pdf">&nbsp; PDF</i>
-                </button>
-                
-                <!-- <button class="btn btn-success" onclick="reporteExcelAlumnos()">
-                    <i class="fas fa-file-excel">&nbsp; EXCEL</i>
-                </button> -->
-            </div>
-        </div>
         <div class="table-responsive">
             <table class="table table-bordered table-striped no-wrap">
                 <thead class="text-center">
                     <tr>
                         <th>Detalle</th>
-                        <th>Vigentes</th>
+                        <th>Incritos</th>
                         <th>Temporales</th>
                         <th>Nuevos</th>
                         <th>Abandonos</th>
@@ -70,18 +59,38 @@
                             </tr>
                             @foreach($turnos as $turno)
                                 @php
+
+                                    $inscritos = App\CarrerasPersona::where('carrera_id', $carrera->id)
+                                                                ->where('turno_id', $turno->id)
+                                                                ->where('gestion', $i)
+                                                                ->where('anio_vigente', $anio_vigente)
+                                                                // ->where('vigencia', 'Vigente')
+                                                                ->count();
+
+                                    $abandonosTemporales = App\CarrerasPersona::where('carrera_id', $carrera->id)
+                                                                        ->where('turno_id', $turno->id)
+                                                                        ->where('gestion', $i)
+                                                                        ->where('anio_vigente', $anio_vigente)
+                                                                        ->where('estado', 'like', 'ABANDONO TERMPORAL')
+                                                                        // ->where('vigencia', 'Vigente')
+                                                                        ->count();
+
+                                                            
+
                                     $vigentes   = App\CarrerasPersona::where('carrera_id', $carrera->id)
                                                                 ->where('turno_id', $turno->id)
                                                                 ->where('gestion', $i)
-                                                                ->where('anio_vigente', date('Y'))
-                                                                ->where('vigencia', 'Vigente')
+                                                                ->where('anio_vigente', $anio_vigente)
+                                                                // ->where('vigencia', 'Vigente')
                                                                 ->count();
+
                                     $temporales = App\CarrerasPersona::where('carrera_id', $carrera->id)
                                                                 ->where('turno_id', $turno->id)
                                                                 ->where('gestion', $i)
                                                                 ->where('anio_vigente', date('Y'))
                                                                 ->where('vigencia', 'Temporal')
                                                                 ->count();
+
                                     $abandonos = App\CarrerasPersona::where('carrera_id', $carrera->id)
                                                                 ->where('turno_id', $turno->id)
                                                                 ->where('gestion', $i)
@@ -94,8 +103,8 @@
                                 @endphp
                                 <tr>
                                     <td>{{ strtoupper($turno->descripcion) }}</td>
-                                    <td>{{ $vigentes }}</td>
-                                    <td>{{ $temporales }}</td>
+                                    <td>{{ $inscritos }}</td>
+                                    <td>{{ $abandonosTemporales }}</td>
                                     <td>0</td>
                                     <td>{{ $abandonos }}</td>
                                     <td>{{ ($vigentes + $temporales + $abandonos) }}</td>
