@@ -352,6 +352,7 @@ class ListaController extends Controller
 
     public function genera_centralizador(Request $request)
     {
+        dd($request->all());
         $alumnos = Nota::select(
                             'personas.apellido_paterno', 
                             'personas.apellido_materno', 

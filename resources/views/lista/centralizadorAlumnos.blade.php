@@ -15,7 +15,7 @@
             <div class="card-header bg-info">
                 <h4 class="mb-0 text-white">CENTRALIZADOR DE CALIFICACIONES BIMESTRAL</h4>
             </div>
-            <form action="{{ url('Lista/genera_centralizador') }}" method="POST">
+            <form action="{{ url('Lista/genera_centralizador') }}" method="POST" id="formularioCentralizador">
                 @csrf
                 <div class="card-body">
                     <div class="row">
@@ -69,8 +69,8 @@
                         <div class="col-md-1">
                             <div class="form-group">
                                 <label class="control-label">&nbsp;</label>
-                                <button type="submit" class="btn waves-effect waves-light btn-block btn-success"
-                                    id="btnGenera" style="display: none;">Generar</button>
+                                <button type="button" class="btn waves-effect waves-light btn-block btn-success"
+                                    id="btnGenera" style="display: none;" onclick="generaCentralizador()">Generar</button>
                             </div>
                         </div>
 
@@ -146,29 +146,13 @@
 
         function generaCentralizador()
         {
-
-            let docente = $('#docentes option[value="' + $('#docente_id').val() + '"]').data('valor');
-            let gestion = $("#gestion").val();
-            let materia = $("#materia_id").val();
-            let turno = $("#turno_id").val();
-            let paralelo = $("#paralelo").val();
-            let semestre = $("#semestre").val();
-            let trimestre = $("#trimestre").val();
-
-            // console.log(trimestre);
+            let formularioCentralizador = $('#formularioCentralizador');
+            let datosFormulario = formularioCentralizador.serializeArray();
 
             $.ajax({
-                url: "{{ url('Lista/ajax_genera_centralizador') }}",
-                data: {
-                    docente: docente,
-                    gestion: gestion,
-                    materia: materia,
-                    turno: turno,
-                    paralelo: paralelo,
-                    semestre: semestre,
-                    trimestre: trimestre,
-                    },
-                type: 'get',
+                url: "{{ url('Lista/genera_centralizador') }}",
+                data: datosFormulario,
+                type: 'post',
                 success: function(data) {
                     
                     // $("#ajaxMuestraTrimestre").html(data);
