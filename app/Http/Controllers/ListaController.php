@@ -352,7 +352,7 @@ class ListaController extends Controller
 
     public function genera_centralizador(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         $alumnos = Nota::select(
                             'personas.apellido_paterno', 
                             'personas.apellido_materno', 
@@ -382,8 +382,10 @@ class ListaController extends Controller
                     ->where('trimestre', $request->trimestre)
                     ->first();
 
-        $pdf = PDF::loadView('pdf.centralizadorBimestral', compact('alumnos', 'datos'))->setPaper('letter');
-        return $pdf->stream('centralizador_bimestral.pdf');
+        return view('lista.centralizadorBimestral')->with(compact('alumnos', 'datos'));
+
+        // $pdf = PDF::loadView('lista.centralizadorBimestral', compact('alumnos', 'datos'))->setPaper('letter');
+        // return $pdf->stream('centralizador_bimestral.pdf');
 
     }
 

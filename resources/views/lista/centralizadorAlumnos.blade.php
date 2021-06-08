@@ -87,7 +87,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">RESULTADO DE BUSQUEDA</h4>
-                <div class="row">
+                {{-- <div class="row">
                     <div class="col-md-12">
                         <button class="btn btn-danger" onclick="reportePdfAlumnos()">
                             <i class="fas fa-file-pdf">&nbsp; PDF</i>
@@ -97,24 +97,12 @@
                             <i class="fas fa-file-excel">&nbsp; EXCEL</i>
                         </button>
                     </div>
+                </div> --}}
+
+                <div id="cargaCalificacionesBimestral">
+
                 </div>
-                <div class="table-responsive">
-                    <table id="tabla-tienda" class="table table-bordered table-striped no-wrap">
-                        <thead class="text-center">
-                            <tr>
-                                <th>N° Carnet</th>
-                                <th>Apellido Paterno</th>
-                                <th>Apellido Materno</th>
-                                <th>Nombres</th>
-                                <th>Celular</th>
-                                <!-- <th>Fecha Retiro</th> -->
-                                <th>Estado</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
+                
             </div>
         </div>
     </div>
@@ -154,8 +142,8 @@
                 data: datosFormulario,
                 type: 'post',
                 success: function(data) {
-                    
-                    // $("#ajaxMuestraTrimestre").html(data);
+                    $("#cargaCalificacionesBimestral").html(data);
+                    $("#mostrar").show();
                 }
             });
 
