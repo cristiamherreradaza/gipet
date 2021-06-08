@@ -61,13 +61,6 @@
 
                         <div class="col-md-1">
                             <div class="form-group">
-                                <label class="control-label">Semestre</label>
-                                <div id="ajaxMuestraSemestre"></div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-1">
-                            <div class="form-group">
                                 <label class="control-label">Bimestre</label>
                                 <div id="ajaxMuestraTrimestre"></div>
                             </div>

@@ -35,5 +35,5 @@
 
 </script>
 @else
-	No hay
+	No existen docentes asignados
 @endif

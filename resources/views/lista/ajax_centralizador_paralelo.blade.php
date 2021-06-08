@@ -16,7 +16,7 @@
 		let paralelo = $("#paralelo").val();
 
 		$.ajax({
-			url: "{{ url('Lista/ajax_centralizador_semestre') }}",
+			url: "{{ url('Lista/ajax_centralizador_trimestre') }}",
 			data: {
 				docente: docente,
 				gestion: gestion,
@@ -26,7 +26,7 @@
 				},
 			type: 'get',
 			success: function(data) {
-				$("#ajaxMuestraSemestre").html(data);
+				$("#ajaxMuestraTrimestre").html(data);
 			}
 		});
 	}

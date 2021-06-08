@@ -10,6 +10,7 @@ use App\Carrera;
 use App\Persona;
 use App\Asignatura;
 use App\Inscripcione;
+use App\NotasPropuesta;
 use App\CarrerasPersona;
 use Illuminate\Http\Request;
 use App\Exports\PersonasExport;
@@ -194,7 +195,6 @@ class ListaController extends Controller
         }
         $carreras   = $query->get();
         $turnos     = Turno::get();
-        return view('lista.ajaxTotalAlumnos')->with(compact('carreras', 'turnos', 'anio_vigente'));
     }
 
     public function reportePdfTotalAlumnos($carrera_id)
@@ -275,7 +275,7 @@ class ListaController extends Controller
 
     public function ajax_centralizador_docente(Request $request)
     {
-        $docentes = Nota::where('anio_vigente', $request->gestion)
+        $docentes = NotasPropuesta::where('anio_vigente', $request->gestion)
                     ->whereNotNull('docente_id')
                     ->groupBy('docente_id')
                     ->get();
@@ -343,7 +343,6 @@ class ListaController extends Controller
                     ->where('asignatura_id', $request->materia)
                     ->where('turno_id', $request->turno)
                     ->where('paralelo', $request->paralelo)
-                    ->where('semestre', $request->semestre)
                     ->whereNotNull('trimestre')
                     ->groupBy('trimestre')
                     ->get();
@@ -369,29 +368,16 @@ class ListaController extends Controller
                             ->where('notas.asignatura_id', $request->materia_id)
                             ->where('notas.turno_id', $request->turno_id)
                             ->where('notas.paralelo', $request->paralelo)
-                            ->where('notas.semestre', $request->semestre)
                             ->where('notas.trimestre', $request->trimestre)
                             ->leftJoin('personas', 'notas.persona_id', '=', 'personas.id')
                             ->orderBy('personas.apellido_paterno', 'asc')
                             ->get();
-
-        // dd($alumnos);
-
-        /*$alumnos = Nota::where('anio_vigente', $request->gestion)
-                    ->where('docente_id', $request->cod_docente)
-                    ->where('asignatura_id', $request->materia_id)
-                    ->where('turno_id', $request->turno_id)
-                    ->where('paralelo', $request->paralelo)
-                    ->where('semestre', $request->semestre)
-                    ->where('trimestre', $request->trimestre)
-                    ->get();*/
 
         $datos = Nota::where('anio_vigente', $request->gestion)
                     ->where('docente_id', $request->cod_docente)
                     ->where('asignatura_id', $request->materia_id)
                     ->where('turno_id', $request->turno_id)
                     ->where('paralelo', $request->paralelo)
-                    ->where('semestre', $request->semestre)
                     ->where('trimestre', $request->trimestre)
                     ->first();
 
