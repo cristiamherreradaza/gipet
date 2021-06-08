@@ -7,23 +7,21 @@
                     <tr>
                         <th>Detalle</th>
                         <th>Incritos</th>
-                        <th>Temporales</th>
-                        <th>Nuevos</th>
+                        <th>Aband. Temp.</th>
                         <th>Abandonos</th>
-                        <th>Subtotal</th>
                         <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
                     @php
                         $totalGeneralVigentes = 0;
-                        $totalGeneralTemporales = 0;
                         $totalGeneralAbandonos = 0;
+                        $totalGeneralAbandonosTemporales = 0;
                     @endphp
                     @foreach($carreras as $carrera)
                         @php
                             $totalCarreraVigentes = 0;
-                            $totalCarreraTemporales = 0;
+                            $totalCarreraAbandonosTemporales = 0;
                             $totalCarreraAbandonos = 0;
                         @endphp
                         <tr>
@@ -51,8 +49,8 @@
                                         $gestion = 'AÑO INDEFINIDO';
                                 }
                                 $totalGestionVigentes = 0;
-                                $totalGestionTemporales = 0;
                                 $totalGestionAbandonos = 0;
+                                $totalGestionAbandonosTemporales = 0;
                             @endphp
                             <tr>
                                 <th colspan="7">{{ $gestion }}</th>
@@ -64,95 +62,63 @@
                                                                 ->where('turno_id', $turno->id)
                                                                 ->where('gestion', $i)
                                                                 ->where('anio_vigente', $anio_vigente)
-                                                                // ->where('vigencia', 'Vigente')
                                                                 ->count();
 
                                     $abandonosTemporales = App\CarrerasPersona::where('carrera_id', $carrera->id)
                                                                         ->where('turno_id', $turno->id)
                                                                         ->where('gestion', $i)
                                                                         ->where('anio_vigente', $anio_vigente)
-                                                                        ->where('estado', 'like', 'ABANDONO TERMPORAL')
-                                                                        // ->where('vigencia', 'Vigente')
+                                                                        ->where('estado', 'ABANDONO TEMPORAL')
                                                                         ->count();
 
-                                                            
-
-                                    $vigentes   = App\CarrerasPersona::where('carrera_id', $carrera->id)
-                                                                ->where('turno_id', $turno->id)
-                                                                ->where('gestion', $i)
-                                                                ->where('anio_vigente', $anio_vigente)
-                                                                // ->where('vigencia', 'Vigente')
-                                                                ->count();
-
-                                    $temporales = App\CarrerasPersona::where('carrera_id', $carrera->id)
-                                                                ->where('turno_id', $turno->id)
-                                                                ->where('gestion', $i)
-                                                                ->where('anio_vigente', date('Y'))
-                                                                ->where('vigencia', 'Temporal')
-                                                                ->count();
-
                                     $abandonos = App\CarrerasPersona::where('carrera_id', $carrera->id)
-                                                                ->where('turno_id', $turno->id)
-                                                                ->where('gestion', $i)
-                                                                ->where('anio_vigente', date('Y'))
-                                                                ->where('vigencia', 'Abandono')
-                                                                ->count();
-                                    $totalGestionVigentes   = $totalGestionVigentes + $vigentes;
-                                    $totalGestionTemporales = $totalGestionTemporales + $temporales;
-                                    $totalGestionAbandonos  = $totalGestionAbandonos + $abandonos;
+                                                                        ->where('turno_id', $turno->id)
+                                                                        ->where('gestion', $i)
+                                                                        ->where('anio_vigente', $anio_vigente)
+                                                                        ->where('estado', 'ABANDONO')
+                                                                        ->count();
+
+                                    $totalGestionVigentes   += $inscritos;
+                                    $totalGestionAbandonosTemporales += $abandonosTemporales;
+                                    $totalGestionAbandonos += $abandonos;
+
                                 @endphp
                                 <tr>
                                     <td>{{ strtoupper($turno->descripcion) }}</td>
-                                    <td>{{ $inscritos }}</td>
-                                    <td>{{ $abandonosTemporales }}</td>
-                                    <td>0</td>
-                                    <td>{{ $abandonos }}</td>
-                                    <td>{{ ($vigentes + $temporales + $abandonos) }}</td>
-                                    <td>{{ ($vigentes + $temporales + $abandonos) }}</td>
+                                    <td class="text-center">{{ $inscritos }}</td>
+                                    <td class="text-center">{{ $abandonosTemporales }}</td>
+                                    <td class="text-center">{{ $abandonos }}</td>
+                                    <td class="text-right">{{ ($inscritos + $abandonosTemporales + $abandonos) }}</td>
                                 </tr>
                             @endforeach
                             @php
                                 $totalCarreraVigentes   = $totalCarreraVigentes + $totalGestionVigentes;
-                                $totalCarreraTemporales = $totalCarreraTemporales + $totalGestionTemporales;
-                                $totalCarreraAbandonos  = $totalCarreraAbandonos + $totalGestionAbandonos;
+                                $totalCarreraAbandonos += $totalGestionAbandonos;
+                                $totalCarreraAbandonosTemporales  += $totalGestionAbandonosTemporales;
                             @endphp
                             <tr>
                                 <th>TOTAL {{ $gestion }}</th>
-                                <th>{{ $totalGestionVigentes }}</th>
-                                <th>{{ $totalGestionTemporales }}</th>
-                                <th>0</th>
-                                <th>{{ $totalGestionAbandonos }}</th>
-                                <th>{{ ($totalGestionVigentes + $totalGestionTemporales + $totalGestionAbandonos) }}</th>
-                                <th>{{ ($totalGestionVigentes + $totalGestionTemporales + $totalGestionAbandonos) }}</th>
+                                <th class="text-center">{{ $totalGestionVigentes }}</th>
+                                <th class="text-center">{{ $totalGestionAbandonosTemporales }}</th>
+                                <th class="text-center">{{ $totalGestionAbandonos }}</th>
+                                <th class="text-right">{{ ($totalGestionVigentes + $totalGestionAbandonosTemporales + $totalGestionAbandonos) }}</th>
                             </tr>
                         @endfor
                         @php
                             $totalGeneralVigentes = $totalGeneralVigentes + $totalCarreraVigentes;
-                            $totalGeneralTemporales = $totalGeneralTemporales + $totalCarreraTemporales;
-                            $totalGeneralAbandonos = $totalGeneralAbandonos + $totalCarreraAbandonos;
+                            $totalGeneralAbandonos += $totalCarreraAbandonos;
+                            $totalGeneralAbandonosTemporales += + $totalCarreraAbandonosTemporales;
                         @endphp
                         <tr>
                             <th>TOTAL {{ strtoupper($carrera->nombre) }}</th>
-                            <th>{{ $totalCarreraVigentes }}</th>
-                            <th>{{ $totalCarreraTemporales }}</th>
-                            <th>0</th>
-                            <th>{{ $totalCarreraAbandonos }}</th>
-                            <th>{{ ($totalCarreraVigentes + $totalCarreraTemporales + $totalCarreraAbandonos) }}</th>
-                            <th>{{ ($totalCarreraVigentes + $totalCarreraTemporales + $totalCarreraAbandonos) }}</th>
+                            <th class="text-center">{{ $totalCarreraVigentes }}</th>
+                            <th class="text-center">{{ $totalCarreraAbandonos }}</th>
+                            <th class="text-center">{{ $totalCarreraAbandonosTemporales }}</th>
+                            <th class="text-right">{{ ($totalCarreraVigentes + $totalCarreraAbandonosTemporales + $totalCarreraAbandonos) }}</th>
                         </tr>
                     @endforeach
                 </tbody>
-                <tfoot>
-                    <tr class="text-primary">
-                        <th>TOTAL GENERAL</th>
-                        <th>{{ $totalGeneralVigentes }}</th>
-                        <th>{{ $totalGeneralTemporales }}</th>
-                        <th>0</th>
-                        <th>{{ $totalGeneralAbandonos }}</th>
-                        <th>{{ ($totalGeneralVigentes + $totalGeneralTemporales + $totalGeneralAbandonos) }}</th>
-                        <th>{{ ($totalGeneralVigentes + $totalGeneralTemporales + $totalGeneralAbandonos) }}</th>
-                    </tr>
-                </tfoot>
+                
             </table>
         </div>
     </div>
