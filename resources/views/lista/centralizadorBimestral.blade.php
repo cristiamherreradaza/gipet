@@ -1,4 +1,4 @@
-<table class="table">
+<table class="table table-striped table-bordered no-wrap table-hover dataTable no-footer">
     <tr>
         <td>No.</td>
         <td colspan="3">APELLIDOS Y NOMBRES</td>

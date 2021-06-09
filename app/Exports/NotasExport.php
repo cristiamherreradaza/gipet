@@ -16,6 +16,8 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\AfterSheet;
 
+// esta clase es para que los docentes exporten sus alumnos con notas
+
 class NotasExport implements FromCollection, WithMapping, WithHeadings, ShouldAutoSize, WithEvents
 {
     /**

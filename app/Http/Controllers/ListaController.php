@@ -195,6 +195,8 @@ class ListaController extends Controller
         }
         $carreras   = $query->get();
         $turnos     = Turno::get();
+        return view('lista.ajaxTotalAlumnos')->with(compact('carreras', 'turnos', 'anio_vigente'));
+
     }
 
     public function reportePdfTotalAlumnos($carrera_id)

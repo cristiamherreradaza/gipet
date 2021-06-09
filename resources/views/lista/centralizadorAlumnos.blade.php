@@ -75,7 +75,7 @@
                         </div>
 
                     </div>
-                    
+
                 </div>
             </form>
         </div>
@@ -102,7 +102,7 @@
                 <div id="cargaCalificacionesBimestral">
 
                 </div>
-                
+
             </div>
         </div>
     </div>
@@ -114,7 +114,7 @@
     <script src="{{ asset('assets/libs/select2/dist/js/select2.min.js') }}" type="text/javascript"></script>
     <script src="{{ asset('dist/js/pages/forms/select2/select2.init.js') }}" type="text/javascript"></script>
     <script>
-        
+
 
         function buscaDocentes(){
 
