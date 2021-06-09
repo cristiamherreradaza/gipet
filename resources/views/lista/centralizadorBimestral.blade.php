@@ -1,4 +1,4 @@
-<link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
+
 
 <table id="tabla-alumnos-bimestral" class="table table-striped table-bordered table-hover table-striped">
     <thead>
@@ -33,12 +33,21 @@
     </tbody>
 </table>
 
-<script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
-<script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
+
+
 <script>
     $(function () {
         $('#tabla-alumnos-bimestral').DataTable({
-            iDisplayLength: 10,
+            paging: true,
+            dom: 'Bfrtip',
+            buttons: [
+            {
+                extend: 'excel',
+                text: 'EXCEL',
+                title: 'NOTAS BIMESTRALES',
+                filename: 'Notas'
+            },
+            ],
             language: {
                 url: '{{ asset('datatableEs.json') }}'
             },
