@@ -65,6 +65,7 @@
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script src="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/datatable-advanced.init.js') }}"></script>
+
 <script>
     // Funcion que se ejecuta al hacer clic en pensum
     function buscar(){

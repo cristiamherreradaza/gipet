@@ -19,7 +19,7 @@
             <div class="card-header bg-info">
                 <h4 class="mb-0 text-white">CENTRALIZADOR DE NOTAS</h4>
             </div>
-            <form action="{{ url('Lista/generaPdfCentralizadorNotas') }}" method="POST">
+            <form action="{{ url('Lista/generaPdfCentralizadorNotas') }}" method="POST" id="formularioCentralizador">
                 @csrf
                 <div class="card-body">
                     <div class="row">
@@ -65,10 +65,10 @@
                         </div>
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label class="control-label">Etapa</label>
+                                <label class="control-label">Bimestre</label>
                                 <select name="tipo" id="tipo" class="form-control">
-                                    <option value="primero"> Primera </option>
-                                    <option value="segundo"> Segunda </option>
+                                    <option value="primero"> Primero </option>
+                                    <option value="segundo"> Segundo </option>
                                     <option value="anual"> Anual </option>
                                 </select>
                             </div>
@@ -85,23 +85,19 @@
                         <div class="col-md-1">
                             <div class="form-group">
                                 <label class="control-label">Gestion</label>
-                                <select name="anio_vigente" id="anio_vigente" class="form-control">
-                                    @foreach($gestiones as $gestion)
-                                    <option value="{{ $gestion->anio_vigente }}"> {{ $gestion->anio_vigente }} </option>
-                                    @endforeach
-                                </select>
+                                <input type="number" name="anio_vigente" id="anio_vigente" class="form-control" value="{{ date('Y') }}">
                             </div>
                         </div>
                         <div class="col-md-1">
                             <div class="form-group">
                                 <label class="control-label">&nbsp;</label>
-                                <button type="submit" class="btn btn-block btn-primary">GENERAR</button>
+                                <button type="button" onclick="generaCentralizador()" class="btn btn-block btn-primary">GENERAR</button>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <div id="listadoProductosAjax"></div>
+                            <div id="ajaxCentralizador"></div>
                         </div>
                     </div>
                 </div>
@@ -154,4 +150,21 @@
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
 <script src="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/datatable-advanced.init.js') }}"></script>
+<script type="text/javascript">
+
+    function generaCentralizador()
+    {
+        let datosFormulario = $('#formularioCentralizador').serializeArray();
+
+        $.ajax({
+            url: "{{ url('Lista/generaPdfCentralizadorNotas') }}",
+            data: datosFormulario,
+            type: 'POST',
+            success: function(data) {
+                $("#mostrar").show('slow');
+                $("#mostrar").html(data);
+            }
+        });
+    }
+</script>
 @endsection

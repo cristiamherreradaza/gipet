@@ -103,7 +103,6 @@
     <div class="col-md-12" id="mostrar" style="display:none;">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">RESULTADO DE BUSQUEDA</h4>
                 
                 <div class="table-responsive">
                     <table id="tabla-tienda" class="table table-bordered table-striped no-wrap">
@@ -228,7 +227,7 @@
                     action: newExportAction
                 },
             ],
-            iDisplayLength: 10,
+            // iDisplayLength: 10,
             processing: true,
             serverSide: true,
             ajax: { 

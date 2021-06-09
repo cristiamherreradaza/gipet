@@ -1,8 +1,8 @@
 <div class="card">
     <div class="card-body">
-        <h4 class="card-title">RESULTADO DE BUSQUEDA</h4>
+        <button onclick="ExportExcel('xlsx')">EXCEL</button>
         <div class="table-responsive">
-            <table class="table table-bordered table-striped no-wrap">
+            <table class="table table-bordered table-striped no-wrap" id="listadoTotalesAlumnos">
                 <thead class="text-center">
                     <tr>
                         <th>Detalle</th>
@@ -120,6 +120,19 @@
                 </tbody>
                 
             </table>
+
         </div>
     </div>
 </div>
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+
+<script type="text/javascript">
+
+    function ExportExcel(type, fn, dl) {
+       var elt = document.getElementById('listadoTotalesAlumnos');
+       var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS"});
+       return dl ?
+          XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :
+          XLSX.writeFile(wb, fn || ('Alumnos.' + (type || 'xlsx')));
+    }
+</script>
