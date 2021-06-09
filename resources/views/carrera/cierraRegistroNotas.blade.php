@@ -55,7 +55,7 @@
                                                                 ->first();
                                     @endphp
                                     <tr>
-                                        <td>{{ $c->carrera->nombre }}</td>
+                                        <td>{{ $c->carrera['nombre'] }}</td>
                                         <td>{{ $c->gestion }}&deg; a&ntilde;o</td>
                                         <td>
                                             @if ($primerBimestre->finalizado != null)

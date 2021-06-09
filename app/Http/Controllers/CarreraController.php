@@ -137,11 +137,16 @@ class CarreraController extends Controller
     public function cierraRegistroNotas(Request $request)
     {
         $anio_vigente = date('Y');
+
         $carrerasNotasPropuestas = Nota::where('anio_vigente', $anio_vigente)
+                    ->whereNotNull('carrera_id')
                     ->groupBy('carrera_id')
+                    ->groupBy('paralelo')
                     // ->groupBy('turno_id')
                     ->groupBy('gestion')
                     ->get();
+
+        // dd($carrerasNotasPropuestas);
 
         return view('carrera.cierraRegistroNotas')->with(compact('carrerasNotasPropuestas'));
     }
