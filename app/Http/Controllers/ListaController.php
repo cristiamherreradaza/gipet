@@ -290,10 +290,10 @@ class ListaController extends Controller
     public function ajax_centralizador_materia(Request $request)
     {
         // dd($request->all());
-        $materias = Nota::where('anio_vigente', $request->gestion)
+        $materias = NotasPropuesta::where('anio_vigente', $request->gestion)
                     ->where('docente_id', $request->docente)
-                    ->whereNotNull('asignatura_id')
-                    ->groupBy('asignatura_id')
+                    // ->whereNotNull('asignatura_id')
+                    // ->groupBy('asignatura_id')
                     ->get();
 
         return view('lista.ajax_centralizador_materia')->with(compact('materias'));
@@ -367,7 +367,7 @@ class ListaController extends Controller
                             'notas.nota_total'
                             )
                             ->where('notas.anio_vigente', $request->gestion)
-                            ->where('notas.docente_id', $request->cod_docente)
+                            // ->where('notas.docente_id', $request->cod_docente)
                             ->where('notas.asignatura_id', $request->materia_id)
                             ->where('notas.turno_id', $request->turno_id)
                             ->where('notas.paralelo', $request->paralelo)
