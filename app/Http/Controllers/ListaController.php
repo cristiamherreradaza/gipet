@@ -302,7 +302,7 @@ class ListaController extends Controller
     public function ajax_centralizador_turno(Request $request)
     {
         $turnos = Nota::where('anio_vigente', $request->gestion)
-                    ->where('docente_id', $request->docente)
+                    // ->where('docente_id', $request->docente)
                     ->where('asignatura_id', $request->materia)
                     ->whereNotNull('turno_id')
                     ->groupBy('turno_id')
@@ -314,9 +314,9 @@ class ListaController extends Controller
     public function ajax_centralizador_paralelo(Request $request)
     {
         $paralelos = Nota::where('anio_vigente', $request->gestion)
-                    ->where('docente_id', $request->docente)
+                    // ->where('docente_id', $request->docente)
                     ->where('asignatura_id', $request->materia)
-                    ->where('turno_id', $request->turno)
+                    // ->where('turno_id', $request->turno)
                     ->whereNotNull('paralelo')
                     ->groupBy('paralelo')
                     ->get();
@@ -324,26 +324,12 @@ class ListaController extends Controller
         return view('lista.ajax_centralizador_paralelo')->with(compact('paralelos'));
     }
 
-    public function ajax_centralizador_semestre(Request $request)
-    {
-        $semestre = Nota::where('anio_vigente', $request->gestion)
-                    ->where('docente_id', $request->docente)
-                    ->where('asignatura_id', $request->materia)
-                    ->where('turno_id', $request->turno)
-                    ->where('paralelo', $request->paralelo)
-                    ->whereNotNull('semestre')
-                    ->groupBy('semestre')
-                    ->get();
-        // dd($semestre);
-        return view('lista.ajax_centralizador_semestre')->with(compact('semestre'));
-    }
-
     public function ajax_centralizador_trimestre(Request $request)
     {
         $trimestre = Nota::where('anio_vigente', $request->gestion)
-                    ->where('docente_id', $request->docente)
+                    // ->where('docente_id', $request->docente)
                     ->where('asignatura_id', $request->materia)
-                    ->where('turno_id', $request->turno)
+                    // ->where('turno_id', $request->turno)
                     ->where('paralelo', $request->paralelo)
                     ->whereNotNull('trimestre')
                     ->groupBy('trimestre')

@@ -40,19 +40,19 @@
                             </div>
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label class="control-label">Asignaturas</label>
                                 <div id="ajaxMuestraMateria"></div>
                             </div>
                         </div>
 
-                        <div class="col-md-1">
+                        {{-- <div class="col-md-1">
                             <div class="form-group">
                                 <label class="control-label">Turno</label>
                                 <div id="ajaxMuestraTurno"></div>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="col-md-1">
                             <div class="form-group">
