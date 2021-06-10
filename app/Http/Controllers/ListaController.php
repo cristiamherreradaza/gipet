@@ -41,24 +41,47 @@ class ListaController extends Controller
     public function ajaxBusquedaAlumnos(Request $request)
     {
         // dd($request->all());
-        $resultado = CarrerasPersona::where('carreras_personas.carrera_id', $request->carrera)
-                        ->where('carreras_personas.gestion', $request->gestion)
-                        ->where('carreras_personas.turno_id', $request->turno)
-                        ->where('carreras_personas.paralelo', $request->paralelo)
-                        ->where('carreras_personas.anio_vigente', $request->anio_vigente)
-                        ->where('carreras_personas.estado', $request->estado)
-                        ->leftJoin('personas', 'carreras_personas.persona_id', '=', 'personas.id')
-                        ->orderBy('personas.apellido_paterno')
-                        ->orderBy('personas.apellido_materno')
-                        ->orderBy('personas.nombres')
-                        ->select(
-                            'personas.cedula as cedula',
-                            'personas.apellido_paterno as apellido_paterno',
-                            'personas.apellido_materno as apellido_materno',
-                            'personas.nombres as nombres',
-                            'personas.numero_celular as numero_celular',
-                            'carreras_personas.estado as estado'
-                        );
+        if($request->estado == 'todos'){
+            $resultado = CarrerasPersona::where('carreras_personas.carrera_id', $request->carrera)
+                            ->where('carreras_personas.gestion', $request->gestion)
+                            ->where('carreras_personas.turno_id', $request->turno)
+                            ->where('carreras_personas.paralelo', $request->paralelo)
+                            ->where('carreras_personas.anio_vigente', $request->anio_vigente)
+                            // ->where('carreras_personas.estado', $request->estado)
+                            ->leftJoin('personas', 'carreras_personas.persona_id', '=', 'personas.id')
+                            ->orderBy('personas.apellido_paterno')
+                            ->orderBy('personas.apellido_materno')
+                            ->orderBy('personas.nombres')
+                            ->select(
+                                'personas.cedula as cedula',
+                                'personas.apellido_paterno as apellido_paterno',
+                                'personas.apellido_materno as apellido_materno',
+                                'personas.nombres as nombres',
+                                'personas.numero_celular as numero_celular',
+                                'carreras_personas.estado as estado'
+                            );
+
+        }else{
+            $resultado = CarrerasPersona::where('carreras_personas.carrera_id', $request->carrera)
+                            ->where('carreras_personas.gestion', $request->gestion)
+                            ->where('carreras_personas.turno_id', $request->turno)
+                            ->where('carreras_personas.paralelo', $request->paralelo)
+                            ->where('carreras_personas.anio_vigente', $request->anio_vigente)
+                            ->where('carreras_personas.estado', $request->estado)
+                            ->leftJoin('personas', 'carreras_personas.persona_id', '=', 'personas.id')
+                            ->orderBy('personas.apellido_paterno')
+                            ->orderBy('personas.apellido_materno')
+                            ->orderBy('personas.nombres')
+                            ->select(
+                                'personas.cedula as cedula',
+                                'personas.apellido_paterno as apellido_paterno',
+                                'personas.apellido_materno as apellido_materno',
+                                'personas.nombres as nombres',
+                                'personas.numero_celular as numero_celular',
+                                'carreras_personas.estado as estado'
+                            );
+            
+        }
                         //->groupBy('carreras_personas.persona_id');
         return Datatables::of($resultado)->make(true);
     }

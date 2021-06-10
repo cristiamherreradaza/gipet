@@ -72,6 +72,7 @@
                         <div class="form-group">
                             <label>Estado</label>
                             <select name="estado" id="estado" class="form-control custom-select">
+                                <option value="todos">TODOS</option>
                                 <option value="APROBO">APROBO</option>
                                 <option value="REPROBO">REPROBO</option>
                                 <option value="CONGELADO">CONGELADO
