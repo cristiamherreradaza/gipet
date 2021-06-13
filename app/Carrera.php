@@ -63,4 +63,8 @@ class Carrera extends Model
         return $this->hasMany('App\DescuentosPersona');
     }
 
+    public function inicio_gestion()
+    {
+        return $this->hasMany('App\InicioGestion');
+    }
 }

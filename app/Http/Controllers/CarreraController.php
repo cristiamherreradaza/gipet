@@ -8,6 +8,7 @@ use App\Carrera;
 use App\Asignatura;
 use App\Resolucione;
 use App\NotasPropuesta;
+use App\InicioGestion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -39,21 +40,24 @@ class CarreraController extends Controller
     {
         $carrera = Carrera::find($request->carrera_id);
         $resoluciones = Resolucione::get();
+
         return view('carrera.ajaxEditaCarrera')->with(compact('carrera', 'resoluciones'));
     }
 
     public function actualizar(Request $request)
     {
         $carrera = Carrera::find($request->id_carrera_edicion);
-        $resolucion = Resolucione::find($request->resolucion_carrera_edicion);
-        $carrera->user_id = Auth::user()->id;
-        $carrera->resolucion_id = $resolucion->id;
-        $carrera->nombre = $request->nombre_carrera_edicion;
-        $carrera->nivel = $request->nivel_carrera_edicion;
-        $carrera->duracion_anios = $request->duracion_carrera_edicion;
-        $carrera->anio_vigente = $request->anio_vigente_carrera_edicion;
+
+        $resolucion               = Resolucione::find($request->resolucion_carrera_edicion);
+        $carrera->user_id         = Auth::user()->id;
+        $carrera->resolucion_id   = $resolucion->id;
+        $carrera->nombre          = $request->nombre_carrera_edicion;
+        $carrera->nivel           = $request->nivel_carrera_edicion;
+        $carrera->duracion_anios  = $request->duracion_carrera_edicion;
+        $carrera->anio_vigente    = $request->anio_vigente_carrera_edicion;
         $carrera->nota_aprobacion = $resolucion->nota_aprobacion;
         $carrera->save();
+
         return redirect('Carrera/listado');
     }
 
