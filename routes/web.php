@@ -270,6 +270,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Carrera/ajaxEditaCarrera', 'CarreraController@ajaxEditaCarrera');
     Route::get('Carrera/cierraRegistroNotas', 'CarreraController@cierraRegistroNotas');
     Route::get('Carrera/actualizaCierraNotas/{carrera_id}/{anio_vigente}/{gestion}/{estado}/{bimestre}', 'CarreraController@actualizaCierraNotas');
+    Route::post('Carrera/ajaxMuestraInicioFinGestiones', 'CarreraController@ajaxMuestraInicioFinGestiones');
+    Route::post('Carrera/ajaxGuardaInicioFinGestiones', 'CarreraController@ajaxGuardaInicioFinGestiones');
 
     Route::get('Descuento/listado', 'DescuentoController@listado');
     Route::post('Descuento/guardar', 'DescuentoController@guardar');

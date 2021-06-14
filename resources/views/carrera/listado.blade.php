@@ -43,6 +43,7 @@
                 <div class="col-md-3">
                     <br>
                     <button type="submit" class="btn btn-info" title="Ver Asignaturas de Carrera" ><i class="fas fa-eye"></i></button>
+                    <button type="button" class="btn btn-primary" title="Inicio, Fin Gestion" onclick="inicioFinGestiones();"><i class="fas fa-calendar-alt"></i></button>
                     <button type="button" class="btn btn-light" title="Vista Impresion Carrera"  onclick="vista_impresion()"><i class="fas fa-print"></i></button>
                     <button type="button" class="btn btn-warning" title="Editar carrera"  onclick="edita_carrera()"><i class="fas fa-edit"></i></button>
                     <button type="button" class="btn btn-danger" title="Eliminar carrera"  onclick="elimina_carrera()"><i class="fas fa-trash-alt"></i></button>
@@ -689,5 +690,33 @@
             }
         });
     });
+
+    function inicioFinGestiones()
+    {
+        if($("#formulario_carreras")[0].checkValidity()){
+
+            let formulario_carreras = $("#formulario_carreras").serializeArray();
+
+            $.ajax({
+                url: "{{ url('Carrera/ajaxMuestraInicioFinGestiones') }}",
+                method: "POST",
+                data: formulario_carreras,
+                success: function(data)
+                {
+                    $("#carga_ajax_lista_asignaturas").html(data);
+                    /*$("#ca_prerequisitos").load('{{ url('Asignatura/ajax_muestra_prerequisitos') }}/'+asignatura_id);
+                    Swal.fire(
+                        'Excelente!',
+                        'El prerequisito fue eliminado',
+                        'success'
+                    ).then(function() {
+                        // $("#modal_asignaturas").modal('hide');
+                    });*/
+                }
+            })
+        }else{
+            $("#formulario_carreras")[0].reportValidity();
+        }
+    }
 </script>
 @endsection

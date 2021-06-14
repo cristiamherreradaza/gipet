@@ -180,4 +180,26 @@ class CarreraController extends Controller
         return redirect('Carrera/cierraRegistroNotas');
     }
 
+    public function ajaxMuestraInicioFinGestiones(Request $request)
+    {
+        $inicioGestion = InicioGestion::where('carrera_id', $request->c_carrera_id)
+                                        ->where('anio_vigente', $request->c_gestion)
+                                        ->first();
+
+        $carrera = $request->c_carrera_id;
+        $anio_vigente = $request->c_gestion;
+        // dd($inicioGestion);
+
+        return view('carrera.ajaxMuestraInicioFinGestiones')->with(compact('inicioGestion', 'carrera', 'anio_vigente'));       
+    }
+
+    public function ajaxGuardaInicioFinGestiones(Request $request)
+    {
+        // dd($request->all());
+        $guardaInicioGestion = InicioGestion::updateOrCreate(
+            ['carrera_id'=>$request->carrera_id, 'anio_vigente'=>$request->anio_vigente],
+            ['inicio'=>$request->inicio, 'fin'=>$request->fin]
+        );
+    }
+
 }
