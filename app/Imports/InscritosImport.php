@@ -20,7 +20,7 @@ class InscritosImport implements ToModel, WithStartRow
     */
     public function model(array $row)
     {
-        print_r($row);
+        print_r($row[1]);
         echo "<br />";
 
         $hoy = date('Y-m-d');
@@ -28,85 +28,78 @@ class InscritosImport implements ToModel, WithStartRow
                 ->first();
         
         if($alumno){
+
             echo $alumno->nombres."<br />";
+
             $carrera = new CarrerasPersona();
             $carrera->user_id           = 36;
-            $carrera->carrera_id        = $row[5];
+            $carrera->carrera_id        = $row[2];
             $carrera->persona_id        = $alumno->id;
-            $carrera->turno_id          = $row[6];
-            $carrera->gestion           = $row[8];
-            $carrera->paralelo          = $row[7];
-            $carrera->anio_vigente      = 2021;
+            $carrera->turno_id          = $row[5];
+            $carrera->gestion           = $row[4];
+            $carrera->paralelo          = $row[6];
+            $carrera->anio_vigente      = $row[7];
             $carrera->sexo              = $alumno->sexo;
             $carrera->vigencia          = "Vigente";
             $carrera->fecha_inscripcion = $hoy;
-            $carrera->estado            = null;
+            $carrera->estado            = $row[9];
             $carrera->save();
 
-            // definimos las materias
-            $materias = Asignatura::where('carrera_id', $row[5])
-                        ->where('anio_vigente', 2021)
-                        ->where('gestion', $row[8])
-                        ->get();
+            $materia = Asignatura::where('carrera_id', $row[2])
+                                    ->where('sigla', $row[3])
+                                    ->where('anio_vigente', $row[7])
+                                    ->first();
 
-            foreach ($materias as $key => $m) {
-
-                echo $m."<br />";
+            if($materia){
 
                 $inscripcion = new Inscripcione();
 
                 $inscripcion->user_id         = 36;
-                $inscripcion->resolucion_id   = $m->resolucion_id;
-                $inscripcion->carrera_id      = $row[5];
-                $inscripcion->asignatura_id   = $m->id;
-                $inscripcion->turno_id        = $row[6];
+                $inscripcion->resolucion_id   = $materia->resolucion_id;
+                $inscripcion->carrera_id      = $row[2];
+                $inscripcion->asignatura_id   = $materia->id;
+                $inscripcion->turno_id        = $row[5];
                 $inscripcion->persona_id      = $alumno->id;
-                $inscripcion->paralelo        = $row[7];
-                $inscripcion->semestre        = $m->semestre;
-                $inscripcion->gestion         = $row[8];
-                $inscripcion->anio_vigente    = 2021;
+                $inscripcion->paralelo        = $row[6];
+                $inscripcion->semestre        = $materia->semestre;
+                $inscripcion->gestion         = $row[4];
+                $inscripcion->anio_vigente    = $row[7];
                 $inscripcion->fecha_registro  = $hoy;
-                // $inscripcion->nota            = $row[$contadorMaterias];
+                $inscripcion->nota            = $row[8];
                 $inscripcion->nota_aprobacion = 61;
                 $inscripcion->troncal         = 'Si';
-                $inscripcion->estado          = 'Cursando';
+                $inscripcion->estado          = 'Finalizado';
                 
                 $inscripcion->save();
 
                 $inscripcionId = $inscripcion->id;
 
-                // verificamos si es semestral o anual
-                if ($m->ciclo == "Anual") {
-                    $cantidadBimestres = 2;
-                }else{
-                    $cantidadBimestres = 4;
-                }
 
-                // guardamos para el registro de notas
                 for ($i=1; $i <= 2; $i++) 
                 { 
                     $nota = new Nota();
 
                     $nota->user_id         = 36;
-                    $nota->resolucion_id   = $m->resolucion_id;
-                    $nota->carrera_id      = $m->carrera_id;
+                    $nota->resolucion_id   = $materia->resolucion_id;
+                    $nota->carrera_id      = $materia->carrera_id;
                     $nota->inscripcion_id  = $inscripcionId;
                     $nota->persona_id      = $alumno->id;
-                    $nota->asignatura_id   = $m->id;
-                    $nota->gestion         = $row[8];
-                    $nota->turno_id        = $row[6];
-                    $nota->paralelo        = $row[7];
-                    $nota->anio_vigente    = 2021;
-                    $nota->semestre        = $m->semestre;
+                    $nota->asignatura_id   = $materia->id;
+                    $nota->gestion         = $row[4];
+                    $nota->turno_id        = $row[5];
+                    $nota->paralelo        = $row[6];
+                    $nota->anio_vigente    = $row[7];
+                    $nota->semestre        = $materia->semestre;
                     $nota->trimestre       = $i;
                     $nota->fecha_registro  = $hoy;
-                    $nota->nota_aprobacion = $m->resolucion->nota_aprobacion;
+                    $nota->nota_aprobacion = $materia->resolucion->nota_aprobacion;
 
                     $nota->save();
-        
+                
                 }
-    
+
             }
+
         }
     }
 
