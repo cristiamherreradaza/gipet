@@ -28,6 +28,7 @@
         </tbody>
     </table>
 </div>
+
 <script>
     function ajaxEscoger(inscripcion_id, nota, nombre)
     {
