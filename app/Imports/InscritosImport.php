@@ -31,19 +31,30 @@ class InscritosImport implements ToModel, WithStartRow
 
             echo $alumno->nombres."<br />";
 
-            $carrera = new CarrerasPersona();
-            $carrera->user_id           = 36;
-            $carrera->carrera_id        = $row[2];
-            $carrera->persona_id        = $alumno->id;
-            $carrera->turno_id          = $row[5];
-            $carrera->gestion           = $row[4];
-            $carrera->paralelo          = $row[6];
-            $carrera->anio_vigente      = $row[7];
-            $carrera->sexo              = $alumno->sexo;
-            $carrera->vigencia          = "Vigente";
-            $carrera->fecha_inscripcion = $hoy;
-            $carrera->estado            = $row[9];
-            $carrera->save();
+            $consultaCarrerasPersona = CarrerasPersona::where('persona_id', $alumno->id)
+                                                    ->where('anio_vigente', $row[7])
+                                                    ->where('carrera_id', $row[2])
+                                                    ->first();
+
+            if ($consultaCarrerasPersona == null) {
+
+                $carrera = new CarrerasPersona();
+                $carrera->user_id           = 36;
+                $carrera->carrera_id        = $row[2];
+                $carrera->persona_id        = $alumno->id;
+                $carrera->turno_id          = $row[5];
+                $carrera->gestion           = $row[4];
+                $carrera->paralelo          = $row[6];
+                $carrera->anio_vigente      = $row[7];
+                $carrera->sexo              = $alumno->sexo;
+                $carrera->vigencia          = "Vigente";
+                $carrera->fecha_inscripcion = $hoy;
+                $carrera->estado            = $row[9];
+                $carrera->save();
+
+            } 
+
+            // dd($consultaInscriciones);
 
             $materia = Asignatura::where('carrera_id', $row[2])
                                     ->where('sigla', $row[3])
