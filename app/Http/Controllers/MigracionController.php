@@ -1640,7 +1640,7 @@ SELECT *
 
     public function migracionInscripcionj()
     {   
-        $archivo = public_path("m85.xlsx");
+        $archivo = public_path("m2014.xlsx");
         Excel::import(new InscritosImport, $archivo);
     }
 }

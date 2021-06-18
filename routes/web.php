@@ -205,6 +205,7 @@ Route::middleware(['auth'])->group(function () {
     // PDFS
     Route::get('Inscripcion/reportePdfHistorialAcademico/{persona_id}/{carrera_id}', 'InscripcionController@reportePdfHistorialAcademico');
     Route::get('Inscripcion/boletin/{id}', 'InscripcionController@boletin');
+    Route::get('Inscripcion/certificadoCalificaciones/{id}', 'InscripcionController@certificadoCalificaciones');
 
     Route::get('Inscripcion/pruebapdf', 'InscripcionController@pruebapdf')->name('users.pdf');      //ELIMINAR
     Route::get('Inscripcion/pruebaMigracion', 'InscripcionController@pruebaMigracion');

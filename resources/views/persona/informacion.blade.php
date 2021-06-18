@@ -403,6 +403,10 @@
                                                     href="{{ url('Inscripcion/boletin/'.$cp->id) }}" target="_blank"><i
                                                         class="fas fa-file-pdf"></i></a>
 
+                                                <a class="btn btn-info" title="Descargar Certificado Calificaciones" href="{{ url('Inscripcion/certificadoCalificaciones/'.$cp->id) }}" target="_blank">
+                                                    <i class="fas fa-file-pdf"></i>
+                                                </a>
+
                                                 <button type="button" class="btn btn-danger"
                                                     title="Eliminar Inscripcion"
                                                     onclick="ajaxEliminaInscripcion('{{ $cp->persona_id }}', '{{ $cp->carrera_id }}', '{{ $cp->turno_id }}', '{{ $cp->paralelo }}', '{{ $cp->gestion }}', '{{ $cp->anio_vigente }}', '{{ $cp->carrera->nombre }}')"><i

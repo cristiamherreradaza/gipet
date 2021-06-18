@@ -2535,4 +2535,58 @@ class InscripcionController extends Controller
 
         return redirect('Persona/informacion/'.$request->adiciona_persona_id);
     }
+
+    public function certificadoCalificaciones(Request $request, $id)
+    {
+        $registro   = CarrerasPersona::find($id);
+
+        $persona    = Persona::find($registro->persona_id);
+        
+        $carrera    = Carrera::find($registro->carrera_id);
+        // En la variable inscripciones hallaremos la relacion entre el registro de la tabla carreras_personas e inscripciones
+        $inscripciones  = Inscripcione::where('carrera_id', $registro->carrera_id)
+                                    ->where('persona_id', $registro->persona_id)
+                                    //->where('turno_id', $registro->turno_id)
+                                    //->where('paralelo', $registro->paralelo)                  //paralelo
+                                    //->where('fecha_registro', $registro->fecha_inscripcion)   //fecha_inscripcion
+                                    ->whereNull('oyente')
+                                    ->where('anio_vigente', $registro->anio_vigente)            //anio_vigente
+                                    ->get();
+        switch ($persona->expedido) {
+            case 'La Paz':
+                $expedido = 'LP';
+                break;
+            case 'Oruro':
+                $expedido = 'OR';
+                break;
+            case 'Potosi':
+                $expedido = 'PT';
+                break;
+            case 'Cochabamba':
+                $expedido = 'CB';
+                break;
+            case 'Santa Cruz':
+                $expedido = 'SC';
+                break;
+            case 'Beni':
+                $expedido = 'BN';
+                break;
+            case 'Pando':
+                $expedido = 'PA';
+                break;
+            case 'Tarija':
+                $expedido = 'TJ';
+                break;
+            case 'Chuquisaca':
+                $expedido = 'CH';
+                break;
+            default:
+                $expedido = '';
+        }
+        $gestionAcademica   = $registro->anio_vigente;
+        $pdf    = PDF::loadView('pdf.certificadoCalificaciones', compact('registro', 'carrera', 'persona', 'inscripciones', 'gestionAcademica', 'expedido'))->setPaper('letter');
+        // return $pdf->download('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
+        return $pdf->stream('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
+
+    }
 }
