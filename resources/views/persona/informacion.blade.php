@@ -733,6 +733,70 @@
                             <label class="control-label">&nbsp;</label>
                             <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="ajaxInscribeAlumno()">INSCRIBIR</button>
                         </div>
+
+                        {{-- inscripcion --}}
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Descuento
+                                    <span class="text-danger">
+                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                    </span>
+                                </label>
+                                <input type="hidden" name="persona_id" value="{{ $estudiante->id }}">
+                                <select class="form-control custom-select" id="carrera_id" name="carrera_id" onchange="cambiaCarrera()" required>
+                                        <option value="">Ninguno</option>
+                                        <option value="">Pago Anticipado</option>
+                                        <option value="">Descuento Familiar</option>
+                                        <option value="">Descuento Rreprobacion</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label">Cuotas a Pagar</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input type="number" class="form-control" id="anio_vigente" name="anio_vigente" value="7"
+                                    required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label">Monto A Pagar</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input type="number" class="form-control" id="anio_vigente" name="anio_vigente" value="200"
+                                    required>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label">Cuotas</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input type="number" class="form-control" id="anio_vigente" name="anio_vigente" value="5"
+                                    required>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label">Mes</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input type="text" class="form-control" id="anio_vigente" name="anio_vigente" value="Junio"
+                                    required>
+                            </div>
+                        </div>
+
                     </div>
                 </form>
                 {{-- bloque de nueva inscripcion --}}
