@@ -2584,9 +2584,11 @@ class InscripcionController extends Controller
                 $expedido = '';
         }
         $gestionAcademica   = $registro->anio_vigente;
-        $pdf    = PDF::loadView('pdf.certificadoCalificaciones', compact('registro', 'carrera', 'persona', 'inscripciones', 'gestionAcademica', 'expedido'))->setPaper('letter');
+        // $pdf = PDF::loadView('pdf.certificadoCalificaciones', compact('registro', 'carrera', 'persona', 'inscripciones', 'gestionAcademica', 'expedido'))->setPaper('letter');
         // return $pdf->download('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
-        return $pdf->stream('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
+        // return $pdf->stream('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
+
+        return view('pdf.certificadoCalificaciones')->with(compact('registro', 'carrera', 'persona', 'inscripciones', 'gestionAcademica', 'expedido'));
 
     }
 }

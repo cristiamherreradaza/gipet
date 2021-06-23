@@ -55,8 +55,10 @@
 <body>
     
     <header>
+                <button onclick="ExportExcel('xlsx')">EXCEL</button>
+
         <br>
-        <table style="width:100%">
+        <table style="width:100%" id="datos">
             <tr>
                 <!-- <td style="width:35%; text-align:right; background-color: #ffe100;"> -->
                 <td  style="width:65%; text-align:center;">
@@ -72,7 +74,7 @@
     </header>
 
     <main>
-        <p style="font-family: 'Times New Roman', Times, serif; font-size:24px; line-height:1%; text-align:center;">
+        <p style="font-family: 'Times New Roman', Times, serif; font-size:24px; text-align:center;">
             CERTIFICADO DE CALIFICACIONES
         </p>
         <table class="bordess" style="width:100%; font-family: 'Times New Roman', Times, serif; font-size:14px; text-align:center">
@@ -245,6 +247,17 @@
             Telefonos: (591) -2- 2119999-2156600
         </p>
     </footer> -->
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
 
+<script type="text/javascript">
+
+    function ExportExcel(type, fn, dl) {
+       var elt = document.getElementById('datos');
+       var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS"});
+       return dl ?
+          XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :
+          XLSX.writeFile(wb, fn || ('Alumnos.' + (type || 'xlsx')));
+    }
+</script>
 </body>
 </html>

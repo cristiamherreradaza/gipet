@@ -204,7 +204,7 @@ class NumeroALetras
     private function wholeNumber($number)
     {
         if ($number == '0') {
-            $number = 'CERO ';
+            $number = 'Cero ';
         } else {
             $number = $this->convertNumber($number);
         }

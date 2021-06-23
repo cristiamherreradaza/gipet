@@ -407,6 +407,9 @@
                                                     <i class="fas fa-file-pdf"></i>
                                                 </a>
 
+                                                <a class="btn btn-success" title="Descargar Certificado Calificaciones" href="{{ url('Persona/generaExcelCertificado/'.$cp->id) }}" target="_blank"><i class="fas fa-file-excel"></i>
+                                                                                                </a>
+
                                                 <button type="button" class="btn btn-danger"
                                                     title="Eliminar Inscripcion"
                                                     onclick="ajaxEliminaInscripcion('{{ $cp->persona_id }}', '{{ $cp->carrera_id }}', '{{ $cp->turno_id }}', '{{ $cp->paralelo }}', '{{ $cp->gestion }}', '{{ $cp->anio_vigente }}', '{{ $cp->carrera->nombre }}')"><i

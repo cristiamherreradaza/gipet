@@ -19,9 +19,15 @@ use App\CarrerasPersona;
 use App\TiposMensualidade;
 use Illuminate\Http\Request;
 use App\EstudiantesCertificado;
+use App\Exports\CertificadoExport;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\librerias\NumeroALetras;
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class PersonaController extends Controller
 {
@@ -893,6 +899,149 @@ class PersonaController extends Controller
     public function adicionaMateriaAlumno()
     {
         
+    }
+
+    public function generaExcelCertificado(Request $request, $carrera_persona_id)
+    {
+        $datosCarrerasPersona = CarrerasPersona::find($carrera_persona_id);
+
+        $datosPersona = Persona::find($datosCarrerasPersona->persona_id);
+        
+        $datosCarrera = Carrera::find($datosCarrerasPersona->carrera_id);
+        // En la variable inscripciones hallaremos la relacion entre el registro de la tabla carreras_personas e inscripciones
+        $inscripciones  = Inscripcione::where('carrera_id', $datosCarrerasPersona->carrera_id)
+                                    ->where('persona_id', $datosCarrerasPersona->persona_id)
+                                    //->where('turno_id', $datosCarrerasPersona->turno_id)
+                                    //->where('paralelo', $datosCarrerasPersona->paralelo)                  //paralelo
+                                    //->where('fecha_registro', $datosCarrerasPersona->fecha_inscripcion)   //fecha_inscripcion
+                                    ->whereNull('oyente')
+                                    ->where('anio_vigente', $datosCarrerasPersona->anio_vigente)            //anio_vigente
+                                    ->get();
+
+        $expedido = $this->cambiaExpedido($datosPersona->expedido);
+
+        $fileName = 'certificadoCalificaciones.xlsx';
+        // return Excel::download(new CertificadoExport($carrera_persona_id), 'certificado.xlsx');
+        $spreadsheet = new Spreadsheet();
+
+        /*$spreadsheet->getActiveSheet()->getPageSetup()
+            ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_PORTRAIT);
+        $spreadsheet->getActiveSheet()->getPageSetup()
+            ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_LEGAL);
+
+        $spreadsheet->getActiveSheet()
+            ->getPageMargins()->setTop(2);
+        $spreadsheet->getActiveSheet()
+            ->getPageMargins()->setRight(0.75);
+        $spreadsheet->getActiveSheet()
+            ->getPageMargins()->setLeft(0.75);
+        $spreadsheet->getActiveSheet()
+            ->getPageMargins()->setBottom(1);*/
+
+        // colocando estilos
+        $styleArray = array(
+            'font'  => array(
+                'bold'  => true,
+                // 'color' => array('rgb' => 'FF0000'),
+                'size'  => 14,
+                'name'  => 'Verdana'
+            ));
+
+        // $spreadsheet->getActiveSheet()->getCell('D1')->setValue('Some text');
+        // $spreadsheet->getActiveSheet()->getStyle('C1')->applyFromArray($styleArray);
+        // fin de colocar estilos
+
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'CERTIFICADO DE CALIFICACIONES');
+        
+        $sheet->setCellValue('A2', 'CARRERA: ');
+        $sheet->setCellValue('A3', 'TURNO: ');
+        $sheet->setCellValue('A4', 'CURSO: ');
+        $sheet->setCellValue('A5', 'NIVEL: ');
+        $sheet->setCellValue('A6', 'ALUMNO: ');
+
+        $sheet->setCellValue('B2', $datosCarrera->nombre);
+        $sheet->setCellValue('B3', $datosCarrerasPersona->turno->descripcion);
+        $sheet->setCellValue('B4', $datosCarrera->gestion);
+        $sheet->setCellValue('B5', 'Tecnico Superior');
+        $sheet->setCellValue('B6', $datosPersona->apellido_paterno);
+        $sheet->setCellValue('B7', $datosPersona->apellido_materno);
+        $sheet->setCellValue('B8', $datosPersona->nombres);
+        
+        $sheet->setCellValue('C5', 'Carnet');
+        $sheet->setCellValue('C6', $datosPersona->cedula." ".$expedido);
+
+        $sheet->setCellValue('C7', 'Gestion');
+        $sheet->setCellValue('C8', $datosCarrera->anio_vigente);
+
+        $sheet->setCellValue('A9', 'No');
+        $sheet->setCellValue('B9', 'Asignaturas');
+        $sheet->setCellValue('C9', 'Promedio');
+        $sheet->setCellValue('D9', 'S. Turno');
+        $sheet->setCellValue('E9', 'Convalida');
+        $sheet->setCellValue('F9', 'Codigo');
+
+        $contadorCeldas = 10;
+        foreach ($inscripciones as $key => $i) {
+
+            // $sheet->getRowDimension($contadorCeldas)->setRowHeight(35);
+
+            // $aLetras = new NumeroALetras();
+
+            $sheet->setCellValue("A$contadorCeldas", ++$key);
+            $sheet->setCellValue("B$contadorCeldas", $i->asignatura->nombre);
+            $sheet->setCellValue("C$contadorCeldas", $i->nota);
+            $sheet->setCellValue("D$contadorCeldas", 0);
+            $sheet->setCellValue("E$contadorCeldas", 0);
+            $sheet->setCellValue("F$contadorCeldas", $i->asignatura->sigla);
+            // $sheet->setCellValue("H$contadorCeldas", $aLetras->toString($i->nota, 0));
+            $contadorCeldas++;
+        }
+        // $sheet->getRowDimension(1)->setRowHeight(35);
+
+
+        $writer = new Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="'. urlencode($fileName).'"');
+        $writer->save('php://output');
+        // $writer->save('demo.xlsx');
+    }
+
+    private function cambiaExpedido($ciudad)
+    {
+        switch ($ciudad) {
+            case 'La Paz':
+                $expedido = 'LP';
+                break;
+            case 'Oruro':
+                $expedido = 'OR';
+                break;
+            case 'Potosi':
+                $expedido = 'PT';
+                break;
+            case 'Cochabamba':
+                $expedido = 'CB';
+                break;
+            case 'Santa Cruz':
+                $expedido = 'SC';
+                break;
+            case 'Beni':
+                $expedido = 'BN';
+                break;
+            case 'Pando':
+                $expedido = 'PA';
+                break;
+            case 'Tarija':
+                $expedido = 'TJ';
+                break;
+            case 'Chuquisaca':
+                $expedido = 'CH';
+                break;
+            default:
+                $expedido = '';
+        }
+
+        return $expedido;
     }
 
 }
