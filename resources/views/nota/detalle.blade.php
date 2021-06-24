@@ -179,7 +179,6 @@
                             </div>
                             <div class="input-group-append">
                                 <input type="submit" name="upload" id="upload" class="btn btn-success" value="Importar" style="width: 200px;">
-                                {{-- <button type="button" class="btn btn-block btn-danger" onclick="finalizarBimestre()" style="width: 200px;">Finalizar Bimestre</button> --}}
                             </div>
                         @endif
                     </div>

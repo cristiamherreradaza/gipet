@@ -4,9 +4,11 @@ namespace App\Imports;
 
 use App\Nota;
 use App\Kardex;
+use App\Asignatura;
 use App\Inscripcion;
 use App\Inscripcione;
 use App\NotasPropuesta;
+use App\CarrerasPersona;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
@@ -62,9 +64,37 @@ class NotasImport implements ToModel, WithStartRow
             $datosAsignatura = Asignatura::find($nota->asignatura_id);
 
             if($promedio >= $datosAsignatura->resolucion->nota_aprobacion){
+
                 $aprobo = 'Si';
+
+                $carrerasPersona = CarrerasPersona::where('persona_id', $nota->persona_id)
+                                                ->where('carrera_id', $nota->carrera_id)
+                                                ->where('turno_id', $nota->turno_id)
+                                                ->where('gestion', $nota->gestion)
+                                                ->where('paralelo', $nota->paralelo)
+                                                ->where('anio_vigente', $nota->anio_vigente)
+                                                ->first();
+
+                if($carrerasPersona->estado == null){
+                    
+                    $modificaEstado = CarrerasPersona::find($carrerasPersona->id);
+                    $modificaEstado->estado = 'APROBO';
+                    $modificaEstado->save();
+                }
+
             }else{
                 $aprobo = null;
+                $carrerasPersona = CarrerasPersona::where('persona_id', $nota->persona_id)
+                                                ->where('carrera_id', $nota->carrera_id)
+                                                ->where('turno_id', $nota->turno_id)
+                                                ->where('gestion', $nota->gestion)
+                                                ->where('paralelo', $nota->paralelo)
+                                                ->where('anio_vigente', $nota->anio_vigente)
+                                                ->first();
+
+                $modificaEstado = CarrerasPersona::find($carrerasPersona->id);
+                $modificaEstado->estado = 'REPROBO';
+                $modificaEstado->save();                
             }
 
             $inscripcion = Inscripcione::find($notaPrimerBimestre->inscripcion_id);
