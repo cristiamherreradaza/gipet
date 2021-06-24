@@ -174,11 +174,16 @@
                         <a class="btn btn-block btn-success" href="{{ url('nota/exportarexcel/'.$asignatura->id.'/'.$bimestreActual) }}" style="width: 200px;">Exportar Formato</a>
                         @if ($nota->finalizado == null)
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" name="select_file" id="select_file">
+                                <input type="file" class="custom-file-input" name="select_file" id="select_file" required>
                                 <label class="custom-file-label" for="inputGroupFile04">Elegir archivo para subir notas</label>
                             </div>
                             <div class="input-group-append">
-                                <input type="submit" name="upload" id="upload" class="btn btn-success" value="Importar" style="width: 200px;">
+                                <input type="button" name="upload" id="upload" class="btn btn-success" value="Importar" style="width: 200px;" onclick="enviaExcel();">
+
+                                <button class="btn btn-primary" type="button" disabled="" id="cargando" style="display: none;">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    Trabajando...
+                                </button>
                             </div>
                         @endif
                     </div>
@@ -292,6 +297,17 @@ $(document).ready(function() {
             },
         });
     });
+
+    function enviaExcel()
+    {
+        if($("#upload_form")[0].checkValidity()){
+            $("#upload_form").submit();
+            $("#upload").hide();
+            $("#cargando").show();
+        }else{
+            $("#upload_form")[0].reportValidity()
+        }
+    }
 
     function enviaDatosCambiaCurso()
     {

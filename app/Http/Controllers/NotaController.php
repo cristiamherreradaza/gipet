@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\User;
-use App\Asignatura;
-use App\Persona;
-use App\NotasPropuesta;
 use App\Nota;
+use App\User;
+use Validator;
 use App\Kardex;
+use App\Persona;
+use App\Asignatura;
 use App\Inscripcione;
 use App\SegundosTurno;
-use Maatwebsite\Excel\Facades\Excel;
+use App\NotasPropuesta;
+use App\CarrerasPersona;
 use App\Exports\NotasExport;
 use App\Imports\NotasImport;
-use Validator;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 class NotaController extends Controller
@@ -814,6 +815,9 @@ class NotaController extends Controller
         
         $registro = Nota::find($nota->id);
 
+        $datosAsignatura = Asignatura::find($nota->asignatura_id);
+
+
         switch ($request->tipo) {
             case 'asistencia':
                 $registro->nota_asistencia = $request->nota;
@@ -845,6 +849,40 @@ class NotaController extends Controller
                                         ->first();
 
                     $promedio = ($notaPrimerBimestre->nota_total+$registro->nota_total)/2;
+
+                    if ($promedio >= $datosAsignatura->resolucion->nota_aprobacion) {
+
+                        $aprobo = 'Si';
+
+                        $carrerasPersona = CarrerasPersona::where('persona_id', $nota->persona_id)
+                            ->where('carrera_id', $nota->carrera_id)
+                            ->where('turno_id', $nota->turno_id)
+                            ->where('gestion', $nota->gestion)
+                            ->where('paralelo', $nota->paralelo)
+                            ->where('anio_vigente', $nota->anio_vigente)
+                            ->first();
+
+                        if ($carrerasPersona->estado == null) {
+
+                            $modificaEstado = CarrerasPersona::find($carrerasPersona->id);
+                            $modificaEstado->estado = 'APROBO';
+                            $modificaEstado->save();
+                        }
+
+                    } else {
+                        $aprobo = null;
+                        $carrerasPersona = CarrerasPersona::where('persona_id', $nota->persona_id)
+                            ->where('carrera_id', $nota->carrera_id)
+                            ->where('turno_id', $nota->turno_id)
+                            ->where('gestion', $nota->gestion)
+                            ->where('paralelo', $nota->paralelo)
+                            ->where('anio_vigente', $nota->anio_vigente)
+                            ->first();
+
+                        $modificaEstado = CarrerasPersona::find($carrerasPersona->id);
+                        $modificaEstado->estado = 'REPROBO';
+                        $modificaEstado->save();
+                    }
 
                     $inscripcion = Inscripcione::find($request->id);
                     $inscripcion->nota = $promedio;
