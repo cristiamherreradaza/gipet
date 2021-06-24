@@ -20,8 +20,6 @@ class NotasImport implements ToModel, WithStartRow
     */
     public function model(array $row)
     {
-        // print_r($row);
-
         $nota = Nota::find($row[0]);
 
         $total = $row[4] + $row[5] + $row[6] + $row[7] + $row[8];

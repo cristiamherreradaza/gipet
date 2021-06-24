@@ -274,6 +274,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Carrera/actualizaCierraNotas/{carrera_id}/{paralelo}/{turno}/{gestion}/{anio_vigente}/{estado}/{bimestre}', 'CarreraController@actualizaCierraNotas');
     Route::post('Carrera/ajaxMuestraInicioFinGestiones', 'CarreraController@ajaxMuestraInicioFinGestiones');
     Route::post('Carrera/ajaxGuardaInicioFinGestiones', 'CarreraController@ajaxGuardaInicioFinGestiones');
+    Route::post('Carrera/ajaxCambiaGestion', 'CarreraController@ajaxCambiaGestion');
 
     Route::get('Descuento/listado', 'DescuentoController@listado');
     Route::post('Descuento/guardar', 'DescuentoController@guardar');

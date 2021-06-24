@@ -150,8 +150,6 @@ class CarreraController extends Controller
                     ->groupBy('gestion')
                     ->get();
 
-        // dd($carrerasNotasPropuestas);
-
         return view('carrera.cierraRegistroNotas')->with(compact('carrerasNotasPropuestas'));
     }
 
@@ -204,6 +202,22 @@ class CarreraController extends Controller
             ['carrera_id'=>$request->carrera_id, 'anio_vigente'=>$request->anio_vigente],
             ['inicio'=>$request->inicio, 'fin'=>$request->fin]
         );
+    }
+
+    public function ajaxCambiaGestion(Request $request)
+    {
+        // dd($request->all());
+        $anio_vigente = $request->gestion;
+
+        $carrerasNotasPropuestas = Nota::where('anio_vigente', $anio_vigente)
+                    ->whereNotNull('carrera_id')
+                    ->groupBy('carrera_id')
+                    ->groupBy('paralelo')
+                    ->groupBy('turno_id')
+                    ->groupBy('gestion')
+                    ->get();
+
+        return view('carrera.ajaxCambiaGestion')->with(compact('carrerasNotasPropuestas'));
     }
 
 }
