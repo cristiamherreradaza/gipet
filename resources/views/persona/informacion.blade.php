@@ -756,8 +756,12 @@
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input type="number" class="form-control" id="cantidad_cuotas" name="cantidad_cuotas" value="7"
-                                    required>
+                                <select class="form-control custom-select" id="tipo_mensualidad_id" name="tipo_mensualidad_id" required>
+                                    @foreach ($tiposMensualidades as $tm)
+                                        <option value="{{ $tm->id }}">{{ $tm->numero_maximo }}</option>
+                                    @endforeach
+                                </select>
+
                             </div>
                         </div>
 
@@ -796,7 +800,7 @@
                                     <option value="3">Marzo</option>
                                     <option value="4">Abril</option>
                                     <option value="5">Mayo</option>
-                                    <option value="6" selected>Junio</option>
+                                    <option value="6">Junio</option>
                                     <option value="7">Julio</option>
                                     <option value="8">Agosto</option>
                                     <option value="9">Septiembre</option>
@@ -929,10 +933,19 @@
     // Funcion que establece la configuracion para el datatable
     $(function () {
 
-        /*$('#tabla-materias tfoot th').each(function() {
-            var title = $(this).text();
-            $(this).html('<input type="text" class="form-control" placeholder="Busca ' + title + '" />');
-        });*/
+        var d = new Date();
+        var n = d.getMonth();
+
+        let mes = n+1;
+
+        $("#mes").val(mes);
+
+        if (mes <= 3) {
+            $("#tipo_mensualidad_id").val(1);
+        }else{
+            $("#tipo_mensualidad_id").val(2);
+        }
+
 
         // DataTable
         var tableSearching = $('#tabla-materias').DataTable({

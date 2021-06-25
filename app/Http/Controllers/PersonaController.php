@@ -739,11 +739,13 @@ class PersonaController extends Controller
         $descuentos = Descuento::where('servicio_id', 2)
                                 ->get();
 
+        $tiposMensualidades = TiposMensualidade::get();
+
         $carreras = Carrera::get();
 
         $turnos = Turno::get();
         
-        return view('persona.informacion')->with(compact('estudiante', 'carrerasPersona', 'carreras', 'turnos', 'materiasInscripcion', 'carrerasPensum', 'descuentos'));
+        return view('persona.informacion')->with(compact('estudiante', 'carrerasPersona', 'carreras', 'turnos', 'materiasInscripcion', 'carrerasPensum', 'descuentos', 'tiposMensualidades'));
 
     }
 
@@ -757,7 +759,73 @@ class PersonaController extends Controller
             $request->gestion, 
             $request->anio_vigente);
 
-        // return redirect("Persona/informacion/$request->persona_id");
+        // generamos los datos para los pagos
+
+        $cuotaInicioPromo = 1;
+
+        $datosServicios = Servicio::find(2);
+        // Guardamos los datos para las mensualidades
+        $descuento                         = new DescuentosPersona();
+        $descuento->user_id                = Auth::user()->id;
+        $descuento->tipos_mensualidades_id = $request->tipo_mensualidad_id;
+        $descuento->carrera_id             = $request->carrera_id;
+        $descuento->persona_id             = $request->persona_id;
+        $descuento->servicio_id            = 2;
+        $descuento->descuento_id           = $request->descuento_id;
+        // $descuento->monto_director         = $request->monto;
+        $descuento->numero_mensualidad     = $request->cuotaInicioPromo;
+        $descuento->a_pagar                = $request->monto_pagar;
+        $descuento->fecha                  = $request->nueva_fecha_inscripcion;
+        $descuento->cantidad_cuotas        = $request->cantidadCuotasPromo;
+        $descuento->anio_vigente           = $request->nueva_gestion;
+        $descuento->vigente                = "Si";
+        $descuento->save();
+        $descuentoId = $descuento->id;
+        // Fin uardamos los datos para las mensualidades
+        
+        $inicioPromo = $request->cuotaInicioPromo;
+        $finalPromo = ($inicioPromo + $request->cantidadCuotasPromo)-1;
+
+        // guardamos los futuros pagos
+        for ($i = 1; $i <= $request->cantidadMensualidades; $i++) {
+
+            // guardamos si tienen promocion
+            if($i >= $inicioPromo && $i <= $finalPromo){
+                $pagos = new Pago();
+                $pagos->user_id = Auth::user()->id;
+                $pagos->carrera_id = $request->carrera_id;
+                $pagos->persona_id = $request->persona_id;
+                $pagos->servicio_id = 2;
+                $pagos->tipo_mensualidad_id = $request->tipo_mensualidad_id;
+                $pagos->descuento_persona_id = $descuentoId;
+                $pagos->a_pagar = $request->monto_pagar;
+                $pagos->importe = 0;
+                $pagos->faltante = 0;
+                $pagos->total = 0;
+                $pagos->mensualidad = $i;
+                $pagos->anio_vigente = $request->nueva_gestion;
+                $pagos->save();
+            }else{
+                // guardamos las que no tienen promocion
+                $pagos = new Pago();
+                $pagos->user_id = Auth::user()->id;
+                $pagos->carrera_id = $request->carrera_id;
+                $pagos->persona_id = $request->persona_id;
+                $pagos->servicio_id = 2;
+                $pagos->tipo_mensualidad_id = $request->tipo_mensualidad_id;
+                $pagos->descuento_persona_id = null;
+                $pagos->a_pagar = $datosServicios->precio;
+                $pagos->importe = 0;
+                $pagos->faltante = 0;
+                $pagos->total = 0;
+                $pagos->mensualidad = $i;
+                $pagos->anio_vigente = $request->nueva_gestion;
+                $pagos->save();
+            }
+        }
+
+        // guardamos las mensualidades
+        // fin guardamos las mensualidades
     }
 
     // funcion privada para inscribir a un alumno
