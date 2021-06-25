@@ -818,8 +818,7 @@
                             </div>
                         </div>
 
-
-                        <div class="col-md-2">
+                        {{-- <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Mes</label>
                                 <span class="text-danger">
@@ -840,7 +839,7 @@
                                     <option value="12">Diciembre</option>
                                 </select>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="col-md-12">
                             <label class="control-label">&nbsp;</label>

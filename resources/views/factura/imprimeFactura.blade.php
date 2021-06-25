@@ -241,36 +241,7 @@
                     <td style="text-align: right;" width="100px">200.00</td>
                     <td style="text-align: right;" width="100px"><b>200</b></td>
                 </tr>
-
-                <tr>
-                    <td width="25px">&nbsp;&nbsp;
-                        3
-                    </td>
-                    <td style="text-align: right;" width="100px">1</td>
-                    <td width="425px" style="text-align: left;">3 MENSUALIDAD</td>
-                    <td style="text-align: right;" width="100px">200.00</td>
-                    <td style="text-align: right;" width="100px"><b>200</b></td>
-                </tr>
-
-                <tr>
-                    <td width="25px">&nbsp;&nbsp;
-                        4
-                    </td>
-                    <td style="text-align: right;" width="100px">1</td>
-                    <td width="425px" style="text-align: left;">4 MENSUALIDAD</td>
-                    <td style="text-align: right;" width="100px">200.00</td>
-                    <td style="text-align: right;" width="100px"><b>200</b></td>
-                </tr>
-
-                <tr>
-                    <td width="25px">&nbsp;&nbsp;
-                        5
-                    </td>
-                    <td style="text-align: right;" width="100px">1</td>
-                    <td width="425px" style="text-align: left;">5 MENSUALIDAD</td>
-                    <td style="text-align: right;" width="100px">200.00</td>
-                    <td style="text-align: right;" width="100px"><b>200</b></td>
-                </tr>
+                
 			</tbody>
 			<tfoot>
 				<td colspan="3" style="text-align: left;">SON: Seis cientos 100/00 BOLIVIANOS</td>
