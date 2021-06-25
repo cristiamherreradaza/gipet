@@ -634,8 +634,39 @@
                         <span class="text-primary font-weight-bold">Materia convalidada</span>
                     </div>
                 </div>
+
+                {{-- tab pagos --}}
                 <div class="tab-pane" id="settings1">
-                    EN CONSTRUCCION
+
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered no-wrap table-hover" id="tabla-pagos">
+                            <thead>
+                                <tr>
+                                    <th>Cuota</th>
+                                    <th>Monto</th>
+                                    <th>Fecha Pago</th>
+                                    <th>Gestion</th>
+                                    <th>Estado</th>
+                                    <th class="text-nowrap"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($pagos as $key => $p)
+                                <tr>
+                                    <td>{{ $p->mensualidad }}</td>
+                                    <td>{{ $p->a_pagar }}</td>
+                                    <td>{{ $p->fecha }}</td>
+                                    <td>{{ $p->anio_vigente }}</td>
+                                    <td>{{ $p->estado }}</td>
+                                    <td>
+                                        
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <br />
+                    </div>
                 </div>
             </div>
 
@@ -950,6 +981,39 @@
         // DataTable
         var tableSearching = $('#tabla-materias').DataTable({
             "order": [[ 6, 'desc' ]],
+            "language": {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sZeroRecords": "No se encontraron resultados",
+                "sEmptyTable": "Ningún dato disponible en esta tabla",
+                "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sSearch": "Buscar:",
+                "sUrl": "",
+                "sInfoThousands": ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"
+                },
+                "oAria": {
+                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                },
+                "buttons": {
+                "copy": "Copiar",
+                "colvis": "Visibilidad"
+                }
+            }
+
+        });
+
+        var tableSearching2 = $('#tabla-pagos').DataTable({
+            "order": [[ 0, 'desc' ]],
             "language": {
                 "sProcessing": "Procesando...",
                 "sLengthMenu": "Mostrar _MENU_ registros",

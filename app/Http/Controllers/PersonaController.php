@@ -15,6 +15,9 @@ use App\CursosCorto;
 use App\Resolucione;
 use App\Inscripcione;
 use App\SegundosTurno;
+use App\Servicio;
+use App\DescuentosPersona;
+use App\Pago;
 use App\CarrerasPersona;
 use App\TiposMensualidade;
 use Illuminate\Http\Request;
@@ -739,13 +742,17 @@ class PersonaController extends Controller
         $descuentos = Descuento::where('servicio_id', 2)
                                 ->get();
 
+        $pagos = Pago::where('persona_id', $estudiante->id)
+                    ->orderBy('id', 'desc')
+                    ->get();
+
         $tiposMensualidades = TiposMensualidade::get();
 
         $carreras = Carrera::get();
 
         $turnos = Turno::get();
         
-        return view('persona.informacion')->with(compact('estudiante', 'carrerasPersona', 'carreras', 'turnos', 'materiasInscripcion', 'carrerasPensum', 'descuentos', 'tiposMensualidades'));
+        return view('persona.informacion')->with(compact('estudiante', 'carrerasPersona', 'carreras', 'turnos', 'materiasInscripcion', 'carrerasPensum', 'descuentos', 'tiposMensualidades', 'pagos'));
 
     }
 
@@ -762,6 +769,7 @@ class PersonaController extends Controller
         // generamos los datos para los pagos
 
         $cuotaInicioPromo = 1;
+        $hoy = date("Y-m-d");
 
         $datosServicios = Servicio::find(2);
         // Guardamos los datos para las mensualidades
@@ -775,19 +783,19 @@ class PersonaController extends Controller
         // $descuento->monto_director         = $request->monto;
         $descuento->numero_mensualidad     = $request->cuotaInicioPromo;
         $descuento->a_pagar                = $request->monto_pagar;
-        $descuento->fecha                  = $request->nueva_fecha_inscripcion;
-        $descuento->cantidad_cuotas        = $request->cantidadCuotasPromo;
-        $descuento->anio_vigente           = $request->nueva_gestion;
+        $descuento->fecha                  = $request->hoy;
+        $descuento->cantidad_cuotas        = $request->cuotas_promo;
+        $descuento->anio_vigente           = $request->anio_vigente;
         $descuento->vigente                = "Si";
         $descuento->save();
         $descuentoId = $descuento->id;
         // Fin uardamos los datos para las mensualidades
         
-        $inicioPromo = $request->cuotaInicioPromo;
-        $finalPromo = ($inicioPromo + $request->cantidadCuotasPromo)-1;
+        $inicioPromo = $cuotaInicioPromo;
+        $finalPromo = ($inicioPromo + $request->cuotas_promo)-1;
 
         // guardamos los futuros pagos
-        for ($i = 1; $i <= $request->cantidadMensualidades; $i++) {
+        for ($i = 1; $i <= 7; $i++) {
 
             // guardamos si tienen promocion
             if($i >= $inicioPromo && $i <= $finalPromo){
@@ -803,7 +811,7 @@ class PersonaController extends Controller
                 $pagos->faltante = 0;
                 $pagos->total = 0;
                 $pagos->mensualidad = $i;
-                $pagos->anio_vigente = $request->nueva_gestion;
+                $pagos->anio_vigente = $request->anio_vigente;
                 $pagos->save();
             }else{
                 // guardamos las que no tienen promocion
@@ -819,7 +827,7 @@ class PersonaController extends Controller
                 $pagos->faltante = 0;
                 $pagos->total = 0;
                 $pagos->mensualidad = $i;
-                $pagos->anio_vigente = $request->nueva_gestion;
+                $pagos->anio_vigente = $request->anio_vigente;
                 $pagos->save();
             }
         }
