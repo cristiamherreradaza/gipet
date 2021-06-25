@@ -32,8 +32,9 @@
                             <td>{{ $servicio->nombre }}</td>
                             <td>{{ $servicio->precio }}</td>
                             <td>
-                                <button type="button" class="btn btn-info" title="Editar servicio"  onclick="editar('{{ $servicio->id }}', '{{ $servicio->nombre }}', '{{ $servicio->sigla }}', '{{ $servicio->precio }}')"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-dark" title="Ver periodos"  onclick="ver_periodos('{{ $servicio->id }}', '{{ $servicio->nombre }}')"><i class="fas fa-bullseye"></i></button>
+                                <button type="button" class="btn btn-warning" title="Editar servicio"  onclick="editar('{{ $servicio->id }}', '{{ $servicio->nombre }}', '{{ $servicio->sigla }}', '{{ $servicio->precio }}')"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-info" title="Descuentos" onclick="ver_descuentos('{{ $servicio->id }}')"><i class="fas fa-ticket-alt"></i></button>
+                                <button type="button" class="btn btn-primary" title="Ver periodos"  onclick="ver_periodos('{{ $servicio->id }}', '{{ $servicio->nombre }}')"><i class="fas fa-bullseye"></i></button>
                                 <button type="button" class="btn btn-danger" title="Eliminar servicio"  onclick="eliminar('{{ $servicio->id }}', '{{ $servicio->nombre }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
@@ -220,6 +221,12 @@
     {
         window.location.href = "{{ url('Servicio/periodo') }}/"+id;
     }
+
+    function ver_descuentos(id)
+    {
+        window.location.href = "{{ url('Descuento/listado') }}/"+id;
+    }
+
 
     function eliminar(id, nombre)
     {

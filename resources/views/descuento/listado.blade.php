@@ -28,10 +28,10 @@
                         <tr>
                             <td>{{ ($key+1) }}</td>
                             <td>{{ $descuento->nombre }}</td>
-                            <td>{{ $descuento->monto }}</td>
+                            <td>{{ $descuento->a_pagar }}</td>
                             <td>
                                 <button type="button" class="btn btn-info" title="Editar descuento"  onclick="editar('{{ $descuento->id }}', '{{ $descuento->nombre }}', '{{ $descuento->monto }}')"><i class="fas fa-edit"></i></button>
-                                <button type="button" class="btn btn-danger" title="Eliminar descuento"  onclick="eliminar('{{ $descuento->id }}', '{{ $descuento->nombre }}')"><i class="fas fa-trash-alt"></i></button>
+                                <button type="button" class="btn btn-danger" title="Eliminar descuento"  onclick="eliminar('{{ $descuento->id }}', '{{ $descuento->nombre }}', '{{ $descuento->servicio_id }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
                     @endforeach

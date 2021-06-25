@@ -532,7 +532,6 @@ class PersonaController extends Controller
         $materiasCarrera = Asignatura::where('carrera_id', $request->carrera)
                             ->where('anio_vigente', $request->anio_vigente)
                             ->where('gestion', $request->curso)
-                            
                             // ->where('anio_vigente', $request->anio_vigente)
                             ->orderBy('orden_impresion', 'asc')
                             ->get();
@@ -737,12 +736,14 @@ class PersonaController extends Controller
         $materiasInscripcion = Inscripcione::where('persona_id', $request->id)
                                 ->get();
 
+        $descuentos = Descuento::where('servicio_id', 2)
+                                ->get();
+
         $carreras = Carrera::get();
 
         $turnos = Turno::get();
-
         
-        return view('persona.informacion')->with(compact('estudiante', 'carrerasPersona', 'carreras', 'turnos', 'materiasInscripcion', 'carrerasPensum'));
+        return view('persona.informacion')->with(compact('estudiante', 'carrerasPersona', 'carreras', 'turnos', 'materiasInscripcion', 'carrerasPensum', 'descuentos'));
 
     }
 

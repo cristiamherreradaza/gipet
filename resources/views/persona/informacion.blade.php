@@ -663,7 +663,6 @@
                         <p>&nbsp;</p>
 
                         <div class="col-md-12"><h3 class="text-info">Formulario de Inscripcion</h3></div>
-
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>Carrera
@@ -679,7 +678,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label>Curso
                                     <span class="text-danger">
@@ -707,7 +706,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label>Paralelo
                                     <span class="text-danger">
@@ -722,7 +721,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Gesti&oacute;n</label>
                                 <span class="text-danger">
@@ -732,10 +731,6 @@
                                     required>
                             </div>
                         </div>                        
-                        <div class="col-md-2">
-                            <label class="control-label">&nbsp;</label>
-                            <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="ajaxInscribeAlumno()">INSCRIBIR</button>
-                        </div>
 
                         {{-- inscripcion --}}
                         <div class="col-md-4">
@@ -746,11 +741,11 @@
                                     </span>
                                 </label>
                                 <input type="hidden" name="persona_id" value="{{ $estudiante->id }}">
-                                <select class="form-control custom-select" id="carrera_id" name="carrera_id" onchange="cambiaCarrera()" required>
-                                        <option value="">Ninguno</option>
-                                        <option value="">Pago Anticipado</option>
-                                        <option value="">Descuento Familiar</option>
-                                        <option value="">Descuento Rreprobacion</option>
+                                <select class="form-control custom-select" id="descuento_id" name="descuento_id" onchange="cambiaDescuento()" required>
+                                    <option value="">Ninguno</option>
+                                    @foreach ($descuentos as $d)
+                                        <option value="{{ $d->id }}" data-monto="{{ $d->a_pagar }}">{{ $d->nombre }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -761,7 +756,7 @@
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input type="number" class="form-control" id="anio_vigente" name="anio_vigente" value="7"
+                                <input type="number" class="form-control" id="cantidad_cuotas" name="cantidad_cuotas" value="7"
                                     required>
                             </div>
                         </div>
@@ -772,18 +767,18 @@
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input type="number" class="form-control" id="anio_vigente" name="anio_vigente" value="200"
+                                <input type="number" class="form-control" id="monto_pagar" name="monto_pagar" value="200"
                                     required>
                             </div>
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                             <div class="form-group">
                                 <label class="control-label">Cuotas</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input type="number" class="form-control" id="anio_vigente" name="anio_vigente" value="5"
+                                <input type="number" class="form-control" id="cuotas_promo" name="cuotas_promo" value="5"
                                     required>
                             </div>
                         </div>
@@ -795,9 +790,26 @@
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input type="text" class="form-control" id="anio_vigente" name="anio_vigente" value="Junio"
-                                    required>
+                                <select class="form-control custom-select" id="mes" name="mes" required>
+                                    <option value="1">Enero</option>
+                                    <option value="2">Febrero</option>
+                                    <option value="3">Marzo</option>
+                                    <option value="4">Abril</option>
+                                    <option value="5">Mayo</option>
+                                    <option value="6" selected>Junio</option>
+                                    <option value="7">Julio</option>
+                                    <option value="8">Agosto</option>
+                                    <option value="9">Septiembre</option>
+                                    <option value="10">Octubre</option>
+                                    <option value="11">Noviembre</option>
+                                    <option value="12">Diciembre</option>
+                                </select>
                             </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="control-label">&nbsp;</label>
+                            <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="ajaxInscribeAlumno()">INSCRIBIR</button>
                         </div>
 
                     </div>
@@ -1176,6 +1188,12 @@
         }
 
     });
+
+    function cambiaDescuento()
+    {
+        let montoPagar = $("#descuento_id").find(':selected').data('monto');
+        $("#monto_pagar").val(montoPagar);
+    }
 
 </script>
 @endsection

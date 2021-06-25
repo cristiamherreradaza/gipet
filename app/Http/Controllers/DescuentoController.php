@@ -8,9 +8,11 @@ use App\Descuento;
 
 class DescuentoController extends Controller
 {
-    public function listado()
+    public function listado($servicio_id)
     {
-        $descuentos = Descuento::get();
+        $descuentos = Descuento::where('servicio_id', $servicio_id)
+                                ->get();
+        // dd($descuentos);
         return view('descuento.listado')->with(compact('descuentos'));
     }
 
