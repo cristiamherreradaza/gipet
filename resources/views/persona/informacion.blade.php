@@ -407,7 +407,7 @@
                                                     <i class="fas fa-file-pdf"></i>
                                                 </a>
 
-                                                <a class="btn btn-success" title="Descargar Certificado Calificaciones" href="{{ url('Persona/generaExcelCertificado/'.$cp->id) }}" target="_blank"><i class="fas fa-file-excel"></i>
+                                                <a class="btn btn-success" title="Descargar Certificado Calificaciones" href="{{ url('Persona/generaExcelCertificado/'.$cp->id) }}"><i class="fas fa-file-excel"></i>
                                                                                                 </a>
 
                                                 <button type="button" class="btn btn-danger"

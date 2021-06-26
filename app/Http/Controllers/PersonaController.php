@@ -997,26 +997,38 @@ class PersonaController extends Controller
 
         $expedido = $this->cambiaExpedido($datosPersona->expedido);
 
-        $fileName = 'certificadoCalificaciones.xlsx';
+        $fileName = 'certifica_notas.xlsx';
         // return Excel::download(new CertificadoExport($carrera_persona_id), 'certificado.xlsx');
         $spreadsheet = new Spreadsheet();
 
-        /*$spreadsheet->getActiveSheet()->getPageSetup()
-            ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_PORTRAIT);
-        $spreadsheet->getActiveSheet()->getPageSetup()
-            ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_LEGAL);
+        $spreadsheet->getActiveSheet()->getStyle("A9:F17")->applyFromArray(
+            array(
+                'borders' => array(
+                    'allBorders' => array(
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'color' => array('argb' => '000000')
+                    )
+                )
+            )
+        );
 
-        $spreadsheet->getActiveSheet()
-            ->getPageMargins()->setTop(2);
-        $spreadsheet->getActiveSheet()
-            ->getPageMargins()->setRight(0.75);
-        $spreadsheet->getActiveSheet()
-            ->getPageMargins()->setLeft(0.75);
-        $spreadsheet->getActiveSheet()
-            ->getPageMargins()->setBottom(1);*/
+        $spreadsheet->getActiveSheet()->setTitle("certifica_cal");
+
+        $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(80);
+        $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(12);
+        $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(12);
+        $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(12);
 
         // colocando estilos
-        $styleArray = array(
+        $fuenteNegrita = array(
+            'font'  => array(
+                'bold'  => true,
+                // 'color' => array('rgb' => 'FF0000'),
+                'size'  => 10,
+                'name'  => 'Verdana'
+            ));
+
+        $fuenteNegritaTitulo = array(
             'font'  => array(
                 'bold'  => true,
                 // 'color' => array('rgb' => 'FF0000'),
@@ -1024,8 +1036,15 @@ class PersonaController extends Controller
                 'name'  => 'Verdana'
             ));
 
+
         // $spreadsheet->getActiveSheet()->getCell('D1')->setValue('Some text');
-        // $spreadsheet->getActiveSheet()->getStyle('C1')->applyFromArray($styleArray);
+        $spreadsheet->getActiveSheet()->getStyle("A1:A6")->applyFromArray($fuenteNegritaTitulo);
+        $spreadsheet->getActiveSheet()->getStyle('A2:A6')->applyFromArray($fuenteNegrita);
+
+        $spreadsheet->getActiveSheet()->getStyle('C5')->applyFromArray($fuenteNegrita);
+        $spreadsheet->getActiveSheet()->getStyle('C7')->applyFromArray($fuenteNegrita);
+
+        $spreadsheet->getActiveSheet()->getStyle('A9:F9')->applyFromArray($fuenteNegrita);
         // fin de colocar estilos
 
         $sheet = $spreadsheet->getActiveSheet();
@@ -1039,7 +1058,7 @@ class PersonaController extends Controller
 
         $sheet->setCellValue('B2', $datosCarrera->nombre);
         $sheet->setCellValue('B3', $datosCarrerasPersona->turno->descripcion);
-        $sheet->setCellValue('B4', $datosCarrera->gestion);
+        $sheet->setCellValue('B4', $datosCarrerasPersona->gestion);
         $sheet->setCellValue('B5', 'Tecnico Superior');
         $sheet->setCellValue('B6', $datosPersona->apellido_paterno);
         $sheet->setCellValue('B7', $datosPersona->apellido_materno);
