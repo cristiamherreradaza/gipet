@@ -22,6 +22,7 @@ use App\CarrerasPersona;
 use App\TiposMensualidade;
 use Illuminate\Http\Request;
 use App\EstudiantesCertificado;
+use App\librerias\Utilidades;
 use App\Exports\CertificadoExport;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\DB;
@@ -995,7 +996,8 @@ class PersonaController extends Controller
                                     ->where('anio_vigente', $datosCarrerasPersona->anio_vigente)            //anio_vigente
                                     ->get();
 
-        $expedido = $this->cambiaExpedido($datosPersona->expedido);
+        $utilidades = new Utilidades();
+        $expedido = $utilidades->cambiaExpedido($datosPersona->expedido);
 
         $fileName = 'certifica_notas.xlsx';
         // return Excel::download(new CertificadoExport($carrera_persona_id), 'certificado.xlsx');
@@ -1102,42 +1104,4 @@ class PersonaController extends Controller
         $writer->save('php://output');
         // $writer->save('demo.xlsx');
     }
-
-    private function cambiaExpedido($ciudad)
-    {
-        switch ($ciudad) {
-            case 'La Paz':
-                $expedido = 'LP';
-                break;
-            case 'Oruro':
-                $expedido = 'OR';
-                break;
-            case 'Potosi':
-                $expedido = 'PT';
-                break;
-            case 'Cochabamba':
-                $expedido = 'CB';
-                break;
-            case 'Santa Cruz':
-                $expedido = 'SC';
-                break;
-            case 'Beni':
-                $expedido = 'BN';
-                break;
-            case 'Pando':
-                $expedido = 'PA';
-                break;
-            case 'Tarija':
-                $expedido = 'TJ';
-                break;
-            case 'Chuquisaca':
-                $expedido = 'CH';
-                break;
-            default:
-                $expedido = '';
-        }
-
-        return $expedido;
-    }
-
 }

@@ -23,6 +23,7 @@ use App\CarrerasPersona;
 use App\CobrosTemporada;
 use App\DescuentosPersona;
 use App\ServiciosAsignatura;
+use App\librerias\Utilidades;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Auth;
@@ -1924,37 +1925,8 @@ class InscripcionController extends Controller
                                         ->whereNull('oyente')
                                         ->avg('nota');
 
-            switch ($persona->expedido) {
-                case 'La Paz':
-                    $expedido = 'LP';
-                    break;
-                case 'Oruro':
-                    $expedido = 'OR';
-                    break;
-                case 'Potosi':
-                    $expedido = 'PT';
-                    break;
-                case 'Cochabamba':
-                    $expedido = 'CB';
-                    break;
-                case 'Santa Cruz':
-                    $expedido = 'SC';
-                    break;
-                case 'Beni':
-                    $expedido = 'BN';
-                    break;
-                case 'Pando':
-                    $expedido = 'PA';
-                    break;
-                case 'Tarija':
-                    $expedido = 'TJ';
-                    break;
-                case 'Chuquisaca':
-                    $expedido = 'CH';
-                    break;
-                default:
-                    $expedido = '';
-            }
+            $utilidades = new Utilidades();
+            $expedido = $utilidades->cambiaExpedido($persona->expedido);
 
             $anioIngreso    = CarrerasPersona::where('persona_id', $persona->id)
                                             ->where('carrera_id', $carrera->id)

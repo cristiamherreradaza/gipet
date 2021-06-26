@@ -403,10 +403,6 @@
                                                     href="{{ url('Inscripcion/boletin/'.$cp->id) }}" target="_blank"><i
                                                         class="fas fa-file-pdf"></i></a>
 
-                                                <a class="btn btn-info" title="Descargar Certificado Calificaciones" href="{{ url('Inscripcion/certificadoCalificaciones/'.$cp->id) }}" target="_blank">
-                                                    <i class="fas fa-file-pdf"></i>
-                                                </a>
-
                                                 <a class="btn btn-success" title="Descargar Certificado Calificaciones" href="{{ url('Persona/generaExcelCertificado/'.$cp->id) }}"><i class="fas fa-file-excel"></i>
                                                                                                 </a>
 
@@ -680,7 +676,7 @@
 
                     <div class="col-md-4">
                         <button type="button" class="btn waves-effect waves-light btn-block btn-light"
-                            onclick="muestraFormularioReportes()">CENTRALIZADORES</button>
+                            onclick="muestraFormularioReportes()">HISTORIAL ACADEMICO</button>
                     </div>
 
                     <div class="col-md-4">
@@ -882,7 +878,10 @@
                                                         <td class="text-left">{{ $cp->carrera->nombre }}</td>
                                                         <td>
                                                             <a href="{{ url('Inscripcion/reportePdfHistorialAcademico') }}/{{ $cp->persona_id }}/{{ $cp->carrera_id }}"
-                                                                class="btn btn-light" title="Contrato" target="blank"><i class="fas fa-file-alt"></i></a>
+                                                                class="btn btn-dark" title="Historial Academico PDF" target="blank"><i class="fas fa-file-pdf"></i></a>
+
+                                                            <a href="{{ url('Inscripcion/reportePdfHistorialAcademico') }}/{{ $cp->persona_id }}/{{ $cp->carrera_id }}"
+                                                                class="btn btn-success" title="Historial Academico Excel" target="blank"><i class="fas fa-file-excel"></i></a>
                                                         </td>
                                                     </tr>
                                                     @endforeach
@@ -893,7 +892,7 @@
                                 </div>
                             </div> <!-- end card-->
                 
-                            <div class="card mb-0">
+{{--                             <div class="card mb-0">
                                 <div class="card-header" id="headingTwo">
                                     <h5 class="m-0">
                                         <a class="custom-accordion-title collapsed d-block pt-2 pb-2" data-toggle="collapse"
@@ -908,7 +907,7 @@
                                         Aqui
                                     </div>
                                 </div>
-                            </div> <!-- end card-->
+                            </div> 
                 
                             <div class="card mb-0">
                                 <div class="card-header" id="headingThree">
@@ -925,7 +924,8 @@
                                         Aqui
                                     </div>
                                 </div>
-                            </div> <!-- end card-->
+                            </div> 
+ --}}
                         </div> <!-- end custom accordions-->
                     </div> <!-- end col -->
                 
