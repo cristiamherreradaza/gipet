@@ -880,8 +880,8 @@
                                                             <a href="{{ url('Inscripcion/reportePdfHistorialAcademico') }}/{{ $cp->persona_id }}/{{ $cp->carrera_id }}"
                                                                 class="btn btn-dark" title="Historial Academico PDF" target="blank"><i class="fas fa-file-pdf"></i></a>
 
-                                                            <a href="{{ url('Inscripcion/reportePdfHistorialAcademico') }}/{{ $cp->persona_id }}/{{ $cp->carrera_id }}"
-                                                                class="btn btn-success" title="Historial Academico Excel" target="blank"><i class="fas fa-file-excel"></i></a>
+                                                            <a href="{{ url('Inscripcion/excelHistorialAcademico') }}/{{ $cp->persona_id }}/{{ $cp->carrera_id }}"
+                                                                class="btn btn-success" title="Historial Academico Excel"><i class="fas fa-file-excel"></i></a>
                                                         </td>
                                                     </tr>
                                                     @endforeach

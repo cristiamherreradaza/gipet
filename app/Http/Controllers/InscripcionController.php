@@ -23,10 +23,14 @@ use App\CarrerasPersona;
 use App\CobrosTemporada;
 use App\DescuentosPersona;
 use App\ServiciosAsignatura;
+use App\InicioGestion;
 use App\librerias\Utilidades;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\Auth;
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class InscripcionController extends Controller
 {
@@ -2562,5 +2566,200 @@ class InscripcionController extends Controller
 
         return view('pdf.certificadoCalificaciones')->with(compact('registro', 'carrera', 'persona', 'inscripciones', 'gestionAcademica', 'expedido'));
 
+    }
+
+    public function excelHistorialAcademico(Request $request, $persona_id, $carrera_id)
+    {
+        if($persona_id && $carrera_id)
+        {
+            $persona        = Persona::find($persona_id);
+
+            $carrera        = Carrera::find($carrera_id);
+
+            $inscripciones  = Inscripcione::where('persona_id', $persona->id)
+                                        ->where('carrera_id', $carrera->id)
+                                        // ->where('aprobo', 'Si')
+                                        ->whereNull('oyente')
+                                        ->orderBy('id')
+                                        ->get();
+
+            $promedioCalificaciones  = Inscripcione::where('persona_id', $persona->id)
+                                        ->where('carrera_id', $carrera->id)
+                                        ->whereNull('oyente')
+                                        ->avg('nota');
+
+            $utilidades = new Utilidades();
+            $expedido = $utilidades->cambiaExpedido($persona->expedido);
+
+
+            $anioIngreso    = CarrerasPersona::where('persona_id', $persona->id)
+                                            ->where('carrera_id', $carrera->id)
+                                            ->min('anio_vigente');
+
+            // dd($anioIngreso);
+
+            $inicioGestion = InicioGestion::where('carrera_id', $carrera_id)
+                                            ->where('anio_vigente', $anioIngreso)
+                                            ->first();
+            if($inicioGestion){
+                $fechaInicioGestion = $inicioGestion->inicio;
+            }else{
+                $fechaInicioGestion = 'N/A';
+            }
+
+            $anioFinal = CarrerasPersona::where('persona_id', $persona->id)
+                                            ->where('carrera_id', $carrera->id)
+                                            ->max('anio_vigente');
+
+            // dd($anioFinal);
+
+            $finalGestion = InicioGestion::where('carrera_id', $carrera_id)
+                                            ->where('anio_vigente', $anioFinal)
+                                            ->first();
+            if($finalGestion){
+                $fechaFinalGestion = $finalGestion->fin;
+            }else{
+                $fechaFinalGestion = 'N/A';
+            }
+
+            // dd($inicioGestion);
+
+            if(!$anioIngreso)
+            {
+                $anioIngreso    = Inscripcione::where('persona_id', $persona->id)
+                                            ->where('carrera_id', $carrera->id)
+                                            ->min('anio_vigente');
+            }
+            $cantidadCurricula  = Asignatura::where('carrera_id', $carrera->id)
+                                            ->where('anio_vigente', $anioIngreso)
+                                            ->count();
+                                            
+            $cantidadAprobados  = Inscripcione::where('carrera_id', $carrera->id)
+                                            ->where('persona_id', $persona->id)
+                                            ->where('aprobo', 'Si')
+                                            ->whereNull('oyente')
+                                            ->count();
+            $totalAsignaturas   = Inscripcione::where('carrera_id', $carrera->id)
+                                            ->where('persona_id', $persona->id)
+                                            ->where('aprobo', 'Si')
+                                            ->whereNull('oyente')
+                                            ->sum('nota');
+
+
+            // Para la carga horaria, buscaremos la gestion maxima aprobada
+            $gestionMaxima  = Inscripcione::where('carrera_id', $carrera->id)
+                                        ->where('persona_id', $persona->id)
+                                        ->where('aprobo', 'Si')
+                                        ->max('gestion');
+            $cargaGestion   = 1200;
+            $cargaHoraria   = 0;
+            for($i=1; $i<=$gestionMaxima; $i++)
+            {
+                // Contamos las asignaturas existentes en la malla curricular
+                $cantidadAsignaturasGestion = Asignatura::where('carrera_id', $carrera->id)
+                                                        ->where('anio_vigente', $anioIngreso)
+                                                        ->where('gestion', $i)
+                                                        ->count();
+
+                // Contamos las asignaturas aprobadas en la gestion de la malla curricular
+                $cantidadAsignaturasAprobadas   = Inscripcione::where('carrera_id', $carrera->id)
+                                                            ->where('persona_id', $persona->id)
+                                                            ->where('gestion', $i)
+                                                            ->where('aprobo', 'Si')
+                                                            ->whereNull('oyente')
+                                                            ->count();
+                if($cantidadAsignaturasGestion == $cantidadAsignaturasAprobadas)
+                {
+                    // Si se aprobaron todas las materias de la gestion, se le sumara automaticamente 1200 en carga horaria
+                    $cargaHoraria   = $cargaHoraria + $cargaGestion;
+                }
+                else
+                {
+                    // Si no se aprobaron todas las materias de la gestion, se hace el promedio de las aprobadas entre las existentes
+                    $cargaHoraria   = $cargaHoraria + round(($cargaGestion*$cantidadAsignaturasAprobadas)/$cantidadAsignaturasGestion);
+                }
+            }
+            $gestionesInscritas = CarrerasPersona::where('carrera_id', $carrera->id)
+                                                ->where('persona_id', $persona->id)
+                                                ->get();
+
+        }
+        
+        // generacion del excel
+        $fileName = 'Pensum.xlsx';
+        $libro = new Spreadsheet();
+
+        $hoja = $libro->getActiveSheet();
+
+        $hoja->setCellValue('A2', 'INSTITUTO');
+        $hoja->setCellValue('A3', 'CARRERA');
+        $hoja->setCellValue('A4', 'NIVEL DE FORMACION');
+        $hoja->setCellValue('A5', 'REGIMEN');
+        $hoja->setCellValue('A6', 'ESTUDIANTE');
+
+        $hoja->setCellValue('B2', 'INSTITUTO TECNICO EF-GIPET S.R.L.');
+        $hoja->setCellValue('B3', $carrera->nombre);
+        $hoja->setCellValue('B4', 'TECNICO SUPERIOR');
+        $hoja->setCellValue('B5', 'ANUAL');
+        $hoja->setCellValue('B6', $persona->apellido_paterno.' '.$persona->apellido_materno.' '.$persona->nombres);
+
+        $hoja->setCellValue('E3', 'FECHA ADMISION');
+        $hoja->setCellValue('E4', 'FECHA CONCLUSION');
+        $hoja->setCellValue('E5', 'MATRICULA');
+        $hoja->setCellValue('E6', 'CEDULA IDENTIDAD');
+
+        $hoja->setCellValue('F3', $fechaInicioGestion);
+        $hoja->setCellValue('F4', $fechaFinalGestion);
+        $hoja->setCellValue('F5', 'MATRICULA');
+        $hoja->setCellValue('F6', $persona->cedula);
+
+        $contadorCeldas = 8;
+        foreach($inscripciones as $key => $i){
+
+            $hoja->setCellValue("A$contadorCeldas", ++$key);
+            $hoja->setCellValue("B$contadorCeldas", $i->asignatura->sigla);
+            $hoja->setCellValue("C$contadorCeldas", $i->asignatura->nombre);
+
+            switch ($i->gestion) {
+                case 1:
+                    $anioLiteral = 'PRIMERO';
+                    break;
+                case 2:
+                    $anioLiteral = 'SEGUNDO';
+                    break;
+                case 3:
+                    $anioLiteral = 'TERCERO';
+                    break;
+            }
+
+            $hoja->setCellValue("D$contadorCeldas", $anioLiteral);
+
+            $prerequisito = Prerequisito::where('asignatura_id', $i->asignatura_id)
+                                        ->first();
+            if($prerequisito){
+                $siglaPrerequisito = $prerequisito->sigla;
+            }else{
+                $siglaPrerequisito = 'NINGUNO';
+            }                            
+
+            $hoja->setCellValue("E$contadorCeldas", $siglaPrerequisito);
+
+            $notaHistorial = ($i->nota)?round($i->nota):'0';
+            $segundoHistorial = ($i->segundo_turno)?round($i->segundo_turno):'0';
+
+            $hoja->setCellValue("F$contadorCeldas", $notaHistorial);
+            $hoja->setCellValue("G$contadorCeldas", $segundoHistorial);
+
+            $contadorCeldas++;
+
+        }
+
+        // exportamos el excel
+        $writer = new Xlsx($libro);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="'. urlencode($fileName).'"');
+        $writer->save('php://output');
+
+        // fin generacion del excel
     }
 }

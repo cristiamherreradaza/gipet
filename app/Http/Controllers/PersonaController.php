@@ -999,6 +999,7 @@ class PersonaController extends Controller
         $utilidades = new Utilidades();
         $expedido = $utilidades->cambiaExpedido($datosPersona->expedido);
 
+        // generacion del excel
         $fileName = 'certifica_notas.xlsx';
         // return Excel::download(new CertificadoExport($carrera_persona_id), 'certificado.xlsx');
         $spreadsheet = new Spreadsheet();
