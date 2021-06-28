@@ -207,16 +207,13 @@
                     <td>{{ $inscripcion->segundo_turno ? round($inscripcion->segundo_turno) : '' }}</td>
                     <td>
                         @php
-                            // $resolucion = Resolucione::
-                            // $asignatura = App\Asignatura::find($inscripcion->asignatura_id);
-                            // $carreraPersona = App\CarrerasPersona::where('');
-
-                            /*if($inscripcion->nota >= $asignatura->resolucion->nota_aprobacion){
-                                $contadorMateriasAprobadas++;
-                                echo 'APROBADO';
-                            }else{
-                                echo 'REPROBO';
-                            }*/
+                            $carreraPersona = App\CarrerasPersona::where('anio_vigente', $inscripcion->anio_vigente)
+                                                                ->where('carrera_id', $inscripcion->carrera_id)
+                                                                ->where('turno_id', $inscripcion->turno_id)
+                                                                ->where('paralelo', $inscripcion->paralelo)
+                                                                ->where('gestion', $inscripcion->gestion)
+                                                                ->first();
+                            echo $carreraPersona->estado;
                         @endphp
                     </td>
                     <!-- <td></td>
