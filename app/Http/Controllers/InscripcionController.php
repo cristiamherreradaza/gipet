@@ -2691,34 +2691,88 @@ class InscripcionController extends Controller
 
         $hoja = $libro->getActiveSheet();
 
+        // estilos 
+
+        $libro->getActiveSheet()->getStyle("A8:I31")->applyFromArray(
+            array(
+                'borders' => array(
+                    'allBorders' => array(
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'color' => array('argb' => '000000')
+                    )
+                )
+            )
+        );
+
+        $fuenteNegrita = array(
+            'font'  => array(
+                'bold'  => true,
+                // 'color' => array('rgb' => 'FF0000'),
+                // 'size'  => 14,
+            ));
+
+        $fuenteNegritaTitulo = array(
+            'font'  => array(
+                'bold'  => true,
+                // 'color' => array('rgb' => 'FF0000'),
+                'size'  => 16,
+                // 'name'  => 'Verdana'
+            ));
+
+        // asignacion de estilos
+        $libro->getActiveSheet()->getStyle("E1")->applyFromArray($fuenteNegritaTitulo);
+        $libro->getActiveSheet()->getStyle('A8:I8')->applyFromArray($fuenteNegrita);
+        $libro->getActiveSheet()->getStyle('A2:A6')->applyFromArray($fuenteNegrita);
+        $libro->getActiveSheet()->getStyle('F3:F6')->applyFromArray($fuenteNegrita);
+
+        // fucion de celdas
+        $libro->getActiveSheet()->mergeCells('A2:B2');
+        $libro->getActiveSheet()->mergeCells('A3:B3');
+        $libro->getActiveSheet()->mergeCells('A4:B4');
+        $libro->getActiveSheet()->mergeCells('A5:B5');
+        $libro->getActiveSheet()->mergeCells('A6:B6');
+
+        // dimencion de celdas
+        $libro->getActiveSheet()->getColumnDimension('E')->setWidth(50);
+        $libro->getActiveSheet()->getColumnDimension('A')->setWidth(10);
+
+        // fin estilos 
+
+        $hoja->setCellValue('A8', 'No');
+        $hoja->setCellValue('B8', 'GESTION');
+        $hoja->setCellValue('C8', 'AÑO');
+        $hoja->setCellValue('D8', 'CODIGO');
+        $hoja->setCellValue('E8', 'ASIGNATURA');
+        $hoja->setCellValue('F8', 'REQUISITOS');
+        $hoja->setCellValue('G8', 'NOTA');
+        $hoja->setCellValue('H8', 'RECUPERATORIO');
+        $hoja->setCellValue('I8', 'OBSERVACIONES');
+
+        $hoja->setCellValue('E1', 'HISTORIAL ACADEMICO');
         $hoja->setCellValue('A2', 'INSTITUTO');
         $hoja->setCellValue('A3', 'CARRERA');
         $hoja->setCellValue('A4', 'NIVEL DE FORMACION');
         $hoja->setCellValue('A5', 'REGIMEN');
         $hoja->setCellValue('A6', 'ESTUDIANTE');
 
-        $hoja->setCellValue('B2', 'INSTITUTO TECNICO EF-GIPET S.R.L.');
-        $hoja->setCellValue('B3', $carrera->nombre);
-        $hoja->setCellValue('B4', 'TECNICO SUPERIOR');
-        $hoja->setCellValue('B5', 'ANUAL');
-        $hoja->setCellValue('B6', $persona->apellido_paterno.' '.$persona->apellido_materno.' '.$persona->nombres);
+        $hoja->setCellValue('C2', 'INSTITUTO TECNICO EF-GIPET S.R.L.');
+        $hoja->setCellValue('C3', $carrera->nombre);
+        $hoja->setCellValue('C4', 'TECNICO SUPERIOR');
+        $hoja->setCellValue('C5', 'ANUAL');
+        $hoja->setCellValue('C6', $persona->apellido_paterno.' '.$persona->apellido_materno.' '.$persona->nombres);
 
-        $hoja->setCellValue('E3', 'FECHA ADMISION');
-        $hoja->setCellValue('E4', 'FECHA CONCLUSION');
-        $hoja->setCellValue('E5', 'MATRICULA');
-        $hoja->setCellValue('E6', 'CEDULA IDENTIDAD');
-
-        $hoja->setCellValue('F3', $fechaInicioGestion);
-        $hoja->setCellValue('F4', $fechaFinalGestion);
+        $hoja->setCellValue('F3', 'FECHA ADMISION');
+        $hoja->setCellValue('F4', 'FECHA CONCLUSION');
         $hoja->setCellValue('F5', 'MATRICULA');
-        $hoja->setCellValue('F6', $persona->cedula);
+        $hoja->setCellValue('F6', 'CEDULA IDENTIDAD');
 
-        $contadorCeldas = 8;
+        $hoja->setCellValue('H3', $fechaInicioGestion);
+        $hoja->setCellValue('H4', $fechaFinalGestion);
+        $hoja->setCellValue('H5', 'MATRICULA');
+        $hoja->setCellValue('H6', $persona->cedula);
+
+        $contadorCeldas = 9;
         foreach($inscripciones as $key => $i){
-
-            $hoja->setCellValue("A$contadorCeldas", ++$key);
-            $hoja->setCellValue("B$contadorCeldas", $i->asignatura->sigla);
-            $hoja->setCellValue("C$contadorCeldas", $i->asignatura->nombre);
 
             switch ($i->gestion) {
                 case 1:
@@ -2732,23 +2786,38 @@ class InscripcionController extends Controller
                     break;
             }
 
-            $hoja->setCellValue("D$contadorCeldas", $anioLiteral);
+            $hoja->setCellValue("A$contadorCeldas", ++$key);
+            $hoja->setCellValue("B$contadorCeldas", $i->anio_vigente);
+            $hoja->setCellValue("C$contadorCeldas", $anioLiteral);
+            $hoja->setCellValue("D$contadorCeldas", $i->asignatura->sigla);
+            $hoja->setCellValue("E$contadorCeldas", $i->asignatura->nombre);
+
 
             $prerequisito = Prerequisito::where('asignatura_id', $i->asignatura_id)
                                         ->first();
-            if($prerequisito){
-                $siglaPrerequisito = $prerequisito->sigla;
+
+            if($prerequisito && $prerequisito->prerequisito_id != null){
+                $siglaPrerequisito = $prerequisito->prerequisito->sigla;
             }else{
                 $siglaPrerequisito = 'NINGUNO';
             }                            
 
-            $hoja->setCellValue("E$contadorCeldas", $siglaPrerequisito);
+            $hoja->setCellValue("F$contadorCeldas", $siglaPrerequisito);
 
             $notaHistorial = ($i->nota)?round($i->nota):'0';
             $segundoHistorial = ($i->segundo_turno)?round($i->segundo_turno):'0';
 
-            $hoja->setCellValue("F$contadorCeldas", $notaHistorial);
-            $hoja->setCellValue("G$contadorCeldas", $segundoHistorial);
+            $hoja->setCellValue("G$contadorCeldas", $notaHistorial);
+            $hoja->setCellValue("H$contadorCeldas", $segundoHistorial);
+
+            $carreraPersona = CarrerasPersona::where('anio_vigente', $i->anio_vigente)
+                                                ->where('carrera_id', $i->carrera_id)
+                                                ->where('turno_id', $i->turno_id)
+                                                ->where('paralelo', $i->paralelo)
+                                                ->where('gestion', $i->gestion)
+                                                ->first();
+
+            $hoja->setCellValue("I$contadorCeldas", $carreraPersona->estado);
 
             $contadorCeldas++;
 
