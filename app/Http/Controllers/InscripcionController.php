@@ -15,20 +15,21 @@ use App\Servicio;
 use App\Asignatura;
 use App\CursosCorto;
 use App\Predefinida;
+use App\Resolucione;
 use App\Inscripcione;
 use App\Prerequisito;
+use App\InicioGestion;
 use App\SegundosTurno;
 use App\NotasPropuesta;
 use App\CarrerasPersona;
 use App\CobrosTemporada;
 use App\DescuentosPersona;
 use App\ServiciosAsignatura;
-use App\InicioGestion;
-use App\librerias\Utilidades;
 use Illuminate\Http\Request;
+use App\librerias\Utilidades;
 use Barryvdh\DomPDF\Facade as PDF;
-use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -2704,6 +2705,40 @@ class InscripcionController extends Controller
             )
         );
 
+        $libro->getActiveSheet()->getStyle("A39:C41")->applyFromArray(
+            array(
+                'borders' => array(
+                    'allBorders' => array(
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'color' => array('argb' => '000000')
+                    )
+                )
+            )
+        );
+
+        $libro->getActiveSheet()->getStyle("A43:C46")->applyFromArray(
+            array(
+                'borders' => array(
+                    'allBorders' => array(
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'color' => array('argb' => '000000')
+                    )
+                )
+            )
+        );
+
+        $libro->getActiveSheet()->getStyle("G39:I41")->applyFromArray(
+            array(
+                'borders' => array(
+                    'allBorders' => array(
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'color' => array('argb' => '000000')
+                    )
+                )
+            )
+        );
+
+
         $fuenteNegrita = array(
             'font'  => array(
                 'bold'  => true,
@@ -2715,7 +2750,7 @@ class InscripcionController extends Controller
             'font'  => array(
                 'bold'  => true,
                 // 'color' => array('rgb' => 'FF0000'),
-                'size'  => 16,
+                'size'  => 20,
                 // 'name'  => 'Verdana'
             ));
 
@@ -2731,10 +2766,13 @@ class InscripcionController extends Controller
         $libro->getActiveSheet()->mergeCells('A4:B4');
         $libro->getActiveSheet()->mergeCells('A5:B5');
         $libro->getActiveSheet()->mergeCells('A6:B6');
+        $libro->getActiveSheet()->mergeCells('A39:C39');
+        $libro->getActiveSheet()->mergeCells('A43:C43');
 
         // dimencion de celdas
-        $libro->getActiveSheet()->getColumnDimension('E')->setWidth(50);
+        $libro->getActiveSheet()->getColumnDimension('E')->setWidth(55);
         $libro->getActiveSheet()->getColumnDimension('A')->setWidth(10);
+        $libro->getActiveSheet()->getColumnDimension('I')->setWidth(12);
 
         // fin estilos 
 
@@ -2772,7 +2810,11 @@ class InscripcionController extends Controller
         $hoja->setCellValue('H6', $persona->cedula);
 
         $contadorCeldas = 9;
+        $contadorMaterias = 0;
+        $contadorAprobadas = 0;
+
         foreach($inscripciones as $key => $i){
+            $contadorMaterias++;
 
             switch ($i->gestion) {
                 case 1:
@@ -2818,10 +2860,60 @@ class InscripcionController extends Controller
                                                 ->first();
 
             $hoja->setCellValue("I$contadorCeldas", $carreraPersona->estado);
+            if($carreraPersona->estado == "APROBADO"){
+                $contadorAprobadas++;
+            }
 
             $contadorCeldas++;
-
         }
+
+        $hoy = date('Y-m-d');
+        $utilidades = new Utilidades();
+        $fechaEs = $utilidades->fechaCastellano($hoy);
+
+        $hoja->setCellValue("A32", "Lugar y Fecha: $fechaEs");
+        $hoja->setCellValue("E37", "Firma Autoridad Academica");
+        
+        $hoja->setCellValue("A39", "ESCALA DE VALORACION");
+        $hoja->setCellValue("A40", "61 - 100");
+        $hoja->setCellValue("B40", "APROBADO");
+        $hoja->setCellValue("A41", "0 - 60");
+        $hoja->setCellValue("B41", "REPROBADO");
+        $hoja->setCellValue("A42", "61");
+        $hoja->setCellValue("B42", "NOTA MINIMA");
+
+        $hoja->setCellValue("A43", "PLAN DE ESTUDIOS");
+
+        $contadorCeldasRm = 44;
+
+        foreach ($gestionesInscritas as $gi) {
+            $resolucion = Resolucione::where('anio_vigente', $anioIngreso)
+                                    ->first();      
+
+            if(!$resolucion){
+
+                for ($i = 1; $i <= 10; $i++) {
+
+                    $anioIngreso = $anioIngreso - 1;
+                    $resolucion = Resolucione::where('anio_vigente', $anioIngreso)
+                        ->first();
+                    if ($resolucion) {
+                        break;
+                    }
+                }
+            }
+            $hoja->setCellValue("A$contadorCeldasRm", 'R.M.');
+            $hoja->setCellValue("B$contadorCeldasRm", $resolucion->resolucion);
+            $hoja->setCellValue("C$contadorCeldasRm", $gi->anio_vigente);
+            $contadorCeldasRm++;
+        }
+
+        $hoja->setCellValue("G39", "Carga Horaria");
+        $hoja->setCellValue("I39", "3600");
+        $hoja->setCellValue("G40", "Asignaturas Aprobadas");
+        $hoja->setCellValue("I40", "$contadorAprobadas/$contadorMaterias");
+        $hoja->setCellValue("G41", "Promedio Calificaciones");
+        $hoja->setCellValue("I41", "$promedioCalificaciones");
 
         // exportamos el excel
         $writer = new Xlsx($libro);
