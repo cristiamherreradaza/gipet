@@ -655,7 +655,14 @@
                                     <td class="text-center">{{ $p->mensualidad }}</td>
                                     <td class="text-center">{{ $p->a_pagar }}</td>
                                     <td class="text-center">{{ $p->fecha }}</td>
-                                    <td class="text-center">{{ $p->estado }}</td>
+                                    <td class="text-center">
+                                        {{ $p->estado }}
+                                        @if ($p->fecha == null)
+                                            <span class="badge py-1 badge-table badge-danger">DEBE</span>
+                                        @else
+                                            <span class="badge py-1 badge-table badge-success">PAGADO</span>
+                                        @endif
+                                    </td>
                                     <td></td>
                                 </tr>
                                 @endforeach
@@ -777,7 +784,7 @@
                                     <input type="hidden" name="persona_id" value="{{ $estudiante->id }}">
                                     <select class="form-control custom-select" id="descuento_id" name="descuento_id"
                                         onchange="cambiaDescuento()" required>
-                                        <option value="">Ninguno</option>
+                                        <option value="" data-monto="{{ $mensualidad->precio }}">Ninguno</option>
                                         @foreach ($descuentos as $d)
                                         <option value="{{ $d->id }}" data-monto="{{ $d->a_pagar }}">{{ $d->nombre }}
                                         </option>
@@ -808,8 +815,9 @@
                                     <span class="text-danger">
                                         <i class="mr-2 mdi mdi-alert-circle"></i>
                                     </span>
+                                    <input type="hidden" name="mensualidad" id="mensualidad" value="{{ $mensualidad->precio }}">
                                     <input type="number" class="form-control" id="monto_pagar" name="monto_pagar"
-                                        value="200" required>
+                                        value="{{ $mensualidad->precio }}" required>
                                 </div>
                             </div>
 

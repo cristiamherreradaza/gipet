@@ -749,16 +749,20 @@ class PersonaController extends Controller
 
         $tiposMensualidades = TiposMensualidade::get();
 
+        $mensualidad = Servicio::find(2);
+
         $carreras = Carrera::get();
 
         $turnos = Turno::get();
         
-        return view('persona.informacion')->with(compact('estudiante', 'carrerasPersona', 'carreras', 'turnos', 'materiasInscripcion', 'carrerasPensum', 'descuentos', 'tiposMensualidades', 'pagos'));
+        return view('persona.informacion')->with(compact('estudiante', 'carrerasPersona', 'carreras', 'turnos', 'materiasInscripcion', 'carrerasPensum', 'descuentos', 'tiposMensualidades', 'pagos', 'mensualidad'));
 
     }
 
     public function ajaxInscribeAlumno(Request $request)
     {
+        // dd($request->all());
+
         $this->inscripcion(
             $request->persona_id, 
             $request->carrera_id, 
@@ -767,70 +771,88 @@ class PersonaController extends Controller
             $request->gestion, 
             $request->anio_vigente);
 
-        // generamos los datos para los pagos
+        $verifica = CarrerasPersona::where('persona_id', $request->persona_id)
+                    ->where('anio_vigente', $request->anio_vigente)
+                    ->where('gestion', $request->gestion)
+                    ->where('turno_id', $request->turno_id)
+                    ->where('carrera_id', $request->carrera_id)
+                    ->where('paralelo', $request->paralelo)
+                    ->count();
 
-        $cuotaInicioPromo = 1;
-        $hoy = date("Y-m-d");
+        if($verifica == 0)
+        {     
 
-        $datosServicios = Servicio::find(2);
-        // Guardamos los datos para las mensualidades
-        $descuento                         = new DescuentosPersona();
-        $descuento->user_id                = Auth::user()->id;
-        $descuento->tipos_mensualidades_id = $request->tipo_mensualidad_id;
-        $descuento->carrera_id             = $request->carrera_id;
-        $descuento->persona_id             = $request->persona_id;
-        $descuento->servicio_id            = 2;
-        $descuento->descuento_id           = $request->descuento_id;
-        // $descuento->monto_director         = $request->monto;
-        $descuento->numero_mensualidad     = $request->cuotaInicioPromo;
-        $descuento->a_pagar                = $request->monto_pagar;
-        $descuento->fecha                  = $request->hoy;
-        $descuento->cantidad_cuotas        = $request->cuotas_promo;
-        $descuento->anio_vigente           = $request->anio_vigente;
-        $descuento->vigente                = "Si";
-        $descuento->save();
-        $descuentoId = $descuento->id;
-        // Fin uardamos los datos para las mensualidades
-        
-        $inicioPromo = $cuotaInicioPromo;
-        $finalPromo = ($inicioPromo + $request->cuotas_promo)-1;
+            // generamos los datos para los pagos
 
-        // guardamos los futuros pagos
-        for ($i = 1; $i <= 7; $i++) {
-
-            // guardamos si tienen promocion
-            if($i >= $inicioPromo && $i <= $finalPromo){
-                $pagos = new Pago();
-                $pagos->user_id = Auth::user()->id;
-                $pagos->carrera_id = $request->carrera_id;
-                $pagos->persona_id = $request->persona_id;
-                $pagos->servicio_id = 2;
-                $pagos->tipo_mensualidad_id = $request->tipo_mensualidad_id;
-                $pagos->descuento_persona_id = $descuentoId;
-                $pagos->a_pagar = $request->monto_pagar;
-                $pagos->importe = 0;
-                $pagos->faltante = 0;
-                $pagos->total = 0;
-                $pagos->mensualidad = $i;
-                $pagos->anio_vigente = $request->anio_vigente;
-                $pagos->save();
+            if($request->aplica_promo == 'inicio'){
+                $cuotaInicioPromo = 1;
             }else{
-                // guardamos las que no tienen promocion
-                $pagos = new Pago();
-                $pagos->user_id = Auth::user()->id;
-                $pagos->carrera_id = $request->carrera_id;
-                $pagos->persona_id = $request->persona_id;
-                $pagos->servicio_id = 2;
-                $pagos->tipo_mensualidad_id = $request->tipo_mensualidad_id;
-                $pagos->descuento_persona_id = null;
-                $pagos->a_pagar = $datosServicios->precio;
-                $pagos->importe = 0;
-                $pagos->faltante = 0;
-                $pagos->total = 0;
-                $pagos->mensualidad = $i;
-                $pagos->anio_vigente = $request->anio_vigente;
-                $pagos->save();
+                $cuotaInicioPromo = ($request->cantidad_cuotas_pagar - $request->cuotas_promo)+1;
             }
+
+            $hoy = date("Y-m-d");
+
+            $datosServicios = Servicio::find(2);
+            // Guardamos los datos para las mensualidades
+            $descuento                         = new DescuentosPersona();
+            $descuento->user_id                = Auth::user()->id;
+            $descuento->tipos_mensualidades_id = $request->tipo_mensualidad_id;
+            $descuento->carrera_id             = $request->carrera_id;
+            $descuento->persona_id             = $request->persona_id;
+            $descuento->servicio_id            = 2;
+            $descuento->descuento_id           = $request->descuento_id;
+            // $descuento->monto_director         = $request->monto;
+            $descuento->numero_mensualidad     = $cuotaInicioPromo;
+            $descuento->a_pagar                = $request->monto_pagar;
+            $descuento->fecha                  = $request->hoy;
+            $descuento->cantidad_cuotas        = $request->cuotas_promo;
+            $descuento->anio_vigente           = $request->anio_vigente;
+            $descuento->vigente                = "Si";
+            $descuento->save();
+            $descuentoId = $descuento->id;
+            // Fin uardamos los datos para las mensualidades
+            
+            $inicioPromo = $cuotaInicioPromo;
+            $finalPromo = ($inicioPromo + $request->cuotas_promo)-1;
+
+            // guardamos los futuros pagos
+            for ($i = 1; $i <= $request->cantidad_cuotas_pagar; $i++) {
+
+                // guardamos si tienen promocion
+                if($i >= $inicioPromo && $i <= $finalPromo){
+                    $pagos = new Pago();
+                    $pagos->user_id = Auth::user()->id;
+                    $pagos->carrera_id = $request->carrera_id;
+                    $pagos->persona_id = $request->persona_id;
+                    $pagos->servicio_id = 2;
+                    $pagos->tipo_mensualidad_id = $request->tipo_mensualidad_id;
+                    $pagos->descuento_persona_id = $descuentoId;
+                    $pagos->a_pagar = $request->monto_pagar;
+                    $pagos->importe = 0;
+                    $pagos->faltante = 0;
+                    $pagos->total = 0;
+                    $pagos->mensualidad = $i;
+                    $pagos->anio_vigente = $request->anio_vigente;
+                    $pagos->save();
+                }else{
+                    // guardamos las que no tienen promocion
+                    $pagos = new Pago();
+                    $pagos->user_id = Auth::user()->id;
+                    $pagos->carrera_id = $request->carrera_id;
+                    $pagos->persona_id = $request->persona_id;
+                    $pagos->servicio_id = 2;
+                    $pagos->tipo_mensualidad_id = $request->tipo_mensualidad_id;
+                    $pagos->descuento_persona_id = null;
+                    $pagos->a_pagar = $datosServicios->precio;
+                    $pagos->importe = 0;
+                    $pagos->faltante = 0;
+                    $pagos->total = 0;
+                    $pagos->mensualidad = $i;
+                    $pagos->anio_vigente = $request->anio_vigente;
+                    $pagos->save();
+                }
+            }
+
         }
 
         // guardamos las mensualidades
@@ -909,7 +931,7 @@ class PersonaController extends Controller
                 }
 
                 // guardamos para el registro de notas
-                for ($i = 1; $i <= $cantidadBimestres; $i++) {
+                for ($i = 1; $i <= 2; $i++) {
 
                     $nota = new Nota();
 
