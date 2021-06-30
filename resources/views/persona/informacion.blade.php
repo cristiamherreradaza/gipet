@@ -147,6 +147,7 @@
                                         value="{{ $estudiante->nombres }}" required>
                                 </div>
                             </div>
+
                             <div class="col">
                                 <div class="form-group">
                                     <label>Fecha Nacimiento
@@ -158,6 +159,7 @@
                                         id="fecha_nacimiento" value="{{ $estudiante->fecha_nacimiento }}" required>
                                 </div>
                             </div>
+                            
                         </div>
                     </div>
                     <div class="tab-pane" id="profile-b2">
@@ -638,25 +640,23 @@
                         <table class="table table-striped table-bordered no-wrap table-hover" id="tabla-pagos">
                             <thead>
                                 <tr>
-                                    <th>Cuota</th>
-                                    <th>Monto</th>
-                                    <th>Fecha Pago</th>
-                                    <th>Gestion</th>
-                                    <th>Estado</th>
+                                    <th class="text-center">Gestion</th>
+                                    <th class="text-center">Cuota</th>
+                                    <th class="text-center">Monto</th>
+                                    <th class="text-center">Fecha Pago</th>
+                                    <th class="text-center">Estado</th>
                                     <th class="text-nowrap"></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($pagos as $key => $p)
                                 <tr>
-                                    <td>{{ $p->mensualidad }}</td>
-                                    <td>{{ $p->a_pagar }}</td>
-                                    <td>{{ $p->fecha }}</td>
-                                    <td>{{ $p->anio_vigente }}</td>
-                                    <td>{{ $p->estado }}</td>
-                                    <td>
-                                        
-                                    </td>
+                                    <td class="text-center">{{ $p->anio_vigente }}</td>
+                                    <td class="text-center">{{ $p->mensualidad }}</td>
+                                    <td class="text-center">{{ $p->a_pagar }}</td>
+                                    <td class="text-center">{{ $p->fecha }}</td>
+                                    <td class="text-center">{{ $p->estado }}</td>
+                                    <td></td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -685,136 +685,162 @@
                 </div>
                 {{-- bloque de nueva inscripcion --}}
                 <form action="#" method="POST" id="formularioInscripcion">
-                    <div class="row" id="bloqueInscripcion" style="display: none;">
-                        
-                        <p>&nbsp;</p>
+                    <div class="form-body">
+                        <div class="row" id="bloqueInscripcion" style="display: none;">
 
-                        <div class="col-md-12"><h3 class="text-info">Formulario de Inscripcion</h3></div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Carrera
-                                    <span class="text-danger">
-                                        <i class="mr-2 mdi mdi-alert-circle"></i>
-                                    </span>
-                                </label>
-                                <input type="hidden" name="persona_id" value="{{ $estudiante->id }}">
-                                <select class="form-control custom-select" id="carrera_id" name="carrera_id" onchange="cambiaCarrera()" required>
-                                    @foreach($carreras as $carrera)
+                            <div class="col-md-12">
+                                <p>&nbsp;</p>
+                                <h3 class="text-info text-center">FORMULARIO DE INSCRIPCION</h3>
+                                <br />
+                            </div>
+
+                            {{-- primera fila --}}
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Carrera
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                    </label>
+                                    <input type="hidden" name="persona_id" value="{{ $estudiante->id }}">
+                                    <select class="form-control custom-select" id="carrera_id" name="carrera_id"
+                                        onchange="cambiaCarreraCuotas()" required>
+                                        @foreach($carreras as $carrera)
                                         <option value="{{ $carrera->id }}">{{ $carrera->nombre }}</option>
-                                    @endforeach
-                                </select>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label>Curso
-                                    <span class="text-danger">
-                                        <i class="mr-2 mdi mdi-alert-circle"></i>
-                                    </span>
-                                </label>
-                                <select class="form-control custom-select" id="gestion" name="gestion" required>
-                                    <option value="1">1&ordm; A&ntilde;o</option>
-                                    <option value="2">2&ordm; A&ntilde;o</option>
-                                    <option value="3">3&ordm; A&ntilde;o</option>
-                                </select>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Curso
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                    </label>
+                                    <select class="form-control custom-select" id="gestion" name="gestion" required>
+                                        <option value="1">1&ordm; A&ntilde;o</option>
+                                        <option value="2">2&ordm; A&ntilde;o</option>
+                                        <option value="3">3&ordm; A&ntilde;o</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label>Turno
-                                    <span class="text-danger">
-                                        <i class="mr-2 mdi mdi-alert-circle"></i>
-                                    </span>
-                                </label>
-                                <select class="form-control custom-select" id="turno_id" name="turno_id" required>
-                                    @foreach($turnos as $turno)
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Turno
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                    </label>
+                                    <select class="form-control custom-select" id="turno_id" name="turno_id" required>
+                                        @foreach($turnos as $turno)
                                         <option value="{{ $turno->id }}">{{ $turno->descripcion }}</option>
-                                    @endforeach
-                                </select>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label>Paralelo
-                                    <span class="text-danger">
-                                        <i class="mr-2 mdi mdi-alert-circle"></i>
-                                    </span>
-                                </label>
-                                <select class="form-control custom-select" id="paralelo" name="paralelo" required>
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Paralelo
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                    </label>
+                                    <select class="form-control custom-select" id="paralelo" name="paralelo" required>
                                         <option value="A">A</option>
                                         <option value="B">B</option>
                                         <option value="C">C</option>
                                         <option value="D">D</option>
-                                </select>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label class="control-label">Gesti&oacute;n</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <input type="number" class="form-control" id="anio_vigente" name="anio_vigente" value="{{ date('Y') }}"
-                                    required>
-                            </div>
-                        </div>                        
-
-                        {{-- inscripcion --}}
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Descuento
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">Gesti&oacute;n</label>
                                     <span class="text-danger">
                                         <i class="mr-2 mdi mdi-alert-circle"></i>
                                     </span>
-                                </label>
-                                <input type="hidden" name="persona_id" value="{{ $estudiante->id }}">
-                                <select class="form-control custom-select" id="descuento_id" name="descuento_id" onchange="cambiaDescuento()" required>
-                                    <option value="">Ninguno</option>
-                                    @foreach ($descuentos as $d)
-                                        <option value="{{ $d->id }}" data-monto="{{ $d->a_pagar }}">{{ $d->nombre }}</option>
-                                    @endforeach
-                                </select>
+                                    <input type="number" class="form-control" id="anio_vigente" name="anio_vigente"
+                                        value="{{ date('Y') }}" required>
+                                </div>
                             </div>
-                        </div>
+                            {{-- fin primera fila --}}
 
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label class="control-label">Cuotas a Pagar</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <select class="form-control custom-select" id="tipo_mensualidad_id" name="tipo_mensualidad_id" required>
-                                    @foreach ($tiposMensualidades as $tm)
+                            {{-- segunda fila --}}
+                            <div class="col-md-4 generacion-cuotas">
+                                <div class="form-group">
+                                    <label>Descuento
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                    </label>
+                                    <input type="hidden" name="persona_id" value="{{ $estudiante->id }}">
+                                    <select class="form-control custom-select" id="descuento_id" name="descuento_id"
+                                        onchange="cambiaDescuento()" required>
+                                        <option value="">Ninguno</option>
+                                        @foreach ($descuentos as $d)
+                                        <option value="{{ $d->id }}" data-monto="{{ $d->a_pagar }}">{{ $d->nombre }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 generacion-cuotas">
+                                <div class="form-group">
+                                    <label class="control-label">Cuotas a Pagar</label>
+                                    <span class="text-danger">
+                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                    </span>
+                                    <input type="hidden" name="cantidad_cuotas_pagar" id="cantidad_cuotas_pagar">
+                                    <select class="form-control custom-select" id="tipo_mensualidad_id" name="tipo_mensualidad_id" onclick="cambiaTipoMensualidad();" required>
+                                        @foreach ($tiposMensualidades as $tm)
                                         <option value="{{ $tm->id }}">{{ $tm->numero_maximo }}</option>
-                                    @endforeach
-                                </select>
+                                        @endforeach
+                                    </select>
 
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label class="control-label">Monto A Pagar</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <input type="number" class="form-control" id="monto_pagar" name="monto_pagar" value="200"
-                                    required>
+                            <div class="col-md-2 generacion-cuotas">
+                                <div class="form-group">
+                                    <label class="control-label">Monto A Pagar</label>
+                                    <span class="text-danger">
+                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                    </span>
+                                    <input type="number" class="form-control" id="monto_pagar" name="monto_pagar"
+                                        value="200" required>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-md-1">
-                            <div class="form-group">
-                                <label class="control-label">Cuotas</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <input type="number" class="form-control" id="cuotas_promo" name="cuotas_promo" value="5"
-                                    required>
+                            <div class="col-md-2 generacion-cuotas">
+                                <div class="form-group">
+                                    <label class="control-label">Cuotas Promo</label>
+                                    <span class="text-danger">
+                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                    </span>
+                                    <input type="number" class="form-control" id="cuotas_promo" name="cuotas_promo"
+                                        value="5" required>
+                                </div>
                             </div>
-                        </div>
 
-                        {{-- <div class="col-md-2">
+                            <div class="col-md-2 generacion-cuotas">
+                                <div class="form-group">
+                                    <label class="control-label">Aplica Promo</label>
+                                    <span class="text-danger">
+                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                    </span>
+                                    <select class="form-control custom-select" id="aplica_promo" name="aplica_promo"
+                                        required>
+                                        <option value="inicio">Inicio</option>
+                                        <option value="final">Final</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            {{-- fin segunda fila --}}
+
+                            {{-- <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Mes</label>
                                 <span class="text-danger">
@@ -837,11 +863,13 @@
                             </div>
                         </div> --}}
 
-                        <div class="col-md-12">
-                            <label class="control-label">&nbsp;</label>
-                            <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="ajaxInscribeAlumno()">INSCRIBIR</button>
-                        </div>
+                            <div class="col-md-12">
+                                <label class="control-label">&nbsp;</label>
+                                <button type="button" class="btn waves-effect waves-light btn-block btn-success"
+                                    onclick="ajaxInscribeAlumno()">INSCRIBIR</button>
+                            </div>
 
+                        </div>
                     </div>
                 </form>
                 {{-- bloque de nueva inscripcion --}}
@@ -972,8 +1000,10 @@
 
         if (mes <= 3) {
             $("#tipo_mensualidad_id").val(1);
+            $("#cantidad_cuotas_pagar").val($("#tipo_mensualidad_id option:selected").text());
         }else{
             $("#tipo_mensualidad_id").val(2);
+            $("#cantidad_cuotas_pagar").val($("#tipo_mensualidad_id option:selected").text());
         }
 
 
@@ -1269,6 +1299,24 @@
     {
         let montoPagar = $("#descuento_id").find(':selected').data('monto');
         $("#monto_pagar").val(montoPagar);
+    }
+
+    function cambiaCarreraCuotas()
+    {
+        let e = document.getElementById('carrera_id');
+        let valor  = e.options[e.selectedIndex].value;
+        console.log(valor);
+        if(valor != 1){
+            $(".generacion-cuotas").hide('slow');
+        }else{
+            $(".generacion-cuotas").show('slow');
+        }
+    }
+
+    function cambiaTipoMensualidad()
+    {
+        $("#cantidad_cuotas_pagar").val($("#tipo_mensualidad_id option:selected").text());
+        // console.log($("#tipo_mensualidad_id option:selected").text());
     }
 
 </script>
