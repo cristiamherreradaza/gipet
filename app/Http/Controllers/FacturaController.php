@@ -61,14 +61,15 @@ class FacturaController extends Controller
 
     public function ajaxBuscaPersona(Request $request)
     {
-        /*$personas = Persona::where('apellido_paterno', 'like', "%$request->termino%")
-                                ->orWhere('apellido_materno', 'like', "%$request->termino%")
-                                ->orWhere('nombres', 'like', "%$request->termino%")
-                                ->orWhere('cedula', 'like', "%$request->termino%")
-                                ->limit(10)
-                                ->get();*/
-
-        $personas = DB::select("Select id, cedula, apellido_paterno, apellido_materno, nombres, concat(cedula,' ',apellido_paterno,' ',apellido_materno,' ',nombres) as campo_mixto from personas where concat(cedula,' ',apellido_paterno,' ',apellido_materno,' ',nombres) like '%$request->termino%' limit 8");
+        $personas = DB::select("
+                                Select 
+                                    id, 
+                                    cedula, 
+                                    apellido_paterno, 
+                                    apellido_materno, 
+                                    nombres, 
+                                    concat(cedula,' ',apellido_paterno,' ',apellido_materno,' ',nombres) as campo_mixto 
+                                    from personas where concat(cedula,' ',apellido_paterno,' ',apellido_materno,' ',nombres) like '%$request->termino%' limit 8");
 
         // dd($personas);
 
@@ -111,7 +112,7 @@ class FacturaController extends Controller
         $gestionActual = date('Y');
         // dd($request->all());
         $paraPagar = Pago::where('persona_id', $request->persona_id)
-                    ->where('carrera_id', $request->carrera_id)
+                    ->where('carrera_id', 1)
                     ->where('anio_vigente', $gestionActual)
                     ->orderBy('mensualidad')
                     ->whereNull('estado')

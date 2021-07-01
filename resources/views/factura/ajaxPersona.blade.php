@@ -35,9 +35,30 @@
     </div>
 
 </div>
-<div class="row">
+
+
+{{-- <div class="row">
     <div class="col-md-12">
         <button type="submit" class="btn btn-block btn-primary">RESUMEN PAGOS</button>
+    </div>
+</div> --}}
+
+<div class="row">
+    <div class="col-3">
+        <div class="form-group">
+            <label>Servicio
+                <span class="text-danger">
+                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                </span>
+            </label>
+            <input type="hidden" value="{{ $siguienteCuota->id }}" name="pago_id">
+            <select name="servicio_id" id="servicio_id" class="form-control" onchange="cambiaServicio()" required>
+                <option value="">SELECCIONE</option>
+                @foreach ($servicios as $s)
+                <option value="{{ $s->id }}">{{ $s->nombre }}</option>
+                @endforeach
+            </select>
+        </div>
     </div>
 </div>
 
@@ -89,8 +110,8 @@
 
 @endif
 <br>
-<div class="card border-secondary">
-    <div class="card-header bg-secondary">
+<div class="card border-primary">
+    <div class="card-header bg-primary">
         <h4 class="mb-0 text-white">REGISTRAR PENSIONES</h4></div>
     <div class="card-body">
         <div class="row">
@@ -131,25 +152,6 @@
     <div class="col-md-12">
         <h3>Registrar Pensiones</h3>
     </div>
-</div>
-<div class="row">
-    <div class="col-3">
-        <div class="form-group">
-            <label>Servicio
-                <span class="text-danger">
-                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                </span>
-            </label>
-            <input type="hidden" value="{{ $siguienteCuota->id }}" name="pago_id">
-            <select name="servicio_id" id="servicio_id" class="form-control" onchange="cambiaServicio()" required>
-                <option value="">SELECCIONE</option>
-                @foreach ($servicios as $s)
-                <option value="{{ $s->id }}">{{ $s->nombre }}</option>
-                @endforeach
-            </select>
-        </div>
-    </div>
-    
 </div>
 
 <div class="row" id="formularioMensualidad" style="display: none;">
