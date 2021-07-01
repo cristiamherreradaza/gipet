@@ -23,7 +23,7 @@
             /* border-collapse: collapse; */
             background-color: #fff;
             position: absolute;
-            top: 425px;
+            top: 325px;
             left: 150px;
             padding: 20px;
             border: 1px solid black;
