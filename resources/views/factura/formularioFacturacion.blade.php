@@ -44,29 +44,6 @@
                 </div>
             </div>
 
-            <form action="{{ url('Factura/guardaFactura') }}" method="POST">
-                @csrf
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="table-responsive m-t-40">
-                        <table id="pensiones" class="table table-bordered table-striped text-center">
-                            <thead>
-                                <tr>
-                                    <th>Carrera</th>
-                                    <th>Cuota</th>                        
-                                    <th>Descuento</th>                        
-                                    <th>Importe</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            
-            </form>
-
         </div>
 
         

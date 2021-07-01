@@ -8,11 +8,11 @@
         <input type="hidden" name="pago_id" id="pago_id" value="{{ $siguienteCuota->id }}">
         <input type="hidden" name="persona_id" id="persona_id" value="{{ $siguienteCuota->persona_id }}">
         <input type="hidden" name="carrera_id" id="carrera_id" value="{{ $siguienteCuota->carrera_id }}">
-        <input type="text" class="form-control" name="numeroCuota" id="numeroCuota" value="{{ $siguienteCuota->mensualidad }}; Mensualidad" readonly />
+        <input type="text" class="form-control" name="numeroCuota" id="numeroCuota" value="{{ $siguienteCuota->mensualidad }}&deg; Mensualidad" readonly />
     </div>
 </div>
 
-<div class="col-md-2">
+<div class="col-md-3">
     <div class="form-group">
         @php
             if($siguienteCuota->descuento_persona_id == null){

@@ -39,8 +39,6 @@
 
         window.location.href = "{{ url("Factura/ajaxFacturar") }}/"+persona_id;
 
-
-
         /*$.ajax({
             url: "{{ url('Factura/ajaxFacturar') }}",
             data: {

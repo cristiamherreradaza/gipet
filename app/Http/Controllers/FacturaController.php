@@ -109,8 +109,9 @@ class FacturaController extends Controller
 
     public function ajaxMuestraCuotasPagar(Request $request)
     {
-        $gestionActual = date('Y');
         // dd($request->all());
+        $gestionActual = date('Y');
+
         $paraPagar = Pago::where('persona_id', $request->persona_id)
                     ->where('carrera_id', 1)
                     ->where('anio_vigente', $gestionActual)
@@ -165,7 +166,7 @@ class FacturaController extends Controller
     public function ajaxMuestraCuotaAPagar(Request $request)
     {
         $siguienteCuota = Pago::where('persona_id', $request->persona_id)
-                        ->where('carrera_id', $request->carrera_id)
+                        ->where('carrera_id', 1)
                         ->whereNull('estado')
                         ->orderBy('mensualidad', 'asc')
                         ->first();

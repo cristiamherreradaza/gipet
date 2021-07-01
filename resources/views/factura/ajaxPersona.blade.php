@@ -36,15 +36,11 @@
 
 </div>
 
-
-{{-- <div class="row">
-    <div class="col-md-12">
-        <button type="submit" class="btn btn-block btn-primary">RESUMEN PAGOS</button>
-    </div>
-</div> --}}
+<hr />
 
 <div class="row">
-    <div class="col-3">
+    
+    <div class="col-2">
         <div class="form-group">
             <label>Servicio
                 <span class="text-danger">
@@ -59,6 +55,10 @@
                 @endforeach
             </select>
         </div>
+    </div>
+
+    <div class="col-md-10">
+        <div class="row" id="ajaxNumeroCuota"></div>
     </div>
 </div>
 
@@ -110,33 +110,6 @@
 
 @endif
 <br>
-<div class="card border-primary">
-    <div class="card-header bg-primary">
-        <h4 class="mb-0 text-white">REGISTRAR PENSIONES</h4></div>
-    <div class="card-body">
-        <div class="row">
-            <div class="col-md-2">
-                <div class="form-group">
-                    <label>Carrera
-                        <span class="text-danger">
-                            <i class="mr-2 mdi mdi-alert-circle"></i>
-                        </span>
-                    </label>
-                    <select name="carrera_id" id="carrera_id" class="form-control" onchange="cambiaCarreraPension();">
-                        <option value="">Seleccione</option>
-                        @foreach ($inscripciones as $i)
-                        <option value="{{ $i->carrera->id }}">{{ $i->carrera->nombre }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-10">
-                <div class="row" id="ajaxNumeroCuota"></div>
-            </div>
-        </div>
-
-    </div>
-</div>
 
 <div class="card border-secondary">
     <div class="card-header bg-secondary">
@@ -145,13 +118,6 @@
             
 
         </div>
-</div>
-
-<hr>
-<div class="row">
-    <div class="col-md-12">
-        <h3>Registrar Pensiones</h3>
-    </div>
 </div>
 
 <div class="row" id="formularioMensualidad" style="display: none;">
@@ -174,66 +140,30 @@
 
 </div>
 
-<div class="row" id="formularioParcial" style="display: none;">
-
-    <div class="col-3">
-        <div class="form-group">
-            <label>Carrera
-                <span class="text-danger">
-                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                </span>
-            </label>
-            <select name="carrera_id" id="carrera_id" class="form-control" required>
-                @foreach ($inscripciones as $i)
-                <option value="{{ $i->carrera->id }}">{{ $i->carrera->nombre }}</option>
-                @endforeach
-            </select>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="form-group">
-            <label>IMPORTE
-                <span class="text-danger">
-                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                </span>
-            </label>
-            <input type="text" class="form-control" name="cantidadMensualidadesParaPagar" id="cantidadMensualidadesParaPagar" value="" required>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="form-group">
-            <label>DESCRIPCION DEL SERVICIO
-                <span class="text-danger">
-                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                </span>
-            </label>
-            <input type="text" class="form-control" name="descripcionMensualidad" id="descripcionMensualidad" value="Parcial" required>
-        </div>
-    </div>
-
-    <div class="col-md-2">
-        <div class="form-group">
-            <label>&nbsp;</label>
-            <button type="button" class="btn btn-block btn-info" onclick="adicionaItem()">Adicionar</button>
-        </div>
-    </div>
-
-</div>
-
-    
-
-</div>
-
 <script>
 
     function cambiaServicio()
     {
         let servicio = $('#servicio_id').val();
+
         if(servicio == 2){
-            $('#formularioMensualidad').show('slow');
+            // $('#formularioMensualidad').show('slow');
             // $('#formularioParcial').toggle('slow');
+                // let carrera = $("#carrera_id").val();
+                let persona_id = {{ $datosPersona->id }};
+
+                $.ajax({
+                    url: "{{ url('Factura/ajaxMuestraCuotaAPagar') }}",
+                    data: {
+                        // carrera_id: carrera,
+                        persona_id: persona_id
+                    },
+                    type: 'GET',
+                    success: function(data) {
+                        $("#ajaxNumeroCuota").html(data);
+                    }
+                });
+                
         }else if(servicio == 8){
             $('#formularioMensualidad').hide('slow');
             $('#formularioParcial').show('slow');
@@ -257,6 +187,5 @@
             }
         });
 
-        
     }
 </script>
