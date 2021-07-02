@@ -4,7 +4,7 @@
             <th>Cantidad</th>
             <th>Descripcion</th>
             <th>Descuento</th>
-            <th>Total</th>
+            <th>Importe</th>
             <th></th>
         </tr>
     </thead>
@@ -14,7 +14,7 @@
         @endphp
         @foreach ($cuotasParaPagar as $cpp)
         @php
-            $montoTotal += $cpp->a_pagar;
+            $montoTotal += $cpp->importe;
         @endphp
             <tr>
                 <td>1</td>
@@ -29,7 +29,12 @@
                         NINGUNO
                     @endif
                 </td>
-                <td>{{ $cpp->a_pagar }}</td>
+                <td>
+                    {{ $cpp->importe }}
+                    @if ($cpp->faltante > 0)
+                        <span class="text-danger">({{ $cpp->faltante }})</span>
+                    @endif
+                </td>
                 <td>
                     @if ($ultimaCuota->id == $cpp->id)
                         <button type="button" class="btnElimina btn btn-danger" title="Elimina Item" onclick="eliminaItemPago('{{ $cpp->id }}')"><i class="fas fa-trash-alt"></i></button>

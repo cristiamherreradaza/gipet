@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Pago;
 use DataTables;
+use App\Factura;
 use App\Persona;
 use App\Servicio;
 use App\CarrerasPersona;
 use App\DescuentosPersona;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Auth;
 class FacturaController extends Controller
 {
     public function listadoPersonas()
@@ -176,31 +177,71 @@ class FacturaController extends Controller
 
     public function ajaxAdicionaItem(Request $request)
     {
+        $datosPago = Pago::find($request->pago_id);
+
+        if($request->pago_parcial == 'parcial'){
+            $faltante = $datosPago->a_pagar - $request->importe_pago;
+            $estado = 'Parcial';
+        }else{
+            $faltante = 0;
+            $estado = 'paraPagar';
+        }
         // actualizamos los datos para mostrar en la tabla pagos
         $cuotaAPagar = Pago::find($request->pago_id);
-        $cuotaAPagar->estado = 'paraPagar';
-        $cuotaAPagar->a_pagar = $request->cuotaAPagar;
+        $cuotaAPagar->importe  = $request->importe_pago;
+        $cuotaAPagar->faltante = $faltante;
+        $cuotaAPagar->estado   = $estado;
         $cuotaAPagar->save();
-
     }
 
     public function generaRecibo(Request $request)
     {
+        $hoy = date('Y-m-d');
+
         $cuotasParaPagar = Pago::where('persona_id', $request->persona_id)
             ->where('estado', 'paraPagar')
-            ->get(); 
+            ->orWhere('estado', 'Parcial')
+            ->get();
 
-        /*foreach ($cuotasParaFacturar as $cf) {
-            $cuotasPagadas = Pago::find($cf->id);
-            $cuotasPagadas->estado = "Espera";
+        // calculamos el monto total
+        $total = 0;
+
+        foreach ($cuotasParaPagar as $cp) {
+            $total += $cp->importe;
+            $anio = $cp->anio_vigente;
+        }
+        
+        // creamos el recibo en la tabla de facturas
+        $recibo               = new Factura();
+        $recibo->user_id      = Auth::user()->id;
+        $recibo->persona_id   = $request->persona_id;
+        $recibo->fecha        = $hoy;
+        $recibo->total        = $total;
+        $recibo->anio_vigente = $anio;
+        $recibo->facturado    = "No";
+        $recibo->save();
+
+        $reciboId = $recibo->id;
+        
+        foreach ($cuotasParaPagar as $cp) 
+        {
+            if($cp->estado == 'paraPagar'){
+                $estado = 'Pagado';
+            }else{
+                $estado = null;
+            }
+            $cuotasPagadas             = Pago::find($cp->id);
+            $cuotasPagadas->estado     = $estado;
+            $cuotasPagadas->fecha      = $hoy;
+            $cuotasPagadas->factura_id = $reciboId;
+            
             $cuotasPagadas->save();
         }
 
-        $cuotasParaPagar = Pago::where('persona_id', $request->persona_id)
-            ->where('estado', 'Espera')
-            ->get(); */
+        $cuotasPagadas = Pago::where('factura_id', $reciboId)
+                            ->get();
 
-        return view('factura.generaRecibo')->with(compact('cuotasParaPagar'));
+        return view('factura.generaRecibo')->with(compact('cuotasPagadas'));
     }
 
     public function ajaxEliminaItemPago(Request $request)
@@ -217,12 +258,14 @@ class FacturaController extends Controller
         // mostramos las cuotas para pagar
         $cuotasParaPagar = Pago::where('persona_id', $request->persona_id)
             ->where('estado', 'paraPagar')
+            ->orWhere('estado', 'Parcial')
             ->orderBy('carrera_id', 'asc')
             ->get(); 
 
         // extraemos la ultima cuota para eliminar de la tabla
         $ultimaCuota = Pago::where('persona_id', $request->persona_id)
                         ->where('estado', 'paraPagar')
+                        ->orWhere('estado', 'Parcial')
                         ->orderBy('id', 'desc')
                         ->first();
 

@@ -57,5 +57,11 @@ class Pago extends Model
         return $this->belongsTo('App\DescuentosPersona', 'descuento_persona_id');
     }
 
+    public function factura()
+    {
+        return $this->belongsTo('App\Factura', 'factura_id');
+    }
+
+
 
 }

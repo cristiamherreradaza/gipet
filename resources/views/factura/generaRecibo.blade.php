@@ -196,7 +196,7 @@
 				@php
 					$total = 0;
 				@endphp
-				@foreach ($cuotasParaPagar as $key => $c)
+				@foreach ($cuotasPagadas as $key => $c)
 				@php
 					$total += $c->a_pagar;
 				@endphp
