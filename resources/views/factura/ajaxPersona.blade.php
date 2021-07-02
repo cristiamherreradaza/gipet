@@ -63,9 +63,15 @@
 
 </div>
 
+<div class="row" id="tituloPagos" style="display: none;">
+    <div class="col-md-12">
+        <h2 class="text-center text-info">DETALLE DE PAGOS</h2>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-md-12" id="ajaxMuestraItemsAPagar">
-
+    
     </div>
 </div>
 
@@ -114,5 +120,25 @@
             }
         });
 
+    }
+
+    function ajaxMuestraTablaPagos()
+    {
+        // alert('entro');
+        // $("#ajaxMuestraItemsAPagar").load('{{ url("Factura/ajaxMuestraTablaPagos/$datosPersona->id") }}');
+
+        let persona_id = {{ $datosPersona->id }};
+
+        $.ajax({
+            url: "{{ url('Factura/ajaxMuestraTablaPagos') }}",
+            data: {
+                persona_id: persona_id
+            },
+            type: 'GET',
+            success: function(data) {
+                // $("#ajaxNumeroCuota").html(data);
+                $("#ajaxMuestraItemsAPagar").html(data);
+            }
+        });
     }
 </script>

@@ -90,6 +90,8 @@
             type: 'GET',
             success: function(data) {
                 cambiaCarreraPension();
+                ajaxMuestraTablaPagos();
+                $("#tituloPagos").show();
                 $("#ajaxMuestraItemsAPagar").html(data);
             }
         });

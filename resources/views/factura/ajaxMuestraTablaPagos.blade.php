@@ -60,7 +60,7 @@
             },
             type: 'GET',
             success: function(data) {
-                // $("#ajaxNumeroCuota").html(data);
+                cambiaCarreraPension();
             }
         });
     }

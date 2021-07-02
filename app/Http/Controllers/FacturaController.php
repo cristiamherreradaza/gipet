@@ -182,25 +182,6 @@ class FacturaController extends Controller
         $cuotaAPagar->a_pagar = $request->cuotaAPagar;
         $cuotaAPagar->save();
 
-        // extraremos la siguiente cuota
-        $siguienteCuota = Pago::where('persona_id', $request->persona_id)
-            ->where('carrera_id', $request->carrera_id)
-            ->whereNull('estado')
-            ->orderBy('mensualidad', 'asc')
-            ->first();
-
-        // mostramos las cuotas para pagar
-        $cuotasParaPagar = Pago::where('persona_id', $request->persona_id)
-            ->where('estado', 'paraPagar')
-            ->orderBy('carrera_id', 'asc')
-            ->get(); 
-
-        // extraemos la ultima cuota para eliminar de la tabla
-        $ultimaCuota = Pago::where('persona_id', $request->persona_id)
-                        ->orderBy('updated_at', 'desc')
-                        ->first();
-
-        return view('factura.ajaxAdicionaItem')->with(compact('siguienteCuota', 'cuotasParaPagar', 'ultimaCuota'));
     }
 
     public function ajaxFacturar(Request $request)
@@ -228,6 +209,28 @@ class FacturaController extends Controller
         $cuotaEliminar = Pago::find($request->pago_id);
         $cuotaEliminar->estado = null;
         $cuotaEliminar->save();
+    }
 
+    public function ajaxMuestraTablaPagos(Request $request)
+    {
+        // extraremos la siguiente cuota
+        $siguienteCuota = Pago::where('persona_id', $request->persona_id)
+            ->where('carrera_id', 1)
+            ->whereNull('estado')
+            ->orderBy('mensualidad', 'asc')
+            ->first();
+
+        // mostramos las cuotas para pagar
+        $cuotasParaPagar = Pago::where('persona_id', $request->persona_id)
+            ->where('estado', 'paraPagar')
+            ->orderBy('carrera_id', 'asc')
+            ->get(); 
+
+        // extraemos la ultima cuota para eliminar de la tabla
+        $ultimaCuota = Pago::where('persona_id', $request->persona_id)
+                        ->orderBy('updated_at', 'desc')
+                        ->first();
+
+        return view('factura.ajaxMuestraTablaPagos')->with(compact('siguienteCuota', 'cuotasParaPagar', 'ultimaCuota'));
     }
 }
