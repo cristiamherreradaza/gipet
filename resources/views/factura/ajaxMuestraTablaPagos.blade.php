@@ -61,6 +61,7 @@
             type: 'GET',
             success: function(data) {
                 cambiaCarreraPension();
+                ajaxMuestraTablaPagos();
             }
         });
     }

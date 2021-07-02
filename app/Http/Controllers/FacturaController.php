@@ -228,7 +228,8 @@ class FacturaController extends Controller
 
         // extraemos la ultima cuota para eliminar de la tabla
         $ultimaCuota = Pago::where('persona_id', $request->persona_id)
-                        ->orderBy('updated_at', 'desc')
+                        ->where('estado', 'paraPagar')
+                        ->orderBy('id', 'desc')
                         ->first();
 
         return view('factura.ajaxMuestraTablaPagos')->with(compact('siguienteCuota', 'cuotasParaPagar', 'ultimaCuota'));
