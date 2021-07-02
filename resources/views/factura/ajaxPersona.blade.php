@@ -63,6 +63,12 @@
 
 </div>
 
+<div class="row">
+    <div class="col-md-12" id="ajaxMuestraItemsAPagar">
+
+    </div>
+</div>
+
 <script>
 
     function cambiaServicio()
