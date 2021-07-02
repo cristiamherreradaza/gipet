@@ -213,13 +213,7 @@ class FacturaController extends Controller
 
     public function ajaxMuestraTablaPagos(Request $request)
     {
-        // extraremos la siguiente cuota
-        $siguienteCuota = Pago::where('persona_id', $request->persona_id)
-            ->where('carrera_id', 1)
-            ->whereNull('estado')
-            ->orderBy('mensualidad', 'asc')
-            ->first();
-
+        $persona_id = $request->persona_id;
         // mostramos las cuotas para pagar
         $cuotasParaPagar = Pago::where('persona_id', $request->persona_id)
             ->where('estado', 'paraPagar')
@@ -232,6 +226,6 @@ class FacturaController extends Controller
                         ->orderBy('id', 'desc')
                         ->first();
 
-        return view('factura.ajaxMuestraTablaPagos')->with(compact('siguienteCuota', 'cuotasParaPagar', 'ultimaCuota'));
+        return view('factura.ajaxMuestraTablaPagos')->with(compact('persona_id', 'cuotasParaPagar', 'ultimaCuota'));
     }
 }

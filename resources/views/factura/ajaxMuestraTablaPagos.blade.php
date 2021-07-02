@@ -3,7 +3,7 @@
         <tr>
             <th>Cantidad</th>
             <th>Descripcion</th>
-            <th>Carrera</th>
+            <th>Descuento</th>
             <th>Total</th>
             <th></th>
         </tr>
@@ -19,7 +19,16 @@
             <tr>
                 <td>1</td>
                 <td>{{ $cpp->mensualidad }}&#176; Mensualidad</td>
-                <td>{{ $cpp->carrera->nombre }}</td>
+                <td>
+                    @if (!$cpp->descuento_persona_id == null)
+                        @php
+                            $descuentoPersona = App\DescuentosPersona::find($cpp->descuento_persona_id);
+                            echo $descuentoPersona->descuento->nombre;
+                        @endphp    
+                    @else
+                        NINGUNO
+                    @endif
+                </td>
                 <td>{{ $cpp->a_pagar }}</td>
                 <td>
                     @if ($ultimaCuota->id == $cpp->id)
@@ -42,11 +51,11 @@
 
 <div class="row">
     <div class="col-md-9">
-        <a href='{{ url("Factura/ajaxFacturar/")."/".$siguienteCuota->persona_id }}' class="btn btn-block btn-success" onclick="ajaxFacturar()">RECIBO</a>
+        <a href='{{ url("Factura/ajaxFacturar/")."/".$persona_id }}' class="btn btn-block btn-success" onclick="ajaxFacturar()">RECIBO</a>
     </div>
 
     <div class="col-md-3">
-        <a href='{{ url("Factura/ajaxFacturar/")."/".$siguienteCuota->persona_id }}' class="btn btn-block btn-dark" onclick="ajaxFacturar()">FACTURA</a>
+        <a href='{{ url("Factura/ajaxFacturar/")."/".$persona_id }}' class="btn btn-block btn-dark" onclick="ajaxFacturar()">FACTURA</a>
     </div>
 </div>
 
