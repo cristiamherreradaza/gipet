@@ -1,3 +1,4 @@
+@if ($siguienteCuota)
 <div class="col-md-2">
     <div class="form-group">
         <label>CUOTA
@@ -58,9 +59,17 @@
 <div class="col-md-2">
     <div class="form-group">
         <label>&nbsp;</label>
-        <button type="button" class="btn btn-block btn-info" onclick="adicionaItem()">Adicionar</button>
+        <button type="button" class="btn btn-block btn-success" onclick="adicionaItem()">Adicionar</button>
     </div>
 </div>
+@else
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>&nbsp;</label>
+            <h2 class="text-success">NO TIENE CUOTAS PENDIENTES</h2>
+        </div>
+    </div>
+@endif
 
 <script>
     function adicionaItem()

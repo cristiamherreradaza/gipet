@@ -656,7 +656,6 @@
                                     <td class="text-center">{{ $p->a_pagar }}</td>
                                     <td class="text-center">{{ $p->fecha }}</td>
                                     <td class="text-center">
-                                        {{ $p->estado }}
                                         @if ($p->fecha == null)
                                             <span class="badge py-1 badge-table badge-danger">DEBE</span>
                                         @else

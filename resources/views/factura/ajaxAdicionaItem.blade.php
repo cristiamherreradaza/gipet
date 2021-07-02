@@ -9,7 +9,13 @@
         </tr>
     </thead>
     <tbody>
+        @php
+            $montoTotal = 0;                    
+        @endphp
         @foreach ($cuotasParaPagar as $cpp)
+        @php
+            $montoTotal += $cpp->a_pagar;
+        @endphp
             <tr>
                 <td>1</td>
                 <td>{{ $cpp->mensualidad }}&#176; Mensualidad</td>
@@ -17,40 +23,45 @@
                 <td>{{ $cpp->a_pagar }}</td>
                 <td>
                     @if ($ultimaCuota->id == $cpp->id)
-                        <button type="button" class="btnElimina btn btn-danger" title="Elimina Producto"><i class="fas fa-trash-alt"></i></button>
+                        <button type="button" class="btnElimina btn btn-danger" title="Elimina Item" onclick="eliminaItemPago('{{ $cpp->id }}')"><i class="fas fa-trash-alt"></i></button>
                     @endif
                 </td>
             </tr>
         @endforeach
     </tbody>
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>{{ $montoTotal }}</th>
+            <th></th>
+        </tr>
+    </thead>
 </table>
 
 <div class="row">
-    <div class="col-md-12">
-        <button type="submit" class="btn btn-block btn-success" onclick="ajaxFacturar()">FACTURAR</button>
+    <div class="col-md-9">
+        <a href='{{ url("Factura/ajaxFacturar/")."/".$siguienteCuota->persona_id }}' class="btn btn-block btn-success" onclick="ajaxFacturar()">RECIBO</a>
+    </div>
+
+    <div class="col-md-3">
+        <a href='{{ url("Factura/ajaxFacturar/")."/".$siguienteCuota->persona_id }}' class="btn btn-block btn-dark" onclick="ajaxFacturar()">FACTURA</a>
     </div>
 </div>
 
 <script type="text/javascript">
-
-    function ajaxFacturar(){
-
-        let persona_id = $("#persona_id").val();
-
-        window.location.href = "{{ url("Factura/ajaxFacturar") }}/"+persona_id;
-
-        /*$.ajax({
-            url: "{{ url('Factura/ajaxFacturar') }}",
+    function eliminaItemPago(pago_id)
+    {
+        $.ajax({
+            url: "{{ url('Factura/ajaxEliminaItemPago') }}",
             data: {
-                persona_id: persona_id,
-                },
+                pago_id: pago_id
+            },
             type: 'GET',
             success: function(data) {
-                cambiaCarreraPension();
-                $("#ajaxMuestraItemsAPagar").html(data);
-                // $("#ajaxPersonas").show('slow');
-                // $("#ajaxPersonas").html(data);
+                // $("#ajaxNumeroCuota").html(data);
             }
-        });    */
+        });
     }
 </script>

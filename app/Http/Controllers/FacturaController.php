@@ -176,50 +176,58 @@ class FacturaController extends Controller
 
     public function ajaxAdicionaItem(Request $request)
     {
-
+        // actualizamos los datos para mostrar en la tabla pagos
         $cuotaAPagar = Pago::find($request->pago_id);
         $cuotaAPagar->estado = 'paraPagar';
         $cuotaAPagar->a_pagar = $request->cuotaAPagar;
         $cuotaAPagar->save();
 
+        // extraremos la siguiente cuota
         $siguienteCuota = Pago::where('persona_id', $request->persona_id)
             ->where('carrera_id', $request->carrera_id)
             ->whereNull('estado')
             ->orderBy('mensualidad', 'asc')
             ->first();
 
+        // mostramos las cuotas para pagar
         $cuotasParaPagar = Pago::where('persona_id', $request->persona_id)
-            // ->where('carrera_id', $request->carrera_id)
             ->where('estado', 'paraPagar')
-            // ->orderBy('mensualidad', 'asc')
             ->orderBy('carrera_id', 'asc')
             ->get(); 
 
+        // extraemos la ultima cuota para eliminar de la tabla
         $ultimaCuota = Pago::where('persona_id', $request->persona_id)
                         ->orderBy('updated_at', 'desc')
                         ->first();
 
         return view('factura.ajaxAdicionaItem')->with(compact('siguienteCuota', 'cuotasParaPagar', 'ultimaCuota'));
-
     }
 
     public function ajaxFacturar(Request $request)
     {
         $cuotasParaFacturar = Pago::where('persona_id', $request->persona_id)
             ->where('estado', 'paraPagar')
-            ->orderBy('carrera_id', 'asc')
             ->get(); 
 
         foreach ($cuotasParaFacturar as $cf) {
             $cuotasPagadas = Pago::find($cf->id);
-            $cuotasPagadas->estado = "Pagado";
+            $cuotasPagadas->estado = "Espera";
             $cuotasPagadas->save();
         }
 
-        // dd($cuotasParaFacturar);
+        $cuotasParaPagar = Pago::where('persona_id', $request->persona_id)
+            ->where('estado', 'Espera')
+            ->get(); 
 
+        return view('factura.imprimeFactura')->with(compact('cuotasParaPagar'));
     }
 
+    public function ajaxEliminaItemPago(Request $request)
+    {
+        // actualizamos el estado del item a pagar
+        $cuotaEliminar = Pago::find($request->pago_id);
+        $cuotaEliminar->estado = null;
+        $cuotaEliminar->save();
 
-
+    }
 }
