@@ -51,11 +51,11 @@
 
 <div class="row">
     <div class="col-md-9">
-        <a href='{{ url("Factura/ajaxFacturar/")."/".$persona_id }}' class="btn btn-block btn-success" onclick="ajaxFacturar()">RECIBO</a>
+        <a href='{{ url("Factura/generaRecibo")."/".$persona_id }}' class="btn btn-block btn-success" onclick="ajaxFacturar()">RECIBO</a>
     </div>
 
     <div class="col-md-3">
-        <a href='{{ url("Factura/ajaxFacturar/")."/".$persona_id }}' class="btn btn-block btn-dark" onclick="ajaxFacturar()">FACTURA</a>
+        <a href='{{ url("Factura/ajaxFacturar")."/".$persona_id }}' class="btn btn-block btn-dark" onclick="ajaxFacturar()">FACTURA</a>
     </div>
 </div>
 

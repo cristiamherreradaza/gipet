@@ -68,9 +68,9 @@ class NumeroALetras
      * @var array
      */
     private $acentosExcepciones = [
-        'VEINTIDOS'  => 'VEINTIDÓS ',
-        'VEINTITRES' => 'VEINTITRÉS ',
-        'VEINTISEIS' => 'VEINTISÉIS ',
+        'Veintidos'  => 'Veintidos ',
+        'Veintitres' => 'Veintitres ',
+        'Veintiseis' => 'Veintiseis ',
     ];
 
     /**
@@ -190,7 +190,7 @@ class NumeroALetras
     private function checkApocope()
     {
         if ($this->apocope === true) {
-            $this->unidades[1] = 'UN ';
+            $this->unidades[1] = 'Un ';
         }
     }
 
@@ -246,17 +246,17 @@ class NumeroALetras
 
         if (intval($millones) > 0) {
             if ($millones == '001') {
-                $converted .= 'UN MILLON ';
+                $converted .= 'Un Millon ';
             } elseif (intval($millones) > 0) {
-                $converted .= sprintf('%sMILLONES ', $this->convertGroup($millones));
+                $converted .= sprintf('%sMillones ', $this->convertGroup($millones));
             }
         }
 
         if (intval($miles) > 0) {
             if ($miles == '001') {
-                $converted .= 'MIL ';
+                $converted .= 'Mil ';
             } elseif (intval($miles) > 0) {
-                $converted .= sprintf('%sMIL ', $this->convertGroup($miles));
+                $converted .= sprintf('%sMil ', $this->convertGroup($miles));
             }
         }
 
@@ -281,7 +281,7 @@ class NumeroALetras
         $output = '';
 
         if ($n == '100') {
-            $output = 'CIEN ';
+            $output = 'Cien ';
         } elseif ($n[0] !== '0') {
             $output = $this->centenas[$n[0] - 1];
         }

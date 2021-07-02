@@ -184,13 +184,13 @@ class FacturaController extends Controller
 
     }
 
-    public function ajaxFacturar(Request $request)
+    public function generaRecibo(Request $request)
     {
-        $cuotasParaFacturar = Pago::where('persona_id', $request->persona_id)
+        $cuotasParaPagar = Pago::where('persona_id', $request->persona_id)
             ->where('estado', 'paraPagar')
             ->get(); 
 
-        foreach ($cuotasParaFacturar as $cf) {
+        /*foreach ($cuotasParaFacturar as $cf) {
             $cuotasPagadas = Pago::find($cf->id);
             $cuotasPagadas->estado = "Espera";
             $cuotasPagadas->save();
@@ -198,9 +198,9 @@ class FacturaController extends Controller
 
         $cuotasParaPagar = Pago::where('persona_id', $request->persona_id)
             ->where('estado', 'Espera')
-            ->get(); 
+            ->get(); */
 
-        return view('factura.imprimeFactura')->with(compact('cuotasParaPagar'));
+        return view('factura.generaRecibo')->with(compact('cuotasParaPagar'));
     }
 
     public function ajaxEliminaItemPago(Request $request)
