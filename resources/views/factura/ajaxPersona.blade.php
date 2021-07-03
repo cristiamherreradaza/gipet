@@ -80,10 +80,11 @@
     function cambiaServicio()
     {
         let servicio = $('#servicio_id').val();
+        let persona_id = {{ $datosPersona->id }};
 
+        // en el caso que el servicio sea mensualidad
+        // mostramos las cuotas a pagar
         if(servicio == 2){
-
-            let persona_id = {{ $datosPersona->id }};
 
             $.ajax({
                 url: "{{ url('Factura/ajaxMuestraCuotaAPagar') }}",
@@ -97,9 +98,19 @@
                 }
             });
                 
-        }else if(servicio == 8){
-            $('#formularioMensualidad').hide('slow');
-            $('#formularioParcial').show('slow');
+        }else{
+
+            $.ajax({
+                url: "{{ url('Factura/ajaxPreciosServicios') }}",
+                data: {
+                    servicio_id: servicio
+                },
+                type: 'GET',
+                success: function(data) {
+                    $("#ajaxNumeroCuota").html(data);
+                }
+            });
+
         }
     }
 

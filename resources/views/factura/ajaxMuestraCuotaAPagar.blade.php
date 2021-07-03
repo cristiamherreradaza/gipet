@@ -49,14 +49,14 @@
 
 <div class="col-2">
     <div class="form-group">
-        <label>
+        <label>PAGO
             <span class="text-danger">
                 <i class="mr-2 mdi mdi-alert-circle"></i>
             </span>
         </label>
         <select name="pago_parcial" id="pago_parcial" class="form-control" required>
-            <option value="total">Total</option>
-            <option value="parcial">Parcial</option>
+            <option value="total">TOTAL</option>
+            <option value="parcial">PARCIAL</option>
         </select>
     </div>
 </div>

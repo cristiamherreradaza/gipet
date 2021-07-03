@@ -271,4 +271,10 @@ class FacturaController extends Controller
 
         return view('factura.ajaxMuestraTablaPagos')->with(compact('persona_id', 'cuotasParaPagar', 'ultimaCuota'));
     }
+
+    public function ajaxPreciosServicios(Request $request)
+    {
+        $preciosServicios = Servicio::find($request->servicio_id);
+        return view('factura.ajaxPreciosServicios')->with(compact('preciosServicios'));
+    }
 }
