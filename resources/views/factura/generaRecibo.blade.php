@@ -135,15 +135,15 @@
 			font-size: 24pt;
 			position: absolute;
 			top: 40px;
-			left: 0px;
-			width: 150px;
+			left: 580px;
+			width: 350px;
 			text-align: center;
 		}
 
 		#logo {
 			position: absolute;
 			top: 20px;
-			left: 680px;
+			left: 0px;
 		}
 
 		#direccionEmpresa {
@@ -166,7 +166,11 @@
 @endphp
 	<div id="fondo">
 
-		<div id="txtRecibo">RECIBO</div>
+		@php
+			$recibo = App\Factura::find($cuotasPagadas[0]->factura_id);
+		@endphp
+
+		<div id="txtRecibo">RECIBO No. {{ str_pad($recibo->numero, 4, '0', STR_PAD_LEFT) }}</div>
 
 		<div id="logo"><img src="{{ asset('assets/imagenes/portal_uno_R.png') }}" width="200"></div>
 			
@@ -174,11 +178,18 @@
 				<tr>
 					<td style="text-align: left;">
 						<b>Lugar y Fecha:</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						La Paz, </td>
+						@php
+							$utilidades = new App\librerias\Utilidades();
+							$fechaEs = $utilidades->fechaCastellano($cuotasPagadas[0]->fecha);
+						@endphp
+						La Paz, {{ $fechaEs }}</td>
 				</tr>
 				<tr>
 					<td style="text-align: left;"><b>Se&ntilde;or(es):</b>
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Herrera</td>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						{{ $cuotasPagadas[0]->persona->apellido_paterno }}&nbsp;
+						{{ $cuotasPagadas[0]->persona->apellido_materno }}&nbsp;
+						{{ $cuotasPagadas[0]->persona->nombres }}</td>
 					<td></td>
 				</tr>
 			</table>
@@ -206,7 +217,13 @@
 							{{ ++$key }}
 						</td>
 						<td style="text-align: right;" width="100px">1</td>
-						<td width="425px" style="text-align: left;">{{ $c->mensualidad }}&deg; Mensualidad</td>
+						<td width="425px" style="text-align: left;">
+							@if ($c->servicio_id == 2)
+							    {{ $c->mensualidad }}&#176; Mensualidad
+							@else
+							    {{ $c->servicio->nombre }}
+							@endif
+						</td>
 						<td style="text-align: right;" width="100px">{{ $c->a_pagar }}</td>
 						<td style="text-align: right;" width="100px"><b>{{ $c->a_pagar }}</b></td>
 					</tr>	
