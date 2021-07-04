@@ -9,6 +9,7 @@ use App\Persona;
 use App\Servicio;
 use App\CarrerasPersona;
 use App\DescuentosPersona;
+use CodigoControlV7;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
