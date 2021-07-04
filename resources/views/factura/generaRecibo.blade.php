@@ -268,7 +268,10 @@
 		</div>
 
 	<script>
-		
+		function vuelveSistema()
+		{
+			location.href = "{{ url('Factura/formularioFacturacion') }}";	
+		}
 	</script>
 	
 </body>
