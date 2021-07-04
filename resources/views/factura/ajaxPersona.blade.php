@@ -103,7 +103,8 @@
             $.ajax({
                 url: "{{ url('Factura/ajaxPreciosServicios') }}",
                 data: {
-                    servicio_id: servicio
+                    servicio_id: servicio,
+                    persona_id: persona_id
                 },
                 type: 'GET',
                 success: function(data) {

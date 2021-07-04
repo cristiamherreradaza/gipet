@@ -771,15 +771,7 @@ class PersonaController extends Controller
             $request->gestion, 
             $request->anio_vigente);
 
-        $verifica = CarrerasPersona::where('persona_id', $request->persona_id)
-                    ->where('anio_vigente', $request->anio_vigente)
-                    ->where('gestion', $request->gestion)
-                    ->where('turno_id', $request->turno_id)
-                    ->where('carrera_id', $request->carrera_id)
-                    ->where('paralelo', $request->paralelo)
-                    ->count();
-
-        if($verifica == 0)
+        if($request->generacion_cuotas == 'Si')
         {     
 
             // generamos los datos para los pagos

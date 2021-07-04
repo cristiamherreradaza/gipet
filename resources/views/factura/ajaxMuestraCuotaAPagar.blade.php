@@ -95,7 +95,7 @@
                 cambiaCarreraPension();
                 ajaxMuestraTablaPagos();
                 $("#tituloPagos").show();
-                $("#ajaxMuestraItemsAPagar").html(data);
+                // $("#ajaxMuestraItemsAPagar").html(data);
             }
         });
 

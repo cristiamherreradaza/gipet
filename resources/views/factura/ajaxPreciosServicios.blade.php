@@ -26,6 +26,35 @@
 <div class="col-md-2">
     <div class="form-group">
         <label>&nbsp;</label>
-        <button type="button" class="btn btn-block btn-success" onclick="adicionaItem()">Adicionar</button>
+        <button type="button" class="btn btn-block btn-success" onclick="adicionaPagoServicio()">Adicionar</button>
     </div>
 </div>
+
+<script type="text/javascript">
+    function adicionaPagoServicio()
+    {
+        let servicio_id = {{ $preciosServicios->id }};
+        let persona_id = {{ $persona->id }};
+        let importe = $('#importe_pago').val();
+        let pago_parcial = $('#pago_parcial').val();
+        // console.log(persona_id);
+
+       $.ajax({
+            url: "{{ url('Factura/ajaxAdicionaItemServicio') }}",
+            data: {
+                servicio_id: servicio_id,
+                persona_id: persona_id,
+                importe: importe,
+                pago_parcial: pago_parcial
+                },
+            type: 'GET',
+            success: function(data) {
+                // cambiaCarreraPension();
+                ajaxMuestraTablaPagos();
+                $("#tituloPagos").show();
+                // $("#ajaxMuestraItemsAPagar").html(data);
+            }
+        });
+
+    }
+</script>

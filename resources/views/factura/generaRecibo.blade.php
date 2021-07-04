@@ -172,8 +172,9 @@
 			
 			<table id="datosEmpresaFactura">
 				<tr>
-					<td style="text-align: left;"><b>Lugar y Fecha:</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;La Paz,
-						25 de Enero</span></td>
+					<td style="text-align: left;">
+						<b>Lugar y Fecha:</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						La Paz, </td>
 				</tr>
 				<tr>
 					<td style="text-align: left;"><b>Se&ntilde;or(es):</b>

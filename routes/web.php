@@ -414,5 +414,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Factura/ajaxMuestraTablaPagos', 'FacturaController@ajaxMuestraTablaPagos');
     Route::get('Factura/generaRecibo/{persona_id}', 'FacturaController@generaRecibo');
     Route::get('Factura/ajaxPreciosServicios', 'FacturaController@ajaxPreciosServicios');
+    Route::get('Factura/ajaxAdicionaItemServicio', 'FacturaController@ajaxAdicionaItemServicio');
+    Route::get('Factura/ajaxEliminaItemPagoServicio', 'FacturaController@ajaxEliminaItemPagoServicio');
+    Route::get('Factura/muestraRecibo/{recibo_id}', 'FacturaController@muestraRecibo');
 
 });

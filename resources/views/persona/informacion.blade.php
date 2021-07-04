@@ -773,7 +773,21 @@
                             {{-- fin primera fila --}}
 
                             {{-- segunda fila --}}
-                            <div class="col-md-4 generacion-cuotas">
+                            <div class="col-md-2 generacion-cuotas">
+                                <div class="form-group">
+                                    <label>Generacion Cuotas
+                                        <span class="text-danger">
+                                            <i class="mr-2 mdi mdi-alert-circle"></i>
+                                        </span>
+                                    </label>
+                                    <select class="form-control custom-select" id="generacion_cuotas" name="generacion_cuotas" required>
+                                        <option value="Si">Si</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-2 generacion-cuotas">
                                 <div class="form-group">
                                     <label>Descuento
                                         <span class="text-danger">
@@ -1172,7 +1186,7 @@
             url: "{{ url('Persona/ajaxInscribeAlumno') }}",
             data: formulario,
             success: function (data) {
-                location.reload()
+                location.reload();
             }
         });
     }

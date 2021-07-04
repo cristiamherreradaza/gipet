@@ -210,13 +210,24 @@ class FacturaController extends Controller
             $total += $cp->importe;
             $anio = $cp->anio_vigente;
         }
-        
+
+        $ultmoRecibo = Factura::where('facturado', 'no')
+                            ->orderBy('id', 'desc')
+                            ->first();
+
+        if ($ultmoRecibo) {
+            $contadorRecibo = $ultmoRecibo->numero+1;
+        } else {
+            $contadorRecibo = 1;
+        }
+
         // creamos el recibo en la tabla de facturas
         $recibo               = new Factura();
         $recibo->user_id      = Auth::user()->id;
         $recibo->persona_id   = $request->persona_id;
         $recibo->fecha        = $hoy;
         $recibo->total        = $total;
+        $recibo->numero       = $contadorRecibo;
         $recibo->anio_vigente = $anio;
         $recibo->facturado    = "No";
         $recibo->save();
@@ -239,6 +250,14 @@ class FacturaController extends Controller
         }
 
         $cuotasPagadas = Pago::where('factura_id', $reciboId)
+                            ->get();
+
+        return redirect("Factura/muestraRecibo/$reciboId");
+    }
+
+    public function muestraRecibo(Request $request, $recibo_id)
+    {
+        $cuotasPagadas = Pago::where('factura_id', $recibo_id)
                             ->get();
 
         return view('factura.generaRecibo')->with(compact('cuotasPagadas'));
@@ -275,6 +294,35 @@ class FacturaController extends Controller
     public function ajaxPreciosServicios(Request $request)
     {
         $preciosServicios = Servicio::find($request->servicio_id);
-        return view('factura.ajaxPreciosServicios')->with(compact('preciosServicios'));
+        $persona = Persona::find($request->persona_id);
+
+        return view('factura.ajaxPreciosServicios')->with(compact('preciosServicios', 'persona'));
+    }
+
+    public function ajaxAdicionaItemServicio(Request $request)
+    {
+        // $datosPago = Pago::find($request->pago_id);
+
+        // if($request->pago_parcial == 'parcial'){
+        //     $faltante = $datosPago->a_pagar - $request->importe_pago;
+        //     $estado = 'Parcial';
+        // }else{
+        //     $faltante = 0;
+        //     $estado = 'paraPagar';
+        // }
+        // actualizamos los datos para mostrar en la tabla pagos
+        $cuotaAPagar              = new Pago();
+        $cuotaAPagar->user_id     = Auth::user()->id;
+        $cuotaAPagar->persona_id  = $request->persona_id;
+        $cuotaAPagar->servicio_id = $request->servicio_id;
+        $cuotaAPagar->importe     = $request->importe;
+        // $cuotaAPagar->faltante = $faltante;
+        $cuotaAPagar->estado      = 'paraPagar';
+        $cuotaAPagar->save();
+    }
+
+    public function ajaxEliminaItemPagoServicio(Request $request)
+    {
+        Pago::destroy($request->pago_id);
     }
 }

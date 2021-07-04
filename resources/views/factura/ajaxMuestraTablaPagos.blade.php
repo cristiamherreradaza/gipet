@@ -18,7 +18,13 @@
         @endphp
             <tr>
                 <td>1</td>
-                <td>{{ $cpp->mensualidad }}&#176; Mensualidad</td>
+                <td>
+                    @if ($cpp->servicio_id == 2)
+                        {{ $cpp->mensualidad }}&#176; Mensualidad
+                    @else
+                        {{ $cpp->servicio->nombre }}
+                    @endif
+                </td>
                 <td>
                     @if (!$cpp->descuento_persona_id == null)
                         @php
@@ -36,8 +42,10 @@
                     @endif
                 </td>
                 <td>
-                    @if ($ultimaCuota->id == $cpp->id)
-                        <button type="button" class="btnElimina btn btn-danger" title="Elimina Item" onclick="eliminaItemPago('{{ $cpp->id }}')"><i class="fas fa-trash-alt"></i></button>
+                    @if ($cpp->servicio_id == 2)
+                        <button type="button" class="btn btn-danger" title="Elimina Item" onclick="eliminaItemPago('{{ $cpp->id }}')"><i class="fas fa-trash-alt"></i></button>
+                    @else
+                        <button type="button" class="btn btn-danger" title="Elimina Item" onclick="eliminaItemPagoServicio('{{ $cpp->id }}')"><i class="fas fa-trash-alt"></i></button>
                     @endif
                 </td>
             </tr>
@@ -75,6 +83,20 @@
             type: 'GET',
             success: function(data) {
                 cambiaCarreraPension();
+                ajaxMuestraTablaPagos();
+            }
+        });
+    }
+
+    function eliminaItemPagoServicio(pago_id)
+    {
+        $.ajax({
+            url: "{{ url('Factura/ajaxEliminaItemPagoServicio') }}",
+            data: {
+                pago_id: pago_id
+            },
+            type: 'GET',
+            success: function(data) {
                 ajaxMuestraTablaPagos();
             }
         });
