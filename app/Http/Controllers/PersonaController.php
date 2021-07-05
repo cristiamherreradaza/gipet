@@ -1000,7 +1000,8 @@ class PersonaController extends Controller
         $datosPersona = Persona::find($datosCarrerasPersona->persona_id);
         
         $datosCarrera = Carrera::find($datosCarrerasPersona->carrera_id);
-        // En la variable inscripciones hallaremos la relacion entre el registro de la tabla carreras_personas e inscripciones
+        // En la variable inscripciones hallaremos la relacion entre 
+        // el registro de la tabla carreras_personas e inscripciones
         $inscripciones  = Inscripcione::where('carrera_id', $datosCarrerasPersona->carrera_id)
                                     ->where('persona_id', $datosCarrerasPersona->persona_id)
                                     //->where('turno_id', $datosCarrerasPersona->turno_id)
@@ -1085,7 +1086,7 @@ class PersonaController extends Controller
         $sheet->setCellValue('C6', $datosPersona->cedula." ".$expedido);
 
         $sheet->setCellValue('C7', 'Gestion');
-        $sheet->setCellValue('C8', $datosCarrera->anio_vigente);
+        $sheet->setCellValue('C8', $datosCarrerasPersona->anio_vigente);
 
         $sheet->setCellValue('A9', 'No');
         $sheet->setCellValue('B9', 'Asignaturas');
