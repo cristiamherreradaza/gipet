@@ -210,7 +210,7 @@
 				@endphp
 				@foreach ($cuotasPagadas as $key => $c)
 				@php
-					$total += $c->a_pagar;
+					$total += $c->importe;
 				@endphp
 					<tr>
 						<td width="25px">&nbsp;&nbsp;
@@ -224,8 +224,8 @@
 							    {{ $c->servicio->nombre }}
 							@endif
 						</td>
-						<td style="text-align: right;" width="100px">{{ $c->a_pagar }}</td>
-						<td style="text-align: right;" width="100px"><b>{{ $c->a_pagar }}</b></td>
+						<td style="text-align: right;" width="100px">{{ $c->importe }}</td>
+						<td style="text-align: right;" width="100px"><b>{{ $c->importe }}</b></td>
 					</tr>	
 				@endforeach
 			</tbody>
@@ -234,7 +234,7 @@
 					$utilidad = new App\librerias\NumeroALetras();
 					$aLetras = $utilidad->toMoney($total);
 				@endphp
-				<td colspan="3" style="text-align: left;">SON: {{ $aLetras }}  100/00 Bolivianos</td>
+				<td colspan="3" style="text-align: left;">Son: {{ $aLetras }}  100/00 Bolivianos</td>
 				<td style="background-color: #abd4ed;color: #000;">TOTAL Bs.</td>
 				<td style="text-align: right;font-size: 9pt;font-weight: bold;">{{ $total }}</td>
 			</tfoot>

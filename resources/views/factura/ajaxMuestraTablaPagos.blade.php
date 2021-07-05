@@ -72,32 +72,36 @@
         <button class="btn btn-block btn-dark" onclick="muestraNit()">FACTURA</button>
     </div>
 </div>
-
-<div class="row" id="bloqueNit" style="display: none;">
+<br />
+<div id="bloqueNit" style="display: none; width: 100%">
     <form action="{{ url('Factura/guardaNitCliente') }}" method="POST" id="formularioNitFacturar">
-        <div class="col-md-3">
-            <div class="form-group">
-                <label class="control-label">NIT</label>
-                <input type="hidden" name="persona_id" value="{{ $persona->id }}">
-                <input type="text" name="nit_factura" id="nit_factura" class="form-control" value="{{ $persona->nit }}" required>
+        @csrf
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">NIT</label>
+                    <input type="hidden" name="persona_id" value="{{ $persona->id }}">
+                    <input type="number" name="nit_factura" id="nit_factura" class="form-control"
+                        value="{{ $persona->nit }}" required>
+                </div>
             </div>
-        </div>
 
-        <div class="col-md-3">
-            <div class="form-group">
-                <label class="control-label">RAZON SOCIAL</label>
-                <input type="text" name="razon_factura" id="razon_factura" class="form-control"
-                    value="{{ $persona->razon_social_cliente }}" required>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">RAZON SOCIAL</label>
+                    <input type="text" name="razon_factura" id="razon_factura" class="form-control"
+                        value="{{ $persona->razon_social_cliente }}" required>
+                </div>
             </div>
-        </div>
 
-        <div class="col-md-3">
-            <div class="form-group">
-                <label class="control-label">&nbsp;</label>
-                <input type="submit" class="btn btn-block btn-success" value="ACEPTAR">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">&nbsp;</label>
+                    <input type="submit" class="btn btn-block btn-success" value="ACEPTAR">
+                </div>
             </div>
-        </div>
 
+        </div>
     </form>
 </div>
 

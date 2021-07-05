@@ -122,10 +122,10 @@
 
 		#txtActividad {
 			/* font-weight: bold; */
-			font-size: 6pt;
+			font-size: 8pt;
 			position: absolute;
 			top: 110px;
-			left: 600px;
+			left: 680px;
 			width: 280px;
 			text-align: left;
 		}
@@ -150,9 +150,9 @@
 			font-weight: bold;
 			font-size: 6pt;
 			position: absolute;
-			top: 85px;
-			left: 20px;
-			width: 150px;
+			top: 90px;
+			left: 40px;
+			width: 180px;
 			text-align: center;
 		}
 	</style>
@@ -190,23 +190,28 @@
 				</tr>
 				<tr>
 					<th style="text-align: left;">FACTURA N&deg;:</th>
-					<td>35</td>
+					<td>{{ $factura->numero }}</td>
 				</tr>
 				<tr>
 					<th style="text-align: left;">N&deg; AUTORIZACION:</th>
-					<td>4568789311113331</td>
+					<td>{{ $parametros->numero_autorizacion }}</td>
 				</tr>
 			</table>
 			
 			<table id="datosEmpresaFactura">
 				<tr>
-					<td style="text-align: left;"><b>Lugar y Fecha:</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;La Paz,
-						25 de Enero</span></td>
-					<td><b>NIT/CI:<b /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Herrera</td>
+					<td style="text-align: left;"><b>Lugar y Fecha:</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						@php
+							$utilidades = new App\librerias\Utilidades();
+							$fechaEs = $utilidades->fechaCastellano($cuotasPagadas[0]->fecha);
+						@endphp
+						La Paz, {{ $fechaEs }}
+						</td>
+					<td><b>NIT/CI:<b /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $factura->nit }}</td>
 				</tr>
 				<tr>
 					<td style="text-align: left;"><b>Se&ntilde;or(es):</b>
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Herrera</td>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ $factura->razon_social }}</td>
 					<td></td>
 				</tr>
 			</table>
@@ -222,31 +227,39 @@
 				</tr>
 			</thead>			
 			<tbody>
-                <tr>
-                    <td width="25px">&nbsp;&nbsp;
-                        1
-                    </td>
-                    <td style="text-align: right;" width="100px">1</td>
-                    <td width="425px" style="text-align: left;">1 MENSUALIDAD</td>
-                    <td style="text-align: right;" width="100px">200.00</td>
-                    <td style="text-align: right;" width="100px"><b>200</b></td>
-                </tr>
-
-                <tr>
-                    <td width="25px">&nbsp;&nbsp;
-                        2
-                    </td>
-                    <td style="text-align: right;" width="100px">1</td>
-                    <td width="425px" style="text-align: left;">2 MENSUALIDAD</td>
-                    <td style="text-align: right;" width="100px">200.00</td>
-                    <td style="text-align: right;" width="100px"><b>200</b></td>
-                </tr>
-                
+				@php
+					$total = 0;
+				@endphp
+				@foreach ($cuotasPagadas as $key => $c)
+				@php
+					$total += $c->importe;
+				@endphp
+					<tr>
+						<td width="25px">&nbsp;&nbsp;
+							{{ ++$key }}
+						</td>
+						<td style="text-align: right;" width="100px">1</td>
+						<td width="425px" style="text-align: left;">
+							@if ($c->servicio_id == 2)
+							    {{ $c->mensualidad }}&#176; Mensualidad
+							@else
+							    {{ $c->servicio->nombre }}
+							@endif
+						</td>
+						<td style="text-align: right;" width="100px">{{ $c->importe }}</td>
+						<td style="text-align: right;" width="100px"><b>{{ $c->importe }}</b></td>
+					</tr>	
+				@endforeach
+			
 			</tbody>
 			<tfoot>
-				<td colspan="3" style="text-align: left;">SON: Seis cientos 100/00 BOLIVIANOS</td>
+				@php
+					$utilidad = new App\librerias\NumeroALetras();
+					$aLetras = $utilidad->toMoney($total);
+				@endphp
+				<td colspan="3" style="text-align: left;">Son: {{ $aLetras }} 100/00 Bolivianos</td>
 				<td style="background-color: #abd4ed;color: #000;">TOTAL Bs.</td>
-				<td style="text-align: right;font-size: 9pt;font-weight: bold;">600.00</td>
+				<td style="text-align: right;font-size: 9pt;font-weight: bold;">{{ $total }}</td>
 			</tfoot>
 			
 		</table>
@@ -254,10 +267,10 @@
 			<table class="codigoControlQr" width="100%">
 				<tr>
 					<td>
-						Codigo de Control: AB-F0-E2-21<br />
-						Fecha limite de Emision: 21/05/2021
+						Codigo de Control: {{ $factura->codigo_control }}<br />
+						Fecha limite de Emision: {{ $parametros->fecha_limite }}
 					</td>
-					<td>
+					<td class="text-right">
 						<div id="qrcode"></div>
 					</td>
 				</tr>
@@ -276,15 +289,41 @@
 		</div>
 
 		<div id="txtOriginal">ORIGINAL</div>
-		<div id="txtActividad">Educacion Superior</div>
+		<div id="txtActividad">EDUCACION SUPERIOR</div>
 		<div id="txtFactura">FACTURA</div>
-		<div id="direccionEmpresa">Av. Villazon Pje Bernardo Trigo No 447</div>
+		<div id="direccionEmpresa">
+			<b>INSTITUTO TECNICO "EF-GIPET" S.R.L.</b><br />
+			CASA MATRIZ<br />
+			AV. VILLAZON PJE. BERNARDO TRIGO No 447<br />
+			TELF 2444654 - 2444554<br />
+			LA PAZ - BOLIVIA<br />
+		</div>
 		
 		</div>
+@php
+	$fechaFactura = new DateTime($factura->fecha);
+	$fechaQr = $fechaFactura->format('d/m/Y');
+@endphp
+<script>
+	let valorTotal = Number({{ $factura->total }});
+		var options = { year: 'numeric', month: 'long', day: 'numeric' };
+		// var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
-	<script>
-		
-	</script>
-	
+		function vuelveSistema(){
+			window.location.href = "{{ url('Venta/tienda') }}";
+		}
+
+		let cadenaQr = "{{ $factura->nit }}|{{ $factura->numero }}|{{ $parametros->numero_autorizacion }}|{{ $fechaQr }}|{{ number_format($factura->total, 2, '.', '') }}|{{ round($factura->total, 0, PHP_ROUND_HALF_UP) }}|{{ $factura->codigo_control }}|{{ $factura->nit }}|0|0|0|0";
+		// console.log(cadenaQr);
+		var qrcode = new QRCode("qrcode", {
+			text: cadenaQr,
+			width: 98,
+			height: 90,
+			colorDark : "#000000",
+			colorLight : "#ffffff",
+			correctLevel : QRCode.CorrectLevel.H
+		});
+</script>
+
 </body>
 </html>
