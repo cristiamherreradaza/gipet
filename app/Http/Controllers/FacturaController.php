@@ -7,12 +7,14 @@ use DataTables;
 use App\Factura;
 use App\Persona;
 use App\Servicio;
+use App\Parametro;
 use App\CarrerasPersona;
 use App\DescuentosPersona;
 use CodigoControlV7;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+
 class FacturaController extends Controller
 {
     public function listadoPersonas()
@@ -211,29 +213,95 @@ class FacturaController extends Controller
             $total += $cp->importe;
             $anio = $cp->anio_vigente;
         }
+        // fin de calcular el monto total
 
-        $ultmoRecibo = Factura::where('facturado', 'no')
-                            ->orderBy('id', 'desc')
-                            ->first();
+        // preguntamos si solo quieren recibo
+        if($request->tipo == 'recibo'){
 
-        if ($ultmoRecibo) {
-            $contadorRecibo = $ultmoRecibo->numero+1;
-        } else {
-            $contadorRecibo = 1;
+            $ultimoRecibo = Factura::where('facturado', 'no')
+                    ->orderBy('id', 'desc')
+                    ->first();
+
+            if ($ultimoRecibo) {
+                $contadorRecibo = $ultmoRecibo->numero+1;
+            } else {
+                $contadorRecibo = 1;
+            }
+
+            // creamos el recibo en la tabla de facturas
+            $recibo               = new Factura();
+            $recibo->user_id      = Auth::user()->id;
+            $recibo->persona_id   = $request->persona_id;
+            $recibo->fecha        = $hoy;
+            $recibo->total        = $total;
+            $recibo->numero       = $contadorRecibo;
+            $recibo->anio_vigente = $anio;
+            $recibo->facturado    = "No";
+            $recibo->save();
+
+            $reciboId = $recibo->id;
+
+        // de lo contrario se generara factura
+        }else{
+
+            $ultimoParametro = Parametro::latest()
+                                        ->first();
+
+            if($ultimoParametro != null && $ultimoParametro->estado == 'Activo')
+            {
+                // tramemos los parametros de la facturacion
+                $parametrosFactura = Parametro::where('estado', 'Activo')
+                                    ->first();
+
+                // obtenemos el ultimo numero de factura
+                $ultimoNumeroFactura = Factura::latest()
+                                        ->where('facturado', 'Si')
+                                        ->first();
+
+                // preguntamos si el numero de fatura sera 
+                // de la tabla facturas
+                if($ultimoNumeroFactura == null){
+                    $nuevoNumeroFactura = $parametrosFactura->numero_factura;
+                }else{
+                    $nuevoNumeroFactura = $ultimoNumeroFactura->numero+1;
+                }
+
+                // traemos datos del cliente
+                $datosPersona = Persona::find($request->persona_id);
+
+                // enviamos los datos para generar el codigo controller
+                $fechaParaCodigo = str_replace("-", "", $hoy);
+
+                // generamos el codigo de control
+                $facturador          = new CodigoControlV7();
+                $numero_autorizacion = $parametrosFactura->numero_autorizacion;
+                $numero_factura      = $nuevoNumeroFactura;
+                $nit_cliente         = $datosPersona->nit;
+                $fecha_compra        = $fechaParaCodigo;
+                $monto_compra        = round($total, 0, PHP_ROUND_HALF_UP);
+                $clave               = $parametrosFactura->llave_dosificacion;
+                $codigoControl       = $facturador::generar($numero_autorizacion, $numero_factura, $nit_cliente, $fecha_compra, $monto_compra, $clave);
+
+                // creamos la factura en la tabla de facturas
+                $factura                 = new Factura();
+                $factura->user_id        = Auth::user()->id;
+                $factura->persona_id     = $request->persona_id;
+                $factura->parametro_id   = $ultimoParametro->id;
+                $factura->fecha          = $hoy;
+                $factura->total          = $total;
+                $factura->numero         = $nuevoNumeroFactura;
+                $factura->nit            = $datosPersona->nit;
+                $factura->razon_social   = $datosPersona->razon_social_cliente;
+                $factura->anio_vigente   = $anio;
+                $factura->codigo_control = $codigoControl;
+                $factura->facturado      = "Si";
+                $factura->save();
+
+                $reciboId = $factura->id;
+
+            }
+
         }
-
-        // creamos el recibo en la tabla de facturas
-        $recibo               = new Factura();
-        $recibo->user_id      = Auth::user()->id;
-        $recibo->persona_id   = $request->persona_id;
-        $recibo->fecha        = $hoy;
-        $recibo->total        = $total;
-        $recibo->numero       = $contadorRecibo;
-        $recibo->anio_vigente = $anio;
-        $recibo->facturado    = "No";
-        $recibo->save();
-
-        $reciboId = $recibo->id;
         
         foreach ($cuotasParaPagar as $cp) 
         {
@@ -250,10 +318,11 @@ class FacturaController extends Controller
             $cuotasPagadas->save();
         }
 
-        $cuotasPagadas = Pago::where('factura_id', $reciboId)
-                            ->get();
-
-        return redirect("Factura/muestraRecibo/$reciboId");
+        if($request->tipo == 'recibo'){
+            return redirect("Factura/muestraRecibo/$reciboId");
+        }else{
+            return redirect("Factura/muestraFactura/$reciboId");
+        }
     }
 
     public function muestraRecibo(Request $request, $recibo_id)
@@ -263,6 +332,19 @@ class FacturaController extends Controller
 
         return view('factura.generaRecibo')->with(compact('cuotasPagadas'));
     }
+
+    public function muestraFactura(Request $request, $recibo_id)
+    {
+        $cuotasPagadas = Pago::where('factura_id', $recibo_id)
+                            ->get();
+
+        $factura = Factura::find($cuotasPagadas[0]->factura_id);
+
+        $parametros = Parametro::find($factura->parametro_id);
+
+        return view('factura.generaFactura')->with(compact('cuotasPagadas', 'factura', 'parametros'));
+    }
+
 
     public function ajaxEliminaItemPago(Request $request)
     {
@@ -275,6 +357,7 @@ class FacturaController extends Controller
     public function ajaxMuestraTablaPagos(Request $request)
     {
         $persona_id = $request->persona_id;
+        $persona = Persona::find($request->persona_id);
         // mostramos las cuotas para pagar
         $cuotasParaPagar = Pago::where('persona_id', $request->persona_id)
             ->where('estado', 'paraPagar')
@@ -289,7 +372,7 @@ class FacturaController extends Controller
                         ->orderBy('id', 'desc')
                         ->first();
 
-        return view('factura.ajaxMuestraTablaPagos')->with(compact('persona_id', 'cuotasParaPagar', 'ultimaCuota'));
+        return view('factura.ajaxMuestraTablaPagos')->with(compact('persona_id', 'cuotasParaPagar', 'ultimaCuota', 'persona'));
     }
 
     public function ajaxPreciosServicios(Request $request)
@@ -325,5 +408,16 @@ class FacturaController extends Controller
     public function ajaxEliminaItemPagoServicio(Request $request)
     {
         Pago::destroy($request->pago_id);
+    }
+
+    public function guardaNitCliente(Request $request)
+    {
+        $persona = Persona::find($request->persona_id);
+        $persona->nit = $request->nit_factura;        
+        $persona->razon_social_cliente = $request->razon_factura;        
+        $persona->save();
+
+        return redirect("Factura/generaRecibo/$request->persona_id/factura");
+
     }
 }

@@ -63,16 +63,56 @@
 </table>
 
 <div class="row">
-    <div class="col-md-9">
-        <a href='{{ url("Factura/generaRecibo")."/".$persona_id }}' class="btn btn-block btn-success" onclick="ajaxFacturar()">RECIBO</a>
+    <div class="col-md-6">
+        <a href='{{ url("Factura/generaRecibo")."/".$persona_id }}/recibo' class="btn btn-block btn-success">RECIBO</a>
     </div>
 
-    <div class="col-md-3">
-        <a href='{{ url("Factura/ajaxFacturar")."/".$persona_id }}' class="btn btn-block btn-dark" onclick="ajaxFacturar()">FACTURA</a>
+    <div class="col-md-6">
+        {{-- <a href='{{ url("Factura/ajaxFacturar")."/".$persona_id }}/factura' class="btn btn-block btn-dark" onclick="muestraNit()">FACTURA</a> --}}
+        <button class="btn btn-block btn-dark" onclick="muestraNit()">FACTURA</button>
     </div>
 </div>
+<br />
+<div id="bloqueNit" style="display: none; width: 100%">
+    <form action="{{ url('Factura/guardaNitCliente') }}" method="POST" id="formularioNitFacturar">
+        @csrf
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">NIT</label>
+                    <input type="hidden" name="persona_id" value="{{ $persona->id }}">
+                    <input type="number" name="nit_factura" id="nit_factura" class="form-control"
+                        value="{{ $persona->nit }}" required>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">RAZON SOCIAL</label>
+                    <input type="text" name="razon_factura" id="razon_factura" class="form-control"
+                        value="{{ $persona->razon_social_cliente }}" required>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">&nbsp;</label>
+                    <input type="submit" class="btn btn-block btn-success" value="ACEPTAR">
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+
 
 <script type="text/javascript">
+
+    function muestraNit()
+    {
+        $("#bloqueNit").show('slow');
+    }
+
     function eliminaItemPago(pago_id)
     {
         $.ajax({

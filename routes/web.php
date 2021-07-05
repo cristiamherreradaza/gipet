@@ -412,10 +412,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Factura/ajaxAdicionaItem', 'FacturaController@ajaxAdicionaItem');
     Route::get('Factura/ajaxEliminaItemPago', 'FacturaController@ajaxEliminaItemPago');
     Route::get('Factura/ajaxMuestraTablaPagos', 'FacturaController@ajaxMuestraTablaPagos');
-    Route::get('Factura/generaRecibo/{persona_id}', 'FacturaController@generaRecibo');
+    Route::get('Factura/generaRecibo/{persona_id}/{tipo}', 'FacturaController@generaRecibo');
     Route::get('Factura/ajaxPreciosServicios', 'FacturaController@ajaxPreciosServicios');
     Route::get('Factura/ajaxAdicionaItemServicio', 'FacturaController@ajaxAdicionaItemServicio');
     Route::get('Factura/ajaxEliminaItemPagoServicio', 'FacturaController@ajaxEliminaItemPagoServicio');
     Route::get('Factura/muestraRecibo/{recibo_id}', 'FacturaController@muestraRecibo');
-
+    Route::get('Factura/muestraFactura/{recibo_id}', 'FacturaController@muestraFactura');
+    Route::post('Factura/guardaNitCliente', 'FacturaController@guardaNitCliente');
 });
