@@ -641,7 +641,7 @@
                             <thead>
                                 <tr>
                                     <th class="text-center">Gestion</th>
-                                    <th class="text-center">Cuota</th>
+                                    <th class="text-center">Descripcion</th>
                                     <th class="text-center">Monto</th>
                                     <th class="text-center">Fecha Pago</th>
                                     <th class="text-center">Estado</th>
@@ -652,17 +652,31 @@
                                 @foreach($pagos as $key => $p)
                                 <tr>
                                     <td class="text-center">{{ $p->anio_vigente }}</td>
-                                    <td class="text-center">{{ $p->mensualidad }}</td>
-                                    <td class="text-center">{{ $p->a_pagar }}</td>
+                                    <td class="text-center">
+                                        @if ($p->servicio_id == 2)
+                                            {{ $p->mensualidad }}&#176; Mensualidad
+                                        @else
+                                            {{ $p->servicio->nombre }}
+                                        @endif
+                                    </td>
+                                    <td class="text-center">{{ $p->importe }}</td>
                                     <td class="text-center">{{ $p->fecha }}</td>
                                     <td class="text-center">
                                         @if ($p->fecha == null)
-                                            <span class="badge py-1 badge-table badge-danger">DEBE</span>
+                                            <span class="badge py-1 badge-table badge-danger" id="tag_debe">DEBE</span>
                                         @else
-                                            <span class="badge py-1 badge-table badge-success">PAGADO</span>
+                                            <span class="badge py-1 badge-table badge-success" id="tag_pagado">PAGADO</span>
                                         @endif
                                     </td>
-                                    <td></td>
+                                    <td>
+                                        <div id="fila_{{ $p->id }}">
+                                        @if ($p->fecha == null)
+                                            <button class="btn btn-success waves-effect waves-light" title="Pagar" type="button"><span class="btn-label"><i class="fas fa-plus"></i></span></button>
+                                        @else
+                                            <button class="btn btn-danger waves-effect waves-light" title="Quitar Pago" type="button"><span class="btn-label"><i class="fas fa-minus"></i></span></button>
+                                        @endif
+                                        </div>
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -673,7 +687,6 @@
             </div>
 
             {{-- fin tabs datos alumno --}}
-
                 
                 <div class="row">
                     <div class="col-md-4">

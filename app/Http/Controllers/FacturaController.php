@@ -387,23 +387,16 @@ class FacturaController extends Controller
 
     public function ajaxAdicionaItemServicio(Request $request)
     {
-        // $datosPago = Pago::find($request->pago_id);
-
-        // if($request->pago_parcial == 'parcial'){
-        //     $faltante = $datosPago->a_pagar - $request->importe_pago;
-        //     $estado = 'Parcial';
-        // }else{
-        //     $faltante = 0;
-        //     $estado = 'paraPagar';
-        // }
         // actualizamos los datos para mostrar en la tabla pagos
-        $cuotaAPagar              = new Pago();
-        $cuotaAPagar->user_id     = Auth::user()->id;
-        $cuotaAPagar->persona_id  = $request->persona_id;
-        $cuotaAPagar->servicio_id = $request->servicio_id;
-        $cuotaAPagar->importe     = $request->importe;
-        // $cuotaAPagar->faltante = $faltante;
-        $cuotaAPagar->estado      = 'paraPagar';
+        $cuotaAPagar               = new Pago();
+
+        $cuotaAPagar->user_id      = Auth::user()->id;
+        $cuotaAPagar->persona_id   = $request->persona_id;
+        $cuotaAPagar->servicio_id  = $request->servicio_id;
+        $cuotaAPagar->importe      = $request->importe;
+        $cuotaAPagar->anio_vigente = date('Y');
+        $cuotaAPagar->estado       = 'paraPagar';
+        
         $cuotaAPagar->save();
     }
 
