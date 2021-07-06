@@ -200,6 +200,7 @@ class FacturaController extends Controller
     public function generaRecibo(Request $request)
     {
         $hoy = date('Y-m-d');
+        // $reciboId = "";
 
         $cuotasParaPagar = Pago::where('persona_id', $request->persona_id)
             ->where('estado', 'paraPagar')
@@ -223,7 +224,7 @@ class FacturaController extends Controller
                     ->first();
 
             if ($ultimoRecibo) {
-                $contadorRecibo = $ultmoRecibo->numero+1;
+                $contadorRecibo = $ultimoRecibo->numero+1;
             } else {
                 $contadorRecibo = 1;
             }
@@ -310,6 +311,7 @@ class FacturaController extends Controller
             }else{
                 $estado = null;
             }
+
             $cuotasPagadas             = Pago::find($cp->id);
             $cuotasPagadas->estado     = $estado;
             $cuotasPagadas->fecha      = $hoy;
