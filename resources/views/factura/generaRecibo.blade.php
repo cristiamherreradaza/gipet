@@ -240,7 +240,7 @@
 				@endphp
 				<td colspan="3" style="text-align: left;">Son: {{ $aLetras }}  100/00 Bolivianos</td>
 				<td style="background-color: #abd4ed;color: #000;">TOTAL Bs.</td>
-				<td style="text-align: right;font-size: 9pt;font-weight: bold;">{{ $total }}</td>
+				<td style="text-align: right;font-size: 9pt;font-weight: bold;">{{ number_format($total, 2) }}</td>
 			</tfoot>
 			
 		</table>

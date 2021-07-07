@@ -182,6 +182,18 @@
 	<div id="fondo">
 
 		<div id="logo"><img src="{{ asset('assets/imagenes/portal_uno_R.png') }}" width="200"></div>
+
+		<div id="txtOriginal">ORIGINAL</div>
+		<div id="txtActividad">EDUCACION SUPERIOR</div>
+		<div id="txtFactura">FACTURA</div>
+		<div id="direccionEmpresa">
+			<b>INSTITUTO TECNICO "EF-GIPET" S.R.L.</b><br />
+			CASA MATRIZ<br />
+			AV. VILLAZON PJE. BERNARDO TRIGO No 447<br />
+			TELF 2444654 - 2444554<br />
+			LA PAZ - BOLIVIA<br />
+		</div>
+
 			
 			<table id="datosEmpresaNit" width="300">
 				<tr>
@@ -259,18 +271,18 @@
 				@endphp
 				<td colspan="3" style="text-align: left;">Son: {{ $aLetras }} 100/00 Bolivianos</td>
 				<td style="background-color: #abd4ed;color: #000;">TOTAL Bs.</td>
-				<td style="text-align: right;font-size: 9pt;font-weight: bold;">{{ $total }}</td>
+				<td style="text-align: right;font-size: 9pt;font-weight: bold;">{{ number_format($total, 2) }}</td>
 			</tfoot>
 			
 		</table>
 		<br />
 			<table class="codigoControlQr" width="100%">
 				<tr>
-					<td>
+					<td style="width: 780px;">
 						Codigo de Control: {{ $factura->codigo_control }}<br />
 						Fecha limite de Emision: {{ $parametros->fecha_limite }}
 					</td>
-					<td class="text-right">
+					<td>
 						<div id="qrcode"></div>
 					</td>
 				</tr>
@@ -288,16 +300,6 @@
 		</center>
 		</div>
 
-		<div id="txtOriginal">ORIGINAL</div>
-		<div id="txtActividad">EDUCACION SUPERIOR</div>
-		<div id="txtFactura">FACTURA</div>
-		<div id="direccionEmpresa">
-			<b>INSTITUTO TECNICO "EF-GIPET" S.R.L.</b><br />
-			CASA MATRIZ<br />
-			AV. VILLAZON PJE. BERNARDO TRIGO No 447<br />
-			TELF 2444654 - 2444554<br />
-			LA PAZ - BOLIVIA<br />
-		</div>
 		
 		</div>
 @php
