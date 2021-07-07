@@ -10,6 +10,10 @@
 			#btnImprimir {
 				display: none;
 			}
+
+			#operario{
+				display: none;	
+			}
 		}
 
 		#botonImpresion {
@@ -240,6 +244,8 @@
 			</tfoot>
 			
 		</table>
+		Operario: {{ $cuotasPagadas[0]->user->apellido_paterno }} {{ $cuotasPagadas[0]->user->apellido_materno }} {{ $cuotasPagadas[0]->user->nombres }}<br />
+		Fecha Hora: {{ $cuotasPagadas[0]->created_at }}
 		<br />
 			{{-- <table class="codigoControlQr" width="100%">
 				<tr>
