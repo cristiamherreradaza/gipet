@@ -62,6 +62,8 @@ class Pago extends Model
         return $this->belongsTo('App\Factura', 'factura_id');
     }
 
-
-
+    public function turno()
+    {
+        return $this->belongsTo('App\Turno', 'turno_id');
+    }
 }

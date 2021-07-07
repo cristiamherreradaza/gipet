@@ -793,7 +793,7 @@ class PersonaController extends Controller
             $descuento->persona_id             = $request->persona_id;
             $descuento->servicio_id            = 2;
             $descuento->descuento_id           = $request->descuento_id;
-            // $descuento->monto_director         = $request->monto;
+            // $descuento->monto_director      = $request->monto;
             $descuento->numero_mensualidad     = $cuotaInicioPromo;
             $descuento->a_pagar                = $request->monto_pagar;
             $descuento->fecha                  = $request->hoy;
@@ -812,35 +812,39 @@ class PersonaController extends Controller
 
                 // guardamos si tienen promocion
                 if($i >= $inicioPromo && $i <= $finalPromo){
-                    $pagos = new Pago();
-                    $pagos->user_id = Auth::user()->id;
-                    $pagos->carrera_id = $request->carrera_id;
-                    $pagos->persona_id = $request->persona_id;
-                    $pagos->servicio_id = 2;
-                    $pagos->tipo_mensualidad_id = $request->tipo_mensualidad_id;
+                    $pagos                       = new Pago();
+                    $pagos->user_id              = Auth::user()->id;
+                    $pagos->carrera_id           = $request->carrera_id;
+                    $pagos->persona_id           = $request->persona_id;
+                    $pagos->servicio_id          = 2;
+                    $pagos->turno_id             = $request->turno_id;
+                    $pagos->tipo_mensualidad_id  = $request->tipo_mensualidad_id;
                     $pagos->descuento_persona_id = $descuentoId;
-                    $pagos->a_pagar = $request->monto_pagar;
-                    $pagos->importe = 0;
-                    $pagos->faltante = 0;
-                    $pagos->total = 0;
-                    $pagos->mensualidad = $i;
-                    $pagos->anio_vigente = $request->anio_vigente;
+                    $pagos->a_pagar              = $request->monto_pagar;
+                    $descuento->gestion          = $request->gestion;
+                    $pagos->importe              = 0;
+                    $pagos->faltante             = 0;
+                    $pagos->total                = 0;
+                    $pagos->mensualidad          = $i;
+                    $pagos->anio_vigente         = $request->anio_vigente;
                     $pagos->save();
                 }else{
                     // guardamos las que no tienen promocion
-                    $pagos = new Pago();
-                    $pagos->user_id = Auth::user()->id;
-                    $pagos->carrera_id = $request->carrera_id;
-                    $pagos->persona_id = $request->persona_id;
-                    $pagos->servicio_id = 2;
-                    $pagos->tipo_mensualidad_id = $request->tipo_mensualidad_id;
+                    $pagos                       = new Pago();
+                    $pagos->user_id              = Auth::user()->id;
+                    $pagos->carrera_id           = $request->carrera_id;
+                    $pagos->persona_id           = $request->persona_id;
+                    $pagos->servicio_id          = 2;
+                    $pagos->turno_id             = $request->turno_id;
+                    $pagos->tipo_mensualidad_id  = $request->tipo_mensualidad_id;
                     $pagos->descuento_persona_id = null;
-                    $pagos->a_pagar = $datosServicios->precio;
-                    $pagos->importe = 0;
-                    $pagos->faltante = 0;
-                    $pagos->total = 0;
-                    $pagos->mensualidad = $i;
-                    $pagos->anio_vigente = $request->anio_vigente;
+                    $pagos->a_pagar              = $datosServicios->precio;
+                    $descuento->gestion          = $request->gestion;
+                    $pagos->importe              = 0;
+                    $pagos->faltante             = 0;
+                    $pagos->total                = 0;
+                    $pagos->mensualidad          = $i;
+                    $pagos->anio_vigente         = $request->anio_vigente;
                     $pagos->save();
                 }
             }
