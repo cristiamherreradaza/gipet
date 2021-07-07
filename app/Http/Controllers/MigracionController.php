@@ -1643,4 +1643,9 @@ SELECT *
         $archivo = public_path("m1218.xlsx");
         Excel::import(new InscritosImport, $archivo);
     }
+
+    public function migracionPagos()
+    {
+        
+    }
 }
