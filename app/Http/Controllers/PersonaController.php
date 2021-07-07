@@ -821,7 +821,7 @@ class PersonaController extends Controller
                     $pagos->tipo_mensualidad_id  = $request->tipo_mensualidad_id;
                     $pagos->descuento_persona_id = $descuentoId;
                     $pagos->a_pagar              = $request->monto_pagar;
-                    $descuento->gestion          = $request->gestion;
+                    $pagos->gestion              = $request->gestion;
                     $pagos->importe              = 0;
                     $pagos->faltante             = 0;
                     $pagos->total                = 0;
@@ -839,7 +839,7 @@ class PersonaController extends Controller
                     $pagos->tipo_mensualidad_id  = $request->tipo_mensualidad_id;
                     $pagos->descuento_persona_id = null;
                     $pagos->a_pagar              = $datosServicios->precio;
-                    $descuento->gestion          = $request->gestion;
+                    $pagos->gestion              = $request->gestion;
                     $pagos->importe              = 0;
                     $pagos->faltante             = 0;
                     $pagos->total                = 0;
