@@ -11,6 +11,7 @@ use App\Asignatura;
 use App\Inscripcione;
 use App\NotasPropuesta;
 use App\CarrerasPersona;
+use App\Imports\PagosImport;
 use App\Imports\InscritosImport;
 use App\Imports\InscripcionesImport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -1646,6 +1647,7 @@ SELECT *
 
     public function migracionPagos()
     {
-        
+        $archivo = public_path("fp1.xlsx");
+        Excel::import(new PagosImport, $archivo);
     }
 }
