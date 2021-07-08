@@ -72,8 +72,8 @@ class FacturaController extends Controller
                                     apellido_paterno, 
                                     apellido_materno, 
                                     nombres, 
-                                    concat(cedula,' ',apellido_paterno,' ',apellido_materno,' ',nombres) as campo_mixto 
-                                    from personas where concat(cedula,' ',apellido_paterno,' ',apellido_materno,' ',nombres) like '%$request->termino%' limit 8");
+                                    concat(cedula,' ',apellido_materno,' ',nombres) as campo_mixto 
+                                    from personas where concat(cedula,' ',apellido_materno,' ',nombres) like '%$request->termino%' limit 8");
 
         // dd($personas);
 
