@@ -22,9 +22,12 @@ class PagosImport implements ToModel
         $persona = Persona::where('cedula', $row[1])
                             ->first();
         if ($persona) {
+
             echo $persona->nombres." - ".$row[1]." - ".$row[5]."<br />";
+            $fechaPago = Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[5]));
+
             if($row[8]=='Pagado'){
-                $fechaPago = Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row[5]));
+
 
                 $pago                      = new Pago();
                 $pago->user_id             = $row[7];
@@ -43,17 +46,17 @@ class PagosImport implements ToModel
             }else{
                 
                 $pago                      = new Pago();
-                $pago->user_id             = $row[7];
+                // $pago->user_id             = $row[7];
                 $pago->turno_id            = $row[3];
                 $pago->carrera_id          = 1;
                 $pago->persona_id          = $persona->id;
                 $pago->servicio_id         = 2;
-                $pago->tipo_mensualidad_id = 1;
-                $pago->importe             = $row[4];
+                // $pago->tipo_mensualidad_id = 1;
+                $pago->importe             = 0;
                 $pago->mensualidad         = $row[6];
                 $pago->gestion             = $row[2];
-                $pago->fecha               = $fechaPago;
-                $pago->estado              = 'Pagado';
+                // $pago->fecha               = $fechaPago;
+                // $pago->estado              = 'Pagado';
                 $pago->save();
             }    
         }
