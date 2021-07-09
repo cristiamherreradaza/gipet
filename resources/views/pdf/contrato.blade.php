@@ -96,8 +96,14 @@
             <tr>
                 <td><b>Nombres:</b></td>
                 <td>{{ $persona->nombres }}</td>
-                <td><b>Sexo</b>:</td>
-                <td>M</td>
+                <td><b>Sexo: </b> </td>
+                <td>
+                    @if ($persona->sexo == 'Masculino')
+                        M
+                    @else
+                        F
+                    @endif
+                </td>
             </tr>
 
             <tr>
