@@ -1647,7 +1647,7 @@ SELECT *
 
     public function migracionPagos()
     {
-        $archivo = public_path("fp1.xlsx");
+        $archivo = public_path("fp2.xlsx");
         Excel::import(new PagosImport, $archivo);
     }
 }

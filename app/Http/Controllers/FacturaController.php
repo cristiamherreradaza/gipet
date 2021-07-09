@@ -313,6 +313,7 @@ class FacturaController extends Controller
             }
 
             $cuotasPagadas             = Pago::find($cp->id);
+            $cuotasPagadas->user_id    = Auth::user()->id;
             $cuotasPagadas->estado     = $estado;
             $cuotasPagadas->fecha      = $hoy;
             $cuotasPagadas->factura_id = $reciboId;
@@ -413,6 +414,23 @@ class FacturaController extends Controller
         $persona->save();
 
         return redirect("Factura/generaRecibo/$request->persona_id/factura");
+
+    }
+
+    // esta es la funcion para hacer el listado de los 
+    // pagos para el listado de pagos
+    public function listadoPagos(Request $request)
+    {
+        $pagos = Pago::limit(100)
+                    ->get();
+        
+        return view('factura.listadoPagos')->with(compact('pagos'));
+    }
+
+    // esta funcion es para el listado de 
+    // 
+    public function ajaxListadoPagos(Request $request)
+    {
 
     }
 }

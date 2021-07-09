@@ -420,4 +420,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Factura/muestraRecibo/{recibo_id}', 'FacturaController@muestraRecibo');
     Route::get('Factura/muestraFactura/{recibo_id}', 'FacturaController@muestraFactura');
     Route::post('Factura/guardaNitCliente', 'FacturaController@guardaNitCliente');
+    Route::get('Factura/listadoPagos', 'FacturaController@listadoPagos');
 });

@@ -39,6 +39,7 @@ class PagosImport implements ToModel
                 $pago->importe             = $row[4];
                 $pago->mensualidad         = $row[6];
                 $pago->gestion             = $row[2];
+                $pago->a_pagar             = 350;
                 $pago->fecha               = $fechaPago;
                 $pago->estado              = 'Pagado';
                 $pago->save();
@@ -47,14 +48,15 @@ class PagosImport implements ToModel
                 
                 $pago                      = new Pago();
                 // $pago->user_id             = $row[7];
-                $pago->turno_id            = $row[3];
-                $pago->carrera_id          = 1;
-                $pago->persona_id          = $persona->id;
-                $pago->servicio_id         = 2;
+                $pago->turno_id    = $row[3];
+                $pago->carrera_id  = 1;
+                $pago->persona_id  = $persona->id;
+                $pago->servicio_id = 2;
+                $pago->importe     = 0;
+                $pago->mensualidad = $row[6];
+                $pago->gestion     = $row[2];
+                $pago->a_pagar     = 350;
                 // $pago->tipo_mensualidad_id = 1;
-                $pago->importe             = 0;
-                $pago->mensualidad         = $row[6];
-                $pago->gestion             = $row[2];
                 // $pago->fecha               = $fechaPago;
                 // $pago->estado              = 'Pagado';
                 $pago->save();

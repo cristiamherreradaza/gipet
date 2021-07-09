@@ -191,7 +191,9 @@
 				<tr>
 					<td style="text-align: left;"><b>Se&ntilde;or(es):</b>
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						{{ $cuotasPagadas[0]->persona->apellido_paterno }}&nbsp;
+						@if ($cuotasPagadas[0]->persona->apellido_paterno)
+							{{ $cuotasPagadas[0]->persona->apellido_paterno }}&nbsp;
+						@endif
 						{{ $cuotasPagadas[0]->persona->apellido_materno }}&nbsp;
 						{{ $cuotasPagadas[0]->persona->nombres }}</td>
 					<td></td>
