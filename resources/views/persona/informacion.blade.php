@@ -263,21 +263,21 @@
                     </div>
                     <div class="tab-pane" id="settings-b2">
                         <div class="row">
-                            <div class="col-3">
+                            <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Nombre Padre </label>
+                                    <label>Nombre </label>
                                     <input type="text" class="form-control" name="nombre_padre" id="nombre_padre"
                                         value="{{ $estudiante->nombre_padre }}">
                                 </div>
                             </div>
-                            <div class="col-3">
+                            <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Celular Padre </label>
+                                    <label>Celular </label>
                                     <input type="text" class="form-control" name="celular_padre" id="celular_padre"
                                         value="{{ $estudiante->celular_padre }}">
                                 </div>
                             </div>
-                            <div class="col-3">
+                            {{-- <div class="col-3">
                                 <div class="form-group">
                                     <label>Nombre Madre </label>
                                     <input type="text" class="form-control" name="nombre_madre" id="nombre_madre"
@@ -290,9 +290,9 @@
                                     <input type="text" class="form-control" name="celular_madre" id="celular_madre"
                                         value="{{ $estudiante->celular_madre }}">
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-3">
                                 <div class="form-group">
                                     <label>Nombre Tutor </label>
@@ -321,7 +321,7 @@
                                         value="{{ $estudiante->celular_pareja }}">
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
 

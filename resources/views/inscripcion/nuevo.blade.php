@@ -236,21 +236,21 @@
                                         <div class="card-body">
                                             <div class="form-body">
                                                 <div class="row">
-                                                    <div class="col-3">
+                                                    <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label>Nombre Padre </label>
+                                                            <label>Nombre </label>
                                                             <input type="text" class="form-control" name="nombre_padre" id="nombre_padre">
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-3">
+                                                    <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label>Celular Padre </label>
+                                                            <label>Celular</label>
                                                             <input type="text" class="form-control" name="celular_padre" id="celular_padre">
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-3">
+                                                    {{-- <div class="col-3">
                                                         <div class="form-group">
                                                             <label>Nombre Madre </label>
                                                             <input type="text" class="form-control" name="nombre_madre" id="nombre_madre">
@@ -262,11 +262,11 @@
                                                             <label>Celular Madre </label>
                                                             <input type="text" class="form-control" name="celular_madre" id="celular_madre">
                                                         </div>
-                                                    </div>
+                                                    </div> --}}
                                                     
                                                 </div>
 
-                                                <div class="row">
+                                                {{-- <div class="row">
                                                     <div class="col-3">
                                                         <div class="form-group">
                                                             <label>Nombre Tutor </label>
@@ -294,7 +294,7 @@
                                                             <input type="text" class="form-control" name="telefono_esposo" id="telefono_esposo">
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> --}}
                                             </div>
                                         </div>
                                     </div>
