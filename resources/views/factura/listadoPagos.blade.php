@@ -69,9 +69,9 @@
                                 <td>{{ $f->user->nombres }}</td>
                                 <td>
                                     @if ($f->facturado=='Si')
-                                        <a href="{{ url("Factura/muestraFactura/$f->id") }}" class="btn btn-info text-white" title="Ver Asignaturas de Carrera"><i class="fas fa-eye"></i></a>
+                                        <a href="{{ url("Factura/muestraFactura/$f->id") }}" class="btn btn-info text-white" title="Muestra Factura"><i class="fas fa-eye"></i></a>
                                     @else
-                                        
+                                        <a href="{{ url("Factura/muestraRecibo/$f->id") }}" class="btn btn-info text-white" title="Muestra Recibo"><i class="fas fa-eye"></i></a>
                                     @endif
                                 </td>
                             </tr>
