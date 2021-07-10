@@ -56,12 +56,12 @@ class Persona extends Model
 
     public function transacciones()
     {
-        return $this->hasMany('App/Transaccion');
+        return $this->hasMany('App\Transaccion');
     }
     
     public function descuentopersonas()
     {
-        return $this->hasMany('App/DescuentoPersona');
+        return $this->hasMany('App\DescuentoPersona');
     }
 
     public function carreraspersona()
@@ -71,11 +71,17 @@ class Persona extends Model
 
     public function cobrostemporadas()
     {
-        return $this->hasMany('App/CobrosTemporada');
+        return $this->hasMany('App\CobrosTemporada');
     }
 
     public function segundosturnos()
     {
         return $this->hasMany('App\SegundosTurno');
     }
+
+    public function factura()
+    {
+        return $this->hasMany('App\Factura');
+    }
+
 }

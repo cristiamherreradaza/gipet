@@ -197,12 +197,13 @@ class FacturaController extends Controller
         $cuotaAPagar->save();
     }
 
-    public function generaRecibo(Request $request)
+    public function generaRecibo(Request $request, $persona_id, $tipo)
     {
+        // dd($tipo);
         $hoy = date('Y-m-d');
         // $reciboId = "";
 
-        $cuotasParaPagar = Pago::where('persona_id', $request->persona_id)
+        $cuotasParaPagar = Pago::where('persona_id', $persona_id)
             ->where('estado', 'paraPagar')
             ->orWhere('estado', 'Parcial')
             ->get();
@@ -217,7 +218,7 @@ class FacturaController extends Controller
         // fin de calcular el monto total
 
         // preguntamos si solo quieren recibo
-        if($request->tipo == 'recibo'){
+        if($tipo == 'recibo'){
 
             $ultimoRecibo = Factura::where('facturado', 'no')
                     ->orderBy('id', 'desc')
@@ -232,7 +233,7 @@ class FacturaController extends Controller
             // creamos el recibo en la tabla de facturas
             $recibo               = new Factura();
             $recibo->user_id      = Auth::user()->id;
-            $recibo->persona_id   = $request->persona_id;
+            $recibo->persona_id   = $persona_id;
             $recibo->fecha        = $hoy;
             $recibo->total        = $total;
             $recibo->numero       = $contadorRecibo;
@@ -268,7 +269,7 @@ class FacturaController extends Controller
                 }
 
                 // traemos datos del cliente
-                $datosPersona = Persona::find($request->persona_id);
+                $datosPersona = Persona::find($persona_id);
 
                 // enviamos los datos para generar el codigo controller
                 $fechaParaCodigo = str_replace("-", "", $hoy);
@@ -286,7 +287,7 @@ class FacturaController extends Controller
                 // creamos la factura en la tabla de facturas
                 $factura                 = new Factura();
                 $factura->user_id        = Auth::user()->id;
-                $factura->persona_id     = $request->persona_id;
+                $factura->persona_id     = $persona_id;
                 $factura->parametro_id   = $ultimoParametro->id;
                 $factura->fecha          = $hoy;
                 $factura->total          = $total;
@@ -321,7 +322,7 @@ class FacturaController extends Controller
             $cuotasPagadas->save();
         }
 
-        if($request->tipo == 'recibo'){
+        if($tipo == 'recibo'){
             return redirect("Factura/muestraRecibo/$reciboId");
         }else{
             return redirect("Factura/muestraFactura/$reciboId");
@@ -421,10 +422,10 @@ class FacturaController extends Controller
     // pagos para el listado de pagos
     public function listadoPagos(Request $request)
     {
-        $pagos = Pago::limit(100)
+        $facturas = Factura::limit(100)
                     ->get();
         
-        return view('factura.listadoPagos')->with(compact('pagos'));
+        return view('factura.listadoPagos')->with(compact('facturas'));
     }
 
     // esta funcion es para el listado de 

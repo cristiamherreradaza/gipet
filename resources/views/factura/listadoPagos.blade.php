@@ -14,7 +14,7 @@
 <div class="card border-info">
     <div class="card-header bg-info">
         <h4 class="mb-0 text-white">
-            CARRERAS &nbsp;&nbsp;
+            PAGOS &nbsp;&nbsp;
         </h4>
     </div>
     <div class="card-body">
@@ -40,65 +40,39 @@
         <div class="row">
             <div class="col-md-12" id="ajax_carreras">
                 <div class="table-responsive">
-                    <table class="table table-striped no-wrap">
+                    <table id="tabla-pagos" class="table table-bordered table-striped text-center">
                         <thead>
                             <tr>
-                                <th>CARRERA</th>
-                                <th class="text-center">PARALELO</th>
-                                <th>TURNO</th>
-                                <th>A&Nacute;O</th>
-                                <th class="text-center">1 BIM</th>
-                                <th class="text-center">2 BIM</th>
+                                <th>ID</th>
+                                <th>NUMERO</th>
+                                <th>CARNET</th>
+                                <th>ESTUDIANTE</th>
+                                <th>RAZON</th>
+                                <th>NIT</th>
+                                <th>FECHA</th>
+                                <th>MONTO</th>
+                                <th>USUARIO</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($carrerasNotasPropuestas as $c)
-                            @php
-                            $primerBimestre = App\Nota::where('carrera_id', $c->carrera_id)
-                            ->where('paralelo', $c->paralelo)
-                            ->where('turno_id', $c->turno_id)
-                            ->where('gestion', $c->gestion)
-                            ->where('anio_vigente', $c->anio_vigente)
-                            ->where('trimestre', 1)
-                            ->where('finalizado', 'Si')
-                            ->first();
-
-                            $segundoBimestre = App\Nota::where('carrera_id', $c->carrera_id)
-                            ->where('paralelo', $c->paralelo)
-                            ->where('turno_id', $c->turno_id)
-                            ->where('gestion', $c->gestion)
-                            ->where('anio_vigente', $c->anio_vigente)
-                            ->where('trimestre', 2)
-                            ->where('finalizado', 'Si')
-                            ->first();
-
-                            // dd($segundoBimestre);
-
-                            @endphp
+                            @foreach ($facturas as $f)
                             <tr>
-                                <td>{{ $c->carrera['nombre'] }}</td>
-                                <td class="text-center">{{ $c->paralelo }}</td>
-                                <td>{{ $c->turno->descripcion }}</td>
-                                <td>{{ $c->gestion }}&deg; a&ntilde;o</td>
-                                <td class="text-center">
-                                    @if ($primerBimestre)
-                                    <a href="{{ url("Carrera/actualizaCierraNotas/$c->carrera_id/$c->paralelo/$c->turno_id/$c->gestion/$c->anio_vigente/abierto/1") }}"
-                                        type="button" class="btn waves-effect waves-light btn-danger">CERRADO</a>
+                                <td>{{ $f->id }}</td>
+                                <td>{{ $f->numero }}</td>
+                                <td>{{ $f->persona->cedula }}</td>
+                                <td>{{ $f->persona->nombres }}</td>
+                                <td>{{ $f->razon_social }}</td>
+                                <td>{{ $f->nit }}</td>
+                                <td>{{ $f->fecha }}</td>
+                                <td>{{ $f->total }}</td>
+                                <td>{{ $f->user->nombres }}</td>
+                                <td>
+                                    @if ($f->facturado=='Si')
+                                        <a href="{{ url("Factura/muestraFactura/$f->id") }}" class="btn btn-info text-white" title="Ver Asignaturas de Carrera"><i class="fas fa-eye"></i></a>
                                     @else
-                                    <a href="{{ url("Carrera/actualizaCierraNotas/$c->carrera_id/$c->paralelo/$c->turno_id/$c->gestion/$c->anio_vigente/cerrado/1") }}"
-                                        type="button" class="btn waves-effect waves-light btn-success">ABIERTO</a>
-
+                                        
                                     @endif
-                                </td>
-                                <td class="text-center">
-                                    @if ($segundoBimestre)
-                                    <a href="{{ url("Carrera/actualizaCierraNotas/$c->carrera_id/$c->paralelo/$c->turno_id/$c->gestion/$c->anio_vigente/abierto/2") }}"
-                                        type="button" class="btn waves-effect waves-light btn-danger">CERRADO</a>
-                                    @else
-                                    <a href="{{ url("Carrera/actualizaCierraNotas/$c->carrera_id/$c->paralelo/$c->turno_id/$c->gestion/$c->anio_vigente/cerrado/2") }}"
-                                        type="button" class="btn waves-effect waves-light btn-success">ABIERTO</a>
-                                    @endif
-
                                 </td>
                             </tr>
                             @endforeach
@@ -126,6 +100,16 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    $(function () {
+        $('#tabla-pagos').DataTable({
+            order: [[ 0, "desc" ]],
+            language: {
+                url: '{{ asset('datatableEs.json') }}'
+            },
+        });
+    });
+
 
     function cambiaGestion()
     {

@@ -9,7 +9,7 @@
     </div>
 </div>
 
-<div class="col-2">
+{{-- <div class="col-2">
     <div class="form-group">
         <label>PAGO
             <span class="text-danger">
@@ -21,7 +21,7 @@
             <option value="parcial">PARCIAL</option>
         </select>
     </div>
-</div>
+</div> --}}
 
 <div class="col-md-2">
     <div class="form-group">
