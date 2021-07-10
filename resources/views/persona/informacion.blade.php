@@ -645,7 +645,6 @@
                                     <th class="text-center">Monto</th>
                                     <th class="text-center">Fecha Pago</th>
                                     <th class="text-center">Estado</th>
-                                    <th class="text-nowrap"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -668,15 +667,7 @@
                                             <span class="badge py-1 badge-table badge-success" id="tag_pagado">PAGADO</span>
                                         @endif
                                     </td>
-                                    <td>
-                                        <div id="fila_{{ $p->id }}">
-                                        @if ($p->fecha == null)
-                                            <button class="btn btn-success waves-effect waves-light" title="Pagar" type="button"><span class="btn-label"><i class="fas fa-plus"></i></span></button>
-                                        @else
-                                            <button class="btn btn-danger waves-effect waves-light" title="Quitar Pago" type="button"><span class="btn-label"><i class="fas fa-minus"></i></span></button>
-                                        @endif
-                                        </div>
-                                    </td>
+                                    
                                 </tr>
                                 @endforeach
                             </tbody>
