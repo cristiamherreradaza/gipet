@@ -18,7 +18,7 @@
         </h4>
     </div>
     <div class="card-body">
-        <form action="#" method="POST" id="formulario_gestion">
+        {{-- <form action="#" method="POST" id="formulario_gestion">
             @csrf
             <div class="row">
 
@@ -35,7 +35,7 @@
                         Gestion</button>
                 </div>
             </div>
-        </form>
+        </form> --}}
 
         <div class="row">
             <div class="col-md-12" id="ajax_carreras">
