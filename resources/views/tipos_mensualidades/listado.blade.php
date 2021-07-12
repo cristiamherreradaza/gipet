@@ -14,7 +14,7 @@
     </div>
     <div class="card-body" id="lista">
         <div class="table-responsive m-t-40">
-            <table id="myTable" class="table table-bordered table-striped text-center">
+            <table id="myTable" class="table table-bordered table-striped">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -60,17 +60,14 @@
                 <input type="hidden" name="tipo_mensualidad" id="tipo_mensualidad" value="">
                 <div class="modal-body">
                     <div class="row">
+
                         <div class="col-md-8">
                             <div class="form-group">
-                                <label class="control-label">Carreras</label>
+                                <label class="control-label">Nombre</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <select name="carrera_id" id="carrera_id" class="form-control">
-                                    @foreach ($carreras as $c)
-                                        <option value="{{ $c->id }}">{{ $c->nombre }}</option>
-                                    @endforeach
-                                </select>
+                                <input name="nombre_servicio" type="text" id="nombre_servicio" maxlength="30" class="form-control" required>
                             </div>
                         </div>
 
@@ -85,28 +82,7 @@
                         </div>
                         
                     </div>
-                    <div class="row">
-
-                        <div class="col-md-8">
-                            <div class="form-group">
-                                <label class="control-label">Nombre</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <input name="nombre_servicio" type="text" id="nombre_servicio" maxlength="30" class="form-control" required>
-                            </div>
-                        </div> 
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label class="control-label">A&ntilde;o Vigente</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <input name="anio_vigente_servicio" type="number" id="anio_vigente_servicio" value="{{ date('Y') }}" min="0" class="form-control" required>
-                            </div>
-                        </div>
-                    </div>
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar_servicio()">GUARDAR PERIODO</button>

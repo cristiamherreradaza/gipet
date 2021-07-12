@@ -31,13 +31,13 @@ class ServicioController extends Controller
             $tipos_mensualidad = TiposMensualidade::find($request->tipo_mensualidad);
         }
         $tipos_mensualidad->user_id       = Auth::user()->id;
-        $tipos_mensualidad->servicio_id   = $request->id_servicio;
-        $tipos_mensualidad->carrera_id    = $request->carrera_id;
+        $tipos_mensualidad->servicio_id   = 2;
+        $tipos_mensualidad->carrera_id    = 1;
         $tipos_mensualidad->nombre        = $request->nombre_servicio;
         $tipos_mensualidad->numero_maximo = $request->numero_mensualidad_servicio;
-        $tipos_mensualidad->anio_vigente  = $request->anio_vigente_servicio;
+        $tipos_mensualidad->anio_vigente  = date('Y');
         $tipos_mensualidad->save();
-        return redirect('Servicio/periodo/'.$request->id_servicio);
+        return redirect('Servicio/periodo/2');
     }
 
     public function eliminar_periodo($id)
