@@ -1190,7 +1190,7 @@
             url: "{{ url('Persona/ajaxInscribeAlumno') }}",
             data: formulario,
             success: function (data) {
-                // location.reload();
+                location.reload();
             }
         });
     }

@@ -761,8 +761,6 @@ class PersonaController extends Controller
 
     public function ajaxInscribeAlumno(Request $request)
     {
-        dd($request->all());
-
         $this->inscripcion(
             $request->persona_id, 
             $request->carrera_id, 
