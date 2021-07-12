@@ -312,7 +312,8 @@
 		// var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
 
 		function vuelveSistema(){
-			window.location.href = "{{ url('Factura/formularioFacturacion') }}";
+			var oldURL = document.referrer;
+			location.href = oldURL;
 		}
 
 		let cadenaQr = "178436029|{{ $factura->numero }}|{{ $parametros->numero_autorizacion }}|{{ $fechaQr }}|{{ number_format($factura->total, 2, '.', '') }}|{{ round($factura->total, 0, PHP_ROUND_HALF_UP) }}|{{ $factura->codigo_control }}|{{ $factura->nit }}|0|0|0|0";
