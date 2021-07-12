@@ -435,6 +435,11 @@ class FacturaController extends Controller
     // 
     public function ajaxBuscaPago(Request $request)
     {
-
+        $pagos = Pago::query();
+        if($request->has('numero')){
+            $pagos->where('numero', $request->numero);    
+        }
+        $pagos->toSql();
+        // dd($pagos);
     }
 }

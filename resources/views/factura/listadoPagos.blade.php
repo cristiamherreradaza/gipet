@@ -60,7 +60,7 @@
 
                 <div class="col-md-2">
                     <br />
-                    <button type="button" class="btn btn-success btn-block" title="Buscar" onclick="buscaPago()">BUSCAR</button>
+                    <button type="button" class="btn btn-success btn-block" title="Buscar">BUSCAR</button>
                 </div>
             </div>
         </form>
