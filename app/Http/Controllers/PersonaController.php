@@ -761,7 +761,7 @@ class PersonaController extends Controller
 
     public function ajaxInscribeAlumno(Request $request)
     {
-        // dd($request->all());
+        dd($request->all());
 
         $this->inscripcion(
             $request->persona_id, 
@@ -771,7 +771,7 @@ class PersonaController extends Controller
             $request->gestion, 
             $request->anio_vigente);
 
-        if($request->generacion_cuotas == 'Si')
+        if($request->generacion_cuotas == 'Si' && $request->carrera_id == 1)
         {     
 
             // generamos los datos para los pagos

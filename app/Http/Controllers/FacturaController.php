@@ -208,6 +208,7 @@ class FacturaController extends Controller
             ->orWhere('estado', 'Parcial')
             ->get();
 
+        // dd($cuotasParaPagar);
         // calculamos el monto total
         $total = 0;
 
@@ -304,21 +305,25 @@ class FacturaController extends Controller
             }
 
         }
+
+        $cuotasParaModificar = Pago::where('persona_id', $persona_id)
+            ->where('estado', 'paraPagar')
+            ->orWhere('estado', 'Parcial')
+            ->get();
+
         
-        foreach ($cuotasParaPagar as $cp) 
+        foreach ($cuotasParaModificar as $cm) 
         {
-            if($cp->estado == 'paraPagar'){
+            if($cm->estado == 'paraPagar'){
                 $estado = 'Pagado';
             }else{
                 $estado = null;
             }
-
-            $cuotasPagadas             = Pago::find($cp->id);
+            $cuotasPagadas             = Pago::find($cm->id);
             $cuotasPagadas->user_id    = Auth::user()->id;
             $cuotasPagadas->estado     = $estado;
             $cuotasPagadas->fecha      = $hoy;
             $cuotasPagadas->factura_id = $reciboId;
-            
             $cuotasPagadas->save();
         }
 
@@ -347,15 +352,6 @@ class FacturaController extends Controller
         $parametros = Parametro::find($factura->parametro_id);
 
         return view('factura.generaFactura')->with(compact('cuotasPagadas', 'factura', 'parametros'));
-    }
-
-
-    public function ajaxEliminaItemPago(Request $request)
-    {
-        // actualizamos el estado del item a pagar
-        $cuotaEliminar = Pago::find($request->pago_id);
-        $cuotaEliminar->estado = null;
-        $cuotaEliminar->save();
     }
 
     public function ajaxMuestraTablaPagos(Request $request)
@@ -391,7 +387,6 @@ class FacturaController extends Controller
     {
         // actualizamos los datos para mostrar en la tabla pagos
         $cuotaAPagar               = new Pago();
-
         $cuotaAPagar->user_id      = Auth::user()->id;
         $cuotaAPagar->persona_id   = $request->persona_id;
         $cuotaAPagar->servicio_id  = $request->servicio_id;
