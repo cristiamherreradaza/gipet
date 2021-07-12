@@ -23,7 +23,7 @@
             @csrf
             <div class="row">
 
-                <div class="col-md-2">
+                <div class="col-md-1">
                     <div class="form-group">
                         <label class="control-label">No.(Fac/Rec) </label>
                         <input type="number" name="numero" id="numero" class="form-control">
@@ -46,6 +46,13 @@
 
                 <div class="col-md-2">
                     <div class="form-group">
+                        <label class="control-label">EMITIDO </label>
+                        <input type="number" name="user" id="user" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
                         <label class="control-label">Fecha Inicio </label>
                         <input type="date" name="feche_inicio" id="feche_inicio" class="form-control">
                     </div>
@@ -58,7 +65,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-1">
                     <br />
                     <button type="button" class="btn btn-success btn-block" title="Buscar">BUSCAR</button>
                 </div>
