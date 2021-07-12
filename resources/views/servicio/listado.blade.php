@@ -14,7 +14,7 @@
     </div>
     <div class="card-body" id="lista">
         <div class="table-responsive m-t-40">
-            <table id="myTable" class="table table-bordered table-striped text-center">
+            <table id="myTable" class="table table-bordered table-striped">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -30,7 +30,7 @@
                             <td>{{ ($key+1) }}</td>
                             <td>{{ $servicio->sigla }}</td>
                             <td>{{ $servicio->nombre }}</td>
-                            <td>{{ $servicio->precio }}</td>
+                            <td class="text-right">{{ $servicio->precio }}</td>
                             <td>
                                 <button type="button" class="btn btn-warning" title="Editar servicio"  onclick="editar('{{ $servicio->id }}', '{{ $servicio->nombre }}', '{{ $servicio->sigla }}', '{{ $servicio->precio }}')"><i class="fas fa-edit"></i></button>
                                 @if ($servicio->id == 2)
@@ -77,10 +77,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Sigla</label>
-                                <span class="text-danger">
-                                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                                </span>
-                                <input name="sigla_servicio" type="text" id="sigla_servicio" maxlength="30" class="form-control" required>
+                                <input name="sigla_servicio" type="text" id="sigla_servicio" maxlength="30" class="form-control">
                             </div>
                         </div>
                         <div class="col-md-6">

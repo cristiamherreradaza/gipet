@@ -8,13 +8,13 @@
 <div class="card border-info">
     <div class="card-header bg-info">
         <h4 class="mb-0 text-white">
-            DESCUENTOS &nbsp;&nbsp;
+            DESCUENTOS POR MENSUALIDAD &nbsp;&nbsp;
             <button type="button" class="btn waves-effect waves-light btn-sm btn-primary" onclick="nuevo_descuento()"><i class="fas fa-plus"></i> &nbsp; NUEVO DESCUENTO</button>
         </h4>
     </div>
     <div class="card-body" id="lista">
         <div class="table-responsive m-t-40">
-            <table id="myTable" class="table table-bordered table-striped text-center">
+            <table id="myTable" class="table table-bordered table-striped">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -30,7 +30,7 @@
                             <td>{{ $descuento->nombre }}</td>
                             <td>{{ $descuento->a_pagar }}</td>
                             <td>
-                                <button type="button" class="btn btn-info" title="Editar descuento"  onclick="editar('{{ $descuento->id }}', '{{ $descuento->nombre }}', '{{ $descuento->monto }}')"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-warning" title="Editar descuento"  onclick="editar('{{ $descuento->id }}', '{{ $descuento->nombre }}', '{{ $descuento->a_pagar }}')"><i class="fas fa-edit"></i></button>
                                 <button type="button" class="btn btn-danger" title="Eliminar descuento"  onclick="eliminar('{{ $descuento->id }}', '{{ $descuento->nombre }}', '{{ $descuento->servicio_id }}')"><i class="fas fa-trash-alt"></i></button>
                             </td>
                         </tr>
@@ -53,7 +53,7 @@
                 @csrf
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-9">
                             <div class="form-group">
                                 <label class="control-label">Nombre</label>
                                 <span class="text-danger">
@@ -62,7 +62,7 @@
                                 <input name="nombre_descuento" type="text" id="nombre_descuento" maxlength="30" class="form-control" required>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Monto</label>
                                 <span class="text-danger">
@@ -95,7 +95,7 @@
                 <div class="modal-body">        
                     <input type="hidden" name="id" id="id" value="">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-9">
                             <div class="form-group">
                                 <label class="control-label">Nombre</label>
                                 <span class="text-danger">
@@ -104,7 +104,7 @@
                                 <input name="nombre" type="text" id="nombre" maxlength="30" class="form-control" required>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Monto</label>
                                 <span class="text-danger">
