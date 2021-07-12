@@ -37,13 +37,16 @@
             </span>
         </label>
         @php
-            if($siguienteCuota->faltante > 0 ){
+            if($siguienteCuota->faltante > 0){
                 $importe = $siguienteCuota->faltante;
             }else{
                 $importe = $siguienteCuota->a_pagar;
             }
         @endphp
         <input type="text" class="form-control" name="importe_pago" id="importe_pago" value="{{ $importe }}" required>
+        @if ($siguienteCuota->faltante > 0)
+            <small id="name1" class="badge badge-default badge-danger form-text text-white float-left">1er Pago {{ $siguienteCuota->importe }} de ({{ $siguienteCuota->a_pagar }})</small>
+        @endif
     </div>
 </div>
 

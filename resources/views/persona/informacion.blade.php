@@ -659,8 +659,11 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        @if ($p->a_pagar == null)
+                                        @if ($p->a_pagar == null || $p->faltante > 0)
                                             {{ $p->importe }}
+                                            @if ($p->faltante > 0)
+                                                <span class="text-danger">({{ $p->a_pagar - $p->importe }})</span>
+                                            @endif
                                         @else
                                             {{ $p->a_pagar }}
                                         @endif
@@ -675,10 +678,10 @@
                                         @endphp
                                     </td>
                                     <td class="text-center">
-                                        @if ($p->fecha == null)
-                                            <span class="badge py-1 badge-table badge-danger" id="tag_debe">DEBE</span>
-                                        @else
+                                        @if ($p->estado == 'Pagado')
                                             <span class="badge py-1 badge-table badge-success" id="tag_pagado">PAGADO</span>
+                                        @else
+                                            <span class="badge py-1 badge-table badge-danger" id="tag_debe">DEBE</span>
                                         @endif
                                     </td>
                                     
