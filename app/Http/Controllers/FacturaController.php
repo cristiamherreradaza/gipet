@@ -433,7 +433,7 @@ class FacturaController extends Controller
 
     // esta funcion es para el listado de 
     // 
-    public function ajaxListadoPagos(Request $request)
+    public function ajaxBuscaPago(Request $request)
     {
 
     }

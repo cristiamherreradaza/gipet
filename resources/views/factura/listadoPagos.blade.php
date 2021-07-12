@@ -14,32 +14,60 @@
 <div class="card border-info">
     <div class="card-header bg-info">
         <h4 class="mb-0 text-white">
-            PAGOS &nbsp;&nbsp;
+            LISTADO ULTIMOS PAGOS
         </h4>
     </div>
     <div class="card-body">
-        {{-- <form action="#" method="POST" id="formulario_gestion">
+
+        <form action="#" method="POST" id="formulario_pagos">
             @csrf
             <div class="row">
 
                 <div class="col-md-2">
                     <div class="form-group">
-                        <label class="control-label">Gestion </label>
-                        <input type="number" name="gestion" id="gestion" class="form-control" value="{{ date('Y') }}"
-                            min="2011" max="{{ date('Y') }}">
+                        <label class="control-label">No.(Fac/Rec) </label>
+                        <input type="number" name="numero" id="numero" class="form-control">
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <br>
-                    <button type="button" class="btn btn-info" title="Ir gestion" onclick="cambiaGestion()">Cambia
-                        Gestion</button>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">C.I. Estudiante </label>
+                        <input type="number" name="ci" id="ci" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">NIT </label>
+                        <input type="number" name="nit" id="nit" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">Fecha Inicio </label>
+                        <input type="date" name="feche_inicio" id="feche_inicio" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">Fecha Fin </label>
+                        <input type="date" name="fecha_final" id="fecha_final" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <br />
+                    <button type="button" class="btn btn-success btn-block" title="Buscar" onclick="buscaPago()">BUSCAR</button>
                 </div>
             </div>
-        </form> --}}
+        </form>
 
         <div class="row">
-            <div class="col-md-12" id="ajax_carreras">
-                <div class="table-responsive">
+            <div class="col-md-12">
+                <div class="table-responsive" id="ajax-bloque-pagos">
                     <table id="tabla-pagos" class="table table-bordered table-striped text-center">
                         <thead>
                             <tr>
@@ -111,16 +139,16 @@
     });
 
 
-    function cambiaGestion()
+    function buscaPago()
     {
-        let datos_formulario = $("#formulario_gestion").serializeArray();  
+        let datos_formulario = $("#formulario_pagos").serializeArray();  
 
         $.ajax({
-            url: "{{ url('Carrera/ajaxCambiaGestion') }}",
+            url: "{{ url('Factura/ajaxBuscaPago') }}",
             method: "POST",
             data: datos_formulario,
             success: function (data) {
-                $("#ajax_carreras").html(data);
+                $("#ajax-bloque-pagos").html(data);
             }
         })
 

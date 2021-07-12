@@ -28,6 +28,14 @@
 			padding: 15px;
 		}
 
+		#botonElimina {
+			background: #d34444;
+			color: #fff;
+			border-radius: 7px;
+			/*box-shadow: 0 5px #119e4d;*/
+			padding: 15px;
+		}
+
 		body {
 			font-family: Arial, Helvetica, sans-serif;
 		}
@@ -296,6 +304,7 @@
 			<div id="btnImprimir">
 				<input type="button" id="botonImpresion" value="IMPRIMIR" onClick="window.print()">
 				<input type="button" id="botonRegresa" value="VOLVER" onClick="vuelveSistema()">
+				<input type="button" id="botonElimina" value="ANULAR FACTURA">
 			</div>
 		</center>
 		</div>
