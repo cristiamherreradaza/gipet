@@ -643,7 +643,7 @@
                                     <th class="text-center">Gestion</th>
                                     <th class="text-center">Descripcion</th>
                                     <th class="text-center">Monto</th>
-                                    <th class="text-center">Fecha Pago</th>
+                                    <th>Fecha Pago</th>
                                     <th class="text-center">Estado</th>
                                 </tr>
                             </thead>
@@ -658,8 +658,22 @@
                                             {{ $p->servicio->nombre }}
                                         @endif
                                     </td>
-                                    <td class="text-center">{{ $p->importe }}</td>
-                                    <td class="text-center">{{ $p->fecha }}</td>
+                                    <td class="text-center">
+                                        @if ($p->a_pagar == null)
+                                            {{ $p->importe }}
+                                        @else
+                                            {{ $p->a_pagar }}
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @php
+                                            if($p->fecha != null){
+                                                $utilidades = new App\librerias\Utilidades();
+                                                $fechaEs = $utilidades->fechaCastellano($p->fecha);
+                                                echo $fechaEs;
+                                            }
+                                        @endphp
+                                    </td>
                                     <td class="text-center">
                                         @if ($p->fecha == null)
                                             <span class="badge py-1 badge-table badge-danger" id="tag_debe">DEBE</span>

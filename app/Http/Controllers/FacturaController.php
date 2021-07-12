@@ -334,6 +334,14 @@ class FacturaController extends Controller
         }
     }
 
+    public function ajaxEliminaItemPago(Request $request)
+    {
+        // actualizamos el estado del item a pagar
+        $cuotaEliminar = Pago::find($request->pago_id);
+        $cuotaEliminar->estado = null;
+        $cuotaEliminar->save();
+    }
+
     public function muestraRecibo(Request $request, $recibo_id)
     {
         $cuotasPagadas = Pago::where('factura_id', $recibo_id)
