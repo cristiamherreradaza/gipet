@@ -14,7 +14,7 @@
     </div>
     <div class="card-body" id="lista">
         <div class="table-responsive m-t-40">
-            <table id="myTable" class="table table-bordered table-striped text-center">
+            <table id="myTable" class="table table-bordered table-striped">
                 <thead>
                     <tr>
                         <th>#</th>

@@ -39,7 +39,7 @@
             <div class="row">
                 <div class="col-md-12" id="ajax_carreras">
                     <div class="table-responsive">
-                        <table class="table table-striped no-wrap">
+                        <table id="carreras" class="table table-striped no-wrap">
                             <thead>
                                 <tr>
                                     <th>CARRERA</th>
@@ -120,6 +120,15 @@
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
+    });
+
+    $(function () {
+        $('#carreras').DataTable({
+            language: {
+                url: '{{ asset('datatableEs.json') }}'
+            },
+        });
+
     });
 
     function cambiaGestion()
