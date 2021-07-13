@@ -147,7 +147,7 @@
 			font-size: 20pt;
 			position: absolute;
 			top: 40px;
-			left: 580px;
+			left: 560px;
 			width: 350px;
 			text-align: center;
 		}
@@ -239,8 +239,9 @@
 						<td width="25px">&nbsp;&nbsp;
 							{{ ++$key }}
 						</td>
-						<td style="text-align: right;" width="100px">1</td>
+						<td style="text-align: center;" width="100px">1</td>
 						<td width="425px" style="text-align: left;">
+							&nbsp;&nbsp;
 							@if ($c->servicio_id == 2)
 							    {{ $c->mensualidad }}&#176; Mensualidad
 							@else
