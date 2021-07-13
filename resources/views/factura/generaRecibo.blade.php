@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Factura</title>
+	<title>RECIBO</title>
 	<style type="text/css">
 		@media print {
 			#btnImprimir {
@@ -51,7 +51,7 @@
 		}
 
 		#tablaProductos {
-			font-size: 8pt;
+			font-size: 10pt;
 			position: absolute;
 			top: 160px;
 			left: 0px;
@@ -83,12 +83,12 @@
 		}
 
 		.datos td {
-			height: 12px;
+			height: 24px;
 		}
 
 		.datos th,
 		.datos td {
-			border: 1px solid #ddd;
+			border: 1px solid #000;
 			padding: 2px;
 			text-align: center;
 		}
@@ -113,7 +113,7 @@
 
 		#datosEmpresaFactura {
 			/* font-weight: bold; */
-			font-size: 10pt;
+			font-size: 11pt;
 			position: absolute;
 			top: 100px;
 			left: 0px;
@@ -144,7 +144,7 @@
 
 		#txtRecibo {
 			font-weight: bold;
-			font-size: 24pt;
+			font-size: 20pt;
 			position: absolute;
 			top: 40px;
 			left: 580px;
@@ -157,15 +157,14 @@
 			top: 20px;
 			left: 0px;
 		}
-
 		#direccionEmpresa {
 			font-weight: bold;
-			font-size: 6pt;
+			font-size: 8pt;
 			position: absolute;
-			top: 85px;
-			left: 20px;
-			width: 150px;
-			text-align: center;
+			top: 25px;
+			left: 240px;
+			width: 250px;
+			text-align: left;
 		}
 	</style>
 	<script src="{{ asset('js/NumeroALetras.js') }}"></script>
@@ -182,7 +181,15 @@
 			$recibo = App\Factura::find($cuotasPagadas[0]->factura_id);
 		@endphp
 
-		<div id="txtRecibo">RECIBO No. {{ str_pad($recibo->numero, 4, '0', STR_PAD_LEFT) }}</div>
+		<div id="txtRecibo">RECIBO No. {{ str_pad($recibo->numero, 5, '0', STR_PAD_LEFT) }}/{{ $recibo->anio_vigente }}</div>
+
+		<div id="direccionEmpresa">
+			<b>INSTITUTO TECNICO "EF-GIPET" S.R.L.</b><br />
+			CASA MATRIZ<br />
+			AV. VILLAZON PJE. BERNARDO TRIGO No 447<br />
+			TELF 2444654 - 2444554<br />
+			LA PAZ - BOLIVIA<br />
+		</div>
 
 		<div id="logo"><img src="{{ asset('assets/imagenes/portal_uno_R.png') }}" width="200"></div>
 			
@@ -193,12 +200,14 @@
 						@php
 							$utilidades = new App\librerias\Utilidades();
 							$fechaEs = $utilidades->fechaCastellano($cuotasPagadas[0]->fecha);
+							$fechaHoraEs = $utilidades->fechaHoraCastellano($cuotasPagadas[0]->created_at);
 						@endphp
 						La Paz, {{ $fechaEs }}</td>
 				</tr>
 				<tr>
 					<td style="text-align: left;"><b>Se&ntilde;or(es):</b>
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						@if ($cuotasPagadas[0]->persona->apellido_paterno)
 							{{ $cuotasPagadas[0]->persona->apellido_paterno }}&nbsp;
 						@endif
@@ -238,7 +247,7 @@
 							    {{ $c->servicio->nombre }}
 							@endif
 						</td>
-						<td style="text-align: right;" width="100px">{{ $c->importe }}</td>
+						<td style="text-align: right;" width="120px">{{ $c->importe }}</td>
 						<td style="text-align: right;" width="100px"><b>{{ $c->importe }}</b></td>
 					</tr>	
 				@endforeach
@@ -248,14 +257,16 @@
 					$utilidad = new App\librerias\NumeroALetras();
 					$aLetras = $utilidad->toMoney($total);
 				@endphp
-				<td colspan="3" style="text-align: left;">Son: {{ $aLetras }}  100/00 Bolivianos</td>
-				<td style="background-color: #abd4ed;color: #000;">TOTAL Bs.</td>
-				<td style="text-align: right;font-size: 9pt;font-weight: bold;">{{ number_format($total, 2) }}</td>
+				<td colspan="3" style="text-align: left;"><b>Son: </b> {{ $aLetras }}  100/00 Bolivianos</td>
+				<td style="background-color: #abd4ed;color: #000;"><b>TOTAL Bs.</b> </td>
+				<td style="text-align: right;font-size: 11pt;font-weight: bold;">{{ number_format($total, 2) }}</td>
 			</tfoot>
 			
 		</table>
-		Operario: {{ $cuotasPagadas[0]->user->apellido_paterno }} {{ $cuotasPagadas[0]->user->apellido_materno }} {{ $cuotasPagadas[0]->user->nombres }}<br />
-		Fecha Hora: {{ $cuotasPagadas[0]->created_at }}
+		<br />
+		<b>Usuario: </b>
+		{{ $cuotasPagadas[0]->user->apellido_paterno }} {{ $cuotasPagadas[0]->user->apellido_materno }} {{ $cuotasPagadas[0]->user->nombres }}<br />
+		<b>Fecha Hora: </b> {{ $fechaHoraEs }}
 		<br />
 			{{-- <table class="codigoControlQr" width="100%">
 				<tr>

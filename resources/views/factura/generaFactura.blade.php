@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Factura</title>
+	<title>FACTURA</title>
 	<style type="text/css">
 		@media print {
 			#btnImprimir {
@@ -122,7 +122,7 @@
 			font-weight: bold;
 			font-size: 12pt;
 			position: absolute;
-			top: 85px;
+			top: 90px;
 			left: 670px;
 			width: 150px;
 			text-align: center;
@@ -191,7 +191,16 @@
 
 		<div id="logo"><img src="{{ asset('assets/imagenes/portal_uno_R.png') }}" width="200"></div>
 
-		<div id="txtOriginal">ORIGINAL</div>
+		<div id="txtOriginal">
+			@php
+				$hoy = date('Y-m-d');
+				if($factura->fecha != $hoy){
+					echo 'COPIA';
+				}else{
+					echo 'ORIGINAL';
+				}
+			@endphp			
+		</div>
 		<div id="txtActividad">EDUCACION SUPERIOR</div>
 		<div id="txtFactura">FACTURA</div>
 		<div id="direccionEmpresa">
