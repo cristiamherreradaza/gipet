@@ -311,7 +311,6 @@ class ListaController extends Controller
             $nombreCompleto = $paterno.' '.$e->apellido_materno.' '.$e->nombres;
 
             $sheet->setCellValue("B".$contadorAlumnos, $nombreCompleto);
-            $contadorAlumnos++;
 
             // colocamos las notas
             $contadorLetrasNotas = 67;
@@ -349,13 +348,15 @@ class ListaController extends Controller
                 // extraemos la letra para la celda
                 $letra = chr($contadorLetrasNotas);
 
-                $sheet->setCellValue($letra . '5', $nota->nota);
+                $sheet->setCellValue($letra . $contadorAlumnos, $nota->nota);
 
                 $spreadsheet->getActiveSheet()->getColumnDimension($letra)->setWidth(18);
 
                 $contadorLetrasNotas++;
 
             }
+            $contadorAlumnos++;
+
 
         }
 
