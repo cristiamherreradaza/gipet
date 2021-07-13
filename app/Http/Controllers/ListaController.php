@@ -221,6 +221,7 @@ class ListaController extends Controller
                                 'personas.apellido_paterno',
                                 'personas.apellido_materno',
                                 'personas.nombres',
+                                'personas.cedula',
                                 'carreras_personas.id',
                                 'carreras_personas.carrera_id',
                                 'carreras_personas.persona_id',
@@ -242,7 +243,7 @@ class ListaController extends Controller
                             ->get();
 
         
-        $fileName = 'certifica_notas.xlsx';
+        $fileName = 'centralizador.xlsx';
         // return Excel::download(new CertificadoExport($carrera_persona_id), 'certificado.xlsx');
         $spreadsheet = new Spreadsheet();
         
@@ -261,14 +262,14 @@ class ListaController extends Controller
 
         // $spreadsheet->getActiveSheet()->getStyle('C4:M4')->applyFromArray($style);
 
-        $spreadsheet->getActiveSheet()->getStyle("C4:M4")->applyFromArray(
+        $spreadsheet->getActiveSheet()->getStyle("A4:O4")->applyFromArray(
             array(
-                'borders' => array(
+                /*'borders' => array(
                     'allBorders' => array(
                         'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                         'color' => array('argb' => '000000')
                     )
-                ),
+                ),*/
                 'alignment' => array(
                     // 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
                     'vertical'   => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
@@ -277,30 +278,63 @@ class ListaController extends Controller
             )
         );
 
+        $fuenteNegritaTitulo = array(
+            'font'  => array(
+                'bold'  => true,
+                // 'color' => array('rgb' => 'FF0000'),
+                'size'  => 16,
+                'name'  => 'Verdana'
+            ));
+
+        $fuenteNegrita = array(
+            'font'  => array(
+                'bold'  => true,
+                // 'color' => array('rgb' => 'FF0000'),
+                'size'  => 11,
+                // 'name'  => 'Verdana'
+            ));
+
+        
+        $spreadsheet->getActiveSheet()->getStyle("B1")->applyFromArray($fuenteNegritaTitulo);
+
         // definimos el ancho de la columna alumnos
-        $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(22);
+        $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(40);
+        // definimos el ancho de carnet
+        $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(14);
+        // definimos el ancho de numero
+        $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(6);
 
         // $spreadsheet->getRowDimension('4')->setRowHeight(-1);
 
         // $spreadsheet->getActiveSheet()->getColumnDimension('C:M')->setWidth(150);
-
+        $sheet->setCellValue('A4', 'No');
+        $sheet->setCellValue('B4', 'NOMBRE');
+        $sheet->setCellValue('C4', 'CEDULA');
+        
+        $sheet->setCellValue('B1', 'CENTRALIZADOR DE CALIFICACIONES');
+        $sheet->setCellValue('B3', "CARRERA: $datosCarrera->nombre");
+        $sheet->setCellValue('C3', "CURSO: $curso Año");
+        $sheet->setCellValue('D3', "GESTION: $gestion");
+        $sheet->setCellValue('E3', "TURNO: $datosTurno->descripcion");
+        $sheet->setCellValue('F3', "PARALELO: $paralelo");
+        $sheet->setCellValue('G3', "BIMESTRE: $tipo");
 
         //colocamos los nombres de las materias
-        $contadorLetras = 67;
+        $contadorLetras = 68;
         foreach ($materiasCarrera as $m) {
             // extraemos la letra para la celda
             $letra = chr($contadorLetras);
 
             $sheet->setCellValue($letra.'4', $m->nombre. ' '.$m->sigla);
 
-            $spreadsheet->getActiveSheet()->getColumnDimension($letra)->setWidth(18);
+            $spreadsheet->getActiveSheet()->getColumnDimension($letra)->setWidth(20);
 
             $contadorLetras++;
         }
 
         // colocamos la lista de los alumnos
         $contadorAlumnos = 5;
-        foreach($nominaEstudiantes as $e){
+        foreach($nominaEstudiantes as $key => $e){
 
             if($e->apellido_paterno != null){
                 $paterno = $e->apellido_paterno;
@@ -310,10 +344,12 @@ class ListaController extends Controller
 
             $nombreCompleto = $paterno.' '.$e->apellido_materno.' '.$e->nombres;
 
+            $sheet->setCellValue("A".$contadorAlumnos, ++$key);
             $sheet->setCellValue("B".$contadorAlumnos, $nombreCompleto);
+            $sheet->setCellValue("C".$contadorAlumnos, $e->cedula);
 
             // colocamos las notas
-            $contadorLetrasNotas = 67;
+            $contadorLetrasNotas = 68;
             foreach ($materiasCarrera as $mn) {
 
                 if($tipo == 'primero'){
@@ -345,10 +381,25 @@ class ListaController extends Controller
                 ->where('anio_vigente', $gestion)
                 ->first();
 
+                if($nota){
+                    if($tipo == 'primero' || $tipo == 'segundo'){
+                        $notaAlumno = intval($nota->nota_total);
+                    }else{
+                        $notaAlumno = intval($nota->nota);
+                    }
+                }else{
+                    $notaAlumno = 0;
+                }
+
                 // extraemos la letra para la celda
                 $letra = chr($contadorLetrasNotas);
+                $letraEstado = $contadorLetrasNotas;
+                $letraEstado++;
+                $caracterEstado = chr($letraEstado);
 
-                $sheet->setCellValue($letra . $contadorAlumnos, $nota->nota);
+                $sheet->setCellValue($letra.$contadorAlumnos, $notaAlumno);
+
+                $sheet->setCellValue($caracterEstado.$contadorAlumnos, $estado->estado);
 
                 $spreadsheet->getActiveSheet()->getColumnDimension($letra)->setWidth(18);
 
@@ -357,16 +408,29 @@ class ListaController extends Controller
             }
             $contadorAlumnos++;
 
-
         }
+        $contadorFinal = --$contadorAlumnos;
+        $spreadsheet->getActiveSheet()->getStyle("A4:".$caracterEstado.$contadorAlumnos)->applyFromArray(
+            array(
+                'borders' => array(
+                    'allBorders' => array(
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'color' => array('argb' => '000000')
+                    )
+                ),
+                /*'alignment' => array(
+                    // 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'vertical'   => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                    'wrapText' => true
+                )*/
+            )
+        );
 
+        $letraEstado = chr($contadorLetrasNotas);
 
+        $spreadsheet->getActiveSheet()->getStyle("A4:O4")->applyFromArray($fuenteNegrita);
 
-
-
-        
-
-        
+        $sheet->setCellValue($letraEstado."4", "OBS");
 
         $writer = new Xlsx($spreadsheet);
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
