@@ -1,48 +1,40 @@
+<button onclick="ExportExcel('xlsx')">EXCEL</button>
+<table width="100%">
+    <tr>
+        <td width="25%"><img src="{{ asset('assets/imagenes/portal_uno_R.png') }}" height="80"></td>
+        <td width="50%" style="text-align: center;"><span style="font-size: 18pt;">CETRALIZADOR DE CALIFICACIONES</span>
+        </td>
+        <td width="25%" style="text-align: right;"><span style="font-size: 8pt;"> FECHA: {{ date('d/m/Y') }}</span></td>
+    </tr>
 
-        {{-- <table width="100%">
-            <tr>
-                <td width="25%"><img src="{{ asset('assets/imagenes/portal_uno_R.png') }}" height="80"></td>
-                <td width="50%" style="text-align: center;"><span style="font-size: 18pt;">CETRALIZADOR DE CALIFICACIONES</span>
-                </td>
-                <td width="25%" style="text-align: right;"><span style="font-size: 8pt;"> FECHA: {{ date('d/m/Y') }}</span></td>
-            </tr>
-        
-            <tr>
-                <td><span style="font-size: 7pt;"><b>CARRERA: </b> {{ $datosCarrera->nombre }}</span></td>
-                <td style="text-align: center;">
-                    <span style="font-size: 7pt;">
-                        <b>CURSO: </b>{{ $curso }}&deg; A&ntilde;o
-                        <b>TURNO: </b>{{ $datosTurno->descripcion }}
-                        <b>PARALELO: </b>"{{ $paralelo }}" -
-                        @if ($tipo == 'primero')
-                            1&deg; Bim
-                        @elseif ($tipo == 'segundo')    
-                            2&deg; Bim
-                        @else
-                            Anual
-                        @endif
-                    </span>
-                </td>
-                <td><span style="font-size: 7pt;"><b>GESTION: </b> {{ $gestion }}</span></td>
-            </tr>
-        </table> --}}
-        {{-- <table width="100%">
-            <tr>
-                <td width="25%"><img src="{{ asset('assets/imagenes/portal_uno_R.png') }}" height="80"></td>
-                <td width="50%" style="text-align: center;"><span style="font-size: 18pt;">CETRALIZADOR DE CALIFICACIONES</span></td>
-                <td width="25%" style="text-align: right;"><span style="font-size: 8pt;"> FECHA: {{ date('d/m/Y') }}</span></td>
-            </tr>
-
-            <tr>
-                <td><span style="font-size: 7pt;"><b>INSTITUCION: </b> INSTITUTO TECNICO "EF GIPET" SRL</span></td>
-                <td style="text-align: center;"><span style="font-size: 7pt;"><b>RM: </b> 252/75 - 081/02 - 889/12 - 210/14</span></td>
-                <td><span style="font-size: 7pt;"><b>CARACTER: </b> PRIVADO</span></td>
-            </tr>
-        </table> --}}
-        <button onclick="ExportExcel('xlsx')">EXCEL</button>
+    <tr>
+        <td><span style="font-size: 7pt;"><b>CARRERA: </b> {{ $datosCarrera->nombre }}</span></td>
+        <td style="text-align: center;">
+            <span style="font-size: 7pt;">
+                <b>CURSO: </b>{{ $curso }}&deg; A&ntilde;o
+                <b>TURNO: </b>{{ $datosTurno->descripcion }}
+                <b>PARALELO: </b>"{{ $paralelo }}" -
+                @if ($tipo == 'primero')
+                1&deg; Bim
+                @elseif ($tipo == 'segundo')
+                2&deg; Bim
+                @else
+                Anual
+                @endif
+            </span>
+        </td>
+        <td><span style="font-size: 7pt;"><b>GESTION: </b> {{ $gestion }}</span></td>
+    </tr>
+</table>
 
 <div class="table-responsive m-t-40">
     <table class="table table-striped table-bordered no-wrap table-hover" id="tablaCentralizador">
+        <tr>
+            <td>
+                CARRERA:<BR>                 
+                TURNO: <BR>
+            </td>
+        </tr>
 
         <tr>
             @if ($imp_nombre == 'Si')
@@ -120,6 +112,7 @@
 
     function ExportExcel(type, fn, dl) {
      var elt = document.getElementById('tablaCentralizador');
+    //  var elt = document.getElementsByClassName('tablaCentralizador');
      var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS"});
      return dl ?
      XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :

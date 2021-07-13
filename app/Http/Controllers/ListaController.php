@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 class ListaController extends Controller
 {
     public function alumnos()
@@ -138,7 +140,6 @@ class ListaController extends Controller
 
     public function generaPdfCentralizadorNotas(Request $request)
     {
-       // dd($request->all());
         $carrera    = $request->carrera_id;
         $curso      = $request->gestion;
         $turno      = $request->turno_id;
@@ -190,9 +191,186 @@ class ListaController extends Controller
 
         return view('pdf.generaPdfCentralizadorNotas')->with(compact('carrera', 'curso', 'paralelo', 'turno', 'gestion', 'datosTurno', 'materiasCarrera', 'nominaEstudiantes', 'datosCarrera', 'tipo', 'imp_nombre'));
 
-        // $pdf = PDF::loadView('pdf.generaPdfCentralizadorNotas', compact('carrera', 'curso', 'paralelo', 'turno', 'gestion', 'datosTurno', 'materiasCarrera', 'nominaEstudiantes', 'datosCarrera', 'tipo', 'imp_nombre'))->setPaper('letter', 'landscape');
-        // return $pdf->stream('listaAlumnos_'.date('Y-m-d H:i:s').'.pdf');
+        // $pdf = PDF::loadView('pdf.centralizadorNotas', compact('carrera', 'curso', 'paralelo', 'turno', 'gestion', 'datosTurno', 'materiasCarrera', 'nominaEstudiantes', 'datosCarrera', 'tipo', 'imp_nombre'))->setPaper('letter', 'landscape');
         // return $pdf->download('centralizador.pdf');
+        // return $pdf->stream('listaAlumnos_'.date('Y-m-d H:i:s').'.pdf');
+    }
+
+    public function excelCentralizadorNotas(Request $request)
+    {
+        $carrera    = $request->carrera_id;
+        $curso      = $request->gestion;
+        $turno      = $request->turno_id;
+        $paralelo   = $request->paralelo;
+        $gestion    = $request->anio_vigente;
+        $tipo       = $request->tipo;
+        $imp_nombre = $request->imprime_nombre;
+
+        $datosTurno = Turno::find($request->turno_id);
+
+        $datosCarrera = Carrera::find($request->carrera_id);
+        
+        $materiasCarrera = Asignatura::where('carrera_id', $request->carrera_id)
+                            ->where('anio_vigente', $request->anio_vigente)
+                            ->where('gestion', $request->gestion)
+                            ->whereNull('estado')
+                            ->orderBy('orden_impresion', 'asc')
+                            ->get();
+
+        $nominaEstudiantes = CarrerasPersona::select(
+                                'personas.apellido_paterno',
+                                'personas.apellido_materno',
+                                'personas.nombres',
+                                'carreras_personas.id',
+                                'carreras_personas.carrera_id',
+                                'carreras_personas.persona_id',
+                                'carreras_personas.turno_id',
+                                'carreras_personas.gestion',
+                                'carreras_personas.paralelo',
+                                'carreras_personas.fecha_inscripcion',
+                                'carreras_personas.anio_vigente',
+                                'carreras_personas.estado'
+                            )
+                            ->where('carreras_personas.anio_vigente', $request->anio_vigente)
+                            ->where('carreras_personas.carrera_id', $request->carrera_id)
+                            ->where('carreras_personas.gestion', $request->gestion)
+                            ->where('carreras_personas.turno_id', $request->turno_id)
+                            ->where('carreras_personas.paralelo', $request->paralelo)
+                            ->leftJoin('personas', 'carreras_personas.persona_id' , '=', 'personas.id')
+                            ->orderBy('personas.apellido_paterno', 'ASC')
+                            ->groupBy('carreras_personas.persona_id')
+                            ->get();
+
+        
+        $fileName = 'certifica_notas.xlsx';
+        // return Excel::download(new CertificadoExport($carrera_persona_id), 'certificado.xlsx');
+        $spreadsheet = new Spreadsheet();
+        
+        // definimos la hoja excel
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // definimos estilos
+        $spreadsheet->getActiveSheet()->getRowDimension('4')->setRowHeight(55);
+
+        /*$style = array(
+            'alignment' => array(
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'wrap' => true
+            )
+        );*/
+
+        // $spreadsheet->getActiveSheet()->getStyle('C4:M4')->applyFromArray($style);
+
+        $spreadsheet->getActiveSheet()->getStyle("C4:M4")->applyFromArray(
+            array(
+                'borders' => array(
+                    'allBorders' => array(
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'color' => array('argb' => '000000')
+                    )
+                ),
+                'alignment' => array(
+                    // 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'vertical'   => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                    'wrapText' => true
+                )
+            )
+        );
+
+        // definimos el ancho de la columna alumnos
+        $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(22);
+
+        // $spreadsheet->getRowDimension('4')->setRowHeight(-1);
+
+        // $spreadsheet->getActiveSheet()->getColumnDimension('C:M')->setWidth(150);
+
+
+        //colocamos los nombres de las materias
+        $contadorLetras = 67;
+        foreach ($materiasCarrera as $m) {
+            // extraemos la letra para la celda
+            $letra = chr($contadorLetras);
+
+            $sheet->setCellValue($letra.'4', $m->nombre. ' '.$m->sigla);
+
+            $spreadsheet->getActiveSheet()->getColumnDimension($letra)->setWidth(18);
+
+            $contadorLetras++;
+        }
+
+        // colocamos la lista de los alumnos
+        $contadorAlumnos = 5;
+        foreach($nominaEstudiantes as $e){
+
+            if($e->apellido_paterno != null){
+                $paterno = $e->apellido_paterno;
+            }else{
+                $paterno = '';
+            }
+
+            $nombreCompleto = $paterno.' '.$e->apellido_materno.' '.$e->nombres;
+
+            $sheet->setCellValue("B".$contadorAlumnos, $nombreCompleto);
+            $contadorAlumnos++;
+
+            // colocamos las notas
+            $contadorLetrasNotas = 67;
+            foreach ($materiasCarrera as $mn) {
+
+                if($tipo == 'primero'){
+                    $nota = Nota::where('persona_id', $e->persona_id)
+                    ->where('carrera_id', $carrera)
+                    ->where('anio_vigente', $gestion)
+                    ->where('paralelo', $paralelo)
+                    ->where('asignatura_id', $mn->id)
+                    ->where('trimestre', 1)
+                    ->first();
+                }elseif ($tipo == 'segundo') {
+                    $nota = Nota::where('persona_id', $e->persona_id)
+                    ->where('carrera_id', $carrera)
+                    ->where('anio_vigente', $gestion)
+                    ->where('paralelo', $paralelo)
+                    ->where('asignatura_id', $mn->id)
+                    ->where('trimestre', 2)
+                    ->first();
+                }else{
+                    $nota = Inscripcione::where('persona_id', $e->persona_id)
+                    ->where('carrera_id', $carrera)
+                    ->where('anio_vigente', $gestion)
+                    ->where('asignatura_id', $mn->id)
+                    ->first();
+                }
+
+                $estado = CarrerasPersona::where('persona_id', $e->persona_id)
+                ->where('carrera_id', $carrera)
+                ->where('anio_vigente', $gestion)
+                ->first();
+
+                // extraemos la letra para la celda
+                $letra = chr($contadorLetrasNotas);
+
+                $sheet->setCellValue($letra . '5', $nota->nota);
+
+                $spreadsheet->getActiveSheet()->getColumnDimension($letra)->setWidth(18);
+
+                $contadorLetrasNotas++;
+
+            }
+
+        }
+
+
+
+
+
+        
+
+        
+
+        $writer = new Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="'. urlencode($fileName).'"');
+        $writer->save('php://output');
     }
     
     public function totalALumnos()

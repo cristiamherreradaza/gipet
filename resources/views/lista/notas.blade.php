@@ -19,7 +19,7 @@
             <div class="card-header bg-info">
                 <h4 class="mb-0 text-white">CENTRALIZADOR DE NOTAS</h4>
             </div>
-            <form action="{{ url('Lista/generaPdfCentralizadorNotas') }}" method="POST" id="formularioCentralizador">
+            <form action="{{ url('Lista/excelCentralizadorNotas') }}" method="POST" id="formularioCentralizador">
                 @csrf
                 <div class="card-body">
                     <div class="row">
@@ -155,16 +155,17 @@
     function generaCentralizador()
     {
         let datosFormulario = $('#formularioCentralizador').serializeArray();
+        $('#formularioCentralizador').submit();
 
-        $.ajax({
-            url: "{{ url('Lista/generaPdfCentralizadorNotas') }}",
+        /*$.ajax({
+            url: "{{ url('Lista/excelCentralizadorNotas') }}",
             data: datosFormulario,
             type: 'POST',
             success: function(data) {
                 $("#mostrar").show('slow');
                 $("#mostrar").html(data);
             }
-        });
+        });*/
     }
 </script>
 @endsection
