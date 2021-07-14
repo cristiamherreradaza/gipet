@@ -450,8 +450,28 @@ class FacturaController extends Controller
             $pagos->where('numero', $request->input('numero'));    
         }
 
-        if($request->input('numero') != null){
-            $pagos->where('numero', $request->input('numero'));    
+        if($request->input('ci') != null){
+            $pagos->where('carnet', $request->input('ci'));    
+        }
+
+        if($request->input('nit') != null){
+            $pagos->where('nit', $request->input('nit'));    
+        }
+
+        if($request->input('user_id') != null){
+            $pagos->where('user_id', $request->input('user_id'));    
+        }
+
+        if($request->input('fecha_inicio') != null){
+            $pagos->whereDate('fecha', '>=',  $request->input('fecha_inicio'));    
+        }
+
+        if($request->input('fecha_final') != null){
+            $pagos->whereDate('fecha', '<=',  $request->input('fecha_final'));    
+        }
+
+        if($request->input('numero') == null && $request->input('numero') == null){
+            
         }
 
         $cobros = $pagos->get();

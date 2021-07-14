@@ -1,3 +1,4 @@
+@if ($cobros->count() > 0)
 <table id="tabla-pagos" class="table table-bordered table-striped text-center">
     <thead>
         <tr>
@@ -38,3 +39,6 @@
         @endforeach
     </tbody>
 </table>
+@else
+    <h2 class="text-center text-danger">NO EXISTEN PAGOS</h2>
+@endif
