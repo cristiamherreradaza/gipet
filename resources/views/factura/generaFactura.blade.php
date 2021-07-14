@@ -164,6 +164,7 @@
 			text-align: left;
 		}
 	</style>
+	<link href="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.css') }}" rel="stylesheet">
 	<script src="{{ asset('js/NumeroALetras.js') }}"></script>
 	<script src="{{ asset('dist/js/qrcode.min.js') }}"></script>
 </head>
@@ -300,8 +301,10 @@
 			<table class="codigoControlQr" width="100%">
 				<tr>
 					<td style="width: 780px;">
-						<b>Codigo de Control: </b> {{ $factura->codigo_control }}<br />
-						<b>Fecha limite de Emision: </b> {{ $parametros->fecha_limite }}
+						<b>NOTA AL CLIENTE: </b> {{ $factura->persona->apellido_paterno }} {{ $factura->persona->apellido_materno }} {{ $factura->persona->nombres }}<br />
+						<hr>
+						<b>CODIGO DE CONTROL: </b> {{ $factura->codigo_control }}<br />
+						<b>FECHA LIMITE DE EMISION: </b> {{ $parametros->fecha_limite }}
 					</td>
 					<td>
 						<div id="qrcode"></div>
@@ -328,6 +331,7 @@
 	$fechaFactura = new DateTime($factura->fecha);
 	$fechaQr = $fechaFactura->format('d/m/Y');
 @endphp
+{{-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 	let valorTotal = Number({{ $factura->total }});
@@ -341,8 +345,42 @@
 
 		function eliminaFactura(factura_id){
 
-			Swal.fire('Any fool can use a computer');
 			// location.href = "{{ url('Factura/anulaFactura') }}/"+factura_id;
+
+			const swalWithBootstrapButtons = Swal.mixin({
+			  customClass: {
+			    confirmButton: 'btn btn-success',
+			    cancelButton: 'btn btn-danger'
+			  },
+			  buttonsStyling: false
+			})
+
+			swalWithBootstrapButtons.fire({
+			  title: 'Are you sure?',
+			  text: "You won't be able to revert this!",
+			  icon: 'warning',
+			  showCancelButton: true,
+			  confirmButtonText: 'Yes, delete it!',
+			  cancelButtonText: 'No, cancel!',
+			  reverseButtons: true
+			}).then((result) => {
+			  if (result.isConfirmed) {
+			    swalWithBootstrapButtons.fire(
+			      'Deleted!',
+			      'Your file has been deleted.',
+			      'success'
+			    )
+			  } else if (
+			    /* Read more about handling dismissals below */
+			    result.dismiss === Swal.DismissReason.cancel
+			  ) {
+			    swalWithBootstrapButtons.fire(
+			      'Cancelled',
+			      'Your imaginary file is safe :)',
+			      'error'
+			    )
+			  }
+			})
 		}
 
 		let cadenaQr = "178436029|{{ $factura->numero }}|{{ $parametros->numero_autorizacion }}|{{ $fechaQr }}|{{ number_format($factura->total, 2, '.', '') }}|{{ round($factura->total, 0, PHP_ROUND_HALF_UP) }}|{{ $factura->codigo_control }}|{{ $factura->nit }}|0|0|0|0";
