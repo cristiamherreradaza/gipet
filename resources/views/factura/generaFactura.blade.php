@@ -65,7 +65,7 @@
 
 		/*estilos para tablas de datos*/
 		table.datos {
-			/*font-size: 13px;*/
+			font-size: 12pt;
 			/*line-height:14px;*/
 			/* width: 1000; */
 			border-collapse: collapse;
@@ -279,7 +279,7 @@
 							    {{ $c->servicio->nombre }}
 							@endif
 						</td>
-						<td style="text-align: right;" width="120px">{{ $c->importe }}</td>
+						<td style="text-align: right;" width="130px">{{ $c->importe }}</td>
 						<td style="text-align: right;" width="100px"><b>{{ $c->importe }}</b></td>
 					</tr>	
 				@endforeach
@@ -292,7 +292,7 @@
 				@endphp
 				<td colspan="3" style="text-align: left;"><b>Son: </b> {{ $aLetras }} 100/00 Bolivianos</td>
 				<td style="background-color: #abd4ed;color: #000;"><b>TOTAL Bs.</b></td>
-				<td style="text-align: right;font-size: 11pt;font-weight: bold;">{{ number_format($total, 2) }}</td>
+				<td style="text-align: right;font-weight: bold;">{{ number_format($total, 2) }}</td>
 			</tfoot>
 			
 		</table>

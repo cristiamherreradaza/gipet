@@ -69,7 +69,7 @@
 
 		/*estilos para tablas de datos*/
 		table.datos {
-			/*font-size: 13px;*/
+			font-size: 12pt;
 			/*line-height:14px;*/
 			/* width: 1000; */
 			border-collapse: collapse;
@@ -248,7 +248,7 @@
 							    {{ $c->servicio->nombre }}
 							@endif
 						</td>
-						<td style="text-align: right;" width="120px">{{ $c->importe }}</td>
+						<td style="text-align: right;" width="130px">{{ $c->importe }}</td>
 						<td style="text-align: right;" width="100px"><b>{{ $c->importe }}</b></td>
 					</tr>	
 				@endforeach
