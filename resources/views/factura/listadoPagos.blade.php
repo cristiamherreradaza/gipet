@@ -46,8 +46,17 @@
 
                 <div class="col-md-2">
                     <div class="form-group">
-                        <label class="control-label">EMITIDO </label>
-                        <input type="number" name="user" id="user" class="form-control">
+                        <label class="control-label">USUARIO </label>
+                        <select name="user_id" id="user_id" class="form-control">
+                            <option value="">TODOS</option>
+                            @foreach ($usuarios as $u)
+                                <option value="{{ $u->user->id }}">
+                                    {{ $u->user->apellido_paterno }}
+                                    {{ $u->user->apellido_materno }}
+                                    {{ $u->user->nombres }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 
@@ -67,7 +76,7 @@
 
                 <div class="col-md-1">
                     <br />
-                    <button type="button" class="btn btn-success btn-block" title="Buscar">BUSCAR</button>
+                    <button type="button" class="btn btn-success btn-block" title="Buscar" onclick="buscaPago()">BUSCAR</button>
                 </div>
             </div>
         </form>

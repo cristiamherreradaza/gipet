@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Pago;
+use App\User;
 use DataTables;
 use App\Factura;
 use App\Persona;
 use App\Servicio;
 use App\Parametro;
+use CodigoControlV7;
 use App\CarrerasPersona;
 use App\DescuentosPersona;
-use CodigoControlV7;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -202,6 +203,7 @@ class FacturaController extends Controller
         // dd($tipo);
         $hoy = date('Y-m-d');
         // $reciboId = "";
+        $persona = Persona::find($persona_id);
 
         $cuotasParaPagar = Pago::where('persona_id', $persona_id)
             ->where('estado', 'paraPagar')
@@ -235,6 +237,7 @@ class FacturaController extends Controller
             $recibo               = new Factura();
             $recibo->user_id      = Auth::user()->id;
             $recibo->persona_id   = $persona_id;
+            $recibo->carnet       = $persona->cedula;
             $recibo->fecha        = $hoy;
             $recibo->total        = $total;
             $recibo->numero       = $contadorRecibo;
@@ -290,6 +293,7 @@ class FacturaController extends Controller
                 $factura->user_id        = Auth::user()->id;
                 $factura->persona_id     = $persona_id;
                 $factura->parametro_id   = $ultimoParametro->id;
+                $factura->carnet         = $persona->cedula;
                 $factura->fecha          = $hoy;
                 $factura->total          = $total;
                 $factura->numero         = $nuevoNumeroFactura;
@@ -427,19 +431,31 @@ class FacturaController extends Controller
     {
         $facturas = Factura::limit(100)
                     ->get();
-        
-        return view('factura.listadoPagos')->with(compact('facturas'));
+
+        $personal = array();
+
+        $usuarios = Factura::groupBy('user_id')
+                            ->get();
+
+        return view('factura.listadoPagos')->with(compact('facturas', 'usuarios'));
     }
 
     // esta funcion es para el listado de 
     // 
     public function ajaxBuscaPago(Request $request)
     {
-        $pagos = Pago::query();
-        if($request->has('numero')){
-            $pagos->where('numero', $request->numero);    
+        $pagos = Factura::orderBy('id', 'desc');
+
+        if($request->input('numero') != null){
+            $pagos->where('numero', $request->input('numero'));    
         }
-        $pagos->toSql();
-        // dd($pagos);
+
+        if($request->input('numero') != null){
+            $pagos->where('numero', $request->input('numero'));    
+        }
+
+        $cobros = $pagos->get();
+        // dd($cobros);
+        return view('factura.ajaxBuscaPago')->with(compact('cobros'));
     }
 }
