@@ -26,7 +26,7 @@
                     @endif
                 </td>
                 <td>
-                    @if (!$cpp->descuento_persona_id == null)
+                    @if (!$cpp->descuento_persona_id == null || $descuentoPersona->descuento_id == null)
                         @php
                             $descuentoPersona = App\DescuentosPersona::find($cpp->descuento_persona_id);
                             echo $descuentoPersona->descuento->nombre;
