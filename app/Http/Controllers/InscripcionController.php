@@ -2852,7 +2852,8 @@ class InscripcionController extends Controller
             $hoja->setCellValue("G$contadorCeldas", $notaHistorial);
             $hoja->setCellValue("H$contadorCeldas", $segundoHistorial);
 
-            $carreraPersona = CarrerasPersona::where('anio_vigente', $i->anio_vigente)
+            $carreraPersona = CarrerasPersona::where('persona_id', $i->persona_id)
+                                                ->where('anio_vigente', $i->anio_vigente)
                                                 ->where('carrera_id', $i->carrera_id)
                                                 ->where('turno_id', $i->turno_id)
                                                 ->where('paralelo', $i->paralelo)

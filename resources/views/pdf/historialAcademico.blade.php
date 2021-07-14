@@ -207,7 +207,8 @@
                     <td>{{ $inscripcion->segundo_turno ? round($inscripcion->segundo_turno) : '' }}</td>
                     <td>
                         @php
-                            $carreraPersona = App\CarrerasPersona::where('anio_vigente', $inscripcion->anio_vigente)
+                            $carreraPersona = App\CarrerasPersona::where('persona_id', $inscripcion->persona_id)
+                                                                ->where('anio_vigente', $inscripcion->anio_vigente)
                                                                 ->where('carrera_id', $inscripcion->carrera_id)
                                                                 ->where('turno_id', $inscripcion->turno_id)
                                                                 ->where('paralelo', $inscripcion->paralelo)
