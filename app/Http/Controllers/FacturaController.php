@@ -478,4 +478,27 @@ class FacturaController extends Controller
         // dd($cobros);
         return view('factura.ajaxBuscaPago')->with(compact('cobros'));
     }
+
+    public function anulaFactura(Request $request, $factura_id)
+    {
+        // dd($);
+        $factura = Factura::find($factura_id);
+        $factura->estado = 'Anulado';
+        $factura->save();
+
+        $pagos = Pago::where('factura_id', $factura_id)
+                    ->get();
+
+        foreach($pagos as $p)
+        {
+            $ePago           = Pago::find($p->id);
+            $ePago->importe  = 0;
+            $ePago->faltante = 0;
+            $ePago->fecha    = null;
+            $ePago->estado   = null;
+            $ePago->save();
+        }
+
+        return redirect("Factura/listadoPagos");
+    }
 }

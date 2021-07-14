@@ -14,7 +14,7 @@
 <div class="col-md-3">
     <div class="form-group">
         @php
-            if($siguienteCuota->descuento_persona_id == null){
+            if($siguienteCuota->descuento_persona_id == null || $siguienteCuota->descuento_persona->descuento_id == null){
                 $nombreDescuento = 'NINGUNO';
             }else{
                 $nombreDescuento = $siguienteCuota->descuento_persona->descuento->nombre;

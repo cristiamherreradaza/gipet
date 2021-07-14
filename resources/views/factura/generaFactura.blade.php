@@ -317,7 +317,7 @@
 			<div id="btnImprimir">
 				<input type="button" id="botonImpresion" value="IMPRIMIR" onClick="window.print()">
 				<input type="button" id="botonRegresa" value="VOLVER" onClick="vuelveSistema()">
-				<input type="button" id="botonElimina" value="ANULAR FACTURA">
+				<input type="button" id="botonElimina" value="ANULAR FACTURA" onclick="eliminaFactura({{ $factura->id }})">
 			</div>
 		</center>
 		</div>
@@ -328,6 +328,7 @@
 	$fechaFactura = new DateTime($factura->fecha);
 	$fechaQr = $fechaFactura->format('d/m/Y');
 @endphp
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 	let valorTotal = Number({{ $factura->total }});
 		var options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -336,6 +337,12 @@
 		function vuelveSistema(){
 			var oldURL = document.referrer;
 			location.href = oldURL;
+		}
+
+		function eliminaFactura(factura_id){
+
+			Swal.fire('Any fool can use a computer');
+			// location.href = "{{ url('Factura/anulaFactura') }}/"+factura_id;
 		}
 
 		let cadenaQr = "178436029|{{ $factura->numero }}|{{ $parametros->numero_autorizacion }}|{{ $fechaQr }}|{{ number_format($factura->total, 2, '.', '') }}|{{ round($factura->total, 0, PHP_ROUND_HALF_UP) }}|{{ $factura->codigo_control }}|{{ $factura->nit }}|0|0|0|0";
