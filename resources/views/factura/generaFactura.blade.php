@@ -36,6 +36,22 @@
 			padding: 15px;
 		}
 
+		.botonSi {
+			background: #17aa56;
+			color: #fff;
+			border-radius: 7px;
+			/*box-shadow: 0 5px #119e4d;*/
+			padding: 15px;
+		}
+
+		.botonNo {
+			background: #d34444;
+			color: #fff;
+			border-radius: 7px;
+			/*box-shadow: 0 5px #119e4d;*/
+			padding: 15px;
+		}
+
 		body {
 			font-family: Arial, Helvetica, sans-serif;
 		}
@@ -331,8 +347,8 @@
 	$fechaFactura = new DateTime($factura->fecha);
 	$fechaQr = $fechaFactura->format('d/m/Y');
 @endphp
-{{-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{{-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
 <script>
 	let valorTotal = Number({{ $factura->total }});
 		var options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -345,29 +361,30 @@
 
 		function eliminaFactura(factura_id){
 
-			// location.href = "{{ url('Factura/anulaFactura') }}/"+factura_id;
-
 			const swalWithBootstrapButtons = Swal.mixin({
 			  customClass: {
-			    confirmButton: 'btn btn-success',
-			    cancelButton: 'btn btn-danger'
+			    confirmButton: 'botonSi',
+			    cancelButton: 'botonNo'
 			  },
 			  buttonsStyling: false
 			})
 
 			swalWithBootstrapButtons.fire({
-			  title: 'Are you sure?',
-			  text: "You won't be able to revert this!",
+			  title: 'Estas seguro?',
+			  text: "Anular esta factura.",
 			  icon: 'warning',
 			  showCancelButton: true,
-			  confirmButtonText: 'Yes, delete it!',
-			  cancelButtonText: 'No, cancel!',
+			  confirmButtonText: 'Si, anular',
+			  cancelButtonText: 'No, cancelar',
 			  reverseButtons: true
 			}).then((result) => {
 			  if (result.isConfirmed) {
+
+			  	location.href = "{{ url('Factura/anulaFactura') }}/"+factura_id;
+
 			    swalWithBootstrapButtons.fire(
-			      'Deleted!',
-			      'Your file has been deleted.',
+			      'Factura anulada!',
+			      'La factura fue anulada.',
 			      'success'
 			    )
 			  } else if (
@@ -375,8 +392,8 @@
 			    result.dismiss === Swal.DismissReason.cancel
 			  ) {
 			    swalWithBootstrapButtons.fire(
-			      'Cancelled',
-			      'Your imaginary file is safe :)',
+			      'Cancelado',
+			      'Esta operacion fue cancelada :)',
 			      'error'
 			    )
 			  }

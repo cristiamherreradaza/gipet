@@ -491,12 +491,17 @@ class FacturaController extends Controller
 
         foreach($pagos as $p)
         {
-            $ePago           = Pago::find($p->id);
-            $ePago->importe  = 0;
-            $ePago->faltante = 0;
-            $ePago->fecha    = null;
-            $ePago->estado   = null;
-            $ePago->save();
+            if($p->servicio_id == 2){
+                $ePago           = Pago::find($p->id);
+                $ePago->factura_id  = null;
+                $ePago->importe  = 0;
+                $ePago->faltante = 0;
+                $ePago->fecha    = null;
+                $ePago->estado   = null;
+                $ePago->save();
+            }else{
+                Pago::destroy($p->id);    
+            }
         }
 
         return redirect("Factura/listadoPagos");
