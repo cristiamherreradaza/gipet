@@ -470,8 +470,8 @@ class FacturaController extends Controller
             $pagos->whereDate('fecha', '<=',  $request->input('fecha_final'));    
         }
 
-        if($request->input('numero') == null && $request->input('numero') == null){
-            
+        if($request->input('numero') == null && $request->input('ci') == null && $request->input('nit') == null && $request->input('user_id') == null && $request->input('fecha_inicio') == null && $request->input('fecha_final') == null){
+            $pagos->limit(100);
         }
 
         $cobros = $pagos->get();

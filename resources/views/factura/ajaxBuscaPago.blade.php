@@ -1,5 +1,5 @@
 @if ($cobros->count() > 0)
-<table id="tabla-pagos" class="table table-bordered table-striped text-center">
+<table id="tabla-ajax-pagos" class="table table-bordered table-striped text-center">
     <thead>
         <tr>
             <th>ID</th>
@@ -42,3 +42,13 @@
 @else
     <h2 class="text-center text-danger">NO EXISTEN PAGOS</h2>
 @endif
+<script type="text/javascript">
+    $(function () {
+        $('#tabla-ajax-pagos').DataTable({
+            order: [[ 0, "desc" ]],
+            language: {
+                url: '{{ asset('datatableEs.json') }}'
+            },
+        });
+    });
+</script>
