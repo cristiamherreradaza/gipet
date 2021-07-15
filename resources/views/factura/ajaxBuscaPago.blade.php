@@ -26,7 +26,14 @@
                     <span class="text-primary">RECIBO</span>     
                 @endif
             </td>
-            <td>{{ $c->numero }}</td>
+            <td>
+                @if ($c->facturado == 'Si')
+                    <span class="text-info">{{ $c->numero }}</span>     
+                @else
+                    <span class="text-primary">{{ $c->numero_recibo }}</span>     
+
+                @endif
+            </td>
             <td>{{ $c->persona->cedula }}</td>
             <td>{{ $c->persona->nombres }}</td>
             <td>{{ $c->razon_social }}</td>

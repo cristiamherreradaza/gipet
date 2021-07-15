@@ -25,14 +25,21 @@
 
                 <div class="col-md-1">
                     <div class="form-group">
-                        <label class="control-label">No.(Fac/Rec) </label>
+                        <label class="control-label">No. Factura </label>
                         <input type="number" name="numero" id="numero" class="form-control">
                     </div>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-1">
                     <div class="form-group">
-                        <label class="control-label">C.I. Estudiante </label>
+                        <label class="control-label">No. Recibo </label>
+                        <input type="text" name="numero_recibo" id="numero_recibo" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-1">
+                    <div class="form-group">
+                        <label class="control-label">C.I. Persona</label>
                         <input type="number" name="ci" id="ci" class="form-control">
                     </div>
                 </div>
@@ -111,7 +118,14 @@
                                         <span class="text-primary">RECIBO</span>     
                                     @endif
                                 </td>
-                                <td>{{ $f->numero }}</td>
+                                <td>
+                                    @if ($f->facturado == 'Si')
+                                        <span class="text-info">{{ $f->numero }}</span>     
+                                    @else
+                                        <span class="text-primary">{{ $f->numero_recibo }}</span>     
+
+                                    @endif
+                                </td>
                                 <td>{{ $f->persona->cedula }}</td>
                                 <td>{{ $f->persona->nombres }}</td>
                                 <td>{{ $f->razon_social }}</td>

@@ -452,6 +452,10 @@ class FacturaController extends Controller
             $pagos->where('numero', $request->input('numero'));    
         }
 
+        if($request->input('numero_recibo') != null){
+            $pagos->where('numero_recibo', $request->input('numero_recibo'));    
+        }
+
         if($request->input('ci') != null){
             $pagos->where('carnet', $request->input('ci'));    
         }
