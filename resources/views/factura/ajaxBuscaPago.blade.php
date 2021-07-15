@@ -3,6 +3,7 @@
     <thead>
         <tr>
             <th>ID</th>
+            <th>TIPO</th>
             <th>NUMERO</th>
             <th>CARNET</th>
             <th>ESTUDIANTE</th>
@@ -18,6 +19,13 @@
         @foreach ($cobros as $c)
         <tr>
             <td>{{ $c->id }}</td>
+            <td>
+                @if ($c->facturado == 'Si')
+                    <span class="text-info">FACTURA</span>     
+                @else
+                    <span class="text-primary">RECIBO</span>     
+                @endif
+            </td>
             <td>{{ $c->numero }}</td>
             <td>{{ $c->persona->cedula }}</td>
             <td>{{ $c->persona->nombres }}</td>
@@ -28,8 +36,13 @@
             <td>{{ $c->user->nombres }}</td>
             <td>
                 @if ($c->facturado=='Si')
-                <a href="{{ url("Factura/muestraFactura/$c->id") }}" class="btn btn-info text-white"
-                    title="Muestra Factura"><i class="fas fa-eye"></i></a>
+
+                    @if ($c->estado == 'Anulado')
+                        <a href="#" class="btn btn-danger text-white" title="Factura Anulada"><i class="fas fa-eye"></i></a>
+                    @else
+                        <a href="{{ url("Factura/muestraFactura/$c->id") }}" class="btn btn-info text-white" title="Muestra Factura"><i class="fas fa-eye"></i></a>
+                    @endif
+
                 @else
                 <a href="{{ url("Factura/muestraRecibo/$c->id") }}" class="btn btn-primary text-white"
                     title="Muestra Recibo"><i class="fas fa-eye"></i></a>
@@ -49,6 +62,11 @@
             language: {
                 url: '{{ asset('datatableEs.json') }}'
             },
+            searching: false,
+            lengthChange: false,
+            order: [[ 0, "desc" ]]
+
         });
     });
+
 </script>
