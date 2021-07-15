@@ -665,7 +665,7 @@
                                                 <span class="text-danger">({{ $p->a_pagar - $p->importe }})</span>
                                             @endif
                                         @else
-                                            {{ $p->a_pagar }}
+                                            {{ $p->importe }}
                                         @endif
                                     </td>
                                     <td>
@@ -862,7 +862,7 @@
                                         <i class="mr-2 mdi mdi-alert-circle"></i>
                                     </span>
                                     <input type="number" class="form-control" id="cuotas_promo" name="cuotas_promo"
-                                        value="5" required>
+                                        value="0" required>
                                 </div>
                             </div>
 

@@ -40,6 +40,22 @@
 			padding: 15px;
 		}
 
+		.botonSi {
+			background: #17aa56;
+			color: #fff;
+			border-radius: 7px;
+			/*box-shadow: 0 5px #119e4d;*/
+			padding: 15px;
+		}
+
+		.botonNo {
+			background: #d34444;
+			color: #fff;
+			border-radius: 7px;
+			/*box-shadow: 0 5px #119e4d;*/
+			padding: 15px;
+		}
+
 		body {
 			font-family: Arial, Helvetica, sans-serif;
 		}
@@ -295,12 +311,53 @@
 		</div>
 		
 		</div>
-
+	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script>
 		function vuelveSistema()
 		{
 			var oldURL = document.referrer;
 			location.href = oldURL;	
+		}
+
+		function eliminaFactura(factura_id){
+
+			const swalWithBootstrapButtons = Swal.mixin({
+			  customClass: {
+			    confirmButton: 'botonSi',
+			    cancelButton: 'botonNo'
+			  },
+			  buttonsStyling: false
+			})
+
+			swalWithBootstrapButtons.fire({
+			  title: 'Estas seguro?',
+			  text: "Anular este recibo.",
+			  icon: 'warning',
+			  showCancelButton: true,
+			  confirmButtonText: 'Si, anular',
+			  cancelButtonText: 'No, cancelar',
+			  reverseButtons: true
+			}).then((result) => {
+			  if (result.isConfirmed) {
+
+			  	location.href = "{{ url('Factura/anulaFactura') }}/"+factura_id;
+
+			    swalWithBootstrapButtons.fire(
+			      'Recibo anulado!',
+			      'El recibo fue anulada.',
+			      'success'
+			    )
+			  } else if (
+			    /* Read more about handling dismissals below */
+			    result.dismiss === Swal.DismissReason.cancel
+			  ) {
+			    swalWithBootstrapButtons.fire(
+			      'Cancelado',
+			      'Esta operacion fue cancelada :)',
+			      'error'
+			    )
+			  }
+			})
 		}
 	</script>
 	

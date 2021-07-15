@@ -84,10 +84,11 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="table-responsive" id="ajax-bloque-pagos">
-                    <table id="tabla-pagos" class="table table-bordered table-striped text-center">
+                    <table id="tabla-pagos" class="table table-bordered table-hover table-striped text-center">
                         <thead>
                             <tr>
                                 <th>ID</th>
+                                <th>TIPO</th>
                                 <th>NUMERO</th>
                                 <th>CARNET</th>
                                 <th>ESTUDIANTE</th>
@@ -103,6 +104,13 @@
                             @foreach ($facturas as $f)
                             <tr>
                                 <td>{{ $f->id }}</td>
+                                <td>
+                                    @if ($f->facturado == 'Si')
+                                        <span class="text-info">FACTURA</span>     
+                                    @else
+                                        <span class="text-primary">RECIBO</span>     
+                                    @endif
+                                </td>
                                 <td>{{ $f->numero }}</td>
                                 <td>{{ $f->persona->cedula }}</td>
                                 <td>{{ $f->persona->nombres }}</td>
@@ -155,6 +163,9 @@
             language: {
                 url: '{{ asset('datatableEs.json') }}'
             },
+            searching: false,
+            lengthChange: false,
+            order: [[ 0, "desc" ]]
         });
     });
 

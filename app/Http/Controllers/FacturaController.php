@@ -36,27 +36,11 @@ class FacturaController extends Controller
 
     public function formularioFacturacion(Request $request)
     {
-        $gestionActual = date('Y');
-        $servicios = Servicio::get();
-        $datosPersona = Persona::find($request->personaId);
-        $carreras = CarrerasPersona::where('persona_id', $request->personaId)
-                                    ->where('anio_vigente', $gestionActual)
-                                    ->get();
-        $pagos = Pago::where('persona_id', $request->personaId)
-                    ->where('anio_vigente', $gestionActual)
-                    ->get();
+        $personas = Persona::limit(100)
+                            ->orderBy('id', 'desc')
+                            ->get();
 
-        $descuento = DescuentosPersona::where('persona_id', $request->personaId)
-                    ->where('anio_vigente', $gestionActual)
-                    ->get();
-
-        /*$descuentosCobrados = Pago::where('persona_id', $request->personaId)
-                            ->where('descuento_persona_id', '<>', )
-                            ->where('anio_vigente', $gestionActual)
-                            ->get();*/
-
-        // dd($datosPersona);
-        return view('factura.formularioFacturacion')->with(compact('datosPersona', 'carreras', 'servicios', 'pagos', 'descuento'));
+        return view('factura.formularioFacturacion')->with(compact('personas'));
     }
 
     public function imprimeFactura()
@@ -66,17 +50,29 @@ class FacturaController extends Controller
 
     public function ajaxBuscaPersona(Request $request)
     {
-        $personas = DB::select("
-                                Select 
-                                    id, 
-                                    cedula, 
-                                    apellido_paterno, 
-                                    apellido_materno, 
-                                    nombres, 
-                                    concat(cedula,' ',apellido_materno,' ',nombres) as campo_mixto 
-                                    from personas where concat(cedula,' ',apellido_materno,' ',nombres) like '%$request->termino%' limit 8");
+        $buscaPersonas = Persona::limit(10);
+        $cedula = $request->input('cedula');
+        $apellido_paterno = $request->input('apellido_paterno');
+        $apellido_materno = $request->input('apellido_materno');
+        $nombres = $request->input('nombres');
 
-        // dd($personas);
+        if($request->input('cedula') != null){
+            $buscaPersonas->where('cedula', 'like', "%$cedula%" );    
+        }
+
+        if($request->input('apellido_paterno') != null){
+            $buscaPersonas->where('apellido_paterno', 'like', "%$apellido_paterno%");    
+        }
+
+        if($request->input('apellido_materno') != null){
+            $buscaPersonas->where('apellido_materno', 'like', "%$apellido_materno%");    
+        }
+        
+        if($request->input('nombres') != null){
+            $buscaPersonas->where('nombres', 'like', "%$nombres%");    
+        }
+
+        $personas = $buscaPersonas->get();
 
         return view('factura.ajaxBuscaPersona')->with(compact('personas'));
                         

@@ -348,7 +348,6 @@
 	$fechaQr = $fechaFactura->format('d/m/Y');
 @endphp
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-{{-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
 <script>
 	let valorTotal = Number({{ $factura->total }});
 		var options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -374,8 +373,8 @@
 			  text: "Anular esta factura.",
 			  icon: 'warning',
 			  showCancelButton: true,
-			  confirmButtonText: 'Si, anular',
-			  cancelButtonText: 'No, cancelar',
+			  confirmButtonText: 'Si, Anular',
+			  cancelButtonText: 'No, Cancelar',
 			  reverseButtons: true
 			}).then((result) => {
 			  if (result.isConfirmed) {

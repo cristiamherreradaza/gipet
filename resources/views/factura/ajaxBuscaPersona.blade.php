@@ -1,4 +1,4 @@
-@if ($personas)
+@if ($personas->count()>0)
     <table class="tablesaw table-striped table-hover table-bordered table no-wrap">
         <thead>
             <tr>
@@ -6,7 +6,7 @@
                 <th>APELLIDO PATERNO</th>
                 <th>APELLIDO MATERNO</th>
                 <th>NOMBRES</th>
-                <th></th>
+                <th>ACCIONES</th>
             </tr>
         </thead>
 
@@ -17,26 +17,22 @@
                     <td>{{ $p->apellido_paterno }}</td>
                     <td>{{ $p->apellido_materno }}</td>
                     <td>{{ $p->nombres }}</td>
-                    <td><button type="button" class="btn btn-sm btn-success" data-venta="tienda" title="Seleccionar" onclick="selecciona({{ $p->id }})"><i class="fas fa-check"></i></button></td>
+                    <td>
+                        <button type="button" class="btn btn-success" title="PAGOS" onclick="selecciona({{ $p->id }})">
+                            <i class="fas fa-donate"></i>
+                        </button>
+                        <button onclick="ver_persona('{{ $p->id }}')" type="button" class="btn btn-info" title="ACADEMICO"><i class="fas fa-list"></i></button>
+                        <button onclick="eliminar_persona('.$estudiantes->id.', '.$estudiantes->cedula.')" type="button" class="btn btn-danger" title="ELIMINAR"><i class="fas fa-trash"></i></button>
+                    </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 @else    
-    <h3 class="text-info">No existe</h3>
+    <h2 class="text-danger text-center">NO EXISTE LA PERSONA</h2>
 @endif
 
 <script>
-    function selecciona(personaId)
-    {
-        $.ajax({
-            url: "{{ url('Factura/ajaxPersona') }}",
-            data: {personaId: personaId},
-            type: 'POST',
-            success: function(data) {
-                $("#ajaxPersonas").hide('slow');
-                $("#ajaxDatosPersona").html(data);
-            }
-        });
-    }
+   
+
 </script>
