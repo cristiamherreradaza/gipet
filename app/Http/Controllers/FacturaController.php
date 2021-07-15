@@ -219,7 +219,10 @@ class FacturaController extends Controller
         // preguntamos si solo quieren recibo
         if($tipo == 'recibo'){
 
+            $gestionNumero = date('Y');
+
             $ultimoRecibo = Factura::where('facturado', 'no')
+                    ->where('anio_vigente', $gestionNumero)
                     ->orderBy('id', 'desc')
                     ->first();
 
@@ -229,16 +232,19 @@ class FacturaController extends Controller
                 $contadorRecibo = 1;
             }
 
+            $numeroRecibo = $contadorRecibo."/".$gestionNumero;
+
             // creamos el recibo en la tabla de facturas
-            $recibo               = new Factura();
-            $recibo->user_id      = Auth::user()->id;
-            $recibo->persona_id   = $persona_id;
-            $recibo->carnet       = $persona->cedula;
-            $recibo->fecha        = $hoy;
-            $recibo->total        = $total;
-            $recibo->numero       = $contadorRecibo;
-            $recibo->anio_vigente = $anio;
-            $recibo->facturado    = "No";
+            $recibo                = new Factura();
+            $recibo->user_id       = Auth::user()->id;
+            $recibo->persona_id    = $persona_id;
+            $recibo->carnet        = $persona->cedula;
+            $recibo->fecha         = $hoy;
+            $recibo->total         = $total;
+            $recibo->numero        = $contadorRecibo;
+            $recibo->numero_recibo = $numeroRecibo;
+            $recibo->anio_vigente  = date('Y');
+            $recibo->facturado     = "No";
             $recibo->save();
 
             $reciboId = $recibo->id;
@@ -295,7 +301,7 @@ class FacturaController extends Controller
                 $factura->numero         = $nuevoNumeroFactura;
                 $factura->nit            = $datosPersona->nit;
                 $factura->razon_social   = $datosPersona->razon_social_cliente;
-                $factura->anio_vigente   = $anio;
+                $factura->anio_vigente   = date('Y');
                 $factura->codigo_control = $codigoControl;
                 $factura->facturado      = "Si";
                 $factura->save();

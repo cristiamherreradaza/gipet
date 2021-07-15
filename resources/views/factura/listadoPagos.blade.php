@@ -121,13 +121,20 @@
                                 <td>{{ $f->user->nombres }}</td>
                                 <td>
                                     @if ($f->facturado=='Si')
+
                                         @if ($f->estado == 'Anulado')
                                             <a href="#" class="btn btn-danger text-white" title="Factura Anulada"><i class="fas fa-eye"></i></a>
                                         @else
                                             <a href="{{ url("Factura/muestraFactura/$f->id") }}" class="btn btn-info text-white" title="Muestra Factura"><i class="fas fa-eye"></i></a>
                                         @endif
                                     @else
-                                        <a href="{{ url("Factura/muestraRecibo/$f->id") }}" class="btn btn-primary text-white" title="Muestra Recibo"><i class="fas fa-eye"></i></a>
+
+                                        @if ($f->estado == 'Anulado')
+                                            <a href="#" class="btn btn-danger text-white" title="Factura Anulada"><i class="fas fa-eye"></i></a>
+                                        @else
+                                            <a href="{{ url("Factura/muestraRecibo/$f->id") }}" class="btn btn-primary text-white" title="Muestra Recibo"><i class="fas fa-eye"></i></a>
+                                        @endif
+
                                     @endif
                                 </td>
                             </tr>

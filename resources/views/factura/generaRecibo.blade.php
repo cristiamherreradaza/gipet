@@ -197,7 +197,7 @@
 			$recibo = App\Factura::find($cuotasPagadas[0]->factura_id);
 		@endphp
 
-		<div id="txtRecibo">RECIBO No. {{ str_pad($recibo->numero, 5, '0', STR_PAD_LEFT) }}/{{ $recibo->anio_vigente }}</div>
+		<div id="txtRecibo">RECIBO No. {{ str_pad($recibo->numero, 4, '0', STR_PAD_LEFT) }}/{{ $recibo->anio_vigente }}</div>
 
 		<div id="direccionEmpresa">
 			<b>INSTITUTO TECNICO "EF-GIPET" S.R.L.</b><br />
@@ -305,7 +305,7 @@
 			<div id="btnImprimir">
 				<input type="button" id="botonImpresion" value="IMPRIMIR" onClick="window.print()">
 				<input type="button" id="botonRegresa" value="VOLVER" onClick="vuelveSistema()">
-				<input type="button" id="botonElimina" value="ELIMINAR RECIBO">
+				<input type="button" id="botonElimina" value="ELIMINAR RECIBO" onclick="eliminaFactura({{ $recibo->id }})">
 			</div>
 		</center>
 		</div>
@@ -334,8 +334,8 @@
 			  text: "Anular este recibo.",
 			  icon: 'warning',
 			  showCancelButton: true,
-			  confirmButtonText: 'Si, anular',
-			  cancelButtonText: 'No, cancelar',
+			  confirmButtonText: 'Si, Anular',
+			  cancelButtonText: 'No, Cancelar',
 			  reverseButtons: true
 			}).then((result) => {
 			  if (result.isConfirmed) {
