@@ -418,9 +418,9 @@ class FacturaController extends Controller
 
     public function guardaNitCliente(Request $request)
     {
-        $persona = Persona::find($request->persona_id);
-        $persona->nit = $request->nit_factura;        
-        $persona->razon_social_cliente = $request->razon_factura;        
+        $persona                       = Persona::find($request->persona_id);
+        $persona->nit                  = $request->nit_factura;
+        $persona->razon_social_cliente = $request->razon_factura;
         $persona->save();
 
         return redirect("Factura/generaRecibo/$request->persona_id/factura");
