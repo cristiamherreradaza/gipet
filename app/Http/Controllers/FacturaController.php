@@ -432,6 +432,7 @@ class FacturaController extends Controller
     public function listadoPagos(Request $request)
     {
         $facturas = Factura::limit(100)
+                    ->orderBy('id', 'desc')
                     ->get();
 
         $personal = array();
