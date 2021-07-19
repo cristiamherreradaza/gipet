@@ -424,4 +424,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Factura/listadoPagos', 'FacturaController@listadoPagos');
     Route::post('Factura/ajaxBuscaPago', 'FacturaController@ajaxBuscaPago');
     Route::get('Factura/anulaFactura/{factura_id}', 'FacturaController@anulaFactura');
+
+    // REPORTES
+    Route::get('Reporte/formulario', 'ReporteController@formulario');
+
 });
