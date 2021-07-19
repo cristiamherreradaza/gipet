@@ -15,10 +15,13 @@ class ReporteController extends Controller
 
     public function libroVentas(Request $request)
     {
-        // dd($request->all());
-        $facturas = Factura::whereBetween('fecha', [$request->input('fecha_inicio'), $request->input('fecha_final')])
+        $fecha_inicio = $request->input('fecha_inicio');
+        $fecha_final = $request->input('fecha_final');
+
+        $facturas = Factura::where('facturado', 'Si')
+                            ->whereBetween('fecha', [$request->input('fecha_inicio'), $request->input('fecha_final')])
                             ->get();
 
-        return view('reporte.libroVentas')->with(compact('facturas'));
+        return view('reporte.libroVentas')->with(compact('facturas', 'fecha_inicio', 'fecha_final'));
     }
 }

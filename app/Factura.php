@@ -36,9 +36,9 @@ class Factura extends Model
         return $this->belongsTo('App\Empresa', 'empresa_id');
     }
 
-    public function dosificacion()
+    public function parametro()
     {
-        return $this->belongsTo('App\Dosificacion', 'dosificacion_id');
+        return $this->belongsTo('App\Parametro', 'parametro_id');
     }
 
     public function persona()
