@@ -39,7 +39,7 @@
 
                 <div class="col-md-2">
                     <br />
-                    <button type="submit" class="btn btn-success btn-block" title="Buscar">GENERA LIBRO VENTAS 2</button>
+                    <button type="submit" class="btn btn-success btn-block" title="Buscar">GENERA LIBRO VENTAS</button>
                 </div>
             </div>
         </form>
