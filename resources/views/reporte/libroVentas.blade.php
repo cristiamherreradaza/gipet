@@ -19,14 +19,14 @@
     </div>
     <div class="card-body">
 
-        <form action="{{ url('Reporte/libroVentas') }}" method="POST">
+        <form action="#" method="POST" id="formulario_pagos">
             @csrf
             <div class="row">
 
                 <div class="col-md-2">
                     <div class="form-group">
                         <label class="control-label">Fecha Inicio </label>
-                        <input type="date" name="feche_inicio" id="feche_inicio" class="form-control" >
+                        <input type="date" name="feche_inicio" id="feche_inicio" class="form-control">
                     </div>
                 </div>
 
@@ -39,7 +39,8 @@
 
                 <div class="col-md-2">
                     <br />
-                    <button type="submit" class="btn btn-success btn-block" title="Buscar">GENERA LIBRO VENTAS 2</button>
+                    <button type="button" class="btn btn-success btn-block" title="Buscar" onclick="buscaPago()">GENERA
+                        LIBRO VENTAS</button>
                 </div>
             </div>
         </form>

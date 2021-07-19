@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Factura;
 use Illuminate\Http\Request;
 
 class ReporteController extends Controller
@@ -14,7 +15,10 @@ class ReporteController extends Controller
 
     public function libroVentas(Request $request)
     {
-        return view('reporte.libroVentas');
+        // dd($request->all());
+        $facturas = Factura::whereBetween('fecha', [$request->input('fecha_inicio'), $request->input('fecha_final')])
+                            ->get();
 
+        return view('reporte.libroVentas')->with(compact('facturas'));
     }
 }

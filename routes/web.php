@@ -427,5 +427,6 @@ Route::middleware(['auth'])->group(function () {
 
     // REPORTES
     Route::get('Reporte/formulario', 'ReporteController@formulario');
+    Route::post('Reporte/libroVentas', 'ReporteController@libroVentas');
 
 });
