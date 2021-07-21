@@ -13,8 +13,8 @@
                 <div class="col-md-4">
                     <h4>
                         <span class="text-info">ESTUDIANTE: </span>
-                        {{ $inscripcion->persona->apellido_materno }}
                         {{ $inscripcion->persona->apellido_paterno }}
+                        {{ $inscripcion->persona->apellido_materno }}
                         {{ $inscripcion->persona->nombres }}
                     </h4>
                 </div>

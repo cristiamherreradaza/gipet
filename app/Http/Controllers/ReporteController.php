@@ -29,7 +29,7 @@ class ReporteController extends Controller
         $pdf = PDF::loadView('pdf.libroVentas', compact('facturas', 'fecha_inicio', 'fecha_final'))
                     ->setPaper('letter', 'landscape');
 
-        return $pdf->stream('LibroVentas.pdf', array('Attachment'=>false));
+        return $pdf->stream('LibroVentas.pdf');
     }
 
     public function formularioReportes()
@@ -58,8 +58,13 @@ class ReporteController extends Controller
         }
 
         $alumnos = Persona::whereIn('id', $alumnosArray)
+                            ->orderBy('apellido_paterno', 'asc')
                             ->get();
+        
+        $pdf = PDF::loadView('pdf.pencionesPorPeriodo', compact('alumnos', 'gestion', 'turno_id', 'fecha_inicio', 'fecha_final'))
+                    ->setPaper('letter', 'landscape');
 
-        dd($alumnos);
+        return $pdf->stream('pensionesPeriodo.pdf');
+
     }
 }

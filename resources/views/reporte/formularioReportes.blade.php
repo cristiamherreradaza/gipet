@@ -61,7 +61,7 @@
 
                 <div class="col-md-2">
                     <br />
-                    <button type="submit" class="btn btn-success btn-block" title="Buscar">GENERAR</button>
+                    <button type="submit" formtarget="_blank" class="btn btn-success btn-block" title="Buscar">GENERAR</button>
                 </div>
             </div>
         </form>
