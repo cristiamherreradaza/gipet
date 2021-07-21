@@ -10,7 +10,7 @@
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <h4>
                         <span class="text-info">ESTUDIANTE: </span>
                         {{ $inscripcion->persona->apellido_paterno }}
@@ -33,7 +33,7 @@
                     </h4>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <h4>
                         <span class="text-info">PARALELO: </span>
                         {{ $inscripcion->paralelo }}
