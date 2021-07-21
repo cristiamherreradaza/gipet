@@ -426,7 +426,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Factura/anulaFactura/{factura_id}', 'FacturaController@anulaFactura');
 
     // REPORTES
-    Route::get('Reporte/formulario', 'ReporteController@formulario');
+    Route::get('Reporte/formularioLibro', 'ReporteController@formularioLibro');
     Route::post('Reporte/libroVentas', 'ReporteController@libroVentas');
+    Route::get('Reporte/formularioReportes', 'ReporteController@formularioReportes');
+    Route::post('Reporte/pencionesPorPeriodo', 'ReporteController@pencionesPorPeriodo');
 
 });
