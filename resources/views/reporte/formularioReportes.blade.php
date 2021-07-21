@@ -48,6 +48,13 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label class="control-label">Fecha Inicio </label>
+                        <input type="number" name="anio_vigente" id="anio_vigente" class="form-control" min="2021" max="2050">
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label">Fecha Inicio </label>
                         <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control">
                     </div>
                 </div>

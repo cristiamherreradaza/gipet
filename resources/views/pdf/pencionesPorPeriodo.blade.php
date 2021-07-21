@@ -93,7 +93,7 @@
 
 <body>
     <div style="text-align: center;">
-        <h2>LIBRO DE VENTAS</h2>
+        <h2>REPORTE DE PAGOS</h2>
     </div>
     <div style="text-align: center;">
         (Expresado en Bolivianos)<br />
@@ -117,18 +117,18 @@
             </tr>
         </thead>
         <tbody>
-            @forelse($alumnos as $a)
+            @forelse($carrerasPersonas as $cp)
             <tr>
                 <td style="text-align: left;">
-                    {{ $a->apellido_paterno }}
-                    {{ $a->apellido_materno }}
-                    {{ $a->nombres }}
+                    {{ $cp->persona->apellido_paterno }}
+                    {{ $cp->persona->apellido_materno }}
+                    {{ $cp->persona->nombres }}
                 </td>
-                <td>{{ $a->cedula }}</td>
+                <td>{{ $cp->persona->cedula }}</td>
                 <td>
                     @php
                         $primerPago = App\Pago::where('gestion', $gestion)
-                                ->where('persona_id', $a->id)
+                                ->where('persona_id', $cp->persona->id)
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
                                 ->where('mensualidad', 1)
@@ -141,10 +141,114 @@
                 <td>
                     @php
                         $primerPago = App\Pago::where('gestion', $gestion)
-                                ->where('persona_id', $a->id)
+                                ->where('persona_id', $cp->persona->id)
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
-                                ->where('mensualidad', 1)
+                                ->where('mensualidad', 2)
+                                ->whereBetween('fecha', [$fecha_inicio, $fecha_final])
+                                ->first();
+
+                        echo ($primerPago!=null)?$primerPago->importe:0;
+                    @endphp
+                </td>
+                <td>
+                    @php
+                        $primerPago = App\Pago::where('gestion', $gestion)
+                                ->where('persona_id', $cp->persona->id)
+                                ->where('turno_id', $turno_id)
+                                ->where('carrera_id', 1)
+                                ->where('mensualidad', 3)
+                                ->whereBetween('fecha', [$fecha_inicio, $fecha_final])
+                                ->first();
+
+                        echo ($primerPago!=null)?$primerPago->importe:0;
+                    @endphp
+                </td>
+                <td>
+                    @php
+                        $primerPago = App\Pago::where('gestion', $gestion)
+                                ->where('persona_id', $cp->persona->id)
+                                ->where('turno_id', $turno_id)
+                                ->where('carrera_id', 1)
+                                ->where('mensualidad', 4)
+                                ->whereBetween('fecha', [$fecha_inicio, $fecha_final])
+                                ->first();
+
+                        echo ($primerPago!=null)?$primerPago->importe:0;
+                    @endphp
+                </td>
+                <td>
+                    @php
+                        $primerPago = App\Pago::where('gestion', $gestion)
+                                ->where('persona_id', $cp->persona->id)
+                                ->where('turno_id', $turno_id)
+                                ->where('carrera_id', 1)
+                                ->where('mensualidad', 5)
+                                ->whereBetween('fecha', [$fecha_inicio, $fecha_final])
+                                ->first();
+
+                        echo ($primerPago!=null)?$primerPago->importe:0;
+                    @endphp
+                </td>
+                <td>
+                    @php
+                        $primerPago = App\Pago::where('gestion', $gestion)
+                                ->where('persona_id', $cp->persona->id)
+                                ->where('turno_id', $turno_id)
+                                ->where('carrera_id', 1)
+                                ->where('mensualidad', 6)
+                                ->whereBetween('fecha', [$fecha_inicio, $fecha_final])
+                                ->first();
+
+                        echo ($primerPago!=null)?$primerPago->importe:0;
+                    @endphp
+                </td>
+                <td>
+                    @php
+                        $primerPago = App\Pago::where('gestion', $gestion)
+                                ->where('persona_id', $cp->persona->id)
+                                ->where('turno_id', $turno_id)
+                                ->where('carrera_id', 1)
+                                ->where('mensualidad', 7)
+                                ->whereBetween('fecha', [$fecha_inicio, $fecha_final])
+                                ->first();
+
+                        echo ($primerPago!=null)?$primerPago->importe:0;
+                    @endphp
+                </td>
+                <td>
+                    @php
+                        $primerPago = App\Pago::where('gestion', $gestion)
+                                ->where('persona_id', $cp->persona->id)
+                                ->where('turno_id', $turno_id)
+                                ->where('carrera_id', 1)
+                                ->where('mensualidad', 8)
+                                ->whereBetween('fecha', [$fecha_inicio, $fecha_final])
+                                ->first();
+
+                        echo ($primerPago!=null)?$primerPago->importe:0;
+                    @endphp
+                </td>
+                <td>
+                    @php
+                        $primerPago = App\Pago::where('gestion', $gestion)
+                                ->where('persona_id', $cp->persona->id)
+                                ->where('turno_id', $turno_id)
+                                ->where('carrera_id', 1)
+                                ->where('mensualidad', 9)
+                                ->whereBetween('fecha', [$fecha_inicio, $fecha_final])
+                                ->first();
+
+                        echo ($primerPago!=null)?$primerPago->importe:0;
+                    @endphp
+                </td>
+                <td>
+                    @php
+                        $primerPago = App\Pago::where('gestion', $gestion)
+                                ->where('persona_id', $cp->persona->id)
+                                ->where('turno_id', $turno_id)
+                                ->where('carrera_id', 1)
+                                ->where('mensualidad', 10)
                                 ->whereBetween('fecha', [$fecha_inicio, $fecha_final])
                                 ->first();
 
