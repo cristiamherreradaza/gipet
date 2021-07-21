@@ -1493,18 +1493,29 @@ class InscripcionController extends Controller
         $notaS->nota_total          = $request->$totalsumaS;
         $notaS->save();
 
+        // preguntamos si la opcion convalidar turno esta con "si"
         if($request->convalidar == 'Si'){
             $convalidarMateria = 'Si';
         }else{
             $convalidarMateria = null;
         }
 
+        // preguntamos si la opcion segundo turno esta con "si"
+        if($request->input('segundo_turno') == 'Si'){
+            $segundoTurno = $request->input('nota_segundoturno');
+        }else{
+            $segundoTurno = null;
+        }
+
+
         // preguntamos si va a convalidar con una materia pasada
         if($request->id_materia_inscripcion == null){
-            // si no solo modifica la nota final
-            $inscripcion = Inscripcione::find($request->inscripcion_id);
-            $inscripcion->nota = $request->nota_convalidar;
-            $inscripcion->convalidado = $convalidarMateria;
+            // si no solo modifica la nota final y guardamos 
+            // la nota de segundo turno mas 
+            $inscripcion                = Inscripcione::find($request->inscripcion_id);
+            $inscripcion->nota          = $request->nota_convalidar;
+            $inscripcion->convalidado   = $convalidarMateria;
+            $inscripcion->segundo_turno = $segundoTurno;
             $inscripcion->save();
         }else{
             // copiamos todos los datos de la materia a convalidar
@@ -1523,8 +1534,9 @@ class InscripcionController extends Controller
             // cambiamos la nota para el centralizador
             $modificaInscripcion = Inscripcione::find($request->inscripcion_id);
 
-            $modificaInscripcion->nota        = $request->nota_convalidar;
-            $modificaInscripcion->convalidado = $convalidarMateria;
+            $modificaInscripcion->nota          = $request->nota_convalidar;
+            $modificaInscripcion->segundo_turno = $segundoTurno;
+            $modificaInscripcion->convalidado   = $convalidarMateria;
 
             $modificaInscripcion->save();
 

@@ -146,13 +146,13 @@
                 </table>
             </div>
 
-            <h4 class="text-center text-info">CONVALIDACION / NOTA CENTRALIZADOR</h4>
+            <h4 class="text-center text-info">2&deg;TURNO / CONVALIDACION / NOTA CENTRALIZADOR</h4>
 
             <div class="row">
 
                 <div class="col-md-2">
-                    <label>Convalidar</label>
-                    <select name="convalidar" id="convalidar" class="form-control" onchange="validaNotaFinal()">
+                    <label class="text-primary">Convalidacion</label>
+                    <select name="convalidar" id="convalidar" class="form-control">
                         <option value="No">No</option>
                         <option value="Si" {{ ($inscripcion->convalidado=='Si')?'selected':'' }}>Si</option>
                     </select>
@@ -160,20 +160,42 @@
 
                 <div class="col-md-8">
                     <div class="form-group">
-                        <label>Materia a Convalidar </label>
+                        <label class="text-primary">Materia a Convalidar </label>
                         <input type="text" class="form-control" name="materia_convalidar" id="materia_convalidar" autocomplete="off">
                     </div>
                 </div>
 
                 <div class="col-md-2">
                     <div class="form-group">
-                        <label class="text-danger">Nota Centralizador</label>
+                        <label class="text-danger">NOTA CENTRALIZAD</label>
                         <input type="number" class="form-control" name="nota_convalidar" id="nota_convalidar" max="100" value="{{ round($inscripcion->nota, 0) }}">
                         <input type="hidden" name="id_materia_inscripcion" id="id_materia_convalidar">
                     </div>
                 </div>
 
             </div>
+
+            <div class="row">
+            
+                <div class="col-md-3">
+                    <label class="text-muted">2&deg;Turno</label>
+                    <select name="segundo_turno" id="segundo_turno" class="form-control">
+                        <option value="No">No</option>
+                        <option value="Si" {{ ($inscripcion->segundo_turno!=null)?'selected':'' }}>Si</option>
+                    </select>
+                </div>
+            
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="text-danger">NOTA SEGUNDO TURNO</label>
+                        <input type="number" class="form-control" name="nota_segundoturno" id="nota_segundoturno" max="100"
+                            value="{{ round($inscripcion->segundo_turno, 0) }}">
+                        <input type="hidden" name="id_materia_inscripcion" id="id_materia_convalidar">
+                    </div>
+                </div>
+            
+            </div>
+
             <div class="row">
                 <div class="col-md-12" id="ajaxMuestraMateriasCursadas">
 
@@ -182,7 +204,7 @@
 
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="enviaFormulario()">ACTUALIZAR</button>
+            <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="enviaFormulario()">ACTUALIZAR CALIFICACIONES</button>
         </div>
     </form>
 </div>
@@ -262,17 +284,4 @@
 
     }
 
-    function validaNotaFinal()
-    {
-        let valorConvalidacion = $("#convalidar").val()
-        if(valorConvalidacion == 'Si'){
-
-            $("#nota_convalidar").attr('required', true);
-
-        }else{
-            
-            $("#nota_convalidar").removeAttr('required');
-        }
-
-    }
 </script>
