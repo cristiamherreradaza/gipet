@@ -85,6 +85,15 @@
             text-align: left;
         }
 
+        .titulo{
+            font-size: 14pt;
+            font-weight: bolder;
+        }
+
+        .centrado{
+            text-align: center;
+        }
+
         /*.contenidos tr:nth-child(even) {background-color: #f2f2f2;}*/
         /*fin de estilos para tablas de contenidos*/
     </style>
@@ -92,11 +101,19 @@
 </head>
 
 <body>
-    <div style="text-align: center;">
-        <h2>REPORTE DE PAGOS</h2>
-    </div>
-    <div style="text-align: center;">
-        (Expresado en Bolivianos)<br />
+    <div class="centrado">
+        <div class="titulo">ESCUELA FINANCIERA GIPET S.R.L.</div>
+        <div class="titulo">CENTRALIZADOR DE PENSIONES POR PERIDO</div>
+        <br />
+        <b>CARRERA: </b> CONTADURIA GENERAL
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>GESTION: </b> {{ $anio_vigente }}
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>TURNO: </b> {{ $datosTurno->descripcion }}
     </div>
 
     <table class="datos">
@@ -104,19 +121,32 @@
             <tr>
                 <th>NOMINA ALUMNOS</th>
                 <th>CARNET</th>
-                <th>1&deg; Mens.</th>
-                <th>2&deg; Mens.</th>
-                <th>3&deg; Mens.</th>
-                <th>4&deg; Mens.</th>
-                <th>5&deg; Mens.</th>
-                <th>6&deg; Mens.</th>
-                <th>7&deg; Mens.</th>
-                <th>8&deg; Mens.</th>
-                <th>9&deg; Mens.</th>
-                <th>10&deg; Mens.</th>
+                <th>1&deg; Mens</th>
+                <th>2&deg; Mens</th>
+                <th>3&deg; Mens</th>
+                <th>4&deg; Mens</th>
+                <th>5&deg; Mens</th>
+                <th>6&deg; Mens</th>
+                <th>7&deg; Mens</th>
+                <th>8&deg; Mens</th>
+                <th>9&deg; Mens</th>
+                <th>10&deg; Mens</th>
+                <th>TOTAL</th>
             </tr>
         </thead>
         <tbody>
+            @php
+                $totalPrimero = 0;
+                $totalSegundo = 0;
+                $totalTercero = 0;
+                $totalCuarto = 0;
+                $totalQuinto = 0;
+                $totalSexto = 0;
+                $totalSeptimo = 0;
+                $totalOctavo = 0;
+                $totalNoveno = 0;
+                $totalDecimo = 0;
+            @endphp
             @forelse($carrerasPersonas as $cp)
             <tr>
                 <td style="text-align: left;">
@@ -132,128 +162,141 @@
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
                                 ->where('mensualidad', 1)
-                                ->whereBetween('fecha', [$fecha_inicio, $fecha_final])
+                                ->whereYear('fecha', $anio_vigente)
                                 ->first();
 
-                        echo ($primerPago!=null)?$primerPago->importe:0;
+                        echo $primer = ($primerPago!=null)?$primerPago->importe:0;
+                        $totalPrimero += $primer;
                     @endphp
                 </td>
                 <td>
                     @php
-                        $primerPago = App\Pago::where('gestion', $gestion)
+                        $segundoPago = App\Pago::where('gestion', $gestion)
                                 ->where('persona_id', $cp->persona->id)
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
                                 ->where('mensualidad', 2)
-                                ->whereBetween('fecha', [$fecha_inicio, $fecha_final])
+                                ->whereYear('fecha', $anio_vigente)
                                 ->first();
 
-                        echo ($primerPago!=null)?$primerPago->importe:0;
+                        echo $segundo = ($segundoPago!=null)?$segundoPago->importe:0;
+                        $totalSegundo += $segundo;
                     @endphp
                 </td>
                 <td>
                     @php
-                        $primerPago = App\Pago::where('gestion', $gestion)
+                        $tercerPago = App\Pago::where('gestion', $gestion)
                                 ->where('persona_id', $cp->persona->id)
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
                                 ->where('mensualidad', 3)
-                                ->whereBetween('fecha', [$fecha_inicio, $fecha_final])
+                                ->whereYear('fecha', $anio_vigente)
                                 ->first();
 
-                        echo ($primerPago!=null)?$primerPago->importe:0;
+                        echo $tercer = ($tercerPago!=null)?$tercerPago->importe:0;
+                        $totalTercero += $tercer;
                     @endphp
                 </td>
                 <td>
                     @php
-                        $primerPago = App\Pago::where('gestion', $gestion)
+                        $cuartoPago = App\Pago::where('gestion', $gestion)
                                 ->where('persona_id', $cp->persona->id)
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
                                 ->where('mensualidad', 4)
-                                ->whereBetween('fecha', [$fecha_inicio, $fecha_final])
+                                ->whereYear('fecha', $anio_vigente)
                                 ->first();
 
-                        echo ($primerPago!=null)?$primerPago->importe:0;
+                        echo $cuarto = ($cuartoPago!=null)?$cuartoPago->importe:0;
+                        $totalCuarto += $cuarto;
                     @endphp
                 </td>
                 <td>
                     @php
-                        $primerPago = App\Pago::where('gestion', $gestion)
+                        $quintoPago = App\Pago::where('gestion', $gestion)
                                 ->where('persona_id', $cp->persona->id)
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
                                 ->where('mensualidad', 5)
-                                ->whereBetween('fecha', [$fecha_inicio, $fecha_final])
+                                ->whereYear('fecha', $anio_vigente)
                                 ->first();
 
-                        echo ($primerPago!=null)?$primerPago->importe:0;
+                        echo $quinto = ($quintoPago!=null)?$quintoPago->importe:0;
+                        $totalQuinto += $quinto;
                     @endphp
                 </td>
                 <td>
                     @php
-                        $primerPago = App\Pago::where('gestion', $gestion)
+                        $sextoPago = App\Pago::where('gestion', $gestion)
                                 ->where('persona_id', $cp->persona->id)
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
                                 ->where('mensualidad', 6)
-                                ->whereBetween('fecha', [$fecha_inicio, $fecha_final])
+                                ->whereYear('fecha', $anio_vigente)
                                 ->first();
 
-                        echo ($primerPago!=null)?$primerPago->importe:0;
+                        echo $sexto = ($sextoPago!=null)?$sextoPago->importe:0;
+                        $totalSexto += $sexto;
                     @endphp
                 </td>
                 <td>
                     @php
-                        $primerPago = App\Pago::where('gestion', $gestion)
+                        $septimoPago = App\Pago::where('gestion', $gestion)
                                 ->where('persona_id', $cp->persona->id)
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
                                 ->where('mensualidad', 7)
-                                ->whereBetween('fecha', [$fecha_inicio, $fecha_final])
+                                ->whereYear('fecha', $anio_vigente)
                                 ->first();
 
-                        echo ($primerPago!=null)?$primerPago->importe:0;
+                        echo $septimo = ($septimoPago!=null)?$septimoPago->importe:0;
+                        $totalSeptimo += $septimo;
                     @endphp
                 </td>
                 <td>
                     @php
-                        $primerPago = App\Pago::where('gestion', $gestion)
+                        $octavoPago = App\Pago::where('gestion', $gestion)
                                 ->where('persona_id', $cp->persona->id)
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
                                 ->where('mensualidad', 8)
-                                ->whereBetween('fecha', [$fecha_inicio, $fecha_final])
+                                ->whereYear('fecha', $anio_vigente)
                                 ->first();
 
-                        echo ($primerPago!=null)?$primerPago->importe:0;
+                        echo $octavo = ($octavoPago!=null)?$octavoPago->importe:0;
+                        $totalOctavo += $octavo;
                     @endphp
                 </td>
                 <td>
                     @php
-                        $primerPago = App\Pago::where('gestion', $gestion)
+                        $novenoPago = App\Pago::where('gestion', $gestion)
                                 ->where('persona_id', $cp->persona->id)
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
                                 ->where('mensualidad', 9)
-                                ->whereBetween('fecha', [$fecha_inicio, $fecha_final])
+                                ->whereYear('fecha', $anio_vigente)
                                 ->first();
 
-                        echo ($primerPago!=null)?$primerPago->importe:0;
+                        echo $noveno = ($novenoPago!=null)?$novenoPago->importe:0;
+                        $totalNoveno += $noveno;
                     @endphp
                 </td>
                 <td>
                     @php
-                        $primerPago = App\Pago::where('gestion', $gestion)
+                        $decimoPago = App\Pago::where('gestion', $gestion)
                                 ->where('persona_id', $cp->persona->id)
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
                                 ->where('mensualidad', 10)
-                                ->whereBetween('fecha', [$fecha_inicio, $fecha_final])
+                                ->whereYear('fecha', $anio_vigente)
                                 ->first();
 
-                        echo ($primerPago!=null)?$primerPago->importe:0;
+                        echo $decimo = ($decimoPago!=null)?$decimoPago->importe:0;
+                        $totalDecimo += $decimo;
                     @endphp
+                </td>
+                <td style="text-align: right;">
+                    {{ $primer + $segundo + $tercer + $cuarto + $quinto + $sexto + $septimo + $octavo + $noveno + $decimo }}
                 </td>
             </tr>
             @empty
@@ -262,7 +305,19 @@
         </tbody>
         <tfoot>
             <tr>
+                <th>TOTALES</th>
                 <th></th>
+                <th>{{ $totalPrimero }}</th>
+                <th>{{ $totalSegundo }}</th>
+                <th>{{ $totalTercero }}</th>
+                <th>{{ $totalCuarto }}</th>
+                <th>{{ $totalQuinto }}</th>
+                <th>{{ $totalSexto }}</th>
+                <th>{{ $totalSeptimo }}</th>
+                <th>{{ $totalOctavo }}</th>
+                <th>{{ $totalNoveno }}</th>
+                <th>{{ $totalDecimo }}</th>
+                <th style="text-align: right;">{{ $totalPrimero + $totalSegundo + $totalTercero + $totalCuarto + $totalQuinto + $totalSexto + $totalSeptimo + $totalOctavo + $totalNoveno + $totalDecimo }}</th>
             </tr>
         </tfoot>
     </table>

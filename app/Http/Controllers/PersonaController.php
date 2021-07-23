@@ -771,9 +771,7 @@ class PersonaController extends Controller
 
         if($request->generacion_cuotas == 'Si' && $request->carrera_id == 1)
         {     
-
             // generamos los datos para los pagos
-
             if($request->aplica_promo == 'inicio'){
                 $cuotaInicioPromo = 1;
             }else{

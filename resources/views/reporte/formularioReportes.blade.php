@@ -45,24 +45,10 @@
                     </div>
                 </div>
 
-                <div class="col-md-2">
+                <div class="col-md-1">
                     <div class="form-group">
-                        <label class="control-label">Fecha Inicio </label>
-                        <input type="number" name="anio_vigente" id="anio_vigente" class="form-control" min="2021" max="2050">
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label class="control-label">Fecha Inicio </label>
-                        <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control">
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label class="control-label">Fecha Fin </label>
-                        <input type="date" name="fecha_final" id="fecha_final" class="form-control">
+                        <label class="control-label">Gestion </label>
+                        <input type="number" name="anio_vigente" id="anio_vigente" value="{{ date('Y') }}" class="form-control" min="2021" max="2050">
                     </div>
                 </div>
 

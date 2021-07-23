@@ -45,10 +45,11 @@ class ReporteController extends Controller
 
         $gestion = $request->input('gestion');
         $turno_id = $request->input('turno_id');
-        $fecha_inicio = $request->input('fecha_inicio');
-        $fecha_final = $request->input('fecha_final');
+        $anio_vigente = $request->input('anio_vigente');
 
-        $alumnosArray = array();
+        $datosTurno = Turno::find($turno_id);
+
+        // $alumnosArray = array();
 
         /*$listaAlumnosPagos = Pago::where('gestion', $gestion)
                             ->where('turno_id', $turno_id)
@@ -67,10 +68,10 @@ class ReporteController extends Controller
         $carrerasPersonas = CarrerasPersona::where('gestion', $gestion)
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
-                                ->where('anio_vigente', 2021)
+                                ->where('anio_vigente', $anio_vigente)
                                 ->get();
         
-        $pdf = PDF::loadView('pdf.pencionesPorPeriodo', compact('carrerasPersonas', 'gestion', 'turno_id', 'fecha_inicio', 'fecha_final'))
+        $pdf = PDF::loadView('pdf.pencionesPorPeriodo', compact('carrerasPersonas', 'gestion', 'turno_id', 'anio_vigente', 'datosTurno'))
                     ->setPaper('letter', 'landscape');
 
         return $pdf->stream('pensionesPeriodo.pdf');
