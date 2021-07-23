@@ -430,5 +430,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('Reporte/libroVentas', 'ReporteController@libroVentas');
     Route::get('Reporte/formularioReportes', 'ReporteController@formularioReportes');
     Route::post('Reporte/pencionesPorPeriodo', 'ReporteController@pencionesPorPeriodo');
+    Route::post('Reporte/pencionesPorCobrar', 'ReporteController@pencionesPorCobrar');
 
 });

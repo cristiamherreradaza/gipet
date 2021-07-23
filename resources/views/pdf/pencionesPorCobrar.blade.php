@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Pensiones Por periodo</title>
+    <title>Pensiones Por Cobrar</title>
     <style type="text/css">
         @page {
             margin: 15px;
@@ -104,7 +104,7 @@
     <div class="centrado">
         <br />
         <div class="titulo">ESCUELA FINANCIERA GIPET S.R.L.</div>
-        <div class="titulo">CENTRALIZADOR DE PENSIONES POR PERIDO</div>
+        <div class="titulo">CENTRALIZADOR DE PENSIONES POR COBRAR</div>
         <br />
         <b>CARRERA: </b> CONTADURIA GENERAL
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -163,10 +163,12 @@
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
                                 ->where('mensualidad', 1)
-                                ->whereYear('fecha', $anio_vigente)
+                                ->whereNull('estado')
+                                ->whereYear('created_at', $anio_vigente)
                                 ->first();
-
-                        echo $primer = ($primerPago!=null)?$primerPago->importe:0;
+                        // dd($primerPago);
+                        echo $primer = ($primerPago!=null)?$primerPago->a_pagar:0;
+                        // echo $primerPago->a_pagar;
                         $totalPrimero += $primer;
                     @endphp
                 </td>
@@ -177,10 +179,11 @@
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
                                 ->where('mensualidad', 2)
-                                ->whereYear('fecha', $anio_vigente)
+                                ->whereNull('estado')
+                                ->whereYear('created_at', $anio_vigente)
                                 ->first();
 
-                        echo $segundo = ($segundoPago!=null)?$segundoPago->importe:0;
+                        echo $segundo = ($segundoPago!=null)?$segundoPago->a_pagar:0;
                         $totalSegundo += $segundo;
                     @endphp
                 </td>
@@ -191,10 +194,11 @@
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
                                 ->where('mensualidad', 3)
-                                ->whereYear('fecha', $anio_vigente)
+                                ->whereNull('estado')
+                                ->whereYear('created_at', $anio_vigente)
                                 ->first();
 
-                        echo $tercer = ($tercerPago!=null)?$tercerPago->importe:0;
+                        echo $tercer = ($tercerPago!=null)?$tercerPago->a_pagar:0;
                         $totalTercero += $tercer;
                     @endphp
                 </td>
@@ -205,10 +209,11 @@
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
                                 ->where('mensualidad', 4)
-                                ->whereYear('fecha', $anio_vigente)
+                                ->whereNull('estado')
+                                ->whereYear('created_at', $anio_vigente)
                                 ->first();
-
-                        echo $cuarto = ($cuartoPago!=null)?$cuartoPago->importe:0;
+                        // dd($cuartoPago);
+                        echo $cuarto = ($cuartoPago!=null)?$cuartoPago->a_pagar:0;
                         $totalCuarto += $cuarto;
                     @endphp
                 </td>
@@ -219,10 +224,11 @@
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
                                 ->where('mensualidad', 5)
-                                ->whereYear('fecha', $anio_vigente)
+                                ->whereNull('estado')
+                                ->whereYear('created_at', $anio_vigente)
                                 ->first();
 
-                        echo $quinto = ($quintoPago!=null)?$quintoPago->importe:0;
+                        echo $quinto = ($quintoPago!=null)?$quintoPago->a_pagar:0;
                         $totalQuinto += $quinto;
                     @endphp
                 </td>
@@ -233,10 +239,10 @@
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
                                 ->where('mensualidad', 6)
-                                ->whereYear('fecha', $anio_vigente)
+                                ->where('importe', 0)
+                                ->whereYear('created_at', $anio_vigente)
                                 ->first();
-
-                        echo $sexto = ($sextoPago!=null)?$sextoPago->importe:0;
+                        echo $sexto = ($sextoPago!=null)?$sextoPago->a_pagar:0;
                         $totalSexto += $sexto;
                     @endphp
                 </td>
@@ -247,10 +253,11 @@
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
                                 ->where('mensualidad', 7)
-                                ->whereYear('fecha', $anio_vigente)
+                                ->where('importe', 0)
+                                ->whereYear('created_at', $anio_vigente)
                                 ->first();
 
-                        echo $septimo = ($septimoPago!=null)?$septimoPago->importe:0;
+                        echo $septimo = ($septimoPago!=null)?$septimoPago->a_pagar:0;
                         $totalSeptimo += $septimo;
                     @endphp
                 </td>
@@ -261,10 +268,11 @@
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
                                 ->where('mensualidad', 8)
-                                ->whereYear('fecha', $anio_vigente)
+                                ->whereNull('estado')
+                                ->whereYear('created_at', $anio_vigente)
                                 ->first();
 
-                        echo $octavo = ($octavoPago!=null)?$octavoPago->importe:0;
+                        echo $octavo = ($octavoPago!=null)?$octavoPago->a_pagar:0;
                         $totalOctavo += $octavo;
                     @endphp
                 </td>
@@ -275,10 +283,11 @@
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
                                 ->where('mensualidad', 9)
-                                ->whereYear('fecha', $anio_vigente)
+                                ->whereNull('estado')
+                                ->whereYear('created_at', $anio_vigente)
                                 ->first();
 
-                        echo $noveno = ($novenoPago!=null)?$novenoPago->importe:0;
+                        echo $noveno = ($novenoPago!=null)?$novenoPago->a_pagar:0;
                         $totalNoveno += $noveno;
                     @endphp
                 </td>
@@ -289,10 +298,11 @@
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
                                 ->where('mensualidad', 10)
-                                ->whereYear('fecha', $anio_vigente)
+                                ->whereNull('estado')
+                                ->whereYear('created_at', $anio_vigente)
                                 ->first();
 
-                        echo $decimo = ($decimoPago!=null)?$decimoPago->importe:0;
+                        echo $decimo = ($decimoPago!=null)?$decimoPago->a_pagar:0;
                         $totalDecimo += $decimo;
                     @endphp
                 </td>
