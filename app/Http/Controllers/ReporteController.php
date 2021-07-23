@@ -9,7 +9,6 @@ use App\Persona;
 use App\CarrerasPersona;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade as PDF;
-
 class ReporteController extends Controller
 {
     
@@ -57,6 +56,7 @@ class ReporteController extends Controller
                     ->setPaper('letter', 'landscape');
 
         return $pdf->stream('pensionesPeriodo.pdf');
+
     }
 
     public function pencionesPorCobrar(Request $request)
@@ -76,7 +76,20 @@ class ReporteController extends Controller
         $pdf = PDF::loadView('pdf.pencionesPorCobrar', compact('carrerasPersonas', 'gestion', 'turno_id', 'anio_vigente', 'datosTurno'))
                     ->setPaper('letter', 'landscape');
 
-        return $pdf->stream('pensionesPeriodo.pdf');
+        return $pdf->stream('pensionesCobrar.pdf');
+
     }
+
+    public function totalPorCobrar(Request $request)
+    {
+        $anio_vigente = $request->input('anio_vigente');
+
+        $pdf = PDF::loadView('pdf.totalPorCobrar', compact('anio_vigente'))
+                    ->setPaper('letter', 'landscape');
+
+        return $pdf->stream('totalCobrar.pdf');
+
+    }
+
 
 }

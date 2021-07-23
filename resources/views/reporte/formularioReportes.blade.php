@@ -115,6 +115,37 @@
     </div>
 </div>
 
+<div class="card border-info">
+    <div class="card-header bg-info">
+        <h4 class="mb-0 text-white">
+            TOTAL PAGOS POR COBRAR
+        </h4>
+    </div>
+    <div class="card-body">
+
+        <form action="{{ url('Reporte/totalPorCobrar') }}" method="POST">
+            @csrf
+            <div class="row">
+
+                <div class="col-md-1">
+                    <div class="form-group">
+                        <label class="control-label">Gestion </label>
+                        <input type="number" name="anio_vigente" id="anio_vigente" value="{{ date('Y') }}"
+                            class="form-control" min="2021" max="2050">
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <br />
+                    <button type="submit" formtarget="_blank" class="btn btn-success btn-block"
+                        title="Buscar">GENERAR</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
 <!-- inicio modal prerequisitos -->
 
 <!-- fin modal prerequisitos -->
