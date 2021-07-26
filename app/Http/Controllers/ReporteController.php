@@ -9,6 +9,8 @@ use App\Persona;
 use App\CarrerasPersona;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Facades\DB;
+
 class ReporteController extends Controller
 {
     
@@ -91,5 +93,53 @@ class ReporteController extends Controller
 
     }
 
+    public static function calculaPagosCobrar($carrera_id, $gestion, $mensualidad, $turno_id, $anio_vigente)
+    {
+        $decimoPago = Pago::select(DB::raw('SUM(a_pagar) as total_decimo'))
+                            ->where('carrera_id', $carrera_id)
+                            ->where('gestion', $gestion)
+                            ->where('mensualidad', $mensualidad)
+                            ->where('turno_id', $turno_id)
+                            ->where('importe', 0)
+                            ->whereYear('created_at', $anio_vigente)
+                            ->first();
+
+        $pago = ($decimoPago->total_decimo != null)?$decimoPago->total_decimo:'0.00';
+        $pagoFormateado = number_format($pago, 2, '.', ',');
+                        
+        return $pagoFormateado;
+    }
+
+    public static function calculaPagosTurnos($carrera_id, $gestion, $turno_id, $anio_vigente)
+    {
+        $decimoPago = Pago::select(DB::raw('SUM(a_pagar) as total_decimo'))
+                            ->where('carrera_id', $carrera_id)
+                            ->where('gestion', $gestion)
+                            ->where('turno_id', $turno_id)
+                            ->where('importe', 0)
+                            ->whereYear('created_at', $anio_vigente)
+                            ->first();
+
+        $pago = ($decimoPago->total_decimo != null)?$decimoPago->total_decimo:'0.00';
+        $pagoFormateado = number_format($pago, 2, '.', ',');
+                        
+        return $pagoFormateado;
+    }
+
+    public static function calculaPagosCuotas($carrera_id, $gestion, $mensualidad, $anio_vigente)
+    {
+        $decimoPago = Pago::select(DB::raw('SUM(a_pagar) as total_decimo'))
+                            ->where('carrera_id', $carrera_id)
+                            ->where('gestion', $gestion)
+                            ->where('mensualidad', $mensualidad)
+                            ->where('importe', 0)
+                            ->whereYear('created_at', $anio_vigente)
+                            ->first();
+
+        $pago = ($decimoPago->total_decimo != null)?$decimoPago->total_decimo:'0.00';
+        $pagoFormateado = number_format($pago, 2, '.', ',');
+                        
+        return $pagoFormateado;
+    }
 
 }
