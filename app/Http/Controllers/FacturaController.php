@@ -447,6 +447,7 @@ class FacturaController extends Controller
     // 
     public function ajaxBuscaPago(Request $request)
     {
+        // dd($request->all());
         $pagos = Factura::orderBy('id', 'desc');
 
         if($request->input('numero') != null){
@@ -470,6 +471,7 @@ class FacturaController extends Controller
         }
 
         if($request->input('fecha_inicio') != null){
+            // $pagos->whereBetween('fecha', [$request->input('fecha_inicio'), $request->input('fecha_final')]);
             $pagos->whereDate('fecha', '>=',  $request->input('fecha_inicio'));    
         }
 

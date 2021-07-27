@@ -70,7 +70,7 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label class="control-label">Fecha Inicio </label>
-                        <input type="date" name="feche_inicio" id="feche_inicio" class="form-control">
+                        <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control">
                     </div>
                 </div>
 
