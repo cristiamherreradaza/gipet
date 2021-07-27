@@ -216,7 +216,7 @@
 						@php
 							$utilidades = new App\librerias\Utilidades();
 							$fechaEs = $utilidades->fechaCastellano($cuotasPagadas[0]->fecha);
-							$fechaHoraEs = $utilidades->fechaHoraCastellano($cuotasPagadas[0]->created_at);
+							$fechaHoraEs = $utilidades->fechaHoraCastellano($cuotasPagadas[0]->modified_at);
 						@endphp
 						La Paz, {{ $fechaEs }}</td>
 				</tr>
@@ -283,7 +283,7 @@
 		<br />
 		<b>Usuario: </b>
 		{{ $cuotasPagadas[0]->user->apellido_paterno }} {{ $cuotasPagadas[0]->user->apellido_materno }} {{ $cuotasPagadas[0]->user->nombres }}<br />
-		<b>Fecha Hora: </b> {{ $fechaEs }}
+		<b>Fecha Hora: </b> {{ $fechaHoraEs }}
 		<br />
 			{{-- <table class="codigoControlQr" width="100%">
 				<tr>
