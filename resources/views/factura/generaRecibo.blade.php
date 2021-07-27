@@ -283,7 +283,7 @@
 		<br />
 		<b>Usuario: </b>
 		{{ $cuotasPagadas[0]->user->apellido_paterno }} {{ $cuotasPagadas[0]->user->apellido_materno }} {{ $cuotasPagadas[0]->user->nombres }}<br />
-		<b>Fecha Hora: </b> {{ $fechaHoraEs }}
+		<b>Fecha Hora: </b> {{ $fechaEs }}
 		<br />
 			{{-- <table class="codigoControlQr" width="100%">
 				<tr>
