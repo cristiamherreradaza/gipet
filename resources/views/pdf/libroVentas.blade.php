@@ -146,18 +146,18 @@
         </tbody>
         <tfoot>
             <tr>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th>TOTAL</th>
-                <th>{{ $totalVentas }}</th>
-                <th></th>
-                <th>{{ $totalVentas }}</th>
-                <th>{{ $totalImpositivo }}</th>
-                <th>{{ $totalVentas - $totalImpositivo }}</th>
-                <th></th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td style="text-align: left;"><b>TOTAL</b></td>
+                <td style="text-align: right;"><b>{{ number_format($totalVentas, 2) }}</b></td>
+                <td></td>
+                <td style="text-align: right;"><b>{{ number_format($totalVentas,2) }}</b></td>
+                <td style="text-align: right;"><b>{{ number_format($totalImpositivo, 2) }}</b></td>
+                <td style="text-align: right;"><b>{{ number_format(($totalVentas - $totalImpositivo), 2) }}</b></td>
+                <td></td>
             </tr>
         </tfoot>
     </table>        
