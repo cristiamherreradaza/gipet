@@ -27,7 +27,7 @@ class ReporteController extends Controller
         $fecha_inicio = $request->input('fecha_inicio');
         $fecha_final = $request->input('fecha_final');
 
-        $facturasQ = Factura::orderBy('id', 'desc');
+        $facturasQ = Factura::orderBy('id', 'asc');
 
         if($request->input('user_id') != ''){
             $facturasQ->where('user_id', $request->input('user_id'));
