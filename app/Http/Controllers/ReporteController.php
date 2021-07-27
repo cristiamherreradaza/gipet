@@ -16,7 +16,10 @@ class ReporteController extends Controller
     
     public function formularioLibro(Request $request)
     {
-        return view('reporte.formularioLibro');
+        $usuarios = Factura::groupBy('user_id')
+                        ->get();
+
+        return view('reporte.formularioLibro')->with(compact('usuarios'));
     }
 
     public function libroVentas(Request $request)
@@ -24,14 +27,28 @@ class ReporteController extends Controller
         $fecha_inicio = $request->input('fecha_inicio');
         $fecha_final = $request->input('fecha_final');
 
-        $facturas = Factura::where('facturado', 'Si')
-                            ->whereBetween('fecha', [$request->input('fecha_inicio'), $request->input('fecha_final')])
-                            ->get();
+        $facturasQ = Factura::orderBy('id', 'desc');
+
+        if($request->input('user_id') != ''){
+            $facturasQ->where('user_id', $request->input('user_id'));
+        }
+
+        $facturasQ->where('facturado', 'Si')
+                ->whereBetween('fecha', [$request->input('fecha_inicio'), $request->input('fecha_final')])
+                ->orderBy('numero', 'desc')
+                ->get();
+
+        $facturas = $facturasQ->get();
 
         $pdf = PDF::loadView('pdf.libroVentas', compact('facturas', 'fecha_inicio', 'fecha_final'))
                     ->setPaper('letter', 'landscape');
 
         return $pdf->stream('LibroVentas.pdf');
+    }
+
+    public function libroVentasExcel(Request $request)
+    {
+
     }
 
     public function formularioReportes()

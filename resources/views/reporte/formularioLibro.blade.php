@@ -32,6 +32,22 @@
                     </div>
                 </div>
 
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">USUARIO </label>
+                        <select name="user_id" id="user_id" class="form-control">
+                            <option value="">TODOS</option>
+                            @foreach ($usuarios as $u)
+                            <option value="{{ $u->user->id }}">
+                                {{ $u->user->apellido_paterno }}
+                                {{ $u->user->apellido_materno }}
+                                {{ $u->user->nombres }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
                 <div class="col-md-2">
                     <br />
                     <button type="submit" formtarget="_blank" class="btn btn-success btn-block" title="Buscar">GENERAR</button>
