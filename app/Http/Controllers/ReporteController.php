@@ -41,7 +41,7 @@ class ReporteController extends Controller
         $facturas = $facturasQ->get();
 
         $pdf = PDF::loadView('pdf.libroVentas', compact('facturas', 'fecha_inicio', 'fecha_final'))
-                    ->setPaper('letter', 'landscape');
+                    ->setPaper('letter');
 
         return $pdf->stream('LibroVentas.pdf');
     }
