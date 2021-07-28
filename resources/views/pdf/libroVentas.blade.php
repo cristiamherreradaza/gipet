@@ -104,7 +104,7 @@
             <tr>
                 <th>Fecha</th>
                 <th>Factura</th>
-                <th>Caja</th>
+                {{-- <th>Caja</th> --}}
                 <th>N. Autoriz.</th>
                 <th>NIT</th>
                 <th>Razon Social</th>
@@ -127,9 +127,9 @@
             $totalImpositivo += $f->total*0.13;
             @endphp
             <tr>
-                <td>{{ $f->fecha }}</td>
+                <td style="font-size: 6pt;">{{ $f->fecha }}</td>
                 <td>{{ $f->numero }}</td>
-                <td>Caja 1</td>
+                {{-- <td>Caja 1</td> --}}
                 <td>{{ $f->parametro->numero_autorizacion }}</td>
                 <td>{{ $f->nit }}</td>
                 <td style="text-align: left;">{{ $f->razon_social }}</td>
