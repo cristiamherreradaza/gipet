@@ -225,14 +225,21 @@ class ReporteController extends Controller
 
         $spreadsheet->getActiveSheet()->setTitle("alumnos");
 
-        $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(16);
         $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(16);
+        $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(16);
         $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(20);
-        $spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(18);
-        $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(20);
-        $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(16);
-        $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(20);
-        $spreadsheet->getActiveSheet()->getColumnDimension('j')->setWidth(16);
+        $spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(16);
+        $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(14);
+        $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(20);
+        $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(14);
+        $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(14);
+        $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(26);
+        $spreadsheet->getActiveSheet()->getColumnDimension('J')->setWidth(16);
+        $spreadsheet->getActiveSheet()->getColumnDimension('K')->setWidth(20);
+        // $spreadsheet->getActiveSheet()->getColumnDimension('L')->setWidth(14);
+        // $spreadsheet->getActiveSheet()->getColumnDimension('M')->setWidth(14);
+        // $spreadsheet->getActiveSheet()->getColumnDimension('N')->setWidth(14);
+        // $spreadsheet->getActiveSheet()->getColumnDimension('O')->setWidth(14);
 
         // colocando estilos
         $fuenteNegrita = array(
@@ -254,7 +261,7 @@ class ReporteController extends Controller
 
         // $spreadsheet->getActiveSheet()->getCell('D1')->setValue('Some text');
         $spreadsheet->getActiveSheet()->getStyle("D1")->applyFromArray($fuenteNegritaTitulo);
-        $spreadsheet->getActiveSheet()->getStyle('A2:K2')->applyFromArray($fuenteNegrita);
+        $spreadsheet->getActiveSheet()->getStyle('A2:O2')->applyFromArray($fuenteNegrita);
 
         // fin de colocar estilos
 
@@ -265,13 +272,17 @@ class ReporteController extends Controller
         $sheet->setCellValue('B2', 'MATERNO');
         $sheet->setCellValue('C2', 'NOMBRES');
         $sheet->setCellValue('D2', 'CARNET');
-        $sheet->setCellValue('E2', 'EMAIL');
-        $sheet->setCellValue('F2', 'CELULAR');
-        $sheet->setCellValue('G2', 'CARRERA');
-        $sheet->setCellValue('H2', 'TURNO');
-        $sheet->setCellValue('I2', 'AÑO');
-        $sheet->setCellValue('J2', 'PARALELO');
-        $sheet->setCellValue('K2', 'GESTION');
+        $sheet->setCellValue('E2', 'EXPEDIDO');
+        $sheet->setCellValue('F2', 'EMAIL');
+        $sheet->setCellValue('G2', 'CELULAR');
+        $sheet->setCellValue('H2', 'GENERO');
+        $sheet->setCellValue('I2', 'DIRECCION');
+        $sheet->setCellValue('J2', 'FECHA NAC');
+        $sheet->setCellValue('K2', 'CARRERA');
+        $sheet->setCellValue('L2', 'TURNO');
+        $sheet->setCellValue('M2', 'AÑO');
+        $sheet->setCellValue('N2', 'PARALELO');
+        $sheet->setCellValue('O2', 'GESTION');
 
         $contadorCeldas = 3;
         foreach ($personasCarrerasPersona as $key => $pcp) {
@@ -280,13 +291,17 @@ class ReporteController extends Controller
             $sheet->setCellValue("B$contadorCeldas", $pcp->persona->apellido_paterno);
             $sheet->setCellValue("C$contadorCeldas", $pcp->persona->nombres);
             $sheet->setCellValue("D$contadorCeldas", $pcp->persona->cedula);
-            $sheet->setCellValue("E$contadorCeldas", $pcp->persona->email);
-            $sheet->setCellValue("F$contadorCeldas", $pcp->persona->numero_celular);
-            $sheet->setCellValue("G$contadorCeldas", $pcp->carrera->nombre);
-            $sheet->setCellValue("H$contadorCeldas", $pcp->turno->descripcion);
-            $sheet->setCellValue("I$contadorCeldas", $pcp->gestion);
-            $sheet->setCellValue("J$contadorCeldas", $pcp->paralelo);
-            $sheet->setCellValue("K$contadorCeldas", $pcp->anio_vigente);
+            $sheet->setCellValue("E$contadorCeldas", $pcp->persona->expedido);
+            $sheet->setCellValue("F$contadorCeldas", $pcp->persona->email);
+            $sheet->setCellValue("G$contadorCeldas", $pcp->persona->numero_celular);
+            $sheet->setCellValue("H$contadorCeldas", $pcp->persona->sexo);
+            $sheet->setCellValue("I$contadorCeldas", $pcp->persona->direccion);
+            $sheet->setCellValue("J$contadorCeldas", $pcp->persona->fecha_nacimiento);
+            $sheet->setCellValue("K$contadorCeldas", $pcp->carrera->nombre);
+            $sheet->setCellValue("L$contadorCeldas", $pcp->turno->descripcion);
+            $sheet->setCellValue("M$contadorCeldas", $pcp->gestion);
+            $sheet->setCellValue("N$contadorCeldas", $pcp->paralelo);
+            $sheet->setCellValue("O$contadorCeldas", $pcp->anio_vigente);
             // $sheet->setCellValue("H$contadorCeldas", $aLetras->toString($i->nota, 0));
             $contadorCeldas++;
         }
