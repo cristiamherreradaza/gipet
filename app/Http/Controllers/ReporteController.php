@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\DB;
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 class ReporteController extends Controller
 {
     
@@ -194,5 +196,109 @@ class ReporteController extends Controller
         return $pagoFormateado;
     }
 
+    public function formularioTotalAlumnosExcel(Request $request)
+    {
+        return view('reporte.formularioTotalAlumnosExcel');
+    }
+
+    public function generaTotalAlumnosExcel(Request $request)
+    {
+        $personasCarrerasPersona = CarrerasPersona::where('anio_vigente', $request->anio_vigente)
+                                                    ->get();
+
+        // generacion del excel
+        $fileName = 'total_alumnos.xlsx';
+        // return Excel::download(new CertificadoExport($carrera_persona_id), 'certificado.xlsx');
+        $spreadsheet = new Spreadsheet();
+
+        // estilos
+        $spreadsheet->getActiveSheet()->getStyle("A2:K600")->applyFromArray(
+            array(
+                'borders' => array(
+                    'allBorders' => array(
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'color' => array('argb' => '000000')
+                    )
+                )
+            )
+        );
+
+        $spreadsheet->getActiveSheet()->setTitle("alumnos");
+
+        $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(16);
+        $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(16);
+        $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(18);
+        $spreadsheet->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+        $spreadsheet->getActiveSheet()->getColumnDimension('F')->setWidth(16);
+        $spreadsheet->getActiveSheet()->getColumnDimension('G')->setWidth(20);
+        $spreadsheet->getActiveSheet()->getColumnDimension('j')->setWidth(16);
+
+        // colocando estilos
+        $fuenteNegrita = array(
+            'font'  => array(
+                'bold'  => true,
+                // 'color' => array('rgb' => 'FF0000'),
+                'size'  => 10,
+                'name'  => 'Verdana'
+            ));
+
+        $fuenteNegritaTitulo = array(
+            'font'  => array(
+                'bold'  => true,
+                // 'color' => array('rgb' => 'FF0000'),
+                'size'  => 14,
+                'name'  => 'Verdana'
+            ));
+
+
+        // $spreadsheet->getActiveSheet()->getCell('D1')->setValue('Some text');
+        $spreadsheet->getActiveSheet()->getStyle("D1")->applyFromArray($fuenteNegritaTitulo);
+        $spreadsheet->getActiveSheet()->getStyle('A2:K2')->applyFromArray($fuenteNegrita);
+
+        // fin de colocar estilos
+
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('D1', 'LISTADO DE ALUMNOS');
+        
+        $sheet->setCellValue('A2', 'PATERNO');
+        $sheet->setCellValue('B2', 'MATERNO');
+        $sheet->setCellValue('C2', 'NOMBRES');
+        $sheet->setCellValue('D2', 'CARNET');
+        $sheet->setCellValue('E2', 'EMAIL');
+        $sheet->setCellValue('F2', 'CELULAR');
+        $sheet->setCellValue('G2', 'CARRERA');
+        $sheet->setCellValue('H2', 'TURNO');
+        $sheet->setCellValue('I2', 'AÑO');
+        $sheet->setCellValue('J2', 'PARALELO');
+        $sheet->setCellValue('K2', 'GESTION');
+
+        $contadorCeldas = 3;
+        foreach ($personasCarrerasPersona as $key => $pcp) {
+
+            $sheet->setCellValue("A$contadorCeldas", $pcp->persona->apellido_paterno);
+            $sheet->setCellValue("B$contadorCeldas", $pcp->persona->apellido_paterno);
+            $sheet->setCellValue("C$contadorCeldas", $pcp->persona->nombres);
+            $sheet->setCellValue("D$contadorCeldas", $pcp->persona->cedula);
+            $sheet->setCellValue("E$contadorCeldas", $pcp->persona->email);
+            $sheet->setCellValue("F$contadorCeldas", $pcp->persona->numero_celular);
+            $sheet->setCellValue("G$contadorCeldas", $pcp->carrera->nombre);
+            $sheet->setCellValue("H$contadorCeldas", $pcp->turno->descripcion);
+            $sheet->setCellValue("I$contadorCeldas", $pcp->gestion);
+            $sheet->setCellValue("J$contadorCeldas", $pcp->paralelo);
+            $sheet->setCellValue("K$contadorCeldas", $pcp->anio_vigente);
+            // $sheet->setCellValue("H$contadorCeldas", $aLetras->toString($i->nota, 0));
+            $contadorCeldas++;
+        }
+        // $sheet->getRowDimension(1)->setRowHeight(35);
+
+
+        $writer = new Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="'. urlencode($fileName).'"');
+        $writer->save('php://output');
+        // $writer->save('demo.xlsx');
+    
+    }
 
 }
