@@ -212,7 +212,7 @@ class ReporteController extends Controller
         $spreadsheet = new Spreadsheet();
 
         // estilos
-        $spreadsheet->getActiveSheet()->getStyle("A2:K600")->applyFromArray(
+        $spreadsheet->getActiveSheet()->getStyle("A2:O600")->applyFromArray(
             array(
                 'borders' => array(
                     'allBorders' => array(
@@ -260,13 +260,13 @@ class ReporteController extends Controller
 
 
         // $spreadsheet->getActiveSheet()->getCell('D1')->setValue('Some text');
-        $spreadsheet->getActiveSheet()->getStyle("D1")->applyFromArray($fuenteNegritaTitulo);
+        $spreadsheet->getActiveSheet()->getStyle("F1")->applyFromArray($fuenteNegritaTitulo);
         $spreadsheet->getActiveSheet()->getStyle('A2:O2')->applyFromArray($fuenteNegrita);
 
         // fin de colocar estilos
 
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('D1', 'LISTADO DE ALUMNOS');
+        $sheet->setCellValue('F1', 'LISTADO DE ALUMNOS');
         
         $sheet->setCellValue('A2', 'PATERNO');
         $sheet->setCellValue('B2', 'MATERNO');
