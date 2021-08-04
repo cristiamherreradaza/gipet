@@ -51,8 +51,12 @@
                     @endif
 
                 @else
-                <a href="{{ url("Factura/muestraRecibo/$c->id") }}" class="btn btn-primary text-white"
-                    title="Muestra Recibo"><i class="fas fa-eye"></i></a>
+                    @if ($c->estado == 'Anulado')
+                        <a href="#" class="btn btn-danger text-white" title="Factura Anulada"><i class="fas fa-eye"></i></a>
+                    @else
+                        <a href="{{ url("Factura/muestraRecibo/$c->id") }}" class="btn btn-primary text-white" title="Muestra Recibo"><i class="fas fa-eye"></i></a>
+                    @endif
+                    
                 @endif
             </td>
         </tr>
