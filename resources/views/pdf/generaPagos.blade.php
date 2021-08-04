@@ -26,6 +26,13 @@
             text-decoration: none;
         }
 
+        .titulos {
+            font-size: 18pt;
+        }
+        .subtitulos {
+            font-size: 14pt;
+        }
+
         /*estilos para tablas de datos*/
         table.datos {
             /*font-size: 13px;*/
@@ -92,18 +99,50 @@
 </head>
 
 <body>
+    <br/>
     <div style="text-align: center;">
-        <h2>LISTADO DE PAGOS</h2>
-    </div>
-    <div style="text-align: center;">
-        (Expresado en Bolivianos)<br />
-        
+        <span class="titulos">INSTITUTO TECNICO "EF - GIPET" S.R.L</span><br>
+        <span class="subtitulos">LISTADO DE PAGOS</span><br>
+        @php
+            $hoy = date('Y-m-d H:m:i');
+            $utilidades = new App\librerias\Utilidades();
+            $fechaHoraEs = $utilidades->fechaHoraCastellano($hoy);
+        @endphp
+        FECHA: {{ $fechaHoraEs }}
     </div>
 
+    <br>
+    @if ($numero != null)
+        <b>NUMERO FACTURA: </b>{{ $numero }} <br>
+    @endif
+
+    @if ($numero_recibo != null)
+        <b>NUMERO RECIBO: </b>{{ $numero_recibo }} <br>
+    @endif
+
+    @if ($ci != null)
+        <b>CARNET: </b>{{ $ci }} <br>
+    @endif
+
+    @if ($user_id != null)
+        @php
+            $usuario = App\User::find($user_id);
+        @endphp
+        <b>USUARIO: </b>{{ $usuario->nombres }}<br>
+    @endif
+
+    @if ($fecha_inicio != null)
+        <b>FECHA DESDE: </b>{{ $fecha_inicio }}
+    @endif
+
+    @if ($fecha_final != null)
+        <b>HASTA: </b>{{ $fecha_final }}
+    @endif
+
+    <br>
     <table class="datos">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>TIPO</th>
                 <th>NUMERO</th>
                 <th>CARNET</th>
@@ -116,17 +155,22 @@
             </tr>
         </thead>
         <tbody>
+            @php
+                $total = 0;
+            @endphp
             @foreach ($cobros as $c)
+            @php
+                $total += $c->total;
+            @endphp
             <tr>
-                <td>{{ $c->id }}</td>
-                <td>
+                <td style="text-align: left;">
                     @if ($c->facturado == 'Si')
                     <span class="text-info">FACTURA</span>
                     @else
                     <span class="text-primary">RECIBO</span>
                     @endif
                 </td>
-                <td>
+                <td style="text-align: right;">
                     @if ($c->facturado == 'Si')
                     <span class="text-info">{{ $c->numero }}</span>
                     @else
@@ -134,16 +178,29 @@
     
                     @endif
                 </td>
-                <td>{{ $c->persona->cedula }}</td>
-                <td>{{ $c->persona->nombres }}</td>
-                <td>{{ $c->razon_social }}</td>
-                <td>{{ $c->nit }}</td>
+                <td style="text-align: right">{{ $c->persona->cedula }}</td>
+                <td style="text-align: left">{{ $c->persona->nombres }}</td>
+                <td style="text-align: left">{{ $c->razon_social }}</td>
+                <td style="text-align: right">{{ $c->nit }}</td>
                 <td>{{ $c->fecha }}</td>
-                <td>{{ $c->total }}</td>
+                <td style="text-align: right">{{ $c->total }}</td>
                 <td>{{ $c->user->nombres }}</td>
             </tr>
             @endforeach
         </tbody>
+        <tfoot>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>TOTAL</th>
+                <th>{{ number_format($total, 2) }}</th>
+                <th></th>
+            </tr>
+        </tfoot>
     </table>
 
 </body>

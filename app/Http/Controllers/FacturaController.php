@@ -520,6 +520,14 @@ class FacturaController extends Controller
     {
         $pagos = Factura::orderBy('id', 'desc');
 
+        $numero = $request->input('numero');
+        $numero_recibo = $request->input('numero_recibo');
+        $ci = $request->input('ci');
+        $nit = $request->input('nit');
+        $user_id = $request->input('user_id');
+        $fecha_inicio = $request->input('fecha_inicio');
+        $fecha_final = $request->input('fecha_final');
+
         if($request->input('numero') != null){
             $pagos->where('numero', $request->input('numero'));    
         }
@@ -556,7 +564,7 @@ class FacturaController extends Controller
         $cobros = $pagos->get();
 
         // return view('factura.ajaxBuscaPago')->with(compact('cobros'));
-        $pdf = PDF::loadView('pdf.generaPagos', compact('cobros'))->setPaper('letter');
+        $pdf = PDF::loadView('pdf.generaPagos', compact('cobros', 'numero', 'numero_recibo', 'ci', 'nit', 'user_id', 'fecha_inicio', 'fecha_final'))->setPaper('letter');
         return $pdf->stream('pagos.pdf');
 
     }
