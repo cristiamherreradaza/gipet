@@ -2699,14 +2699,14 @@ class InscripcionController extends Controller
         }
         
         // generacion del excel
-        $fileName = 'Pensum.xlsx';
+        $fileName = 'HistorialAcademico.xlsx';
         $libro = new Spreadsheet();
 
         $hoja = $libro->getActiveSheet();
 
         // estilos 
 
-        $libro->getActiveSheet()->getStyle("A8:I31")->applyFromArray(
+        $libro->getActiveSheet()->getStyle("A8:K31")->applyFromArray(
             array(
                 'borders' => array(
                     'allBorders' => array(
@@ -2768,7 +2768,7 @@ class InscripcionController extends Controller
 
         // asignacion de estilos
         $libro->getActiveSheet()->getStyle("E1")->applyFromArray($fuenteNegritaTitulo);
-        $libro->getActiveSheet()->getStyle('A8:I8')->applyFromArray($fuenteNegrita);
+        $libro->getActiveSheet()->getStyle('A8:K8')->applyFromArray($fuenteNegrita);
         $libro->getActiveSheet()->getStyle('A2:A6')->applyFromArray($fuenteNegrita);
         $libro->getActiveSheet()->getStyle('F3:F6')->applyFromArray($fuenteNegrita);
 
@@ -2797,6 +2797,8 @@ class InscripcionController extends Controller
         $hoja->setCellValue('G8', 'NOTA');
         $hoja->setCellValue('H8', 'RECUPERATORIO');
         $hoja->setCellValue('I8', 'OBSERVACIONES');
+        $hoja->setCellValue('J8', 'FOLIO');
+        $hoja->setCellValue('K8', 'LIBRO');
 
         $hoja->setCellValue('E1', 'HISTORIAL ACADEMICO');
         $hoja->setCellValue('A2', 'INSTITUTO');
