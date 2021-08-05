@@ -212,16 +212,7 @@ class ReporteController extends Controller
         $spreadsheet = new Spreadsheet();
 
         // estilos
-        $spreadsheet->getActiveSheet()->getStyle("A2:O600")->applyFromArray(
-            array(
-                'borders' => array(
-                    'allBorders' => array(
-                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                        'color' => array('argb' => '000000')
-                    )
-                )
-            )
-        );
+        
 
         $spreadsheet->getActiveSheet()->setTitle("alumnos");
 
@@ -261,10 +252,11 @@ class ReporteController extends Controller
 
         // $spreadsheet->getActiveSheet()->getCell('D1')->setValue('Some text');
         $spreadsheet->getActiveSheet()->getStyle("F1")->applyFromArray($fuenteNegritaTitulo);
-        $spreadsheet->getActiveSheet()->getStyle('A2:O2')->applyFromArray($fuenteNegrita);
+
+        // estilos para las cabeceras con negrita
+        $spreadsheet->getActiveSheet()->getStyle('A2:P2')->applyFromArray($fuenteNegrita);
 
         // fin de colocar estilos
-
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('F1', 'LISTADO DE ALUMNOS');
         
@@ -283,6 +275,7 @@ class ReporteController extends Controller
         $sheet->setCellValue('M2', 'AÑO');
         $sheet->setCellValue('N2', 'PARALELO');
         $sheet->setCellValue('O2', 'GESTION');
+        $sheet->setCellValue('P2', 'ESTADO');
 
         $contadorCeldas = 3;
         foreach ($personasCarrerasPersona as $key => $pcp) {
@@ -302,11 +295,23 @@ class ReporteController extends Controller
             $sheet->setCellValue("M$contadorCeldas", $pcp->gestion);
             $sheet->setCellValue("N$contadorCeldas", $pcp->paralelo);
             $sheet->setCellValue("O$contadorCeldas", $pcp->anio_vigente);
+            $sheet->setCellValue("P$contadorCeldas", $pcp->estado);
             // $sheet->setCellValue("H$contadorCeldas", $aLetras->toString($i->nota, 0));
             $contadorCeldas++;
         }
-        // $sheet->getRowDimension(1)->setRowHeight(35);
 
+        // estilos para el borde de las celdas
+        $spreadsheet->getActiveSheet()->getStyle("A2:P$contadorCeldas")->applyFromArray(
+            array(
+                'borders' => array(
+                    'allBorders' => array(
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'color' => array('argb' => '000000')
+                    )
+                )
+            )
+        );
+        // fin estilos para el borde de las celdas
 
         $writer = new Xlsx($spreadsheet);
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

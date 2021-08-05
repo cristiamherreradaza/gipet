@@ -320,7 +320,7 @@ class ListaController extends Controller
         $sheet->setCellValue('G3', "BIMESTRE: $tipo");
 
         //colocamos los nombres de las materias
-        $contadorLetras = 68;
+        $contadorLetras = 68; //comenzamos a partir de la letra D
         foreach ($materiasCarrera as $m) {
             // extraemos la letra para la celda
             $letra = chr($contadorLetras);
