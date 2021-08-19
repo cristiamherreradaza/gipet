@@ -280,17 +280,17 @@ class ReporteController extends Controller
         $contadorCeldas = 3;
         foreach ($personasCarrerasPersona as $key => $pcp) {
 
-            $sheet->setCellValue("A$contadorCeldas", $pcp->persona->apellido_paterno);
-            $sheet->setCellValue("B$contadorCeldas", $pcp->persona->apellido_paterno);
-            $sheet->setCellValue("C$contadorCeldas", $pcp->persona->nombres);
-            $sheet->setCellValue("D$contadorCeldas", $pcp->persona->cedula);
-            $sheet->setCellValue("E$contadorCeldas", $pcp->persona->expedido);
-            $sheet->setCellValue("F$contadorCeldas", $pcp->persona->email);
-            $sheet->setCellValue("G$contadorCeldas", $pcp->persona->numero_celular);
-            $sheet->setCellValue("H$contadorCeldas", $pcp->persona->sexo);
-            $sheet->setCellValue("I$contadorCeldas", $pcp->persona->direccion);
-            $sheet->setCellValue("J$contadorCeldas", $pcp->persona->fecha_nacimiento);
-            $sheet->setCellValue("K$contadorCeldas", $pcp->carrera->nombre);
+            $sheet->setCellValue("A$contadorCeldas", $pcp->persona['apellido_paterno']);
+            $sheet->setCellValue("B$contadorCeldas", $pcp->persona['apellido_materno']);
+            $sheet->setCellValue("C$contadorCeldas", $pcp->persona['nombres']);
+            $sheet->setCellValue("D$contadorCeldas", $pcp->persona['cedula']);
+            $sheet->setCellValue("E$contadorCeldas", $pcp->persona['expedido']);
+            $sheet->setCellValue("F$contadorCeldas", $pcp->persona['email']);
+            $sheet->setCellValue("G$contadorCeldas", $pcp->persona['numero_celular']);
+            $sheet->setCellValue("H$contadorCeldas", $pcp->persona['sexo']);
+            $sheet->setCellValue("I$contadorCeldas", $pcp->persona['direccion']);
+            $sheet->setCellValue("J$contadorCeldas", $pcp->persona['fecha_nacimiento']);
+            $sheet->setCellValue("K$contadorCeldas", $pcp->carrera['nombre']);
             $sheet->setCellValue("L$contadorCeldas", $pcp->turno->descripcion);
             $sheet->setCellValue("M$contadorCeldas", $pcp->gestion);
             $sheet->setCellValue("N$contadorCeldas", $pcp->paralelo);
