@@ -155,7 +155,13 @@
                     <td>{{ $notaDos ? round($notaDos->nota_total) : '' }}</td>
                     <td style="background-color: #e5e5e5;">{{ $notaUno && $notaDos ? round(($notaUno->nota_total+$notaDos->nota_total)/2) : '' }}</td>
                     <td></td>
-                    <td style="background-color: #e5e5e5;">{{ $inscripcion->nota ? round($inscripcion->nota) : '0' }}</td>
+                    <td style="background-color: #e5e5e5;">
+                        @if ($inscripcion->segundo_turno != null)
+                            {{ $inscripcion->segundo_turno ? round($inscripcion->segundo_turno) : '0' }}*
+                        @else
+                            {{ $inscripcion->nota ? round($inscripcion->nota) : '0' }}
+                        @endif
+                    </td>
                 </tr>
             @endforeach
         </table>

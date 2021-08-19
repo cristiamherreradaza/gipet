@@ -19,7 +19,7 @@
     </div>
     <div class="card-body">
 
-        <form action="#" method="POST" id="formulario_pagos">
+        <form action="{{ url('Factura/generaPdfPagos') }}" method="POST" id="formulario_pagos" target="_blank">
             @csrf
             <div class="row">
 
@@ -70,7 +70,7 @@
                 <div class="col-md-2">
                     <div class="form-group">
                         <label class="control-label">Fecha Inicio </label>
-                        <input type="date" name="feche_inicio" id="feche_inicio" class="form-control">
+                        <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control">
                     </div>
                 </div>
 
@@ -158,6 +158,13 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            
+            <div class="col-md-12">
+                <br />
+                <a href="#" target="_blank" class="btn btn-success btn-block" title="GENERA PDF" onclick="generaPdf()">GENERAR PDF</a>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -204,6 +211,11 @@
             }
         })
 
+    }
+
+    function generaPdf()
+    {
+        $("#formulario_pagos").submit();
     }
 
 </script>

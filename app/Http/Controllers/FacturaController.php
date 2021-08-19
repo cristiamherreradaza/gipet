@@ -15,7 +15,7 @@ use App\DescuentosPersona;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-
+use Barryvdh\DomPDF\Facade as PDF;
 class FacturaController extends Controller
 {
     public function listadoPersonas()
@@ -447,6 +447,7 @@ class FacturaController extends Controller
     // 
     public function ajaxBuscaPago(Request $request)
     {
+        // dd($request->all());
         $pagos = Factura::orderBy('id', 'desc');
 
         if($request->input('numero') != null){
@@ -470,6 +471,7 @@ class FacturaController extends Controller
         }
 
         if($request->input('fecha_inicio') != null){
+            // $pagos->whereBetween('fecha', [$request->input('fecha_inicio'), $request->input('fecha_final')]);
             $pagos->whereDate('fecha', '>=',  $request->input('fecha_inicio'));    
         }
 
@@ -512,5 +514,58 @@ class FacturaController extends Controller
         }
 
         return redirect("Factura/listadoPagos");
+    }
+
+    public function generaPdfPagos(Request $request)
+    {
+        $pagos = Factura::orderBy('id', 'desc');
+
+        $numero = $request->input('numero');
+        $numero_recibo = $request->input('numero_recibo');
+        $ci = $request->input('ci');
+        $nit = $request->input('nit');
+        $user_id = $request->input('user_id');
+        $fecha_inicio = $request->input('fecha_inicio');
+        $fecha_final = $request->input('fecha_final');
+
+        if($request->input('numero') != null){
+            $pagos->where('numero', $request->input('numero'));    
+        }
+
+        if($request->input('numero_recibo') != null){
+            $pagos->where('numero_recibo', $request->input('numero_recibo'));    
+        }
+
+        if($request->input('ci') != null){
+            $pagos->where('carnet', $request->input('ci'));    
+        }
+
+        if($request->input('nit') != null){
+            $pagos->where('nit', $request->input('nit'));    
+        }
+
+        if($request->input('user_id') != null){
+            $pagos->where('user_id', $request->input('user_id'));    
+        }
+
+        if($request->input('fecha_inicio') != null){
+            // $pagos->whereBetween('fecha', [$request->input('fecha_inicio'), $request->input('fecha_final')]);
+            $pagos->whereDate('fecha', '>=',  $request->input('fecha_inicio'));    
+        }
+
+        if($request->input('fecha_final') != null){
+            $pagos->whereDate('fecha', '<=',  $request->input('fecha_final'));    
+        }
+
+        if($request->input('numero') == null && $request->input('ci') == null && $request->input('nit') == null && $request->input('user_id') == null && $request->input('fecha_inicio') == null && $request->input('fecha_final') == null){
+            $pagos->limit(100);
+        }
+
+        $cobros = $pagos->get();
+
+        // return view('factura.ajaxBuscaPago')->with(compact('cobros'));
+        $pdf = PDF::loadView('pdf.generaPagos', compact('cobros', 'numero', 'numero_recibo', 'ci', 'nit', 'user_id', 'fecha_inicio', 'fecha_final'))->setPaper('letter');
+        return $pdf->stream('pagos.pdf');
+
     }
 }

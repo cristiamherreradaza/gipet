@@ -160,6 +160,8 @@
                 <th>NOTA</th>
                 <th>PRUEBA RECUP</th>
                 <th>OBSERVACIONES</th>
+                <th>No. FOLIO</th>
+                <th>No. LIBRO</th>
                 <!-- <th>N° DE LIBRO</th>
                 <th>N° DE FOLIO</th> -->
             </tr>
@@ -217,6 +219,8 @@
                             echo $carreraPersona->estado;
                         @endphp
                     </td>
+                    <td></td>
+                    <td></td>
                     <!-- <td></td>
                     <td></td> -->
                 </tr>

@@ -612,7 +612,12 @@
                                     <td class="text-center">{{ $m->anio_vigente }}</td>
                                     <td class="text-center">
                                         @if ($m->convalidado == null)
-                                            <h4>{{ round($m->nota, 0) }}</h4>
+                                            <h4>
+                                                {{ round($m->nota, 0) }} 
+                                                @if ($m->segundo_turno != null)
+                                                    <span class="text-muted">({{ round($m->segundo_turno, 0) }})</span>
+                                                @endif
+                                            </h4>
                                         @else
                                             <h4 class="text-primary">{{ round($m->nota, 0) }}*</h4>
                                         @endif

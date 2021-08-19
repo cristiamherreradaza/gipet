@@ -320,7 +320,7 @@ class ListaController extends Controller
         $sheet->setCellValue('G3', "BIMESTRE: $tipo");
 
         //colocamos los nombres de las materias
-        $contadorLetras = 68;
+        $contadorLetras = 68; //comenzamos a partir de la letra D
         foreach ($materiasCarrera as $m) {
             // extraemos la letra para la celda
             $letra = chr($contadorLetras);
@@ -384,8 +384,10 @@ class ListaController extends Controller
                 if($nota){
                     if($tipo == 'primero' || $tipo == 'segundo'){
                         $notaAlumno = intval($nota->nota_total);
+                        $asterisco = ($nota->segundo_turno != null)?'*':'';
                     }else{
                         $notaAlumno = intval($nota->nota);
+                        $asterisco = ($nota->segundo_turno != null) ? '*' : '';
                     }
                 }else{
                     $notaAlumno = 0;
@@ -397,7 +399,7 @@ class ListaController extends Controller
                 $letraEstado++;
                 $caracterEstado = chr($letraEstado);
 
-                $sheet->setCellValue($letra.$contadorAlumnos, $notaAlumno);
+                $sheet->setCellValue($letra.$contadorAlumnos, $notaAlumno.$asterisco);
 
                 $sheet->setCellValue($caracterEstado.$contadorAlumnos, $estado->estado);
 

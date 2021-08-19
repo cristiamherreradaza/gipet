@@ -216,7 +216,7 @@
 						@php
 							$utilidades = new App\librerias\Utilidades();
 							$fechaEs = $utilidades->fechaCastellano($cuotasPagadas[0]->fecha);
-							$fechaHoraEs = $utilidades->fechaHoraCastellano($cuotasPagadas[0]->created_at);
+							$fechaHoraEs = $utilidades->fechaHoraCastellano($cuotasPagadas[0]->updated_at);
 						@endphp
 						La Paz, {{ $fechaEs }}</td>
 				</tr>

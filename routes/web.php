@@ -424,4 +424,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Factura/listadoPagos', 'FacturaController@listadoPagos');
     Route::post('Factura/ajaxBuscaPago', 'FacturaController@ajaxBuscaPago');
     Route::get('Factura/anulaFactura/{factura_id}', 'FacturaController@anulaFactura');
+    Route::post('Factura/generaPdfPagos', 'FacturaController@generaPdfPagos');
+
+    // REPORTES
+    Route::get('Reporte/formularioLibro', 'ReporteController@formularioLibro');
+    Route::post('Reporte/libroVentas', 'ReporteController@libroVentas');
+    Route::get('Reporte/formularioReportes', 'ReporteController@formularioReportes');
+    Route::post('Reporte/pencionesPorPeriodo', 'ReporteController@pencionesPorPeriodo');
+    Route::post('Reporte/pencionesPorCobrar', 'ReporteController@pencionesPorCobrar');
+    Route::post('Reporte/totalPorCobrar', 'ReporteController@totalPorCobrar');
+    Route::get('Reporte/formularioTotalAlumnosExcel', 'ReporteController@formularioTotalAlumnosExcel');
+    Route::post('Reporte/generaTotalAlumnosExcel', 'ReporteController@generaTotalAlumnosExcel');
+
 });

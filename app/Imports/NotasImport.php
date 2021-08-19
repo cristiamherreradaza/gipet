@@ -22,9 +22,12 @@ class NotasImport implements ToModel, WithStartRow
     */
     public function model(array $row)
     {
+        // buscammos la nota en funcion 
+        // a la primera columna excel
         $nota = Nota::find($row[0]);
         // echo $nota->persona_id."<br>";
 
+        // calculamos el total de la nota del bimestre
         $total = $row[4] + $row[5] + $row[6] + $row[7] + $row[8];
 
         $notapropuesta = NotasPropuesta::where('asignatura_id', $nota->asignatura_id)
