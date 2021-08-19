@@ -42,15 +42,137 @@ class ReporteController extends Controller
 
         $facturas = $facturasQ->get();
 
-        $pdf = PDF::loadView('pdf.libroVentas', compact('facturas', 'fecha_inicio', 'fecha_final'))
+        if($request->input('boton') == 'pdf'){
+
+            $pdf = PDF::loadView('pdf.libroVentas', compact('facturas', 'fecha_inicio', 'fecha_final'))
                     ->setPaper('letter');
 
-        return $pdf->stream('LibroVentas.pdf');
+            return $pdf->stream('LibroVentas.pdf');
+
+        }else{
+            // generacion del excel
+            $fileName = 'libro_ventas.xlsx';
+            // return Excel::download(new CertificadoExport($carrera_persona_id), 'certificado.xlsx');
+            $spreadsheet = new Spreadsheet();
+
+            $sheet = $spreadsheet->getActiveSheet();
+
+            $sheet->setCellValue('H1', "LIBRO DE VENTAS");
+
+            $sheet->setCellValue('A3', "PERIODO $fecha_inicio HASTA $fecha_final");
+
+            $sheet->setCellValue('A5', 'ESPECIFICACION');
+            $sheet->setCellValue('B5', 'No');
+            $sheet->setCellValue('C5', 'FECHA DE LA FACTURA');
+            $sheet->setCellValue('D5', 'No DE LA FACTURA');
+            $sheet->setCellValue('E5', 'No DE AUTORIZACION');
+            $sheet->setCellValue('F5', 'ESTADO');
+            $sheet->setCellValue('G5', 'NIT/CI CLIENTE');
+            $sheet->setCellValue('H5', 'NOMBRE O RAZON SOCIAL');
+            $sheet->setCellValue('I5', 'IMPORTE DE LA VENTA');
+            $sheet->setCellValue('J5', 'IMPORTE ICE/IEHD/TASAS');
+            $sheet->setCellValue('K5', 'EXPORTACIONES Y OPERACIONES EXENTAS');
+            $sheet->setCellValue('L5', 'VENTAS GRAVADAS A TASA CERO');
+            $sheet->setCellValue('M5', 'SUBTOTAL');
+            $sheet->setCellValue('N5', 'DESCUENTOS, BONIFICACIONES Y REBAJAS OTORGADAS');
+            $sheet->setCellValue('O5', 'IMPORTE BASE PARA DEBITO FISCAL');
+            $sheet->setCellValue('P5', 'DEBITO FISCAL');
+            $sheet->setCellValue('Q5', 'CODIGO CONTROL');
+
+            $contadorFilas = 6;
+
+            foreach($facturas as $key => $f)
+            {
+                if($f->estado == null){
+                    $estadoFactura = 'V: VALIDA';
+                }else{
+                    $estadoFactura = 'V: ANULADO';
+                }
+
+                // para sacar el debito fiscal
+                $debito = $f->total * 0.13;
+
+                $sheet->setCellValue("A$contadorFilas", 3);
+                $sheet->setCellValue("B$contadorFilas", ++$key);
+                $sheet->setCellValue("C$contadorFilas", $f->fecha);
+                $sheet->setCellValue("D$contadorFilas", $f->numero);
+                $sheet->setCellValue("E$contadorFilas", $f->parametro->numero_autorizacion);
+                $sheet->setCellValue("F$contadorFilas", $estadoFactura);
+                $sheet->setCellValue("G$contadorFilas", $f->nit);
+                $sheet->setCellValue("H$contadorFilas", $f->razon_social);
+                $sheet->setCellValue("I$contadorFilas", $f->total);
+                $sheet->setCellValue("J$contadorFilas", 0);
+                $sheet->setCellValue("K$contadorFilas", 0);
+                $sheet->setCellValue("L$contadorFilas", 0);
+                $sheet->setCellValue("M$contadorFilas", $f->total);
+                $sheet->setCellValue("N$contadorFilas", 0);
+                $sheet->setCellValue("O$contadorFilas", $f->total);
+                $sheet->setCellValue("P$contadorFilas", $debito);
+                $sheet->setCellValue("Q$contadorFilas", $f->codigo_control);
+
+                $contadorFilas++;
+            }
+
+            // estilos para el borde de las celdas
+            $finalCeldas = $contadorFilas-1;
+            $spreadsheet->getActiveSheet()->getStyle("A5:Q$finalCeldas")->applyFromArray(
+                array(
+                    'borders' => array(
+                        'allBorders' => array(
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            'color' => array('argb' => '000000')
+                        )
+                    )
+                )
+            );
+
+            // estilo para ajustar el contenido de las celdas
+            $spreadsheet->getActiveSheet()->getStyle('A5:Q5')->getAlignment()->setWrapText(true);
+
+            // damos el ancho a las celdas
+            $contadorLetras = 68; //comenzamos a partir de la letra D
+            for ($i=1; $i<=18; $i++) {
+                // extraemos la letra para la celda
+                $letra = chr($contadorLetras);
+
+                $spreadsheet->getActiveSheet()->getColumnDimension($letra)->setWidth(20);
+
+                $contadorLetras++;
+            }
+            
+           
+
+            $writer = new Xlsx($spreadsheet);
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment; filename="' . urlencode($fileName) . '"');
+            $writer->save('php://output');
+        }
+
     }
 
     public function libroVentasExcel(Request $request)
     {
+        // dd($request->all());
+        $fecha_inicio = $request->input('fecha_inicio');
+        $fecha_final = $request->input('fecha_final');
 
+        $facturasQ = Factura::orderBy('id', 'asc');
+
+        if($request->input('user_id') != ''){
+            $facturasQ->where('user_id', $request->input('user_id'));
+        }
+
+        $facturasQ->where('facturado', 'Si')
+                ->whereBetween('fecha', [$request->input('fecha_inicio'), $request->input('fecha_final')])
+                ->orderBy('numero', 'desc')
+                ->get();
+
+        $facturas = $facturasQ->get();
+
+        $pdf = PDF::loadView('pdf.libroVentas', compact('facturas', 'fecha_inicio', 'fecha_final'))
+                    ->setPaper('letter');
+
+        return $pdf->download('LibroVentas.pdf');
     }
 
     public function formularioReportes()
@@ -212,8 +334,6 @@ class ReporteController extends Controller
         $spreadsheet = new Spreadsheet();
 
         // estilos
-        
-
         $spreadsheet->getActiveSheet()->setTitle("alumnos");
 
         $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(16);
