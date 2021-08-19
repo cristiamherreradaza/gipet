@@ -23,6 +23,7 @@ class NotasImport implements ToModel, WithStartRow
     public function model(array $row)
     {
         $nota = Nota::find($row[0]);
+        // echo $nota->persona_id."<br>";
 
         $total = $row[4] + $row[5] + $row[6] + $row[7] + $row[8];
 
@@ -93,6 +94,7 @@ class NotasImport implements ToModel, WithStartRow
                                                 ->first();
 
                 $modificaEstado = CarrerasPersona::find($carrerasPersona->id);
+                // dd($modificaEstado);
                 $modificaEstado->estado = 'REPROBO';
                 $modificaEstado->save();                
             }
