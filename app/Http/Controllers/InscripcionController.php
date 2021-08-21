@@ -1934,7 +1934,7 @@ class InscripcionController extends Controller
                                         ->where('carrera_id', $carrera->id)
                                         // ->where('aprobo', 'Si')
                                         ->whereNull('oyente')
-                                        ->orderBy('id')
+                                        ->orderBy('anio_vigente', 'asc')
                                         ->get();
 
             $promedioCalificaciones  = Inscripcione::where('persona_id', $persona->id)
