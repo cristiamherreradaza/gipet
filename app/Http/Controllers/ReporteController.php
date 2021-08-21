@@ -139,8 +139,32 @@ class ReporteController extends Controller
 
                 $contadorLetras++;
             }
-            
-           
+
+            $fuenteNegritaTitulo = array(
+            'font'  => array(
+                'bold'  => true,
+                // 'color' => array('rgb' => 'FF0000'),
+                'size'  => 22,
+                // 'name'  => 'Verdana'
+            ));
+
+            $fuenteNegrita = array(
+            'font'  => array(
+                'bold'  => true,
+                // 'color' => array('rgb' => 'FF0000'),
+                'size'  => 14,
+            ));
+
+            $fuenteNegritaCabecera = array(
+            'font'  => array(
+                'bold'  => true,
+                // 'color' => array('rgb' => 'FF0000'),
+                'size'  => 12,
+            ));
+
+            $spreadsheet->getActiveSheet()->getStyle("H1")->applyFromArray($fuenteNegritaTitulo);
+            $spreadsheet->getActiveSheet()->getStyle('A3')->applyFromArray($fuenteNegrita);
+            $spreadsheet->getActiveSheet()->getStyle("A5:Q5")->applyFromArray($fuenteNegritaCabecera);
 
             $writer = new Xlsx($spreadsheet);
             header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

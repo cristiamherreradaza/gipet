@@ -9,6 +9,7 @@
                         <th>Incritos</th>
                         <th>Aband. Temp.</th>
                         <th>Abandonos</th>
+                        <th>Congelados</th>
                         <th>Total</th>
                     </tr>
                 </thead>
@@ -16,6 +17,7 @@
                     @php
                         $totalGeneralVigentes = 0;
                         $totalGeneralAbandonos = 0;
+                        $totalGeneralCongelados = 0;
                         $totalGeneralAbandonosTemporales = 0;
                     @endphp
                     @foreach($carreras as $carrera)
@@ -78,6 +80,13 @@
                                                                         ->where('estado', 'ABANDONO')
                                                                         ->count();
 
+                                    $congelados = App\CarrerasPersona::where('carrera_id', $carrera->id)
+                                                                        ->where('turno_id', $turno->id)
+                                                                        ->where('gestion', $i)
+                                                                        ->where('anio_vigente', $anio_vigente)
+                                                                        ->where('estado', 'CONGELADO')
+                                                                        ->count();
+
                                     $totalGestionVigentes   += $inscritos;
                                     $totalGestionAbandonosTemporales += $abandonosTemporales;
                                     $totalGestionAbandonos += $abandonos;
@@ -88,6 +97,7 @@
                                     <td class="text-center">{{ $inscritos }}</td>
                                     <td class="text-center">{{ $abandonosTemporales }}</td>
                                     <td class="text-center">{{ $abandonos }}</td>
+                                    <td class="text-center">{{ $congelados }}</td>
                                     <td class="text-right">{{ ($inscritos + $abandonosTemporales + $abandonos) }}</td>
                                 </tr>
                             @endforeach
@@ -101,6 +111,7 @@
                                 <th class="text-center">{{ $totalGestionVigentes }}</th>
                                 <th class="text-center">{{ $totalGestionAbandonosTemporales }}</th>
                                 <th class="text-center">{{ $totalGestionAbandonos }}</th>
+                                <th class="text-center">0</th>
                                 <th class="text-right">{{ ($totalGestionVigentes + $totalGestionAbandonosTemporales + $totalGestionAbandonos) }}</th>
                             </tr>
                         @endfor
@@ -114,6 +125,7 @@
                             <th class="text-center">{{ $totalCarreraVigentes }}</th>
                             <th class="text-center">{{ $totalCarreraAbandonos }}</th>
                             <th class="text-center">{{ $totalCarreraAbandonosTemporales }}</th>
+                            <th class="text-center">0</th>
                             <th class="text-right">{{ ($totalCarreraVigentes + $totalCarreraAbandonosTemporales + $totalCarreraAbandonos) }}</th>
                         </tr>
                     @endforeach

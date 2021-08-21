@@ -1934,7 +1934,7 @@ class InscripcionController extends Controller
                                         ->where('carrera_id', $carrera->id)
                                         // ->where('aprobo', 'Si')
                                         ->whereNull('oyente')
-                                        ->orderBy('id')
+                                        ->orderBy('anio_vigente', 'asc')
                                         ->get();
 
             $promedioCalificaciones  = Inscripcione::where('persona_id', $persona->id)
@@ -2593,7 +2593,7 @@ class InscripcionController extends Controller
                                         ->where('carrera_id', $carrera->id)
                                         // ->where('aprobo', 'Si')
                                         ->whereNull('oyente')
-                                        ->orderBy('id')
+                                        ->orderBy('anio_vigente', 'asc')
                                         ->get();
 
             $promedioCalificaciones  = Inscripcione::where('persona_id', $persona->id)
@@ -2886,16 +2886,23 @@ class InscripcionController extends Controller
         $utilidades = new Utilidades();
         $fechaEs = $utilidades->fechaCastellano($hoy);
 
-        $hoja->setCellValue("A32", "Lugar y Fecha: $fechaEs");
-        $hoja->setCellValue("E37", "Firma Autoridad Academica");
+        // generacion de la impresion de lugar y fecha para abajo
+        $filaFirma = $contadorCeldas+5;
+        $filaEscala = $filaFirma+2;
+        $filaAprobado = $filaEscala+1;
+        $filaReprobado = $filaAprobado+1;
+        $filaMinima = $filaReprobado+1;
+
+        $hoja->setCellValue("A$contadorCeldas", "Lugar y Fecha: $fechaEs");
+        $hoja->setCellValue("E$filaFirma", "Firma Autoridad Academica");
         
-        $hoja->setCellValue("A39", "ESCALA DE VALORACION");
-        $hoja->setCellValue("A40", "61 - 100");
-        $hoja->setCellValue("B40", "APROBADO");
-        $hoja->setCellValue("A41", "0 - 60");
-        $hoja->setCellValue("B41", "REPROBADO");
-        $hoja->setCellValue("A42", "61");
-        $hoja->setCellValue("B42", "NOTA MINIMA");
+        $hoja->setCellValue("A$filaEscala", "ESCALA DE VALORACION");
+        $hoja->setCellValue("A$filaAprobado", "61 - 100");
+        $hoja->setCellValue("B$filaAprobado", "APROBADO");
+        $hoja->setCellValue("A$filaReprobado", "0 - 60");
+        $hoja->setCellValue("B$filaReprobado", "REPROBADO");
+        $hoja->setCellValue("A$filaMinima", "61");
+        $hoja->setCellValue("B$filaMinima", "NOTA MINIMA");
 
         $hoja->setCellValue("A43", "PLAN DE ESTUDIOS");
 
