@@ -48,7 +48,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">EDICION DE PAGO</h4>
+                    <h4 class="modal-title" id="myModalLabel"></h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <form action="{{ url('Persona/modifica_pago') }}"  method="POST" >
@@ -56,7 +56,7 @@
                     <div class="modal-body">
                         {{-- formulario --}}
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label class="control-label">A Pagar</label>
                                     <span class="text-danger">
@@ -67,13 +67,26 @@
                                     <input type="number" name="a_pagar" id="a_pagar" class="form-control">
                                 </div> 
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label class="control-label">Monto</label>
                                     <span class="text-danger">
                                         <i class="mr-2 mdi mdi-alert-circle"></i>
                                     </span>
                                     <input type="number" name="monto_pago" id="monto_pago" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Tipo de pago</label>
+                                    <span class="text-danger">
+                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                    </span>
+                                    <select name="tipo_pago" id="tipo_pago" class="form-control">
+                                        <option value="null">Selecciona</option>
+                                        <option value="total">TOTAL</option>
+                                        <option value="parcial">PARCIAL</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-3">
@@ -85,7 +98,7 @@
                                     <input type="date" name="fecha_pago" id="fecha_pago" class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <div class="form-group">
                                     <label class="control-label">Estado</label>
                                     <span class="text-danger">
@@ -98,7 +111,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                     <div class="modal-footer">
                         <!-- <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar()">GUARDAR USUARIO</button> -->
@@ -760,7 +772,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-warning" title="Edita Pago" onclick="edita_pago('{{ $p->id }}', '{{ $p->a_pagar }}', '{{ $p->importe }}', '{{ $p->fecha }}', '{{ $p->estado }}')"><i class="fas fa-edit"></i></button>
+                                        <button type="button" class="btn btn-warning" title="Edita Pago" onclick="edita_pago('{{ $p->id }}', '{{ $p->a_pagar }}', '{{ $p->importe }}', '{{ $p->fecha }}', '{{ $p->estado }}', '{{ $p->mensualidad }}', '{{ $p->faltante }}')"><i class="fas fa-edit"></i></button>
                                         {{-- <button type="button" class="btn btn-warning" title="Edita Pago" onclick="ajaxEditaNotas('{{ $m->id }}')"><i class="fas fa-edit"></i></button> --}}
                                     </td>
                                     
@@ -1448,12 +1460,22 @@
 
 
     // edicion de pagos
-    function edita_pago(id, a_pagar, importe, fecha, estado){
+    function edita_pago(id, a_pagar, importe, fecha, estado, mensualidad, faltante){
 
         let tipo_estado;
         $('#pago_id').val(id);
         $('#a_pagar').val(a_pagar);
         $('#monto_pago').val(importe);
+        if(faltante != ""){
+            faltante_pago = "parcial";
+        }else{
+            if(importe == a_pagar){
+                faltante_pago = "total";
+            }else{
+                faltante_pago = "null";
+            }
+        }
+        $('#tipo_pago').val(faltante_pago);
         $('#fecha_pago').val(fecha);
         if(estado == "Pagado"){
             tipo_estado = "pagado";
@@ -1461,6 +1483,7 @@
             tipo_estado = "debe";
         }
         $('#estado').val(tipo_estado);
+        $('#myModalLabel').text("EDICION DE PAGO DE LA "+mensualidad+"° MENSUALIDAD");
 
         $("#modal_edita_pago").modal('show');
     }
