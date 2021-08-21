@@ -1120,4 +1120,26 @@ class PersonaController extends Controller
         $writer->save('php://output');
         // $writer->save('demo.xlsx');
     }
+
+    public function modifica_pago(request $request){
+
+        // dd($request->input('pago_id'));
+        $pago = Pago::find($request->input('pago_id'));
+
+        $pago->a_pagar = $request->input('a_pagar');
+        $pago->importe = $request->input('monto_pago');
+        $pago->fecha   = $request->input('fecha_pago');
+        if($request->input('estado') == "debe"){
+            $estado_pago = null;
+        }else{
+            $estado_pago = "Pagado";
+        }
+        $pago->estado  = $estado_pago;
+
+        $pago->save();
+        // dd("Id de pago => ".$request->input('pago_id')."<br>a pagar=> ".$request->input('a_pagar')."<br>monto de pago=> ".$request->input('monto_pago')."<br>fecha=> ".$request->input('fecha_pago')."<br>fecha=> ".$request->input('estado'));
+
+        return redirect('Persona/informacion/'.$request->input('persona_id'));
+
+    }
 }

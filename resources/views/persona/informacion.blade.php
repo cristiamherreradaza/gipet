@@ -42,6 +42,74 @@
 
 <div class="row">
 
+    {{-- MODAL MODIFICA PAGO  --}}
+    
+    <div id="modal_edita_pago" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">EDICION DE PAGO</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                </div>
+                <form action="{{ url('Persona/modifica_pago') }}"  method="POST" >
+                    @csrf
+                    <div class="modal-body">
+                        {{-- formulario --}}
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">A Pagar</label>
+                                    <span class="text-danger">
+                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                    </span>
+                                    <input type="hidden" id="pago_id" name="pago_id">
+                                    <input type="hidden" id="persona_id" name="persona_id" value="{{ $estudiante->id }}">
+                                    <input type="number" name="a_pagar" id="a_pagar" class="form-control">
+                                </div> 
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Monto</label>
+                                    <span class="text-danger">
+                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                    </span>
+                                    <input type="number" name="monto_pago" id="monto_pago" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Fecha de Pago</label>
+                                    <span class="text-danger">
+                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                    </span>
+                                    <input type="date" name="fecha_pago" id="fecha_pago" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Estado</label>
+                                    <span class="text-danger">
+                                        <i class="mr-2 mdi mdi-alert-circle"></i>
+                                    </span>
+                                    <select class="form-control" name="estado" id="estado">
+                                        <option value="debe">DEBE</option>
+                                        <option value="pagado">PAGADO</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <!-- <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar()">GUARDAR USUARIO</button> -->
+                        <button type="submit" class="btn waves-effect waves-light btn-block btn-success" onclick="guardar()">MODIFICAR PAGO</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {{-- END MODAL MODIFICA PAGO  --}}
+
     <div class="col-md-12">
         <div class="card card-info">
             <div class="card-header bg-info">
@@ -650,6 +718,7 @@
                                     <th class="text-center">Monto</th>
                                     <th>Fecha Pago</th>
                                     <th class="text-center">Estado</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -689,6 +758,10 @@
                                         @else
                                             <span class="badge py-1 badge-table badge-danger" id="tag_debe">DEBE</span>
                                         @endif
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-warning" title="Edita Pago" onclick="edita_pago('{{ $p->id }}', '{{ $p->a_pagar }}', '{{ $p->importe }}', '{{ $p->fecha }}', '{{ $p->estado }}')"><i class="fas fa-edit"></i></button>
+                                        {{-- <button type="button" class="btn btn-warning" title="Edita Pago" onclick="ajaxEditaNotas('{{ $m->id }}')"><i class="fas fa-edit"></i></button> --}}
                                     </td>
                                     
                                 </tr>
@@ -1365,6 +1438,31 @@
     {
         $("#cantidad_cuotas_pagar").val($("#tipo_mensualidad_id option:selected").text());
         // console.log($("#tipo_mensualidad_id option:selected").text());
+    }
+
+    // Funcion para mostrar modal de edita pago
+    function edita_pago()
+    {
+        $("#modal_edita_pago").modal('show');
+    }
+
+
+    // edicion de pagos
+    function edita_pago(id, a_pagar, importe, fecha, estado){
+
+        let tipo_estado;
+        $('#pago_id').val(id);
+        $('#a_pagar').val(a_pagar);
+        $('#monto_pago').val(importe);
+        $('#fecha_pago').val(fecha);
+        if(estado == "Pagado"){
+            tipo_estado = "pagado";
+        }else{
+            tipo_estado = "debe";
+        }
+        $('#estado').val(tipo_estado);
+
+        $("#modal_edita_pago").modal('show');
     }
 
 </script>
