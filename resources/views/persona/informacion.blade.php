@@ -49,7 +49,7 @@
             </div>
             <div class="card-body">
 
-            {{-- tab alumno --}}
+            {{-- tabs alumno --}}
             <form action="{{ url('Persona/actualizar') }}" method="POST" id="formularioAlumno">
                 @csrf
                 <ul class="nav nav-tabs nav-justified nav-bordered mb-3 customtab">
@@ -73,6 +73,7 @@
                     </li>
                 </ul>
 
+                {{-- bloque de informacion del estudiante --}}
                 <div class="tab-content">
                     <div class="tab-pane show active" id="home-b2">
                         <div class="row">
@@ -324,19 +325,16 @@
                         </div> --}}
                     </div>
                 </div>
+                {{-- bloque de informacion del estudiante --}}
 
                 <div class="row">
                     <div class="col-md-12">
                         <button type="button" class="btn waves-effect waves-light btn-block btn-success"
                             onclick="actualizaPerfilEstudiante();">ACTUALIZAR PERFIL</button>
                     </div>
-                    {{-- <div class="col-md-6">
-                                        <a href="{{ url('Persona/listado') }}" type="button"
-                    class="btn waves-effect waves-light btn-block btn-inverse">Volver</a>
-                </div> --}}
                 </div>
             </form>
-            {{-- fin tab alumno --}}
+            {{-- fin tabs alumno --}}
 
             <br />
 
@@ -362,6 +360,7 @@
                 </li>
             </ul>
             
+            {{-- el primer tab de inscripciones --}}
             <div class="tab-content">
                 <div class="tab-pane show active" id="home1">
                     <div class="row">
@@ -647,6 +646,7 @@
                                 <tr>
                                     <th class="text-center">Gestion</th>
                                     <th class="text-center">Descripcion</th>
+                                    <th class="text-center">A Pagar</th>
                                     <th class="text-center">Monto</th>
                                     <th>Fecha Pago</th>
                                     <th class="text-center">Estado</th>
@@ -663,6 +663,7 @@
                                             {{ $p->servicio->nombre }}
                                         @endif
                                     </td>
+                                    <td class="text-center">{{ $p->a_pagar }}</td>
                                     <td class="text-center">
                                         @if ($p->a_pagar == null || $p->faltante > 0)
                                             {{ $p->importe }}
