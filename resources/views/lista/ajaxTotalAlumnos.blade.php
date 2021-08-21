@@ -10,26 +10,30 @@
                         <th>Aband. Temp.</th>
                         <th>Abandonos</th>
                         <th>Congelados</th>
-                        <th>Total</th>
+                        <th>Vigentes</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @php
+                    @foreach($carreras as $carrera)
+                     @php
                         $totalGeneralVigentes = 0;
                         $totalGeneralAbandonos = 0;
                         $totalGeneralCongelados = 0;
                         $totalGeneralAbandonosTemporales = 0;
+                        $totalGeneralAbandonaron = 0;
                     @endphp
-                    @foreach($carreras as $carrera)
-                        @php
-                            $totalCarreraVigentes = 0;
-                            $totalCarreraAbandonosTemporales = 0;
-                            $totalCarreraAbandonos = 0;
-                        @endphp
                         <tr>
                             <th colspan="7" class="text-info">CARRERA: {{ strtoupper($carrera->nombre) }}</th>
                         </tr>
                         @for($i = 1; $i <= $carrera->duracion_anios; $i++)
+
+                        @php
+                            $totalCarreraVigentes = 0;
+                            $totalCarreraAbandonosTemporales = 0;
+                            $totalCarreraAbandonos = 0;
+                            $totalCarreraCongelados = 0;
+                        @endphp
+
                             @php
                                 switch ($i) {
                                     case 1:
@@ -50,15 +54,18 @@
                                     default:
                                         $gestion = 'AÑO INDEFINIDO';
                                 }
-                                $totalGestionVigentes = 0;
-                                $totalGestionAbandonos = 0;
-                                $totalGestionAbandonosTemporales = 0;
                             @endphp
                             <tr>
                                 <th colspan="7">{{ $gestion }}</th>
                             </tr>
                             @foreach($turnos as $turno)
                                 @php
+                                    $totalGestionVigentes = 0;
+                                    $totalGestionAbandonos = 0;
+                                    $totalGestionAbandonosTemporales = 0;
+                                    $totalGestionCongelados = 0;
+                                    $totalGestionAbandonos = 0;
+                                    $totalGestionAbandonosFila = 0;
 
                                     $inscritos = App\CarrerasPersona::where('carrera_id', $carrera->id)
                                                                 ->where('turno_id', $turno->id)
@@ -90,6 +97,17 @@
                                     $totalGestionVigentes   += $inscritos;
                                     $totalGestionAbandonosTemporales += $abandonosTemporales;
                                     $totalGestionAbandonos += $abandonos;
+                                    $totalGestionCongelados += $congelados;
+
+                                    $totalGestionAbandonosFila = $totalGestionAbandonosTemporales + $totalGestionAbandonos + $totalGestionCongelados;
+
+                                    // calsulamos el total por anio
+                                    $totalCarreraVigentes += $totalGestionVigentes;
+                                    $totalCarreraAbandonos += $totalGestionAbandonos;
+                                    $totalCarreraAbandonosTemporales += $totalGestionAbandonosTemporales;
+                                    $totalCarreraCongelados += $totalGestionCongelados;
+                                    
+                                    $totalCarreraAbandonosGeneral = $totalCarreraAbandonos + $totalGestionAbandonosTemporales + $totalCarreraCongelados;
 
                                 @endphp
                                 <tr>
@@ -98,35 +116,34 @@
                                     <td class="text-center">{{ $abandonosTemporales }}</td>
                                     <td class="text-center">{{ $abandonos }}</td>
                                     <td class="text-center">{{ $congelados }}</td>
-                                    <td class="text-right">{{ ($inscritos + $abandonosTemporales + $abandonos) }}</td>
+                                    <td class="text-right">{{ $totalGestionVigentes - $totalGestionAbandonosFila }}</td>
                                 </tr>
                             @endforeach
-                            @php
-                                $totalCarreraVigentes   = $totalCarreraVigentes + $totalGestionVigentes;
-                                $totalCarreraAbandonos += $totalGestionAbandonos;
-                                $totalCarreraAbandonosTemporales  += $totalGestionAbandonosTemporales;
-                            @endphp
                             <tr>
                                 <th>TOTAL {{ $gestion }}</th>
-                                <th class="text-center">{{ $totalGestionVigentes }}</th>
-                                <th class="text-center">{{ $totalGestionAbandonosTemporales }}</th>
-                                <th class="text-center">{{ $totalGestionAbandonos }}</th>
-                                <th class="text-center">0</th>
-                                <th class="text-right">{{ ($totalGestionVigentes + $totalGestionAbandonosTemporales + $totalGestionAbandonos) }}</th>
+                                <th class="text-center">{{ $totalCarreraVigentes }}</th>
+                                <th class="text-center">{{ $totalCarreraAbandonosTemporales }}</th>
+                                <th class="text-center">{{ $totalCarreraAbandonos }}</th>
+                                <th class="text-center">{{ $totalCarreraCongelados }}</th>
+                                <th class="text-right">{{ ($totalCarreraVigentes - $totalCarreraAbandonosGeneral) }}</th>
                             </tr>
+
+                            @php
+                                $totalGeneralVigentes += $totalCarreraVigentes;
+                                $totalGeneralAbandonosTemporales += $totalCarreraAbandonosTemporales;
+                                $totalGeneralAbandonos += $totalCarreraAbandonos;
+                                $totalGeneralCongelados += $totalCarreraCongelados;
+                                $totalGeneralAbandonaron = $totalGeneralAbandonosTemporales + $totalGeneralAbandonos + $totalGeneralCongelados;
+                            @endphp
+
                         @endfor
-                        @php
-                            $totalGeneralVigentes = $totalGeneralVigentes + $totalCarreraVigentes;
-                            $totalGeneralAbandonos += $totalCarreraAbandonos;
-                            $totalGeneralAbandonosTemporales += + $totalCarreraAbandonosTemporales;
-                        @endphp
                         <tr>
                             <th>TOTAL {{ strtoupper($carrera->nombre) }}</th>
-                            <th class="text-center">{{ $totalCarreraVigentes }}</th>
-                            <th class="text-center">{{ $totalCarreraAbandonos }}</th>
-                            <th class="text-center">{{ $totalCarreraAbandonosTemporales }}</th>
-                            <th class="text-center">0</th>
-                            <th class="text-right">{{ ($totalCarreraVigentes + $totalCarreraAbandonosTemporales + $totalCarreraAbandonos) }}</th>
+                            <th class="text-center">{{ $totalGeneralVigentes}}</th>
+                            <th class="text-center">{{ $totalGeneralAbandonosTemporales }}</th>
+                            <th class="text-center">{{ $totalGeneralAbandonos }}</th>
+                            <th class="text-center">{{ $totalGeneralCongelados }}</th>
+                            <th class="text-right">{{ $totalGeneralVigentes - $totalGeneralAbandonaron }}</th>
                         </tr>
                     @endforeach
                 </tbody>
