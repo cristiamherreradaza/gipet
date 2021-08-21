@@ -25,6 +25,7 @@ class NotasImport implements ToModel, WithStartRow
         // buscammos la nota en funcion 
         // a la primera columna excel
         $nota = Nota::find($row[0]);
+        // echo $nota->persona_id."<br>";
 
         // calculamos el total de la nota del bimestre
         $total = $row[4] + $row[5] + $row[6] + $row[7] + $row[8];
@@ -96,6 +97,7 @@ class NotasImport implements ToModel, WithStartRow
                                                 ->first();
 
                 $modificaEstado = CarrerasPersona::find($carrerasPersona->id);
+                // dd($modificaEstado);
                 $modificaEstado->estado = 'REPROBO';
                 $modificaEstado->save();                
             }

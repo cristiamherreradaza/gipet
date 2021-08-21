@@ -94,7 +94,7 @@ class ReporteController extends Controller
 
                 $sheet->setCellValue("A$contadorFilas", 3);
                 $sheet->setCellValue("B$contadorFilas", ++$key);
-                $sheet->setCellValue("C$contadorFilas", $f->fecha);
+                $sheet->setCellValue("C$contadorFilas", date("d/m/Y",strtotime($f->fecha)));
                 $sheet->setCellValue("D$contadorFilas", $f->numero);
                 $sheet->setCellValue("E$contadorFilas", $f->parametro->numero_autorizacion);
                 $sheet->setCellValue("F$contadorFilas", $estadoFactura);
