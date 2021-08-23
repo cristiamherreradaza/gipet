@@ -1484,7 +1484,7 @@
         if(faltante > 0){
             $('#monto_pago').val(faltante);
         }else{
-            $('#monto_pago').val(a_pagar);
+            $('#monto_pago').val(importe);
         }
 
         $('#myModalLabel').text("EDICION DE PAGO DE LA "+mensualidad+"° MENSUALIDAD");

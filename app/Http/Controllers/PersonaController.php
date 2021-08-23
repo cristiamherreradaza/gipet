@@ -1135,7 +1135,7 @@ class PersonaController extends Controller
             $estado = null;
         }else{
             $faltante = 0;
-            $importe = $request->input('a_pagar');
+            $importe = ($request->input('estado')=='Pagado')?$request->input('a_pagar'):0;
             $estado = ($request->input('estado')=='Pagado')?'Pagado':null;
         }
 
