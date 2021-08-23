@@ -147,39 +147,23 @@ class PersonaController extends Controller
     {
         // Aqui debe eliminarse todo registro de la persona en el sistema
         // Su usuario
-        $persona = Persona::find($request->persona_id);
-        $carrerasPersonas           = CarrerasPersona::where('persona_id', $persona->id)->get();
-        foreach($carrerasPersonas as $registro){
-            $registro->delete();
-        }
-        // Sus notas
-        $notas                      = Nota::where('persona_id', $persona->id)->get();
-        foreach($notas as $registro){
-            $registro->delete();
-        }
-        // Sus recuperatorios
-        $segundosTurnos             = SegundosTurno::where('persona_id', $persona->id)->get();
-        foreach($segundosTurnos as $registro){
-            $registro->delete();
-        }
-        // Sus cursos varios
-        $cursosCortos               = CursosCorto::where('persona_id', $persona->id)->get();
-        foreach($cursosCortos as $registro){
-            $registro->delete();
-        }
-        // Sus inscripciones
-        $inscripciones              = Inscripcione::where('persona_id', $persona->id)->get();
-        foreach($inscripciones as $registro){
-            $registro->delete();
-        }
-        // Sus certificados
-        $estudiantesCertificados    = EstudiantesCertificado::where('persona_id', $persona->id)->get();
-        foreach($estudiantesCertificados as $registro){
-            $registro->delete();
-        }
-        // Finalmente se elimina a la persona
-        $persona->delete();
-        return redirect('Persona/listado');
+
+        $eliminaPersona = Persona::where('id', $request->persona_id)
+                            ->delete();
+
+        $eliminaCarrerasPersona = CarrerasPersona::where('persona_id', $request->persona_id)
+                                    ->delete();
+
+        $eliminaInscripcion = Inscripcione::where('persona_id', $request->persona_id)
+                                ->delete();
+
+        $eliminaNotas = Nota::where('persona_id', $request->persona_id)
+                                ->delete();
+
+        $eliminaPagos = Pago::where('persona_id', $request->persona_id)
+                            ->delete();
+
+        return redirect('Factura/formularioFacturacion');
     }
 
     public function ajaxDetalleHistorialAcademico(Request $request)

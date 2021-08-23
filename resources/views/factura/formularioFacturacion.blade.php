@@ -78,7 +78,7 @@
                                     </button>
                                     <button onclick="ver_persona('{{ $p->id }}')" type="button" class="btn btn-info" title="ACADEMICO"><i
                                             class="fas fa-list"></i></button>
-                                    <button onclick="eliminar_persona('.$estudiantes->id.', '.$estudiantes->cedula.')" type="button"
+                                    <button onclick="eliminar_persona('{{ $p->id }}', '{{ $p->cedula }}')" type="button"
                                         class="btn btn-danger" title="ELIMINAR"><i class="fas fa-trash"></i></button>
                                 </td>
                             </tr>
@@ -199,7 +199,7 @@
                             'El estudiante fue eliminado',
                             'success'
                         )
-                        window.location.href = "{{ url('Persona/listado') }}/";
+                        // window.location.href = "{{ url('Factura/formularioFacturacion') }}/";
                     }
                 });
             }
