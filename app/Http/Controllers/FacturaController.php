@@ -568,4 +568,19 @@ class FacturaController extends Controller
         return $pdf->stream('pagos.pdf');
 
     }
+
+    // listamos los pagos con respectivos Servicios
+    public function listadoPagosServicio(){
+
+        $pagos = Pago::limit(100)
+                    ->orderBy('id', 'desc')
+                    ->get();
+
+        $personal = array();
+
+        $usuarios = Factura::groupBy('user_id')
+                            ->get();
+
+        return view('factura.listadoPagosServicio')->with(compact('pagos', 'usuarios'));
+    }
 }
