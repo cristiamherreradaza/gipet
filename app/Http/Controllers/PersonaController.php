@@ -1123,11 +1123,26 @@ class PersonaController extends Controller
 
     public function modifica_pago(request $request){
 
-        // dd($request->input('pago_id'));
+        // dd($request->all());
         $pago = Pago::find($request->input('pago_id'));
+
         $pago->a_pagar = $request->input('a_pagar');
-        if($request->tipo_pago)
-        $pago->estado  = $estado_pago;
+
+        if($request->input('tipo_pago') == 'parcial'){
+
+            $faltante = $request->input('a_pagar') - $request->input('monto_pago');
+            $importe = $request->input('monto_pago');
+            $estado = null;
+        }else{
+            $faltante = 0;
+            $importe = $request->input('a_pagar');
+            $estado = ($request->input('estado')=='Pagado')?'Pagado':null;
+        }
+
+        $pago->faltante = $faltante;
+        $pago->importe  = $importe;
+        $pago->fecha    = $request->fecha_pago;
+        $pago->estado   = $estado;
 
         $pago->save();
         // dd("Id de pago => ".$request->input('pago_id')."<br>a pagar=> ".$request->input('a_pagar')."<br>monto de pago=> ".$request->input('monto_pago')."<br>fecha=> ".$request->input('fecha_pago')."<br>fecha=> ".$request->input('estado'));

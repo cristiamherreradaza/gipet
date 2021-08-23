@@ -94,7 +94,7 @@
                                     <span class="text-danger">
                                         <i class="mr-2 mdi mdi-alert-circle"></i>
                                     </span>
-                                    <input type="date" name="fecha_pago" id="fecha_pago" class="form-control" value="{{ date('Y-m-d') }}">
+                                    <input type="date" name="fecha_pago" id="fecha_pago" class="form-control" >
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -104,8 +104,8 @@
                                         <i class="mr-2 mdi mdi-alert-circle"></i>
                                     </span>
                                     <select class="form-control" name="estado" id="estado">
-                                        <option value="debe">DEBE</option>
-                                        <option value="pagado">PAGADO</option>
+                                        <option value="">DEBE</option>
+                                        <option value="Pagado">PAGADO</option>
                                     </select>
                                 </div>
                             </div>
