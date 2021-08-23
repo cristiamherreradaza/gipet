@@ -1480,6 +1480,7 @@
         let tipo_estado;
         $('#pago_id').val(id);
         $('#a_pagar').val(a_pagar);
+        $('#fecha_pago').val(fecha);
         
         if(faltante > 0){
             $('#monto_pago').val(faltante);
