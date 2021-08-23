@@ -1126,22 +1126,7 @@ class PersonaController extends Controller
         // dd($request->input('pago_id'));
         $pago = Pago::find($request->input('pago_id'));
         $pago->a_pagar = $request->input('a_pagar');
-        // dd($request->input('tipo_pago'));
-        if($request->input('tipo_pago') != "null"){
-            if($request->input('tipo_pago') == "total"){
-                $pago->importe  = $request->input('monto_pago');
-                $pago->faltante = null;
-            }else{
-                $pago->importe  = $pago->importe + $request->input('monto_pago');
-                $pago->faltante = $pago->a_pagar - $pago->importe;
-            }
-        }
-        $pago->fecha   = $request->input('fecha_pago');
-        if($request->input('estado') == "debe"){
-            $estado_pago = null;
-        }else{
-            $estado_pago = "Pagado";
-        }
+        if($request->tipo_pago)
         $pago->estado  = $estado_pago;
 
         $pago->save();

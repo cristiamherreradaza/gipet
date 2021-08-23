@@ -83,7 +83,6 @@
                                         <i class="mr-2 mdi mdi-alert-circle"></i>
                                     </span>
                                     <select name="tipo_pago" id="tipo_pago" class="form-control">
-                                        <option value="null">Selecciona</option>
                                         <option value="total">TOTAL</option>
                                         <option value="parcial">PARCIAL</option>
                                     </select>
@@ -95,7 +94,7 @@
                                     <span class="text-danger">
                                         <i class="mr-2 mdi mdi-alert-circle"></i>
                                     </span>
-                                    <input type="date" name="fecha_pago" id="fecha_pago" class="form-control">
+                                    <input type="date" name="fecha_pago" id="fecha_pago" class="form-control" value="{{ date('Y-m-d') }}">
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -728,6 +727,7 @@
                                     <th class="text-center">Descripcion</th>
                                     <th class="text-center">A Pagar</th>
                                     <th class="text-center">Monto</th>
+                                    <th class="text-center">Rec / Fac</th>
                                     <th>Fecha Pago</th>
                                     <th class="text-center">Estado</th>
                                     <th></th>
@@ -754,6 +754,21 @@
                                         @else
                                             {{ $p->importe }}
                                         @endif
+                                    </td>
+                                    <td>
+                                        @php
+                                            $factura = App\Factura::find($p->factura_id);
+                                            // dd($factura);
+
+                                            if($factura)
+                                            {
+                                                if($factura->numero_recibo == null){
+                                                    echo "Fac. ".$factura->numero;
+                                                }else{
+                                                    echo "Rec. ".$factura->numero_recibo;
+                                                }
+                                            }
+                                        @endphp
                                     </td>
                                     <td>
                                         @php
@@ -1465,24 +1480,13 @@
         let tipo_estado;
         $('#pago_id').val(id);
         $('#a_pagar').val(a_pagar);
-        $('#monto_pago').val(importe);
-        if(faltante != ""){
-            faltante_pago = "parcial";
+        
+        if(faltante > 0){
+            $('#monto_pago').val(faltante);
         }else{
-            if(importe == a_pagar){
-                faltante_pago = "total";
-            }else{
-                faltante_pago = "null";
-            }
+            $('#monto_pago').val(a_pagar);
         }
-        $('#tipo_pago').val(faltante_pago);
-        $('#fecha_pago').val(fecha);
-        if(estado == "Pagado"){
-            tipo_estado = "pagado";
-        }else{
-            tipo_estado = "debe";
-        }
-        $('#estado').val(tipo_estado);
+
         $('#myModalLabel').text("EDICION DE PAGO DE LA "+mensualidad+"° MENSUALIDAD");
 
         $("#modal_edita_pago").modal('show');
@@ -1490,3 +1494,4 @@
 
 </script>
 @endsection
+
