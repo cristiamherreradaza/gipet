@@ -2703,90 +2703,7 @@ class InscripcionController extends Controller
         $libro = new Spreadsheet();
 
         $hoja = $libro->getActiveSheet();
-
-        // estilos 
-
-        $libro->getActiveSheet()->getStyle("A8:K31")->applyFromArray(
-            array(
-                'borders' => array(
-                    'allBorders' => array(
-                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                        'color' => array('argb' => '000000')
-                    )
-                )
-            )
-        );
-
-        $libro->getActiveSheet()->getStyle("A39:C41")->applyFromArray(
-            array(
-                'borders' => array(
-                    'allBorders' => array(
-                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                        'color' => array('argb' => '000000')
-                    )
-                )
-            )
-        );
-
-        $libro->getActiveSheet()->getStyle("A43:C46")->applyFromArray(
-            array(
-                'borders' => array(
-                    'allBorders' => array(
-                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                        'color' => array('argb' => '000000')
-                    )
-                )
-            )
-        );
-
-        $libro->getActiveSheet()->getStyle("G39:I41")->applyFromArray(
-            array(
-                'borders' => array(
-                    'allBorders' => array(
-                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
-                        'color' => array('argb' => '000000')
-                    )
-                )
-            )
-        );
-
-
-        $fuenteNegrita = array(
-            'font'  => array(
-                'bold'  => true,
-                // 'color' => array('rgb' => 'FF0000'),
-                // 'size'  => 14,
-            ));
-
-        $fuenteNegritaTitulo = array(
-            'font'  => array(
-                'bold'  => true,
-                // 'color' => array('rgb' => 'FF0000'),
-                'size'  => 20,
-                // 'name'  => 'Verdana'
-            ));
-
-        // asignacion de estilos
-        $libro->getActiveSheet()->getStyle("E1")->applyFromArray($fuenteNegritaTitulo);
-        $libro->getActiveSheet()->getStyle('A8:K8')->applyFromArray($fuenteNegrita);
-        $libro->getActiveSheet()->getStyle('A2:A6')->applyFromArray($fuenteNegrita);
-        $libro->getActiveSheet()->getStyle('F3:F6')->applyFromArray($fuenteNegrita);
-
-        // fucion de celdas
-        $libro->getActiveSheet()->mergeCells('A2:B2');
-        $libro->getActiveSheet()->mergeCells('A3:B3');
-        $libro->getActiveSheet()->mergeCells('A4:B4');
-        $libro->getActiveSheet()->mergeCells('A5:B5');
-        $libro->getActiveSheet()->mergeCells('A6:B6');
-        $libro->getActiveSheet()->mergeCells('A39:C39');
-        $libro->getActiveSheet()->mergeCells('A43:C43');
-
-        // dimencion de celdas
-        $libro->getActiveSheet()->getColumnDimension('E')->setWidth(55);
-        $libro->getActiveSheet()->getColumnDimension('A')->setWidth(10);
-        $libro->getActiveSheet()->getColumnDimension('I')->setWidth(12);
-
-        // fin estilos 
+        
 
         $hoja->setCellValue('A8', 'No');
         $hoja->setCellValue('B8', 'GESTION');
@@ -2893,6 +2810,8 @@ class InscripcionController extends Controller
         $filaReprobado = $filaAprobado+1;
         $filaMinima = $filaReprobado+1;
 
+        $filaResoluciones = $filaMinima + 2;
+
         $hoja->setCellValue("A$contadorCeldas", "Lugar y Fecha: $fechaEs");
         $hoja->setCellValue("E$filaFirma", "Firma Autoridad Academica");
         
@@ -2904,9 +2823,15 @@ class InscripcionController extends Controller
         $hoja->setCellValue("A$filaMinima", "61");
         $hoja->setCellValue("B$filaMinima", "NOTA MINIMA");
 
-        $hoja->setCellValue("A43", "PLAN DE ESTUDIOS");
+        $filaMinima++;
 
-        $contadorCeldasRm = 44;
+        $hoja->setCellValue("A$filaMinima", "PLAN DE ESTUDIOS");
+
+        $contadorCeldasRm = $filaResoluciones;
+        $contadorCeldasRmStyle = $filaResoluciones;
+        $contadorCargaHoraria = $filaEscala;
+        $contadorCargaHorariaEstilos = $filaEscala;
+        // dd($$filaResoluciones);
 
         foreach ($gestionesInscritas as $gi) {
             $resolucion = Resolucione::where('anio_vigente', $anioIngreso)
@@ -2930,12 +2855,106 @@ class InscripcionController extends Controller
             $contadorCeldasRm++;
         }
 
-        $hoja->setCellValue("G39", "Carga Horaria");
-        $hoja->setCellValue("I39", "3600");
-        $hoja->setCellValue("G40", "Asignaturas Aprobadas");
-        $hoja->setCellValue("I40", "$contadorAprobadas/$contadorMaterias");
-        $hoja->setCellValue("G41", "Promedio Calificaciones");
-        $hoja->setCellValue("I41", "$promedioCalificaciones");
+        $hoja->setCellValue("G$contadorCargaHoraria", "Carga Horaria");
+        $hoja->setCellValue("I$contadorCargaHoraria", "3600");
+        $contadorCargaHoraria++;
+        $hoja->setCellValue("G$contadorCargaHoraria", "Asignaturas Aprobadas");
+        $hoja->setCellValue("I$contadorCargaHoraria", "$contadorAprobadas/$contadorMaterias");
+        $contadorCargaHoraria++;
+        $hoja->setCellValue("G$contadorCargaHoraria", "Promedio Calificaciones");
+        $hoja->setCellValue("I$contadorCargaHoraria", "$promedioCalificaciones");
+
+
+        // estilos 
+
+        $contadorCeltasParaEStiloMaterias = $contadorCeldas - 1;
+        
+        $libro->getActiveSheet()->getStyle("A8:K$contadorCeltasParaEStiloMaterias")->applyFromArray(
+            array(
+                'borders' => array(
+                    'allBorders' => array(
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'color' => array('argb' => '000000')
+                    )
+                )
+            )
+        );
+
+        $filaFinescala = $filaEscala + 3;
+
+        $libro->getActiveSheet()->getStyle("A$filaEscala:C$filaFinescala")->applyFromArray(
+            array(
+                'borders' => array(
+                    'allBorders' => array(
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'color' => array('argb' => '000000')
+                    )
+                )
+            )
+        );
+
+        // Stylos de las resolucione
+        $contadorCeldasRmFin = $contadorCeldasRm - 1;
+        $libro->getActiveSheet()->getStyle("A$contadorCeldasRmStyle:C$contadorCeldasRmFin")->applyFromArray(
+            array(
+                'borders' => array(
+                    'allBorders' => array(
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'color' => array('argb' => '000000')
+                    )
+                )
+            )
+        );
+
+        // carga horaria
+        $libro->getActiveSheet()->getStyle("G$contadorCargaHorariaEstilos:I$contadorCargaHoraria")->applyFromArray(
+            array(
+                'borders' => array(
+                    'allBorders' => array(
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                        'color' => array('argb' => '000000')
+                    )
+                )
+            )
+        );
+
+
+        $fuenteNegrita = array(
+            'font'  => array(
+                'bold'  => true,
+                // 'color' => array('rgb' => 'FF0000'),
+                // 'size'  => 14,
+            ));
+
+        $fuenteNegritaTitulo = array(
+            'font'  => array(
+                'bold'  => true,
+                // 'color' => array('rgb' => 'FF0000'),
+                'size'  => 20,
+                // 'name'  => 'Verdana'
+            ));
+
+        // asignacion de estilos
+        $libro->getActiveSheet()->getStyle("E1")->applyFromArray($fuenteNegritaTitulo);
+        $libro->getActiveSheet()->getStyle('A8:K8')->applyFromArray($fuenteNegrita);
+        $libro->getActiveSheet()->getStyle('A2:A6')->applyFromArray($fuenteNegrita);
+        $libro->getActiveSheet()->getStyle('F3:F6')->applyFromArray($fuenteNegrita);
+
+        // fucion de celdas
+        $libro->getActiveSheet()->mergeCells('A2:B2');
+        $libro->getActiveSheet()->mergeCells('A3:B3');
+        $libro->getActiveSheet()->mergeCells('A4:B4');
+        $libro->getActiveSheet()->mergeCells('A5:B5');
+        $libro->getActiveSheet()->mergeCells('A6:B6');
+        // $libro->getActiveSheet()->mergeCells('A39:C39');
+        // $libro->getActiveSheet()->mergeCells('A43:C43');
+
+        // dimencion de celdas
+        $libro->getActiveSheet()->getColumnDimension('E')->setWidth(55);
+        $libro->getActiveSheet()->getColumnDimension('A')->setWidth(10);
+        $libro->getActiveSheet()->getColumnDimension('I')->setWidth(12);
+
+        // fin estilos 
 
         // exportamos el excel
         $writer = new Xlsx($libro);
