@@ -274,7 +274,7 @@
 					$utilidad = new App\librerias\NumeroALetras();
 					$aLetras = $utilidad->toMoney($total);
 				@endphp
-				<td colspan="3" style="text-align: left;"><b>Son: </b> {{ $aLetras }}  100/00 Bolivianos</td>
+				<td colspan="3" style="text-align: left;"><b>Son: </b> {{ $aLetras }}  00/100 Bolivianos</td>
 				<td style="background-color: #abd4ed;color: #000;"><b>TOTAL Bs.</b> </td>
 				<td style="text-align: right;font-size: 11pt;font-weight: bold;">{{ number_format($total, 2) }}</td>
 			</tfoot>
