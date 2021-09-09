@@ -11,7 +11,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($carrerasNotasPropuestas as $c)
+        @foreach ($carrerasNotasPropuestas as $c) 
         @php
 
             $primerBimestre = App\Nota::where('carrera_id', $c->carrera_id)

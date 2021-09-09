@@ -939,12 +939,13 @@
                                     <span class="text-danger">
                                         <i class="mr-2 mdi mdi-alert-circle"></i>
                                     </span>
-                                    <input type="hidden" name="cantidad_cuotas_pagar" id="cantidad_cuotas_pagar">
-                                    <select class="form-control custom-select" id="tipo_mensualidad_id" name="tipo_mensualidad_id" onclick="cambiaTipoMensualidad();" required>
+                                    <input type="number" name="cantidad_cuotas_pagar" id="cantidad_cuotas_pagar" class="form-control" value="10">
+                                    {{-- <input type="hidden" name="cantidad_cuotas_pagar" id="cantidad_cuotas_pagar"> --}}
+                                    {{-- <select class="form-control custom-select" id="tipo_mensualidad_id" name="tipo_mensualidad_id" onclick="cambiaTipoMensualidad();" required>
                                         @foreach ($tiposMensualidades as $tm)
                                         <option value="{{ $tm->id }}">{{ $tm->numero_maximo }}</option>
                                         @endforeach
-                                    </select>
+                                    </select> --}}
 
                                 </div>
                             </div>
@@ -1136,7 +1137,6 @@
         }
     });
 
-    // Funcion que establece la configuracion para el datatable
     $(function () {
 
         var d = new Date();
@@ -1146,12 +1146,13 @@
 
         $("#mes").val(mes);
 
+        // verificamos que el mes sea menor a marzo
         if (mes <= 3) {
-            $("#tipo_mensualidad_id").val(1);
-            $("#cantidad_cuotas_pagar").val($("#tipo_mensualidad_id option:selected").text());
+            $("#cantidad_cuotas_pagar").val(10);
+            // $("#cantidad_cuotas_pagar").val($("#tipo_mensualidad_id option:selected").text());
         }else{
-            $("#tipo_mensualidad_id").val(2);
-            $("#cantidad_cuotas_pagar").val($("#tipo_mensualidad_id option:selected").text());
+            $("#cantidad_cuotas_pagar").val(7);
+            // $("#cantidad_cuotas_pagar").val($("#tipo_mensualidad_id option:selected").text());
         }
 
 
