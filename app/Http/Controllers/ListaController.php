@@ -92,7 +92,10 @@ class ListaController extends Controller
                                                 'personas.numero_celular as numero_celular',
                                                 'carreras_personas.estado as estado'
                                             )
-                                            ->get();
+                                            // ->get()
+                                            ;
+
+                                            // dd($resultado);
             // $resultado = CarrerasPersona::where('carreras_personas.carrera_id', $request->carrera)
             //                 ->where('carreras_personas.gestion', $request->gestion)
             //                 ->where('carreras_personas.turno_id', $request->turno)
