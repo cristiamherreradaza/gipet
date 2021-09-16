@@ -73,10 +73,10 @@
                             <label>Estado</label>
                             <select name="estado" id="estado" class="form-control custom-select">
                                 <option value="todos">TODOS</option>
+                                <option value="VIGENTES">VIGENTES</option>
                                 <option value="APROBO">APROBO</option>
                                 <option value="REPROBO">REPROBO</option>
-                                <option value="CONGELADO">CONGELADO
-                                </option>
+                                <option value="CONGELADO">CONGELADO</option>
                                 <option value="ABANDONO">ABANDONO</option>
                                 <option value="ABANDONO TEMPORAL">ABANDONO TEMPORAL</option>
                             </select>
@@ -99,7 +99,6 @@
         </div>
     </div>
 </div>
-
 <div class="row">
     <div class="col-md-12" id="mostrar" style="display:none;">
         <div class="card">
