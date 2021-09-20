@@ -101,18 +101,23 @@
                     $anioInicial    = App\CarrerasPersona::where('carrera_id', $carrera->id)
                                                         ->where('persona_id', $persona->id)
                                                         ->min('anio_vigente');
+                                                        // dd($anioInicial);
                     if($anioInicial)
                     {
-                        $fechaAdmision  = App\CarrerasPersona::where('carrera_id', $carrera->id)
-                                                            ->where('persona_id', $persona->id)
-                                                            ->where('anio_vigente', $anioInicial)
+                        $fechaAdmision = App\InicioGestion::where('anio_vigente',$anioInicial)
                                                             ->first();
-                        if($fechaAdmision->fecha_inscripcion)
+                                                            // dd($fechaAdmision);
+                        // $fechaAdmision  = App\CarrerasPersona::where('carrera_id', $carrera->id)
+                        //                                     ->where('persona_id', $persona->id)
+                        //                                     ->where('anio_vigente', $anioInicial)
+                        //                                     ->first();
+                        if($fechaAdmision->inicio)
                         {
-                            $dia    = date("d", strtotime($fechaAdmision->fecha_inscripcion));
-                            $mes    = date("m", strtotime($fechaAdmision->fecha_inscripcion));
-                            $anio   = date("Y", strtotime($fechaAdmision->fecha_inscripcion));
-                            $fechaAdmision  = $dia.'/'.$mes.'/'.$anio;
+                            $fechaAdmision = date('d/m/Y',strtotime($fechaAdmision->inicio));
+                            // $dia    = date("d", strtotime($fechaAdmision->fecha_inscripcion));
+                            // $mes    = date("m", strtotime($fechaAdmision->fecha_inscripcion));
+                            // $anio   = date("Y", strtotime($fechaAdmision->fecha_inscripcion));
+                            // $fechaAdmision  = $dia.'/'.$mes.'/'.$anio;
                         }
                         else
                         {
@@ -122,6 +127,31 @@
                     else
                     {
                         $fechaAdmision = '-/-/-';
+                    }
+
+                    // Para el anio final
+
+                    $anioFinal    = App\CarrerasPersona::where('carrera_id', $carrera->id)
+                                                        ->where('persona_id', $persona->id)
+                                                        ->max('anio_vigente');
+                                                        // dd($anioFinal);
+                    if($anioFinal)
+                    {
+                        $fechaAdmisionFinal = App\InicioGestion::where('anio_vigente',$anioFinal)
+                                                            ->first();
+                                                            // dd($fechaAdmisionFinal);
+                        if($fechaAdmisionFinal->fin)
+                        {
+                            $fechaAdmisionFinal = date('d/m/Y',strtotime($fechaAdmisionFinal->fin));
+                        }
+                        else
+                        {
+                            $fechaAdmisionFinal = '-/-/-';
+                        }
+                    }
+                    else
+                    {
+                        $fechaAdmisionFinal = '-/-/-';
                     }
                 @endphp
                 <td><strong>CARRERA:</strong></td>
@@ -133,7 +163,8 @@
                 <td><strong>NIVEL DE FORMACION:</strong></td>
                 <td>{{ strtoupper($carrera->nivel) }}</td>
                 <td><strong>FECHA DE CONCLUSION:</strong></td>
-                <td>{{ date('d') }}/{{ date('m') }}/{{ date('Y') }}</td>
+                {{-- <td>{{ date('d') }}/{{ date('m') }}/{{ date('Y') }}</td> --}}
+                <td>{{ $fechaAdmisionFinal }}</td>
             </tr>
             <tr>
                 <td><strong>REGIMEN:</strong></td>
@@ -149,7 +180,7 @@
             </tr>
         </table>
         <br>
-        <table cellpadding="1" class="celdas" style="font-size:10px; text-align:center">
+        <table cellpadding="1" class="celdas" style="font-size:9px; text-align:center">
             <tr>
                 <th>N°</th>
                 <th>GESTION ACADEMICA</th>
@@ -195,9 +226,10 @@
                     <td style="text-align:left" nowrap>{{ $inscripcion->asignatura->nombre }}</td>
                     <td>
                         @php
+                            dd($inscripcion);
                             $prerequisito = App\Prerequisito::where('asignatura_id', $inscripcion->asignatura_id)
                                                             ->first();
-                            // dd($prerequisito);
+                            dd($prerequisito);
                         @endphp
                         @if($prerequisito && $prerequisito->prerequisito_id != null)
                             {{ $prerequisito->prerequisito->sigla }}
@@ -216,8 +248,15 @@
                                                                 ->where('paralelo', $inscripcion->paralelo)
                                                                 ->where('gestion', $inscripcion->gestion)
                                                                 ->first();
-                            echo $carreraPersona->estado;
+                            // echo $carreraPersona;
+                            if($carreraPersona){
+                                echo $carreraPersona->estado;
+                                if($carreraPersona->estado == "APROBO"){
+                                    $contadorMateriasAprobadas++;
+                                }
+                            }
                         @endphp
+                        {{-- {{ ($carreraPersona->estado)? $carreraPersona->estado:'' }} --}}
                     </td>
                     <td></td>
                     <td></td>

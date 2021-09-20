@@ -2007,7 +2007,10 @@ class InscripcionController extends Controller
                                                 ->where('persona_id', $persona->id)
                                                 ->get();
 
-            $pdf    = PDF::loadView('pdf.historialAcademico', compact('carrera', 'persona', 'inscripciones', 'expedido', 'cantidadCurricula', 'cantidadAprobados', 'promedio', 'cargaHoraria', 'gestionesInscritas', 'anioIngreso', 'promedioCalificaciones'))->setPaper('letter');
+            // antiguo
+            // $pdf    = PDF::loadView('pdf.historialAcademico', compact('carrera', 'persona', 'inscripciones', 'expedido', 'cantidadCurricula', 'cantidadAprobados', 'promedio', 'cargaHoraria', 'gestionesInscritas', 'anioIngreso', 'promedioCalificaciones'))->setPaper('letter');
+            // nuevo al que se modifico
+            $pdf    = PDF::loadView('pdf.historialAcademico', compact('carrera', 'persona', 'inscripciones', 'expedido', 'cantidadCurricula', 'cantidadAprobados', 'cargaHoraria', 'gestionesInscritas', 'anioIngreso', 'promedioCalificaciones'))->setPaper('letter');
             // return $pdf->download('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
             return $pdf->stream('historialAcademico_'.date('Y-m-d H:i:s').'.pdf');
         }
