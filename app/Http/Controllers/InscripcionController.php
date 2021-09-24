@@ -1957,12 +1957,21 @@ class InscripcionController extends Controller
             $cantidadCurricula  = Asignatura::where('carrera_id', $carrera->id)
                                             ->where('anio_vigente', $anioIngreso)
                                             ->count();
+                                            // ->toSql();
+                                            // dd($carrera->id." < - > ".$anioIngreso." slq -> ".$cantidadCurricula);
+
+                                            // dd($cantidadCurricula);
+                                            // dd($cantidadCurricula);
                                             
             $cantidadAprobados  = Inscripcione::where('carrera_id', $carrera->id)
                                             ->where('persona_id', $persona->id)
                                             ->where('aprobo', 'Si')
                                             ->whereNull('oyente')
                                             ->count();
+                                            // ->toSql();
+
+                                            // dd($cantidadAprobados);
+                                            // dd($cantidadAprobados." < - > ".$carrera->id." < - > ".$persona->id);
             $totalAsignaturas   = Inscripcione::where('carrera_id', $carrera->id)
                                             ->where('persona_id', $persona->id)
                                             ->where('aprobo', 'Si')
@@ -2005,7 +2014,10 @@ class InscripcionController extends Controller
             }
             $gestionesInscritas = CarrerasPersona::where('carrera_id', $carrera->id)
                                                 ->where('persona_id', $persona->id)
+                                                ->orderBy('anio_vigente','asc')
                                                 ->get();
+
+                                                // dd($gestionesInscritas);
 
             // antiguo
             // $pdf    = PDF::loadView('pdf.historialAcademico', compact('carrera', 'persona', 'inscripciones', 'expedido', 'cantidadCurricula', 'cantidadAprobados', 'promedio', 'cargaHoraria', 'gestionesInscritas', 'anioIngreso', 'promedioCalificaciones'))->setPaper('letter');

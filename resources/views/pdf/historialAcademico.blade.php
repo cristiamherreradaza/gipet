@@ -197,6 +197,7 @@
                 <th>N° DE FOLIO</th> -->
             </tr>
             @php
+                // dd($cantidadAprobados);
                 $contadorMateriasAprobadas = 0;
             @endphp
             @foreach($inscripciones as $key => $inscripcion)
@@ -226,10 +227,12 @@
                     <td style="text-align:left" nowrap>{{ $inscripcion->asignatura->nombre }}</td>
                     <td>
                         @php
-                            dd($inscripcion);
+                            // dd($inscripcion);
+                            // dd($inscripcion);
                             $prerequisito = App\Prerequisito::where('asignatura_id', $inscripcion->asignatura_id)
+                                                            // ->where('anio_vigente', $inscripcion->anio_vigente)
                                                             ->first();
-                            dd($prerequisito);
+                            // dd($prerequisito);
                         @endphp
                         @if($prerequisito && $prerequisito->prerequisito_id != null)
                             {{ $prerequisito->prerequisito->sigla }}
@@ -335,25 +338,36 @@
                         </tr>
                         @foreach($gestionesInscritas as $gestion)
                             @php
-                                $resolucion = App\Resolucione::where('anio_vigente', $anioIngreso)
+                                // dd($persona->id." < - > ".$carrera->id." < - > ".$gestion->anio_vigente);
+                                $resolucion = App\Inscripcione::where('persona_id',$persona->id)
+                                                            ->where('carrera_id',$carrera->id)
+                                                            ->where('anio_vigente',$gestion->anio_vigente)
                                                             ->first();
-                                if(!$resolucion)
-                                {
-                                    for($i=1; $i<=10; $i++)
-                                    {
-                                        $anioIngreso    = $anioIngreso - 1;
-                                        $resolucion     = App\Resolucione::where('anio_vigente', $anioIngreso)
-                                                            ->first();
-                                        if($resolucion)
-                                        {
-                                            break;
-                                        }
-                                    }
-                                }
+
+                                // dd($resolucion);
+                                // echo $gestion;
+                                // $resolucion = App\Resolucione::where('anio_vigente', $gestion->anio_vigente)
+                                //                             ->orderBy('anio_vigente','desc')
+                                //                             ->first();
+                                                            // dd($resolucion);
+
+                                // if(!$resolucion)
+                                // {
+                                //     for($i=1; $i<=10; $i++)
+                                //     {
+                                //         $anioIngreso    = $anioIngreso - 1;
+                                //         $resolucion     = App\Resolucione::where('anio_vigente', $anioIngreso)
+                                //                             ->first();
+                                //         if($resolucion)
+                                //         {
+                                //             break;
+                                //         }
+                                //     }
+                                // }
                             @endphp
                             <tr>
                                 <td style="width:30%;">R. M.</td>
-                                <td style="width:35%;">{{ $resolucion->resolucion }}</td>
+                                <td style="width:35%;">{{ $resolucion->resolucion->resolucion }}</td>
                                 <td style="width:35%;">{{ $gestion->anio_vigente }}</td>
                             </tr>
                         @endforeach
