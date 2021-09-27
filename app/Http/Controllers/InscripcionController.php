@@ -2460,7 +2460,7 @@ class InscripcionController extends Controller
 
         // cambiamos las cuotas que se pagaron por los estados
         if($request->estado_inscripcion == "ABANDONO" || $request->estado_inscripcion == "CONGELADO"){
-            $pagos = Pagos::where('anio_vigente', $request->anio_vigente);
+            $pagos = Pago::where('anio_vigente', $request->anio_vigente);
         }
 
         return redirect('Persona/informacion/'.$request->persona_id);
