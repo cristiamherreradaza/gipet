@@ -151,13 +151,13 @@ class AsignaturaController extends Controller
     {
         $prerequisito = Prerequisito::find($prerequisito_id);
         $cantidad = Prerequisito::where('asignatura_id', $prerequisito->asignatura_id)->count();
-        if($cantidad > 1){
+        // if($cantidad > 1){
             $prerequisito->delete();
-        }else{
-            $prerequisito->prerequisito_id = NULL;
-            $prerequisito->sigla = NULL;
-            $prerequisito->save();
-        }
+        // }else{
+        //     $prerequisito->prerequisito_id = NULL;
+        //     $prerequisito->sigla = NULL;
+        //     $prerequisito->save();
+        // }
         // $eliminaPrerequisito          = Prerequisito::find($prerequisito_id);
         // $eliminaPrerequisito->borrado = date("Y-m-d H:i:s");
         // $eliminaPrerequisito->save();

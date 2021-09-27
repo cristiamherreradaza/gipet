@@ -37,7 +37,8 @@ class ListaController extends Controller
                                 ->groupBy('paralelo')
                                 ->get();
 
-        return view('lista.alumnos')->with(compact('carreras', 'cursos', 'gestiones', 'paralelos', 'turnos', 'estados'));
+        return view('lista.alumnos')->with(compact('carreras', 'cursos', 'paralelos', 'turnos'));
+        // return view('lista.alumnos')->with(compact('carreras', 'cursos', 'gestiones', 'paralelos', 'turnos', 'estados'));
     }
 
     public function ajaxBusquedaAlumnos(Request $request)
@@ -62,6 +63,61 @@ class ListaController extends Controller
                                 'personas.numero_celular as numero_celular',
                                 'carreras_personas.estado as estado'
                             );
+                        // dd($resultado);
+        }elseif($request->estado == 'VIGENTES'){
+            // dd($request->all());
+                // $resultado = CarrerasPersona::where('carrera_id', $request->carrera)->get();
+                $resultado = CarrerasPersona::query()
+                                            ->where('carreras_personas.carrera_id', $request->carrera)
+                                            ->where('carreras_personas.gestion',$request->gestion)
+                                            ->where('carreras_personas.turno_id',$request->turno)
+                                            ->where('carreras_personas.paralelo',$request->paralelo)
+                                            ->where('carreras_personas.anio_vigente', $request->anio_vigente)
+                                            ->where(function($query){
+                                                $query->where('carreras_personas.estado', '<>','ABANDONO')
+                                                    ->where('carreras_personas.estado', '<>','CONGELADO')
+                                                    ->Orwhere('carreras_personas.estado',null);
+                                            })
+                                            
+                                            ->leftJoin('personas', 'carreras_personas.persona_id', '=', 'personas.id')
+                                            // ->whereNull('carreras_personas.estado')
+                                            ->orderBy('personas.apellido_paterno')
+                                            ->orderBy('personas.apellido_materno')
+                                            ->orderBy('personas.nombres')
+                                            ->select(
+                                                'personas.cedula as cedula',
+                                                'personas.apellido_paterno as apellido_paterno',
+                                                'personas.apellido_materno as apellido_materno',
+                                                'personas.nombres as nombres',
+                                                'personas.numero_celular as numero_celular',
+                                                'carreras_personas.estado as estado'
+                                            )
+                                            // ->get()
+                                            ;
+
+                                            // dd($resultado);
+            // $resultado = CarrerasPersona::where('carreras_personas.carrera_id', $request->carrera)
+            //                 ->where('carreras_personas.gestion', $request->gestion)
+            //                 ->where('carreras_personas.turno_id', $request->turno)
+            //                 ->where('carreras_personas.paralelo', $request->paralelo)
+            //                 ->where('carreras_personas.anio_vigente', $request->anio_vigente)
+            //                 ->where('carreras_personas.estado', '','ABANDONO')
+            //                 ->where('carreras_personas.estado','REPROBO')
+            //                 ->leftJoin('personas', 'carreras_personas.persona_id', '=', 'personas.id')
+            //                 ->whereNull('carreras_personas.estado')
+            //                 ->orderBy('personas.apellido_paterno')
+            //                 ->orderBy('personas.apellido_materno')
+            //                 ->orderBy('personas.nombres')
+            //                 ->select(
+            //                     'personas.cedula as cedula',
+            //                     'personas.apellido_paterno as apellido_paterno',
+            //                     'personas.apellido_materno as apellido_materno',
+            //                     'personas.nombres as nombres',
+            //                     'personas.numero_celular as numero_celular',
+            //                     'carreras_personas.estado as estado'
+            //                 )
+            //                 ->get();
+                            // dd($resultado);
 
         }else{
             $resultado = CarrerasPersona::where('carreras_personas.carrera_id', $request->carrera)

@@ -5,6 +5,7 @@
                 <tr>
                     <th>Sigla</th>
                     <th>Materia</th>
+                    <th>Año Vigente</th>
                     <th class="text-nowrap">Accion</th>
                 </tr>
             </thead>
@@ -14,6 +15,7 @@
                         <tr>
                             <td>{{ $asignatura->prerequisito->sigla }}</td>
                             <td>{{ $asignatura->prerequisito->nombre }}</td>
+                            <td>{{ $asignatura->prerequisito->anio_vigente }}</td>
                             <td class="text-nowrap">
                                 <button type="button" class="btn btn-danger" onclick="elimina_prerequisito('{{ $asignatura->id }}', '{{ $asignatura->asignatura_id }}', '{{ $asignatura->prerequisito->nombre }}')">
                                     <i class="fas fa-trash"></i>
