@@ -96,6 +96,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {{-- @dd($inscritos) --}}
                     @foreach($inscritos as $contador => $inscrito)
                     @php
                         $nota = App\Nota::where('inscripcion_id', $inscrito->id)
