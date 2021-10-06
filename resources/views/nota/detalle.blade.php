@@ -109,9 +109,9 @@
                         }
                     @endphp 
                         <tr>
-                            <td class="text-left">{{ $inscrito->persona->apellido_paterno }}</td>
-                            <td class="text-left">{{ $inscrito->persona->apellido_materno }}</td>
-                            <td class="text-left">{{ $inscrito->persona->nombres }}</td>
+                            <td class="text-left">{{ $inscrito->persona['apellido_paterno'] }}</td>
+                            <td class="text-left">{{ $inscrito->persona['apellido_materno'] }}</td>
+                            <td class="text-left">{{ $inscrito->persona['nombres'] }}</td>
                             <td class="text-left">{{ $inscrito->persona->cedula }}</td>
                             <td>
                                 <input type="number" name="asistencia_{{ $inscrito->id }}" id="asistencia_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_asistencia, 0) }}" onchange="ajaxRegistraNotaAsistencia('{{ $inscrito->id }}', '{{ $bimestreActual }}', 'asistencia')" {{ $estado }} />
