@@ -96,6 +96,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {{-- @dd($inscritos) --}}
                     @foreach($inscritos as $contador => $inscrito)
                     @php
                         $nota = App\Nota::where('inscripcion_id', $inscrito->id)
@@ -109,6 +110,8 @@
                         }
                     @endphp 
                         <tr>
+                            {{-- @dd($inscrito->persona) --}}
+                            
                             <td class="text-left">{{ $inscrito->persona->apellido_paterno }}</td>
                             <td class="text-left">{{ $inscrito->persona->apellido_materno }}</td>
                             <td class="text-left">{{ $inscrito->persona->nombres }}</td>

@@ -199,6 +199,7 @@
             @php
                 // dd($cantidadAprobados);
                 $contadorMateriasAprobadas = 0;
+                $sumaNotas = 0;
             @endphp
             @foreach($inscripciones as $key => $inscripcion)
                 <tr>
@@ -240,7 +241,17 @@
                             NINGUNO
                         @endif
                     </td>
-                    <td>{{ $inscripcion->nota ? round($inscripcion->nota) : '0' }}</td>
+                    <td>
+                        {{-- {{ ($inscripcion->nota) ? (round($inscripcion->nota)) : '0' }} --}}
+                        @php
+                            if($inscripcion->nota){
+                                echo round($inscripcion->nota);
+                                $sumaNotas = $sumaNotas + $inscripcion->nota;
+                            }else{
+                                echo '0';
+                            }
+                        @endphp
+                    </td>
                     <td>{{ $inscripcion->segundo_turno ? round($inscripcion->segundo_turno) : '' }}</td>
                     <td>
                         @php
@@ -267,6 +278,9 @@
                     <td></td> -->
                 </tr>
             @endforeach
+            @php
+                $contadorMaterias = $key+1;
+            @endphp
         </table>
 
         <p style="font-size: 9pt;">
@@ -319,11 +333,16 @@
                         </tr>
                         <tr>
                             <td>Asignaturas Aprobadas</td>
-                            <td>{{ $contadorMateriasAprobadas }} / {{ $cantidadCurricula }}</td>
+                            <td>{{ $contadorMateriasAprobadas }} / {{ $contadorMaterias }}</td>
                         </tr>
                         <tr>
                             <td rowspan="2">Promedio de Calificaciones</td>
-                            <td rowspan="2">{{ round($promedioCalificaciones, 0) }}</td>
+                            {{-- <td rowspan="2">{{ round($promedioCalificaciones, 0) }}</td> --}}
+                            <td rowspan="2">
+                                @php
+                                    echo round($sumaNotas/$contadorMaterias);
+                                @endphp
+                            </td>
                         </tr>
 
                     </table>
