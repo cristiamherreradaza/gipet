@@ -77,27 +77,36 @@ class NotasExport implements FromCollection, WithMapping, WithHeadings, ShouldAu
         * @var Invoice $invoice
         */
         $registro   = Inscripcione::where('id', $nota->inscripcion_id)
+                                // ->whereNotNull('convalidado')
+                                // ->where('convalidado', null)
                                 ->first();
-        if($registro){
-            if($registro->convalidacion_externa && $registro->convalidacion_externa == 'Si'){
-                $observacion    = 'No Calificar';
+        if($registro->convalidado != 'Si'){
+            if($registro){
+                if($registro->convalidacion_externa && $registro->convalidacion_externa == 'Si'){
+                    $observacion    = 'No Calificar';
+                }else{
+                    $observacion    = '';
+                }
             }else{
                 $observacion    = '';
             }
+
+            return [
+                $nota->id,
+                $nota->persona->apellido_paterno. ' ' .$nota->persona->apellido_materno. ' ' .$nota->persona->nombres,
+                $nota->persona->cedula,
+                $nota->trimestre,
+                $nota->nota_asistencia,
+                $nota->nota_practicas,
+                $nota->nota_primer_parcial,
+                $nota->nota_examen_final,
+                $nota->nota_puntos_ganados,
+            ];
         }else{
-            $observacion    = '';
+            return [];
         }
-        return [
-            $nota->id,
-            $nota->persona->apellido_paterno. ' ' .$nota->persona->apellido_materno. ' ' .$nota->persona->nombres,
-            $nota->persona->cedula,
-            $nota->trimestre,
-            $nota->nota_asistencia,
-            $nota->nota_practicas,
-            $nota->nota_primer_parcial,
-            $nota->nota_examen_final,
-            $nota->nota_puntos_ganados,
-        ];
+
+
     }
 
     public function headings() : array
