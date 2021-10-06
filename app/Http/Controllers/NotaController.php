@@ -119,6 +119,7 @@ class NotaController extends Controller
 
     public function exportarexcel($asignatura_id, $bimestre)
     {
+        // dd($asignatura_id);
         $asignatura = NotasPropuesta::find($asignatura_id);
 
         $nombreAsignatura = $asignatura->asignatura->nombre;
@@ -539,7 +540,10 @@ class NotaController extends Controller
                                             ->where('anio_vigente', $request->anio_vigente)
                                             ->first();
                 $inscripcion->nota = round($nota->total/2, 0);
-                $inscripcion->save();
+
+                if($inscripcion->convalidado != 'Si'){
+                    $inscripcion->save();
+                }
             }
 
             return response()->json([
