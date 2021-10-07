@@ -2746,7 +2746,7 @@ class InscripcionController extends Controller
 
         $hoja->setCellValue('C2', 'INSTITUTO TECNICO EF-GIPET S.R.L.');
         $hoja->setCellValue('C3', $carrera->nombre);
-        $hoja->setCellValue('C4', 'TECNICO SUPERIOR');
+        $hoja->setCellValue('C4', $carrera->nivel);
         $hoja->setCellValue('C5', 'ANUAL');
         $hoja->setCellValue('C6', $persona->apellido_paterno.' '.$persona->apellido_materno.' '.$persona->nombres);
 
@@ -2755,14 +2755,15 @@ class InscripcionController extends Controller
         $hoja->setCellValue('F5', 'MATRICULA');
         $hoja->setCellValue('F6', 'CEDULA IDENTIDAD');
 
-        $hoja->setCellValue('H3', $fechaInicioGestion);
-        $hoja->setCellValue('H4', $fechaFinalGestion);
-        $hoja->setCellValue('H5', 'MATRICULA');
+        $hoja->setCellValue('H3', date('d/m/Y', strtotime($fechaInicioGestion)));
+        $hoja->setCellValue('H4', date('d/m/Y', strtotime($fechaFinalGestion)));
+        $hoja->setCellValue('H5', '');
         $hoja->setCellValue('H6', $persona->cedula);
 
         $contadorCeldas = 9;
         $contadorMaterias = 0;
         $contadorAprobadas = 0;
+        $sumaNotas = 0;
 
         foreach($inscripciones as $key => $i){
             $contadorMaterias++;
@@ -2798,6 +2799,7 @@ class InscripcionController extends Controller
             $hoja->setCellValue("F$contadorCeldas", $siglaPrerequisito);
 
             $notaHistorial = ($i->nota)?round($i->nota):'0';
+            $sumaNotas = $sumaNotas + $notaHistorial;
             $segundoHistorial = ($i->segundo_turno)?round($i->segundo_turno):'0';
 
             $hoja->setCellValue("G$contadorCeldas", $notaHistorial);
@@ -2812,7 +2814,7 @@ class InscripcionController extends Controller
                                                 ->first();
 
             $hoja->setCellValue("I$contadorCeldas", $carreraPersona->estado);
-            if($carreraPersona->estado == "APROBADO"){
+            if($carreraPersona->estado == "APROBO"){
                 $contadorAprobadas++;
             }
 
@@ -2881,6 +2883,8 @@ class InscripcionController extends Controller
         $hoja->setCellValue("G$contadorCargaHoraria", "Asignaturas Aprobadas");
         $hoja->setCellValue("I$contadorCargaHoraria", "$contadorAprobadas/$contadorMaterias");
         $contadorCargaHoraria++;
+        $promedioCalificaciones = $sumaNotas / $key;
+        // dd($promedioCalificaciones."<----->".$sumaNotas."<----->".$key);
         $hoja->setCellValue("G$contadorCargaHoraria", "Promedio Calificaciones");
         $hoja->setCellValue("I$contadorCargaHoraria", "$promedioCalificaciones");
 
