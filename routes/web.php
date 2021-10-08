@@ -371,7 +371,7 @@ Route::middleware(['auth'])->group(function () {
     // REPORTES
     Route::get('Lista/alumnos', 'ListaController@alumnos');
     Route::get('Lista/ajaxBusquedaAlumnos', 'ListaController@ajaxBusquedaAlumnos');
-    Route::get('Lista/reportePdfAlumnos/{carrera}/{curso}/{turno}/{paralelo}/{gestion}/{estado}', 'ListaController@reportePdfAlumnos');
+    Route::get('Lista/reportePdfAlumnos/{carrera}/{gestion}/{turno}/{paralelo}/{anio_vigente}/{estado}', 'ListaController@reportePdfAlumnos');
     Route::get('Lista/notas', 'ListaController@notas');
     Route::post('Lista/generaPdfCentralizadorNotas', 'ListaController@generaPdfCentralizadorNotas');
     Route::get('Lista/totalAlumnos', 'ListaController@totalAlumnos');
@@ -389,6 +389,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('Lista/genera_centralizador', 'ListaController@genera_centralizador');
     Route::post('Lista/generaExcelCentralizador', 'ListaController@generaExcelCentralizador');
     Route::post('Lista/excelCentralizadorNotas', 'ListaController@excelCentralizadorNotas');
+    Route::get('Lista/listaAsistencia', 'ListaController@listaAsistencia');
+
 
     // EXCEL
     Route::get('Importacion/excel', 'ImportacionController@excel');

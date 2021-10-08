@@ -144,15 +144,24 @@ class ListaController extends Controller
         return Datatables::of($resultado)->make(true);
     }
 
-    public function reportePdfAlumnos($carrera_id, $curso_id, $turno_id, $paralelo, $gestion, $estado)
+    public function reportePdfAlumnos($carrera_id, $gestion, $turno_id, $paralelo, $anio_vigente, $estado)
     {
-        $listado    = CarrerasPersona::where('carrera_id', $carrera_id)
-                                    ->where('gestion', $curso_id)
+        // dd($carrera_id."-".$gestion."-". $turno_id."-".$paralelo."-". $anio_vigente."-". $estado);
+        // dd($anio_vigente);
+        $listado = CarrerasPersona::where('carrera_id', $carrera_id)
                                     ->where('turno_id', $turno_id)
+                                    ->where('gestion', $gestion)
                                     ->where('paralelo', $paralelo)
-                                    ->where('anio_vigente', $gestion)
-                                    ->where('vigencia', $estado)
+                                    ->where('anio_vigente',$anio_vigente)
                                     ->get();
+        // $listado    = CarrerasPersona::where('carrera_id', $carrera_id)
+        //                             ->where('gestion', $curso_id)
+        //                             ->where('turno_id', $turno_id)
+        //                             ->where('paralelo', $paralelo)
+        //                             ->where('anio_vigente', $gestion)
+        //                             ->where('vigencia', $estado)
+        //                             ->get();
+                // dd($listado);
         $array_personas = array();
         foreach($listado as $registro)
         {
@@ -772,6 +781,23 @@ class ListaController extends Controller
         // dd($nominaEstudiantes[0]->id);
 
         return view('persona.formularioCentralizador')->with(compact('carrera', 'curso', 'paralelo', 'turno', 'gestion', 'datosTurno', 'materiasCarrera', 'nominaEstudiantes', 'datosCarrera'));
+    }
+
+    public function listaAsistencia(Request $request)
+    {
+        $carreras   = Carrera::whereNull('estado')->get();
+
+        $cursos     = Asignatura::select('gestion')
+                                ->groupBy('gestion')
+                                ->get();
+
+        $turnos     = Turno::get();
+
+        $paralelos  = CarrerasPersona::select('paralelo')
+                                ->groupBy('paralelo')
+                                ->get();
+
+        return view('lista.listaAsistencia')->with(compact('carreras', 'cursos', 'paralelos', 'turnos'));
     }
 
 }
