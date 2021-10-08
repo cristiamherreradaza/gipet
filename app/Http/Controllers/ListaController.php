@@ -148,20 +148,29 @@ class ListaController extends Controller
     {
         // dd($carrera_id."-".$gestion."-". $turno_id."-".$paralelo."-". $anio_vigente."-". $estado);
         // dd($anio_vigente);
-        $listado = CarrerasPersona::where('carrera_id', $carrera_id)
-                                    ->where('turno_id', $turno_id)
-                                    ->where('gestion', $gestion)
-                                    ->where('paralelo', $paralelo)
-                                    ->where('anio_vigente',$anio_vigente)
-                                    ->get();
-        // $listado    = CarrerasPersona::where('carrera_id', $carrera_id)
-        //                             ->where('gestion', $curso_id)
-        //                             ->where('turno_id', $turno_id)
-        //                             ->where('paralelo', $paralelo)
-        //                             ->where('anio_vigente', $gestion)
-        //                             ->where('vigencia', $estado)
-        //                             ->get();
-                // dd($listado);
+        $carrera    = Carrera::find($carrera_id);
+        $turno      = Turno::find($turno_id);
+
+        
+        $listado1 = CarrerasPersona::query();
+
+        $listado1->where('carrera_id', $carrera_id)
+                 ->where('turno_id', $turno_id)
+                 ->where('gestion', $gestion)
+                 ->where('paralelo', $paralelo)
+                 ->where('anio_vigente',$anio_vigente);
+                 if($estado == "VIGENTES"){
+                     $listado1->where(function($query){
+                        $query->whereIn('estado', ['REPROBO','APROBO'])
+                            ->OrwhereNull('estado');
+                     });
+                 }elseif($estado == "APROBO" || $estado == "REPROBO" || $estado == "CONGELADO" || $estado == "ABANDONO" || $estado == "ABANDONO TEMPORAL"){
+                    $listado1 -> where('estado', $estado);
+                 }
+
+        $listado = $listado1->get();
+        // dd($listado);
+
         $array_personas = array();
         foreach($listado as $registro)
         {
@@ -172,7 +181,8 @@ class ListaController extends Controller
                                 ->orderBy('apellido_materno')
                                 ->orderBy('nombres')
                                 ->get();
-        $pdf    = PDF::loadView('pdf.listaAlumnoCarreraCursoTurnoParalelo', compact('listado', 'estudiantes', 'estado'))->setPaper('letter');
+        // dd($estudiantes);
+        $pdf    = PDF::loadView('pdf.listaAlumnoCarreraCursoTurnoParalelo', compact('listado', 'estudiantes', 'estado', 'carrera', 'gestion', 'turno', 'paralelo','anio_vigente'))->setPaper('letter');
         // return $pdf->download('boletinInscripcion_'.date('Y-m-d H:i:s').'.pdf');
         return $pdf->stream('listaAlumnos_'.date('Y-m-d H:i:s').'.pdf');
     }

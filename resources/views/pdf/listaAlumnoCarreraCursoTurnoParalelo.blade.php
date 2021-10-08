@@ -91,7 +91,8 @@
             </tr>
             <tr>
                 <td style="text-align:center; font-family: 'Times New Roman', Times, serif; font-size:15px; line-height:100%">
-                    <strong>{{ $listado[0]->anio_vigente }}</strong>
+                    {{-- <strong>{{ $listado[0]->anio_vigente }}</strong> --}}
+                    <strong>{{ $anio_vigente }}</strong>
                 </td>
             </tr>
         </table> 
@@ -102,13 +103,15 @@
                     <strong>Carrera:</strong>
                 </td>
                 <td style="text-align:left; font-family: 'Times New Roman', Times, serif; font-size:12px; line-height:100%">
-                    {{ $listado[0]->carrera->nombre }}
+                    {{-- {{ $listado[0]->carrera->nombre }} --}}
+                    {{ $carrera->nombre }}
                 </td>
                 <td style="text-align:left; font-family: 'Times New Roman', Times, serif; font-size:12px; line-height:100%">
                     <strong>Paralelo:</strong>
                 </td>
                 <td style="text-align:left; font-family: 'Times New Roman', Times, serif; font-size:12px; line-height:100%">
-                    PARALELO ({{ $listado[0]->paralelo }})
+                    {{-- PARALELO ({{ $listado[0]->paralelo }}) --}}
+                    PARALELO ({{ $paralelo }})
                 </td>
             </tr>
         </table>
@@ -119,13 +122,15 @@
                     <strong>Curso:</strong>
                 </td>
                 <td style="text-align:left; font-family: 'Times New Roman', Times, serif; font-size:12px; line-height:100%">
-                    {{ $listado[0]->gestion }}° A&ntilde;o
+                    {{-- {{ $listado[0]->gestion }}° A&ntilde;o --}}
+                    {{ $gestion }}° A&ntilde;o
                 </td>
                 <td style="text-align:left; font-family: 'Times New Roman', Times, serif; font-size:12px; line-height:100%">
                     <strong>Turno:</strong>
                 </td>
                 <td style="text-align:left; font-family: 'Times New Roman', Times, serif; font-size:12px; line-height:100%">
-                    {{ $listado[0]->turno->descripcion }}
+                    {{-- {{ $listado[0]->turno->descripcion }} --}}
+                    {{ $turno->descripcion }}
                 </td>
                 <td style="text-align:left; font-family: 'Times New Roman', Times, serif; font-size:12px; line-height:100%">
                     <strong>Fecha:</strong>

@@ -84,10 +84,21 @@
                     </div>
 
                     <div class="col-md-2">
-                        <div class="form-group">
-                            <label class="control-label">&nbsp;</label>
-                            <button type="button" onclick="buscar()" class="btn btn-block btn-primary">Buscar</button>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">&nbsp;</label>
+                                    <button type="button" onclick="buscar()" class="btn btn-block btn-primary">Buscar</button>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">&nbsp;</label>
+                                    <button type="button" onclick="reportePdfAlumnos()" class="btn btn-block btn-danger"> <i class="fas fa-file-pdf"></i> PDF</button>
+                                </div>
+                            </div>
                         </div>
+                        
                     </div>
                 </div>
                 <div class="row">
@@ -261,13 +272,13 @@
     function reportePdfAlumnos()
     {
         var carrera     = $("#carrera").val();
-        var curso       = $("#curso").val();
+        var gestion       = $("#gestion").val();
         var turno       = $("#turno").val();
         var paralelo    = $("#paralelo").val();
-        var gestion     = $("#gestion").val();
+        var anio_vigente     = $("#anio_vigente").val();
         var estado      = $("#estado").val();
         // Aplicar validaciones, para cuando los campos sean vacios
-        window.open("{{ url('Lista/reportePdfAlumnos') }}/"+carrera+'/'+curso+'/'+turno+'/'+paralelo+'/'+gestion+'/'+estado);
+        window.open("{{ url('Lista/reportePdfAlumnos') }}/"+carrera+'/'+gestion+'/'+turno+'/'+paralelo+'/'+anio_vigente+'/'+estado);
         //window.location.href = "{{ url('Lista/reportePdfAlumnos') }}/"+carrera+'/'+curso+'/'+turno+'/'+paralelo+'/'+gestion+'/'+estado;
     }
 
