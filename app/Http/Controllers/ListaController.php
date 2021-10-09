@@ -215,9 +215,27 @@ class ListaController extends Controller
 
     public function generaPdfCentralizadorNotas(Request $request)
     {
-        $carrera    = $request->carrera_id;
+        // $carrera    = $request->carrera_id;
+        // $curso      = $request->gestion;
+        // $turno      = $request->turno_id;
+        // $paralelo   = $request->paralelo;
+        // $gestion    = $request->anio_vigente;
+        // $tipo       = $request->tipo;
+        // $imp_nombre = $request->imprime_nombre;
+
+        // cambiar esto para el centralizador de notas
+
+        $request->carrera_id = 1;
+        $request->gestion = 1;
+        $request->turno_id = 1;
+        $request->paralelo = "A";
+        $request->anio_vigente = '2021';
+        $request->tipo = 'anual';
+        $request->imprime_nombre = 'Si';
+
+         $carrera    = $request->carrera_id;
         $curso      = $request->gestion;
-        $turno      = $request->turno_id;
+        // $turno      = $request->turno_id;
         $paralelo   = $request->paralelo;
         $gestion    = $request->anio_vigente;
         $tipo       = $request->tipo;
@@ -260,15 +278,17 @@ class ListaController extends Controller
                             ->groupBy('carreras_personas.persona_id')
                             ->get();
 
+        // dd($nominaEstudiantes);
+
         // buscamos el anio de inscripcion del primer estudiante
         // para buscar las materias de esa gestion
         // dd($nominaEstudiantes[0]->id);
 
-        return view('pdf.generaPdfCentralizadorNotas')->with(compact('carrera', 'curso', 'paralelo', 'turno', 'gestion', 'datosTurno', 'materiasCarrera', 'nominaEstudiantes', 'datosCarrera', 'tipo', 'imp_nombre'));
+        // return view('pdf.generaPdfCentralizadorNotas')->with(compact('carrera', 'curso', 'paralelo', 'turno', 'gestion', 'datosTurno', 'materiasCarrera', 'nominaEstudiantes', 'datosCarrera', 'tipo', 'imp_nombre'));
 
-        // $pdf = PDF::loadView('pdf.centralizadorNotas', compact('carrera', 'curso', 'paralelo', 'turno', 'gestion', 'datosTurno', 'materiasCarrera', 'nominaEstudiantes', 'datosCarrera', 'tipo', 'imp_nombre'))->setPaper('letter', 'landscape');
+        $pdf = PDF::loadView('pdf.centralizadorNotas', compact('carrera', 'curso', 'paralelo', 'turno', 'gestion', 'datosTurno', 'materiasCarrera', 'nominaEstudiantes', 'datosCarrera', 'tipo', 'imp_nombre'))->setPaper('letter', 'landscape');
         // return $pdf->download('centralizador.pdf');
-        // return $pdf->stream('listaAlumnos_'.date('Y-m-d H:i:s').'.pdf');
+        return $pdf->stream('listaAlumnos_'.date('Y-m-d H:i:s').'.pdf');
     }
 
     public function excelCentralizadorNotas(Request $request)

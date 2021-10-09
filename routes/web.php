@@ -373,7 +373,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Lista/ajaxBusquedaAlumnos', 'ListaController@ajaxBusquedaAlumnos');
     Route::get('Lista/reportePdfAlumnos/{carrera}/{gestion}/{turno}/{paralelo}/{anio_vigente}/{estado}', 'ListaController@reportePdfAlumnos');
     Route::get('Lista/notas', 'ListaController@notas');
-    Route::post('Lista/generaPdfCentralizadorNotas', 'ListaController@generaPdfCentralizadorNotas');
+
+    // modificar este
+    Route::get('Lista/generaPdfCentralizadorNotas', 'ListaController@generaPdfCentralizadorNotas');
     Route::get('Lista/totalAlumnos', 'ListaController@totalAlumnos');
     Route::get('Lista/ajaxTotalAlumnos', 'ListaController@ajaxTotalAlumnos');
     Route::get('Lista/reportePdfTotalAlumnos/{carrera}', 'ListaController@reportePdfTotalAlumnos');
