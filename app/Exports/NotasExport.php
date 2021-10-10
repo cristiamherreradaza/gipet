@@ -80,7 +80,7 @@ class NotasExport implements FromCollection, WithMapping, WithHeadings, ShouldAu
                                 // ->whereNotNull('convalidado')
                                 // ->where('convalidado', null)
                                 ->first();
-        if($registro->convalidado != 'Si'){
+        if($registro->convalidado != 'Si' && $nota->persona){
             if($registro){
                 if($registro->convalidacion_externa && $registro->convalidacion_externa == 'Si'){
                     $observacion    = 'No Calificar';
