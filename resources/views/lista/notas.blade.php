@@ -23,7 +23,7 @@
                 @csrf
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Carrera</label>
                                 <select name="carrera_id" id="carrera_id" class="form-control">
@@ -88,11 +88,23 @@
                                 <input type="number" name="anio_vigente" id="anio_vigente" class="form-control" value="{{ date('Y') }}">
                             </div>
                         </div>
-                        <div class="col-md-1">
-                            <div class="form-group">
-                                <label class="control-label">&nbsp;</label>
-                                <button type="button" onclick="generaCentralizador()" class="btn btn-block btn-primary">GENERAR</button>
+                        <div class="col-md-2">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">&nbsp;</label>
+                                        <button type="button" onclick="generaCentralizador()" class="btn btn-block btn-success"><i class="far fa-file-excel"></i> EXCEL</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">&nbsp;</label>
+                                        <button type="button" onclick="generaCentralizadorPdf()" class="btn btn-block btn-danger"><i class="far fa-file-pdf"></i> PDF</button>
+                                        {{-- <a href="#" class="btn btn-danger btn-block" target="_target" >PDF</a> --}}
+                                    </div>
+                                </div>
                             </div>
+                            
                         </div>
                     </div>
                     <div class="row">
@@ -166,6 +178,21 @@
                 $("#mostrar").html(data);
             }
         });*/
+    }
+
+    function generaCentralizadorPdf(){
+
+        $carrera            = $('#carrera_id').val();
+        $gestion            = $('#gestion').val();
+        $turno              = $('#turno_id').val();
+        $paralelo           = $('#paralelo').val();
+        $tipo               = $('#tipo').val()
+        $imprime_nombre     = $('#imprime_nombre').val()
+        $anio_vigente       = $('#anio_vigente').val();
+
+        // window.location.href = "{{ url('Lista/generaPdfCentralizadorNotas') }}/"+$carrera+"/"+$gestion+"/"+$turno+"/"+$paralelo+"/"+$tipo+"/"+$imprime_nombre+"/"+$anio_vigente;
+
+        window.open("{{ url('Lista/generaPdfCentralizadorNotas') }}/"+$carrera+"/"+$gestion+"/"+$turno+"/"+$paralelo+"/"+$tipo+"/"+$imprime_nombre+"/"+$anio_vigente, '_blank');
     }
 </script>
 @endsection

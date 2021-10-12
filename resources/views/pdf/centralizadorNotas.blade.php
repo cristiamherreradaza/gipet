@@ -139,48 +139,46 @@
                 @endif
                 <td>{{ $ne->persona->cedula }}</td>
                 @foreach ($materiasCarrera as $mc)
-                @php
-
-                if($tipo == 'primero'){
-                    $nota = App\Nota::where('persona_id', $ne->persona_id)
-                    ->where('carrera_id', $carrera)
-                    ->where('anio_vigente', $gestion)
-                    ->where('paralelo', $paralelo)
-                    ->where('asignatura_id', $mc->id)
-                    ->where('trimestre', 1)
-                    ->first();
-                }elseif ($tipo == 'segundo') {
-                $nota = App\Nota::where('persona_id', $ne->persona_id)
-                ->where('carrera_id', $carrera)
-                ->where('anio_vigente', $gestion)
-                ->where('paralelo', $paralelo)
-                ->where('asignatura_id', $mc->id)
-                ->where('trimestre', 2)
-                ->first();
-                }else{
-                $nota = App\Inscripcione::where('persona_id', $ne->persona_id)
-                ->where('carrera_id', $carrera)
-                ->where('anio_vigente', $gestion)
-                ->where('asignatura_id', $mc->id)
-                ->first();
-                }
-
-                $estado = App\CarrerasPersona::where('persona_id', $ne->persona_id)
-                ->where('carrera_id', $carrera)
-                ->where('anio_vigente', $gestion)
-                ->first();
-                @endphp
-                <td>
-                    @if ($nota)
-                    @if ($tipo == 'primero' || $tipo == 'segundo')
-                    {{ intval($nota->nota_total) }}
-                    @else
-                    {{ intval($nota->nota) }}
-                    @endif
-                    @else
-                    0
-                    @endif
-                </td>
+                    @php
+                        if($tipo == 'primero'){
+                            $nota = App\Nota::where('persona_id', $ne->persona_id)
+                            ->where('carrera_id', $carrera)
+                            ->where('anio_vigente', $gestion)
+                            ->where('paralelo', $paralelo)
+                            ->where('asignatura_id', $mc->id)
+                            ->where('trimestre', 1)
+                            ->first();
+                        }elseif ($tipo == 'segundo') {
+                            $nota = App\Nota::where('persona_id', $ne->persona_id)
+                            ->where('carrera_id', $carrera)
+                            ->where('anio_vigente', $gestion)
+                            ->where('paralelo', $paralelo)
+                            ->where('asignatura_id', $mc->id)
+                            ->where('trimestre', 2)
+                            ->first();
+                        }else{
+                            $nota = App\Inscripcione::where('persona_id', $ne->persona_id)
+                            ->where('carrera_id', $carrera)
+                            ->where('anio_vigente', $gestion)
+                            ->where('asignatura_id', $mc->id)
+                            ->first();
+                        }
+                        $estado = App\CarrerasPersona::where('persona_id', $ne->persona_id)
+                        ->where('carrera_id', $carrera)
+                        ->where('anio_vigente', $gestion)
+                        ->first();
+                    @endphp
+                    <td>
+                        @if ($nota)
+                            @if ($tipo == 'primero' || $tipo == 'segundo')
+                                {{ intval($nota->nota_total) }}
+                            @else
+                                {{ intval($nota->nota) }}
+                            @endif
+                        @else
+                        0
+                        @endif
+                    </td>
                 @endforeach
                 {{-- <td>{{ $estado->estado }}</td> --}}
             </tr>

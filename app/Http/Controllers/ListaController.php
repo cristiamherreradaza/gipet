@@ -213,7 +213,7 @@ class ListaController extends Controller
         return view('lista.notas')->with(compact('carreras', 'cursos', 'gestiones', 'paralelos', 'turnos', 'estados'));
     } 
 
-    public function generaPdfCentralizadorNotas(Request $request)
+    public function generaPdfCentralizadorNotas(Request $request, $carrera_id, $curso_id, $turno_id, $paralelo, $tipo, $imp_nombre, $anio_vigente)
     {
         // $carrera    = $request->carrera_id;
         // $curso      = $request->gestion;
@@ -225,17 +225,27 @@ class ListaController extends Controller
 
         // cambiar esto para el centralizador de notas
 
-        $request->carrera_id = 1;
-        $request->gestion = 1;
-        $request->turno_id = 1;
-        $request->paralelo = "A";
-        $request->anio_vigente = '2021';
-        $request->tipo = 'anual';
-        $request->imprime_nombre = 'Si';
+        // $request->carrera_id = 1;
+        // $request->gestion = 1;
+        // $request->turno_id = 1;
+        // $request->paralelo = "A";
+        // $request->anio_vigente = '2021';
+        // $request->tipo = 'anual';
+        // $request->imprime_nombre = 'Si';
 
-         $carrera    = $request->carrera_id;
+        
+        $request->carrera_id = $carrera_id;
+        $request->gestion = $curso_id;
+        $request->turno_id = $turno_id;
+        $request->paralelo = $paralelo;
+        $request->anio_vigente = $anio_vigente;
+        $request->tipo = $tipo;
+        $request->imprime_nombre = $imp_nombre;
+
+
+        $carrera    = $request->carrera_id;
         $curso      = $request->gestion;
-        // $turno      = $request->turno_id;
+        $turno      = $request->turno_id;
         $paralelo   = $request->paralelo;
         $gestion    = $request->anio_vigente;
         $tipo       = $request->tipo;
