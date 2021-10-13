@@ -132,56 +132,58 @@
                 {{-- <td><b>OBSERVACIONES</b></td> --}}
             </tr>
             @foreach ($nominaEstudiantes as $k => $ne)
-            <tr>
-                @if ($imp_nombre == 'Si')
-                <td style="width: 190px;">{{ $ne->persona->apellido_paterno }} {{ $ne->persona->apellido_materno }}
-                    {{ $ne->persona->nombres }}</td>
-                @endif
-                <td>{{ $ne->persona->cedula }}</td>
-                @foreach ($materiasCarrera as $mc)
-                    @php
-                        if($tipo == 'primero'){
-                            $nota = App\Nota::where('persona_id', $ne->persona_id)
+                @if ($ne->persona)
+                <tr>
+                    @if ($imp_nombre == 'Si')
+                    <td style="width: 190px;">{{ $ne->persona->apellido_paterno }} {{ $ne->persona->apellido_materno }}
+                        {{ $ne->persona->nombres }}</td>
+                    @endif
+                    <td>{{ $ne->persona->cedula }}</td>
+                    @foreach ($materiasCarrera as $mc)
+                        @php
+                            if($tipo == 'primero'){
+                                $nota = App\Nota::where('persona_id', $ne->persona_id)
+                                ->where('carrera_id', $carrera)
+                                ->where('anio_vigente', $gestion)
+                                ->where('paralelo', $paralelo)
+                                ->where('asignatura_id', $mc->id)
+                                ->where('trimestre', 1)
+                                ->first();
+                            }elseif ($tipo == 'segundo') {
+                                $nota = App\Nota::where('persona_id', $ne->persona_id)
+                                ->where('carrera_id', $carrera)
+                                ->where('anio_vigente', $gestion)
+                                ->where('paralelo', $paralelo)
+                                ->where('asignatura_id', $mc->id)
+                                ->where('trimestre', 2)
+                                ->first();
+                            }else{
+                                $nota = App\Inscripcione::where('persona_id', $ne->persona_id)
+                                ->where('carrera_id', $carrera)
+                                ->where('anio_vigente', $gestion)
+                                ->where('asignatura_id', $mc->id)
+                                ->first();
+                            }
+                            $estado = App\CarrerasPersona::where('persona_id', $ne->persona_id)
                             ->where('carrera_id', $carrera)
                             ->where('anio_vigente', $gestion)
-                            ->where('paralelo', $paralelo)
-                            ->where('asignatura_id', $mc->id)
-                            ->where('trimestre', 1)
                             ->first();
-                        }elseif ($tipo == 'segundo') {
-                            $nota = App\Nota::where('persona_id', $ne->persona_id)
-                            ->where('carrera_id', $carrera)
-                            ->where('anio_vigente', $gestion)
-                            ->where('paralelo', $paralelo)
-                            ->where('asignatura_id', $mc->id)
-                            ->where('trimestre', 2)
-                            ->first();
-                        }else{
-                            $nota = App\Inscripcione::where('persona_id', $ne->persona_id)
-                            ->where('carrera_id', $carrera)
-                            ->where('anio_vigente', $gestion)
-                            ->where('asignatura_id', $mc->id)
-                            ->first();
-                        }
-                        $estado = App\CarrerasPersona::where('persona_id', $ne->persona_id)
-                        ->where('carrera_id', $carrera)
-                        ->where('anio_vigente', $gestion)
-                        ->first();
-                    @endphp
-                    <td>
-                        @if ($nota)
-                            @if ($tipo == 'primero' || $tipo == 'segundo')
-                                {{ intval($nota->nota_total) }}
+                        @endphp
+                        <td>
+                            @if ($nota)
+                                @if ($tipo == 'primero' || $tipo == 'segundo')
+                                    {{ intval($nota->nota_total) }}
+                                @else
+                                    {{ intval($nota->nota) }}
+                                @endif
                             @else
-                                {{ intval($nota->nota) }}
+                            0
                             @endif
-                        @else
-                        0
-                        @endif
-                    </td>
-                @endforeach
-                {{-- <td>{{ $estado->estado }}</td> --}}
-            </tr>
+                        </td>
+                    @endforeach
+                    {{-- <td>{{ $estado->estado }}</td> --}}
+                </tr>
+                @endif
             @endforeach
         </table>
     </main>
