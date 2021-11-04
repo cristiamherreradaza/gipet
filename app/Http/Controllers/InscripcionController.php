@@ -2473,6 +2473,16 @@ class InscripcionController extends Controller
                                             ]
                                         );
 
+        $pago = Pago::where('persona_id', $request->persona_id)
+                                        ->where('carrera_id', $request->carrera_id)        
+                                        ->where('gestion', $request->gestion)            
+                                        ->where('anio_vigente', $request->anio_vigente)        
+                                        ->update(
+                                            [
+                                                'turno_id'=>$request->turno_id,
+                                            ]
+                                        );
+
         // cambiamos las cuotas que se pagaron por los estados
         if($request->estado_inscripcion == "ABANDONO" || $request->estado_inscripcion == "CONGELADO"){
             $pagos = Pago::where('anio_vigente', $request->anio_vigente);
