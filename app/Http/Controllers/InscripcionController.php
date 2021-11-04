@@ -2812,11 +2812,16 @@ class InscripcionController extends Controller
                                                 ->where('paralelo', $i->paralelo)
                                                 ->where('gestion', $i->gestion)
                                                 ->first();
-
-            $hoja->setCellValue("I$contadorCeldas", $carreraPersona->estado);
-            if($carreraPersona->estado == "APROBO"){
-                $contadorAprobadas++;
+            
+                                                // dd($carreraPersona);
+            if($carreraPersona){
+                $hoja->setCellValue("I$contadorCeldas", $carreraPersona->estado);
+                if($carreraPersona->estado == "APROBO"){
+                    $contadorAprobadas++;
+                }
             }
+
+            
 
             $contadorCeldas++;
         }

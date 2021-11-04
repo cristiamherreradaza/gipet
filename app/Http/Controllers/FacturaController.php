@@ -352,6 +352,8 @@ class FacturaController extends Controller
     {
         $cuotasPagadas = Pago::where('factura_id', $recibo_id)
                             ->get();
+                            // dd($recibo_id);
+        // $cuotasPagadas = Factura::find($recibo_id);
 
         return view('factura.generaRecibo')->with(compact('cuotasPagadas'));
     }

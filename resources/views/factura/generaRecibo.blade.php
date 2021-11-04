@@ -194,7 +194,9 @@
 	<div id="fondo">
 
 		@php
-			$recibo = App\Factura::find($cuotasPagadas[0]->factura_id);
+			// dd($cuotasPagadas);
+			// $recibo = App\Factura::find($cuotasPagadas->id);
+			$recibo = App\Factura::find($cuotasPagadas[0]->id);
 		@endphp
 
 		<div id="txtRecibo">RECIBO No. {{ str_pad($recibo->numero, 4, '0', STR_PAD_LEFT) }}/{{ $recibo->anio_vigente }}</div>

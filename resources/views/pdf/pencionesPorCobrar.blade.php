@@ -166,6 +166,7 @@
                                 ->whereNull('estado')
                                 ->whereYear('created_at', $anio_vigente)
                                 ->first();
+                        //         ->toSql();
                         // dd($primerPago);
                         echo $primer = ($primerPago!=null)?$primerPago->a_pagar:0;
                         // echo $primerPago->a_pagar;

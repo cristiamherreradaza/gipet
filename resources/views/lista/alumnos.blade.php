@@ -31,7 +31,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label class="control-label">Curso</label>
                             <select name="gestion" id="gestion" class="form-control">
@@ -51,7 +51,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                         <div class="form-group">
                             <label class="control-label">Paralelo</label>
                             <select name="paralelo" id="paralelo" class="form-control">
@@ -86,19 +86,38 @@
                     <div class="col-md-2">
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label class="control-label">&nbsp;</label>
                                     <button type="button" onclick="buscar()" class="btn btn-block btn-primary">Buscar</button>
-                                </div>
+                                </div> --}}
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                     <label class="control-label">&nbsp;</label>
                                     <button type="button" onclick="reportePdfAlumnos()" class="btn btn-block btn-danger"> <i class="fas fa-file-pdf"></i> PDF</button>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
-                        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">&nbsp;</label>
+                            <button type="button" onclick="buscar()" class="btn btn-block btn-primary">Buscar</button>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">&nbsp;</label>
+                            <button type="button" onclick="reportePdfAlumnos()" class="btn btn-block btn-danger"> <i class="fas fa-file-pdf"></i> PDF</button>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">&nbsp;</label>
+                            <button type="button" onclick="listaAlumnos()" class="btn btn-block btn-success"> <i class="fas fa-file-pdf"></i> Lista de Asistencia</button>
+                        </div>
                     </div>
                 </div>
                 <div class="row">
@@ -293,6 +312,18 @@
         // Aplicar validaciones, para cuando los campos sean vacios
         //window.open("{{ url('Lista/reporteExcelAlumnos') }}/"+carrera+'/'+curso+'/'+turno+'/'+paralelo+'/'+gestion+'/'+estado);
         window.location.href = "{{ url('Lista/reporteExcelAlumnos') }}/"+carrera+'/'+gestion+'/'+turno+'/'+paralelo+'/'+anio_vigente+'/'+estado;
+    }
+
+    function listaAlumnos()
+    {
+        var carrera      = $("#carrera").val();
+        var gestion      = $("#gestion").val();
+        var turno        = $("#turno").val();
+        var paralelo     = $("#paralelo").val();
+        var anio_vigente = $("#anio_vigente").val();
+        var estado       = $("#estado").val();
+            
+        alert('en desarrollo :v');
     }
 
 </script>
