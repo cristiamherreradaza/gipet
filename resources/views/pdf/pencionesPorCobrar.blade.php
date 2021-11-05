@@ -148,169 +148,172 @@
                 $totalNoveno = 0;
                 $totalDecimo = 0;
             @endphp
+            
             @forelse($carrerasPersonas as $cp)
-            <tr>
-                <td style="text-align: left;">
-                    {{ $cp->persona->apellido_paterno }}
-                    {{ $cp->persona->apellido_materno }}
-                    {{ $cp->persona->nombres }}
-                </td>
-                <td>{{ $cp->persona->cedula }}</td>
-                <td>
-                    @php
-                        $primerPago = App\Pago::where('gestion', $gestion)
-                                ->where('persona_id', $cp->persona->id)
-                                ->where('turno_id', $turno_id)
-                                ->where('carrera_id', 1)
-                                ->where('mensualidad', 1)
-                                ->whereNull('estado')
-                                ->whereYear('created_at', $anio_vigente)
-                                ->first();
-                        //         ->toSql();
-                        // dd($primerPago);
-                        echo $primer = ($primerPago!=null)?$primerPago->a_pagar:0;
-                        // echo $primerPago->a_pagar;
-                        $totalPrimero += $primer;
-                    @endphp
-                </td>
-                <td>
-                    @php
-                        $segundoPago = App\Pago::where('gestion', $gestion)
-                                ->where('persona_id', $cp->persona->id)
-                                ->where('turno_id', $turno_id)
-                                ->where('carrera_id', 1)
-                                ->where('mensualidad', 2)
-                                ->whereNull('estado')
-                                ->whereYear('created_at', $anio_vigente)
-                                ->first();
+                @if ($cp->persona)
+                <tr>
+                    <td style="text-align: left;">
+                        {{ $cp->persona->apellido_paterno }}
+                        {{ $cp->persona->apellido_materno }}
+                        {{ $cp->persona->nombres }}
+                    </td>
+                    <td>{{ $cp->persona->cedula }}</td>
+                    <td>
+                        @php
+                            $primerPago = App\Pago::where('gestion', $gestion)
+                                    ->where('persona_id', $cp->persona->id)
+                                    ->where('turno_id', $turno_id)
+                                    ->where('carrera_id', 1)
+                                    ->where('mensualidad', 1)
+                                    ->whereNull('estado')
+                                    ->whereYear('created_at', $anio_vigente)
+                                    ->first();
+                            //         ->toSql();
+                            // dd($primerPago);
+                            echo $primer = ($primerPago!=null)?$primerPago->a_pagar:0;
+                            // echo $primerPago->a_pagar;
+                            $totalPrimero += $primer;
+                        @endphp
+                    </td>
+                    <td>
+                        @php
+                            $segundoPago = App\Pago::where('gestion', $gestion)
+                                    ->where('persona_id', $cp->persona->id)
+                                    ->where('turno_id', $turno_id)
+                                    ->where('carrera_id', 1)
+                                    ->where('mensualidad', 2)
+                                    ->whereNull('estado')
+                                    ->whereYear('created_at', $anio_vigente)
+                                    ->first();
 
-                        echo $segundo = ($segundoPago!=null)?$segundoPago->a_pagar:0;
-                        $totalSegundo += $segundo;
-                    @endphp
-                </td>
-                <td>
-                    @php
-                        $tercerPago = App\Pago::where('gestion', $gestion)
-                                ->where('persona_id', $cp->persona->id)
-                                ->where('turno_id', $turno_id)
-                                ->where('carrera_id', 1)
-                                ->where('mensualidad', 3)
-                                ->whereNull('estado')
-                                ->whereYear('created_at', $anio_vigente)
-                                ->first();
+                            echo $segundo = ($segundoPago!=null)?$segundoPago->a_pagar:0;
+                            $totalSegundo += $segundo;
+                        @endphp
+                    </td>
+                    <td>
+                        @php
+                            $tercerPago = App\Pago::where('gestion', $gestion)
+                                    ->where('persona_id', $cp->persona->id)
+                                    ->where('turno_id', $turno_id)
+                                    ->where('carrera_id', 1)
+                                    ->where('mensualidad', 3)
+                                    ->whereNull('estado')
+                                    ->whereYear('created_at', $anio_vigente)
+                                    ->first();
 
-                        echo $tercer = ($tercerPago!=null)?$tercerPago->a_pagar:0;
-                        $totalTercero += $tercer;
-                    @endphp
-                </td>
-                <td>
-                    @php
-                        $cuartoPago = App\Pago::where('gestion', $gestion)
-                                ->where('persona_id', $cp->persona->id)
-                                ->where('turno_id', $turno_id)
-                                ->where('carrera_id', 1)
-                                ->where('mensualidad', 4)
-                                ->whereNull('estado')
-                                ->whereYear('created_at', $anio_vigente)
-                                ->first();
-                        // dd($cuartoPago);
-                        echo $cuarto = ($cuartoPago!=null)?$cuartoPago->a_pagar:0;
-                        $totalCuarto += $cuarto;
-                    @endphp
-                </td>
-                <td>
-                    @php
-                        $quintoPago = App\Pago::where('gestion', $gestion)
-                                ->where('persona_id', $cp->persona->id)
-                                ->where('turno_id', $turno_id)
-                                ->where('carrera_id', 1)
-                                ->where('mensualidad', 5)
-                                ->whereNull('estado')
-                                ->whereYear('created_at', $anio_vigente)
-                                ->first();
+                            echo $tercer = ($tercerPago!=null)?$tercerPago->a_pagar:0;
+                            $totalTercero += $tercer;
+                        @endphp
+                    </td>
+                    <td>
+                        @php
+                            $cuartoPago = App\Pago::where('gestion', $gestion)
+                                    ->where('persona_id', $cp->persona->id)
+                                    ->where('turno_id', $turno_id)
+                                    ->where('carrera_id', 1)
+                                    ->where('mensualidad', 4)
+                                    ->whereNull('estado')
+                                    ->whereYear('created_at', $anio_vigente)
+                                    ->first();
+                            // dd($cuartoPago);
+                            echo $cuarto = ($cuartoPago!=null)?$cuartoPago->a_pagar:0;
+                            $totalCuarto += $cuarto;
+                        @endphp
+                    </td>
+                    <td>
+                        @php
+                            $quintoPago = App\Pago::where('gestion', $gestion)
+                                    ->where('persona_id', $cp->persona->id)
+                                    ->where('turno_id', $turno_id)
+                                    ->where('carrera_id', 1)
+                                    ->where('mensualidad', 5)
+                                    ->whereNull('estado')
+                                    ->whereYear('created_at', $anio_vigente)
+                                    ->first();
 
-                        echo $quinto = ($quintoPago!=null)?$quintoPago->a_pagar:0;
-                        $totalQuinto += $quinto;
-                    @endphp
-                </td>
-                <td>
-                    @php
-                        $sextoPago = App\Pago::where('gestion', $gestion)
-                                ->where('persona_id', $cp->persona->id)
-                                ->where('turno_id', $turno_id)
-                                ->where('carrera_id', 1)
-                                ->where('mensualidad', 6)
-                                ->where('importe', 0)
-                                ->whereYear('created_at', $anio_vigente)
-                                ->first();
-                        echo $sexto = ($sextoPago!=null)?$sextoPago->a_pagar:0;
-                        $totalSexto += $sexto;
-                    @endphp
-                </td>
-                <td>
-                    @php
-                        $septimoPago = App\Pago::where('gestion', $gestion)
-                                ->where('persona_id', $cp->persona->id)
-                                ->where('turno_id', $turno_id)
-                                ->where('carrera_id', 1)
-                                ->where('mensualidad', 7)
-                                ->where('importe', 0)
-                                ->whereYear('created_at', $anio_vigente)
-                                ->first();
+                            echo $quinto = ($quintoPago!=null)?$quintoPago->a_pagar:0;
+                            $totalQuinto += $quinto;
+                        @endphp
+                    </td>
+                    <td>
+                        @php
+                            $sextoPago = App\Pago::where('gestion', $gestion)
+                                    ->where('persona_id', $cp->persona->id)
+                                    ->where('turno_id', $turno_id)
+                                    ->where('carrera_id', 1)
+                                    ->where('mensualidad', 6)
+                                    ->where('importe', 0)
+                                    ->whereYear('created_at', $anio_vigente)
+                                    ->first();
+                            echo $sexto = ($sextoPago!=null)?$sextoPago->a_pagar:0;
+                            $totalSexto += $sexto;
+                        @endphp
+                    </td>
+                    <td>
+                        @php
+                            $septimoPago = App\Pago::where('gestion', $gestion)
+                                    ->where('persona_id', $cp->persona->id)
+                                    ->where('turno_id', $turno_id)
+                                    ->where('carrera_id', 1)
+                                    ->where('mensualidad', 7)
+                                    ->where('importe', 0)
+                                    ->whereYear('created_at', $anio_vigente)
+                                    ->first();
 
-                        echo $septimo = ($septimoPago!=null)?$septimoPago->a_pagar:0;
-                        $totalSeptimo += $septimo;
-                    @endphp
-                </td>
-                <td>
-                    @php
-                        $octavoPago = App\Pago::where('gestion', $gestion)
-                                ->where('persona_id', $cp->persona->id)
-                                ->where('turno_id', $turno_id)
-                                ->where('carrera_id', 1)
-                                ->where('mensualidad', 8)
-                                ->whereNull('estado')
-                                ->whereYear('created_at', $anio_vigente)
-                                ->first();
+                            echo $septimo = ($septimoPago!=null)?$septimoPago->a_pagar:0;
+                            $totalSeptimo += $septimo;
+                        @endphp
+                    </td>
+                    <td>
+                        @php
+                            $octavoPago = App\Pago::where('gestion', $gestion)
+                                    ->where('persona_id', $cp->persona->id)
+                                    ->where('turno_id', $turno_id)
+                                    ->where('carrera_id', 1)
+                                    ->where('mensualidad', 8)
+                                    ->whereNull('estado')
+                                    ->whereYear('created_at', $anio_vigente)
+                                    ->first();
 
-                        echo $octavo = ($octavoPago!=null)?$octavoPago->a_pagar:0;
-                        $totalOctavo += $octavo;
-                    @endphp
-                </td>
-                <td>
-                    @php
-                        $novenoPago = App\Pago::where('gestion', $gestion)
-                                ->where('persona_id', $cp->persona->id)
-                                ->where('turno_id', $turno_id)
-                                ->where('carrera_id', 1)
-                                ->where('mensualidad', 9)
-                                ->whereNull('estado')
-                                ->whereYear('created_at', $anio_vigente)
-                                ->first();
+                            echo $octavo = ($octavoPago!=null)?$octavoPago->a_pagar:0;
+                            $totalOctavo += $octavo;
+                        @endphp
+                    </td>
+                    <td>
+                        @php
+                            $novenoPago = App\Pago::where('gestion', $gestion)
+                                    ->where('persona_id', $cp->persona->id)
+                                    ->where('turno_id', $turno_id)
+                                    ->where('carrera_id', 1)
+                                    ->where('mensualidad', 9)
+                                    ->whereNull('estado')
+                                    ->whereYear('created_at', $anio_vigente)
+                                    ->first();
 
-                        echo $noveno = ($novenoPago!=null)?$novenoPago->a_pagar:0;
-                        $totalNoveno += $noveno;
-                    @endphp
-                </td>
-                <td>
-                    @php
-                        $decimoPago = App\Pago::where('gestion', $gestion)
-                                ->where('persona_id', $cp->persona->id)
-                                ->where('turno_id', $turno_id)
-                                ->where('carrera_id', 1)
-                                ->where('mensualidad', 10)
-                                ->whereNull('estado')
-                                ->whereYear('created_at', $anio_vigente)
-                                ->first();
+                            echo $noveno = ($novenoPago!=null)?$novenoPago->a_pagar:0;
+                            $totalNoveno += $noveno;
+                        @endphp
+                    </td>
+                    <td>
+                        @php
+                            $decimoPago = App\Pago::where('gestion', $gestion)
+                                    ->where('persona_id', $cp->persona->id)
+                                    ->where('turno_id', $turno_id)
+                                    ->where('carrera_id', 1)
+                                    ->where('mensualidad', 10)
+                                    ->whereNull('estado')
+                                    ->whereYear('created_at', $anio_vigente)
+                                    ->first();
 
-                        echo $decimo = ($decimoPago!=null)?$decimoPago->a_pagar:0;
-                        $totalDecimo += $decimo;
-                    @endphp
-                </td>
-                <td style="text-align: right;">
-                    {{ $primer + $segundo + $tercer + $cuarto + $quinto + $sexto + $septimo + $octavo + $noveno + $decimo }}
-                </td>
-            </tr>
+                            echo $decimo = ($decimoPago!=null)?$decimoPago->a_pagar:0;
+                            $totalDecimo += $decimo;
+                        @endphp
+                    </td>
+                    <td style="text-align: right;">
+                        {{ $primer + $segundo + $tercer + $cuarto + $quinto + $sexto + $septimo + $octavo + $noveno + $decimo }}
+                    </td>
+                </tr>
+                @endif
             @empty
             <h3 class="text-danger text-center">NO EXISTEN REGISTROS</h3>
             @endforelse
