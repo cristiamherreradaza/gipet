@@ -60,7 +60,7 @@ class Utilidades{
     {
         switch ($ciudad) {
             case 'La Paz':
-                $expedido = 'LP';
+                $expedido = 'L.P.';
                 break;
             case 'Oruro':
                 $expedido = 'OR';
@@ -72,7 +72,7 @@ class Utilidades{
                 $expedido = 'CB';
                 break;
             case 'Santa Cruz':
-                $expedido = 'SC';
+                $expedido = 'S.C.';
                 break;
             case 'Beni':
                 $expedido = 'BN';

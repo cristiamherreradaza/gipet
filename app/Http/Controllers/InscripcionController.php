@@ -2724,6 +2724,7 @@ class InscripcionController extends Controller
             }
             $gestionesInscritas = CarrerasPersona::where('carrera_id', $carrera->id)
                                                 ->where('persona_id', $persona->id)
+                                                ->orderBy('anio_vigente', 'asc')
                                                 ->get();
 
         }
@@ -2747,6 +2748,19 @@ class InscripcionController extends Controller
         $hoja->setCellValue('J8', 'FOLIO');
         $hoja->setCellValue('K8', 'LIBRO');
 
+        $libro->getActiveSheet()->getStyle("A8")->getAlignment()->setWrapText(true);
+        $libro->getActiveSheet()->getStyle("B8")->getAlignment()->setWrapText(true);
+        $libro->getActiveSheet()->getStyle("C8")->getAlignment()->setWrapText(true);
+        $libro->getActiveSheet()->getStyle("D8")->getAlignment()->setWrapText(true);
+        $libro->getActiveSheet()->getStyle("E8")->getAlignment()->setWrapText(true);
+        $libro->getActiveSheet()->getStyle("F8")->getAlignment()->setWrapText(true);
+        $libro->getActiveSheet()->getStyle("G8")->getAlignment()->setWrapText(true);
+        $libro->getActiveSheet()->getStyle("H8")->getAlignment()->setWrapText(true);
+        $libro->getActiveSheet()->getStyle("I8")->getAlignment()->setWrapText(true);
+        $libro->getActiveSheet()->getStyle("J8")->getAlignment()->setWrapText(true);
+        $libro->getActiveSheet()->getStyle("K8")->getAlignment()->setWrapText(true);
+
+        
         $hoja->setCellValue('E1', 'HISTORIAL ACADEMICO');
         $hoja->setCellValue('A2', 'INSTITUTO');
         $hoja->setCellValue('A3', 'CARRERA');
@@ -2754,11 +2768,11 @@ class InscripcionController extends Controller
         $hoja->setCellValue('A5', 'REGIMEN');
         $hoja->setCellValue('A6', 'ESTUDIANTE');
 
-        $hoja->setCellValue('C2', 'INSTITUTO TECNICO EF-GIPET S.R.L.');
-        $hoja->setCellValue('C3', $carrera->nombre);
-        $hoja->setCellValue('C4', $carrera->nivel);
-        $hoja->setCellValue('C5', 'ANUAL');
-        $hoja->setCellValue('C6', $persona->apellido_paterno.' '.$persona->apellido_materno.' '.$persona->nombres);
+        $hoja->setCellValue('D2', 'INSTITUTO TECNICO EF-GIPET S.R.L.');
+        $hoja->setCellValue('D3',  strtoupper($carrera->nombre));
+        $hoja->setCellValue('D4', strtoupper($carrera->nivel));
+        $hoja->setCellValue('D5', 'ANUAL');
+        $hoja->setCellValue('D6', $persona->apellido_paterno.' '.$persona->apellido_materno.' '.$persona->nombres);
 
         $hoja->setCellValue('F3', 'FECHA ADMISION');
         $hoja->setCellValue('F4', 'FECHA CONCLUSION');
@@ -2768,7 +2782,11 @@ class InscripcionController extends Controller
         $hoja->setCellValue('H3', date('d/m/Y', strtotime($fechaInicioGestion)));
         $hoja->setCellValue('H4', date('d/m/Y', strtotime($fechaFinalGestion)));
         $hoja->setCellValue('H5', '');
-        $hoja->setCellValue('H6', $persona->cedula);
+
+            $utilidades = new Utilidades();
+            $expedido = $utilidades->cambiaExpedido($persona->expedido);
+
+        $hoja->setCellValue('H6', $persona->cedula ." ".$expedido);
 
         $contadorCeldas = 9;
         $contadorMaterias = 0;
@@ -2841,7 +2859,8 @@ class InscripcionController extends Controller
         $fechaEs = $utilidades->fechaCastellano($hoy);
 
         // generacion de la impresion de lugar y fecha para abajo
-        $filaFirma = $contadorCeldas+5;
+        $filaFirma = $contadorCeldas+7;
+        $selloIntitucion = $contadorCeldas+13;
         $filaEscala = $filaFirma+2;
         $filaAprobado = $filaEscala+1;
         $filaReprobado = $filaAprobado+1;
@@ -2849,58 +2868,73 @@ class InscripcionController extends Controller
 
         $filaResoluciones = $filaMinima + 2;
 
-        $hoja->setCellValue("A$contadorCeldas", "Lugar y Fecha: $fechaEs");
+        $lugaryFecha = $contadorCeldas +2;
+
+        $hoja->setCellValue("A$lugaryFecha", "Lugar y Fecha: $fechaEs");
         $hoja->setCellValue("E$filaFirma", "Firma Autoridad Academica");
+        $hoja->setCellValue("E$selloIntitucion", "Sello de Intitución");
+
         
         $hoja->setCellValue("A$filaEscala", "ESCALA DE VALORACION");
         $hoja->setCellValue("A$filaAprobado", "61 - 100");
-        $hoja->setCellValue("B$filaAprobado", "APROBADO");
+        $hoja->setCellValue("C$filaAprobado", "APROBADO");
         $hoja->setCellValue("A$filaReprobado", "0 - 60");
-        $hoja->setCellValue("B$filaReprobado", "REPROBADO");
+        $hoja->setCellValue("C$filaReprobado", "REPROBADO");
         $hoja->setCellValue("A$filaMinima", "61");
-        $hoja->setCellValue("B$filaMinima", "NOTA MINIMA");
+        $hoja->setCellValue("C$filaMinima", "NOTA MINIMA");
 
         $filaMinima++;
 
-        $hoja->setCellValue("A$filaMinima", "PLAN DE ESTUDIOS");
+        $planEstudios = $filaMinima + 1;
 
-        $contadorCeldasRm = $filaResoluciones;
-        $contadorCeldasRmStyle = $filaResoluciones;
+        $hoja->setCellValue("A$planEstudios", "PLAN DE ESTUDIOS");
+
+        $contadorCeldasRm = $filaResoluciones+1;
+        $contadorCeldasRmStyle = $filaResoluciones+1;
         $contadorCargaHoraria = $filaEscala;
         $contadorCargaHorariaEstilos = $filaEscala;
         // dd($$filaResoluciones);
 
         foreach ($gestionesInscritas as $gi) {
-            $resolucion = Resolucione::where('anio_vigente', $anioIngreso)
-                                    ->first();      
 
-            if(!$resolucion){
+            $resolucion = Inscripcione::where('persona_id',$persona->id)
+                                                            ->where('carrera_id',$carrera->id)
+                                                            ->where('anio_vigente',$gi->anio_vigente)
+                                                            // ->orderBy('anio_vigente', 'asc')
+                                                            ->first();
+                                                            // ->toSql();
+            // dd($persona->id."<->".$carrera->id."<->".$gi->anio_vigente."<->".$resolucion);
 
-                for ($i = 1; $i <= 10; $i++) {
+            // $resolucion = Resolucione::where('anio_vigente', $anioIngreso)
+            //                         ->first();      
 
-                    $anioIngreso = $anioIngreso - 1;
-                    $resolucion = Resolucione::where('anio_vigente', $anioIngreso)
-                        ->first();
-                    if ($resolucion) {
-                        break;
-                    }
-                }
-            }
+            // if(!$resolucion){
+
+            //     for ($i = 1; $i <= 10; $i++) {
+
+            //         $anioIngreso = $anioIngreso - 1;
+            //         $resolucion = Resolucione::where('anio_vigente', $anioIngreso)
+            //             ->first();
+            //         if ($resolucion) {
+            //             break;
+            //         }
+            //     }
+            // }
             $hoja->setCellValue("A$contadorCeldasRm", 'R.M.');
-            $hoja->setCellValue("B$contadorCeldasRm", $resolucion->resolucion);
+            $hoja->setCellValue("B$contadorCeldasRm", $resolucion->resolucion->resolucion);
             $hoja->setCellValue("C$contadorCeldasRm", $gi->anio_vigente);
             $contadorCeldasRm++;
         }
 
-        $hoja->setCellValue("G$contadorCargaHoraria", "Carga Horaria");
+        $hoja->setCellValue("F$contadorCargaHoraria", "Carga Horaria");
         $hoja->setCellValue("I$contadorCargaHoraria", "3600");
         $contadorCargaHoraria++;
-        $hoja->setCellValue("G$contadorCargaHoraria", "Asignaturas Aprobadas");
+        $hoja->setCellValue("F$contadorCargaHoraria", "Asignaturas Aprobadas");
         $hoja->setCellValue("I$contadorCargaHoraria", "$contadorAprobadas/$contadorMaterias");
         $contadorCargaHoraria++;
         $promedioCalificaciones = $sumaNotas / $key;
         // dd($promedioCalificaciones."<----->".$sumaNotas."<----->".$key);
-        $hoja->setCellValue("G$contadorCargaHoraria", "Promedio Calificaciones");
+        $hoja->setCellValue("F$contadorCargaHoraria", "Promedio Calificaciones");
         $hoja->setCellValue("I$contadorCargaHoraria", "$promedioCalificaciones");
 
 
@@ -2921,7 +2955,7 @@ class InscripcionController extends Controller
 
         $filaFinescala = $filaEscala + 3;
 
-        $libro->getActiveSheet()->getStyle("A$filaEscala:C$filaFinescala")->applyFromArray(
+        $libro->getActiveSheet()->getStyle("A$filaEscala:D$filaFinescala")->applyFromArray(
             array(
                 'borders' => array(
                     'allBorders' => array(
@@ -2934,7 +2968,7 @@ class InscripcionController extends Controller
 
         // Stylos de las resolucione
         $contadorCeldasRmFin = $contadorCeldasRm - 1;
-        $libro->getActiveSheet()->getStyle("A$contadorCeldasRmStyle:C$contadorCeldasRmFin")->applyFromArray(
+        $libro->getActiveSheet()->getStyle("A$contadorCeldasRmStyle:D$contadorCeldasRmFin")->applyFromArray(
             array(
                 'borders' => array(
                     'allBorders' => array(
@@ -2946,7 +2980,7 @@ class InscripcionController extends Controller
         );
 
         // carga horaria
-        $libro->getActiveSheet()->getStyle("G$contadorCargaHorariaEstilos:I$contadorCargaHoraria")->applyFromArray(
+        $libro->getActiveSheet()->getStyle("F$contadorCargaHorariaEstilos:I$contadorCargaHoraria")->applyFromArray(
             array(
                 'borders' => array(
                     'allBorders' => array(
@@ -2982,16 +3016,80 @@ class InscripcionController extends Controller
         // fucion de celdas
         $libro->getActiveSheet()->mergeCells('A2:B2');
         $libro->getActiveSheet()->mergeCells('A3:B3');
-        $libro->getActiveSheet()->mergeCells('A4:B4');
+        $libro->getActiveSheet()->mergeCells('A4:C4');
         $libro->getActiveSheet()->mergeCells('A5:B5');
         $libro->getActiveSheet()->mergeCells('A6:B6');
+
+
+
+        $conNotaMin = $filaMinima - 1;
+        $libro->getActiveSheet()->mergeCells("A$filaEscala:D$filaEscala");
+        $libro->getActiveSheet()->mergeCells("A$filaAprobado:B$filaAprobado");
+        $libro->getActiveSheet()->mergeCells("A$filaReprobado:B$filaReprobado");
+        $libro->getActiveSheet()->mergeCells("A$conNotaMin:B$conNotaMin");
+        $libro->getActiveSheet()->mergeCells("A$planEstudios:D$planEstudios");
+        
+        $cargahorairia = $contadorCargaHoraria;
+        $libro->getActiveSheet()->mergeCells("F$cargahorairia:H$cargahorairia");
+        $cargahorairia--;
+        $libro->getActiveSheet()->mergeCells("F$cargahorairia:H$cargahorairia");
+        $cargahorairia--;
+        $libro->getActiveSheet()->mergeCells("F$cargahorairia:H$cargahorairia");
+        // $libro->getActiveSheet()->mergeCells("A$planEstudios:D$planEstudios");
+
+
         // $libro->getActiveSheet()->mergeCells('A39:C39');
         // $libro->getActiveSheet()->mergeCells('A43:C43');
 
         // dimencion de celdas
-        $libro->getActiveSheet()->getColumnDimension('E')->setWidth(55);
-        $libro->getActiveSheet()->getColumnDimension('A')->setWidth(10);
+        $libro->getActiveSheet()->getColumnDimension('E')->setWidth(58);
+        $libro->getActiveSheet()->getColumnDimension('A')->setWidth(5);
         $libro->getActiveSheet()->getColumnDimension('I')->setWidth(12);
+        $libro->getActiveSheet()->getColumnDimension('F')->setWidth(12);
+
+
+
+        // estilos de centrado de cabezeras
+        $style = array(
+            'alignment' => array(
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            )
+        );
+        $centreado = $contadorCeldas - 1 ;
+
+        $hoja->getStyle("A8")->applyFromArray($style);
+        $hoja->getStyle("B8:B$centreado")->applyFromArray($style);
+        $hoja->getStyle("C8:C$centreado")->applyFromArray($style);
+        $hoja->getStyle("D8:D$centreado")->applyFromArray($style);
+        $hoja->getStyle("E8")->applyFromArray($style);
+        $hoja->getStyle("F8")->applyFromArray($style);
+        $hoja->getStyle("G8")->applyFromArray($style);
+        $hoja->getStyle("H8")->applyFromArray($style);
+        $hoja->getStyle("I8")->applyFromArray($style);
+        $hoja->getStyle("J8")->applyFromArray($style);
+        $hoja->getStyle("K8")->applyFromArray($style);
+
+        // centreao de la firma autoridad academica
+        $hoja->getStyle("E$filaFirma")->applyFromArray($style);
+        $hoja->getStyle("E$selloIntitucion")->applyFromArray($style);
+
+        // Escalas plan de estudio carga horaria al
+        $hoja->getStyle("A$filaEscala")->applyFromArray($style);
+        $hoja->getStyle("A$filaAprobado")->applyFromArray($style);
+        $hoja->getStyle("A$filaReprobado")->applyFromArray($style);
+        $hoja->getStyle("A$conNotaMin")->applyFromArray($style);
+        $hoja->getStyle("A$planEstudios")->applyFromArray($style);
+        $cargahoraria1 = $contadorCargaHoraria;
+        $hoja->getStyle("I$cargahoraria1")->applyFromArray($style);
+        $cargahoraria1--;
+        $hoja->getStyle("I$cargahoraria1")->applyFromArray($style);
+        $cargahoraria1--;
+        $hoja->getStyle("I$cargahoraria1")->applyFromArray($style);
+
+
+
+
 
         // fin estilos 
 
