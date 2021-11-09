@@ -50,7 +50,10 @@ class NotasImport implements ToModel, WithStartRow
         $registraNota->nota_examen_final     = $row[7];
         $registraNota->nota_puntos_ganados   = $row[8];      //extras
         $registraNota->nota_total            = $total;
-        $registraNota->save();
+
+        if($registraNota->finalizado != 'Si'){
+            $registraNota->save();
+        }
 
         if($row[3] == 2){
 
