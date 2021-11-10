@@ -101,7 +101,10 @@ class NotasImport implements ToModel, WithStartRow
 
                 $modificaEstado = CarrerasPersona::find($carrerasPersona->id);
                 // dd($modificaEstado);
-                $modificaEstado->estado = 'REPROBO';
+                // validamos si el alumno esta con estado de ABANDONO , ABANDONO TEMPORAL o CONGELADO NO SE EDITE EL ESTADO CON LA QUE ESTA
+                if($modificaEstado->estado != 'ABANDONO' && $modificaEstado->estado != 'ABANDONO TEMPORAL' && $modificaEstado->estado != 'CONGELADO'){
+                    $modificaEstado->estado = 'REPROBO';
+                }
                 $modificaEstado->save();                
             }
 

@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\CarrerasPersona;
 use App\Nota;
 use App\NotasPropuesta;
 use App\Inscripcione;
@@ -80,7 +81,13 @@ class NotasExport implements FromCollection, WithMapping, WithHeadings, ShouldAu
                                 // ->whereNotNull('convalidado')
                                 // ->where('convalidado', null)
                                 ->first();
-        if($registro->convalidado != 'Si' && $nota->persona){
+        $estado = CarrerasPersona::where('carrera_id',$registro->carrera_id)
+                                ->where('persona_id', $registro->persona_id)
+                                ->where('anio_vigente', $registro->anio_vigente)
+                                ->first();
+                                // dd($estado);
+
+        if($registro->convalidado != 'Si' && $nota->persona && $estado->estado != 'ABANDONO' && $estado->estado != 'ABANDONO TEMPORAL' && $estado->estado != 'CONGELADO'){
             if($registro){
                 if($registro->convalidacion_externa && $registro->convalidacion_externa == 'Si'){
                     $observacion    = 'No Calificar';

@@ -78,6 +78,7 @@ class NotaController extends Controller
                                 ->where('turno_id', $asignatura->turno_id)
                                 ->where('paralelo', $asignatura->paralelo)
                                 ->where('anio_vigente', $asignatura->anio_vigente)
+                                // para ue no salga en la lista los convalidados 
                                 ->whereNull('convalidado')
                                 ->get();
 
