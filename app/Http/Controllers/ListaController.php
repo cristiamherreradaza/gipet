@@ -491,8 +491,14 @@ class ListaController extends Controller
                         $notaAlumno = intval($nota->nota_total);
                         $asterisco = ($nota->segundo_turno != null)?'*':'';
                     }else{
-                        $notaAlumno = intval($nota->nota);
-                        $asterisco = ($nota->segundo_turno != null) ? '*' : '';
+                        if($nota->segundo_turno > 60){
+                            $notaAlumno = intval($nota->segundo_turno);
+                            $asterisco = ($nota->segundo_turno != null) ? '*' : '';
+
+                        }else{
+                            $notaAlumno = intval($nota->nota);
+                            $asterisco = ($nota->segundo_turno != null) ? '*' : '';
+                        }
                     }
                 }else{
                     $notaAlumno = 0;

@@ -194,13 +194,17 @@
             @endphp
             <td style="text-align: center;">
                 @if ($nota)
-                @if ($tipo == 'primero' || $tipo == 'segundo')
-                {{ intval($nota->nota_total) }}
+                    @if ($tipo == 'primero' || $tipo == 'segundo')
+                        {{ intval($nota->nota_total) }}
+                    @else
+                        @if ($nota->segundo_turno > 60)
+                            {{ intval($nota->segundo_turno) }}*
+                        @else
+                            {{ intval($nota->nota) }}
+                        @endif
+                    @endif
                 @else
-                {{ intval($nota->nota) }}
-                @endif
-                @else
-                0
+                    0
                 @endif
             </td>
             @endforeach

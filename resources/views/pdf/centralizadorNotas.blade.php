@@ -174,7 +174,11 @@
                                 @if ($tipo == 'primero' || $tipo == 'segundo')
                                     {{ intval($nota->nota_total) }}
                                 @else
-                                    {{ intval($nota->nota) }}
+                                    @if ($nota->segundo_turno > 60)
+                                        {{ intval($nota->segundo_turno) }}*
+                                    @else
+                                        {{ intval($nota->nota) }}
+                                    @endif
                                 @endif
                             @else
                             0
