@@ -197,11 +197,18 @@
                     @if ($tipo == 'primero' || $tipo == 'segundo')
                         {{ intval($nota->nota_total) }}
                     @else
-                        @if ($nota->segundo_turno > 60)
+                        @php
+                            $notaAlumno = intval($nota->nota);
+                            if($nota->segundo_turno != null){
+                                $notaAlumno = $notaAlumno."(".$nota->segundo_turno.")";
+                            }
+                            echo $notaAlumno;
+                        @endphp
+                        {{-- @if ($nota->segundo_turno > 60)
                             {{ intval($nota->segundo_turno) }}*
                         @else
                             {{ intval($nota->nota) }}
-                        @endif
+                        @endif --}}
                     @endif
                 @else
                     0
