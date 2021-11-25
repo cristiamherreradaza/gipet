@@ -177,7 +177,8 @@
                                     @php
                                         $notaAlumno = intval($nota->nota);
                                         if($nota->segundo_turno != null){
-                                            $notaAlumno = $notaAlumno."(".$nota->segundo_turno.")";
+                                            $nota2t = intval($nota->segundo_turno);
+                                            $notaAlumno = $notaAlumno."(".$nota2t.")";
                                         }
                                         echo $notaAlumno;
                                     @endphp
