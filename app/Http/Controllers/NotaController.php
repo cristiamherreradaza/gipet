@@ -73,6 +73,7 @@ class NotaController extends Controller
                                     
         // Buscamos los detalles de la materia a mostrar
         $asignatura = NotasPropuesta::find($id);
+        // dd($asignatura->asignatura_id);
         // Buscamos a los estudiantes inscritos en esa materia
         $inscritos  = Inscripcione::where('asignatura_id', $asignatura->asignatura_id)
                                 ->where('turno_id', $asignatura->turno_id)

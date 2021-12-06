@@ -111,14 +111,14 @@
                                 }
 
                                 $sw = true;
-                                $estado = App\CarrerasPersona::where('carrera_id', $inscrito->carrera_id)
+                                $estado_alumno = App\CarrerasPersona::where('carrera_id', $inscrito->carrera_id)
                                         ->where('persona_id', $inscrito->persona_id)
                                         ->where('anio_vigente', $inscrito->anio_vigente)
                                         ->first();
-                                if( $estado->estado == 'ABANDONO' || $estado->estado == 'ABANDONO TEMPORAL' || $estado->estado == 'CONGELADO'){
+                                if( $estado_alumno->estado == 'ABANDONO' || $estado_alumno->estado == 'ABANDONO TEMPORAL' || $estado_alumno->estado == 'CONGELADO'){
                                     $sw = false;
                                 }
-                                // dd($estado);
+                                // dd($estado_alumno);
                             @endphp 
                             @if ($sw)
                                 <tr>
