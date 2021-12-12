@@ -106,13 +106,18 @@ class NotasImport implements ToModel, WithStartRow
                                                     ->where('anio_vigente', $nota->anio_vigente)
                                                     ->first();
 
-                    $modificaEstado = CarrerasPersona::find($carrerasPersona->id);
-                    // dd($modificaEstado);
-                    // validamos si el alumno esta con estado de ABANDONO , ABANDONO TEMPORAL o CONGELADO NO SE EDITE EL ESTADO CON LA QUE ESTA
-                    if($modificaEstado->estado != 'ABANDONO' && $modificaEstado->estado != 'ABANDONO TEMPORAL' && $modificaEstado->estado != 'CONGELADO'){
-                        $modificaEstado->estado = 'REPROBO';
+                    if($carrerasPersona){
+
+                        $modificaEstado = CarrerasPersona::find($carrerasPersona->id);
+
+                        // dd($modificaEstado);
+                        // validamos si el alumno esta con estado de ABANDONO , ABANDONO TEMPORAL o CONGELADO NO SE EDITE EL ESTADO CON LA QUE ESTA
+                        if($modificaEstado->estado != 'ABANDONO' && $modificaEstado->estado != 'ABANDONO TEMPORAL' && $modificaEstado->estado != 'CONGELADO'){
+                            $modificaEstado->estado = 'REPROBO';
+                        }
+                        $modificaEstado->save();                
                     }
-                    $modificaEstado->save();                
+
                 }
 
                 $inscripcion = Inscripcione::find($notaPrimerBimestre->inscripcion_id);
