@@ -36,9 +36,17 @@ Route::get('listado', 'PruebaController@listado');
 
 Route::get('detalle_alumno', 'PruebaController@detalle_alumno');
 
-Route::get('Prueba/guardar', 'PruebaController@guardar'); 
+Route::get('Prueba/guardar', 'PruebaController@guardar');
 
 Auth::routes();
+
+
+// RUTA PARA EL ESTUDIANTE PARA QUE PUEDA CAMBIAR LOS DATOS PERSONALES
+Route::get('Persona/login', 'PersonaController@login');
+Route::post('Persona/ingresa', 'PersonaController@ingresa');
+Route::post('Persona/guardaDatos', 'PersonaController@guardaDatos');
+
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', 'HomeController@index')->name('home');
@@ -89,6 +97,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('Persona/ajaxEliminaInscripcionAlumno', 'PersonaController@ajaxEliminaInscripcionAlumno');
     Route::get('Persona/generaExcelCertificado/{carrera_persona_id}', 'PersonaController@generaExcelCertificado');
     Route::post('Persona/modifica_pago', 'PersonaController@modifica_pago');
+
+    // esta ruta es para editar los datos los estudoantes
+    // Route::get('Persona/login', 'PersonaController@login');
+
 
     Route::get('user/asignar', 'UserController@asignar');
 
@@ -143,6 +155,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Migracion/migracionj2021', 'MigracionController@migracionj2021');
     Route::get('Migracion/migracionInscripcionj', 'MigracionController@migracionInscripcionj');
     Route::get('Migracion/migracionPagos', 'MigracionController@migracionPagos');
+    Route::get('Migracion/creacionUserPass', 'MigracionController@creacionUserPass');
 
     //INSCRIPCIONES
     Route::get('Inscripcion/inscripcion', 'InscripcionController@inscripcion');

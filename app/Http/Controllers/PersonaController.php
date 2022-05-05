@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Nota;
+use App\Pago;
 use App\Turno;
 use App\Kardex;
 use DataTables;
 use App\Carrera;
 use App\Persona;
+use App\Servicio;
 use App\Descuento;
 use App\Asignatura;
 use App\Certificado;
@@ -15,21 +17,21 @@ use App\CursosCorto;
 use App\Resolucione;
 use App\Inscripcione;
 use App\SegundosTurno;
-use App\Servicio;
-use App\DescuentosPersona;
-use App\Pago;
 use App\CarrerasPersona;
+use App\DescuentosPersona;
 use App\TiposMensualidade;
 use Illuminate\Http\Request;
-use App\EstudiantesCertificado;
 use App\librerias\Utilidades;
+use App\EstudiantesCertificado;
+use App\librerias\NumeroALetras;
 use App\Exports\CertificadoExport;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Maatwebsite\Excel\Facades\Excel;
-use App\librerias\NumeroALetras;
+use Illuminate\Support\Facades\Hash;
 
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -1132,6 +1134,81 @@ class PersonaController extends Controller
         // dd("Id de pago => ".$request->input('pago_id')."<br>a pagar=> ".$request->input('a_pagar')."<br>monto de pago=> ".$request->input('monto_pago')."<br>fecha=> ".$request->input('fecha_pago')."<br>fecha=> ".$request->input('estado'));
 
         return redirect('Persona/informacion/'.$request->input('persona_id'));
+
+    }
+
+    public function login(Request $request){
+
+        // dd("holas como estan desde el login");
+        return view('persona.login');
+
+    }
+
+    public function ingresa(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'password' => 'required'
+        ]);
+
+        $user = $request->input('name');
+        $pass = $request->input('password');
+
+        $persona  = Persona::where('usuario',$user)
+                            ->first();
+        
+        if($persona && Hash::check($pass,$persona->password)){
+
+            // echo json_encode($persona);
+            return view('persona.editadatos')->with(compact('persona'));
+            // $html = view('persona.editadatos');
+
+        }else{
+            $html = "error";
+        }
+
+        echo json_encode($html);
+
+    }
+
+    public function guardaDatos(Request $request){
+
+        // dd($request->all());
+        if($request->ajax()){
+
+            $validator = Validator::make($request->all(), [
+                'apellido_paterno' => 'required',
+                'apellido_materno' => 'required',
+                'nombres' => 'required',
+                'fecha_nacimiento' => 'required',
+                'genero' => 'required',
+                'cedula' => 'required',
+                'expedido' => 'required',
+                'numero_celular' => 'required'
+            ]);
+
+            if ($validator->fails()) {
+
+                return json_encode(['success' => false, 'errors' => $validator->getMessageBag()->toArray()]);
+
+            }else{
+
+                $persona = Persona::find();
+
+                // $campania = new Campania();
+
+                // $campania->nombre       = $request->input('nombre_campania');
+                // $campania->fecha_inicio = $request->input('fecha_inicio');
+                // $campania->fecha_fin    = $request->input('fecha_fin');
+                // $campania->descripcion  = $request->input('descripcion_campania');
+
+                // $campania->save();
+
+                // return json_encode(['success' => true]);
+            }
+        }else{
+
+        }
 
     }
 }

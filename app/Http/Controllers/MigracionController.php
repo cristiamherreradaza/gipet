@@ -14,6 +14,7 @@ use App\CarrerasPersona;
 use App\Imports\PagosImport;
 use App\Imports\InscritosImport;
 use App\Imports\InscripcionesImport;
+use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
 
 
@@ -1641,7 +1642,8 @@ SELECT *
 
     public function migracionInscripcionj()
     {   
-        $archivo = public_path("m1218.xlsx");
+        // $archivo = public_path("m1218.xlsx");
+        $archivo = public_path("m2011.xlsx");
         Excel::import(new InscritosImport, $archivo);
     }
 
@@ -1649,5 +1651,24 @@ SELECT *
     {
         $archivo = public_path("f.xlsx");
         Excel::import(new PagosImport, $archivo);
+    }
+
+
+    // CREACION DE USUARIO Y PASSWORD DE LA TABLA PERSONA CON SU CI
+    public function creacionUserPass(){
+
+        $personas = Persona::all();
+
+        foreach($personas as $p){
+            echo $p->id." ".$p->nombres." ".$p->apellido_paterno."<br>";
+
+            $per = Persona::find($p->id);
+
+            $per->usuario  = $p->cedula;
+            $per->password = Hash::make($p->cedula);;
+
+            $per->save();
+            
+        }
     }
 }
