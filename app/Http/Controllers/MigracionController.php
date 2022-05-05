@@ -1639,6 +1639,7 @@ SELECT *
         $archivo = public_path("sec2.xlsx");
         Excel::import(new InscripcionesImport, $archivo);
     }
+    
 
     public function migracionInscripcionj()
     {   
