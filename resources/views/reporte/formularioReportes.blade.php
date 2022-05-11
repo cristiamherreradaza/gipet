@@ -11,140 +11,186 @@
 
 @section('content')
 
-<div class="card border-info">
-    <div class="card-header bg-info">
-        <h4 class="mb-0 text-white">
-            CENTRALIZADOR DE PENSIONES POR PERIODOS
-        </h4>
-    </div>
-    <div class="card-body">
-
-        <form action="{{ url('Reporte/pencionesPorPeriodo') }}" method="POST">
-            @csrf
-            <div class="row">
-
-                <div class="col-md-1">
-                    <div class="form-group">
-                        <label class="control-label">Curso</label>
-                        <select name="gestion" id="gestion" class="form-control">
-                            <option value="1"> 1° A&ntilde;o </option>
-                            <option value="2"> 2° A&ntilde;o </option>
-                            <option value="3"> 3° A&ntilde;o </option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label class="control-label">Turno</label>
-                        <select name="turno_id" id="turno_id" class="form-control">
-                            @foreach($turnos as $turno)
-                            <option value="{{ $turno->id }}"> {{ $turno->descripcion }} </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-1">
-                    <div class="form-group">
-                        <label class="control-label">Gestion </label>
-                        <input type="number" name="anio_vigente" id="anio_vigente" value="{{ date('Y') }}" class="form-control" min="2021" max="2050">
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <br />
-                    <button type="submit" formtarget="_blank" class="btn btn-success btn-block" title="Buscar">GENERAR</button>
-                </div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card border-info">
+            <div class="card-header bg-info">
+                <h4 class="mb-0 text-white">
+                    CENTRALIZADOR DE PENSIONES POR PERIODOS
+                </h4>
             </div>
-        </form>
-
+            <div class="card-body">
+        
+                <form action="{{ url('Reporte/pencionesPorPeriodo') }}" method="POST">
+                    @csrf
+                    <div class="row">
+        
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Curso</label>
+                                <select name="gestion" id="gestion" class="form-control">
+                                    <option value="1"> 1° A&ntilde;o </option>
+                                    <option value="2"> 2° A&ntilde;o </option>
+                                    <option value="3"> 3° A&ntilde;o </option>
+                                </select>
+                            </div>
+                        </div>
+        
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Turno</label>
+                                <select name="turno_id" id="turno_id" class="form-control">
+                                    @foreach($turnos as $turno)
+                                    <option value="{{ $turno->id }}"> {{ $turno->descripcion }} </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+        
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Gestion </label>
+                                <input type="number" name="anio_vigente" id="anio_vigente" value="{{ date('Y') }}" class="form-control" min="2021" max="2050">
+                            </div>
+                        </div>
+        
+                        <div class="col-md-3">
+                            <br />
+                            <button type="submit" formtarget="_blank" class="btn btn-success btn-block" title="Buscar">GENERAR</button>
+                        </div>
+                    </div>
+                </form>
+        
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card border-info">
+            <div class="card-header bg-info">
+                <h4 class="mb-0 text-white">
+                    CENTRALIZADOR DE PENSIONES POR COBRAR
+                </h4>
+            </div>
+            <div class="card-body">
+        
+                <form action="{{ url('Reporte/pencionesPorCobrar') }}" method="POST">
+                    @csrf
+                    <div class="row">
+        
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Curso</label>
+                                <select name="gestion" id="gestion" class="form-control">
+                                    <option value="1"> 1° A&ntilde;o </option>
+                                    <option value="2"> 2° A&ntilde;o </option>
+                                    <option value="3"> 3° A&ntilde;o </option>
+                                </select>
+                            </div>
+                        </div>
+        
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Turno</label>
+                                <select name="turno_id" id="turno_id" class="form-control">
+                                    @foreach($turnos as $turno)
+                                    <option value="{{ $turno->id }}"> {{ $turno->descripcion }} </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+        
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Gestion </label>
+                                <input type="number" name="anio_vigente" id="anio_vigente" value="{{ date('Y') }}"
+                                    class="form-control" min="2021" max="2050">
+                            </div>
+                        </div>
+        
+                        <div class="col-md-3">
+                            <br />
+                            <button type="submit" formtarget="_blank" class="btn btn-success btn-block"
+                                title="Buscar">GENERAR</button>
+                        </div>
+                    </div>
+                </form>
+        
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="card border-info">
-    <div class="card-header bg-info">
-        <h4 class="mb-0 text-white">
-            CENTRALIZADOR DE PENSIONES POR COBRAR
-        </h4>
-    </div>
-    <div class="card-body">
-
-        <form action="{{ url('Reporte/pencionesPorCobrar') }}" method="POST">
-            @csrf
-            <div class="row">
-
-                <div class="col-md-1">
-                    <div class="form-group">
-                        <label class="control-label">Curso</label>
-                        <select name="gestion" id="gestion" class="form-control">
-                            <option value="1"> 1° A&ntilde;o </option>
-                            <option value="2"> 2° A&ntilde;o </option>
-                            <option value="3"> 3° A&ntilde;o </option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label class="control-label">Turno</label>
-                        <select name="turno_id" id="turno_id" class="form-control">
-                            @foreach($turnos as $turno)
-                            <option value="{{ $turno->id }}"> {{ $turno->descripcion }} </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-                <div class="col-md-1">
-                    <div class="form-group">
-                        <label class="control-label">Gestion </label>
-                        <input type="number" name="anio_vigente" id="anio_vigente" value="{{ date('Y') }}"
-                            class="form-control" min="2021" max="2050">
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <br />
-                    <button type="submit" formtarget="_blank" class="btn btn-success btn-block"
-                        title="Buscar">GENERAR</button>
-                </div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card border-info">
+            <div class="card-header bg-info">
+                <h4 class="mb-0 text-white">
+                    TOTAL PAGOS POR COBRAR
+                </h4>
             </div>
-        </form>
-
+            <div class="card-body">
+        
+                <form action="{{ url('Reporte/totalPorCobrar') }}" method="POST">
+                    @csrf
+                    <div class="row">
+        
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Gestion </label>
+                                <input type="number" name="anio_vigente" id="anio_vigente" value="{{ date('Y') }}"
+                                    class="form-control" min="2021" max="2050">
+                            </div>
+                        </div>
+        
+                        <div class="col-md-6">
+                            <br />
+                            <button type="submit" formtarget="_blank" class="btn btn-success btn-block"
+                                title="Buscar">GENERAR</button>
+                        </div>
+                    </div>
+                </form>
+        
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card border-info">
+            <div class="card-header bg-info">
+                <h4 class="mb-0 text-white">
+                    TOTAL PAGOS
+                </h4>
+            </div>
+            <div class="card-body">
+        
+                <form action="{{ url('Reporte/totalCobrado') }}" method="POST">
+                    @csrf
+                    <div class="row">
+        
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Gestion </label>
+                                <input type="number" name="anio_vigente" id="anio_vigente" value="{{ date('Y') }}"
+                                    class="form-control" min="2021" max="2050">
+                            </div>
+                        </div>
+        
+                        <div class="col-md-6">
+                            <br />
+                            <button type="submit" formtarget="_blank" class="btn btn-success btn-block"
+                                title="Buscar">GENERAR</button>
+                        </div>
+                    </div>
+                </form>
+        
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="card border-info">
-    <div class="card-header bg-info">
-        <h4 class="mb-0 text-white">
-            TOTAL PAGOS POR COBRAR
-        </h4>
-    </div>
-    <div class="card-body">
 
-        <form action="{{ url('Reporte/totalPorCobrar') }}" method="POST">
-            @csrf
-            <div class="row">
 
-                <div class="col-md-1">
-                    <div class="form-group">
-                        <label class="control-label">Gestion </label>
-                        <input type="number" name="anio_vigente" id="anio_vigente" value="{{ date('Y') }}"
-                            class="form-control" min="2021" max="2050">
-                    </div>
-                </div>
 
-                <div class="col-md-2">
-                    <br />
-                    <button type="submit" formtarget="_blank" class="btn btn-success btn-block"
-                        title="Buscar">GENERAR</button>
-                </div>
-            </div>
-        </form>
 
-    </div>
-</div>
 
 <!-- inicio modal prerequisitos -->
 

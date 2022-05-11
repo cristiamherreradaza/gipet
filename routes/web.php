@@ -455,5 +455,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('Reporte/totalPorCobrar', 'ReporteController@totalPorCobrar');
     Route::get('Reporte/formularioTotalAlumnosExcel', 'ReporteController@formularioTotalAlumnosExcel');
     Route::post('Reporte/generaTotalAlumnosExcel', 'ReporteController@generaTotalAlumnosExcel');
+    Route::post('Reporte/totalCobrado', 'ReporteController@totalCobrado');
 
 });

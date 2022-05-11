@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Svg\Tag\Rect;
+
 class ReporteController extends Controller
 {
     
@@ -347,8 +349,7 @@ class ReporteController extends Controller
         return view('reporte.formularioTotalAlumnosExcel');
     }
 
-    public function generaTotalAlumnosExcel(Request $request)
-    {
+    public function generaTotalAlumnosExcel(Request $request){
         $personasCarrerasPersona = CarrerasPersona::where('anio_vigente', $request->anio_vigente)
                                                     ->get();
 
@@ -464,5 +465,97 @@ class ReporteController extends Controller
         // $writer->save('demo.xlsx');
     
     }
+
+
+    // REPORTES PAGOS COBRADOS
+    public function totalCobrado(Request $request){
+        
+        $anio_vigente = $request->input('anio_vigente');
+
+        $pdf = PDF::loadView('pdf.totalCobrado', compact('anio_vigente'))
+                    ->setPaper('letter', 'landscape');
+
+        return $pdf->stream('totalCobrar.pdf');
+        
+    }
+
+
+    public static function calculaPagosCobrados($mes, $gestion, $servicio, $carrera, $turno, $anio_vigente){
+
+        $fechaIni = $anio_vigente."-".(($mes<=9)? "0".$mes:$mes)."-01";
+
+        $numDiasMes = date( 't', strtotime( $fechaIni ) );
+
+        $fechaFin = $anio_vigente."-".(($mes<=9)? "0".$mes:$mes)."-".$numDiasMes;
+
+        $pago="";
+        $decimoPago = Pago::select(DB::raw('SUM(importe) as total_decimo'))
+                            ->where('turno_id', $turno)
+                            ->where('carrera_id', $carrera)
+                            ->where('servicio_id', $servicio)
+                            ->where('gestion', $gestion)
+                            ->where('anio_vigente', $anio_vigente)
+                            ->whereBetween('fecha', [$fechaIni,$fechaFin])
+                            // ->whereYear('created_at', $anio_vigente)
+                            ->first();
+
+        $pago = ($decimoPago->total_decimo != null)?$decimoPago->total_decimo:'0.00';
+        $pagoFormateado = number_format($pago, 2, '.', ',');
+
+        return $pagoFormateado;
+    }
+
+    public static function sumaTotalCobrado($gestion, $servicio, $carrera, $turno, $anio_vigente){
+        $sumaTot = 0;
+
+        for($i = 1; $i <= 12 ; $i++){
+
+            $valor = ReporteController::calculaPagosCobrados($i,$gestion, $servicio, $carrera, $turno, $anio_vigente);
+
+            $sumaTot = $sumaTot + intval(str_replace (',', '', $valor));
+
+        }
+        
+        return  number_format($sumaTot, 2, '.', ',');
+    }
+
+    public static function sumaTotalMes($mes, $servicio, $carrera, $gestion, $anio_vigente){
+
+        $fechaIni = $anio_vigente."-".(($mes<=9)? "0".$mes:$mes)."-01";
+
+        $numDiasMes = date( 't', strtotime( $fechaIni ) );
+
+        $fechaFin = $anio_vigente."-".(($mes<=9)? "0".$mes:$mes)."-".$numDiasMes;
+
+        $total = Pago::select(DB::raw('SUM(importe) as total_mes'))
+                    ->where('anio_vigente',$anio_vigente)
+                    ->where('gestion',$gestion)
+                    ->where('carrera_id',$carrera)
+                    ->where('servicio_id',$servicio)
+                    ->whereBetween('fecha',[$fechaIni,$fechaFin])
+                    ->first();
+
+                    
+        $pago = ($total->total_mes != null)?$total->total_mes:'0.00';
+        $pagoFormateado = number_format($pago, 2, '.', ',');
+
+        return $pagoFormateado;
+    }
+
+    public static function sumaTotalPagadoAnual($gestion, $carrera, $servicio, $anio_vigente){
+
+        $total = Pago::select(DB::raw('SUM(importe) as total_anio'))
+                    ->where('anio_vigente', $anio_vigente)
+                    ->where('gestion', $gestion)
+                    ->where('carrera_id', $carrera)
+                    ->where('servicio_id', $servicio)
+                    ->first();
+
+        $pago = ($total->total_anio != null)?$total->total_anio:'0.00';
+        $pagoFormateado = number_format($pago, 2, '.', ',');
+
+        return $pagoFormateado;
+    }
+
 
 }
