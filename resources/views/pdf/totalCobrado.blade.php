@@ -332,351 +332,410 @@
             <tr>
                 <td colspan="12" style="text-align: center;"><b>SEGUNDO A&Ntilde;O</b></td>
             </tr>
+            
+            
             <tr>
                 <td style="text-align: left;">Turno Ma&ntilde;ana</td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 1, 1, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(1, 2, 2, 1, 1, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 2, 1, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(2, 2, 2, 1, 1, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 3, 1, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(3, 2, 2, 1, 1, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 4, 1, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(4, 2, 2, 1, 1, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 5, 1, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(5, 2, 2, 1, 1, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 6, 1, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(6, 2, 2, 1, 1, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 7, 1, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(7, 2, 2, 1, 1, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 8, 1, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(8, 2, 2, 1, 1, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 9, 1, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(9, 2, 2, 1, 1, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 10, 1, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(10, 2, 2, 1, 1, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosTurnos(1, 2, 1, $anio_vigente) }}     
+                    {{ ReporteController::calculaPagosCobrados(11, 2, 2, 1, 1, $anio_vigente) }}
+                </td>
+                <td style="text-align: right;">
+                    {{ ReporteController::calculaPagosCobrados(12, 2, 2, 1, 1, $anio_vigente) }}
+                </td>
+                <td style="text-align: right;">
+                    {{ ReporteController::sumaTotalCobrado(2, 2, 1, 1, $anio_vigente) }}
                 </td>
             </tr>
 
             <tr>
                 <td style="text-align: left;">Turno Tarde</td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 1, 2, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(1, 2, 2, 1, 2, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 2, 2, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(2, 2, 2, 1, 2, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 3, 2, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(3, 2, 2, 1, 2, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 4, 2, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(4, 2, 2, 1, 2, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 5, 2, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(5, 2, 2, 1, 2, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 6, 2, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(6, 2, 2, 1, 2, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 7, 2, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(7, 2, 2, 1, 2, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 8, 2, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(8, 2, 2, 1, 2, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 9, 2, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(9, 2, 2, 1, 2, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 10, 2, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(10, 2, 2, 1, 2, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosTurnos(1, 2, 2, $anio_vigente) }}     
+                    {{ ReporteController::calculaPagosCobrados(11, 2, 2, 1, 2, $anio_vigente) }}
+                </td>
+                <td style="text-align: right;">
+                    {{ ReporteController::calculaPagosCobrados(12, 2, 2, 1, 2, $anio_vigente) }}
+                </td>
+                <td style="text-align: right;">
+                    {{ ReporteController::sumaTotalCobrado(2, 2, 1, 2, $anio_vigente) }}
                 </td>
             </tr>
 
             <tr>
                 <td style="text-align: left;">Turno Noche</td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 1, 3, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(1, 2, 2, 1, 3, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 2, 3, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(2, 2, 2, 1, 3, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 3, 3, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(3, 2, 2, 1, 3, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 4, 3, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(4, 2, 2, 1, 3, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 5, 3, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(5, 2, 2, 1, 3, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 6, 3, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(6, 2, 2, 1, 3, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 7, 3, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(7, 2, 2, 1, 3, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 8, 3, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(8, 2, 2, 1, 3, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 9, 3, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(9, 2, 2, 1, 3, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 10, 3, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(10, 2, 2, 1, 3, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosTurnos(1, 2, 3, $anio_vigente) }}     
+                    {{ ReporteController::calculaPagosCobrados(11, 2, 2, 1, 3, $anio_vigente) }}
+                </td>
+                <td style="text-align: right;">
+                    {{ ReporteController::calculaPagosCobrados(12, 2, 2, 1, 3, $anio_vigente) }}
+                </td>
+                <td style="text-align: right;">
+                    {{ ReporteController::sumaTotalCobrado(2, 2, 1, 3, $anio_vigente) }}
                 </td>
             </tr>
 
             <tr>
                 <td style="text-align: left;">Turno Especial</td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 1, 4, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(1, 2, 2, 1, 4, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 2, 4, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(2, 2, 2, 1, 4, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 3, 4, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(3, 2, 2, 1, 4, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 4, 4, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(4, 2, 2, 1, 4, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 5, 4, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(5, 2, 2, 1, 4, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 6, 4, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(6, 2, 2, 1, 4, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 7, 4, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(7, 2, 2, 1, 4, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 8, 4, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(8, 2, 2, 1, 4, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 2, 9, 4, $anio_vigente) }}     
+                    {{ ReporteController::calculaPagosCobrados(9, 2, 2, 1, 4, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 1, 10, 4, $anio_vigente) }}     
+                    {{ ReporteController::calculaPagosCobrados(10, 2, 2, 1, 4, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosTurnos(1, 2, 4, $anio_vigente) }}     
-                </td>                
+                    {{ ReporteController::calculaPagosCobrados(11, 2, 2, 1, 4, $anio_vigente) }}
+                </td>  
+                <td style="text-align: right;">
+                    {{ ReporteController::calculaPagosCobrados(12, 2, 2, 1, 4, $anio_vigente) }}
+                </td>
+                <td style="text-align: right;">
+                    {{ ReporteController::sumaTotalCobrado(2, 2, 1, 4, $anio_vigente) }}
+                </td>               
             </tr>
             
             <tr>
                 <td><b>TOTAL SEGUNDO A&Ntilde;O</b></td>
-                <td style="text-align: right;"><b>{{ ReporteController::calculaPagosCuotas(1, 2, 1, $anio_vigente) }}</b></td>
-                <td style="text-align: right;"><b>{{ ReporteController::calculaPagosCuotas(1, 2, 2, $anio_vigente) }}</b></td>
-                <td style="text-align: right;"><b>{{ ReporteController::calculaPagosCuotas(1, 2, 3, $anio_vigente) }}</b></td>
-                <td style="text-align: right;"><b>{{ ReporteController::calculaPagosCuotas(1, 2, 4, $anio_vigente) }}</b></td>
-                <td style="text-align: right;"><b>{{ ReporteController::calculaPagosCuotas(1, 2, 5, $anio_vigente) }}</b></td>
-                <td style="text-align: right;"><b>{{ ReporteController::calculaPagosCuotas(1, 2, 6, $anio_vigente) }}</b></td>
-                <td style="text-align: right;"><b>{{ ReporteController::calculaPagosCuotas(1, 2, 7, $anio_vigente) }}</b></td>
-                <td style="text-align: right;"><b>{{ ReporteController::calculaPagosCuotas(1, 2, 8, $anio_vigente) }}</b></td>
-                <td style="text-align: right;"><b>{{ ReporteController::calculaPagosCuotas(1, 2, 9, $anio_vigente) }}</b></td>
-                <td style="text-align: right;"><b>{{ ReporteController::calculaPagosCuotas(1, 2, 10, $anio_vigente) }}</b></td>
-                <td style="text-align: right;"><b>{{ ReporteController::calculaTotalGestion(1, 2, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalMes(1, 2, 1, 2, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalMes(2, 2, 1, 2, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalMes(3, 2, 1, 2, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalMes(4, 2, 1, 2, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalMes(5, 2, 1, 2, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalMes(6, 2, 1, 2, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalMes(7, 2, 1, 2, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalMes(8, 2, 1, 2, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalMes(9, 2, 1, 2, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalMes(10, 2, 1, 2, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalMes(11, 2, 1, 2, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalMes(12, 2, 1, 2, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalPagadoAnual(2, 1, 2, $anio_vigente) }}</b></td>
             </tr>
 
 
             <tr>
                 <td colspan="12" style="text-align: center;"><b>TERCER A&Ntilde;O</b></td>
             </tr>
+            
+            
+            
             <tr>
                 <td style="text-align: left;">Turno Ma&ntilde;ana</td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 1, 1, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(1, 3, 2, 1, 1, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 2, 1, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(2, 3, 2, 1, 1, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 3, 1, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(3, 3, 2, 1, 1, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 4, 1, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(4, 3, 2, 1, 1, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 5, 1, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(5, 3, 2, 1, 1, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 6, 1, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(6, 3, 2, 1, 1, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 7, 1, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(7, 3, 2, 1, 1, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 8, 1, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(8, 3, 2, 1, 1, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 9, 1, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(9, 3, 2, 1, 1, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 10, 1, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(10, 3, 2, 1, 1, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosTurnos(1, 3, 1, $anio_vigente) }}     
+                    {{ ReporteController::calculaPagosCobrados(11, 3, 2, 1, 1, $anio_vigente) }}
+                </td>
+                <td style="text-align: right;">
+                    {{ ReporteController::calculaPagosCobrados(12, 3, 2, 1, 1, $anio_vigente) }}
+                </td>
+                <td style="text-align: right;">
+                    {{ ReporteController::sumaTotalCobrado(3, 2, 1, 1, $anio_vigente) }}
                 </td>
             </tr>
 
             <tr>
                 <td style="text-align: left;">Turno Tarde</td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 1, 2, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(1, 3, 2, 1, 2, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 2, 2, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(2, 3, 2, 1, 2, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 3, 2, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(3, 3, 2, 1, 2, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 4, 2, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(4, 3, 2, 1, 2, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 5, 2, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(5, 3, 2, 1, 2, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 6, 2, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(6, 3, 2, 1, 2, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 7, 2, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(7, 3, 2, 1, 2, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 8, 2, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(8, 3, 2, 1, 2, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 9, 2, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(9, 3, 2, 1, 2, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 10, 2, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(10, 3, 2, 1, 2, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosTurnos(1, 3, 2, $anio_vigente) }}     
+                    {{ ReporteController::calculaPagosCobrados(11, 3, 2, 1, 2, $anio_vigente) }}
+                </td>
+                <td style="text-align: right;">
+                    {{ ReporteController::calculaPagosCobrados(12, 3, 2, 1, 2, $anio_vigente) }}
+                </td>
+                <td style="text-align: right;">
+                    {{ ReporteController::sumaTotalCobrado(3, 2, 1, 2, $anio_vigente) }}
                 </td>
             </tr>
 
             <tr>
                 <td style="text-align: left;">Turno Noche</td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 1, 3, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(1, 3, 2, 1, 3, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 2, 3, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(2, 3, 2, 1, 3, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 3, 3, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(3, 3, 2, 1, 3, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 4, 3, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(4, 3, 2, 1, 3, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 5, 3, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(5, 3, 2, 1, 3, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 6, 3, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(6, 3, 2, 1, 3, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 7, 3, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(7, 3, 2, 1, 3, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 8, 3, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(8, 3, 2, 1, 3, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 9, 3, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(9, 3, 2, 1, 3, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 10, 3, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(10, 3, 2, 1, 3, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosTurnos(1, 3, 3, $anio_vigente) }}     
+                    {{ ReporteController::calculaPagosCobrados(11, 3, 2, 1, 3, $anio_vigente) }}
+                </td>
+                <td style="text-align: right;">
+                    {{ ReporteController::calculaPagosCobrados(12, 3, 2, 1, 3, $anio_vigente) }}
+                </td>
+                <td style="text-align: right;">
+                    {{ ReporteController::sumaTotalCobrado(3, 2, 1, 3, $anio_vigente) }}
                 </td>
             </tr>
 
             <tr>
                 <td style="text-align: left;">Turno Especial</td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 1, 4, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(1, 3, 2, 1, 4, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 2, 4, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(2, 3, 2, 1, 4, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 3, 4, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(3, 3, 2, 1, 4, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 4, 4, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(4, 3, 2, 1, 4, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 5, 4, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(5, 3, 2, 1, 4, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 6, 4, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(6, 3, 2, 1, 4, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 7, 4, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(7, 3, 2, 1, 4, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 8, 4, $anio_vigente) }}
+                    {{ ReporteController::calculaPagosCobrados(8, 3, 2, 1, 4, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 9, 4, $anio_vigente) }}     
+                    {{ ReporteController::calculaPagosCobrados(9, 3, 2, 1, 4, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosCobrar(1, 3, 10, 4, $anio_vigente) }}     
+                    {{ ReporteController::calculaPagosCobrados(10, 3, 2, 1, 4, $anio_vigente) }}
                 </td>
                 <td style="text-align: right;">
-                    {{ ReporteController::calculaPagosTurnos(1, 3, 4, $anio_vigente) }}     
-                </td>                
+                    {{ ReporteController::calculaPagosCobrados(11, 3, 2, 1, 4, $anio_vigente) }}
+                </td>  
+                <td style="text-align: right;">
+                    {{ ReporteController::calculaPagosCobrados(12, 3, 2, 1, 4, $anio_vigente) }}
+                </td>
+                <td style="text-align: right;">
+                    {{ ReporteController::sumaTotalCobrado(3, 2, 1, 4, $anio_vigente) }}
+                </td>               
             </tr>
             
             <tr>
-                <td><b>TOTAL TECER A&Ntilde;O</b></td>
-                <td style="text-align: right;"><b>{{ ReporteController::calculaPagosCuotas(1, 3, 1, $anio_vigente) }}</b></td>
-                <td style="text-align: right;"><b>{{ ReporteController::calculaPagosCuotas(1, 3, 2, $anio_vigente) }}</b></td>
-                <td style="text-align: right;"><b>{{ ReporteController::calculaPagosCuotas(1, 3, 3, $anio_vigente) }}</b></td>
-                <td style="text-align: right;"><b>{{ ReporteController::calculaPagosCuotas(1, 3, 4, $anio_vigente) }}</b></td>
-                <td style="text-align: right;"><b>{{ ReporteController::calculaPagosCuotas(1, 3, 5, $anio_vigente) }}</b></td>
-                <td style="text-align: right;"><b>{{ ReporteController::calculaPagosCuotas(1, 3, 6, $anio_vigente) }}</b></td>
-                <td style="text-align: right;"><b>{{ ReporteController::calculaPagosCuotas(1, 3, 7, $anio_vigente) }}</b></td>
-                <td style="text-align: right;"><b>{{ ReporteController::calculaPagosCuotas(1, 3, 8, $anio_vigente) }}</b></td>
-                <td style="text-align: right;"><b>{{ ReporteController::calculaPagosCuotas(1, 3, 9, $anio_vigente) }}</b></td>
-                <td style="text-align: right;"><b>{{ ReporteController::calculaPagosCuotas(1, 3, 10, $anio_vigente) }}</b></td>
-                <td style="text-align: right;"><b>{{ ReporteController::calculaTotalGestion(1, 3, $anio_vigente) }}</b></td>
+                <td><b>TOTAL TERCER A&Ntilde;O</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalMes(1, 2, 1, 3, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalMes(2, 2, 1, 3, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalMes(3, 2, 1, 3, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalMes(4, 2, 1, 3, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalMes(5, 2, 1, 3, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalMes(6, 2, 1, 3, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalMes(7, 2, 1, 3, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalMes(8, 2, 1, 3, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalMes(9, 2, 1, 3, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalMes(10, 2, 1, 3, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalMes(11, 2, 1, 3, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalMes(12, 2, 1, 3, $anio_vigente) }}</b></td>
+                <td style="text-align: right;"><b>{{ ReporteController::sumaTotalPagadoAnual(3, 1, 2, $anio_vigente) }}</b></td>
             </tr>
 
         </tbody>        
         <tfoot>
             <tr>
                 <th>TOTAL</th>
-                <th style="text-align: right;">{{ ReporteController::calculaTotalPagosCuotas(1, 1, $anio_vigente) }}</th>
-                <th style="text-align: right;">{{ ReporteController::calculaTotalPagosCuotas(1, 2, $anio_vigente) }}</th>
-                <th style="text-align: right;">{{ ReporteController::calculaTotalPagosCuotas(1, 3, $anio_vigente) }}</th>
-                <th style="text-align: right;">{{ ReporteController::calculaTotalPagosCuotas(1, 4, $anio_vigente) }}</th>
-                <th style="text-align: right;">{{ ReporteController::calculaTotalPagosCuotas(1, 5, $anio_vigente) }}</th>
-                <th style="text-align: right;">{{ ReporteController::calculaTotalPagosCuotas(1, 6, $anio_vigente) }}</th>
-                <th style="text-align: right;">{{ ReporteController::calculaTotalPagosCuotas(1, 7, $anio_vigente) }}</th>
-                <th style="text-align: right;">{{ ReporteController::calculaTotalPagosCuotas(1, 8, $anio_vigente) }}</th>
-                <th style="text-align: right;">{{ ReporteController::calculaTotalPagosCuotas(1, 9, $anio_vigente) }}</th>
-                <th style="text-align: right;">{{ ReporteController::calculaTotalPagosCuotas(1, 10, $anio_vigente) }}</th>
-                <th></th>
+                <th style="text-align: right;">{{ ReporteController::sumaTotalGestionesCobrado(1, 2, 1, $anio_vigente) }}</th>
+                <th style="text-align: right;">{{ ReporteController::sumaTotalGestionesCobrado(2, 2, 1, $anio_vigente) }}</th>
+                <th style="text-align: right;">{{ ReporteController::sumaTotalGestionesCobrado(3, 2, 1, $anio_vigente) }}</th>
+                <th style="text-align: right;">{{ ReporteController::sumaTotalGestionesCobrado(4, 2, 1, $anio_vigente) }}</th>
+                <th style="text-align: right;">{{ ReporteController::sumaTotalGestionesCobrado(5, 2, 1, $anio_vigente) }}</th>
+                <th style="text-align: right;">{{ ReporteController::sumaTotalGestionesCobrado(6, 2, 1, $anio_vigente) }}</th>
+                <th style="text-align: right;">{{ ReporteController::sumaTotalGestionesCobrado(7, 2, 1, $anio_vigente) }}</th>
+                <th style="text-align: right;">{{ ReporteController::sumaTotalGestionesCobrado(8, 2, 1, $anio_vigente) }}</th>
+                <th style="text-align: right;">{{ ReporteController::sumaTotalGestionesCobrado(9, 2, 1, $anio_vigente) }}</th>
+                <th style="text-align: right;">{{ ReporteController::sumaTotalGestionesCobrado(10, 2, 1, $anio_vigente) }}</th>
+                <th style="text-align: right;">{{ ReporteController::sumaTotalGestionesCobrado(11, 2, 1, $anio_vigente) }}</th>
+                <th style="text-align: right;">{{ ReporteController::sumaTotalGestionesCobrado(12, 2, 1, $anio_vigente) }}</th>
+                <th style="text-align: right;">{{ ReporteController::sumaTotalPagosCobrado(1, 2, $anio_vigente) }}</th>
             </tr>
         </tfoot>
     </table>

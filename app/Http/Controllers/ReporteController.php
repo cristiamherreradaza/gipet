@@ -557,5 +557,42 @@ class ReporteController extends Controller
         return $pagoFormateado;
     }
 
+    public static function sumaTotalPagosCobrado($carrera, $servicio, $anio_vigente){
+
+        $total = Pago::select(DB::raw('SUM(importe) as total_anio'))
+                    ->where('anio_vigente', $anio_vigente)
+                    ->where('carrera_id', $carrera)
+                    ->where('servicio_id', $servicio)
+                    ->first();
+
+        $pago = ($total->total_anio != null)?$total->total_anio:'0.00';
+        $pagoFormateado = number_format($pago, 2, '.', ',');
+
+        return $pagoFormateado;
+    }   
+
+
+    public static function sumaTotalGestionesCobrado($mes, $servicio, $carrera, $anio_vigente){
+
+        $valorPrimer     = ReporteController::sumaTotalMes($mes, $servicio, $carrera, 1, $anio_vigente);
+        $valorSegundo    = ReporteController::sumaTotalMes($mes, $servicio, $carrera, 2, $anio_vigente);
+        $valorTercer     = ReporteController::sumaTotalMes($mes, $servicio, $carrera, 3, $anio_vigente);
+
+        if($valorPrimer != null && $valorSegundo != null && $valorTercer != null ){
+
+            $pago = intval(str_replace (',', '', $valorPrimer)) + intval(str_replace (',', '', $valorSegundo)) + intval(str_replace (',', '', $valorTercer));
+
+        }else{
+
+            $pago  = 'o.00';
+
+        }
+
+        $pagoFormateado = number_format($pago, 2, '.', ',');
+
+        return $pagoFormateado;
+    
+    }
+
 
 }
