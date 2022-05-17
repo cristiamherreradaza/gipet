@@ -1157,11 +1157,9 @@ class PersonaController extends Controller
         $persona  = Persona::where('usuario',$user)
                             ->first();
         
-        if($persona && Hash::check($pass,$persona->password)){
+        if($persona && Hash::check($pass, $persona->password)){
 
-            // echo json_encode($persona);
             return view('persona.editadatos')->with(compact('persona'));
-            // $html = view('persona.editadatos');
 
         }else{
             $html = "error";
@@ -1173,7 +1171,6 @@ class PersonaController extends Controller
 
     public function guardaDatos(Request $request){
 
-        // dd($request->all());
         if($request->ajax()){
 
             $validator = Validator::make($request->all(), [
