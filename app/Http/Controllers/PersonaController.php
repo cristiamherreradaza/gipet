@@ -1156,16 +1156,26 @@ class PersonaController extends Controller
 
         $persona  = Persona::where('usuario',$user)
                             ->first();
-        
-        if($persona && Hash::check($pass, $persona->password)){
 
-            return view('persona.editadatos')->with(compact('persona'));
+        if($persona->cantidad_intentos == 1){
+
+            if($persona && Hash::check($pass, $persona->password)){
+
+                return view('persona.editadatos')->with(compact('persona'));
+    
+            }else{
+
+                $html = 1;
+
+            }
 
         }else{
-            $html = "error";
-        }
+            
+            $html = 2;
 
-        echo json_encode($html);
+        }
+        
+        return json_encode($html);
 
     }
 

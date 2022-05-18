@@ -1665,8 +1665,9 @@ SELECT *
 
             $per = Persona::find($p->id);
 
-            $per->usuario  = $p->cedula;
-            $per->password = Hash::make($p->cedula);;
+            $per->usuario            = $p->cedula;
+            $per->password           = Hash::make($p->cedula);
+            $per->cantidad_intentos  = 1;
 
             $per->save();
             

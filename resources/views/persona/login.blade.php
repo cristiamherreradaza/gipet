@@ -85,11 +85,19 @@
                                                         </div>
                                                     </div>
                                                 </form>
+                                                <div class="load" style="display: none">
+                                                    <img src="{{ asset('assets/imagenes/cargando.gif') }}" alt="" width="50">
+                                                </div>
                                             </div>
                                         {{-- </div> --}}
                                     </center>
                             </div>
                         <div class="col-md-2"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                        
+                        </div>
                     </div>
                 </div>
             </div>
@@ -101,6 +109,10 @@
         <!-- Bootstrap tether Core JavaScript -->
     <script src="{{ asset('assets/libs/popper.js/dist/umd/popper.min.js') }}"></script>
     <script src="{{ asset('assets/libs/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+    
+    {{-- sweet alert --}}
+    <script src="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
+    <script src="{{ asset('assets/extra-libs/sweetalert2/sweet-alert.init.js') }}"></script>
     <script>
         $('[data-toggle="tooltip"]').tooltip();
         $(".preloader").fadeOut();
@@ -119,10 +131,48 @@
                     type: "POST",
                     url: "{{ url('Persona/ingresa') }}",
                     data: datos,
+                    // dataType : "json",
                     success: function (data) {
 
-                        $("#formulario-edita").html(data);
-                    }
+                        if(data == 1){
+                            var html = 
+                            '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+
+                                '<strong>Datos Erroneos!</strong> Su Usuario o contraseña es erroneo.'+
+                                '<a href="#">Volver a Buscar</a>'+
+                                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+                                    '<span aria-hidden="true">&times;</span>'+
+                                '</button>'+
+                            '</div>';
+
+                            $("#formulario-edita").html(html);
+                            
+                        }else if(data == 2){
+                            var html = 
+                            '<div class="alert alert-warning alert-dismissible fade show" role="alert">'+
+                                '<strong>Erro!</strong> Usted ya corrigio sus datos personales.'+
+                                '<a href="#">Volver a Buscar</a>'+
+                                '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+                                    '<span aria-hidden="true">&times;</span>'+
+                                '</button>'+
+                            '</div>';
+
+                            $("#formulario-edita").html(html);
+
+                        }else{
+                            $("#formulario-edita").html(data);
+                        }
+
+                        // $("#formulario-edita").html(data.html);
+
+                        console.log(data);
+                        
+                    },
+                    beforeSend: function() {
+                        // setting a timeout
+                        //$(placeholder).addClass('loading');
+                       //i++;
+                       $('.load').toggle("show");
+                    },
                 });
             }else{
                 $("#formulario-persona")[0].reportValidity();
@@ -130,42 +180,65 @@
         }
 
         function guardardatos(){
-            if ($("#formulario-edita-persona")[0].checkValidity()) {
-                var datos = $('#formulario-edita-persona').serialize();
-                $.ajax({
-                    type: "POST",
-                    url: "{{ url('Persona/guardaDatos') }}",
-                    data: datos,
-                    success: function (data) {
 
-                        let campania = JSON.parse(data);
-                        $('#_fecha_inicio, #_nombre_campania, #_fecha_fin, #_descripcion_campania').text('');
-                        if(campania.success === false){
+            Swal.fire({
+                title: 'Estas seguro de guardar los datos?',
+                text: "Solo tiene 1 oportunidad para editar sus datos!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, Guardar!'
+            }).then((result) => {
 
-                            $.each(campania.errors, function(index, value){
-                                $('#_'+index).text(value);
-                            });    
-                            
-                        }else{
 
-                            // Swal.fire({
-                            //     title: 'Exito!',
-                            //     text: 'Se guardo los datos con exito',
-                            //     icon: 'success',
-                            //     confirmButtonText: 'Ok'
-                            // });
-                            // setTimeout(function(){
-                            //     $('#modal-nuevo').modal('hide');
-                            // }, 3000);
-                            // ajaxListado();
+                if ($("#formulario-edita-persona")[0].checkValidity()) {
+                    var datos = $('#formulario-edita-persona').serialize();
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ url('Persona/guardaDatos') }}",
+                        data: datos,
+                        success: function (data) {
+
+                            let campania = JSON.parse(data);
+                            $('#_fecha_inicio, #_nombre_campania, #_fecha_fin, #_descripcion_campania').text('');
+                            if(campania.success === false){
+
+                                $.each(campania.errors, function(index, value){
+                                    $('#_'+index).text(value);
+                                });    
+                                
+                            }else{
+
+                                // Swal.fire({
+                                //     title: 'Exito!',
+                                //     text: 'Se guardo los datos con exito',
+                                //     icon: 'success',
+                                //     confirmButtonText: 'Ok'
+                                // });
+                                // setTimeout(function(){
+                                //     $('#modal-nuevo').modal('hide');
+                                // }, 3000);
+                                // ajaxListado();
+                            }
+
+                            // $("#formulario-edita").html(data);
                         }
+                    });
+                }else{
+                    $("#formulario-edita-persona")[0].reportValidity();
+                }
 
-                        // $("#formulario-edita").html(data);
-                    }
-                });
-            }else{
-                $("#formulario-edita-persona")[0].reportValidity();
-            }
+                /*
+                if (result.isConfirmed) {
+                    Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                    )
+                }
+                */
+            })
         }
     </script>
 </body>
