@@ -1139,7 +1139,6 @@ class PersonaController extends Controller
 
     public function login(Request $request){
 
-        // dd("holas como estan desde el login");
         return view('persona.login');
 
     }
@@ -1157,23 +1156,30 @@ class PersonaController extends Controller
         $persona  = Persona::where('usuario',$user)
                             ->first();
 
-        if($persona->cantidad_intentos == 1){
+        if($persona){
+            // if($persona->cantidad_intentos == 1){
 
-            if($persona && Hash::check($pass, $persona->password)){
+                if($persona && Hash::check($pass, $persona->password)){
 
-                return view('persona.editadatos')->with(compact('persona'));
-    
-            }else{
+                    return view('persona.editadatos')->with(compact('persona'));
+        
+                }else{
 
-                $html = 1;
+                    $html = 1;
 
-            }
+                }
 
+            // }else{
+                
+            //     $html = 2;
+
+            // }
         }else{
-            
-            $html = 2;
+
+            $html = 1;
 
         }
+
         
         return json_encode($html);
 
@@ -1191,7 +1197,8 @@ class PersonaController extends Controller
                 'genero' => 'required',
                 'cedula' => 'required',
                 'expedido' => 'required',
-                'numero_celular' => 'required'
+                'numero_celular' => 'required',
+                'persona_id' => 'required'
             ]);
 
             if ($validator->fails()) {
@@ -1200,18 +1207,31 @@ class PersonaController extends Controller
 
             }else{
 
-                $persona = Persona::find();
+                $persona_id = $request->input('persona_id');
 
-                // $campania = new Campania();
+                $persona = Persona::find($persona_id);
 
-                // $campania->nombre       = $request->input('nombre_campania');
-                // $campania->fecha_inicio = $request->input('fecha_inicio');
-                // $campania->fecha_fin    = $request->input('fecha_fin');
-                // $campania->descripcion  = $request->input('descripcion_campania');
+                $persona->apellido_paterno  = $request->input('apellido_paterno');
+                $persona->apellido_materno  = $request->input('apellido_materno');
+                $persona->nombres           = $request->input('nombres');
+                $persona->fecha_nacimiento  = $request->input('fecha_nacimiento');
+                $persona->sexo              = $request->input('genero');
+                $persona->cedula            = $request->input('cedula');
+                $persona->expedido          = $request->input('expedido');
+                $persona->numero_celular    = $request->input('numero_celular');
+                $persona->email             = $request->input('correo_electronico');
+                $persona->nombre_padre      = $request->input('referencia_familiar');
+                $persona->celular_padre     = $request->input('referencia_familiar_celular');
+                $persona->direccion         = $request->input('direccion_domicilio');
+                $persona->cantidad_intentos = 0; 
 
-                // $campania->save();
+                $persona->save();
+
+                $dato['success'] = true;
+                $dato['view'] = view('persona.editadatos', compact('persona'))->render();
 
                 // return json_encode(['success' => true]);
+                return json_encode($dato);
             }
         }else{
 

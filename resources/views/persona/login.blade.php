@@ -54,7 +54,7 @@
                                                     <br>
                                                     <div class="form-group ">
                                                         <div class="col-xs-12">
-                                                            <input id="name" type="text" class="form-control  @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus placeholder="Nombre de Usuario" />
+                                                            <input id="name" type="text" class="form-control  @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus placeholder="Nombre de Usuario" autocomplete="off"/>
                             
                                                             @error('name')
                                                                 <span class="invalid-feedback" role="alert">
@@ -80,7 +80,7 @@
                                                     <div class="form-group text-center mt-3">
                                                         <div class="col-xs-12">
                                                             <button type="button" onclick="persona()" class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light">
-                                                                {{ __('INGRESAR') }}
+                                                                {{ __('BUSCAR') }}
                                                             </button>
                                                         </div>
                                                     </div>
@@ -138,7 +138,7 @@
                             var html = 
                             '<div class="alert alert-danger alert-dismissible fade show" role="alert">'+
                                 '<strong>Datos Erroneos!</strong> Su Usuario o contraseña es erroneo.'+
-                                '<a href="#">Volver a Buscar</a>'+
+                                '<a href="#" onclick="volerIntentar()">Volver a Buscar</a>'+
                                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
                                     '<span aria-hidden="true">&times;</span>'+
                                 '</button>'+
@@ -150,7 +150,7 @@
                             var html = 
                             '<div class="alert alert-warning alert-dismissible fade show" role="alert">'+
                                 '<strong>Erro!</strong> Usted ya corrigio sus datos personales.'+
-                                '<a href="#">Volver a Buscar</a>'+
+                                '<a href="#" onclick="volerIntentar()">Volver a Buscar</a>'+
                                 '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
                                     '<span aria-hidden="true">&times;</span>'+
                                 '</button>'+
@@ -164,7 +164,7 @@
 
                         // $("#formulario-edita").html(data.html);
 
-                        console.log(data);
+                        // console.log(data);
                         
                     },
                     beforeSend: function() {
@@ -200,7 +200,10 @@
                         data: datos,
                         success: function (data) {
 
+                            console.log(data);
+
                             let campania = JSON.parse(data);
+
                             $('#_fecha_inicio, #_nombre_campania, #_fecha_fin, #_descripcion_campania').text('');
                             if(campania.success === false){
 
@@ -210,20 +213,37 @@
                                 
                             }else{
 
-                                // Swal.fire({
-                                //     title: 'Exito!',
-                                //     text: 'Se guardo los datos con exito',
-                                //     icon: 'success',
-                                //     confirmButtonText: 'Ok'
-                                // });
-                                // setTimeout(function(){
-                                //     $('#modal-nuevo').modal('hide');
-                                // }, 3000);
-                                // ajaxListado();
+                                Swal.fire({
+                                    title: 'Exito!',
+                                    text: 'Se guardo los datos con exito',
+                                    icon: 'success',
+                                    confirmButtonText: 'Ok',
+                                    timer: 1500
+                                });
+
+
+                                $("#formulario-edita").html(campania.view);
+
+                                // $('.load').toggle("show");
+
+                                // var html = 
+                                //     '<div class="alert alert-warning alert-dismissible fade show" role="alert">'+
+                                //         '<strong>Erro!</strong> Usted ya corrigio sus datos personales.'+
+                                //         '<a href="#" onclick="volerIntentar()">Volver a Buscar</a>'+
+                                //         '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
+                                //             '<span aria-hidden="true">&times;</span>'+
+                                //         '</button>'+
+                                //     '</div>';
+
+                                // $("#formulario-edita").html(html);
+
                             }
 
                             // $("#formulario-edita").html(data);
-                        }
+                        },
+                        beforeSend: function() {
+                            $('.load').toggle("show");
+                        },
                     });
                 }else{
                     $("#formulario-edita-persona")[0].reportValidity();
@@ -239,6 +259,13 @@
                 }
                 */
             })
+        }
+
+        function volerIntentar(){
+
+            // console.log("intento ota ves");
+            location.reload();
+
         }
     </script>
 </body>
