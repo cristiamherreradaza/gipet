@@ -99,15 +99,88 @@
         <br>
     </form>    
 @else
-    <table class="table table-dark">
+    <table class="table table-hover text-center">
         <thead>
-            <th>
-                <td>DATOS PERSONALES</td>
-            </th>
+            <tr>
+                <th>Ap Paterno</th>
+                <th>Ap Materno</th>
+                <th>Nombres</th>
+            </tr>
         </thead>
         <tbody>
-
+            <tr>
+                <td>{{ $persona->apellido_paterno }}</td>
+                <td>{{ $persona->apellido_materno }}</td>
+                <td>{{ $persona->nombres }}</td>
+            </tr>
         </tbody>
     </table>
+
+    <table class="table table-hover text-center">
+        <thead>
+            <tr>
+                <th>Fecha Nacimiento</th>
+                <th>Genero</th>
+                <th>N° Cedula</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ date('d/m/Y', strtotime($persona->fecha_nacimiento)) }}</td>
+                <td>{{ $persona->sexo }}</td>
+                <td>{{ $persona->cedula }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-hover text-center">
+        <thead>
+            <tr>
+                <th>Expedido Cedula</th>
+                <th>N° Celular</th>
+                <th>Correo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ $persona->expedido }}</td>
+                <td>{{ $persona->numero_celular }}</td>
+                <td>{{ $persona->email }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-hover text-center">
+        <thead>
+            <tr>
+                <th>Referencia Familiar</th>
+                <th>N° Celular referencia</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ $persona->nombre_padre }}</td>
+                <td>{{ $persona->celular_padre }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-hover text-center">
+        <thead>
+            <tr>
+                <th>Direccion de Domicilio</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ $persona->direccion }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    <hr>
+    <button class="btn btn-success btn-block" onclick="volerIntentar()">Volver</button>
+    <hr>
+    <br>
 @endif
 
