@@ -1157,23 +1157,15 @@ class PersonaController extends Controller
                             ->first();
 
         if($persona){
-            // if($persona->cantidad_intentos == 1){
+            if($persona && Hash::check($pass, $persona->password)){
 
-                if($persona && Hash::check($pass, $persona->password)){
+                return view('persona.editadatos')->with(compact('persona'));
+    
+            }else{
 
-                    return view('persona.editadatos')->with(compact('persona'));
-        
-                }else{
+                $html = 1;
 
-                    $html = 1;
-
-                }
-
-            // }else{
-                
-            //     $html = 2;
-
-            // }
+            }
         }else{
 
             $html = 1;

@@ -2,7 +2,7 @@
     <h3 class="text-success">FORMULARIO EDICION DE DATOS PERSONALES - ESTUDIANTES </h3>
     <form action="" id="formulario-edita-persona">
         @csrf
-        <input type="text" value="{{ $persona->id }}" name="persona_id">
+        <input type="hidden" value="{{ $persona->id }}" name="persona_id">
         <div class="row">
             <div class="col-md-4">
                 <label for="">APELLIDO PATERNO<b class="text-danger">*</b></label>

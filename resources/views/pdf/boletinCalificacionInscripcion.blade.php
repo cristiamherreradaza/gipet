@@ -250,7 +250,7 @@
         <table style="width:100%; font-family: 'Times New Roman', Times, serif; font-size:14px; text-align:center">
             <tr>
                 <td>
-                    <img style="height:150px; width:250px" src="../public/assets/imagenes/firmara.png">
+                    <img style="height:150px; width:250px" src="../public/assets/imagenes/firmaFabi.png">
                 </td>
                 <td>
                     <img style="height:150px; width:250px" src="../public/assets/imagenes/firmajm.png">
