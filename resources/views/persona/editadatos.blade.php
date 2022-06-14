@@ -1,4 +1,40 @@
-@if ($persona->cantidad_intentos == 1)
+@if ($persona->estado == null)
+    <h3 class="text-success">FORMULARIO EDICION DE ACCESOS </h3>
+    <div class="row">
+        <div class="col-md-6">
+            ESTUDIANTES: <span class="text-info text-bold">{{ $persona->apellido_paterno." ".$persona->apellido_materno." ".$persona->nombres }}</span>
+        </div>
+        <div class="col-md-6">
+            CEDULA: <span class="text-info text-bold">{{ $persona->cedula }}</span>
+        </div>
+    </div>
+    <hr>
+    <form action="" id="formulario-edita-userPass">
+        @csrf
+        <input type="hidden" value="{{ $persona->id }}" name="persona_id">
+        <div class="row">
+            <div class="col-md-6">
+                <label for="">USUARIO<b class="text-danger">*</b></label>
+                <input type="text" class="form-control" id="usuario" name="usuario" value="{{$persona->usuario}}" required placeholder="Escriba su usuario">
+            </div>
+            <div class="col-md-6">
+                <label for="">CONTRASEÑA<b class="text-danger">*</b></label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Escriba su contraseña">
+                <small class="text-danger">Si no desea cambiar su contraseña, deje en blanco</small>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-6">
+                <button type="button" class="btn btn-success btn-block" onclick="guardardatosUserPass()">GUARDAR MIS DATOS</button>
+            </div>
+            <div class="col-md-6">
+                <button type="button" class="btn btn-danger btn-block" onclick="volerIntentar()">CANCELAR</button>
+            </div>
+        </div>
+        <br>
+    </form>  
+@elseif ($persona->cantidad_intentos == 1)
     <h3 class="text-success">FORMULARIO EDICION DE DATOS PERSONALES - ESTUDIANTES </h3>
     <form action="" id="formulario-edita-persona">
         @csrf
@@ -97,8 +133,9 @@
             </div>
         </div>
         <br>
-    </form>    
+    </form> 
 @else
+
     <table class="table table-hover text-center">
         <thead>
             <tr>
@@ -183,4 +220,3 @@
     <hr>
     <br>
 @endif
-

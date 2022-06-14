@@ -45,6 +45,7 @@ Auth::routes();
 Route::get('Persona/login', 'PersonaController@login');
 Route::post('Persona/ingresa', 'PersonaController@ingresa');
 Route::post('Persona/guardaDatos', 'PersonaController@guardaDatos');
+Route::post('Persona/editaAccesos', 'PersonaController@editaAccesos');
 
 
 
@@ -155,6 +156,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Migracion/migracionj2021', 'MigracionController@migracionj2021');
     Route::get('Migracion/migracionInscripcionj', 'MigracionController@migracionInscripcionj');
     Route::get('Migracion/migracionPagos', 'MigracionController@migracionPagos');
+    // ruta parra que el user y estudiante puedan cambiar sus datos personales
     Route::get('Migracion/creacionUserPass', 'MigracionController@creacionUserPass');
 
     //INSCRIPCIONES

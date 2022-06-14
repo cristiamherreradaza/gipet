@@ -184,7 +184,7 @@
             Swal.fire({
                 title: 'Estas seguro de guardar los datos?',
                 text: "Solo tiene 1 oportunidad para editar sus datos!",
-                icon: 'warning',
+                type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
@@ -199,8 +199,6 @@
                         url: "{{ url('Persona/guardaDatos') }}",
                         data: datos,
                         success: function (data) {
-
-                            console.log(data);
 
                             let campania = JSON.parse(data);
 
@@ -263,8 +261,53 @@
 
         function volerIntentar(){
 
-            // console.log("intento ota ves");
             location.reload();
+
+        }
+
+        function guardardatosUserPass(){
+
+            Swal.fire({
+                title: 'Estas seguro de guardar los datos?',
+                text: "Solo tiene 1 oportunidad para editar sus datos!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, Guardar!'
+            }).then((result) => {
+
+                if (result.value) {
+
+                    var datos = $('#formulario-edita-userPass').serialize();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ url('Persona/editaAccesos') }}",
+                        data: datos,
+                        dataType : "json",
+                        success: function (data) {
+
+                            console.log(data);
+
+                            if(data.success){
+
+                                $("#formulario-edita").html(data.view);
+
+                            }
+
+                        },
+                        
+                        beforeSend: function() {
+
+                            $('.load').toggle("show");
+
+                        },
+                    });
+
+                }
+
+            })
 
         }
     </script>

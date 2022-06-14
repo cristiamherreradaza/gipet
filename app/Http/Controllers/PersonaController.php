@@ -1159,7 +1159,12 @@ class PersonaController extends Controller
         if($persona){
             if($persona && Hash::check($pass, $persona->password)){
 
+                // cambiamos el estado para que realize la verifiacion de cambio de contraseña
+                // $persona->estado = "1";
+                // $persona->save();
+
                 return view('persona.editadatos')->with(compact('persona'));
+                // return view('persona.editaUserPass')->with(compact('persona'));
     
             }else{
 
@@ -1228,6 +1233,29 @@ class PersonaController extends Controller
         }else{
 
         }
+
+    }
+    
+    public function editaAccesos(Request  $request){
+
+        $persona_id = $request->input('persona_id');
+
+        $persona = Persona::find($persona_id);
+
+        if(!is_null($request->input('password'))){
+
+            $persona->password = Hash::make($request->input('password'));
+
+        }
+        // cambiamos el estado
+        $persona->estado = 1;
+
+        $persona->save();
+
+        $dato['success'] = true;
+        $dato['view'] = view('persona.editadatos', compact('persona'))->render();
+
+        return json_encode($dato);
 
     }
 }
