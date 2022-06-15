@@ -1208,19 +1208,20 @@ class PersonaController extends Controller
 
                 $persona = Persona::find($persona_id);
 
-                $persona->apellido_paterno  = $request->input('apellido_paterno');
-                $persona->apellido_materno  = $request->input('apellido_materno');
-                $persona->nombres           = $request->input('nombres');
-                $persona->fecha_nacimiento  = $request->input('fecha_nacimiento');
-                $persona->sexo              = $request->input('genero');
-                $persona->cedula            = $request->input('cedula');
-                $persona->expedido          = $request->input('expedido');
-                $persona->numero_celular    = $request->input('numero_celular');
-                $persona->email             = $request->input('correo_electronico');
-                $persona->nombre_padre      = $request->input('referencia_familiar');
-                $persona->celular_padre     = $request->input('referencia_familiar_celular');
-                $persona->direccion         = $request->input('direccion_domicilio');
-                $persona->cantidad_intentos = 0; 
+                $persona->apellido_paterno      = trim(strtoupper($request->input('apellido_paterno')));
+                $persona->apellido_materno      = trim(strtoupper($request->input('apellido_materno')));
+                $persona->nombres               = trim(strtoupper($request->input('nombres')));
+                $persona->fecha_nacimiento      = $request->input('fecha_nacimiento');
+                $persona->sexo                  = $request->input('genero');
+                $persona->cedula                = $request->input('cedula');
+                $persona->expedido              = $request->input('expedido');
+                $persona->numero_celular        = $request->input('numero_celular');
+                $persona->email                 = $request->input('correo_electronico');
+                $persona->nombre_padre          = trim(strtoupper($request->input('referencia_familiar')));
+                $persona->celular_padre         = $request->input('referencia_familiar_celular');
+                $persona->direccion             = trim(strtoupper($request->input('direccion_domicilio')));
+                $persona->cantidad_intentos     = 0; 
+                $persona->fecha_modificacion    = date('Y-m-d H:i:s');
 
                 $persona->save();
 

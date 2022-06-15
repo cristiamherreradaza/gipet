@@ -42,17 +42,17 @@
         <div class="row">
             <div class="col-md-4">
                 <label for="">APELLIDO PATERNO<b class="text-danger">*</b></label>
-                <input type="text" class="form-control" id="apellido_paterno" name="apellido_paterno" value="{{$persona->apellido_paterno}}" required placeholder="Apellido Parterno">
+                <input style="text-transform:uppercase" type="text" class="form-control" id="apellido_paterno" name="apellido_paterno" value="{{$persona->apellido_paterno}}" required placeholder="Apellido Parterno">
                 <small class="text-danger" id="_apellido_paterno"></small>
             </div>
             <div class="col-md-4">
                 <label for="">APELLIDO MATERNO<b class="text-danger">*</b></label>
-                <input type="text" class="form-control" id="apellido_materno" name="apellido_materno"  value="{{$persona->apellido_materno}}" required placeholder="Apellido Materno">
+                <input  style="text-transform:uppercase" type="text" class="form-control" id="apellido_materno" name="apellido_materno"  value="{{$persona->apellido_materno}}" required placeholder="Apellido Materno">
                 <small class="text-danger" id="_apellido_materno"></small>
             </div>
             <div class="col-md-4">
                 <label for="">NOMBRES<b class="text-danger">*</b></label>
-                <input type="text" class="form-control" id="nombres" name="nombres" value="{{$persona->nombres}}" required placeholder="Nombres Completos">
+                <input  style="text-transform:uppercase" type="text" class="form-control" id="nombres" name="nombres" value="{{$persona->nombres}}" required placeholder="Nombres Completos">
                 <small class="text-danger" id="_nombres"></small>
             </div>
         </div>
@@ -108,7 +108,7 @@
         <div class="row">
             <div class="col-md-8">
                 <label for="">REFERENCIA FAMILIAR</label>
-                <input type="text" class="form-control"  name="referencia_familiar" id="referencia_familiar" value="{{$persona->nombre_padre}}" placeholder="Nombres Referencia">
+                <input style="text-transform:uppercase" type="text" class="form-control"  name="referencia_familiar" id="referencia_familiar" value="{{$persona->nombre_padre}}" placeholder="Nombres Referencia">
             </div>
             <div class="col-md-4">
                 <label for="">NUMERO DE CELULAR</label>
@@ -120,7 +120,7 @@
         <div class="row">
             <div class="col-md-12">
                 <label for="">Direccion de Domicilio</label>
-                <textarea class="form-control" name="direccion_domicilio" id="direccion_domicilio" cols="30" rows="2" placeholder="Direccion de domicilio">{{$persona->direccion}}</textarea>
+                <textarea style="text-transform:uppercase"  class="form-control" name="direccion_domicilio" id="direccion_domicilio" cols="30" rows="2" placeholder="Direccion de domicilio">{{$persona->direccion}}</textarea>
             </div>
         </div>
         <br>

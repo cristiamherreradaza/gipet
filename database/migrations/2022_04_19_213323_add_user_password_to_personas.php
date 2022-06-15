@@ -14,7 +14,8 @@ class AddUserPasswordToPersonas extends Migration
     public function up()
     {
         Schema::table('personas', function (Blueprint $table) {
-            $table->string('usuario')->after('estado')->nullable();
+            $table->datetime('fecha_modificacion')->nullable()->after('estado');
+            $table->string('usuario')->after('fecha_modificacion')->nullable();
             $table->string('password')->after('usuario')->nullable();
             $table->string('cantidad_intentos')->after('password')->nullable();
         });
@@ -28,6 +29,7 @@ class AddUserPasswordToPersonas extends Migration
     public function down()
     {
         Schema::table('personas', function (Blueprint $table) {
+            $table->dropColumn('fecha_modificacion');
             $table->dropColumn('usuario');
             $table->dropColumn('password');
             $table->dropColumn('cantidad_intentos');

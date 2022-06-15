@@ -30,6 +30,7 @@ use App\librerias\Utilidades;
 use Barryvdh\DomPDF\Facade as PDF;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -80,6 +81,13 @@ class InscripcionController extends Controller
         // nit
         // razon_social_cliente
         $persona->anio_vigente      = date('Y');                // PENDIENTE PARA 2 CARRERAS EN DIFERENTES ANIOS
+
+        // para que peudan editar sus datos mas adelante
+        $persona->cantidad_intentos     = 1;
+        $persona->usuario               = $request->carnet;
+        $persona->password              = Hash::make($request->carnet);
+        // para que peudan editar sus datos mas adelante END
+
         $persona->save();
         
         return redirect('Persona/informacion/'.$persona->id);
