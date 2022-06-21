@@ -183,47 +183,48 @@
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Si, Guardar!'
             }).then((result) => {
+                if(result.value){
+                    if ($("#formulario-edita-persona")[0].checkValidity()) {
+                        var datos = $('#formulario-edita-persona').serialize();
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ url('Persona/guardaDatos') }}",
+                            data: datos,
+                            success: function (data) {
 
 
-                if ($("#formulario-edita-persona")[0].checkValidity()) {
-                    var datos = $('#formulario-edita-persona').serialize();
-                    $.ajax({
-                        type: "POST",
-                        url: "{{ url('Persona/guardaDatos') }}",
-                        data: datos,
-                        success: function (data) {
+                                let campania = JSON.parse(data);
 
-                            let campania = JSON.parse(data);
+                                $('#_fecha_inicio, #_nombre_campania, #_fecha_fin, #_descripcion_campania').text('');
+                                if(campania.success === false){
 
-                            $('#_fecha_inicio, #_nombre_campania, #_fecha_fin, #_descripcion_campania').text('');
-                            if(campania.success === false){
+                                    $.each(campania.errors, function(index, value){
+                                        $('#_'+index).text(value);
+                                    });    
+                                    
+                                }else{
 
-                                $.each(campania.errors, function(index, value){
-                                    $('#_'+index).text(value);
-                                });    
-                                
-                            }else{
-
-                                Swal.fire({
-                                    title: 'Exito!',
-                                    text: 'Se guardo los datos con exito',
-                                    icon: 'success',
-                                    confirmButtonText: 'Ok',
-                                    timer: 1500
-                                });
+                                    Swal.fire({
+                                        title: 'Exito!',
+                                        text: 'Se guardo los datos con exito',
+                                        icon: 'success',
+                                        confirmButtonText: 'Ok',
+                                        timer: 1500
+                                    });
 
 
-                                $("#formulario-edita").html(campania.view);
+                                    $("#formulario-edita").html(campania.view);
 
-                            }
+                                }
 
-                        },
-                        beforeSend: function() {
-                            $('.load').toggle("show");
-                        },
-                    });
-                }else{
-                    $("#formulario-edita-persona")[0].reportValidity();
+                            },
+                            beforeSend: function() {
+                                $('.load').toggle("show");
+                            },
+                        });
+                    }else{
+                        $("#formulario-edita-persona")[0].reportValidity();
+                    }
                 }
             })
         }
@@ -248,7 +249,7 @@
 
                 if (result.value) {
 
-                    console.log(result.value);
+                    // console.log(result.value);
 
                     var datos = $('#formulario-edita-userPass').serialize();
 
