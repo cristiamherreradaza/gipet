@@ -162,15 +162,8 @@
                             $("#formulario-edita").html(data);
                         }
 
-                        // $("#formulario-edita").html(data.html);
-
-                        // console.log(data);
-                        
                     },
                     beforeSend: function() {
-                        // setting a timeout
-                        //$(placeholder).addClass('loading');
-                       //i++;
                        $('.load').toggle("show");
                     },
                 });
@@ -222,22 +215,8 @@
 
                                 $("#formulario-edita").html(campania.view);
 
-                                // $('.load').toggle("show");
-
-                                // var html = 
-                                //     '<div class="alert alert-warning alert-dismissible fade show" role="alert">'+
-                                //         '<strong>Erro!</strong> Usted ya corrigio sus datos personales.'+
-                                //         '<a href="#" onclick="volerIntentar()">Volver a Buscar</a>'+
-                                //         '<button type="button" class="close" data-dismiss="alert" aria-label="Close">'+
-                                //             '<span aria-hidden="true">&times;</span>'+
-                                //         '</button>'+
-                                //     '</div>';
-
-                                // $("#formulario-edita").html(html);
-
                             }
 
-                            // $("#formulario-edita").html(data);
                         },
                         beforeSend: function() {
                             $('.load').toggle("show");
@@ -246,16 +225,6 @@
                 }else{
                     $("#formulario-edita-persona")[0].reportValidity();
                 }
-
-                /*
-                if (result.isConfirmed) {
-                    Swal.fire(
-                    'Deleted!',
-                    'Your file has been deleted.',
-                    'success'
-                    )
-                }
-                */
             })
         }
 
@@ -279,6 +248,8 @@
 
                 if (result.value) {
 
+                    console.log(result.value);
+
                     var datos = $('#formulario-edita-userPass').serialize();
 
                     $.ajax({
@@ -287,8 +258,6 @@
                         data: datos,
                         dataType : "json",
                         success: function (data) {
-
-                            console.log(data);
 
                             if(data.success){
 
