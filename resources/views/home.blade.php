@@ -872,18 +872,18 @@
       function drawChart() {
         var data = google.visualization.arrayToDataTable([
             ['Year', 'Ingresos'],
-            ["Enero", {{ ($mensualidadEnero->total != null)? $mensualidadEnero->total : 0 }} ],
-            ["Febrero", {{ ($mensualidadFebrero->total != null)? $mensualidadFebrero->total : 0 }}],
-            ["Marzo", {{ ($mensualidadMarzo->total != null)? $mensualidadMarzo->total : 0 }}],
-            ["Abril", {{ ($mensualidadAbril->total != null)? $mensualidadAbril->total : 0 }}],
-            ["Mayo", {{ ($mensualidadMayo->total != null)? $mensualidadMayo->total : 0 }}],
-            ["Junio", {{ ($mensualidadJunio->total != null)? $mensualidadJunio->total : 0 }}],
-            ["Julio", {{ ($mensualidadJulio->total != null)? $mensualidadJulio->total : 0 }}],
-            ["Agosto", {{ ($mensualidadAgosto->total != null)? $mensualidadAgosto->total:0 }}],
-            ["Septiembre", {{ ($mensualidadSeptiembre->total != null)? $mensualidadSeptiembre->total : 0 }}],
-            ["Octubre", {{ ($mensualidadOctubre->total != null)? $mensualidadOctubre->total : 0 }}],
-            ["Noviembre", {{ ($mensualidadNoviembre->total != null)? $mensualidadNoviembre->total : 0 }}],
-            ['Diciembre', {{ ($mensualidadDiciembre->total != null)? $mensualidadDiciembre->total: 0}}]
+            ["Enero", {{ ($mensualidadEnero != null)? $mensualidadEnero->total : 0 }} ],
+            ["Febrero", {{ ($mensualidadFebrero != null)? $mensualidadFebrero->total : 0 }}],
+            ["Marzo", {{ ($mensualidadMarzo != null)? $mensualidadMarzo->total : 0 }}],
+            ["Abril", {{ ($mensualidadAbril != null)? $mensualidadAbril->total : 0 }}],
+            ["Mayo", {{ ($mensualidadMayo != null)? $mensualidadMayo->total : 0 }}],
+            ["Junio", {{ ($mensualidadJunio != null)? $mensualidadJunio->total : 0 }}],
+            ["Julio", {{ ($mensualidadJulio != null)? $mensualidadJulio->total : 0 }}],
+            ["Agosto", {{ ($mensualidadAgosto != null)? $mensualidadAgosto->total:0 }}],
+            ["Septiembre", {{ ($mensualidadSeptiembre != null)? $mensualidadSeptiembre->total : 0 }}],
+            ["Octubre", {{ ($mensualidadOctubre != null)? $mensualidadOctubre->total : 0 }}],
+            ["Noviembre", {{ ($mensualidadNoviembre != null)? $mensualidadNoviembre->total : 0 }}],
+            ['Diciembre', {{ ($mensualidadDiciembre != null)? $mensualidadDiciembre->total: 0}}]
 
         //   ['Year', 'Sales', 'Expenses', 'Profit'],
         //   ['2014', 10000, 400, 200],
@@ -919,48 +919,6 @@
         }
       }
 
-
-    // google.charts.load('current', {'packages':['bar']});
-    // google.charts.setOnLoadCallback(drawStuff);
-
-    // function drawStuff() {
-    //     var data = new google.visualization.arrayToDataTable([
-    //         ['Mes', 'Ganancia'],
-    //         ["Enero", {{ ($mensualidadEnero->total != null)? $mensualidadEnero->total : 0 }} ],
-    //         ["Febrero", {{ ($mensualidadFebrero->total != null)? $mensualidadFebrero->total : 0 }}],
-    //         ["Marzo", {{ ($mensualidadMarzo->total != null)? $mensualidadMarzo->total : 0 }}],
-    //         ["Abril", {{ ($mensualidadAbril->total != null)? $mensualidadAbril->total : 0 }}],
-    //         ["Mayo", {{ ($mensualidadMayo->total != null)? $mensualidadMayo->total : 0 }}],
-    //         ["Junio", {{ ($mensualidadJunio->total != null)? $mensualidadJunio->total : 0 }}],
-    //         ["Julio", {{ ($mensualidadJulio->total != null)? $mensualidadJulio->total : 0 }}],
-    //         ["Agosto", {{ ($mensualidadAgosto->total != null)? $mensualidadAgosto->total:0 }}],
-    //         ["Septiembre", {{ ($mensualidadSeptiembre->total != null)? $mensualidadSeptiembre->total : 0 }}],
-    //         ["Octubre", {{ ($mensualidadOctubre->total != null)? $mensualidadOctubre->total : 0 }}],
-    //         ["Noviembre", {{ ($mensualidadNoviembre->total != null)? $mensualidadNoviembre->total : 0 }}],
-    //         ['Diciembre', {{ ($mensualidadDiciembre->total != null)? $mensualidadDiciembre->total: 0}}]
-    //     ]);
-
-    //     var options = {
-    //         width: 800,
-    //         legend: { position: 'none' },
-    //         chart: {
-    //             title: '',
-    //             subtitle: '' 
-    //         },
-    //         axes: {
-    //         x: {
-    //             0: { side: 'top', label: ''} // Top x-axis.
-    //         }
-    //         },
-    //         bar: { groupWidth: "90%" }
-    //         hAxis: {format: 'decimal'},
-    //     };
-
-    //     var chart = new google.charts.Bar(document.getElementById('top_x_div'));
-    //     // Convert the Classic options to Material options.
-    //     chart.draw(data, google.charts.Bar.convertOptions(options));
-
-    // };
 </script>
 <script type="text/javascript">
       google.charts.load("current", {packages:["corechart"]});
