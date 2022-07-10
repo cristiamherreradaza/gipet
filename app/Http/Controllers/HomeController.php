@@ -50,15 +50,15 @@ class HomeController extends Controller
                                                 
         $anio = date('Y');
 
-        // $number = cal_days_in_month(CAL_GREGORIAN, 1, $anio);
-        // $fechaInicoEnero = $anio.'-01-01';
-        // $fechaFinEnero = $anio.'-01-'.$number;
-        // // MENSUALIDADES
-        // $mensualidadEnero = DB::table('pagos')
-        //                     ->select(DB::raw('sum(importe) as total'))
-        //                     ->where('servicio_id',2)
-        //                     ->whereBetween('fecha',[$fechaInicoEnero,$fechaFinEnero])
-        //                     ->first();
+        $number = cal_days_in_month(CAL_GREGORIAN, 1, $anio);
+        $fechaInicoEnero = $anio.'-01-01';
+        $fechaFinEnero = $anio.'-01-'.$number;
+        // MENSUALIDADES
+        $mensualidadEnero = DB::table('pagos')
+                            ->select(DB::raw('sum(importe) as total'))
+                            ->where('servicio_id',2)
+                            ->whereBetween('fecha',[$fechaInicoEnero,$fechaFinEnero])
+                            ->first();
 
         // $number = cal_days_in_month(CAL_GREGORIAN, 2, $anio);
         // $fechaInicoFebrero = $anio.'-02-01';
@@ -175,7 +175,7 @@ class HomeController extends Controller
         //                     ->first();
 
         // POP ERRROR DE SERVER SE CAMBIO A NULL
-        $mensualidadEnero = null;
+        // $mensualidadEnero = null;
         $mensualidadFebrero = null;
         $mensualidadMarzo = null;
         $mensualidadAbril = null;
