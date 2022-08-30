@@ -120,6 +120,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('nota/ajax_importar', 'NotaController@ajax_importar');
     Route::get('Nota/ajaxMuestraNota', 'NotaController@ajaxMuestraNota');
     Route::post('Nota/ajaxRegistraNota', 'NotaController@ajaxRegistraNota');
+    Route::get('nota/listaAsistenciaPdf/{asignatura_id}/{bimestre}', 'NotaController@listaAsistenciaPdf');
+    
 
     //NOTAS PROPUESTA
     Route::get('notaspropuesta/listado', 'NotasPropuestaController@listado');

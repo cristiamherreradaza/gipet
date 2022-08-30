@@ -18,6 +18,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
+use Barryvdh\DomPDF\Facade as PDF;
+
+
 
 class NotaController extends Controller
 {
@@ -127,6 +130,42 @@ class NotaController extends Controller
         $nombreAsignatura = $asignatura->asignatura->nombre;
         
         return Excel::download(new NotasExport($asignatura_id, $bimestre), date('Y-m-d')."-$nombreAsignatura.xlsx");
+    }
+
+    public function listaAsistenciaPdf($asignatura_id, $bimestre){
+
+        $notapropuesta = NotasPropuesta::find($asignatura_id);
+
+        $inscritos  = Inscripcione::where('asignatura_id', $notapropuesta->asignatura_id)
+                            ->where('turno_id', $notapropuesta->turno_id)
+                            ->where('paralelo', $notapropuesta->paralelo)
+                            ->where('anio_vigente', $notapropuesta->anio_vigente)
+                            // para ue no salga en la lista los convalidados 
+                            ->whereNull('convalidado')
+                            ->get();
+
+        $contador = 1;
+
+        // foreach($inscritos as $ins){
+        //     if($ins->persona){
+        //         $sw = true;
+        //         $estado_alumno = CarrerasPersona::where('carrera_id', $ins->carrera_id)
+        //                                         ->where('persona_id', $ins->persona_id)
+        //                                         ->where('anio_vigente', $ins->anio_vigente)
+        //                                         ->first();
+        //         if($estado_alumno->estado == 'ABANDONO' || $estado_alumno->estado == 'ABANDONO TEMPORAL' || $estado_alumno->estado == 'CONGELADO')
+        //             $sw = false;
+
+        //         if($sw){
+        //             echo $contador.": ".$ins->persona->apellido_paterno." ".$ins->persona->apellido_materno."<br>";
+        //             $contador++;
+        //         }
+        //     }
+        // }
+
+        $pdf = PDF::loadView('pdf.listaAsistencia', compact('inscritos', 'notapropuesta', 'bimestre'))->setPaper('letter');
+        return $pdf->stream('contrato.pdf');
+
     }
 
     public function actualizar(Request $request)

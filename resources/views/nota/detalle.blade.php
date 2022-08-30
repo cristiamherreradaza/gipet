@@ -118,7 +118,6 @@
                                 if( $estado_alumno->estado == 'ABANDONO' || $estado_alumno->estado == 'ABANDONO TEMPORAL' || $estado_alumno->estado == 'CONGELADO'){
                                     $sw = false;
                                 }
-                                // dd($estado_alumno);
                             @endphp 
                             @if ($sw)
                                 <tr>
@@ -206,7 +205,12 @@
                 </div>
 
             </div>
-        </form>        
+        </form>    
+        <div class="row">
+            <div class="col-md-12">
+                <a target="_target" href="{{ url('nota/listaAsistenciaPdf/'.$asignatura->id.'/'.$bimestreActual) }}" class="btn btn-danger btn-block text-white"type="button"><i class="fa fa-file-pdf"></i> Lista de asistencia</a>
+            </div>
+        </div>    
     </div>
 </div>
 
