@@ -167,6 +167,9 @@
                 </tr>
             </thead>
             <tbody>
+                @php
+                    $contador  = 1;
+                @endphp
                 @foreach ($inscritos as $key => $inscrito )
                     @if ($inscrito->persona)
                         @php
@@ -183,7 +186,7 @@
 
                         @if ($sw)
                             <tr>
-                                <td>{{ ($key+1) }}</td>
+                                <td>{{ $contador }}</td>
                                 <td>{{ $inscrito->persona->apellido_paterno." ".$inscrito->persona->apellido_materno." ".$inscrito->persona->nombres }}</td>
                                 <td></td>
                                 <td></td>
@@ -208,6 +211,9 @@
                                 <td></td>
                                 <td></td>
                             </tr>
+                            @php
+                                $contador++;
+                            @endphp
                         @endif
                     @endif
                 @endforeach
