@@ -35,7 +35,6 @@
                                 </select>
                             </div>
                         </div>
-        
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Turno</label>
@@ -46,16 +45,26 @@
                                 </select>
                             </div>
                         </div>
-        
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Paralelo </label>
+                                <select name="paralelo" id="paralelo" class="form-control">
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Gestion </label>
                                 <input type="number" name="anio_vigente" id="anio_vigente" value="{{ date('Y') }}" class="form-control" min="2021" max="2050">
                             </div>
                         </div>
-        
-                        <div class="col-md-3">
-                            <br />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
                             <button type="submit" formtarget="_blank" class="btn btn-success btn-block" title="Buscar">GENERAR</button>
                         </div>
                     </div>
@@ -101,16 +110,27 @@
         
                         <div class="col-md-3">
                             <div class="form-group">
+                                <label class="control-label">Paralelo </label>
+                                <select name="paralelo" id="paralelo" class="form-control">
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+                                </select>
+                            </div>
+                        </div>
+        
+                        <div class="col-md-3">
+                            <div class="form-group">
                                 <label class="control-label">Gestion </label>
                                 <input type="number" name="anio_vigente" id="anio_vigente" value="{{ date('Y') }}"
                                     class="form-control" min="2021" max="2050">
                             </div>
                         </div>
-        
-                        <div class="col-md-3">
-                            <br />
-                            <button type="submit" formtarget="_blank" class="btn btn-success btn-block"
-                                title="Buscar">GENERAR</button>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="submit" formtarget="_blank" class="btn btn-success btn-block" title="Buscar">GENERAR</button>
                         </div>
                     </div>
                 </form>

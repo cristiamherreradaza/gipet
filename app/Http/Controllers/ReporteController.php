@@ -207,11 +207,13 @@ class ReporteController extends Controller
         return view('reporte.formularioReportes')->with(compact('turnos'));
     }
 
-    public function pencionesPorPeriodo(Request $request)
-    {
-        $gestion = $request->input('gestion');
-        $turno_id = $request->input('turno_id');
-        $anio_vigente = $request->input('anio_vigente');
+    public function pencionesPorPeriodo(Request $request){
+        // dd($request->all());
+
+        $gestion        = $request->input('gestion');
+        $turno_id       = $request->input('turno_id');
+        $anio_vigente   = $request->input('anio_vigente');
+        $paralelo       = $request->input('paralelo');
 
         $datosTurno = Turno::find($turno_id);
 
@@ -219,20 +221,22 @@ class ReporteController extends Controller
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
                                 ->where('anio_vigente', $anio_vigente)
+                                ->where('paralelo', $paralelo)
                                 ->get();
         
-        $pdf = PDF::loadView('pdf.pencionesPorPeriodo', compact('carrerasPersonas', 'gestion', 'turno_id', 'anio_vigente', 'datosTurno'))
+        $pdf = PDF::loadView('pdf.pencionesPorPeriodo', compact('carrerasPersonas', 'gestion', 'turno_id', 'anio_vigente', 'datosTurno', 'paralelo'))
                     ->setPaper('letter', 'landscape');
 
         return $pdf->stream('pensionesPeriodo.pdf');
 
     }
 
-    public function pencionesPorCobrar(Request $request)
-    {
-        $gestion = $request->input('gestion');
-        $turno_id = $request->input('turno_id');
-        $anio_vigente = $request->input('anio_vigente');
+    public function pencionesPorCobrar(Request $request){
+
+        $gestion        = $request->input('gestion');
+        $turno_id       = $request->input('turno_id');
+        $anio_vigente   = $request->input('anio_vigente');
+        $paralelo       = $request->input('paralelo');
 
         $datosTurno = Turno::find($turno_id);
 
@@ -240,9 +244,10 @@ class ReporteController extends Controller
                                 ->where('turno_id', $turno_id)
                                 ->where('carrera_id', 1)
                                 ->where('anio_vigente', $anio_vigente)
+                                ->where('paralelo', $paralelo)
                                 ->get();
         
-        $pdf = PDF::loadView('pdf.pencionesPorCobrar', compact('carrerasPersonas', 'gestion', 'turno_id', 'anio_vigente', 'datosTurno'))
+        $pdf = PDF::loadView('pdf.pencionesPorCobrar', compact('carrerasPersonas', 'gestion', 'turno_id', 'anio_vigente', 'datosTurno', 'paralelo'))
                     ->setPaper('letter', 'landscape');
 
         return $pdf->stream('pensionesCobrar.pdf');

@@ -103,18 +103,16 @@
 <body>
     <div class="centrado">
         <br />
-        <div class="titulo">ESCUELA FINANCIERA GIPET S.R.L.</div>
-        <div class="titulo">CENTRALIZADOR DE PENSIONES POR PERIDO</div>
+            <div class="titulo">ESCUELA FINANCIERA GIPET S.R.L.</div>
+            <div class="titulo">CENTRALIZADOR DE PENSIONES POR PERIDO</div>
         <br />
         <b>CARRERA: </b> CONTADURIA GENERAL
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <b>GESTION: </b> {{ $anio_vigente }}
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <b>TURNO: </b> {{ $datosTurno->descripcion }}
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <b>PARALELO: </b> {{ $paralelo }}
     </div>
 
     <table class="datos">
