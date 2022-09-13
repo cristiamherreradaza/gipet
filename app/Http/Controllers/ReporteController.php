@@ -485,7 +485,7 @@ class ReporteController extends Controller
     }
 
 
-    public static function calculaPagosCobrados($mes, $gestion, $servicio, $carrera, $turno, $anio_vigente){
+    public static function calculaPagosCobrados($mes, $gestion, $servicio, $carrera, $turno, $anio_vigente, $paralelo){
 
         $fechaIni = $anio_vigente."-".(($mes<=9)? "0".$mes:$mes)."-01";
 
@@ -494,15 +494,35 @@ class ReporteController extends Controller
         $fechaFin = $anio_vigente."-".(($mes<=9)? "0".$mes:$mes)."-".$numDiasMes;
 
         $pago="";
+
         $decimoPago = Pago::select(DB::raw('SUM(importe) as total_decimo'))
-                            ->where('turno_id', $turno)
-                            ->where('carrera_id', $carrera)
-                            ->where('servicio_id', $servicio)
-                            ->where('gestion', $gestion)
-                            ->where('anio_vigente', $anio_vigente)
-                            ->whereBetween('fecha', [$fechaIni,$fechaFin])
+                            ->join('carreras_personas', 'pagos.persona_id', '=','carreras_personas.persona_id')
+                            ->where('pagos.turno_id', $turno)
+                            ->where('pagos.carrera_id', $carrera)
+                            ->where('pagos.servicio_id', $servicio)
+                            ->where('pagos.gestion', $gestion)
+                            ->where('pagos.anio_vigente', $anio_vigente)
+                            ->whereBetween('pagos.fecha', [$fechaIni,$fechaFin])
+                            ->whereNull('carreras_personas.deleted_at')
+                            ->where('carreras_personas.carrera_id', $carrera)
+                            ->where('carreras_personas.anio_vigente', $anio_vigente)
+                            ->where('carreras_personas.paralelo', $paralelo)
                             // ->whereYear('created_at', $anio_vigente)
                             ->first();
+                            // ->toSql();
+
+        // $decimoPago = Pago::select(DB::raw('SUM(importe) as total_decimo'))
+        //                     ->where('turno_id', $turno)
+        //                     ->where('carrera_id', $carrera)
+        //                     ->where('servicio_id', $servicio)
+        //                     ->where('gestion', $gestion)
+        //                     ->where('anio_vigente', $anio_vigente)
+        //                     ->whereBetween('fecha', [$fechaIni,$fechaFin])
+        //                     // ->whereYear('created_at', $anio_vigente)
+        //                     ->first();
+                            
+                            // ->toSql();
+                            // dd($decimoPago, "mes> ".$mes, "gestion> ".$gestion, "servicio> ".$servicio, "carrera> ".$carrera, "turno> ".$turno, "anio vigente> ".$anio_vigente,"fecha ini> ".$fechaIni,"fecha fin> ".$fechaFin);
 
         $pago = ($decimoPago->total_decimo != null)?$decimoPago->total_decimo:'0.00';
         $pagoFormateado = number_format($pago, 2, '.', ',');
@@ -510,12 +530,12 @@ class ReporteController extends Controller
         return $pagoFormateado;
     }
 
-    public static function sumaTotalCobrado($gestion, $servicio, $carrera, $turno, $anio_vigente){
+    public static function sumaTotalCobrado($gestion, $servicio, $carrera, $turno, $anio_vigente, $paralelo){
         $sumaTot = 0;
 
         for($i = 1; $i <= 12 ; $i++){
 
-            $valor = ReporteController::calculaPagosCobrados($i,$gestion, $servicio, $carrera, $turno, $anio_vigente);
+            $valor = ReporteController::calculaPagosCobrados($i,$gestion, $servicio, $carrera, $turno, $anio_vigente, $paralelo);
 
             $sumaTot = $sumaTot + intval(str_replace (',', '', $valor));
 
@@ -524,7 +544,7 @@ class ReporteController extends Controller
         return  number_format($sumaTot, 2, '.', ',');
     }
 
-    public static function sumaTotalMes($mes, $servicio, $carrera, $gestion, $anio_vigente){
+    public static function sumaTotalMes($mes, $servicio, $carrera, $gestion, $anio_vigente, $paralelo){
 
         $fechaIni = $anio_vigente."-".(($mes<=9)? "0".$mes:$mes)."-01";
 
@@ -533,11 +553,16 @@ class ReporteController extends Controller
         $fechaFin = $anio_vigente."-".(($mes<=9)? "0".$mes:$mes)."-".$numDiasMes;
 
         $total = Pago::select(DB::raw('SUM(importe) as total_mes'))
-                    ->where('anio_vigente',$anio_vigente)
-                    ->where('gestion',$gestion)
-                    ->where('carrera_id',$carrera)
-                    ->where('servicio_id',$servicio)
-                    ->whereBetween('fecha',[$fechaIni,$fechaFin])
+                    ->join('carreras_personas', 'pagos.persona_id', '=','carreras_personas.persona_id')
+                    ->where('pagos.anio_vigente',$anio_vigente)
+                    ->where('pagos.gestion',$gestion)
+                    ->where('pagos.carrera_id',$carrera)
+                    ->where('pagos.servicio_id',$servicio)
+                    ->whereBetween('pagos.fecha',[$fechaIni,$fechaFin])
+                    ->whereNull('carreras_personas.deleted_at')
+                    ->where('carreras_personas.carrera_id', $carrera)
+                    ->where('carreras_personas.anio_vigente', $anio_vigente)
+                    ->where('carreras_personas.paralelo', $paralelo)
                     ->first();
 
                     
@@ -547,13 +572,18 @@ class ReporteController extends Controller
         return $pagoFormateado;
     }
 
-    public static function sumaTotalPagadoAnual($gestion, $carrera, $servicio, $anio_vigente){
+    public static function sumaTotalPagadoAnual($gestion, $carrera, $servicio, $anio_vigente, $paralelo){
 
         $total = Pago::select(DB::raw('SUM(importe) as total_anio'))
-                    ->where('anio_vigente', $anio_vigente)
-                    ->where('gestion', $gestion)
-                    ->where('carrera_id', $carrera)
-                    ->where('servicio_id', $servicio)
+                    ->join('carreras_personas', 'pagos.persona_id', '=','carreras_personas.persona_id')
+                    ->where('pagos.anio_vigente', $anio_vigente)
+                    ->where('pagos.gestion', $gestion)
+                    ->where('pagos.carrera_id', $carrera)
+                    ->where('pagos.servicio_id', $servicio)
+                    ->whereNull('carreras_personas.deleted_at')
+                    ->where('carreras_personas.carrera_id', $carrera)
+                    ->where('carreras_personas.anio_vigente', $anio_vigente)
+                    ->where('carreras_personas.paralelo', $paralelo)
                     ->first();
 
         $pago = ($total->total_anio != null)?$total->total_anio:'0.00';
@@ -579,13 +609,15 @@ class ReporteController extends Controller
 
     public static function sumaTotalGestionesCobrado($mes, $servicio, $carrera, $anio_vigente){
 
-        $valorPrimer     = ReporteController::sumaTotalMes($mes, $servicio, $carrera, 1, $anio_vigente);
-        $valorSegundo    = ReporteController::sumaTotalMes($mes, $servicio, $carrera, 2, $anio_vigente);
-        $valorTercer     = ReporteController::sumaTotalMes($mes, $servicio, $carrera, 3, $anio_vigente);
 
-        if($valorPrimer != null && $valorSegundo != null && $valorTercer != null ){
+        $valorPrimerA     = ReporteController::sumaTotalMes($mes, $servicio, $carrera, 1, $anio_vigente, "A");
+        $valorPrimerB     = ReporteController::sumaTotalMes($mes, $servicio, $carrera, 1, $anio_vigente, "B");
+        $valorSegundo    = ReporteController::sumaTotalMes($mes, $servicio, $carrera, 2, $anio_vigente, "A");
+        $valorTercer     = ReporteController::sumaTotalMes($mes, $servicio, $carrera, 3, $anio_vigente, "A");
 
-            $pago = intval(str_replace (',', '', $valorPrimer)) + intval(str_replace (',', '', $valorSegundo)) + intval(str_replace (',', '', $valorTercer));
+        if($valorPrimerA != null && $valorPrimerB != null && $valorSegundo != null && $valorTercer != null ){
+
+            $pago = intval(str_replace (',', '', $valorPrimerA)) + intval(str_replace (',', '', $valorPrimerB)) + intval(str_replace (',', '', $valorSegundo)) + intval(str_replace (',', '', $valorTercer));
 
         }else{
 
