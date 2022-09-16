@@ -507,9 +507,11 @@ class ReporteController extends Controller
                             ->where('carreras_personas.carrera_id', $carrera)
                             ->where('carreras_personas.anio_vigente', $anio_vigente)
                             ->where('carreras_personas.paralelo', $paralelo)
+                            ->where('carreras_personas.gestion', $gestion)
                             // ->whereYear('created_at', $anio_vigente)
                             ->first();
                             // ->toSql();
+                            // dd($decimoPago, "Mes ".$mes, "Gestion ".$gestion, "Servicio ".$servicio, "Carrera ".$carrera, "Turno ".$turno, "Anio ".$anio_vigente, "Paralelo ".$paralelo);
 
         // $decimoPago = Pago::select(DB::raw('SUM(importe) as total_decimo'))
         //                     ->where('turno_id', $turno)
