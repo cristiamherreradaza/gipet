@@ -565,6 +565,7 @@ class ReporteController extends Controller
                     ->where('carreras_personas.carrera_id', $carrera)
                     ->where('carreras_personas.anio_vigente', $anio_vigente)
                     ->where('carreras_personas.paralelo', $paralelo)
+                    ->where('carreras_personas.gestion', $gestion)
                     ->first();
 
                     
