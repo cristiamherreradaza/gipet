@@ -33,26 +33,26 @@
             </div>
         </div>
         <br>
-    </form>  
+    </form>
 @elseif ($persona->cantidad_intentos == 1)
-    <h3 class="text-success">FORMULARIO EDICION DE DATOS PERSONALES - ESTUDIANTES </h3>
+    <h3 class="text-success">VERIFICACION DE DATOS PERSONALES - ESTUDIANTES </h3>
     <form action="" id="formulario-edita-persona">
         @csrf
         <input type="hidden" value="{{ $persona->id }}" name="persona_id">
         <div class="row">
             <div class="col-md-4">
                 <label for="">APELLIDO PATERNO<b class="text-danger">*</b></label>
-                <input style="text-transform:uppercase" type="text" class="form-control" id="apellido_paterno" name="apellido_paterno" value="{{$persona->apellido_paterno}}" required placeholder="Apellido Parterno">
+                <input style="text-transform:uppercase" type="text" class="form-control" id="apellido_paterno" name="apellido_paterno" value="{{$persona->apellido_paterno}}" required placeholder="Apellido Parterno" disabled>
                 <small class="text-danger" id="_apellido_paterno"></small>
             </div>
             <div class="col-md-4">
                 <label for="">APELLIDO MATERNO<b class="text-danger">*</b></label>
-                <input  style="text-transform:uppercase" type="text" class="form-control" id="apellido_materno" name="apellido_materno"  value="{{$persona->apellido_materno}}" required placeholder="Apellido Materno">
+                <input  style="text-transform:uppercase" type="text" class="form-control" id="apellido_materno" name="apellido_materno"  value="{{$persona->apellido_materno}}" required placeholder="Apellido Materno" disabled>
                 <small class="text-danger" id="_apellido_materno"></small>
             </div>
             <div class="col-md-4">
                 <label for="">NOMBRES<b class="text-danger">*</b></label>
-                <input  style="text-transform:uppercase" type="text" class="form-control" id="nombres" name="nombres" value="{{$persona->nombres}}" required placeholder="Nombres Completos">
+                <input  style="text-transform:uppercase" type="text" class="form-control" id="nombres" name="nombres" value="{{$persona->nombres}}" required placeholder="Nombres Completos" disabled>
                 <small class="text-danger" id="_nombres"></small>
             </div>
         </div>
@@ -60,12 +60,12 @@
         <div class="row">
             <div class="col-md-4">
                 <label for="">FECHA DE NACIMIENTO<b class="text-danger">*</b></label>
-                <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" value="{{$persona->fecha_nacimiento}}" required>
+                <input type="date" class="form-control" id="fecha_nacimiento" name="fecha_nacimiento" value="{{$persona->fecha_nacimiento}}" required disabled>
                 <small class="text-danger" id="_fecha_nacimiento"></small>
             </div>
             <div class="col-md-4">
                 <label for="">GENERO<b class="text-danger">*</b></label>
-                <select class="form-control"  id="genero" name="genero" required>
+                <select class="form-control"  id="genero" name="genero" required disabled>
                     <option value="Masculino" {{($persona->sexo == 'Masculino')? 'selected': ''}}>Masculino</option>
                     <option value="Femenino" {{($persona->sexo == 'Femenino')? 'selected': ''}}>Femenino</option>
                 </select>
@@ -73,7 +73,7 @@
             </div>
             <div class="col-md-4">
                 <label for="">CEDULA DE IDENTIDAD<b class="text-danger">*</b></label>
-                <input type="text" class="form-control" id="cedula" name="cedula"  value="{{$persona->cedula}}" required placeholder="Cedula de Identidad">
+                <input type="text" class="form-control" id="cedula" name="cedula"  value="{{$persona->cedula}}" required placeholder="Cedula de Identidad" disabled>
                 <small class="text-danger" id="_cedula"></small>
             </div>
         </div>
@@ -81,7 +81,7 @@
         <div class="row">
             <div class="col-md-4">
                 <label for="">EXPEDIDO CEDULA<b class="text-danger">*</b></label>
-                <select name="expedido" id="expedido" class="form-control" required>
+                <select name="expedido" id="expedido" class="form-control" required disabled>
                     <option {{ ($persona->expedido == "La Paz")? 'selected': '' }} value="La Paz">La Paz</option>
                     <option {{ ($persona->expedido == "Oruro")? 'selected': '' }} value="Oruro">Oruro</option>
                     <option {{ ($persona->expedido == "Potosi")? 'selected': '' }} value="Potosi">Potosi</option>
@@ -96,23 +96,23 @@
             </div>
             <div class="col-md-4">
                 <label for="">NUMERO DE CELULAR<b class="text-danger">*</b></label>
-                <input type="text" class="form-control" name="numero_celular" id="numero_celular" value="{{$persona->numero_celular}}" required placeholder="Numero de celular">
+                <input type="text" class="form-control" name="numero_celular" id="numero_celular" value="{{$persona->numero_celular}}" required placeholder="Numero de celular" disabled>
                 <small class="text-danger" id="_numero_celular"></small>
             </div>
             <div class="col-md-4">
                 <label for="">CORREO ELECTRONICO</label>
-                <input type="text" class="form-control" name="correo_electronico" id="correo_electronico" value="{{$persona->email}}" placeholder="Correo Electronico">
+                <input type="text" class="form-control" name="correo_electronico" id="correo_electronico" value="{{$persona->email}}" placeholder="Correo Electronico" disabled>
             </div>
         </div>
         <br>
         <div class="row">
             <div class="col-md-8">
                 <label for="">REFERENCIA FAMILIAR</label>
-                <input style="text-transform:uppercase" type="text" class="form-control"  name="referencia_familiar" id="referencia_familiar" value="{{$persona->nombre_padre}}" placeholder="Nombres Referencia">
+                <input style="text-transform:uppercase" type="text" class="form-control"  name="referencia_familiar" id="referencia_familiar" value="{{$persona->nombre_padre}}" placeholder="Nombres Referencia" disabled>
             </div>
             <div class="col-md-4">
                 <label for="">NUMERO DE CELULAR</label>
-                <input type="text" class="form-control"  name="referencia_familiar_celular" id="referencia_familiar_celular" value="{{$persona->celular_padre}}" placeholder="Numero de la Referencia personal">
+                <input type="text" class="form-control"  name="referencia_familiar_celular" id="referencia_familiar_celular" value="{{$persona->celular_padre}}" placeholder="Numero de la Referencia personal" disabled>
                 <small>Numero de la referencia personal</small>
             </div>
         </div>
@@ -120,20 +120,20 @@
         <div class="row">
             <div class="col-md-12">
                 <label for="">Direccion de Domicilio</label>
-                <textarea style="text-transform:uppercase"  class="form-control" name="direccion_domicilio" id="direccion_domicilio" cols="30" rows="2" placeholder="Direccion de domicilio">{{$persona->direccion}}</textarea>
+                <textarea style="text-transform:uppercase"  class="form-control" name="direccion_domicilio" id="direccion_domicilio" cols="30" rows="2" placeholder="Direccion de domicilio" disabled>{{$persona->direccion}}</textarea>
             </div>
         </div>
         <br>
-        <div class="row">
+        {{--  <div class="row">
             <div class="col-md-6">
                 <button type="button" class="btn btn-success btn-block" onclick="guardardatos()">GUARDAR MIS DATOS</button>
             </div>
             <div class="col-md-6">
                 <button type="button" class="btn btn-danger btn-block" onclick="volerIntentar()">CANCELAR</button>
             </div>
-        </div>
+        </div>  --}}
         <br>
-    </form> 
+    </form>
 @else
 
     <table class="table table-hover text-center">
