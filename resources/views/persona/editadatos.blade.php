@@ -124,6 +124,11 @@
             </div>
         </div>
         <br>
+        <div class="row">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-dark btn-block" onclick="volerIntentar()">VOLVER</button>
+            </div>
+        </div>
         {{--  <div class="row">
             <div class="col-md-6">
                 <button type="button" class="btn btn-success btn-block" onclick="guardardatos()">GUARDAR MIS DATOS</button>
