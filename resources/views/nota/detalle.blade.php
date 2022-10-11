@@ -96,7 +96,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{-- @dd($inscritos) --}}
                     @foreach($inscritos as $contador => $inscrito)
                         @if ($inscrito->persona)
                             @php
@@ -114,6 +113,7 @@
                                 $estado_alumno = App\CarrerasPersona::where('carrera_id', $inscrito->carrera_id)
                                         ->where('persona_id', $inscrito->persona_id)
                                         ->where('anio_vigente', $inscrito->anio_vigente)
+                                        ->where('paralelo', $inscrito->paralelo)    
                                         ->first();
                                 if( $estado_alumno->estado == 'ABANDONO' || $estado_alumno->estado == 'ABANDONO TEMPORAL' || $estado_alumno->estado == 'CONGELADO'){
                                     $sw = false;
