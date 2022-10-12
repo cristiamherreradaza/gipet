@@ -81,6 +81,7 @@ class NotasExport implements FromCollection, WithMapping, WithHeadings, ShouldAu
                                 // ->whereNotNull('convalidado')
                                 // ->where('convalidado', null)
                                 ->first();
+                                
         $estado = CarrerasPersona::where('carrera_id',$registro->carrera_id)
                                 ->where('persona_id', $registro->persona_id)
                                 ->where('anio_vigente', $registro->anio_vigente)

@@ -478,12 +478,14 @@ class ListaController extends Controller
                     ->where('carrera_id', $carrera)
                     ->where('anio_vigente', $gestion)
                     ->where('asignatura_id', $mn->id)
+                    ->where('paralelo', $paralelo)
                     ->first();
                 }
 
                 $estado = CarrerasPersona::where('persona_id', $e->persona_id)
                 ->where('carrera_id', $carrera)
                 ->where('anio_vigente', $gestion)
+                ->where('paralelo', $paralelo)
                 ->first();
 
                 if($nota){
