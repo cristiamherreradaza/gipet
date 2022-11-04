@@ -734,7 +734,8 @@ class ListaController extends Controller
                             'notas.nota_primer_parcial',
                             'notas.nota_examen_final',
                             'notas.nota_puntos_ganados',
-                            'notas.nota_total'
+                            'notas.nota_total',
+                            'notas.asignatura_id',
                             )
                             ->where('notas.anio_vigente', $request->gestion)
                             // ->where('notas.docente_id', $request->cod_docente)
