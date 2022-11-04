@@ -78,7 +78,7 @@ class ListaController extends Controller
                                                     ->where('carreras_personas.estado', '<>','CONGELADO')
                                                     ->Orwhere('carreras_personas.estado',null);
                                             })
-                                            
+
                                             ->leftJoin('personas', 'carreras_personas.persona_id', '=', 'personas.id')
                                             // ->whereNull('carreras_personas.estado')
                                             ->orderBy('personas.apellido_paterno')
@@ -138,7 +138,7 @@ class ListaController extends Controller
                                 'personas.numero_celular as numero_celular',
                                 'carreras_personas.estado as estado'
                             );
-            
+
         }
                         //->groupBy('carreras_personas.persona_id');
         return Datatables::of($resultado)->make(true);
@@ -151,7 +151,7 @@ class ListaController extends Controller
         $carrera    = Carrera::find($carrera_id);
         $turno      = Turno::find($turno_id);
 
-        
+
         $listado1 = CarrerasPersona::query();
 
         $listado1->where('carrera_id', $carrera_id)
@@ -211,7 +211,7 @@ class ListaController extends Controller
                                     ->orderBy('vigencia', 'desc')
                                     ->get();
         return view('lista.notas')->with(compact('carreras', 'cursos', 'gestiones', 'paralelos', 'turnos', 'estados'));
-    } 
+    }
 
     public function generaPdfCentralizadorNotas(Request $request, $carrera_id, $curso_id, $turno_id, $paralelo, $tipo, $imp_nombre, $anio_vigente)
     {
@@ -233,7 +233,7 @@ class ListaController extends Controller
         // $request->tipo = 'anual';
         // $request->imprime_nombre = 'Si';
 
-        
+
         $request->carrera_id = $carrera_id;
         $request->gestion = $curso_id;
         $request->turno_id = $turno_id;
@@ -254,7 +254,7 @@ class ListaController extends Controller
         $datosTurno = Turno::find($request->turno_id);
 
         $datosCarrera = Carrera::find($request->carrera_id);
-        
+
         $materiasCarrera = Asignatura::where('carrera_id', $request->carrera_id)
                             ->where('anio_vigente', $request->anio_vigente)
                             ->where('gestion', $request->gestion)
@@ -314,7 +314,7 @@ class ListaController extends Controller
         $datosTurno = Turno::find($request->turno_id);
 
         $datosCarrera = Carrera::find($request->carrera_id);
-        
+
         $materiasCarrera = Asignatura::where('carrera_id', $request->carrera_id)
                             ->where('anio_vigente', $request->anio_vigente)
                             ->where('gestion', $request->gestion)
@@ -347,11 +347,11 @@ class ListaController extends Controller
                             ->groupBy('carreras_personas.persona_id')
                             ->get();
 
-        
+
         $fileName = 'centralizador.xlsx';
         // return Excel::download(new CertificadoExport($carrera_persona_id), 'certificado.xlsx');
         $spreadsheet = new Spreadsheet();
-        
+
         // definimos la hoja excel
         $sheet = $spreadsheet->getActiveSheet();
 
@@ -399,7 +399,7 @@ class ListaController extends Controller
                 // 'name'  => 'Verdana'
             ));
 
-        
+
         $spreadsheet->getActiveSheet()->getStyle("B1")->applyFromArray($fuenteNegritaTitulo);
 
         // definimos el ancho de la columna alumnos
@@ -415,7 +415,7 @@ class ListaController extends Controller
         $sheet->setCellValue('A4', 'No');
         $sheet->setCellValue('B4', 'NOMBRE');
         $sheet->setCellValue('C4', 'CEDULA');
-        
+
         $sheet->setCellValue('B1', 'CENTRALIZADOR DE CALIFICACIONES');
         $sheet->setCellValue('B3', "CARRERA: $datosCarrera->nombre");
         $sheet->setCellValue('C3', "CURSO: $curso Año");
@@ -554,7 +554,7 @@ class ListaController extends Controller
         header('Content-Disposition: attachment; filename="'. urlencode($fileName).'"');
         $writer->save('php://output');
     }
-    
+
     public function totalALumnos()
     {
         $carreras   = Carrera::get();
@@ -562,7 +562,7 @@ class ListaController extends Controller
         $gestiones  = CarrerasPersona::select('anio_vigente')
                                 ->groupBy('anio_vigente')
                                 ->get();
-                                
+
         return view('lista.totalAlumnos')->with(compact('carreras', 'gestiones'));
     }
 
@@ -725,9 +725,10 @@ class ListaController extends Controller
     {
         // dd($request->all());
         $alumnos = Nota::select(
-                            'personas.apellido_paterno', 
-                            'personas.apellido_materno', 
+                            'personas.apellido_paterno',
+                            'personas.apellido_materno',
                             'personas.nombres',
+                            'personas.id as persona_id',
                             'notas.nota_asistencia',
                             'notas.nota_practicas',
                             'notas.nota_primer_parcial',
@@ -753,7 +754,9 @@ class ListaController extends Controller
                     ->where('trimestre', $request->trimestre)
                     ->first();
 
-        return view('lista.centralizadorBimestral')->with(compact('alumnos', 'datos'));
+        $gestion = $request->gestion;
+
+        return view('lista.centralizadorBimestral')->with(compact('alumnos', 'datos', 'gestion'));
 
         // $pdf = PDF::loadView('lista.centralizadorBimestral', compact('alumnos', 'datos'))->setPaper('letter');
         // return $pdf->stream('centralizador_bimestral.pdf');
@@ -791,11 +794,11 @@ class ListaController extends Controller
         $datosTurno = Turno::find($request->turno);
 
         $datosCarrera = Carrera::find($carrera);
-        
+
         $materiasCarrera = Asignatura::where('carrera_id', $request->carrera)
                             ->where('anio_vigente', $request->anio_vigente)
                             ->where('gestion', $request->curso)
-                            
+
                             // ->where('anio_vigente', $request->anio_vigente)
                             ->orderBy('orden_impresion', 'asc')
                             ->get();

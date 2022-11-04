@@ -12,7 +12,8 @@
             <th>EXAMEN PARCIAL</th>
             <th>EXAMEN FINAL</th>
             <th>PUNTOS GANADOS</th>
-            <th>BIM</th>
+            <th>FINAL</th>
+            <th>ESTADO</th>
         </tr>
     </thead>
     <tbody>
@@ -28,6 +29,12 @@
         <td>{{ intval($a->nota_examen_final) }}</td>
         <td>{{ intval($a->nota_puntos_ganados) }}</td>
         <td>{{ intval($a->nota_total) }}</td>
+        @php
+            $carrerasPersona = App\CarrerasPersona::where('persona_id', $a->persona_id)
+                                                ->where('anio_vigente',$gestion)
+                                                ->first();
+        @endphp
+        <td>{{ $carrerasPersona->estado }}</td>
     </tr>
     @endforeach
     </tbody>
