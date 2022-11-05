@@ -18,7 +18,7 @@
                         {{ $inscripcion->persona->nombres }}
                     </h4>
                 </div>
-                
+
                 <div class="col-md-2">
                     <h4>
                         <span class="text-info">CURSO: </span>
@@ -40,8 +40,8 @@
                     </h4>
                 </div>
             </div>
-            
-            
+
+
             <div class="table-responsive">
                 <table class="table table-hover text-center">
                     <thead class="align-middle text-danger">
@@ -75,69 +75,69 @@
                                             @else
                                                 <input type="hidden" name="notaIdS" value="{{ $nota->id }}">
                                             @endif
-                                            <input 
-                                                min="0" 
+                                            <input
+                                                min="0"
                                                 onchange="calcula( {{ $nota->id }} )"
                                                 type="number"
-                                                id="asistencia-{{ $nota->id }}" 
+                                                id="asistencia-{{ $nota->id }}"
                                                 name="asistencia-{{ $nota->id }}"
-                                                value="{{ round($nota->nota_asistencia) }}" 
+                                                value="{{ round($nota->nota_asistencia) }}"
                                                 step="any"
-                                                style="text-align: center; width: 100px;" 
+                                                style="text-align: center; width: 100px;"
                                                 class="form-control">
                                         </td>
-                                        <td><input 
+                                        <td><input
                                                 min="0"
                                                 onchange="calcula( {{ $nota->id }} )"
                                                 type="number"
-                                                id="practicas-{{ $nota->id }}" 
+                                                id="practicas-{{ $nota->id }}"
                                                 name="practicas-{{ $nota->id }}"
-                                                value="{{ round($nota->nota_practicas) }}" 
+                                                value="{{ round($nota->nota_practicas) }}"
                                                 step="any"
-                                                style="text-align: center; width: 100px;" 
+                                                style="text-align: center; width: 100px;"
                                                 class="form-control"></td>
-                                        <td><input 
+                                        <td><input
                                                 min="0"
                                                 onchange="calcula( {{ $nota->id }} )"
                                                 type="number"
-                                                id="parcial-{{ $nota->id }}" 
+                                                id="parcial-{{ $nota->id }}"
                                                 name="parcial-{{ $nota->id }}"
-                                                value="{{ round($nota->nota_primer_parcial) }}" 
+                                                value="{{ round($nota->nota_primer_parcial) }}"
                                                 step="any"
-                                                style="text-align: center; width: 100px;" 
+                                                style="text-align: center; width: 100px;"
                                                 class="form-control"></td>
                                         <td>
-                                            <input 
+                                            <input
                                                 min="0"
                                                 onchange="calcula( {{ $nota->id }} )"
                                                 type="number"
-                                                id="final-{{ $nota->id }}" 
+                                                id="final-{{ $nota->id }}"
                                                 name="final-{{ $nota->id }}"
-                                                value="{{ round($nota->nota_examen_final) }}" 
+                                                value="{{ round($nota->nota_examen_final) }}"
                                                 step="any"
-                                                style="text-align: center; width: 100px;" 
+                                                style="text-align: center; width: 100px;"
                                                 class="form-control"></td>
                                         <td>
-                                            <input 
-                                                min="0" 
+                                            <input
+                                                min="0"
                                                 onchange="calcula( {{ $nota->id }} )"
-                                                data-puntos="{{ $nota->nota_puntos_ganados }}" 
-                                                type="number" 
+                                                data-puntos="{{ $nota->nota_puntos_ganados }}"
+                                                type="number"
                                                 id="puntos-{{ $nota->id }}"
-                                                name="puntos-{{ $nota->id }}" 
-                                                value="{{ round($nota->nota_puntos_ganados) }}" 
+                                                name="puntos-{{ $nota->id }}"
+                                                value="{{ round($nota->nota_puntos_ganados) }}"
                                                 step="any"
-                                                style="text-align: center; width: 100px;" 
+                                                style="text-align: center; width: 100px;"
                                                 class="form-control"></td>
                                         <td>
-                                            <input 
-                                                type="number" 
+                                            <input
+                                                type="number"
                                                 step="any"
                                                 max="100"
-                                                value="{{ round($nota->nota_total) }}" 
-                                                id="totalsuma-{{ $nota->id }}" 
-                                                name="total-{{ $nota->id }}" 
-                                                style="text-align: center; width: 100px;" 
+                                                value="{{ round($nota->nota_total) }}"
+                                                id="totalsuma-{{ $nota->id }}"
+                                                name="total-{{ $nota->id }}"
+                                                style="text-align: center; width: 100px;"
                                                 class="form-control total_bimestres_{{ $key }}" />
                                         </td>
                                     </tr>
@@ -176,7 +176,7 @@
             </div>
 
             <div class="row">
-            
+
                 <div class="col-md-3">
                     <label class="text-muted">2&deg;Turno</label>
                     <select name="segundo_turno" id="segundo_turno" class="form-control">
@@ -184,7 +184,7 @@
                         <option value="Si" {{ ($inscripcion->segundo_turno!=null)?'selected':'' }}>Si</option>
                     </select>
                 </div>
-            
+
                 <div class="col-md-3">
                     <div class="form-group">
                         <label class="text-danger">NOTA SEGUNDO TURNO</label>
@@ -193,7 +193,7 @@
                         <input type="hidden" name="id_materia_inscripcion" id="id_materia_convalidar">
                     </div>
                 </div>
-            
+
             </div>
 
             <div class="row">
@@ -204,7 +204,9 @@
 
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="enviaFormulario()">ACTUALIZAR CALIFICACIONES</button>
+            @if (Auth::user()->id == 36 || Auth::user()->id == 37)
+                <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="enviaFormulario()">ACTUALIZAR CALIFICACIONES</button>
+            @endif
         </div>
     </form>
 </div>
@@ -226,7 +228,7 @@
         }
 
     });
-    
+
     function checkCampos(numero) {
         if(numero.length <= 0){
             return 0;
@@ -237,7 +239,7 @@
 
     function calcula(id)
     {
-        // sumamos los totales 
+        // sumamos los totales
         let sum = 0;
         let notaCentralizador = 0;
 
