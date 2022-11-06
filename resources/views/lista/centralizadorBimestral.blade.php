@@ -7,6 +7,7 @@
             <th>AP PATERNO</th>
             <th>AP MATERNO</th>
             <th>NOMBRES</th>
+            <th>CEDULA</th>
             <th>ASISTENCIA</th>
             <th>TRABAJOS PRACTICOS</th>
             <th>EXAMEN PARCIAL</th>
@@ -14,7 +15,7 @@
             <th>PUNTOS GANADOS</th>
             <th>FINAL</th>
             <th>ESTADO</th>
-            <th>CONVALIDADO</th>
+            <th>CONV.</th>
         </tr>
     </thead>
     <tbody>
@@ -25,6 +26,7 @@
         <td style="text-align: left;">{{ $a->apellido_paterno }}</td>
         <td style="text-align: left;">{{ $a->apellido_materno }}</td>
         <td style="text-align: left; width: 120px;">{{ $a->nombres }}</td>
+        <td style="text-align: left; width: 120px;">{{ $a->cedula }}</td>
         <td>{{ intval($a->nota_asistencia) }}</td>
         <td>{{ intval($a->nota_practicas) }}</td>
         <td>{{ intval($a->nota_primer_parcial) }}</td>

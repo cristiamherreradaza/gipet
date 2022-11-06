@@ -729,13 +729,14 @@ class ListaController extends Controller
                             'personas.apellido_materno',
                             'personas.nombres',
                             'personas.id as persona_id',
+                            'personas.cedula',
                             'notas.nota_asistencia',
                             'notas.nota_practicas',
                             'notas.nota_primer_parcial',
                             'notas.nota_examen_final',
                             'notas.nota_puntos_ganados',
                             'notas.nota_total',
-                            'notas.asignatura_id',
+                            'notas.asignatura_id'
                             )
                             ->where('notas.anio_vigente', $request->gestion)
                             // ->where('notas.docente_id', $request->cod_docente)
