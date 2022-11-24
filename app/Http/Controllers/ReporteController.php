@@ -17,7 +17,7 @@ use Svg\Tag\Rect;
 
 class ReporteController extends Controller
 {
-    
+
     public function formularioLibro(Request $request)
     {
         $usuarios = Factura::groupBy('user_id')
@@ -223,7 +223,7 @@ class ReporteController extends Controller
                                 ->where('anio_vigente', $anio_vigente)
                                 ->where('paralelo', $paralelo)
                                 ->get();
-        
+
         $pdf = PDF::loadView('pdf.pencionesPorPeriodo', compact('carrerasPersonas', 'gestion', 'turno_id', 'anio_vigente', 'datosTurno', 'paralelo'))
                     ->setPaper('letter', 'landscape');
 
@@ -246,7 +246,7 @@ class ReporteController extends Controller
                                 ->where('anio_vigente', $anio_vigente)
                                 ->where('paralelo', $paralelo)
                                 ->get();
-        
+
         $pdf = PDF::loadView('pdf.pencionesPorCobrar', compact('carrerasPersonas', 'gestion', 'turno_id', 'anio_vigente', 'datosTurno', 'paralelo'))
                     ->setPaper('letter', 'landscape');
 
@@ -279,7 +279,7 @@ class ReporteController extends Controller
 
         $pago = ($decimoPago->total_decimo != null)?$decimoPago->total_decimo:'0.00';
         $pagoFormateado = number_format($pago, 2, '.', ',');
-                        
+
         return $pagoFormateado;
     }
 
@@ -296,7 +296,7 @@ class ReporteController extends Controller
 
         $pago = ($decimoPago->total_decimo != null)?$decimoPago->total_decimo:'0.00';
         $pagoFormateado = number_format($pago, 2, '.', ',');
-                        
+
         return $pagoFormateado;
     }
 
@@ -313,7 +313,7 @@ class ReporteController extends Controller
 
         $pago = ($decimoPago->total_decimo != null)?$decimoPago->total_decimo:'0.00';
         $pagoFormateado = number_format($pago, 2, '.', ',');
-                        
+
         return $pagoFormateado;
     }
 
@@ -329,7 +329,7 @@ class ReporteController extends Controller
 
         $pago = ($decimoPago->total_decimo != null)?$decimoPago->total_decimo:'0.00';
         $pagoFormateado = number_format($pago, 2, '.', ',');
-                        
+
         return $pagoFormateado;
     }
 
@@ -345,7 +345,7 @@ class ReporteController extends Controller
 
         $pago = ($decimoPago->total_decimo != null)?$decimoPago->total_decimo:'0.00';
         $pagoFormateado = number_format($pago, 2, '.', ',');
-                        
+
         return $pagoFormateado;
     }
 
@@ -409,7 +409,7 @@ class ReporteController extends Controller
         // fin de colocar estilos
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('F1', 'LISTADO DE ALUMNOS');
-        
+
         $sheet->setCellValue('A2', 'PATERNO');
         $sheet->setCellValue('B2', 'MATERNO');
         $sheet->setCellValue('C2', 'NOMBRES');
@@ -429,25 +429,26 @@ class ReporteController extends Controller
 
         $contadorCeldas = 3;
         foreach ($personasCarrerasPersona as $key => $pcp) {
-
-            $sheet->setCellValue("A$contadorCeldas", $pcp->persona['apellido_paterno']);
-            $sheet->setCellValue("B$contadorCeldas", $pcp->persona['apellido_materno']);
-            $sheet->setCellValue("C$contadorCeldas", $pcp->persona['nombres']);
-            $sheet->setCellValue("D$contadorCeldas", $pcp->persona['cedula']);
-            $sheet->setCellValue("E$contadorCeldas", $pcp->persona['expedido']);
-            $sheet->setCellValue("F$contadorCeldas", $pcp->persona['email']);
-            $sheet->setCellValue("G$contadorCeldas", $pcp->persona['numero_celular']);
-            $sheet->setCellValue("H$contadorCeldas", $pcp->persona['sexo']);
-            $sheet->setCellValue("I$contadorCeldas", $pcp->persona['direccion']);
-            $sheet->setCellValue("J$contadorCeldas", $pcp->persona['fecha_nacimiento']);
-            $sheet->setCellValue("K$contadorCeldas", $pcp->carrera['nombre']);
-            $sheet->setCellValue("L$contadorCeldas", $pcp->turno->descripcion);
-            $sheet->setCellValue("M$contadorCeldas", $pcp->gestion);
-            $sheet->setCellValue("N$contadorCeldas", $pcp->paralelo);
-            $sheet->setCellValue("O$contadorCeldas", $pcp->anio_vigente);
-            $sheet->setCellValue("P$contadorCeldas", $pcp->estado);
-            // $sheet->setCellValue("H$contadorCeldas", $aLetras->toString($i->nota, 0));
-            $contadorCeldas++;
+            if($pcp->persona){
+                $sheet->setCellValue("A$contadorCeldas", (($pcp->persona['apellido_paterno'])? $pcp->persona['apellido_paterno'] : ''));
+                $sheet->setCellValue("B$contadorCeldas", $pcp->persona['apellido_materno']);
+                $sheet->setCellValue("C$contadorCeldas", $pcp->persona['nombres']);
+                $sheet->setCellValue("D$contadorCeldas", $pcp->persona['cedula']);
+                $sheet->setCellValue("E$contadorCeldas", $pcp->persona['expedido']);
+                $sheet->setCellValue("F$contadorCeldas", $pcp->persona['email']);
+                $sheet->setCellValue("G$contadorCeldas", $pcp->persona['numero_celular']);
+                $sheet->setCellValue("H$contadorCeldas", $pcp->persona['sexo']);
+                $sheet->setCellValue("I$contadorCeldas", $pcp->persona['direccion']);
+                $sheet->setCellValue("J$contadorCeldas", $pcp->persona['fecha_nacimiento']);
+                $sheet->setCellValue("K$contadorCeldas", $pcp->carrera['nombre']);
+                $sheet->setCellValue("L$contadorCeldas", $pcp->turno->descripcion);
+                $sheet->setCellValue("M$contadorCeldas", $pcp->gestion);
+                $sheet->setCellValue("N$contadorCeldas", $pcp->paralelo);
+                $sheet->setCellValue("O$contadorCeldas", $pcp->anio_vigente);
+                $sheet->setCellValue("P$contadorCeldas", $pcp->estado);
+                // $sheet->setCellValue("H$contadorCeldas", $aLetras->toString($i->nota, 0));
+                $contadorCeldas++;
+            }
         }
 
         // estilos para el borde de las celdas
@@ -468,20 +469,20 @@ class ReporteController extends Controller
         header('Content-Disposition: attachment; filename="'. urlencode($fileName).'"');
         $writer->save('php://output');
         // $writer->save('demo.xlsx');
-    
+
     }
 
 
     // REPORTES PAGOS COBRADOS
     public function totalCobrado(Request $request){
-        
+
         $anio_vigente = $request->input('anio_vigente');
 
         $pdf = PDF::loadView('pdf.totalCobrado', compact('anio_vigente'))
                     ->setPaper('letter', 'landscape');
 
         return $pdf->stream('totalCobrar.pdf');
-        
+
     }
 
 
@@ -522,7 +523,7 @@ class ReporteController extends Controller
         //                     ->whereBetween('fecha', [$fechaIni,$fechaFin])
         //                     // ->whereYear('created_at', $anio_vigente)
         //                     ->first();
-                            
+
                             // ->toSql();
                             // dd($decimoPago, "mes> ".$mes, "gestion> ".$gestion, "servicio> ".$servicio, "carrera> ".$carrera, "turno> ".$turno, "anio vigente> ".$anio_vigente,"fecha ini> ".$fechaIni,"fecha fin> ".$fechaFin);
 
@@ -542,7 +543,7 @@ class ReporteController extends Controller
             $sumaTot = $sumaTot + intval(str_replace (',', '', $valor));
 
         }
-        
+
         return  number_format($sumaTot, 2, '.', ',');
     }
 
@@ -568,7 +569,7 @@ class ReporteController extends Controller
                     ->where('carreras_personas.gestion', $gestion)
                     ->first();
 
-                    
+
         $pago = ($total->total_mes != null)?$total->total_mes:'0.00';
         $pagoFormateado = number_format($pago, 2, '.', ',');
 
@@ -607,7 +608,7 @@ class ReporteController extends Controller
         $pagoFormateado = number_format($pago, 2, '.', ',');
 
         return $pagoFormateado;
-    }   
+    }
 
 
     public static function sumaTotalGestionesCobrado($mes, $servicio, $carrera, $anio_vigente){
@@ -631,7 +632,7 @@ class ReporteController extends Controller
         $pagoFormateado = number_format($pago, 2, '.', ',');
 
         return $pagoFormateado;
-    
+
     }
 
 
