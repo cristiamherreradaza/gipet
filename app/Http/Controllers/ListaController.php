@@ -736,13 +736,14 @@ class ListaController extends Controller
                             'notas.nota_examen_final',
                             'notas.nota_puntos_ganados',
                             'notas.nota_total',
+                            'notas.paralelo',
                             'notas.asignatura_id'
                             )
                             ->where('notas.anio_vigente', $request->gestion)
                             // ->where('notas.docente_id', $request->cod_docente)
                             ->where('notas.asignatura_id', $request->materia_id)
                             ->where('notas.turno_id', $request->turno_id)
-                            ->where('notas.paralelo', $request->paralelo)
+                            // ->where('notas.paralelo', $request->paralelo)
                             ->where('notas.trimestre', $request->trimestre)
                             ->leftJoin('personas', 'notas.persona_id', '=', 'personas.id')
                             ->orderBy('personas.apellido_paterno', 'asc')
