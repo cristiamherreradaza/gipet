@@ -1,7 +1,7 @@
 <select class="select3" name="materia_id" id="materia_id" style="width: 100%; height:36px;" onchange="ajaxBuscaTurno()">
 	<option value="">Seleccione</option>
     @foreach ($materias as $m)
-        <option value="{{ $m->asignatura_id }}" data-turno="{{ $m->turno_id }}">{{ $m->asignatura->nombre }} ({{ $m->asignatura->carrera->nombre }}) - {{ $m->turno->descripcion }} 
+        <option value="{{ $m->asignatura_id }}" data-turno="{{ $m->turno_id }}">{{ $m->asignatura->nombre }} ({{ $m->asignatura->carrera->nombre }}) - {{ $m->turno->descripcion }}  - {{ $m->paralelo }}
         </option>
     @endforeach
 </select>
