@@ -43,7 +43,7 @@
 <div class="row">
 
     {{-- MODAL MODIFICA PAGO  --}}
-    
+
     <div id="modal_edita_pago" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -65,7 +65,7 @@
                                     <input type="hidden" id="pago_id" name="pago_id">
                                     <input type="hidden" id="persona_id" name="persona_id" value="{{ $estudiante->id }}">
                                     <input type="number" name="a_pagar" id="a_pagar" class="form-control">
-                                </div> 
+                                </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="form-group">
@@ -197,6 +197,7 @@
                                         </option>
                                         <option value="Pando" {{ $estudiante->expedido=='Pando' ? 'selected' : '' }}>
                                             Pando</option>
+                                        <option value="" {{ $estudiante->expedido==null ? 'selected' : '' }}>QR</option>
                                     </select>
                                 </div>
                             </div>
@@ -239,7 +240,7 @@
                                         id="fecha_nacimiento" value="{{ $estudiante->fecha_nacimiento }}" required>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                     <div class="tab-pane" id="profile-b2">
@@ -438,7 +439,7 @@
                     </a>
                 </li>
             </ul>
-            
+
             {{-- el primer tab de inscripciones --}}
             <div class="tab-content">
                 <div class="tab-pane show active" id="home1">
@@ -514,7 +515,7 @@
                     <br />
                     <form action="{{ url('Inscripcion/inscribeMateriaAlumno') }}" method="POST">
                         @csrf
-                        
+
                         <div class="row" id="bloqueAdicionaMateria" style="display: none;">
 
                             <div class="col-md-1">
@@ -608,7 +609,7 @@
                                     </span>
                                     <input type="number" class="form-control" id="adiciona_anio_vigente" name="adiciona_anio_vigente" value="{{ date('Y') }}" required>
                                 </div>
-                            </div>                        
+                            </div>
 
                             <div class="col-md-1">
                                 <div class="form-group">
@@ -646,7 +647,7 @@
 
                         <div class="row">
                             <div class="col-md-12" id="ajaxCargaMateriasAdicionar">
-                                
+
                             </div>
                         </div>
                     </form>
@@ -691,7 +692,7 @@
                                     <td class="text-center">
                                         @if ($m->convalidado == null)
                                             <h4>
-                                                {{ round($m->nota, 0) }} 
+                                                {{ round($m->nota, 0) }}
                                                 @if ($m->segundo_turno != null)
                                                     <span class="text-muted">({{ round($m->segundo_turno, 0) }})</span>
                                                 @endif
@@ -707,7 +708,7 @@
                                 </tr>
                                 @endforeach
                             </tbody>
-                            
+
                         </table>
                         <span class="font-weight-bold">Informacion colores:</span>
                         <span class="text-info font-weight-bold">Materia para regularizacion</span>,
@@ -790,7 +791,7 @@
                                         <button type="button" class="btn btn-warning" title="Edita Pago" onclick="edita_pago('{{ $p->id }}', '{{ $p->a_pagar }}', '{{ $p->importe }}', '{{ $p->fecha }}', '{{ $p->estado }}', '{{ $p->mensualidad }}', '{{ $p->faltante }}')"><i class="fas fa-edit"></i></button>
                                         {{-- <button type="button" class="btn btn-warning" title="Edita Pago" onclick="ajaxEditaNotas('{{ $m->id }}')"><i class="fas fa-edit"></i></button> --}}
                                     </td>
-                                    
+
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -801,7 +802,7 @@
             </div>
 
             {{-- fin tabs datos alumno --}}
-                
+
                 <div class="row">
                     <div class="col-md-4">
                         <button type="button" class="btn waves-effect waves-light btn-block btn-primary" onclick="muestraFormularioInscripcion()">NUEVA INSCRIPCION</button>
@@ -1024,9 +1025,9 @@
                 {{-- bloque de nueva inscripcion --}}
                 <div class="row" id="bloqueReportes" style="display: none;">
                     <div class="col-lg-12">
-                
+
                         <div id="accordion" class="custom-accordion mb-4">
-                
+
                             <div class="card mb-0">
                                 <div class="card-header" id="headingOne">
                                     <h5 class="m-0">
@@ -1068,7 +1069,7 @@
                                     </div>
                                 </div>
                             </div> <!-- end card-->
-                
+
 {{--                             <div class="card mb-0">
                                 <div class="card-header" id="headingTwo">
                                     <h5 class="m-0">
@@ -1084,8 +1085,8 @@
                                         Aqui
                                     </div>
                                 </div>
-                            </div> 
-                
+                            </div>
+
                             <div class="card mb-0">
                                 <div class="card-header" id="headingThree">
                                     <h5 class="m-0">
@@ -1101,13 +1102,13 @@
                                         Aqui
                                     </div>
                                 </div>
-                            </div> 
+                            </div>
  --}}
                         </div> <!-- end custom accordions-->
                     </div> <!-- end col -->
-                
+
                     <!-- end col -->
-                
+
                 </div>
             </div>
         </div>
@@ -1117,7 +1118,7 @@
 <div id="modal-notas" class="modal bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
     aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-xl" id="ajaxContenidoMaterias">
-        
+
         <!-- /.modal-content -->
     </div>
     <!-- /.modal-dialog -->
@@ -1296,7 +1297,7 @@
                 $("#ajaxContenidoMaterias").html(data);
             }
         });
-        
+
     }
 
     function ajaxInscribeAlumno()
@@ -1482,7 +1483,7 @@
         $('#pago_id').val(id);
         $('#a_pagar').val(a_pagar);
         $('#fecha_pago').val(fecha);
-        
+
         if(faltante > 0){
             $('#monto_pago').val(faltante);
         }else{

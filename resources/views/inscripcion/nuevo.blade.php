@@ -7,14 +7,14 @@
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/libs/select2/dist/css/select2.min.css') }}">
     <style>
-    
+
         /* these styles are for the demo, but are not required for the plugin */
         .zoom {
             display: inline-block;
             position: relative;
             cursor: zoom-in;
         }
-    
+
         /* magnifying glass icon */
         .zoom:after {
             content: '';
@@ -26,15 +26,15 @@
             right: 0;
             background: url(icon.png);
         }
-    
+
         .zoom img {
             display: block;
         }
-    
+
         .zoom img::selection {
             background-color: transparent;
         }
-    
+
     </style>
 @endsection
 
@@ -71,7 +71,7 @@
                                                 <div class="row">
                                                     <div class="col">
                                                         <div class="form-group">
-                                                            <label>Cedula de Identidad 
+                                                            <label>Cedula de Identidad
                                                                 <span class="text-danger">
                                                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                                                 </span>
@@ -82,7 +82,7 @@
                                                     <input type="text" class="form-control" hidden name="persona_id" id="persona_id">
                                                     <div class="col">
                                                         <div class="form-group">
-                                                            <label>Expedido 
+                                                            <label>Expedido
                                                                 <span class="text-danger">
                                                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                                                 </span>
@@ -97,6 +97,7 @@
                                                                 <option value="Sucre">Sucre</option>
                                                                 <option value="Beni">Beni</option>
                                                                 <option value="Pando">Pando</option>
+                                                                <option value="">QR</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -150,7 +151,7 @@
                                                     </div>
                                                     <div class="col-3">
                                                         <div class="form-group">
-                                                            <label>Celular 
+                                                            <label>Celular
                                                                 <span class="text-danger">
                                                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                                                 </span>
@@ -160,7 +161,7 @@
                                                     </div>
                                                     <div class="col-3">
                                                         <div class="form-group">
-                                                            <label>Genero 
+                                                            <label>Genero
                                                                 <span class="text-danger">
                                                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                                                 </span>
@@ -225,7 +226,7 @@
                                                             <input type="email" id="email_empresa" class="form-control" name="email_empresa">
                                                         </div>
                                                     </div>
-                                                </div>  
+                                                </div>
                                                 <!-- row -->
                                             </div>
                                         </div>
@@ -263,7 +264,7 @@
                                                             <input type="text" class="form-control" name="celular_madre" id="celular_madre">
                                                         </div>
                                                     </div> --}}
-                                                    
+
                                                 </div>
 
                                                 {{-- <div class="row">
@@ -383,8 +384,8 @@
             }
         });
     });
-    
-    
+
+
 
     var room = 1;
     var cantidad = 1;
@@ -468,13 +469,13 @@
         $('#cantidad').val(cantidad);
     }
 
-    
+
 
     // generamos los tabs
     $('#tabsProductos div .btn').click(function () {
         var t = $(this).attr('id');
 
-        if ($(this).hasClass('inactivo')) { //preguntamos si tiene la clase inactivo 
+        if ($(this).hasClass('inactivo')) { //preguntamos si tiene la clase inactivo
             $('#tabsProductos div .btn').addClass('inactivo');
             $(this).removeClass('inactivo');
 
