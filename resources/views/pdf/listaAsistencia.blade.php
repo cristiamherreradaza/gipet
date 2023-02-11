@@ -78,14 +78,14 @@
         <table width="100%">
             <tr>
                 <td width="25%"><img src="{{ asset('assets/imagenes/portal_uno_R.png') }}" height="50"></td>
-                
+
                 <td width="25%" style="text-align: right;">
                     <span style="font-size: 13px;">
                         INSTITUTO TECNICO "EF-GIPET" S.R.L.
                     </span>
                     <br>
                     <span style="font-size: 8pt;">
-                        
+
                     </span>
                     <span style="font-size: 8pt;">
                         FECHA: {{ date('d/m/Y') }}
@@ -171,51 +171,36 @@
                     $contador  = 1;
                 @endphp
                 @foreach ($inscritos as $key => $inscrito )
-                    @if ($inscrito->persona)
-                        @php
-                            $sw = true;
-                            $estado_alumno = App\CarrerasPersona::where('carrera_id', $inscrito->carrera_id)
-                                                            ->where('persona_id', $inscrito->persona_id)
-                                                            ->where('anio_vigente', $inscrito->anio_vigente)
-                                                            ->first();
-                            if($estado_alumno->estado == 'ABANDONO' || $estado_alumno->estado == 'ABANDONO TEMPORAL' || $estado_alumno->estado == 'CONGELADO'){
-                                $sw = false; 
-                            }
 
-                        @endphp
-
-                        @if ($sw)
-                            <tr>
-                                <td>{{ $contador }}</td>
-                                <td>{{ $inscrito->persona->apellido_paterno." ".$inscrito->persona->apellido_materno." ".$inscrito->persona->nombres }}</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            @php
-                                $contador++;
-                            @endphp
-                        @endif
-                    @endif
+                    <tr>
+                        <td>{{ $contador }}</td>
+                        <td>{{ $inscrito->apellido_paterno." ".$inscrito->apellido_materno." ".$inscrito->nombres }}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    @php
+                        $contador++;
+                    @endphp
                 @endforeach
                 @for ($i = 1 ; $i <= 10; $i++)
                     <tr>
@@ -243,7 +228,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                    </tr>    
+                    </tr>
                 @endfor
             </tbody>
         </table>

@@ -52,17 +52,17 @@ class NotaController extends Controller
                                             ->where('anio_vigente', $request->gestion)
                                             ->groupBy('asignatura_id')
                                             ->get();
-                                            
+
         return view('nota.ajaxAsignaturasGestion')->with(compact('asignaturasDocente'));
     }
 
     public function detalle($id, $bimestre)
     {
-        
+
         $datosNP = NotasPropuesta::where('id', $id)->first();
-        
+
         $bimestreActual = $bimestre;
-        
+
         $comboTurnos = NotasPropuesta::where('asignatura_id', $datosNP->asignatura_id)
                                     // ->where('user_id', $datosNP->user_id)
                                     ->where('anio_vigente', $datosNP->anio_vigente)
@@ -73,7 +73,7 @@ class NotaController extends Controller
                                     ->where('paralelo', $datosNP->paralelo)
                                     ->where('anio_vigente', $datosNP->anio_vigente)
                                     ->first();
-                                    
+
         // Buscamos los detalles de la materia a mostrar
         $asignatura = NotasPropuesta::find($id);
 
@@ -82,7 +82,7 @@ class NotaController extends Controller
                                 ->where('turno_id', $asignatura->turno_id)
                                 ->where('paralelo', $asignatura->paralelo)
                                 ->where('anio_vigente', $asignatura->anio_vigente)
-                                // para ue no salga en la lista los convalidados 
+                                // para ue no salga en la lista los convalidados
                                 ->whereNull('convalidado')
                                 ->get();
 
@@ -104,7 +104,7 @@ class NotaController extends Controller
                     ->where('anio_vigente', $request->anio_vigente)
                     ->where('trimestre', $request->bimestre)
                     ->get();
-                    
+
         if($asignatura->asignatura->ciclo == 'Semestral')
         {
             // Enviar a la vista donde registrará las notas correspondientes a 2 bimestres
@@ -128,7 +128,7 @@ class NotaController extends Controller
         $asignatura = NotasPropuesta::find($asignatura_id);
 
         $nombreAsignatura = $asignatura->asignatura->nombre;
-        
+
         return Excel::download(new NotasExport($asignatura_id, $bimestre), date('Y-m-d')."-$nombreAsignatura.xlsx");
     }
 
@@ -136,15 +136,45 @@ class NotaController extends Controller
 
         $notapropuesta = NotasPropuesta::find($asignatura_id);
 
-        $inscritos  = Inscripcione::where('asignatura_id', $notapropuesta->asignatura_id)
-                            ->where('turno_id', $notapropuesta->turno_id)
-                            ->where('paralelo', $notapropuesta->paralelo)
-                            ->where('anio_vigente', $notapropuesta->anio_vigente)
-                            // para ue no salga en la lista los convalidados 
-                            ->whereNull('convalidado')
-                            ->get();
+        // dd($notapropuesta);
 
-        $contador = 1;
+        // CONSULTA NUEVA
+        // $inscritos = Persona::select('personas.apellido_paterno','personas.apellido_materno','personas.nombres')
+        //                     ->join('inscripciones', 'inscripciones.persona_id','')
+        //                     ->where()
+        //                     ->get();
+
+
+        $inscritos = Inscripcione::select('personas.apellido_paterno','personas.apellido_materno','personas.nombres')
+                            ->join('carreras_personas', 'inscripciones.persona_id','carreras_personas.persona_id')
+                            ->join('personas', 'personas.id', 'inscripciones.persona_id')
+                            ->where('inscripciones.asignatura_id',$notapropuesta->asignatura_id)
+                            ->where('inscripciones.turno_id',$notapropuesta->turno_id)
+                            ->where('inscripciones.paralelo',$notapropuesta->paralelo)
+                            ->where('inscripciones.anio_vigente',$notapropuesta->anio_vigente)
+                            ->whereNull('inscripciones.convalidado')
+                            ->whereNull('carreras_personas.deleted_at')
+                            ->where('carreras_personas.paralelo',$notapropuesta->paralelo)
+                            ->where('carreras_personas.anio_vigente',$notapropuesta->anio_vigente)
+                            ->where('carreras_personas.carrera_id',$notapropuesta->carrera_id)
+                            ->whereNotIn('carreras_personas.estado', ['ABANDONO', 'ABANDONO TEMPORAL', 'CONGELADO'])
+                            ->orderBy('personas.apellido_paterno', 'ASC')
+
+                            ->get();
+                            // ->toSql();
+
+                            // dd($inscritos);
+
+        // PRIMERA CONSULTA
+        // $inscritos  = Inscripcione::where('asignatura_id', $notapropuesta->asignatura_id)
+        //                     ->where('turno_id', $notapropuesta->turno_id)
+        //                     ->where('paralelo', $notapropuesta->paralelo)
+        //                     ->where('anio_vigente', $notapropuesta->anio_vigente)
+        //                     // para ue no salga en la lista los convalidados
+        //                     ->whereNull('convalidado')
+        //                     ->get();
+
+        // $contador = 1;
 
         // foreach($inscritos as $ins){
         //     if($ins->persona){
@@ -179,7 +209,7 @@ class NotaController extends Controller
                                     ->where('anio_vigente', $nota->anio_vigente)
                                     ->first();      // Encuentra la NotaPropuesta correspondiente a la Nota
 
-        // Validacion para asistencia                                    
+        // Validacion para asistencia
         if($request->asistencia <= $ponderacion->nota_asistencia && $request->asistencia >= 0)
         {
             // Aqui preguntar si es semestral o anual
@@ -224,7 +254,7 @@ class NotaController extends Controller
             else                                                                    // Es anual, se registra en su bimestre
             {
                 $nota->registrado = 'Si';
-                $nota->nota_asistencia = $request->asistencia;                      // Nota del bimestre     
+                $nota->nota_asistencia = $request->asistencia;                      // Nota del bimestre
             }
         }
         else
@@ -282,9 +312,9 @@ class NotaController extends Controller
             else                                                                    // Es anual, se registra en su bimestre
             {
                 $nota->registrado = 'Si';
-                $nota->nota_practicas = $request->practicas;                        // Nota del bimestre     
+                $nota->nota_practicas = $request->practicas;                        // Nota del bimestre
             }
-            
+
         }
         else
         {
@@ -341,7 +371,7 @@ class NotaController extends Controller
             else                                                                    // Es anual, se registra en su bimestre
             {
                 $nota->registrado = 'Si';
-                $nota->nota_puntos_ganados = $request->puntos;                      // Nota del bimestre     
+                $nota->nota_puntos_ganados = $request->puntos;                      // Nota del bimestre
             }
         }
         else
@@ -399,7 +429,7 @@ class NotaController extends Controller
             else                                                                    // Es anual, se registra en su bimestre
             {
                 $nota->registrado = 'Si';
-                $nota->nota_primer_parcial = $request->parcial;                     // Nota del bimestre     
+                $nota->nota_primer_parcial = $request->parcial;                     // Nota del bimestre
             }
         }
         else
@@ -457,7 +487,7 @@ class NotaController extends Controller
             else                                                                    // Es anual, se registra en su bimestre
             {
                 $nota->registrado = 'Si';
-                $nota->nota_examen_final = $request->final;                         // Nota del bimestre     
+                $nota->nota_examen_final = $request->final;                         // Nota del bimestre
             }
         }
         else
@@ -516,7 +546,7 @@ class NotaController extends Controller
             else                                                                    // Es anual, se registra en su bimestre
             {
                 $nota->registrado = 'Si';
-                $nota->nota_total = $request->resultado;                      // Nota del bimestre     
+                $nota->nota_total = $request->resultado;                      // Nota del bimestre
             }
         }
         $nota->fecha_registro = date('Y-m-d H:i:s');
@@ -528,7 +558,7 @@ class NotaController extends Controller
             $inscripcion = Inscripcione::where('asignatura_id', $nota->asignatura_id)
                                     ->where('turno_id', $nota->turno_id)
                                     ->where('persona_id', $nota->persona_id)
-                                    ->where('paralelo', $nota->paralelo) 
+                                    ->where('paralelo', $nota->paralelo)
                                     ->where('anio_vigente', $nota->anio_vigente)
                                     ->firstOrFail();
 
@@ -630,7 +660,7 @@ class NotaController extends Controller
                     ->first();
         $inscripcion    = Inscripcione::where('id', $base->inscripcion_id)
                                     ->first();
-        
+
         // Verificamos como se lleva a cabo esta asignatura, si es semestral o anual
         if($nota_propuesta->asignatura->ciclo == 'Semestral')
         {
@@ -857,7 +887,7 @@ class NotaController extends Controller
         $nota = Nota::where('inscripcion_id', $request->id)
                     ->where('trimestre', $request->numero)
                     ->first();
-        
+
         $registro = Nota::find($nota->id);
 
         $datosAsignatura = Asignatura::find($nota->asignatura_id);
@@ -973,5 +1003,5 @@ class NotaController extends Controller
         $inscripcion->nota = $notaTotalFinal;
         $inscripcion->save();
     }
-    
+
 }
