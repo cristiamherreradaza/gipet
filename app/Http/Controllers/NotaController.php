@@ -146,24 +146,20 @@ class NotaController extends Controller
 
 
         $inscritos = Inscripcione::select('personas.apellido_paterno','personas.apellido_materno','personas.nombres')
-                            ->join('carreras_personas', 'inscripciones.persona_id','carreras_personas.persona_id')
-                            ->join('personas', 'personas.id', 'inscripciones.persona_id')
-                            ->where('inscripciones.asignatura_id',$notapropuesta->asignatura_id)
-                            ->where('inscripciones.turno_id',$notapropuesta->turno_id)
-                            ->where('inscripciones.paralelo',$notapropuesta->paralelo)
-                            ->where('inscripciones.anio_vigente',$notapropuesta->anio_vigente)
-                            ->whereNull('inscripciones.convalidado')
-                            ->whereNull('carreras_personas.deleted_at')
-                            ->where('carreras_personas.paralelo',$notapropuesta->paralelo)
-                            ->where('carreras_personas.anio_vigente',$notapropuesta->anio_vigente)
-                            ->where('carreras_personas.carrera_id',$notapropuesta->carrera_id)
-                            ->whereNotIn('carreras_personas.estado', ['ABANDONO', 'ABANDONO TEMPORAL', 'CONGELADO'])
-                            ->orderBy('personas.apellido_paterno', 'ASC')
-
-                            ->get();
-                            // ->toSql();
-
-                            // dd($inscritos);
+                                ->join('carreras_personas', 'inscripciones.persona_id','carreras_personas.persona_id')
+                                ->join('personas', 'personas.id', 'inscripciones.persona_id')
+                                ->where('inscripciones.asignatura_id',$notapropuesta->asignatura_id)
+                                ->where('inscripciones.turno_id',$notapropuesta->turno_id)
+                                ->where('inscripciones.paralelo',$notapropuesta->paralelo)
+                                ->where('inscripciones.anio_vigente',$notapropuesta->anio_vigente)
+                                ->whereNull('inscripciones.convalidado')
+                                ->whereNull('carreras_personas.deleted_at')
+                                ->where('carreras_personas.paralelo',$notapropuesta->paralelo)
+                                ->where('carreras_personas.anio_vigente',$notapropuesta->anio_vigente)
+                                ->where('carreras_personas.carrera_id',$notapropuesta->carrera_id)
+                                // ->whereNotIn('carreras_personas.estado', ['ABANDONO', 'ABANDONO TEMPORAL', 'CONGELADO'])
+                                ->orderBy('personas.apellido_paterno', 'ASC')
+                                ->get();
 
         // PRIMERA CONSULTA
         // $inscritos  = Inscripcione::where('asignatura_id', $notapropuesta->asignatura_id)

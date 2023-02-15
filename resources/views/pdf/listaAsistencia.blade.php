@@ -171,36 +171,37 @@
                     $contador  = 1;
                 @endphp
                 @foreach ($inscritos as $key => $inscrito )
-
-                    <tr>
-                        <td>{{ $contador }}</td>
-                        <td>{{ $inscrito->apellido_paterno." ".$inscrito->apellido_materno." ".$inscrito->nombres }}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    @php
-                        $contador++;
-                    @endphp
+                    @if ($inscrito->estado != "ABANDONO" && $inscrito->estado != "ABANDONO TEMPORAL" && $inscrito->estado != "CONGELADO")
+                        <tr>
+                            <td>{{ $contador }}</td>
+                            <td>{{ $inscrito->apellido_paterno." ".$inscrito->apellido_materno." ".$inscrito->nombres }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        @php
+                            $contador++;
+                        @endphp
+                    @endif
                 @endforeach
                 @for ($i = 1 ; $i <= 10; $i++)
                     <tr>
