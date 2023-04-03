@@ -175,7 +175,7 @@
                     <span class="text-info">{{ $c->numero }}</span>
                     @else
                     <span class="text-primary">{{ $c->numero_recibo }}</span>
-    
+
                     @endif
                 </td>
                 <td style="text-align: right">{{ $c->persona->cedula }}</td>

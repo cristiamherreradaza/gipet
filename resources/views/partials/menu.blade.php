@@ -1,4 +1,3 @@
-
 <aside class="left-sidebar">
     <!-- Sidebar scroll-->
     <div class="scroll-sidebar">
@@ -19,7 +18,7 @@
                         </div>
                         <!-- User profile text-->
                         <div class="profile-text py-1 text-white">
-                            {{ auth()->user()->name }}  
+                            {{ auth()->user()->name }}
                         </div>
                     </div>
                     <!-- End User profile text-->
@@ -73,7 +72,7 @@
                 <li class="nav-devider"></li>
                 {{-- <li class="nav-small-cap"><i class="mdi mdi-dots-horizontal"></i> <span class="hide-menu">Otros</span>
                 </li>
-                <li class="sidebar-item"> 
+                <li class="sidebar-item">
                     <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ url('Producto/info') }}" aria-expanded="false">
                         <i data-feather="codepen" class="feather-icon"></i><span class="hide-menu">Informacion</span>
                     </a>

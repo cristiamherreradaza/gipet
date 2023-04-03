@@ -57,25 +57,25 @@ class FacturaController extends Controller
         $nombres = $request->input('nombres');
 
         if($request->input('cedula') != null){
-            $buscaPersonas->where('cedula', 'like', "%$cedula%" );    
+            $buscaPersonas->where('cedula', 'like', "%$cedula%" );
         }
 
         if($request->input('apellido_paterno') != null){
-            $buscaPersonas->where('apellido_paterno', 'like', "%$apellido_paterno%");    
+            $buscaPersonas->where('apellido_paterno', 'like', "%$apellido_paterno%");
         }
 
         if($request->input('apellido_materno') != null){
-            $buscaPersonas->where('apellido_materno', 'like', "%$apellido_materno%");    
+            $buscaPersonas->where('apellido_materno', 'like', "%$apellido_materno%");
         }
-        
+
         if($request->input('nombres') != null){
-            $buscaPersonas->where('nombres', 'like', "%$nombres%");    
+            $buscaPersonas->where('nombres', 'like', "%$nombres%");
         }
 
         $personas = $buscaPersonas->get();
 
         return view('factura.ajaxBuscaPersona')->with(compact('personas'));
-                        
+
     }
 
     public function ajaxPersona(Request $request)
@@ -120,7 +120,7 @@ class FacturaController extends Controller
                     ->whereNull('estado')
                     ->limit($request->mensualidades_a_pagar)
                     ->get();
-        
+
         // $jsonPagos = $paraPagar->toJson();
 
         $arrayPagos = [];
@@ -154,7 +154,7 @@ class FacturaController extends Controller
     public function guardaFactura(Request $request)
     {
         $fechaPago = date('Y-m-d');
-        for ($i=0; $i < count($request->carrera_id); $i++) { 
+        for ($i=0; $i < count($request->carrera_id); $i++) {
             // echo $request->carrera_id[$i]." - ".$request->cuota[$i]."<br />";
             $pago = Pago::find($request->pago_id[$i]);
             $pago->fecha = $fechaPago;
@@ -266,7 +266,7 @@ class FacturaController extends Controller
                                         ->where('facturado', 'Si')
                                         ->first();
 
-                // preguntamos si el numero de fatura sera 
+                // preguntamos si el numero de fatura sera
                 // de la tabla facturas
                 if($ultimoNumeroFactura == null){
                     $nuevoNumeroFactura = $parametrosFactura->numero_factura;
@@ -317,8 +317,8 @@ class FacturaController extends Controller
             ->orWhere('estado', 'Parcial')
             ->get();
 
-        
-        foreach ($cuotasParaModificar as $cm) 
+
+        foreach ($cuotasParaModificar as $cm)
         {
             if($cm->estado == 'paraPagar'){
                 $estado = 'Pagado';
@@ -379,7 +379,7 @@ class FacturaController extends Controller
             ->where('estado', 'paraPagar')
             ->orWhere('estado', 'Parcial')
             ->orderBy('carrera_id', 'asc')
-            ->get(); 
+            ->get();
 
         // extraemos la ultima cuota para eliminar de la tabla
         $ultimaCuota = Pago::where('persona_id', $request->persona_id)
@@ -409,7 +409,7 @@ class FacturaController extends Controller
         $cuotaAPagar->importe      = $request->importe;
         $cuotaAPagar->anio_vigente = date('Y');
         $cuotaAPagar->estado       = 'paraPagar';
-        
+
         $cuotaAPagar->save();
     }
 
@@ -429,7 +429,7 @@ class FacturaController extends Controller
 
     }
 
-    // esta es la funcion para hacer el listado de los 
+    // esta es la funcion para hacer el listado de los
     // pagos para el listado de pagos
     public function listadoPagos(Request $request)
     {
@@ -445,40 +445,40 @@ class FacturaController extends Controller
         return view('factura.listadoPagos')->with(compact('facturas', 'usuarios'));
     }
 
-    // esta funcion es para el listado de 
-    // 
+    // esta funcion es para el listado de
+    //
     public function ajaxBuscaPago(Request $request)
     {
         // dd($request->all());
         $pagos = Factura::orderBy('id', 'desc');
 
         if($request->input('numero') != null){
-            $pagos->where('numero', $request->input('numero'));    
+            $pagos->where('numero', $request->input('numero'));
         }
 
         if($request->input('numero_recibo') != null){
-            $pagos->where('numero_recibo', $request->input('numero_recibo'));    
+            $pagos->where('numero_recibo', $request->input('numero_recibo'));
         }
 
         if($request->input('ci') != null){
-            $pagos->where('carnet', $request->input('ci'));    
+            $pagos->where('carnet', $request->input('ci'));
         }
 
         if($request->input('nit') != null){
-            $pagos->where('nit', $request->input('nit'));    
+            $pagos->where('nit', $request->input('nit'));
         }
 
         if($request->input('user_id') != null){
-            $pagos->where('user_id', $request->input('user_id'));    
+            $pagos->where('user_id', $request->input('user_id'));
         }
 
         if($request->input('fecha_inicio') != null){
             // $pagos->whereBetween('fecha', [$request->input('fecha_inicio'), $request->input('fecha_final')]);
-            $pagos->whereDate('fecha', '>=',  $request->input('fecha_inicio'));    
+            $pagos->whereDate('fecha', '>=',  $request->input('fecha_inicio'));
         }
 
         if($request->input('fecha_final') != null){
-            $pagos->whereDate('fecha', '<=',  $request->input('fecha_final'));    
+            $pagos->whereDate('fecha', '<=',  $request->input('fecha_final'));
         }
 
         if($request->input('numero') == null && $request->input('ci') == null && $request->input('nit') == null && $request->input('user_id') == null && $request->input('fecha_inicio') == null && $request->input('fecha_final') == null){
@@ -511,7 +511,7 @@ class FacturaController extends Controller
                 $ePago->estado   = null;
                 $ePago->save();
             }else{
-                Pago::destroy($p->id);    
+                Pago::destroy($p->id);
             }
         }
 
@@ -531,33 +531,35 @@ class FacturaController extends Controller
         $fecha_final = $request->input('fecha_final');
 
         if($request->input('numero') != null){
-            $pagos->where('numero', $request->input('numero'));    
+            $pagos->where('numero', $request->input('numero'));
         }
 
         if($request->input('numero_recibo') != null){
-            $pagos->where('numero_recibo', $request->input('numero_recibo'));    
+            $pagos->where('numero_recibo', $request->input('numero_recibo'));
         }
 
         if($request->input('ci') != null){
-            $pagos->where('carnet', $request->input('ci'));    
+            $pagos->where('carnet', $request->input('ci'));
         }
 
         if($request->input('nit') != null){
-            $pagos->where('nit', $request->input('nit'));    
+            $pagos->where('nit', $request->input('nit'));
         }
 
         if($request->input('user_id') != null){
-            $pagos->where('user_id', $request->input('user_id'));    
+            $pagos->where('user_id', $request->input('user_id'));
         }
 
         if($request->input('fecha_inicio') != null){
             // $pagos->whereBetween('fecha', [$request->input('fecha_inicio'), $request->input('fecha_final')]);
-            $pagos->whereDate('fecha', '>=',  $request->input('fecha_inicio'));    
+            $pagos->whereDate('fecha', '>=',  $request->input('fecha_inicio'));
         }
 
         if($request->input('fecha_final') != null){
-            $pagos->whereDate('fecha', '<=',  $request->input('fecha_final'));    
+            $pagos->whereDate('fecha', '<=',  $request->input('fecha_final'));
         }
+
+        $pagos->whereNull('estado');
 
         if($request->input('numero') == null && $request->input('ci') == null && $request->input('nit') == null && $request->input('user_id') == null && $request->input('fecha_inicio') == null && $request->input('fecha_final') == null){
             $pagos->limit(100);
