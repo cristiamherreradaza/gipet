@@ -21,7 +21,7 @@
         <form action="#" method="POST" id="formulario_gestion">
             @csrf
             <div class="row">
-                
+
                 <div class="col-md-2">
                     <div class="form-group">
                         <label class="control-label">Gestion </label>
@@ -144,7 +144,7 @@
 
     function cambiaGestion()
     {
-        let datos_formulario = $("#formulario_gestion").serializeArray();  
+        let datos_formulario = $("#formulario_gestion").serializeArray();
 
         $.ajax({
             url: "{{ url('Carrera/ajaxCambiaGestion') }}",

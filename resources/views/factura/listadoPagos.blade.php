@@ -113,16 +113,16 @@
                                 <td>{{ $f->id }}</td>
                                 <td>
                                     @if ($f->facturado == 'Si')
-                                        <span class="text-info">FACTURA</span>     
+                                        <span class="text-info">FACTURA</span>
                                     @else
-                                        <span class="text-primary">RECIBO</span>     
+                                        <span class="text-primary">RECIBO</span>
                                     @endif
                                 </td>
                                 <td>
                                     @if ($f->facturado == 'Si')
-                                        <span class="text-info">{{ $f->numero }}</span>     
+                                        <span class="text-info">{{ $f->numero }}</span>
                                     @else
-                                        <span class="text-primary">{{ $f->numero_recibo }}</span>     
+                                        <span class="text-primary">{{ $f->numero_recibo }}</span>
 
                                     @endif
                                 </td>
@@ -159,7 +159,7 @@
             </div>
         </div>
         <div class="row">
-            
+
             <div class="col-md-12">
                 <br />
                 <a href="#" target="_blank" class="btn btn-success btn-block" title="GENERA PDF" onclick="generaPdf()">GENERAR PDF</a>
@@ -200,7 +200,7 @@
 
     function buscaPago()
     {
-        let datos_formulario = $("#formulario_pagos").serializeArray();  
+        let datos_formulario = $("#formulario_pagos").serializeArray();
 
         $.ajax({
             url: "{{ url('Factura/ajaxBuscaPago') }}",

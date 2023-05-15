@@ -16,8 +16,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade as PDF;
+
 class FacturaController extends Controller
 {
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
+
+
     public function listadoPersonas()
     {
     	return view('factura.listadoPersonas');
@@ -105,7 +112,85 @@ class FacturaController extends Controller
                             ->orderBy('mensualidad', 'asc')
                             ->first();
 
-        return view('factura.ajaxPersona')->with(compact('datosPersona', 'inscripciones', 'descuentos', 'servicios', 'siguienteCuota'));
+        // para el siat LA CONECCION
+        $siat = app(SiatController::class);
+        $verificacionSiat = json_decode($siat->verificarComunicacion());
+
+        if($verificacionSiat->estado === "success"){
+
+            $codigoCuis = json_decode($siat->cuis());
+            if($codigoCuis->estado === "success"){
+                session()->put('scuis', $codigoCuis->resultado->RespuestaCuis->codigo);
+                session()->put('sfechaVigenciaCuis', $codigoCuis->resultado->RespuestaCuis->fechaVigencia);
+            }
+
+            $arrayCufd =  array();
+
+            // dd(session()->has('scufd'),session()->all());
+
+            if(!session()->has('scufd')){
+
+                $cufd = json_decode($siat->cufd());
+
+                if($cufd->estado === "success"){
+                    if($cufd->resultado->RespuestaCufd->transaccion){
+
+                        session()->put('scufd', $cufd->resultado->RespuestaCufd->codigo);
+                        session()->put('scodigoControl', $cufd->resultado->RespuestaCufd->codigoControl);
+                        session()->put('sdireccion', $cufd->resultado->RespuestaCufd->direccion);
+                        session()->put('sfechaVigenciaCufd', $cufd->resultado->RespuestaCufd->fechaVigencia);
+
+                        $arrayCufd['scufd']                 = $cufd->resultado->RespuestaCufd->codigo;
+                        $arrayCufd['scodigoControl']        = $cufd->resultado->RespuestaCufd->codigoControl;
+                        $arrayCufd['sdireccion']            = $cufd->resultado->RespuestaCufd->direccion;
+                        $arrayCufd['sfechaVigenciaCufd']    = $cufd->resultado->RespuestaCufd->fechaVigencia;
+                        $arrayCufd['estado'] = 'success';
+                        // $arrayCufd['estado'] = 'success1';
+
+                    }else{
+                        $arrayCufd['estado'] = 'error1';
+                    }
+                }else{
+                    $arrayCufd['estado'] = 'error2';
+                }
+            }else{
+                $fechaVigencia = str_replace("T"," ",substr(session('sfechaVigenciaCufd'),0,16));
+
+                if($fechaVigencia < date('Y-m-d H:i')){
+                    $cufd = json_decode($siat->cufd());
+
+                    if($cufd->estado === "success"){
+                        if($cufd->resultado->RespuestaCufd->transaccion){
+                            session()->put('scufd', $cufd->resultado->RespuestaCufd->codigo);
+                            session()->put('scodigoControl', $cufd->resultado->RespuestaCufd->codigoControl);
+                            session()->put('sdireccion', $cufd->resultado->RespuestaCufd->direccion);
+                            session()->put('sfechaVigenciaCufd', $cufd->resultado->RespuestaCufd->fechaVigencia);
+
+                            $arrayCufd['scufd']                 = $cufd->resultado->RespuestaCufd->codigo;
+                            $arrayCufd['scodigoControl']        = $cufd->resultado->RespuestaCufd->codigoControl;
+                            $arrayCufd['sdireccion']            = $cufd->resultado->RespuestaCufd->direccion;
+                            $arrayCufd['sfechaVigenciaCufd']    = $cufd->resultado->RespuestaCufd->fechaVigencia;
+                            $arrayCufd['estado'] = 'success2';
+
+                        }else{
+                            $arrayCufd['estado'] = 'error3';
+                        }
+                    }else{
+                        $arrayCufd['estado'] = 'error4';
+                    }
+                }else{
+                    $arrayCufd['estado'] = 'success';
+                    // $arrayCufd['estado'] = 'success3';
+                }
+            }
+
+        }
+
+        session()->save();
+
+        // echo $siat->verificarComunicacion();
+
+        return view('factura.ajaxPersona')->with(compact('datosPersona', 'inscripciones', 'descuentos', 'servicios', 'siguienteCuota', 'verificacionSiat', 'codigoCuis', 'arrayCufd'));
     }
 
     public function ajaxMuestraCuotasPagar(Request $request)

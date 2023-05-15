@@ -10,7 +10,7 @@
     </thead>
     <tbody>
         @php
-            $montoTotal = 0;                    
+            $montoTotal = 0;
         @endphp
         @foreach ($cuotasParaPagar as $cpp)
         @php
@@ -32,7 +32,7 @@
                         @php
                             $descuentoPersona = App\DescuentosPersona::find($cpp->descuento_persona_id);
                             echo $descuentoPersona->descuento->nombre;
-                        @endphp    
+                        @endphp
 
                     @endif
                 </td>
@@ -70,7 +70,8 @@
 
     <div class="col-md-6">
         {{-- <a href='{{ url("Factura/ajaxFacturar")."/".$persona_id }}/factura' class="btn btn-block btn-dark" onclick="muestraNit()">FACTURA</a> --}}
-        <button class="btn btn-block btn-dark" onclick="muestraNit()">FACTURA</button>
+        {{-- <button class="btn btn-block btn-dark" onclick="muestraNit()">FACTURA</button> --}}
+        <button class="btn btn-block btn-dark">FACTURA</button>
     </div>
 </div>
 <br />

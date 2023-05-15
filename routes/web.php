@@ -27,12 +27,12 @@ Route::get('/', 'Auth\LoginController@inicio');
 // });
 
 // Route::get('users/{id}', function ($id) {
-    
+
 // });
 
-Route::get('prueba/inicia', 'PruebaController@inicia'); 
+Route::get('prueba/inicia', 'PruebaController@inicia');
 
-Route::get('listado', 'PruebaController@listado'); 
+Route::get('listado', 'PruebaController@listado');
 
 Route::get('detalle_alumno', 'PruebaController@detalle_alumno');
 
@@ -52,11 +52,11 @@ Route::post('Persona/editaAccesos', 'PersonaController@editaAccesos');
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', 'HomeController@index')->name('home');
 
-    Route::get('prueba/tabla', 'CarreraController@tabla'); 
+    Route::get('prueba/tabla', 'CarreraController@tabla');
 
-    Route::post('carrera/store', 'CarreraController@store'); 
+    Route::post('carrera/store', 'CarreraController@store');
 
-    Route::get('persona/nuevo', 'PersonaController@nuevo'); 
+    Route::get('persona/nuevo', 'PersonaController@nuevo');
     Route::post('persona/guarda', 'PersonaController@guarda');
     Route::get('Persona/listado', 'PersonaController@listado');
     Route::get('Persona/ajax_listado', 'PersonaController@ajax_listado');
@@ -121,7 +121,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Nota/ajaxMuestraNota', 'NotaController@ajaxMuestraNota');
     Route::post('Nota/ajaxRegistraNota', 'NotaController@ajaxRegistraNota');
     Route::get('nota/listaAsistenciaPdf/{asignatura_id}/{bimestre}', 'NotaController@listaAsistenciaPdf');
-    
+
 
     //NOTAS PROPUESTA
     Route::get('notaspropuesta/listado', 'NotasPropuestaController@listado');
@@ -283,7 +283,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Carrera/ajax_combo_materias/{carrera_id}/{anio_vigente}', 'CarreraController@ajax_combo_materias');
     Route::post('Asignatura/guarda_prerequisito', 'AsignaturaController@guarda_prerequisito');
 
-    // CARRERAS 
+    // CARRERAS
     Route::get('Carrera/listado_nuevo', 'CarreraController@listado_nuevo');
     Route::post('Carrera/guardar', 'CarreraController@guardar');
     Route::post('Carrera/actualizar', 'CarreraController@actualizar');
@@ -448,6 +448,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Factura/anulaFactura/{factura_id}', 'FacturaController@anulaFactura');
     Route::post('Factura/generaPdfPagos', 'FacturaController@generaPdfPagos');
     Route::get('Factura/listadoPagosServicio', 'FacturaController@listadoPagosServicio');
+
+    // NUEVO IMPLEMENATCION DEL SIAT
+    Route::get('Siat/verificarComunicacion','SiatController@verificarComunicacion');
+    Route::get('Siat/cuis','SiatController@cuis');
+    Route::get('Siat/sincronizarListaProductosServicios','SiatController@sincronizarListaProductosServicios');
 
 
     // REPORTES

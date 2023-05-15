@@ -7,10 +7,20 @@
 @section('content')
 <div class="card border-info">
     <div class="card-header bg-info">
-        <h4 class="mb-0 text-white">
-            SERVICIOS &nbsp;&nbsp;
-            <button type="button" class="btn waves-effect waves-light btn-sm btn-primary" onclick="nuevo_servicio()"><i class="fas fa-plus"></i> &nbsp; NUEVO SERVICIO</button>
-        </h4>
+        <div class="row">
+            <div class="col-md-6">
+                <h4 class="mb-0 text-white">
+                    SERVICIOS &nbsp;&nbsp;
+                    <button type="button" class="btn waves-effect waves-light btn-sm btn-primary" onclick="nuevo_servicio()"><i class="fas fa-plus"></i> &nbsp; NUEVO SERVICIO</button>
+                </h4>
+            </div>
+            <div class="col-md-6">
+                <h4 class="mb-0 text-white">
+                    CATALOGO SIAT &nbsp;&nbsp;
+                    <button type="button" class="btn waves-effect waves-light btn-sm btn-dark" onclick="verCatalogo()"><i class="fas fa-eye"></i> &nbsp; Catalogo SIAT</button>
+                </h4>
+            </div>
+        </div>
     </div>
     <div class="card-body" id="lista">
         <div class="table-responsive m-t-40">
@@ -21,6 +31,7 @@
                         <th>Codigo</th>
                         <th>Nombre</th>
                         <th>Costo</th>
+                        <th>Codigo SIN</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
@@ -31,6 +42,7 @@
                             <td>{{ $servicio->sigla }}</td>
                             <td>{{ $servicio->nombre }}</td>
                             <td class="text-right">{{ $servicio->precio }}</td>
+                            <td class="text-right">{{ $servicio->estado }}</td>
                             <td>
                                 <button type="button" class="btn btn-warning" title="Editar servicio"  onclick="editar('{{ $servicio->id }}', '{{ $servicio->nombre }}', '{{ $servicio->sigla }}', '{{ $servicio->precio }}')"><i class="fas fa-edit"></i></button>
                                 @if ($servicio->id == 2)
@@ -110,7 +122,7 @@
             </div>
             <form action="{{ url('Servicio/actualizar') }}"  method="POST" >
                 @csrf
-                <div class="modal-body">        
+                <div class="modal-body">
                     <input type="hidden" name="id" id="id" value="">
                     <div class="row">
                         <div class="col-md-12">
@@ -156,7 +168,7 @@
 <!-- inicio modal ver periodos -->
 <div id="editar_perfiles" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" id="editaPerfilAjax">
-        
+
     </div>
 </div>
 <!-- fin modal ver periodos -->
@@ -252,6 +264,10 @@
                 });
             }
         })
+    }
+
+    function verCatalogo(){
+
     }
 </script>
 @endsection

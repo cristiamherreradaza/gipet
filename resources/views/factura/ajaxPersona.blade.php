@@ -39,7 +39,37 @@
 <hr />
 
 <div class="row">
-    
+    <div class="col-md-12 text-center">
+        {{-- @dd(session()->has('scuis')) --}}
+        {{-- @dd($arrayCufd,session('scufd'), session()->all()) --}}
+        {{-- @dump($arrayCufd,session('scufd'), session()->all()) --}}
+        {{-- @dd($arrayCufd) --}}
+
+        @if ($verificacionSiat->estado === "success")
+        <div class="row">
+            <div class="col-md-6">
+                <span class="badge bg-success text-white w-100">{{ $verificacionSiat->resultado->RespuestaComunicacion->mensajesList->descripcion }}</span>
+            </div>
+            <div class="col-md-3">
+                CUIS: {{ (session()->has('scuis'))?  session('scuis') : '<span class="text-danger">NO existe la Cuis Vigente</span>'}}
+            </div>
+            <div class="col-md-3">
+                {{-- @dd($arrayCufd) --}}
+                @if ($arrayCufd['estado'] == "success")
+                    CUFD: {{ (session()->has('scodigoControl'))?  session('scodigoControl')." ".str_replace("T", " ",substr(session('sfechaVigenciaCufd'), 0 , 16)) : '<span class="text-danger">NO existe la Cufd Vigente</span>'}}
+                @else
+                    CUFD: {{ (session()->has('scodigoControl'))?  session('scodigoControl') : '<span class="text-danger">NO existe la Cufd Vigente</span>'}}
+                @endif
+            </div>
+        </div>
+        @else
+            <span class="badge bg-danger text-white w-100">NO HAY CONECCION CON SIAT</span>
+        @endif
+    </div>
+</div>
+
+<div class="row">
+
     <div class="col-md-2">
         <div class="form-group">
             <label>Servicio
@@ -47,7 +77,7 @@
                     <i class="mr-2 mdi mdi-alert-circle"></i>
                 </span>
             </label>
-            <select name="servicio_id" id="servicio_id" class="form-control" onchange="cambiaServicio()" required>
+            <select name="servicio_id" id="servicio_id" class="form-control" onchange="cambiaServicio()" required {{ ($verificacionSiat->estado === "success")? '' : 'disabled'  }}>
                 <option value="">SELECCIONE</option>
                 @foreach ($servicios as $s)
                 <option value="{{ $s->id }}">{{ $s->nombre }}</option>
@@ -71,7 +101,7 @@
 
 <div class="row">
     <div class="col-md-12" id="ajaxMuestraItemsAPagar">
-    
+
     </div>
 </div>
 
@@ -97,7 +127,7 @@
                     $("#ajaxNumeroCuota").html(data);
                 }
             });
-                
+
         }else{
 
             $.ajax({
