@@ -24,7 +24,7 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-        
+
 </head>
 
 <body class="fix-header card-no-border fix-sidebar">
@@ -58,7 +58,7 @@
                                 <b class="logo-icon">
                                     <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
                                     <!-- Dark Logo icon -->
-                                    <img src="{{ asset('assets/images/background/portal_dos.png') }}" alt="homepage" class="dark-logo" />
+                                    {{--  <img src="{{ asset('assets/images/background/portal_dos.png') }}" alt="homepage" class="dark-logo" />  --}}
                                     <!-- Light Logo icon -->
                                     <img src="{{ asset('assets/images/background/logo_trans.png') }}" alt="homepage" class="light-logo" style="max-width:50px; margin-top: -7px;"/>
                                 </b>
@@ -548,7 +548,7 @@
     </script>
 
     @section('js')
-        
+
     @show
 </body>
 

@@ -57,7 +57,7 @@ class UserController extends Controller
         $user->nombre_hijo = $request->nombre_hijo;
         $user->direccion = $request->direccion;
         $user->zona = $request->zona;
-        
+
         $user->numero_celular = $request->celular;
         $user->numero_fijo = $request->numero_fijo;
         $user->email = $request->email;
@@ -65,6 +65,9 @@ class UserController extends Controller
         $user->persona_referencia = $request->persona_referencia;
         $user->numero_referencia = $request->numero_referencia;
         $user->name = $request->username;
+        $user->name = $request->username;
+        $user->codigo_punto_venta = $request->input('codigo_punto_venta');
+
         $user->save();
 
         if($request->perfil)
@@ -93,6 +96,8 @@ class UserController extends Controller
 
     public function actualizar(Request $request)
     {
+
+        // dd($request->input());
         $sw=0;
         $user = User::find($request->id_edicion);
         $user->apellido_paterno = $request->apellido_paterno_edicion;
@@ -116,7 +121,7 @@ class UserController extends Controller
         $user->nombre_hijo = $request->nombre_hijo_edicion;
         $user->direccion = $request->direccion_edicion;
         $user->zona = $request->zona_edicion;
-        
+
         $user->numero_celular = $request->celular_edicion;
         $user->numero_fijo = $request->numero_fijo_edicion;
         $user->email = $request->email_edicion;
@@ -124,6 +129,7 @@ class UserController extends Controller
         $user->persona_referencia = $request->persona_referencia_edicion;
         $user->numero_referencia = $request->numero_referencia_edicion;
         $user->name = $request->username_edicion;
+        $user->codigo_punto_venta = $request->input('codigo_punto_venta');
         // if($user->perfil_id != $request->perfil_edicion)
         // {
         //     // Eliminaremos el perfil con sus respectivos menus anteriores en la tabla menusUser
@@ -152,7 +158,7 @@ class UserController extends Controller
         // Asignaremos nuevo perfil
         $user->perfil_id = $request->perfil_edicion;
         $sw=1;
-        
+
         $user->save();
 
         if($sw == 1)
@@ -173,7 +179,7 @@ class UserController extends Controller
                 }
             }
         }
-        
+
         return redirect('User/listado');
         //dd($user);
     }
@@ -193,7 +199,7 @@ class UserController extends Controller
         return view('user.ajaxEditaPerfil')->with(compact('perfil', 'menusperfil', 'menugeneral', 'usuario'));
     }
 
-    
+
     public function asignar()
     {
         $users = User::where('vigente', 'Si')->get();
@@ -205,7 +211,15 @@ class UserController extends Controller
         $usuarios = User::get();
         $perfiles = Perfile::get();
         $menus = Menu::whereNull('padre')->get();
-    	return view('user.listado')->with(compact('menus', 'perfiles', 'usuarios'));
+
+
+        $siat = app(SiatController::class);
+        $respuesta = json_decode($siat->consultaPuntoVenta(), true);
+        $puntos = $respuesta['resultado']['RespuestaConsultaPuntoVenta']['listaPuntosVentas'];
+
+        // dd($respuesta['resultado']['RespuestaConsultaPuntoVenta']['listaPuntosVentas']);
+
+    	return view('user.listado')->with(compact('menus', 'perfiles', 'usuarios', 'puntos'));
     }
 
     public function ajax_listado()
@@ -557,7 +571,7 @@ class UserController extends Controller
         //                         ->where('asignatura_id', $request->asignatura)
         //                         ->groupBy('turno_id')
         //                         ->get();
-        
+
         $turnos = Inscripcione::where('anio_vigente', $request->gestion)
                                 ->where('asignatura_id', $request->asignatura)
                                 ->groupBy('turno_id')
@@ -650,12 +664,12 @@ class UserController extends Controller
         //dd($materias);
         return view('user.ajaxVerMaterias')->with(compact('asignaturas', 'docente', 'materias'));
     }
-    
+
     public function formatoExcelAsignatura($asignatura_id, $turno_id, $paralelo, $anio_vigente)
     {
         return Excel::download(new AsignaturaNotasExport($asignatura_id, $turno_id, $paralelo, $anio_vigente), date('Y-m-d').'-formatoAsignaturasImportacion.xlsx');
     }
-    
+
     public function importarNotasAsignaturas(Request $request)
     {
         $validation = Validator::make($request->all(), [

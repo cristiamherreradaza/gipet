@@ -1,17 +1,20 @@
+{{--  @dd($siguienteCuota)  --}}
+{{--  <input type="text" id="mensualidad_numero_cuota_pago" value="{{ $siguienteCuota->mensualidad }}"/>  --}}
 @if ($siguienteCuota)
-<div class="col-md-2">
+<div class="col-md-3">
     <div class="form-group">
         <label>CUOTA
             <span class="text-danger">
                 <i class="mr-2 mdi mdi-alert-circle"></i>
             </span>
         </label>
-        <input type="hidden" name="pago_id" id="pago_id" value="{{ $siguienteCuota->id }}">
         <input type="text" class="form-control" name="numero_cuota_pago" id="numero_cuota_pago" value="{{ $siguienteCuota->mensualidad }}&deg; Mensualidad" readonly />
+        <input type="hidden" name="pago_id" id="pago_id" value="{{ $siguienteCuota->id }}">
+        <input type="hidden" id="anio_vigente_cuota_pago" value="{{ $siguienteCuota->anio_vigente }}"/>
     </div>
 </div>
 
-<div class="col-md-3">
+{{--  <div class="col-md-3">
     <div class="form-group">
         @php
             if($siguienteCuota->descuento_persona_id == null || $siguienteCuota->descuento_persona->descuento_id == null){
@@ -27,9 +30,9 @@
         </label>
         <input type="text" class="form-control" name="descuento_pago" id="descuento_pago" value="{{ $nombreDescuento }}" readonly>
     </div>
-</div>
+</div>  --}}
 
-<div class="col-md-2">
+<div class="col-md-3">
     <div class="form-group">
         <label>IMPORTE
             <span class="text-danger">
@@ -50,7 +53,7 @@
     </div>
 </div>
 
-<div class="col-2">
+<div class="col-md-3">
     <div class="form-group">
         <label>PAGO
             <span class="text-danger">
@@ -64,7 +67,7 @@
     </div>
 </div>
 
-<div class="col-md-2">
+<div class="col-md-3">
     <div class="form-group">
         <label>&nbsp;</label>
         <button type="button" class="btn btn-block btn-success" onclick="adicionaItem()">Adicionar</button>

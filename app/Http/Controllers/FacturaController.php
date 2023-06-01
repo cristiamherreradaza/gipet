@@ -16,6 +16,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade as PDF;
+use DOMDocument;
+// use Maatwebsite\Excel\Writer;
+use SimpleXMLElement;
+use SoapClient;
+
+
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class FacturaController extends Controller
 {
@@ -87,6 +94,18 @@ class FacturaController extends Controller
 
     public function ajaxPersona(Request $request)
     {
+
+        // session()->start();
+
+        // dd(env(
+        //     'SCUIS',
+        //     'SFECHAVIGENCIACUIS',
+        //     'SCUFD',
+        //     'SCODIGOCONTROL',
+        //     'SDIRECCION',
+        //     'SFECHAVIGENCIACUFD'));
+
+
         $gestionActual = date('Y');
 
         $servicios = Servicio::get();
@@ -116,81 +135,106 @@ class FacturaController extends Controller
         $siat = app(SiatController::class);
         $verificacionSiat = json_decode($siat->verificarComunicacion());
 
-        if($verificacionSiat->estado === "success"){
+        // if($verificacionSiat->estado === "success"){
 
-            $codigoCuis = json_decode($siat->cuis());
-            if($codigoCuis->estado === "success"){
-                session()->put('scuis', $codigoCuis->resultado->RespuestaCuis->codigo);
-                session()->put('sfechaVigenciaCuis', $codigoCuis->resultado->RespuestaCuis->fechaVigencia);
-            }
+        //     $codigoCuis = json_decode($siat->cuis());
+        //     if($codigoCuis->estado === "success"){
+        //         $ser = $codigoCuis->resultado->RespuestaCuis->codigo;
 
-            $arrayCufd =  array();
+        //         session(['scuis' => $codigoCuis->resultado->RespuestaCuis->codigo]);
+        //         session(['sfechaVigenciaCuis' => $codigoCuis->resultado->RespuestaCuis->fechaVigencia]);
 
-            // dd(session()->has('scufd'),session()->all());
+        //         // session()->put('scuis', $codigoCuis->resultado->RespuestaCuis->codigo);
+        //         // session()->put('sfechaVigenciaCuis', $codigoCuis->resultado->RespuestaCuis->fechaVigencia);
+        //     }
 
-            if(!session()->has('scufd')){
+        //     // dd(session('scuis'));
 
-                $cufd = json_decode($siat->cufd());
+        //     $arrayCufd =  array();
 
-                if($cufd->estado === "success"){
-                    if($cufd->resultado->RespuestaCufd->transaccion){
+        //     // dd(session('scufd'));
 
-                        session()->put('scufd', $cufd->resultado->RespuestaCufd->codigo);
-                        session()->put('scodigoControl', $cufd->resultado->RespuestaCufd->codigoControl);
-                        session()->put('sdireccion', $cufd->resultado->RespuestaCufd->direccion);
-                        session()->put('sfechaVigenciaCufd', $cufd->resultado->RespuestaCufd->fechaVigencia);
+        //     if(!session()->has('scufd')){
 
-                        $arrayCufd['scufd']                 = $cufd->resultado->RespuestaCufd->codigo;
-                        $arrayCufd['scodigoControl']        = $cufd->resultado->RespuestaCufd->codigoControl;
-                        $arrayCufd['sdireccion']            = $cufd->resultado->RespuestaCufd->direccion;
-                        $arrayCufd['sfechaVigenciaCufd']    = $cufd->resultado->RespuestaCufd->fechaVigencia;
-                        $arrayCufd['estado'] = 'success';
-                        // $arrayCufd['estado'] = 'success1';
+        //         $cufd = json_decode($siat->cufd());
 
-                    }else{
-                        $arrayCufd['estado'] = 'error1';
-                    }
-                }else{
-                    $arrayCufd['estado'] = 'error2';
-                }
-            }else{
-                $fechaVigencia = str_replace("T"," ",substr(session('sfechaVigenciaCufd'),0,16));
+        //         if($cufd->estado === "success"){
+        //             if($cufd->resultado->RespuestaCufd->transaccion){
 
-                if($fechaVigencia < date('Y-m-d H:i')){
-                    $cufd = json_decode($siat->cufd());
+        //                 // session()->put('scufd', $cufd->resultado->RespuestaCufd->codigo);
+        //                 // session()->put('scodigoControl', $cufd->resultado->RespuestaCufd->codigoControl);
+        //                 // session()->put('sdireccion', $cufd->resultado->RespuestaCufd->direccion);
+        //                 // session()->put('sfechaVigenciaCufd', $cufd->resultado->RespuestaCufd->fechaVigencia);
 
-                    if($cufd->estado === "success"){
-                        if($cufd->resultado->RespuestaCufd->transaccion){
-                            session()->put('scufd', $cufd->resultado->RespuestaCufd->codigo);
-                            session()->put('scodigoControl', $cufd->resultado->RespuestaCufd->codigoControl);
-                            session()->put('sdireccion', $cufd->resultado->RespuestaCufd->direccion);
-                            session()->put('sfechaVigenciaCufd', $cufd->resultado->RespuestaCufd->fechaVigencia);
+        //                 session(['scufd' => $cufd->resultado->RespuestaCufd->codigo]);
+        //                 session(['scodigoControl' => $cufd->resultado->RespuestaCufd->codigoControl]);
+        //                 session(['sdireccion' => $cufd->resultado->RespuestaCufd->direccion]);
+        //                 session(['sfechaVigenciaCufd' => $cufd->resultado->RespuestaCufd->fechaVigencia]);
 
-                            $arrayCufd['scufd']                 = $cufd->resultado->RespuestaCufd->codigo;
-                            $arrayCufd['scodigoControl']        = $cufd->resultado->RespuestaCufd->codigoControl;
-                            $arrayCufd['sdireccion']            = $cufd->resultado->RespuestaCufd->direccion;
-                            $arrayCufd['sfechaVigenciaCufd']    = $cufd->resultado->RespuestaCufd->fechaVigencia;
-                            $arrayCufd['estado'] = 'success2';
+        //                 $arrayCufd['scufd']                 = $cufd->resultado->RespuestaCufd->codigo;
+        //                 $arrayCufd['scodigoControl']        = $cufd->resultado->RespuestaCufd->codigoControl;
+        //                 $arrayCufd['sdireccion']            = $cufd->resultado->RespuestaCufd->direccion;
+        //                 $arrayCufd['sfechaVigenciaCufd']    = $cufd->resultado->RespuestaCufd->fechaVigencia;
+        //                 $arrayCufd['estado'] = 'success1';
+        //                 // $arrayCufd['estado'] = 'success1';
 
-                        }else{
-                            $arrayCufd['estado'] = 'error3';
-                        }
-                    }else{
-                        $arrayCufd['estado'] = 'error4';
-                    }
-                }else{
-                    $arrayCufd['estado'] = 'success';
-                    // $arrayCufd['estado'] = 'success3';
-                }
-            }
+        //             }else{
+        //                 $arrayCufd['estado'] = 'error1';
+        //             }
+        //         }else{
+        //             $arrayCufd['estado'] = 'error2';
+        //         }
+        //     }else{
+        //         $fechaVigencia = str_replace("T"," ",substr(session('sfechaVigenciaCufd'),0,16));
 
-        }
+        //         if($fechaVigencia < date('Y-m-d H:i')){
+        //             $cufd = json_decode($siat->cufd());
 
-        session()->save();
+        //             if($cufd->estado === "success"){
+        //                 if($cufd->resultado->RespuestaCufd->transaccion){
 
+        //                     session(['scufd' => $cufd->resultado->RespuestaCufd->codigo]);
+        //                     session(['scodigoControl' => $cufd->resultado->RespuestaCufd->codigoControl]);
+        //                     session(['sdireccion' => $cufd->resultado->RespuestaCufd->direccion]);
+        //                     session(['sfechaVigenciaCufd' => $cufd->resultado->RespuestaCufd->fechaVigencia]);
+
+        //                     // session()->put('scufd', $cufd->resultado->RespuestaCufd->codigo);
+        //                     // session()->put('scodigoControl', $cufd->resultado->RespuestaCufd->codigoControl);
+        //                     // session()->put('sdireccion', $cufd->resultado->RespuestaCufd->direccion);
+        //                     // session()->put('sfechaVigenciaCufd', $cufd->resultado->RespuestaCufd->fechaVigencia);
+
+        //                     $arrayCufd['scufd']                 = $cufd->resultado->RespuestaCufd->codigo;
+        //                     $arrayCufd['scodigoControl']        = $cufd->resultado->RespuestaCufd->codigoControl;
+        //                     $arrayCufd['sdireccion']            = $cufd->resultado->RespuestaCufd->direccion;
+        //                     $arrayCufd['sfechaVigenciaCufd']    = $cufd->resultado->RespuestaCufd->fechaVigencia;
+        //                     $arrayCufd['estado']                = 'success2';
+
+        //                 }else{
+        //                     $arrayCufd['estado'] = 'error3';
+        //                 }
+        //             }else{
+        //                 $arrayCufd['estado'] = 'error4';
+        //             }
+        //         }else{
+        //             $arrayCufd['estado'] = 'success2';
+        //             // $arrayCufd['estado'] = 'success3';
+        //         }
+        //     }
+
+
+        // }
+
+        // dd($arrayCufd);
+
+        // session()->save();
+
+        // dd(session()->all());
+
+        // dd(!session()->has('scufd'), session('scufd'), $cufd);
         // echo $siat->verificarComunicacion();
 
-        return view('factura.ajaxPersona')->with(compact('datosPersona', 'inscripciones', 'descuentos', 'servicios', 'siguienteCuota', 'verificacionSiat', 'codigoCuis', 'arrayCufd'));
+        // return view('factura.ajaxPersona')->with(compact('datosPersona', 'inscripciones', 'descuentos', 'servicios', 'siguienteCuota', 'verificacionSiat', 'codigoCuis', 'arrayCufd'));
+        return view('factura.ajaxPersona')->with(compact('datosPersona', 'inscripciones', 'descuentos', 'servicios', 'siguienteCuota', 'verificacionSiat'));
     }
 
     public function ajaxMuestraCuotasPagar(Request $request)
@@ -429,6 +473,8 @@ class FacturaController extends Controller
     {
         // actualizamos el estado del item a pagar
         $cuotaEliminar = Pago::find($request->pago_id);
+        $cuotaEliminar->descuento = 0;
+        $cuotaEliminar->subTotal = 0;
         $cuotaEliminar->estado = null;
         $cuotaEliminar->save();
     }
@@ -453,6 +499,7 @@ class FacturaController extends Controller
         $parametros = Parametro::find($factura->parametro_id);
 
         return view('factura.generaFactura')->with(compact('cuotasPagadas', 'factura', 'parametros'));
+        // return view('factura.generaFactura')->with(compact('cuotasPagadas', 'factura'));
     }
 
     public function ajaxMuestraTablaPagos(Request $request)
@@ -460,11 +507,19 @@ class FacturaController extends Controller
         $persona_id = $request->persona_id;
         $persona = Persona::find($request->persona_id);
         // mostramos las cuotas para pagar
-        $cuotasParaPagar = Pago::where('persona_id', $request->persona_id)
-            ->where('estado', 'paraPagar')
-            ->orWhere('estado', 'Parcial')
-            ->orderBy('carrera_id', 'asc')
-            ->get();
+        // $cuotasParaPagar = Pago::where('persona_id', $request->persona_id)
+        //                         ->where('estado', 'paraPagar')
+        //                         ->orWhere('estado', 'Parcial')
+        //                         ->orderBy('carrera_id', 'asc')
+        //                         ->get();
+
+        $cuotasParaPagar = Pago::select('pagos.*', 'servicios.codigoActividad', 'servicios.codigoProducto', 'servicios.unidadMedida', 'servicios.nombre')
+                                ->join('servicios', 'pagos.servicio_id', '=','servicios.id')
+                                ->where('pagos.persona_id', $request->persona_id)
+                                ->where('pagos.estado', 'paraPagar')
+                                ->orWhere('pagos.estado', 'Parcial')
+                                ->orderBy('pagos.carrera_id', 'asc')
+                                ->get();
 
         // extraemos la ultima cuota para eliminar de la tabla
         $ultimaCuota = Pago::where('persona_id', $request->persona_id)
@@ -473,7 +528,12 @@ class FacturaController extends Controller
                         ->orderBy('id', 'desc')
                         ->first();
 
-        return view('factura.ajaxMuestraTablaPagos')->with(compact('persona_id', 'cuotasParaPagar', 'ultimaCuota', 'persona'));
+        // SACAMOS LA ULTIMA FACTURA
+        $ultimaFactura = $this->getUltimoFactura();
+
+        // dd($ultimaFactura);
+
+        return view('factura.ajaxMuestraTablaPagos')->with(compact('persona_id', 'cuotasParaPagar', 'ultimaCuota', 'persona', 'ultimaFactura'));
     }
 
     public function ajaxPreciosServicios(Request $request)
@@ -500,6 +560,9 @@ class FacturaController extends Controller
 
     public function ajaxEliminaItemPagoServicio(Request $request)
     {
+
+        // dd($request->pago_id);
+
         Pago::destroy($request->pago_id);
     }
 
@@ -671,5 +734,553 @@ class FacturaController extends Controller
                             ->get();
 
         return view('factura.listadoPagosServicio')->with(compact('pagos', 'usuarios'));
+    }
+
+    protected function getUltimoFactura(){
+
+        $ultimoNumeroFactura = Factura::latest()
+                                    ->where('facturado', 'Si')
+                                    ->first();
+
+        return $ultimoNumeroFactura;
+
+    }
+
+    // FACTURACION EN LINEA
+    public function emitirFactura(Request $request){
+        $datos = $request->input('datos');
+        $datosPersona = $request->input('datosPersona');
+        $valoresCabecera = $datos['factura'][0]['cabecera'];
+
+        $nitEmisor          = str_pad($valoresCabecera['nitEmisor'],13,"0",STR_PAD_LEFT);
+        $fechaEmision       = str_replace(".","",str_replace(":","",str_replace("-","",str_replace("T", "",$valoresCabecera['fechaEmision']))));
+        $sucursal           = str_pad(0,4,"0",STR_PAD_LEFT);
+        $modalidad          = 2;
+        $tipoEmision        = 1;
+        $tipoFactura        = 1;
+        $tipoFacturaSector  = 11;
+        $numeroFactura      = str_pad($valoresCabecera['numeroFactura'],10,"0",STR_PAD_LEFT);
+        $puntoVenta         = str_pad(0,4,"0",STR_PAD_LEFT);
+        // $puntoVenta         = str_pad(1,4,"0",STR_PAD_LEFT);
+        // $puntoVenta         = str_pad(3,4,"0",STR_PAD_LEFT);
+
+        // dd($puntoVenta, $datos);
+
+        $cadena = $nitEmisor.$fechaEmision.$sucursal.$modalidad.$tipoEmision.$tipoFactura.$tipoFacturaSector.$numeroFactura.$puntoVenta;
+
+        // CODIGO DEL VIDEO PARACE QUE SIRVE NOMAS
+        // ini_set('soap.wsdl_cache_enable',0);
+        // $wdls = "https://indexingenieria.com/webservices/wssiatcuf.php?wsdl";
+        // $client = new SoapClient($wdls);
+        // $client->__getFunctions();
+        // $params = array(
+        //     'factura_numero' => $numeroFactura,
+        //     'nit_emisor' => $nitEmisor,
+        //     'fechaEmision' => $valoresCabecera['fechaEmision'],
+        //     'codigoControl' => session('scodigoControl')
+        // );
+        // $cuf = $client->__soapCall('generaCuf', $params);
+        // $datos['factura'][0]['cabecera']['cuf'] = $cuf;
+
+        if(!session()->has('scufd')){
+            $siat = app(SiatController::class);
+            $siat->verificarConeccion();
+        }
+
+        // CODIGO DE JOEL ESETE LO HIZMOMOS NOSOTROS
+        $cadenaConM11 = $cadena.$this->calculaDigitoMod11($cadena, 1, 9, false);
+        $cufPro = $this->generarBase16($cadenaConM11).session('scodigoControl');
+        $datos['factura'][0]['cabecera']['cuf']                 = $cufPro;
+        $datos['factura'][0]['cabecera']['cufd']                = session('scufd');
+        $datos['factura'][0]['cabecera']['direccion']           = session('sdireccion');
+        // $datos['factura'][0]['cabecera']['codigoPuntoVenta']    = 3;
+        // $datos['factura'][0]['cabecera']['codigoPuntoVenta']    = 1;
+
+        // dd($datos['factura']);
+
+        // VERIFICAMOS QUE SEA MENSUALIDAD
+        for ($i=1; $i < count($datos['factura']); $i++) {
+            if($datos['factura'][$i]['detalle']['codigoProducto'] != 2){
+                $g = explode(' ', $datos['factura'][$i]['detalle']['descripcion']);
+                $datos['factura'][$i]['detalle']['descripcion'] = $g[1];
+            }
+        }
+
+        // VERIFICAMOS EN EL PERIDOD
+        $periodo = explode(' ', $datos['factura'][0]['cabecera']['periodoFacturado']);
+        if(array_intersect(["null","undefined"],$periodo))
+            $datos['factura'][0]['cabecera']['periodoFacturado'] = $periodo[1];
+
+
+        $temporal = $datos['factura'];
+        $dar = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+                    <facturaComputarizadaSectorEducativo xsi:noNamespaceSchemaLocation="facturaComputarizadaSectorEducativo.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"></facturaComputarizadaSectorEducativo>';
+        $xml_temporal = new SimpleXMLElement($dar);
+        $this->formato_xml($temporal, $xml_temporal);
+
+        $xml_temporal->asXML("assets/docs/facturaxml.xml");
+
+        // COMPRIMIMOS EL ARCHIVO A ZIP
+        $gzdato = gzencode(file_get_contents('assets/docs/facturaxml.xml',9));
+        $fiape = fopen('assets/docs/facturaxml.xml.zip',"w");
+        fwrite($fiape,$gzdato);
+        fclose($fiape);
+
+        //  hashArchivo EL ARCHIVO
+        $archivoZip = $gzdato;
+        $hashArchivo = hash("sha256", file_get_contents('assets/docs/facturaxml.xml'));
+
+        // GUARDAMOS EN LA FACTURA
+        // dd($datos['factura'][0]['cabecera']['nombreRazonSocial']);
+
+        $factura = new Factura();
+
+        $factura->user_id                   = Auth::user()->id;
+        $factura->persona_id                = $datosPersona['persona_id'];
+        $factura->carnet                    = $datosPersona['carnet'];
+        $factura->razon_social              = $datos['factura'][0]['cabecera']['nombreRazonSocial'];
+        $factura->nit                       = $datos['factura'][0]['cabecera']['numeroDocumento'];
+        $factura->fecha                     = $datos['factura'][0]['cabecera']['fechaEmision'];
+        $factura->total                     = $datos['factura'][0]['cabecera']['montoTotal'];
+        $factura->facturado                 = "Si";
+        $factura->numero                    = $datos['factura'][0]['cabecera']['numeroFactura'];
+        $factura->anio_vigente              = date('Y');
+        $factura->cuf                       = $datos['factura'][0]['cabecera']['cuf'];
+        $factura->codigo_metodo_pago_siat   = $datos['factura'][0]['cabecera']['codigoMetodoPago'];
+        $factura->monto_total_subjeto_iva   = $datos['factura'][0]['cabecera']['montoTotalSujetoIva'];
+        $factura->descuento_adicional       = $datos['factura'][0]['cabecera']['descuentoAdicional'];
+        $factura->productos_xml             = file_get_contents('assets/docs/facturaxml.xml');
+
+        $factura->save();
+
+        $siat = app(SiatController::class);
+        $for = json_decode($siat->recepcionFactura($archivoZip, $valoresCabecera['fechaEmision'],$hashArchivo));
+
+        // dd($for);
+
+        if($for->resultado->RespuestaServicioFacturacion->transaccion){
+            $codigo_recepcion = $for->resultado->RespuestaServicioFacturacion->codigoRecepcion;
+            $descripcion = NULL;
+        }else{
+            $codigo_recepcion = NULL;
+            $descripcion = $for->resultado->RespuestaServicioFacturacion->mensajesList->descripcion;
+        }
+
+        $facturaNew = Factura::find($factura->id);
+        $facturaNew->codigo_descripcion = $for->resultado->RespuestaServicioFacturacion->codigoDescripcion;
+        $facturaNew->codigo_recepcion   = $codigo_recepcion;
+        $facturaNew->codigo_trancaccion = $for->resultado->RespuestaServicioFacturacion->transaccion;
+        $facturaNew->descripcion        = $descripcion;
+        $facturaNew->cuis               = session('scuis');
+        $facturaNew->cufd               = session('scufd');
+        $facturaNew->fechaVigencia      = session('sfechaVigenciaCufd');
+        $facturaNew->save();
+
+        $data['estado'] = $facturaNew->codigo_descripcion;
+
+        for ($i=1; $i < count($datos['factura']) ; $i++) {
+
+            $servicio = $datos['factura'][$i]['detalle']['codigoProducto'];
+
+            // PREGUNTAMOS SI ES MENSUALIDAD
+            if($servicio === "2"){
+                $arrayMen = explode(" ", $datos['factura'][$i]['detalle']['descripcion']);
+                $pago = Pago::where('persona_id',$datosPersona['persona_id'])
+                            ->where('estado', 'paraPagar')
+                            ->where('anio_vigente', date('Y'))
+                            ->where('mensualidad', $arrayMen[0])
+                            ->first();
+
+                if($pago){
+                    $pago->descuento    = ($datos['factura'][$i]['detalle']['montoDescuento'] == null)? 0 :  $datos['factura'][$i]['detalle']['montoDescuento'];
+                    $pago->subTotal     = ($datos['factura'][$i]['detalle']['subTotal'] == null)? 0 :  $datos['factura'][$i]['detalle']['subTotal'];
+                    $pago->estado       = "Pagado";
+                    $pago->fecha        = $valoresCabecera['fechaEmision'];
+                    $pago->factura_id   = $facturaNew->id;
+                    $pago->user_id      = Auth::user()->id;
+                    // $pago->cuis         = session('scuis');
+                    // $pago->cufd         = session('scufd');
+                    // $pago->fechaVigencia= session('sfechaVigenciaCufd');
+
+                    $pago->save();
+                }
+            }else{
+                $pago = Pago::where('persona_id',$datosPersona['persona_id'])
+                            ->where('estado', 'paraPagar')
+                            ->where('anio_vigente', date('Y'))
+                            ->where('servicio_id', $servicio)
+                            ->first();
+
+                if($pago){
+                    $pago->descuento    = ($datos['factura'][$i]['detalle']['montoDescuento'] == null)? 0 :  $datos['factura'][$i]['detalle']['montoDescuento'];
+                    $pago->subTotal     = ($datos['factura'][$i]['detalle']['subTotal'] == null)? 0 :  $datos['factura'][$i]['detalle']['subTotal'];
+                    $pago->estado       = "Pagado";
+                    $pago->fecha        = $valoresCabecera['fechaEmision'];
+                    $pago->factura_id   = $facturaNew->id;
+                    $pago->user_id      = Auth::user()->id;
+                    // $pago->cuis         = session('scuis');
+                    // $pago->cufd         = session('scufd');
+                    // $pago->fechaVigencia= session('sfechaVigenciaCufd');
+
+                    $pago->save();
+                }
+            }
+
+        }
+
+        // PARA VALIDAR EL XML
+        // $this->validar();
+
+        return $data;
+    }
+
+    protected function formato_xml($temporal, $xml_temporal){
+        $ns_xsi = "http://www.w3.org/2001/XMLSchema-instance";
+        foreach($temporal as $key => $value){
+            if(is_array($value)){
+                if(!is_numeric($key)){
+                    $subnodo = $xml_temporal->addChild("$key");
+                    $this->formato_xml($value, $subnodo);
+                }else{
+                    $this->formato_xml($value, $xml_temporal);
+                }
+            }else{
+                if($value == null && $value <> '0'){
+                    $hijo = $xml_temporal->addChild("$key","$value");
+                    $hijo->addAttribute('xsi:nil','true', $ns_xsi);
+                }else{
+                    $xml_temporal->addChild("$key", "$value");
+                }
+            }
+        }
+    }
+
+    public function actualizaDescuento(Request $request){
+        if($request->ajax()){
+
+            $pago = Pago::find($request->input('pago_id'));
+            $pago->descuento = $request->input('valor');
+            $pago->subTotal = $pago->importe - $request->input('valor');
+            $pago->save();
+
+            $persona_id = $pago->persona_id;
+
+            $sumaImporte = Pago::where('estado','paraPagar')
+                                ->where('persona_id',$persona_id)
+                                ->sum('importe');
+            $sumaRebaja = Pago::where('estado','paraPagar')
+                                ->where('persona_id',$persona_id)
+                                ->sum('descuento');
+
+            $data['valor'] = ($sumaImporte-$sumaRebaja);
+            $data['estado'] = 'success';
+
+        }else{
+            $data['estado'] = 'error';
+        }
+
+        return $data;
+    }
+
+    public function arrayCuotasPagar(Request $request){
+
+        if($request->ajax()){
+            $persona_id = $request->input('persona');
+            $cuotasParaPagar = Pago::select('pagos.*', 'servicios.codigoActividad', 'servicios.codigoProducto', 'servicios.unidadMedida', 'servicios.nombre')
+                                    ->join('servicios', 'pagos.servicio_id', '=','servicios.id')
+                                    ->where('pagos.persona_id', $persona_id)
+                                    ->where('pagos.estado', 'paraPagar')
+                                    ->orWhere('pagos.estado', 'Parcial')
+                                    ->orderBy('pagos.carrera_id', 'asc')
+                                    ->get();
+            $data['estado'] = 'success';
+            $data['lista'] = json_encode($cuotasParaPagar);
+        }else{
+            $data['estado'] = 'error';
+        }
+        return $data;
+    }
+
+    public function sumaTotalMonto(Request $request){
+        if($request->ajax()){
+
+            $persona_id = $request->input('persona');
+
+            $sumaImporte = Pago::where('estado','paraPagar')
+                                ->where('persona_id',$persona_id)
+                                ->sum('importe');
+            $sumaRebaja = Pago::where('estado','paraPagar')
+                                ->where('persona_id',$persona_id)
+                                ->sum('descuento');
+
+            $data['valor'] = ($sumaImporte-$sumaRebaja);
+        }
+
+        return $data;
+    }
+
+    protected function calculaDigitoMod11($cadena, $numDig, $limMult, $x10){
+
+        $mult = 0;
+        $suma = 0;
+        $dig = 0;
+        $i = 0;
+        $n = 0;
+
+        if (!$x10) {
+            $numDig = 1;
+        }
+
+        for ($n = 1; $n <= $numDig; $n++) {
+            $suma = 0;
+            $mult = 2;
+
+            for ($i = strlen($cadena) - 1; $i >= 0; $i--) {
+                $suma += ($mult * intval(substr($cadena, $i, 1)));
+
+                if (++$mult > $limMult) {
+                    $mult = 2;
+                }
+            }
+
+            if ($x10) {
+                $dig = (($suma * 10) % 11) % 10;
+            } else {
+                $dig = $suma % 11;
+            }
+
+            if ($dig == 10) {
+                $cadena .= "1";
+            }
+
+            if ($dig == 11) {
+                $cadena .= "0";
+            }
+
+            if ($dig < 10) {
+                $cadena .= strval($dig);
+            }
+        }
+
+        return substr($cadena, strlen($cadena) - $numDig, $numDig);
+    }
+
+    protected function generarBase16($caracteres) {
+        $pString = ltrim($caracteres, '0');
+        $vValor = gmp_init($pString);
+        return strtoupper(gmp_strval($vValor, 16));
+    }
+
+    protected function base10($datos){
+        return number_format(hexdec($datos), 0, '', '');
+    }
+
+    protected function validar(){
+        // Ruta del archivo XML a validar
+        $xmlFile = "assets/docs/facturaxml.xml";
+
+        // Ruta del archivo XSD
+        $xsdFile = "assets/docs/facturaComputarizadaSectorEducativo.xsd";
+
+        // dd($xmlFile, $xsdFile);
+
+        // Cargar el archivo XML
+        $dom = new DOMDocument();
+        $dom->load($xmlFile);
+
+        // dd($dom);
+
+        // Habilitar la validación contra el XSD
+        $dom->schemaValidate($xsdFile);
+
+        // Verificar si hay errores de validación
+        $errors = libxml_get_errors();
+
+        if (empty($errors)) {
+            echo "El archivo XML es válido.";
+        } else {
+            foreach ($errors as $error) {
+                echo "Error de validación: " . $error->message . "\n";
+            }
+        }
+    }
+
+    public function generaPdfFacturaNew(Request $request, $factura_id){
+        $factura = Factura::find($factura_id);
+        $xml = $factura['productos_xml'];
+
+        $archivoXML = new SimpleXMLElement($xml);
+
+        $cabeza = (array) $archivoXML;
+
+        $cuf            = (string)$cabeza['cabecera']->cuf;
+        $numeroFactura  = (string)$cabeza['cabecera']->numeroFactura;
+
+        // Genera el texto para el código QR
+        $textoQR = 'https://pilotosiat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf='.$cuf.'&numero='.$numeroFactura.'&t=2';
+        // Genera la ruta temporal para guardar la imagen del código QR
+        $rutaImagenQR = storage_path('app/public/qr_code.png');
+        // Genera el código QR y guarda la imagen en la ruta temporal
+        QrCode::generate($textoQR, $rutaImagenQR);
+
+        $pdf = PDF::loadView('pdf.generaPdfFacturaNew', compact('factura', 'archivoXML','rutaImagenQR'))->setPaper('letter');
+        // unlink($rutaImagenQR);
+        return $pdf->stream('factura.pdf');
+    }
+
+    public function anularFacturaNew(Request $request){
+        if($request->ajax()){
+
+            $idFactura = $request->input('factura');
+            $moivo = $request->input('moivo');
+            $fatura = Factura::find($idFactura);
+
+            // dd($idFactura,$moivo,$fatura, session()->all());
+
+            $siat = app(SiatController::class);
+
+            $respuesta = json_decode($siat->anulacionFactura($moivo, $fatura->cuf));
+
+            // dd($respuesta, session()->all());
+
+            if($respuesta->resultado->RespuestaServicioFacturacion->transaccion){
+                $fatura->estado = 'Anulado';
+                $pagos = Pago::where('factura_id', $fatura->id)
+                                ->get();
+                foreach($pagos as $p){
+                    if($p->servicio_id == 2){
+                        $ePago              = Pago::find($p->id);
+                        $ePago->factura_id  = null;
+                        $ePago->importe     = 0;
+                        $ePago->faltante    = 0;
+                        $ePago->fecha       = null;
+                        $ePago->estado      = null;
+                        $ePago->save();
+                    }else{
+                        Pago::destroy($p->id);
+                    }
+                }
+            }else{
+                $fatura->descripcion = $respuesta->resultado->RespuestaServicioFacturacion->mensajesList->descripcion;
+            }
+
+            // dd($fatura);
+
+            $data['estado'] = $respuesta->resultado->RespuestaServicioFacturacion->transaccion;
+            $data['descripcion'] = $respuesta->resultado->RespuestaServicioFacturacion->codigoDescripcion;
+
+            $fatura->save();
+
+            // dd($data);
+
+            return $data;
+        }
+    }
+
+    // protected function verificarConeccion(){
+    //     // PARA LA CONNECCION
+    //     $siat = app(SiatController::class);
+    //     $verificacionSiat = json_decode($siat->verificarComunicacion());
+    //     if($verificacionSiat->estado === "success"){
+    //         $codigoCuis = json_decode($siat->cuis());
+    //         if($codigoCuis->estado === "success"){
+    //             session(['scuis' => $codigoCuis->resultado->RespuestaCuis->codigo]);
+    //             session(['sfechaVigenciaCuis' => $codigoCuis->resultado->RespuestaCuis->fechaVigencia]);
+    //             // session()->put('scuis', $codigoCuis->resultado->RespuestaCuis->codigo);
+    //             // session()->put('sfechaVigenciaCuis', $codigoCuis->resultado->RespuestaCuis->fechaVigencia);
+    //         }
+    //         if(!session()->has('scufd')){
+    //             $cufd = json_decode($siat->cufd());
+    //             if($cufd->estado === "success"){
+    //                 if($cufd->resultado->RespuestaCufd->transaccion){
+
+    //                     session(['scufd' => $cufd->resultado->RespuestaCufd->codigo]);
+    //                     session(['scodigoControl' => $cufd->resultado->RespuestaCufd->codigoControl]);
+    //                     session(['sdireccion' => $cufd->resultado->RespuestaCufd->direccion]);
+    //                     session(['sfechaVigenciaCufd' => $cufd->resultado->RespuestaCufd->fechaVigencia]);
+
+    //                     // session()->put('scufd', $cufd->resultado->RespuestaCufd->codigo);
+    //                     // session()->put('scodigoControl', $cufd->resultado->RespuestaCufd->codigoControl);
+    //                     // session()->put('sdireccion', $cufd->resultado->RespuestaCufd->direccion);
+    //                     // session()->put('sfechaVigenciaCufd', $cufd->resultado->RespuestaCufd->fechaVigencia);
+    //                 }
+    //             }
+    //         }else{
+    //             $fechaVigencia = str_replace("T"," ",substr(session('sfechaVigenciaCufd'),0,16));
+    //             if($fechaVigencia < date('Y-m-d H:i')){
+    //                 $cufd = json_decode($siat->cufd());
+    //                 if($cufd->estado === "success"){
+    //                     if($cufd->resultado->RespuestaCufd->transaccion){
+
+    //                         session(['scufd' => $cufd->resultado->RespuestaCufd->codigo]);
+    //                         session(['scodigoControl' => $cufd->resultado->RespuestaCufd->codigoControl]);
+    //                         session(['sdireccion' => $cufd->resultado->RespuestaCufd->direccion]);
+    //                         session(['sfechaVigenciaCufd' => $cufd->resultado->RespuestaCufd->fechaVigencia]);
+
+    //                         // session()->put('scufd', $cufd->resultado->RespuestaCufd->codigo);
+    //                         // session()->put('scodigoControl', $cufd->resultado->RespuestaCufd->codigoControl);
+    //                         // session()->put('sdireccion', $cufd->resultado->RespuestaCufd->direccion);
+    //                         // session()->put('sfechaVigenciaCufd', $cufd->resultado->RespuestaCufd->fechaVigencia);
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+
+
+    //     return $siat;
+    //     // session()->save();
+    //     //END PARA LA CONECCION
+    // }
+
+    public function pruebaSiat(){
+        $siat = app(SiatController::class);
+
+
+        $factura = Factura::find(4233);
+        $xml = $factura['productos_xml'];
+
+        $archivoXML = new SimpleXMLElement($xml);
+
+        // dd($archivoXML);
+
+        $archivoXML->asXML("assets/docs/facturaxmlContingencia.xml");
+        // COMPRIMIMOS EL ARCHIVO A ZIP
+        $gzdato = gzencode(file_get_contents('assets/docs/facturaxmlContingencia.xml',9));
+        $fiape = fopen('assets/docs/facturaxmlContingencia.xml.zip',"w");
+        fwrite($fiape,$gzdato);
+        fclose($fiape);
+
+        //  hashArchivo EL ARCHIVO
+        $archivoZip = $gzdato;
+        $hashArchivo = hash("sha256", file_get_contents('assets/docs/facturaxmlContingencia.xml'));
+
+        // $res = $siat->consultaEventoSignificativo();
+        // recepcionPaqueteFactura($arch, $hasarch, $cafcC, $canFact, $codEvent)
+        $res = $siat->recepcionPaqueteFactura($archivoZip, $hashArchivo, NULL, 1, 1);
+        // $res = $siat->recepcionPaqueteFactura("1", "2", "3", "4", "5");
+
+        // echo json_encode($res, true);
+        echo $res;
+
+        // for ($i = 1; $i <= 50 ; $i++) {
+        //     // $verificacionSiat = json_decode($siat->sincronizarParametricaPaisOrigen());
+        //     // $verificacionSiat = json_decode($siat->sincronizarParametricaTipoDocumentoIdentidad());
+        //     // $verificacionSiat = json_decode($siat->sincronizarParametricaTipoEmision());
+        //     // $verificacionSiat = json_decode($siat->sincronizarParametricaTipoHabitacion());
+        //     // $verificacionSiat = json_decode($siat->sincronizarParametricaTipoMetodoPago());
+        //     // $verificacionSiat = json_decode($siat->sincronizarParametricaTipoMoneda());
+        //     $verificacionSiat1 = json_decode($siat->sincronizarParametricaTipoPuntoVenta());
+        //     $verificacionSiat2 = json_decode($siat->sincronizarParametricaTiposFactura());
+        //     $verificacionSiat3 = json_decode($siat->sincronizarParametricaUnidadMedida());
+
+        //     var_dump($verificacionSiat1);
+        //     echo "<br><br><br>";
+        //     var_dump($verificacionSiat2);
+        //     echo "<br><br><br>";
+        //     var_dump($verificacionSiat3);
+        //     echo "****************** => <h1>".$i."</h1><= ******************";
+        //     sleep(3);
+        // }
     }
 }

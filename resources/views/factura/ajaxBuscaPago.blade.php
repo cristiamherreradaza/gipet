@@ -11,6 +11,8 @@
             <th>NIT</th>
             <th>FECHA</th>
             <th>MONTO</th>
+            <th>ESTADO</th>
+            <th>ESTADO SIAT</th>
             <th>USUARIO</th>
             <th></th>
         </tr>
@@ -21,16 +23,16 @@
             <td>{{ $c->id }}</td>
             <td>
                 @if ($c->facturado == 'Si')
-                    <span class="text-info">FACTURA</span>     
+                    <span class="text-info">FACTURA</span>
                 @else
-                    <span class="text-primary">RECIBO</span>     
+                    <span class="text-primary">RECIBO</span>
                 @endif
             </td>
             <td>
                 @if ($c->facturado == 'Si')
-                    <span class="text-info">{{ $c->numero }}</span>     
+                    <span class="text-info">{{ $c->numero }}</span>
                 @else
-                    <span class="text-primary">{{ $c->numero_recibo }}</span>     
+                    <span class="text-primary">{{ $c->numero_recibo }}</span>
 
                 @endif
             </td>
@@ -40,23 +42,54 @@
             <td>{{ $c->nit }}</td>
             <td>{{ $c->fecha }}</td>
             <td>{{ $c->total }}</td>
+            <td>
+                @if ($c->estado === "Anulado")
+                    <span class="badge badge-danger">ANULADO</span>
+                @else
+                    <span class="badge badge-success">VIGENTE</span>
+                @endif
+            </td>
+            <td>
+                @php
+                    if($c->codigo_descripcion == "VALIDADA"){
+                        $text = "badge badge-success";
+                    }else{
+                        $text = "badge badge-danger";
+                    }
+                @endphp
+                <span class="{{ $text }}" >{{ $c->codigo_descripcion }}</span>
+            </td>
             <td>{{ $c->user->nombres }}</td>
             <td>
-                @if ($c->facturado=='Si')
+                @if ($c->productos_xml != null)
+                    <a class="btn btn-info" href="{{ url('Factura/generaPdfFacturaNew', [$c->id]) }}" target="_blank"><i class="fa fa-file-pdf"></i></a>
+                @endif
 
-                    @if ($c->estado == 'Anulado')
-                        <a href="#" class="btn btn-danger text-white" title="Factura Anulada"><i class="fas fa-eye"></i></a>
-                    @else
-                        <a href="{{ url("Factura/muestraFactura/$c->id") }}" class="btn btn-info text-white" title="Muestra Factura"><i class="fas fa-eye"></i></a>
-                    @endif
+                {{--  <a href="https://pilotosiat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf={{ $c->cuf }}&numero={{ $c->numero }}&t=2" target="_blank" class="btn btn-dark btn-icon btn-sm"><i class="fa fa-file"></i></a>  --}}
 
-                @else
-                    @if ($c->estado == 'Anulado')
-                        <a href="#" class="btn btn-danger text-white" title="Factura Anulada"><i class="fas fa-eye"></i></a>
-                    @else
-                        <a href="{{ url("Factura/muestraRecibo/$c->id") }}" class="btn btn-primary text-white" title="Muestra Recibo"><i class="fas fa-eye"></i></a>
+                @if ($c->estado != 'Anulado')
+                    @if ($c->productos_xml != null)
+                        <button class="btn btn-danger btn-icon" onclick="modalAnularFactura('{{ $c->id }}')"><i class="fa fa-trash"></i></button>
                     @endif
-                    
+                @endif
+
+                @if ($c->productos_xml == null)
+                    @if ($c->facturado=='Si')
+
+                        @if ($c->estado != 'Anulado')
+                            <a href="{{ url("Factura/muestraFactura/$c->id") }}" class="btn btn-info text-white" title="Muestra Factura"><i class="fas fa-eye"></i></a>
+                        @else
+                            {{--  <a href="#" class="btn btn-danger text-white" title="Factura Anulada"><i class="fas fa-eye"></i></a>  --}}
+                        @endif
+
+                    @else
+                        @if ($c->estado != 'Anulado')
+                            <a href="{{ url("Factura/muestraRecibo/$c->id") }}" class="btn btn-primary text-white" title="Muestra Recibo"><i class="fas fa-eye"></i></a>
+                        @else
+                            {{--  <a href="#" class="btn btn-danger text-white" title="Factura Anulada"><i class="fas fa-eye"></i></a>  --}}
+                        @endif
+
+                    @endif
                 @endif
             </td>
         </tr>

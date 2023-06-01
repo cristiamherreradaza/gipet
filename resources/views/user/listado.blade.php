@@ -43,7 +43,7 @@
                             <td>{{ $usuario->cedula }}</td>
                             <td>{{ $usuario->celulares }}</td>
                             <td>
-                                <button type="button" class="btn btn-warning" title="Editar usuario"  onclick="editar('{{ $usuario->id }}', '{{ $usuario->nombres }}', '{{ $usuario->apellido_paterno }}', '{{ $usuario->apellido_materno }}', '{{ $usuario->cedula }}', '{{ $usuario->expedido }}', '{{ $usuario->estado_civil }}', '{{ $usuario->sexo }}', '{{ $usuario->fecha_nacimiento }}', '{{ $usuario->lugar_nacimiento }}', '{{ $usuario->name }}', '{{ $usuario->email }}', '{{ $usuario->perfil_id }}', '{{ $usuario->zona }}', '{{ $usuario->direccion }}', '{{ $usuario->numero_fijo }}', '{{ $usuario->numero_celular }}', '{{ $usuario->nombre_conyugue }}', '{{ $usuario->nombre_hijo }}', '{{ $usuario->persona_referencia }}', '{{ $usuario->numero_referencia }}')"><i class="fas fa-edit"></i></button>
+                                <button type="button" class="btn btn-warning" title="Editar usuario"  onclick="editar('{{ $usuario->id }}', '{{ $usuario->nombres }}', '{{ $usuario->apellido_paterno }}', '{{ $usuario->apellido_materno }}', '{{ $usuario->cedula }}', '{{ $usuario->expedido }}', '{{ $usuario->estado_civil }}', '{{ $usuario->sexo }}', '{{ $usuario->fecha_nacimiento }}', '{{ $usuario->lugar_nacimiento }}', '{{ $usuario->name }}', '{{ $usuario->email }}', '{{ $usuario->perfil_id }}', '{{ $usuario->zona }}', '{{ $usuario->direccion }}', '{{ $usuario->numero_fijo }}', '{{ $usuario->numero_celular }}', '{{ $usuario->nombre_conyugue }}', '{{ $usuario->nombre_hijo }}', '{{ $usuario->persona_referencia }}', '{{ $usuario->numero_referencia }}', '{{ $usuario->codigo_punto_venta }}')"><i class="fas fa-edit"></i></button>
                                 <button type="button" class="btn btn-primary" title="Asignar materias"  onclick="asignar('{{ $usuario->id }}')"><i class="fas fa-plus-circle"></i></button>
                                 <button type="button" class="btn btn-secondary" title="Editar permisos"  onclick="permisos('{{ $usuario->id }}', '{{ $usuario->perfil_id }}')"><i class="fas fa-list"></i></button>
                                 <button type="button" class="btn btn-info" title="Cambiar contraseña"  onclick="contrasena({{ $usuario->id }})"><i class="fas fa-key"></i></button>
@@ -77,27 +77,27 @@
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
                                 <input type="text" name="nombres" id="nombres" class="form-control" required>
-                            </div>                            
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="control-label">Apellido Paterno</label>                            
+                                <label class="control-label">Apellido Paterno</label>
                                 <input type="text" name="apellido_paterno" id="apellido_paterno" class="form-control">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="control-label">Apellido Materno</label>                            
+                                <label class="control-label">Apellido Materno</label>
                                 <input type="text" name="apellido_materno" id="apellido_materno" class="form-control">
                             </div>
                         </div>
-                        
-                        
+
+
                         <!-- <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Nomina</label>
-                                <select name="nomina" id="nomina" class="form-control"> 
-                                    <option value="" selected></option>                              
+                                <select name="nomina" id="nomina" class="form-control">
+                                    <option value="" selected></option>
                                     <option value="Lic."> Licenciado(a) </option>
                                     <option value="Ing."> Ingeniero(a) </option>
                                     <option value="Per."> Personal </option>
@@ -121,7 +121,7 @@
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <select name="expedido" id="expedido" class="form-control" required>                               
+                                <select name="expedido" id="expedido" class="form-control" required>
                                     <option value="Beni"> Beni </option>
                                     <option value="Chuquisaca"> Chuquisaca </option>
                                     <option value="Cochabamba"> Cochabamba </option>
@@ -152,7 +152,7 @@
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <select name="sexo" id="sexo" class="form-control" required>                
+                                <select name="sexo" id="sexo" class="form-control" required>
                                     <option value="Femenino"> Femenino </option>
                                     <option value="Masculino" selected> Masculino </option>
                                 </select>
@@ -202,7 +202,7 @@
                             <div class="form-group">
                                 <label class="control-label">Correo Electrónico</label>
                                 <input type="text" name="email" id="email" class="form-control" >
-                            </div>                            
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
@@ -220,31 +220,31 @@
                     </div>
                     <hr>
                     <div class="row">
-                        
+
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Zona</label>
                                 <input type="text" name="zona" id="zona" class="form-control">
-                            </div>                            
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label">Dirección</label>                            
+                                <label class="control-label">Dirección</label>
                                 <input type="text" name="direccion" id="direccion" class="form-control">
-                            </div>                            
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label">Teléfono</label>                            
+                                <label class="control-label">Teléfono</label>
                                 <input type="text" name="numero_fijo" id="numero_fijo" class="form-control">
-                            </div>                            
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label">Celular</label>                            
+                                <label class="control-label">Celular</label>
                                 <input type="text" name="celular" id="celular" class="form-control">
-                            </div>                            
-                        </div>                        
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-3">
@@ -255,21 +255,32 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label">Nombre Hijo(a)</label>                            
+                                <label class="control-label">Nombre Hijo(a)</label>
                                 <input type="text" name="nombre_hijo" id="nombre_hijo" class="form-control">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label">Persona Referencia</label>                            
+                                <label class="control-label">Persona Referencia</label>
                                 <input type="text" name="persona_referencia" id="persona_referencia" class="form-control">
-                            </div>                            
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Numero Referencia</label>
                                 <input type="text" name="numero_referencia" id="numero_referencia" class="form-control">
-                            </div>                            
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Punto de venta</label>
+                            <select name="codigo_punto_venta" id="codigo_punto_venta" class="form-control">
+                                <option value="">Seleccione</option>
+                                @foreach ( $puntos as $p)
+                                <option value="{{ $p['codigoPuntoVenta'] }}">{{ $p['nombrePuntoVenta'] }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -303,17 +314,17 @@
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
                                 <input type="text" name="nombres_edicion" id="nombres_edicion" class="form-control" required>
-                            </div>                            
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="control-label">Apellido Paterno</label>                            
+                                <label class="control-label">Apellido Paterno</label>
                                 <input type="text" name="apellido_paterno_edicion" id="apellido_paterno_edicion" class="form-control">
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label class="control-label">Apellido Materno</label>                            
+                                <label class="control-label">Apellido Materno</label>
                                 <input type="text" name="apellido_materno_edicion" id="apellido_materno_edicion" class="form-control">
                             </div>
                         </div>
@@ -365,7 +376,7 @@
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <select name="sexo_edicion" id="sexo_edicion" class="form-control" required> 
+                                <select name="sexo_edicion" id="sexo_edicion" class="form-control" required>
                                     <option value="Femenino"> Femenino </option>
                                     <option value="Masculino"> Masculino </option>
                                 </select>
@@ -409,7 +420,7 @@
                             <div class="form-group">
                                 <label class="control-label">Correo Electrónico</label>
                                 <input type="text" name="email_edicion" id="email_edicion" class="form-control">
-                            </div>                            
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
@@ -431,26 +442,26 @@
                             <div class="form-group">
                                 <label class="control-label">Zona</label>
                                 <input type="text" name="zona_edicion" id="zona_edicion" class="form-control">
-                            </div>                            
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label">Dirección</label>                            
+                                <label class="control-label">Dirección</label>
                                 <input type="text" name="direccion_edicion" id="direccion_edicion" class="form-control">
-                            </div>                            
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label">Teléfono</label>                            
+                                <label class="control-label">Teléfono</label>
                                 <input type="text" name="numero_fijo_edicion" id="numero_fijo_edicion" class="form-control">
-                            </div>                            
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label">Celular</label>                            
+                                <label class="control-label">Celular</label>
                                 <input type="text" name="celular_edicion" id="celular_edicion" class="form-control">
-                            </div>                            
-                        </div>                        
+                            </div>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-3">
@@ -461,26 +472,37 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label">Nombre Hijo(a)</label>                            
+                                <label class="control-label">Nombre Hijo(a)</label>
                                 <input type="text" name="nombre_hijo_edicion" id="nombre_hijo_edicion" class="form-control">
                             </div>
                         </div>
-                        
+
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label">Persona Referencia</label>                            
+                                <label class="control-label">Persona Referencia</label>
                                 <input type="text" name="persona_referencia_edicion" id="persona_referencia_edicion" class="form-control">
-                            </div>                            
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Numero Referencia</label>
                                 <input type="text" name="numero_referencia_edicion" id="numero_referencia_edicion" class="form-control">
-                            </div>                            
-                        </div>                          
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Punto de venta</label>
+                            <select name="codigo_punto_venta" id="codigo_punto_venta" class="form-control">
+                                <option value="">Seleccione</option>
+                                @foreach ( $puntos as $p)
+                                <option value="{{ $p['codigoPuntoVenta'] }}">{{ $p['nombrePuntoVenta'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                 </div>
-                
+
                 <!-- <div class="modal-body">
                     <input type="hidden" name="id" id="id" value="">
                     <div class="row">
@@ -555,7 +577,7 @@
                                 </span>
                                 <select name="almacen" id="almacen" class="form-control" required>
                                     <option value="" selected>Seleccione</option>
-                                    
+
                                 </select>
                             </div>
                         </div>
@@ -574,7 +596,7 @@
 <!-- inicio modal asignar materias -->
 <div id="asigna_materias" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" id="asignaMateriasAjax">
-        
+
     </div>
 </div>
 <!-- fin modal asignar materias -->
@@ -582,7 +604,7 @@
 <!-- inicio modal editar perfil -->
 <div id="editar_perfiles" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" id="editaPerfilAjax">
-        
+
     </div>
 </div>
 <!-- fin modal editar perfil -->
@@ -652,7 +674,7 @@
 
     // Funcion que comprueba que existen ciertos valores en el formulario y si estan muestra una alerta de exito
     function guardar()
-    {        
+    {
         var apellido_paterno = $("#apellido_paterno").val();
         var apellido_materno = $("#apellido_materno").val();
         var nombres = $("#nombres").val();
@@ -679,7 +701,7 @@
         //foto
         var persona_referencia = $("#persona_referencia").val();
         var numero_referencia = $("#numero_referencia").val();
-        if( nombres.length>0 && 
+        if( nombres.length>0 &&
             ci.length>0 &&
             expedido.length>0 &&
             username.length>0 &&
@@ -703,7 +725,7 @@
     }
 
     // Funcion que despliega el modal de edicion de usuario, mandando todos sus datos al mismo
-    function editar(id, nombres, apellido_paterno, apellido_materno, cedula, expedido, estado_civil, sexo, fecha_nacimiento, lugar_nacimiento, name, email, perfil_id, zona, direccion, numero_fijo, numero_celular, nombre_conyugue, nombre_hijo, persona_referencia, numero_referencia)
+    function editar(id, nombres, apellido_paterno, apellido_materno, cedula, expedido, estado_civil, sexo, fecha_nacimiento, lugar_nacimiento, name, email, perfil_id, zona, direccion, numero_fijo, numero_celular, nombre_conyugue, nombre_hijo, persona_referencia, numero_referencia, codigo_punto_venta)
     {
         $("#id_edicion").val(id);
         $("#nombres_edicion").val(nombres);
@@ -726,6 +748,7 @@
         $("#nombre_hijo_edicion").val(nombre_hijo);
         $("#persona_referencia_edicion").val(persona_referencia);
         $("#numero_referencia_edicion").val(numero_referencia);
+        $("#codigo_punto_venta").val(codigo_punto_venta)
         $("#editar_usuarios").modal('show');
     }
 
@@ -756,7 +779,7 @@
                 $("#almacen_usuario").prop('required',false);
                 $("#nombre_nuevo_almacen").prop('required',false);
                 $("#direccion_nuevo_almacen").prop('required',false);
-                
+
                 $("#ventana_almacen_existente").hide();
                 $(".ventana_almacen_nuevo").hide();
             }
@@ -780,7 +803,7 @@
 
     // Funcion que comprueba que existen ciertos valores en el formulario y si estan muestra una alerta de exito
     function guardar_edicion()
-    {        
+    {
         var apellido_paterno = $("#apellido_paterno_edicion").val();
         var apellido_materno = $("#apellido_materno_edicion").val();
         var nombres = $("#nombres_edicion").val();
@@ -807,7 +830,7 @@
         //foto
         var persona_referencia = $("#persona_referencia_edicion").val();
         var numero_referencia = $("#numero_referencia_edicion").val();
-        if( nombres.length>0 && 
+        if( nombres.length>0 &&
             ci.length>0 &&
             expedido.length>0 &&
             username.length>0 &&
@@ -891,7 +914,7 @@
         });
     }
 
-    
+
 
     // Funcion que emite una alerta de exito en caso de encontrarse ciertos valores
     function actualizar_usuario()

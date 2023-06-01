@@ -188,20 +188,21 @@
 <body>
 @php
 	function fechaCastellano ($fecha) {
-	$fecha = substr($fecha, 0, 10);
-	$numeroDia = date('d', strtotime($fecha));
-	$dia = date('l', strtotime($fecha));
-	$mes = date('F', strtotime($fecha));
-	$anio = date('Y', strtotime($fecha));
-	$dias_ES = array("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo");
-	$dias_EN = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
-	$nombredia = str_replace($dias_EN, $dias_ES, $dia);
-	$meses_ES = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
-	"Noviembre", "Diciembre");
-	$meses_EN = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
-	"November", "December");
-	$nombreMes = str_replace($meses_EN, $meses_ES, $mes);
-	return $numeroDia." de ".$nombreMes." de ".$anio;
+        $fecha = substr($fecha, 0, 10);
+        $numeroDia = date('d', strtotime($fecha));
+        $dia = date('l', strtotime($fecha));
+        $mes = date('F', strtotime($fecha));
+        $anio = date('Y', strtotime($fecha));
+        $dias_ES = array("Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo");
+        $dias_EN = array("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
+        $nombredia = str_replace($dias_EN, $dias_ES, $dia);
+        $meses_ES = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
+        "Noviembre", "Diciembre");
+        $meses_EN = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October",
+        "November", "December");
+        $nombreMes = str_replace($meses_EN, $meses_ES, $mes);
+
+        return $numeroDia." de ".$nombreMes." de ".$anio;
 	}
 @endphp
 	<div id="fondo">
@@ -216,7 +217,7 @@
 				}else{
 					echo 'ORIGINAL';
 				}
-			@endphp			
+			@endphp
 		</div>
 		<div id="txtActividad">EDUCACION SUPERIOR</div>
 		<div id="txtFactura">FACTURA</div>
@@ -228,7 +229,7 @@
 			LA PAZ - BOLIVIA<br />
 		</div>
 
-			
+
 			<table id="datosEmpresaNit" width="300">
 				<tr>
 					<th style="text-align: left;">NIT</th>
@@ -243,7 +244,7 @@
 					<td> : {{ $parametros->numero_autorizacion }}</td>
 				</tr>
 			</table>
-			
+
 			<table id="datosEmpresaFactura">
 				<tr>
 					<td style="text-align: left;"><b>Lugar y Fecha: </b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -274,7 +275,7 @@
 					<th>PRECIO UNITARIO</th>
 					<th>SUBTOTAL</th>
 				</tr>
-			</thead>			
+			</thead>
 			<tbody>
 				@php
 					$total = 0;
@@ -298,9 +299,9 @@
 						</td>
 						<td style="text-align: right;" width="130px">{{ $c->importe }}</td>
 						<td style="text-align: right;" width="100px"><b>{{ $c->importe }}</b></td>
-					</tr>	
+					</tr>
 				@endforeach
-			
+
 			</tbody>
 			<tfoot>
 				@php
@@ -311,7 +312,7 @@
 				<td style="background-color: #abd4ed;color: #000;"><b>TOTAL Bs.</b></td>
 				<td style="text-align: right;font-weight: bold;">{{ number_format($total, 2) }}</td>
 			</tfoot>
-			
+
 		</table>
 		<br />
 			<table class="codigoControlQr" width="100%">
@@ -341,7 +342,7 @@
 		</center>
 		</div>
 
-		
+
 		</div>
 @php
 	$fechaFactura = new DateTime($factura->fecha);
@@ -399,7 +400,8 @@
 			})
 		}
 
-		let cadenaQr = "178436029|{{ $factura->numero }}|{{ $parametros->numero_autorizacion }}|{{ $fechaQr }}|{{ number_format($factura->total, 2, '.', '') }}|{{ round($factura->total, 0, PHP_ROUND_HALF_UP) }}|{{ $factura->codigo_control }}|{{ $factura->nit }}|0|0|0|0";
+		{{--  let cadenaQr = "178436029|{{ $factura->numero }}|{{ $parametros->numero_autorizacion }}|{{ $fechaQr }}|{{ number_format($factura->total, 2, '.', '') }}|{{ round($factura->total, 0, PHP_ROUND_HALF_UP) }}|{{ $factura->codigo_control }}|{{ $factura->nit }}|0|0|0|0";  --}}
+		let cadenaQr = "178436029|{{ $factura->numero }}|{{ $fechaQr }}|{{ number_format($factura->total, 2, '.', '') }}|{{ round($factura->total, 0, PHP_ROUND_HALF_UP) }}|{{ $factura->codigo_control }}|{{ $factura->nit }}|0|0|0|0";
 		// console.log(cadenaQr);
 		var qrcode = new QRCode("qrcode", {
 			text: cadenaQr,

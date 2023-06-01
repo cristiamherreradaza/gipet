@@ -63,7 +63,7 @@
                                 <th>ACCIONES</th>
                             </tr>
                         </thead>
-                    
+
                         <tbody>
                             @foreach ($personas as $p)
                             <tr>
@@ -96,7 +96,7 @@
 
         </div>
 
-        
+
     </div>
 </div>
 
@@ -215,6 +215,160 @@
             success: function(data) {
                 $("#ajaxPersonas").hide('slow');
                 $("#ajaxDatosPersona").html(data);
+            }
+        });
+    }
+
+    function generaFacturaLinea(){
+
+        if($("#formularioGeneraFactura")[0].checkValidity()){
+            //PONEMOS TODO AL MODELO DEL SIAT EL DETALLE
+            detalle = [];
+            arrayProductos.forEach(function (prod){
+                detalle.push({
+                    actividadEconomica:prod.codigoActividad,
+                    codigoProductoSin:prod.codigoProducto,
+                    codigoProducto:prod.servicio_id,
+                    descripcion:prod.mensualidad+" "+prod.nombre,
+                    cantidad:1,
+                    unidadMedida:prod.unidadMedida,
+                    precioUnitario:prod.importe,
+                    montoDescuento:prod.descuento,
+                    subTotal:((1*prod.importe)-prod.descuento)
+                })
+            })
+
+            let numero_factura = $('#numero_factura').val();
+            let cuf = "123456789";//cambiar
+            let cufd = "{{ session('scufd') }}";  //solo despues de que aga
+            let direccion = "{{ session('sdireccion') }}";//solo despues de que aga
+
+            var tzoffset = ((new Date()).getTimezoneOffset()*60000);
+
+            let fechaEmision = ((new Date(Date.now()-tzoffset)).toISOString()).slice(0,-1);
+            let nombreRazonSocial = $('#razon_factura').val();
+            let codigoTipoDocumentoIdentidad = $('#tipo_documento').val()
+            let numeroDocumento = $('#nit_factura').val();
+            let complemento = $('#complementoPersonaFac').val();
+            let montoTotal = $('#motoTotalFac').val();
+            let descuentoAdicional = $('#descuento_adicional').val();
+            let leyenda = "Ley N° 453: El proveedor deberá suministrar el servicio en las modalidades y términos ofertados o convenidos.";
+            let usuario = "{{ Auth::user()->nombre_usuario }}";
+            let nombreEstudiante = $('#nombreCompletoEstudiante').val();
+            let periodoFacturado = detalle[(detalle.length)-1].descripcion+" / "+$('#anio_vigente_cuota_pago').val();
+
+            var factura = [];
+            factura.push({
+                cabecera: {
+                    nitEmisor:"178436029",
+                    razonSocialEmisor:'INSTITUTO TECNICO "EF-GIPET" S.R.L.',
+                    municipio:"La Paz",
+                    telefono:"73717199",
+                    numeroFactura:numero_factura,
+                    cuf:cuf,
+                    cufd:cufd,
+                    codigoSucursal:0,
+                    direccion:direccion ,
+                    codigoPuntoVenta:0,
+                    fechaEmision:fechaEmision,
+                    nombreRazonSocial:nombreRazonSocial,
+                    codigoTipoDocumentoIdentidad:codigoTipoDocumentoIdentidad,
+                    numeroDocumento:numeroDocumento,
+                    complemento:complemento,
+                    codigoCliente:numeroDocumento,
+                    nombreEstudiante:nombreEstudiante,
+                    periodoFacturado:periodoFacturado,
+                    codigoMetodoPago:1,
+                    numeroTarjeta:null,
+                    montoTotal:montoTotal,
+                    montoTotalSujetoIva:montoTotal,
+                    codigoMoneda:1,
+                    tipoCambio:1,
+                    montoTotalMoneda:montoTotal,
+                    montoGiftCard:null,
+                    descuentoAdicional:descuentoAdicional,//ver llenado
+                    codigoExcepcion:0,
+                    cafc:null,
+                    leyenda:leyenda,
+                    usuario:usuario,
+                    codigoDocumentoSector:11
+                }
+            })
+
+            detalle.forEach(function (prod1){
+                factura.push({
+                    detalle:prod1
+                })
+            })
+
+            var datos = {factura};
+
+            var datosPersona = {
+                'persona_id':$('#persona_id').val(),
+                'carnet':$('#cedulaPersona').val()
+            };
+
+            $.ajax({
+                url: "{{ url('Factura/emitirFactura') }}",
+                data: {
+                    datos: datos,
+                    datosPersona:datosPersona
+                },
+                type: 'POST',
+                dataType:'json',
+                success: function(data) {
+                    if(data.estado === "VALIDADA"){
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Excelente!',
+                            text: 'LA FACTURA FUE VALIDADA',
+                            timer: 3000
+                        })
+                        window.location.href = "{{ url('Factura/listadoPagos')}}"
+                        {{--  location.reload();  --}}
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'LA FACTURA FUE RECHAZADA',
+                            timer: 3000
+                        })
+                    }
+                }
+            });
+        }else{
+            $("#formularioGeneraFactura")[0].reportValidity();
+        }
+    }
+
+    function funcionNueva(input, pago){
+        $.ajax({
+            url: "{{ url('Factura/actualizaDescuento') }}",
+            data: {
+                pago_id: pago,
+                valor: input.value,
+                },
+            type: 'POST',
+            dataType:'json',
+            success: function(data) {
+                if(data.estado === 'success'){
+                    $('#motoTotalFac').val((data.valor)-$('#descuento_adicional').val())
+                }
+            }
+        });
+    }
+
+    function caluculaTotal(event){
+        $.ajax({
+            url: "{{ url('Factura/sumaTotalMonto') }}",
+            data: {
+                anio: $('#anio_vigente_cuota_pago').val(),
+                persona: $('#persona_id').val(),
+                },
+            type: 'POST',
+            dataType:'json',
+            success: function(data) {
+                $('#motoTotalFac').val((data.valor)-$('#descuento_adicional').val())
             }
         });
     }

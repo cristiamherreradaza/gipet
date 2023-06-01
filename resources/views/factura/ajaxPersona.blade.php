@@ -2,14 +2,17 @@
     <div class="col">
         <h4>
             <span class="text-info">CARNET: </span>
-            {{ $datosPersona->cedula }}
+            {{ $datosPersona->cedula }} {{ $datosPersona->complemento }}
+            <input type="hidden" value="{{ $datosPersona->complemento }}" id="complementoPersonaFac"/>
+            <input type="hidden" value="{{ $datosPersona->cedula }}" id="cedulaPersona"/>
         </h4>
     </div>
     <div class="col">
-        <input type="hidden" name="persona_id" value="{{ $datosPersona->id }}">
+        <input type="hidden" name="persona_id" value="{{ $datosPersona->id }}" id="persona_id">
         <h4>
             <span class="text-info">APELLIDO PATERNO: </span>
             {{ $datosPersona->apellido_paterno }}
+            <input type="hidden" value="{{ $datosPersona->apellido_paterno." ".$datosPersona->apellido_materno." ".$datosPersona->nombres }}" id="nombreCompletoEstudiante"/>
         </h4>
     </div>
 
@@ -40,11 +43,6 @@
 
 <div class="row">
     <div class="col-md-12 text-center">
-        {{-- @dd(session()->has('scuis')) --}}
-        {{-- @dd($arrayCufd,session('scufd'), session()->all()) --}}
-        {{-- @dump($arrayCufd,session('scufd'), session()->all()) --}}
-        {{-- @dd($arrayCufd) --}}
-
         @if ($verificacionSiat->estado === "success")
         <div class="row">
             <div class="col-md-6">
@@ -54,12 +52,7 @@
                 CUIS: {{ (session()->has('scuis'))?  session('scuis') : '<span class="text-danger">NO existe la Cuis Vigente</span>'}}
             </div>
             <div class="col-md-3">
-                {{-- @dd($arrayCufd) --}}
-                @if ($arrayCufd['estado'] == "success")
-                    CUFD: {{ (session()->has('scodigoControl'))?  session('scodigoControl')." ".str_replace("T", " ",substr(session('sfechaVigenciaCufd'), 0 , 16)) : '<span class="text-danger">NO existe la Cufd Vigente</span>'}}
-                @else
-                    CUFD: {{ (session()->has('scodigoControl'))?  session('scodigoControl') : '<span class="text-danger">NO existe la Cufd Vigente</span>'}}
-                @endif
+                CUFD: {{ session('scodigoControl')." ".str_replace("T", " ",substr(session('sfechaVigenciaCufd'), 0 , 16)) }}
             </div>
         </div>
         @else
@@ -70,14 +63,15 @@
 
 <div class="row">
 
-    <div class="col-md-2">
+    <div class="col-md-3">
         <div class="form-group">
             <label>Servicio
                 <span class="text-danger">
                     <i class="mr-2 mdi mdi-alert-circle"></i>
                 </span>
             </label>
-            <select name="servicio_id" id="servicio_id" class="form-control" onchange="cambiaServicio()" required {{ ($verificacionSiat->estado === "success")? '' : 'disabled'  }}>
+            {{--  <select name="servicio_id" id="servicio_id" class="form-control" onchange="cambiaServicio()" required {{ ($verificacionSiat->estado === "success")? '' : 'disabled'  }}>  --}}
+            <select name="servicio_id" id="servicio_id" class="form-control" onchange="cambiaServicio()" required>
                 <option value="">SELECCIONE</option>
                 @foreach ($servicios as $s)
                 <option value="{{ $s->id }}">{{ $s->nombre }}</option>
@@ -86,7 +80,7 @@
         </div>
     </div>
 
-    <div class="col-md-10">
+    <div class="col-md-9">
         <div class="row" id="ajaxNumeroCuota"></div>
 
     </div>
@@ -106,6 +100,8 @@
 </div>
 
 <script>
+
+    {{--  var cedulaPersona  --}}
 
     function cambiaServicio()
     {

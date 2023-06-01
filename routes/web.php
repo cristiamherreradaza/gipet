@@ -453,6 +453,23 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Siat/verificarComunicacion','SiatController@verificarComunicacion');
     Route::get('Siat/cuis','SiatController@cuis');
     Route::get('Siat/sincronizarListaProductosServicios','SiatController@sincronizarListaProductosServicios');
+    Route::get('Siat/sincronizarListaLeyendasFactura','SiatController@sincronizarListaLeyendasFactura');
+    Route::get('Siat/consultaPuntoVenta','SiatController@consultaPuntoVenta');
+
+
+    Route::post('Factura/emitirFactura','FacturaController@emitirFactura');
+    Route::post('Factura/actualizaDescuento','FacturaController@actualizaDescuento');
+    Route::post('Factura/arrayCuotasPagar','FacturaController@arrayCuotasPagar');
+    Route::post('Factura/sumaTotalMonto','FacturaController@sumaTotalMonto');
+    Route::get('Factura/generaPdfFacturaNew/{factura_id}','FacturaController@generaPdfFacturaNew');
+    Route::post('Factura/anularFacturaNew','FacturaController@anularFacturaNew');
+    Route::get('Factura/pruebaSiat','FacturaController@pruebaSiat');
+
+    Route::get('PuntoVenta/listado','PuntoVentaController@listado');
+    Route::get('PuntoVenta/ajaxListado','PuntoVentaController@ajaxListado');
+    Route::post('PuntoVenta/guarda','PuntoVentaController@guarda');
+    Route::post('PuntoVenta/eliminaPuntoVenta','PuntoVentaController@eliminaPuntoVenta');
+   // END NUEVO IMPLEMENATCION DEL SIAT
 
 
     // REPORTES
