@@ -299,7 +299,7 @@
                 //dd($listado_detalles, count($listado_detalles));
                 //dd($listado_detalles);
 
-                dd($listado_detalles);
+                dd("pdf" ,$listado_detalles);
             @endphp
 
             @foreach ($listado_detalles as $d)
