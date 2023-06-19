@@ -753,6 +753,8 @@ class FacturaController extends Controller
     // FACTURACION EN LINEA
     public function emitirFactura(Request $request){
 
+        dd("este chee");
+
         $datos              = $request->input('datos');
         $datosPersona       = $request->input('datosPersona');
         $valoresCabecera    = $datos['factura'][0]['cabecera'];
@@ -884,7 +886,7 @@ class FacturaController extends Controller
 
 
         // ENVIAMOS EL CORREO DE LA FACTURA
-        //$this->enviaCorreo('jjjoelcito123@gmail.com',$factura->id);
+        // $this->enviaCorreo('jjjoelcito123@gmail.com',$factura->id);
 
         if($tipo_factura === "online"){
             $siat = app(SiatController::class);
