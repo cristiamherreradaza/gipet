@@ -50,6 +50,67 @@
 </div>
 <!-- fin modal anula factua -->
 
+
+<!-- inicio modal anula factua -->
+<div id="modmodalContingenciaFueraLinea" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">FORMULARIO DE CONTINGENCIA</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="formularioRecepcionFacuraContingenciaFueraLineaEentoSignificativo" >
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">FECHA</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input type="date" class="form-control" id="fecha_contingencia" name="fecha_contingencia" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-success btn-block mt-4" onclick="buscarEventosSignificativos()" type="button"><i class="fa fa-search"></i>Buscar</button>
+                        </div>
+                    </div>
+                </form>
+
+                <form id="formularioRecepcionFacuraContingenciaFueraLinea" >
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">EVENTO SIGNIFICATIVO</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <select name="evento_significativo_contingencia_select" id="evento_significativo_contingencia_select" class="form-control" required>
+
+                                </select>
+                                <input type="text" id="factura_id_contingencia" name="factura_id_contingencia" required>
+                            </div>
+                            <div id="bloque_no_hay_eventos" style="display: none;">
+                                <span class="text-danger text-center" id="mensaje_contingencia"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">CODIGO CAFC</label>
+                                <input type="text" class="form-control" name="codigo_cafc_contingencia">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-block btn-success" onclick="enviarFacturaContingenica()">ENVIAR FACTURA</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- fin modal anula factua -->
+
 <div class="card border-info">
     <div class="card-header bg-info">
         <h4 class="mb-0 text-white">
@@ -144,6 +205,7 @@
                                 <th>MONTO</th>
                                 <th>ESTADO</th>
                                 <th>ESTADO SIAT</th>
+                                <th>EMISION</th>
                                 <th>USUARIO</th>
                                 <th></th>
                             </tr>
@@ -184,22 +246,38 @@
                                     @php
                                         if($f->codigo_descripcion == "VALIDADA"){
                                             $text = "badge badge-success";
+                                        }elseif($f->codigo_descripcion == "PENDIENTE"){
+                                            $text = "badge badge-warning";
                                         }else{
                                             $text = "badge badge-danger";
                                         }
                                     @endphp
                                     <span class="{{ $text }}" >{{ $f->codigo_descripcion }}</span>
                                 </td>
+                                <td>
+                                    @if ($f->tipo_factura === "online")
+                                        <span class="badge badge-success" >Linea</span>
+                                    @elseif($f->tipo_factura === "offline")
+                                        <span class="badge badge-warning text-white" >Fuera de Linea</span>
+                                    @endif
+                                </td>
                                 <td>{{ $f->user->nombres }}</td>
                                 <td>
                                     @if ($f->productos_xml != null)
                                         <a class="btn btn-info" href="{{ url('Factura/generaPdfFacturaNew', [$f->id]) }}" target="_blank"><i class="fa fa-file-pdf"></i></a>
                                     @endif
-                                    {{--  <a href="https://pilotosiat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf={{ $f->cuf }}&numero={{ $f->numero }}&t=2" target="_blank" class="btn btn-dark btn-icon btn-sm"><i class="fa fa-file"></i></a>  --}}
+
+                                    <a href="https://pilotosiat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf={{ $f->cuf }}&numero={{ $f->numero }}&t=2" target="_blank" class="btn btn-dark btn-icon btn-sm"><i class="fa fa-file"></i></a>
 
                                     @if ($f->estado != 'Anulado')
-                                        @if ($f->productos_xml != null)
-                                            <button class="btn btn-danger btn-icon" onclick="modalAnularFactura('{{ $f->id }}')"><i class="fa fa-trash"></i></button>
+                                        @if ($f->tipo_factura === "online")
+                                            @if ($f->productos_xml != null)
+                                                <button class="btn btn-danger btn-icon" onclick="modalAnularFactura('{{ $f->id }}')"><i class="fa fa-trash"></i></button>
+                                            @else
+
+                                            @endif
+                                        @else
+                                            <button class="btn btn-dark btn-icon" onclick="modalRecepcionFacuraContingenciaFueraLinea('{{ $f->id }}')"><i class="fa fa-upload" aria-hidden="true"></i></button>
                                         @endif
                                     @endif
 
@@ -343,6 +421,72 @@
             })
         }else{
             $("#formularioAnulaciion")[0].reportValidity();
+        }
+    }
+
+    function modalRecepcionFacuraContingenciaFueraLinea(factura){
+        $('#factura_id_contingencia').val(factura)
+        $('#modmodalContingenciaFueraLinea').modal('show')
+    }
+
+    function enviarFacturaContingenica(){
+        if($("#formularioRecepcionFacuraContingenciaFueraLinea")[0].checkValidity() && $("#formularioRecepcionFacuraContingenciaFueraLineaEentoSignificativo")[0].checkValidity()){
+            let datos_formulario = $("#formularioRecepcionFacuraContingenciaFueraLinea").serializeArray();
+            $.ajax({
+                url: "{{ url('Factura/recepcionFacturaFueraLinea') }}",
+                method: "POST",
+                dataType: 'json',
+                data: datos_formulario,
+                success: function (data) {
+                    if(data.estado === "success"){
+                        Swal.fire({
+                            icon:   'success',
+                            title:  'Exitos!',
+                            text:   "Estado "+data.descripcion,
+                            timer: 1500
+                        })
+                        buscaPago();
+                        $('#modmodalContingenciaFueraLinea').modal('hide')
+                    }else{
+                        Swal.fire({
+                            icon:   'error',
+                            title:  'Error!',
+                            text:   "Algo fallo"
+                        })
+                    }
+                }
+            })
+        }else{
+            $("#formularioRecepcionFacuraContingenciaFueraLinea")[0].reportValidity();
+            $("#formularioRecepcionFacuraContingenciaFueraLineaEentoSignificativo")[0].reportValidity();
+        }
+    }
+
+    function buscarEventosSignificativos(){
+        if($("#formularioRecepcionFacuraContingenciaFueraLineaEentoSignificativo")[0].checkValidity()){
+            let datos_formulario = $("#formularioRecepcionFacuraContingenciaFueraLineaEentoSignificativo").serializeArray();
+            $.ajax({
+                url: "{{ url('EventoSignificativo/buscarEventosSignificativos') }}",
+                method: "POST",
+                data: datos_formulario,
+                success: function (data) {
+                    $('#evento_significativo_contingencia_select').empty();
+                    if(data.estado === "success"){
+                        $('#bloque_no_hay_eventos').hide('toggle');
+                        $(data.eventos).each(function(index, element) {
+                            var optionText = element.descripcion;
+                            var optionValue = element.codigoRecepcionEventoSignificativo;
+                            var newOption = $('<option>').text(optionText).val(optionValue);
+                            $('#evento_significativo_contingencia_select').append(newOption);
+                        });
+                    }else{
+                        $('#mensaje_contingencia').text(data.msg)
+                        $('#bloque_no_hay_eventos').show('toggle');
+                    }
+                }
+            })
+        }else{
+            $("#formularioRecepcionFacuraContingenciaFueraLineaEentoSignificativo")[0].reportValidity();
         }
     }
 </script>

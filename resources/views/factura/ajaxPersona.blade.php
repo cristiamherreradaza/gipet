@@ -47,6 +47,7 @@
         <div class="row">
             <div class="col-md-6">
                 <span class="badge bg-success text-white w-100">{{ $verificacionSiat->resultado->RespuestaComunicacion->mensajesList->descripcion }}</span>
+            
             </div>
             <div class="col-md-3">
                 CUIS: {{ (session()->has('scuis'))?  session('scuis') : '<span class="text-danger">NO existe la Cuis Vigente</span>'}}

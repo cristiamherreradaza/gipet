@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Cufd;
 use Carbon\Carbon;
 use DateTime;
 use DateTimeZone;
@@ -362,6 +363,80 @@ class SiatController extends Controller
             $resultado = false;
             $data['estado'] = 'error';
             $data['resultado'] = $resultado;
+            $data['msg'] = $fault->getMessage();
+        }
+        return json_encode($data, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function recepcionPaqueteFactura($arch, $fechaenv,$hasarch, $cafcC, $canFact, $codEvent){
+        // dd($arch, $fechaenv,$hasarch, $cafcC, $canFact, $codEvent);
+        $this->verificarConeccion();
+        $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/ServicioFacturacionComputarizada?wsdl";
+        $codigoAmbiente         = $this->codigoAmbiente;
+        $codigoDocumentoSector  = 11;                       // SECTOR EDUCATIVO
+        $codigoEmision          = 2;                        // FUERA DE  LINEA (LINEA = 1 | FUERA DE LINEA = 2)
+        $codigoModalidad        = $this->codigoModalidad;
+        $codigoPuntoVenta       = $this->codigoPuntoVenta;
+        $codigoSistema          = $this->codigoSistema;
+        $codigoSucursal         = $this->codigoSucursal;
+        $cufd                   = session('scufd');
+        $cuis                   = session('scuis');
+        $nit                    = $this->nit;
+        $tipoFacturaDocumento   = 1;                        //NUEVO FACTURA CON DERECHO A CREDITO FISCAL
+        $archivo                = $arch;
+        $fechaEnvio             = $fechaenv;
+        $hashArchivo            = $hasarch;
+        $cafc                   = $cafcC;
+        $cantidadFacturas       = $canFact;
+        $codigoEvento           = $codEvent;
+
+        $parametros         =  array(
+            'SolicitudServicioRecepcionPaquete' => array(
+                'codigoAmbiente'            => $codigoAmbiente,
+                'codigoDocumentoSector'     => $codigoDocumentoSector,
+                'codigoEmision'             => $codigoEmision,
+                'codigoModalidad'           => $codigoModalidad,
+                'codigoPuntoVenta'          => $codigoPuntoVenta,
+                'codigoSistema'             => $codigoSistema,
+                'codigoSucursal'            => $codigoSucursal,
+                'cufd'                      => $cufd,
+                'cuis'                      => $cuis,
+                'nit'                       => $nit,
+                'tipoFacturaDocumento'      => $tipoFacturaDocumento,
+                'archivo'                   => $archivo,
+                'fechaEnvio'                => $fechaEnvio,
+                'hashArchivo'               => $hashArchivo,
+                'cafc'                      => $cafc,
+                'cantidadFacturas'          => $cantidadFacturas,
+                'codigoEvento'              => $codigoEvento
+            )
+        );
+
+        $aoptions = array(
+            'http' => array(
+                'header' => $this->header,
+                'timeout' => $this->timeout
+            ),
+        );
+
+        $context = stream_context_create($aoptions);
+
+        try {
+            $client = new \SoapClient($wsdl,[
+                'stream_context' => $context,
+                'cache_wsdl' => WSDL_CACHE_NONE,
+                'compression' => SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP | SOAP_COMPRESSION_DEFLATE
+            ]);
+
+            $resultado = $client->recepcionPaqueteFactura($parametros);
+
+            $data['estado'] = 'success';
+            $data['resultado'] = $resultado;
+        } catch (SoapFault $fault) {
+            $resultado = false;
+            $data['estado'] = 'error';
+            $data['resultado'] = $resultado;
+            $data['msg'] = $fault->getMessage();
         }
         return json_encode($data, JSON_UNESCAPED_UNICODE);
     }
@@ -1037,7 +1112,56 @@ class SiatController extends Controller
         return json_encode($data, JSON_UNESCAPED_UNICODE);
     }
 
-    public function consultaEventoSignificativo(){
+    public function sincronizarParametricaEventosSignificativos(){
+        $this->verificarConeccion();
+        $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionSincronizacion?wsdl";
+        $codigoAmbiente         = $this->codigoAmbiente;
+        $codigoPuntoVenta       = $this->codigoPuntoVenta;
+        $codigoSistema          = $this->codigoSistema;
+        $codigoSucursal         = $this->codigoSucursal;
+        $cuis                   = session('scuis');
+        $nit                    = $this->nit;
+
+        $parametros         =  array(
+            'SolicitudSincronizacion' => array(
+                'codigoAmbiente'    => $codigoAmbiente,
+                'codigoPuntoVenta'  => $codigoPuntoVenta,
+                'codigoSistema'     => $codigoSistema,
+                'codigoSucursal'    => $codigoSucursal,
+                'cuis'              => $cuis,
+                'nit'               => $nit
+            )
+        );
+
+        $aoptions = array(
+            'http' => array(
+                'header' => $this->header,
+                'timeout' => $this->timeout
+            ),
+        );
+
+        $context = stream_context_create($aoptions);
+
+        try {
+            $client = new \SoapClient($wsdl,[
+                'stream_context' => $context,
+                'cache_wsdl' => WSDL_CACHE_NONE,
+                'compression' => SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP | SOAP_COMPRESSION_DEFLATE
+            ]);
+
+            $resultado = $client->sincronizarParametricaEventosSignificativos($parametros);
+
+            $data['estado'] = 'success';
+            $data['resultado'] = $resultado;
+        } catch (SoapFault $fault) {
+            $resultado = false;
+            $data['estado'] = 'error';
+            $data['resultado'] = $resultado;
+        }
+        return json_encode($data, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function consultaEventoSignificativo($fecha){
         $this->verificarConeccion();
         $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionOperaciones?wsdl";
         $codigoAmbiente         = $this->codigoAmbiente;
@@ -1046,21 +1170,24 @@ class SiatController extends Controller
         $codigoSucursal         = $this->codigoSucursal;
         $cufd                   = session('scufd');
         $cuis                   = session('scuis');
-        $fechaEvento            = (new DateTime())->setTimeZone(new DateTimeZone('UTC'));
+        // $fechaEvento            = (new DateTime())->setTimeZone(new DateTimeZone('UTC'));
+        // $fechaEvento            = Carbon::now()->format('Y-m-d\TH:i:s');
+        $fechaEvento            = $fecha;
         $nit                    = $this->nit;
 
-
-        dd($codigoAmbiente,
-        $codigoPuntoVenta,
-        $codigoSistema,
-        $codigoSucursal,
-        $cufd,
-        $cuis,
-        $fechaEvento,
-        $nit);
+        // dd(
+        //     "codigoPuntoVenta ".$codigoPuntoVenta,
+        //     "codigoAmbiente ".$codigoAmbiente,
+        //     "codigoSistema ".$codigoSistema,
+        //     "codigoSucursal ".$codigoSucursal,
+        //     "cufd ".$cufd,
+        //     "cuis ".$cuis,
+        //     "fechaEvento ".$fechaEvento,
+        //     "nit ".$nit
+        // );
 
         $parametros         =  array(
-            'SolicitudSincronizacion' => array(
+            'SolicitudConsultaEvento' => array(
                 'codigoAmbiente'    => $codigoAmbiente,
                 'codigoPuntoVenta'  => $codigoPuntoVenta,
                 'codigoSistema'     => $codigoSistema,
@@ -1100,64 +1227,36 @@ class SiatController extends Controller
         return json_encode($data, JSON_UNESCAPED_UNICODE);
     }
 
-    public function recepcionPaqueteFactura($arch, $hasarch, $cafcC, $canFact, $codEvent){
+    public function registroEventoSignificativo($codMotEvent, $cufdEvent, $desc, $fechaIni, $fechaFin){
         $this->verificarConeccion();
-        $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/ServicioFacturacionComputarizada?wsdl";
+        $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionOperaciones?wsdl";
         $codigoAmbiente         = $this->codigoAmbiente;
-        $codigoDocumentoSector  = 11;                       // SECTOR EDUCATIVO
-        $codigoEmision          = 1;                        // NUEVO LINENA
+        $codigoMotivoEvento     = $codMotEvent;
         $codigoPuntoVenta       = $this->codigoPuntoVenta;
         $codigoSistema          = $this->codigoSistema;
         $codigoSucursal         = $this->codigoSucursal;
         $cufd                   = session('scufd');
+        $cufdEvento             = $cufdEvent;
         $cuis                   = session('scuis');
+        $descripcion            = $desc;
+        $fechaHoraFinEvento     = $fechaFin;
+        $fechaHoraInicioEvento  = $fechaIni;
         $nit                    = $this->nit;
-        $tipoFacturaDocumento   = 1;                        //NUEVO FACTURA CON DERECHO A CREDITO FISCAL
-        $archivo                = $arch;
-        // $fechaEnvio             = gmdate('Y-m-d\TH:i:s');
-        $fechaEnvio             = Carbon::now()->format('Y-m-d\TH:i:s');;
-        $hashArchivo            = $hasarch;
-        $cafc                   = $cafcC;
-        $cantidadFacturas       = $canFact;
-        $codigoEvento           = $codEvent;
-
-        // dd(
-        //     $codigoAmbiente,
-        //     $codigoDocumentoSector,
-        //     $codigoEmision,
-        //     $codigoPuntoVenta,
-        //     $codigoSistema,
-        //     $codigoSucursal,
-        //     $cufd,
-        //     $cuis,
-        //     $nit,
-        //     $tipoFacturaDocumento,
-        //     $archivo,
-        //     $fechaEnvio,
-        //     $hashArchivo,
-        //     $cafc,
-        //     $cantidadFacturas,
-        //     $codigoEvento
-        // );
 
         $parametros         =  array(
-            'SolicitudServicioRecepcionPaquete' => array(
+            'SolicitudEventoSignificativo' => array(
                 'codigoAmbiente'            => $codigoAmbiente,
-                'codigoDocumentoSector'     => $codigoDocumentoSector,
-                'codigoEmision'             => $codigoEmision,
+                'codigoMotivoEvento'        => $codigoMotivoEvento,
                 'codigoPuntoVenta'          => $codigoPuntoVenta,
                 'codigoSistema'             => $codigoSistema,
                 'codigoSucursal'            => $codigoSucursal,
                 'cufd'                      => $cufd,
+                'cufdEvento'                => $cufdEvento,
                 'cuis'                      => $cuis,
-                'nit'                       => $nit,
-                'tipoFacturaDocumento'      => $tipoFacturaDocumento,
-                'archivo'                   => $archivo,
-                'fechaEnvio'                => $fechaEnvio,
-                'hashArchivo'               => $hashArchivo,
-                'cafc'                      => $cafc,
-                'cantidadFacturas'          => $cantidadFacturas,
-                'codigoEvento'              => $codigoEvento,
+                'descripcion'               => $descripcion,
+                'fechaHoraFinEvento'        => $fechaHoraFinEvento,
+                'fechaHoraInicioEvento'     => $fechaHoraInicioEvento,
+                'nit'                       => $nit
             )
         );
 
@@ -1177,7 +1276,7 @@ class SiatController extends Controller
                 'compression' => SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP | SOAP_COMPRESSION_DEFLATE
             ]);
 
-            $resultado = $client->recepcionPaqueteFactura($parametros);
+            $resultado = $client->registroEventoSignificativo($parametros);
 
             $data['estado'] = 'success';
             $data['resultado'] = $resultado;
@@ -1185,51 +1284,100 @@ class SiatController extends Controller
             $resultado = false;
             $data['estado'] = 'error';
             $data['resultado'] = $resultado;
+            $data['msg'] = $fault;
+        }
+        return json_encode($data, JSON_UNESCAPED_UNICODE);
+    }
+
+    // public function validacionRecepcionPaqueteFactura($codMotEvent, $cufdEvent, $desc, $fechaIni, $fechaFin){
+    public function validacionRecepcionPaqueteFactura($codEmision, $codRecepcion){
+        $this->verificarConeccion();
+        $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/ServicioFacturacionComputarizada?wsdl";
+        $codigoAmbiente         = $this->codigoAmbiente;
+        $codigoDocumentoSector  = 11;                           //SECTOR EDUCATIVO
+        $codigoEmision          = $codEmision;                  //NUEVO LINENA 1 LINEA | 2 FUENRA DE LINEA
+        $codigoModalidad        = $this->codigoModalidad;
+        $codigoPuntoVenta       = $this->codigoPuntoVenta;
+        $codigoSistema          = $this->codigoSistema;
+        $codigoSucursal         = $this->codigoSucursal;
+        $cufd                   = session('scufd');
+        $cuis                   = session('scuis');
+        $nit                    = $this->nit;
+        $tipoFacturaDocumento   = 1;                            //NUEVO FACTURA CON DERECHO A CREDITO FISCAL
+        $codigoRecepcion        = $codRecepcion;
+
+        $parametros         =  array(
+            'SolicitudServicioValidacionRecepcionPaquete' => array(
+                'codigoAmbiente'          => $codigoAmbiente,
+                'codigoDocumentoSector'   => $codigoDocumentoSector,
+                'codigoEmision'           => $codigoEmision,
+                'codigoModalidad'         => $codigoModalidad,
+                'codigoPuntoVenta'        => $codigoPuntoVenta,
+                'codigoSistema'           => $codigoSistema,
+                'codigoSucursal'          => $codigoSucursal,
+                'cufd'                    => $cufd,
+                'cuis'                    => $cuis,
+                'nit'                     => $nit,
+                'tipoFacturaDocumento'    => $tipoFacturaDocumento,
+                'codigoRecepcion'         => $codigoRecepcion,
+            )
+        );
+
+        $aoptions = array(
+            'http' => array(
+                'header' => $this->header,
+                'timeout' => $this->timeout
+            ),
+        );
+
+        $context = stream_context_create($aoptions);
+
+        try {
+            $client = new \SoapClient($wsdl,[
+                'stream_context' => $context,
+                'cache_wsdl' => WSDL_CACHE_NONE,
+                'compression' => SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP | SOAP_COMPRESSION_DEFLATE
+            ]);
+
+            $resultado = $client->validacionRecepcionPaqueteFactura($parametros);
+
+            $data['estado'] = 'success';
+            $data['resultado'] = $resultado;
+        } catch (SoapFault $fault) {
+            $resultado = false;
+            $data['estado'] = 'error';
+            $data['resultado'] = $resultado;
+            $data['msg'] = $fault;
         }
         return json_encode($data, JSON_UNESCAPED_UNICODE);
     }
 
     public function verificarConeccion(){
-
-        // if(!session()->has('scuis')){
-        //     $codigoCuis = json_decode($this->cuis());
-        //     // dd($codigoCuis, session()->all());
-        //     if($codigoCuis->estado === "success"){
-        //         // dd("si");
-        //         session(['scuis'                => $codigoCuis->resultado->RespuestaCuis->codigo]);
-        //         session(['sfechaVigenciaCuis'   => $codigoCuis->resultado->RespuestaCuis->fechaVigencia]);
-        //         $data['$codigoCuis->estado === "success"'] = 'si';
-        //     }else{
-        //         // dd("no");
-        //         $data['$codigoCuis->estado === "success"'] = 'no';
-        //     }
-        //     $data['!session()->has("scuis")'] = 'si';
-        // }else{
-        //     // dd("no");
-        //     $data['!session()->has("scuis")'] = 'no';
-        // }
-
-        // dd(session()->has('scufd'));
-
         if(!session()->has('scufd')){
             $cufd = json_decode($this->cufd());
-
-            dd($cufd);
             if($cufd->estado === "success"){
                 if($cufd->resultado->RespuestaCufd->transaccion){
                     session(['scufd'                => $cufd->resultado->RespuestaCufd->codigo]);
                     session(['scodigoControl'       => $cufd->resultado->RespuestaCufd->codigoControl]);
                     session(['sdireccion'           => $cufd->resultado->RespuestaCufd->direccion]);
                     session(['sfechaVigenciaCufd'   => $cufd->resultado->RespuestaCufd->fechaVigencia]);
+
+                    $cufdNew = app(CufdController::class);
+                    $cufdNew->create(
+                                    $cufd->resultado->RespuestaCufd->codigo,
+                                    $cufd->resultado->RespuestaCufd->codigoControl,
+                                    $cufd->resultado->RespuestaCufd->direccion,
+                                    $cufd->resultado->RespuestaCufd->fechaVigencia
+                                );
+
                     $data['$cufd->resultado->RespuestaCufd->transaccion'] = 'si';
                 }else{
                     $data['$cufd->resultado->RespuestaCufd->transaccion'] = 'no';
                 }
                 $data['!session()->has("scufd")'] = 'si';
             }else{
-
+                // dd("chw");
             }
-
         }else{
             // dd("no");
             $fechaVigencia = str_replace("T"," ",substr(session('sfechaVigenciaCufd'),0,16));
@@ -1241,6 +1389,14 @@ class SiatController extends Controller
                         session(['scodigoControl' => $cufd->resultado->RespuestaCufd->codigoControl]);
                         session(['sdireccion' => $cufd->resultado->RespuestaCufd->direccion]);
                         session(['sfechaVigenciaCufd' => $cufd->resultado->RespuestaCufd->fechaVigencia]);
+
+                        $cufdNew = app(CufdController::class);
+                        $cufdNew->create(
+                                        $cufd->resultado->RespuestaCufd->codigo,
+                                        $cufd->resultado->RespuestaCufd->codigoControl,
+                                        $cufd->resultado->RespuestaCufd->direccion,
+                                        $cufd->resultado->RespuestaCufd->fechaVigencia
+                                    );
                         $data['$cufd->resultado->RespuestaCufd->transaccion 2'] = 'si';
                     }else{
                         $data['$cufd->resultado->RespuestaCufd->transaccion 2'] = 'no';

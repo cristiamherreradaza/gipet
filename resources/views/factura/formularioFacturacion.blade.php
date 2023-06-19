@@ -312,7 +312,8 @@
                 url: "{{ url('Factura/emitirFactura') }}",
                 data: {
                     datos: datos,
-                    datosPersona:datosPersona
+                    datosPersona:datosPersona,
+                    modalidad: $('#tipo_facturacion').val()
                 },
                 type: 'POST',
                 dataType:'json',

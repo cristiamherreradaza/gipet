@@ -16,6 +16,9 @@
 //     return view('welcome');
 // });
 
+use App\Mail\EnvioFactura;
+use Illuminate\Support\Facades\Mail;
+
 Route::get('logueo', function () {
     return view('layouts.index');
 });
@@ -452,12 +455,13 @@ Route::middleware(['auth'])->group(function () {
     // NUEVO IMPLEMENATCION DEL SIAT
     Route::get('Siat/verificarComunicacion','SiatController@verificarComunicacion');
     Route::get('Siat/cuis','SiatController@cuis');
+    Route::get('Siat/cufd','SiatController@cufd');
     Route::get('Siat/sincronizarListaProductosServicios','SiatController@sincronizarListaProductosServicios');
     Route::get('Siat/sincronizarListaLeyendasFactura','SiatController@sincronizarListaLeyendasFactura');
     Route::get('Siat/consultaPuntoVenta','SiatController@consultaPuntoVenta');
 
-
     Route::post('Factura/emitirFactura','FacturaController@emitirFactura');
+    Route::post('Factura/recepcionFacturaFueraLinea','FacturaController@recepcionFacturaFueraLinea');
     Route::post('Factura/actualizaDescuento','FacturaController@actualizaDescuento');
     Route::post('Factura/arrayCuotasPagar','FacturaController@arrayCuotasPagar');
     Route::post('Factura/sumaTotalMonto','FacturaController@sumaTotalMonto');
@@ -469,6 +473,30 @@ Route::middleware(['auth'])->group(function () {
     Route::get('PuntoVenta/ajaxListado','PuntoVentaController@ajaxListado');
     Route::post('PuntoVenta/guarda','PuntoVentaController@guarda');
     Route::post('PuntoVenta/eliminaPuntoVenta','PuntoVentaController@eliminaPuntoVenta');
+
+    Route::get('EventoSignificativo/listado','EventoSignificativoController@listado');
+    Route::post('EventoSignificativo/consultaEventos','EventoSignificativoController@consultaEventos');
+    Route::post('EventoSignificativo/registro','EventoSignificativoController@registro');
+    Route::post('EventoSignificativo/buscarEventosSignificativos','EventoSignificativoController@buscarEventosSignificativos');
+
+
+    // Route::post('EventoSignificativo/correo', function(){+
+
+    //     $pdfPath = "assets/docs/joel.pdf";
+    //     $xmlPath = "assets/docs/facturaxml.xml";
+
+    //     $mail = new EnvioFactura();
+    //     $mail->attach($pdfPath, ['as' => 'Factura.pdf'])
+    //         ->attach($xmlPath, ['as' => 'Factura.xml']);
+
+    //     $response = Mail::to('jjjoelcito123@gmail.com')->send($mail);
+    //     dd($response);
+    // });
+
+
+    // Route::get('EventoSignificativo/ajaxListado','EventoSignificativoController@ajaxListado');
+    // Route::post('EventoSignificativo/guarda','EventoSignificativoController@guarda');
+
    // END NUEVO IMPLEMENATCION DEL SIAT
 
 

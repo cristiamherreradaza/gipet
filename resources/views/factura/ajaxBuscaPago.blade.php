@@ -13,6 +13,7 @@
             <th>MONTO</th>
             <th>ESTADO</th>
             <th>ESTADO SIAT</th>
+            <th>EMISION</th>
             <th>USUARIO</th>
             <th></th>
         </tr>
@@ -53,11 +54,20 @@
                 @php
                     if($c->codigo_descripcion == "VALIDADA"){
                         $text = "badge badge-success";
+                    }elseif($c->codigo_descripcion == "PENDIENTE"){
+                        $text = "badge badge-warning";
                     }else{
                         $text = "badge badge-danger";
                     }
                 @endphp
                 <span class="{{ $text }}" >{{ $c->codigo_descripcion }}</span>
+            </td>
+            <td>
+                @if ($c->tipo_factura === "online")
+                    <span class="badge badge-success" >Linea</span>
+                @elseif($c->tipo_factura === "offline")
+                    <span class="badge badge-warning text-white" >Fuera de Linea</span>
+                @endif
             </td>
             <td>{{ $c->user->nombres }}</td>
             <td>
@@ -65,7 +75,7 @@
                     <a class="btn btn-info" href="{{ url('Factura/generaPdfFacturaNew', [$c->id]) }}" target="_blank"><i class="fa fa-file-pdf"></i></a>
                 @endif
 
-                {{--  <a href="https://pilotosiat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf={{ $c->cuf }}&numero={{ $c->numero }}&t=2" target="_blank" class="btn btn-dark btn-icon btn-sm"><i class="fa fa-file"></i></a>  --}}
+                <a href="https://pilotosiat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf={{ $c->cuf }}&numero={{ $c->numero }}&t=2" target="_blank" class="btn btn-dark btn-icon btn-sm"><i class="fa fa-file"></i></a>
 
                 @if ($c->estado != 'Anulado')
                     @if ($c->productos_xml != null)

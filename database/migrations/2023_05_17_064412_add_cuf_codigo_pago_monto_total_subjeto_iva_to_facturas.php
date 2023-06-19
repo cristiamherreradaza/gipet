@@ -26,6 +26,7 @@ class AddCufCodigoPagoMontoTotalSubjetoIvaToFacturas extends Migration
             $table->string('cuis')->nullable()->after('descripcion');
             $table->string('cufd')->nullable()->after('cuis');
             $table->dateTime('fechaVigencia')->nullable()->after('cufd');
+            $table->string('tipo_factura')->nullable()->after('fechaVigencia');
         });
     }
 
@@ -49,6 +50,7 @@ class AddCufCodigoPagoMontoTotalSubjetoIvaToFacturas extends Migration
             $table->dropColumn('cuis');
             $table->dropColumn('cufd');
             $table->dropColumn('fechaVigencia');
+            $table->dropColumn('tipo_factura');
         });
     }
 }

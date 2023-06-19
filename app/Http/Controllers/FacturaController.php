@@ -12,11 +12,15 @@ use App\Parametro;
 use CodigoControlV7;
 use App\CarrerasPersona;
 use App\DescuentosPersona;
+use App\Mail\EnvioFactura;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade as PDF;
 use DOMDocument;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use PharData;
 // use Maatwebsite\Excel\Writer;
 use SimpleXMLElement;
 use SoapClient;
@@ -748,9 +752,10 @@ class FacturaController extends Controller
 
     // FACTURACION EN LINEA
     public function emitirFactura(Request $request){
-        $datos = $request->input('datos');
-        $datosPersona = $request->input('datosPersona');
-        $valoresCabecera = $datos['factura'][0]['cabecera'];
+
+        $datos              = $request->input('datos');
+        $datosPersona       = $request->input('datosPersona');
+        $valoresCabecera    = $datos['factura'][0]['cabecera'];
 
         $nitEmisor          = str_pad($valoresCabecera['nitEmisor'],13,"0",STR_PAD_LEFT);
         $fechaEmision       = str_replace(".","",str_replace(":","",str_replace("-","",str_replace("T", "",$valoresCabecera['fechaEmision']))));
@@ -768,6 +773,8 @@ class FacturaController extends Controller
 
         $cadena = $nitEmisor.$fechaEmision.$sucursal.$modalidad.$tipoEmision.$tipoFactura.$tipoFacturaSector.$numeroFactura.$puntoVenta;
 
+        $tipo_factura = $request->input('modalidad');
+
         // CODIGO DEL VIDEO PARACE QUE SIRVE NOMAS
         // ini_set('soap.wsdl_cache_enable',0);
         // $wdls = "https://indexingenieria.com/webservices/wssiatcuf.php?wsdl";
@@ -782,17 +789,38 @@ class FacturaController extends Controller
         // $cuf = $client->__soapCall('generaCuf', $params);
         // $datos['factura'][0]['cabecera']['cuf'] = $cuf;
 
-        if(!session()->has('scufd')){
-            $siat = app(SiatController::class);
-            $siat->verificarConeccion();
-        }
-
         // CODIGO DE JOEL ESETE LO HIZMOMOS NOSOTROS
         $cadenaConM11 = $cadena.$this->calculaDigitoMod11($cadena, 1, 9, false);
-        $cufPro = $this->generarBase16($cadenaConM11).session('scodigoControl');
-        $datos['factura'][0]['cabecera']['cuf']                 = $cufPro;
-        $datos['factura'][0]['cabecera']['cufd']                = session('scufd');
-        $datos['factura'][0]['cabecera']['direccion']           = session('sdireccion');
+        if($tipo_factura === "online"){
+            if(!session()->has('scufd')){
+                $siat = app(SiatController::class);
+                $siat->verificarConeccion();
+            }
+            $scufd                  = session('scufd');
+            $scodigoControl         = session('scodigoControl');
+            $sdireccion             = session('sdireccion');
+            $sfechaVigenciaCufd     = session('sfechaVigenciaCufd');
+        }else{
+            $cufdController             = app(CufdController::class);
+            $datosCufdOffLine           = $cufdController->sacarCufdVigenteFueraLinea();
+            if($datosCufdOffLine['estado'] === "success"){
+                $scufd                  = $datosCufdOffLine['scufd'];
+                $scodigoControl         = $datosCufdOffLine['scodigoControl'];
+                $sdireccion             = $datosCufdOffLine['sdireccion'];
+                $sfechaVigenciaCufd     = $datosCufdOffLine['sfechaVigenciaCufd'];
+            }else{
+
+            }
+        }
+
+        $cufPro                                         = $this->generarBase16($cadenaConM11).$scodigoControl;
+
+        // dd($cufPro, $scodigoControl, $this->generarBase16($cadenaConM11), $cadenaConM11);
+
+        $datos['factura'][0]['cabecera']['cuf']         = $cufPro;
+        $datos['factura'][0]['cabecera']['cufd']        = $scufd;
+        $datos['factura'][0]['cabecera']['direccion']   = $sdireccion;
+
         // $datos['factura'][0]['cabecera']['codigoPuntoVenta']    = 3;
         // $datos['factura'][0]['cabecera']['codigoPuntoVenta']    = 1;
 
@@ -850,30 +878,72 @@ class FacturaController extends Controller
         $factura->monto_total_subjeto_iva   = $datos['factura'][0]['cabecera']['montoTotalSujetoIva'];
         $factura->descuento_adicional       = $datos['factura'][0]['cabecera']['descuentoAdicional'];
         $factura->productos_xml             = file_get_contents('assets/docs/facturaxml.xml');
+        $factura->tipo_factura              = $tipo_factura;
 
         $factura->save();
 
-        $siat = app(SiatController::class);
-        $for = json_decode($siat->recepcionFactura($archivoZip, $valoresCabecera['fechaEmision'],$hashArchivo));
 
-        // dd($for);
+        // ENVIAMOS EL CORREO DE LA FACTURA
+        $this->enviaCorreo('jjjoelcito123@gmail.com',$factura->id);
 
-        if($for->resultado->RespuestaServicioFacturacion->transaccion){
-            $codigo_recepcion = $for->resultado->RespuestaServicioFacturacion->codigoRecepcion;
-            $descripcion = NULL;
+        if($tipo_factura === "online"){
+            $siat = app(SiatController::class);
+            $for = json_decode($siat->recepcionFactura($archivoZip, $valoresCabecera['fechaEmision'],$hashArchivo));
+
+            if($for->estado === "error"){
+                $codigo_descripcion = null;
+                $codigo_trancaccion = null;
+                $descripcion        = null;
+                $codigo_recepcion   = null;
+            }else{
+                if($for->resultado->RespuestaServicioFacturacion->transaccion){
+                    $codigo_recepcion = $for->resultado->RespuestaServicioFacturacion->codigoRecepcion;
+                    $descripcion = NULL;
+                }else{
+                    $codigo_recepcion = NULL;
+                    $descripcion = $for->resultado->RespuestaServicioFacturacion->mensajesList->descripcion;
+                }
+                $codigo_descripcion = $for->resultado->RespuestaServicioFacturacion->codigoDescripcion;
+                $codigo_trancaccion = $for->resultado->RespuestaServicioFacturacion->transaccion;
+            }
         }else{
-            $codigo_recepcion = NULL;
-            $descripcion = $for->resultado->RespuestaServicioFacturacion->mensajesList->descripcion;
+            $codigo_descripcion = null;
+            $codigo_recepcion   = null;
+            $codigo_trancaccion = null;
+            $descripcion        = null;
         }
 
-        $facturaNew = Factura::find($factura->id);
-        $facturaNew->codigo_descripcion = $for->resultado->RespuestaServicioFacturacion->codigoDescripcion;
+        // $siat = app(SiatController::class);
+        // $for = json_decode($siat->recepcionFactura($archivoZip, $valoresCabecera['fechaEmision'],$hashArchivo));
+
+        // if($for->estado === "error"){
+        //     $codigo_descripcion = null;
+        //     $codigo_trancaccion = null;
+        //     $descripcion        = null;
+        //     $codigo_recepcion   = null;
+        // }else{
+        //     if($for->resultado->RespuestaServicioFacturacion->transaccion){
+        //         $codigo_recepcion = $for->resultado->RespuestaServicioFacturacion->codigoRecepcion;
+        //         $descripcion = NULL;
+        //     }else{
+        //         $codigo_recepcion = NULL;
+        //         $descripcion = $for->resultado->RespuestaServicioFacturacion->mensajesList->descripcion;
+        //     }
+        //     $codigo_descripcion = $for->resultado->RespuestaServicioFacturacion->codigoDescripcion;
+        //     $codigo_trancaccion = $for->resultado->RespuestaServicioFacturacion->transaccion;
+        // }
+
+        $facturaNew                     = Factura::find($factura->id);
+        $facturaNew->codigo_descripcion = $codigo_descripcion;
         $facturaNew->codigo_recepcion   = $codigo_recepcion;
-        $facturaNew->codigo_trancaccion = $for->resultado->RespuestaServicioFacturacion->transaccion;
+        $facturaNew->codigo_trancaccion = $codigo_trancaccion;
         $facturaNew->descripcion        = $descripcion;
+        // $facturaNew->cuis               = session('scuis');
+        // $facturaNew->cufd               = session('scufd');
+        // $facturaNew->fechaVigencia      = session('sfechaVigenciaCufd');
         $facturaNew->cuis               = session('scuis');
-        $facturaNew->cufd               = session('scufd');
-        $facturaNew->fechaVigencia      = session('sfechaVigenciaCufd');
+        $facturaNew->cufd               = $scufd;
+        $facturaNew->fechaVigencia      = $sfechaVigenciaCufd;
         $facturaNew->save();
 
         $data['estado'] = $facturaNew->codigo_descripcion;
@@ -928,9 +998,89 @@ class FacturaController extends Controller
 
         }
 
+
+
         // PARA VALIDAR EL XML
         // $this->validar();
 
+        return $data;
+    }
+
+
+    // RECEPCION FACTURA FEURA DE LINEA
+    public function recepcionFacturaFueraLinea(Request $request){
+
+        if($request->ajax()){
+            $factura_id                     = $request->input('factura_id_contingencia');
+            $codigo_evento_significativo    = $request->input('evento_significativo_contingencia_select');
+            $codigo_cafc_contingencia       = $request->input('codigo_cafc_contingencia');
+            $siat = app(SiatController::class);
+            $factura = Factura::find($factura_id);
+            $xml = $factura['productos_xml'];
+
+            $fechaActual = date('Y-m-d\TH:i:s.v');
+            $fechaEmicion = $fechaActual;
+            $archivoXML = new SimpleXMLElement($xml);
+
+            // GUARDAMOS EN LA CARPETA EL XML
+            $archivoXML->asXML("assets/docs/paquete/facturaxmlContingencia.xml");
+
+            // Ruta de la carpeta que deseas comprimir
+            $rutaCarpeta = "assets/docs/paquete";
+
+            // Nombre y ruta del archivo TAR resultante
+            $archivoTar = "assets/docs/paquete.tar";
+
+            // Crear el archivo TAR utilizando la biblioteca PharData
+            $tar = new PharData($archivoTar);
+            $tar->buildFromDirectory($rutaCarpeta);
+
+            // Ruta y nombre del archivo comprimido en formato Gzip
+            $archivoGzip = "assets/docs/paquete.tar.gz";
+
+            // Comprimir el archivo TAR en formato Gzip
+            $comandoGzip = "gzip -c $archivoTar > $archivoGzip";
+            exec($comandoGzip);
+
+            // Leer el contenido del archivo comprimido
+            $contenidoArchivo = file_get_contents($archivoGzip);
+
+            // Calcular el HASH (SHA256) del contenido del archivo
+            $hashArchivo = hash('sha256', $contenidoArchivo);
+
+            $res = json_decode($siat->recepcionPaqueteFactura($contenidoArchivo, $fechaEmicion, $hashArchivo, $codigo_cafc_contingencia, 1, $codigo_evento_significativo));
+            // $res = json_decode($siat->recepcionPaqueteFactura($contenidoArchivo, $fechaEmicion, $hashArchivo, NULL, 1, $codigo_evento_significativo));
+            $data['estado'] = "success";
+            // dd($res);
+            // if($res->estado === "success"){
+            if($res->resultado->RespuestaServicioFacturacion->transaccion){
+                $data['descripcion']                = $res->resultado->RespuestaServicioFacturacion->codigoDescripcion;
+                $data['codRecepcion']               = $res->resultado->RespuestaServicioFacturacion->codigoRecepcion;
+                if($res->resultado->RespuestaServicioFacturacion->transaccion){
+                    $factura->codigo_descripcion    = $res->resultado->RespuestaServicioFacturacion->codigoDescripcion;
+                    $factura->codigo_recepcion      = $res->resultado->RespuestaServicioFacturacion->codigoRecepcion;
+                    $factura->codigo_trancaccion    = $res->resultado->RespuestaServicioFacturacion->transaccion;
+                    $factura->save();
+                    $respVali = json_decode($siat->validacionRecepcionPaqueteFactura(2,$factura->codigo_recepcion));
+                    if($respVali->estado === "success"){
+                        if($respVali->resultado->RespuestaServicioFacturacion->transaccion){
+                            $factura->codigo_descripcion    = $respVali->resultado->RespuestaServicioFacturacion->codigoDescripcion;
+                            if($respVali->resultado->RespuestaServicioFacturacion->codigoDescripcion != 'VALIDADA')
+                                $factura->descripcion       = json_encode($respVali->resultado->RespuestaServicioFacturacion->mensajesList);
+                        }else{
+
+                        }
+                        $factura->save();
+                    }else{
+
+                    }
+                }
+            }else{
+                $data['estado'] = "error";
+            }
+        }else{
+            $data['estado'] = "error";
+        }
         return $data;
     }
 
@@ -1128,6 +1278,29 @@ class FacturaController extends Controller
         return $pdf->stream('factura.pdf');
     }
 
+    protected function generaPdfFacturaNewSave(Request $request, $factura_id){
+        $factura = Factura::find($factura_id);
+        $xml = $factura['productos_xml'];
+
+        $archivoXML = new SimpleXMLElement($xml);
+
+        $cabeza = (array) $archivoXML;
+
+        $cuf            = (string)$cabeza['cabecera']->cuf;
+        $numeroFactura  = (string)$cabeza['cabecera']->numeroFactura;
+
+        // Genera el texto para el código QR
+        $textoQR = 'https://pilotosiat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf='.$cuf.'&numero='.$numeroFactura.'&t=2';
+        // Genera la ruta temporal para guardar la imagen del código QR
+        $rutaImagenQR = storage_path('app/public/qr_code.png');
+        // Genera el código QR y guarda la imagen en la ruta temporal
+        QrCode::generate($textoQR, $rutaImagenQR);
+
+        $pdf = PDF::loadView('pdf.generaPdfFacturaNew', compact('factura', 'archivoXML','rutaImagenQR'))->setPaper('letter');
+        // unlink($rutaImagenQR);
+        return $pdf->stream('factura.pdf');
+    }
+
     public function anularFacturaNew(Request $request){
         if($request->ajax()){
 
@@ -1236,32 +1409,73 @@ class FacturaController extends Controller
     public function pruebaSiat(){
         $siat = app(SiatController::class);
 
-
-        $factura = Factura::find(4233);
+        $factura = Factura::find(4234);
         $xml = $factura['productos_xml'];
 
+
+        // $xmlConver = simplexml_load_string($xml);
+        // $json = json_encode($xmlConver);
+        // $array = json_decode($json, true);
+
+        $fechaActual = date('Y-m-d\TH:i:s.v');
+        $fechaEmicion = $fechaActual;
         $archivoXML = new SimpleXMLElement($xml);
+        // GUARDAMOS EN LA CARPETA EL XML
+        $archivoXML->asXML("assets/docs/paquete/facturaxmlContingencia.xml");
 
-        // dd($archivoXML);
 
-        $archivoXML->asXML("assets/docs/facturaxmlContingencia.xml");
+        // Ruta de la carpeta que deseas comprimir
+        $rutaCarpeta = "assets/docs/paquete";
+
+        // Nombre y ruta del archivo TAR resultante
+        $archivoTar = "assets/docs/paquete.tar";
+
+        // Crear el archivo TAR utilizando la biblioteca PharData
+        $tar = new PharData($archivoTar);
+        $tar->buildFromDirectory($rutaCarpeta);
+
+        // $carpetaFacatura    = "assets/docs/paquete";
+        // $archivoTar         = "assets/docs/paquete.tar";
+        // // Comando para empaquetar las facturas en el archivo TAR
+        // $comandoTar = "tar -cvf $archivoTar -C $carpetaFacatura .";
+        // // Ejecutar el comando
+        // exec($comandoTar);
+
+        // Ruta y nombre del archivo TAR original
+        // $archivoTar = "/ruta/a/la/carpeta/paquete.tar";
+
+        // Ruta y nombre del archivo comprimido en formato Gzip
+        $archivoGzip = "assets/docs/paquete.tar.gz";
+        // $archivoGzip = "assets/docs/paquete.tar.zip";
+
+        // Comprimir el archivo TAR en formato Gzip
+        $comandoGzip = "gzip -c $archivoTar > $archivoGzip";
+        exec($comandoGzip);
+
         // COMPRIMIMOS EL ARCHIVO A ZIP
-        $gzdato = gzencode(file_get_contents('assets/docs/facturaxmlContingencia.xml',9));
-        $fiape = fopen('assets/docs/facturaxmlContingencia.xml.zip',"w");
-        fwrite($fiape,$gzdato);
-        fclose($fiape);
+        // $gzdato = gzencode('assets/docs/paquete');
+        // $fiape = fopen('assets/docs/facturaContingencia.xml.zip',"w");
+        // fwrite($fiape,$gzdato);
+        // fclose($fiape);
 
-        //  hashArchivo EL ARCHIVO
-        $archivoZip = $gzdato;
-        $hashArchivo = hash("sha256", file_get_contents('assets/docs/facturaxmlContingencia.xml'));
+        // //  hashArchivo EL ARCHIVO
+        // $archivoZip = $gzdato;
+        // $hashArchivo = hash("sha256", file_get_contents('assets/docs/facturaxml.xml'));
 
-        // $res = $siat->consultaEventoSignificativo();
-        // recepcionPaqueteFactura($arch, $hasarch, $cafcC, $canFact, $codEvent)
-        $res = $siat->recepcionPaqueteFactura($archivoZip, $hashArchivo, NULL, 1, 1);
+        // Leer el contenido del archivo comprimido
+        $contenidoArchivo = file_get_contents($archivoGzip);
+
+        // Calcular el HASH (SHA256) del contenido del archivo
+        $hashArchivo = hash('sha256', $contenidoArchivo);
+
+        // $res = $siat->recepcionPaqueteFactura($archivoZip, $fechaEmicion, $hashArchivo, NULL, 1, 5112428);
+        // $res = $siat->recepcionPaqueteFactura($archivoZip, $fechaEmicion, $hashArchivo, NULL, 1, 5112428);
+        $res = $siat->recepcionPaqueteFactura($contenidoArchivo, $fechaEmicion, $hashArchivo, NULL, 1, 5123269);
         // $res = $siat->recepcionPaqueteFactura("1", "2", "3", "4", "5");
-
+        // dd($res, $archivoZip, $fechaEmicion, $archivoZip);
+        dd($res);
         // echo json_encode($res, true);
-        echo $res;
+        // echo $res;
 
         // for ($i = 1; $i <= 50 ; $i++) {
         //     // $verificacionSiat = json_decode($siat->sincronizarParametricaPaisOrigen());
@@ -1282,5 +1496,45 @@ class FacturaController extends Controller
         //     echo "****************** => <h1>".$i."</h1><= ******************";
         //     sleep(3);
         // }
+    }
+
+    protected function enviaCorreo($correo, $factura_id){
+
+        $factura = Factura::find($factura_id);
+        $xml = $factura['productos_xml'];
+
+        $archivoXML = new SimpleXMLElement($xml);
+
+        $cabeza = (array) $archivoXML;
+
+        $cuf            = (string)$cabeza['cabecera']->cuf;
+        $numeroFactura  = (string)$cabeza['cabecera']->numeroFactura;
+
+        // Genera el texto para el código QR
+        $textoQR = 'https://pilotosiat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf='.$cuf.'&numero='.$numeroFactura.'&t=2';
+        // Genera la ruta temporal para guardar la imagen del código QR
+        $rutaImagenQR = storage_path('app/public/qr_code.png');
+        // Genera el código QR y guarda la imagen en la ruta temporal
+        QrCode::generate($textoQR, $rutaImagenQR);
+        $pdf = PDF::loadView('pdf.generaPdfFacturaNew', compact('factura', 'archivoXML','rutaImagenQR'))->setPaper('letter');
+
+        // Genera la ruta donde se guardará el archivo PDF
+        $rutaPDF = storage_path('app/public/factura.pdf');
+        // Guarda el PDF en la ruta especificada
+        $pdf->save($rutaPDF);
+
+        // $pdfPath = "assets/docs/facturapdf.pdf";
+        $xmlPath = "assets/docs/facturaxml.xml";
+
+        $mail = new EnvioFactura();
+        // $mail->attach($pdfPath, ['as' => 'Factura.pdf'])
+        $mail->attach($rutaPDF, ['as' => 'Factura.pdf'])
+            ->attach($xmlPath, ['as' => 'Factura.xml']);
+
+        $response = Mail::to($correo)->send($mail);
+
+        // Elimina el archivo PDF guardado en la ruta temporal
+        Storage::delete($rutaPDF);
+        dd($response);
     }
 }

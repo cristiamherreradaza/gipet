@@ -91,7 +91,7 @@
         @csrf
         <div class="row">
 
-            <div class="col-md-2">
+            <div class="col-md-1">
                 <div class="form-group">
                     <label class="control-label">NUMERO DE FACTURA</label>
                     <input type="text" name="numero_factura" id="numero_factura" class="form-control"
@@ -119,11 +119,20 @@
                 </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="form-group">
                     <label class="control-label">RAZON SOCIAL</label>
                     <input type="text" name="razon_factura" id="razon_factura" class="form-control"
                         value="{{ $persona->razon_social_cliente }}" required>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="control-label">TIPO DE FACTURACION</label>
+                    <select name="tipo_facturacion" id="tipo_facturacion" class="form-control" required>
+                    <option value="online">EN LINEA</option>
+                    <option value="offline">FUERA DE LINEA</option>
+                </select>
                 </div>
             </div>
             <div class="col-md-3">

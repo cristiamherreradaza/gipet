@@ -10,31 +10,32 @@
 
 @section('content')
 
-
 <!-- inicio modal cambiar contrasena -->
-<div id="modaNewPuntoVeta" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div id="modaNewEventoSignificativo" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">NUEVO PUNTO DE VENTA O VENTANILLA</h4>
+                <h4 class="modal-title" id="myModalLabel">FORMULARIO DE NUEVO EVENTO SIGNIFICATIVO</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <form class="needs-validation" id="formularioNew">
+            <form class="needs-validation" id="formularioNewEvento">
                 @csrf
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-5">
                             <div class="form-group">
-                                <label class="control-label">Nombre</label>
+                                <label class="control-label">Tipo de Evento</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input name="nombre" type="text" id="nombre" class="form-control" required>
+                                <select name="codigoEvento" id="codigoEvento" class="form-control" required>
+                                    @foreach ($eventosparametricas as $eve)
+                                        <option value="{{ $eve['codigoClasificador'] }}">{{ $eve['descripcion'] }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-7">
                             <div class="form-group">
                                 <label class="control-label">Descripcion</label>
                                 <span class="text-danger">
@@ -44,9 +45,29 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Fecha Inicio Evento</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input  type="datetime-local" name="fechainicio" id="fechainicio" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Fecha Fin Evento</label>
+                                <span class="text-danger">
+                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                </span>
+                                <input type="datetime-local" name="fechafin" id="fechafin" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="guardarNew()">ACTUALIZAR</button>
+                    <button type="button" class="btn waves-effect waves-light btn-block btn-success" onclick="agregarEventoSignificativo()">AGREGAR</button>
                 </div>
             </form>
         </div>
@@ -58,16 +79,22 @@
 <div class="card border-info">
     <div class="card-header bg-info">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <h4 class="mb-0 text-white">
-                    Puntos de venta
+                    Eventos Significativos
                 </h4>
             </div>
             <div class="col-md-3">
-                <button class="btn btn-primary" onclick="modalNewPuntoVenta()">Nuevo Punto de Venta</button>
+                <button class="btn btn-success text-white mt-4 btn-block" onclick="abraModalAddEventoSignificativo()" >Nuevo Evento Significativo</button>
             </div>
             <div class="col-md-3">
-                <a href="{{ url('EventoSignificativo/listado') }}"class="btn btn-dark text-white" >Eventos Significativos</a>
+                <form id="formularioEventosConuslta">
+                    <label for="" class="text-white">Fecha del Evento:</label>
+                    <input type="date" class="form-control" id="fechaEvento" required>
+                </form>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-success text-white mt-4 btn-block" onclick="consultar()" >Consultar</button>
             </div>
         </div>
     </div>
@@ -92,35 +119,29 @@
     });
 
     $(document).ready(function() {
-        ajaxListado()
+        {{--  ajaxListado()  --}}
     } );
 
-    function ajaxListado(){
+    {{--  function ajaxListado(){
         $.ajax({
-            url: "{{ url('PuntoVenta/ajaxListado') }}",
+            url: "{{ url('EventoSignificativo/ajaxListado') }}",
             cache: false,
             type: 'GET',
             dateType: 'json',
             success: function(data) {
                 $('#tabla_puntos').html(data.listado);
-                {{--  Swal.fire(
-                    'Excelente!',
-                    'El estudiante fue eliminado',
-                    'success'
-                )
-                window.location.href = "{{ url('Persona/listado') }}/";  --}}
             }
         });
-    }
-
+    }  --}}
+{{--
     function modalNewPuntoVenta(){
         $('#nombre').val('')
         $('#descripcion').val('')
 
         $('#modaNewPuntoVeta').modal('show');
-    }
+    }  --}}
 
-    function guardarNew(){
+    {{--  function guardarNew(){
         let nombre = $('#nombre').val()
         let descripcion = $('#descripcion').val()
         $.ajax({
@@ -144,9 +165,9 @@
                 }
             }
         });
-    }
+    }  --}}
 
-    function eliminaPuntoVenta(puntoventa){
+    {{--  function eliminaPuntoVenta(puntoventa){
         Swal.fire({
             title: 'Esta seguro de eliminar el punto de venta?',
             text: "Luego no podras recuperarlo!",
@@ -178,6 +199,66 @@
                 });
             }
         })
+    }  --}}
+
+    function consultar(){
+        if($("#formularioEventosConuslta")[0].checkValidity()){
+            $.ajax({
+                url: "{{ url('EventoSignificativo/consultaEventos') }}",
+                {{--  cache: false,  --}}
+                data:{
+                    fecha :$('#fechaEvento').val()
+                },
+                type: 'POST',
+                dateType: 'json',
+                success: function(data) {
+                    if(data.estado === "success"){
+                        $('#tabla_puntos').html(data.listado);
+                    }else{
+                        Swal.fire(
+                            'Error!',
+                            data.msg,
+                            'error'
+                        )
+                    }
+                }
+            });
+        }else{
+            $("#formularioEventosConuslta")[0].reportValidity();
+        }
+    }
+
+    function abraModalAddEventoSignificativo(){
+        $('#modaNewEventoSignificativo').modal('show')
+    }
+
+    function agregarEventoSignificativo(){
+        if($("#formularioNewEvento")[0].checkValidity()){
+            let dato = $("#formularioNewEvento").serializeArray();
+            $.ajax({
+                url: "{{ url('EventoSignificativo/registro') }}",
+                data: dato,
+                type: 'POST',
+                dateType: 'json',
+                success: function(data) {
+                    if(data.estado === "success"){
+                        Swal.fire(
+                            'Exito!',
+                            "Se registro con exito con el codigo "+data.msg,
+                            'success'
+                        )
+                    }else{
+                        Swal.fire(
+                            'Error!',
+                            data.msg,
+                            'error'
+                        )
+                    }
+                }
+            });
+        }else{
+            $("#formularioNewEvento")[0].reportValidity();
+        }
     }
 
     // Funcion de configuracion de datatable y llamado de listado de personas ajax
