@@ -753,7 +753,7 @@ class FacturaController extends Controller
     // FACTURACION EN LINEA
     public function emitirFactura(Request $request){
 
-        dd("este chee");
+        // dd("este chee");
 
         $datos              = $request->input('datos');
         $datosPersona       = $request->input('datosPersona');
