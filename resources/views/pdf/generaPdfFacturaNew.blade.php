@@ -298,12 +298,15 @@
 
                 //dd($listado_detalles, count($listado_detalles));
                 //dd($listado_detalles);
+
+                dd($listado_detalles);
             @endphp
 
             @foreach ($listado_detalles as $d)
                 @if (is_array($d))
                     @php
                         $subTotales += (float) $d['subTotal'];
+                        dd($subTotales);
                     @endphp
                     <tr>
                         <td>{{ $d['codigoProducto'] }}</td>
