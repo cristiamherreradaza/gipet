@@ -1535,6 +1535,6 @@ class FacturaController extends Controller
 
         // Elimina el archivo PDF guardado en la ruta temporal
         Storage::delete($rutaPDF);
-        dd($response);
+        // dd($response);
     }
 }
