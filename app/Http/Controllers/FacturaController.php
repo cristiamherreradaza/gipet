@@ -888,6 +888,7 @@ class FacturaController extends Controller
         // ENVIAMOS EL CORREO DE LA FACTURA
         $this->enviaCorreo('jjjoelcito123@gmail.com',$factura->id);
 
+
         if($tipo_factura === "online"){
             $siat = app(SiatController::class);
             $for = json_decode($siat->recepcionFactura($archivoZip, $valoresCabecera['fechaEmision'],$hashArchivo));
