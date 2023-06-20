@@ -480,17 +480,22 @@ Route::middleware(['auth'])->group(function () {
     Route::post('EventoSignificativo/buscarEventosSignificativos','EventoSignificativoController@buscarEventosSignificativos');
 
 
-    // Route::post('EventoSignificativo/correo', function(){+
+    // Route::post('EventoSignificativo/correo', function(){
+    // Route::get('EventoSignificativo/correo', function(){
 
     //     $pdfPath = "assets/docs/joel.pdf";
     //     $xmlPath = "assets/docs/facturaxml.xml";
 
-    //     $mail = new EnvioFactura();
+    //     $mail = new EnvioFactura("JOEL FLORES");
     //     $mail->attach($pdfPath, ['as' => 'Factura.pdf'])
     //         ->attach($xmlPath, ['as' => 'Factura.xml']);
 
     //     $response = Mail::to('jjjoelcito123@gmail.com')->send($mail);
     //     dd($response);
+
+    //     // $name = "LUIS FLORES QUISPE";
+    //     // return view('mail.correoFactura')->with(compact('name'));
+
     // });
 
 

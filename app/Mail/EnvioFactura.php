@@ -10,15 +10,20 @@ use Illuminate\Queue\SerializesModels;
 class EnvioFactura extends Mailable
 {
     use Queueable, SerializesModels;
+    public $nombre;
+    public $numero;
+    public $fecha;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($nombre, $numero, $fecha)
     {
-        //
+        $this->nombre   = $nombre;
+        $this->numero   = $numero;
+        $this->fecha    = $fecha;
     }
 
     /**
@@ -28,8 +33,12 @@ class EnvioFactura extends Mailable
      */
     public function build()
     {
-        $name = "JOEL";
+        // $name = "JOEL";
+        // $nombre = "JOEL JONATHAN FLORES QUISPE";
+        $name       = $this->nombre;
+        $date       = $this->fecha;
+        $number     = $this->numero;
 
-        return $this->view('mail.correoFactura')->with(compact('name'));
+        return $this->view('mail.correoFactura')->with(compact('name', 'date', 'number'));
     }
 }

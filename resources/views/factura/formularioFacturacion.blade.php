@@ -326,13 +326,17 @@
                             timer: 3000
                         })
                         window.location.href = "{{ url('Factura/listadoPagos')}}"
-                        {{--  location.reload();  --}}
+                    }else if(data.estado === "error_email"){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: data.msg,
+                        })
                     }else{
                         Swal.fire({
                             icon: 'error',
                             title: 'Error!',
                             text: 'LA FACTURA FUE RECHAZADA',
-                            timer: 3000
                         })
                     }
                 }

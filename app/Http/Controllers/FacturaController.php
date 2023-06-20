@@ -777,6 +777,14 @@ class FacturaController extends Controller
 
         $tipo_factura = $request->input('modalidad');
 
+        // VERIFICAMOS SI EXISTE LOS DATOS SUFICINTES APRA EL MANDAO DEL CORREO
+        $persona = Persona::find($datosPersona['persona_id']);
+        if(!($persona && $persona->email != null && $persona->email != '')){
+            $data['estado'] = "error_email";
+            $data['msg']    = "La persona no tiene correo";
+            return $data;
+        }
+
         // CODIGO DEL VIDEO PARACE QUE SIRVE NOMAS
         // ini_set('soap.wsdl_cache_enable',0);
         // $wdls = "https://indexingenieria.com/webservices/wssiatcuf.php?wsdl";
@@ -884,11 +892,6 @@ class FacturaController extends Controller
 
         $factura->save();
 
-
-        // ENVIAMOS EL CORREO DE LA FACTURA
-        // $this->enviaCorreo('jjjoelcito123@gmail.com',$factura->id);
-
-
         if($tipo_factura === "online"){
             $siat = app(SiatController::class);
             $for = json_decode($siat->recepcionFactura($archivoZip, $valoresCabecera['fechaEmision'],$hashArchivo));
@@ -900,14 +903,14 @@ class FacturaController extends Controller
                 $codigo_recepcion   = null;
             }else{
                 if($for->resultado->RespuestaServicioFacturacion->transaccion){
-                    $codigo_recepcion = $for->resultado->RespuestaServicioFacturacion->codigoRecepcion;
-                    $descripcion = NULL;
+                    $codigo_recepcion   = $for->resultado->RespuestaServicioFacturacion->codigoRecepcion;
+                    $descripcion        = NULL;
                 }else{
-                    $codigo_recepcion = NULL;
-                    $descripcion = $for->resultado->RespuestaServicioFacturacion->mensajesList->descripcion;
+                    $codigo_recepcion   = NULL;
+                    $descripcion        = $for->resultado->RespuestaServicioFacturacion->mensajesList->descripcion;
                 }
-                $codigo_descripcion = $for->resultado->RespuestaServicioFacturacion->codigoDescripcion;
-                $codigo_trancaccion = $for->resultado->RespuestaServicioFacturacion->transaccion;
+                $codigo_descripcion     = $for->resultado->RespuestaServicioFacturacion->codigoDescripcion;
+                $codigo_trancaccion     = $for->resultado->RespuestaServicioFacturacion->transaccion;
             }
         }else{
             $codigo_descripcion = null;
@@ -1002,6 +1005,15 @@ class FacturaController extends Controller
         }
 
 
+        // ENVIAMOS EL CORREO DE LA FACTURA
+        $nombre = $persona->nombres." ".$persona->apellido_paterno." ".$persona->apellido_materno;
+        $this->enviaCorreo(
+            $persona->email,
+            $nombre,
+            $factura->numero,
+            $factura->fecha,
+            $factura->id
+        );
 
         // PARA VALIDAR EL XML
         // $this->validar();
@@ -1501,9 +1513,10 @@ class FacturaController extends Controller
         // }
     }
 
-    protected function enviaCorreo($correo, $factura_id){
+    protected function enviaCorreo($correo, $nombre, $numero, $fecha, $factura_id){
 
         $factura = Factura::find($factura_id);
+
         $xml = $factura['productos_xml'];
 
         $archivoXML = new SimpleXMLElement($xml);
@@ -1529,7 +1542,7 @@ class FacturaController extends Controller
         // $pdfPath = "assets/docs/facturapdf.pdf";
         $xmlPath = "assets/docs/facturaxml.xml";
 
-        $mail = new EnvioFactura();
+        $mail = new EnvioFactura($nombre, $numero, $fecha);
         // $mail->attach($pdfPath, ['as' => 'Factura.pdf'])
         $mail->attach($rutaPDF, ['as' => 'Factura.pdf'])
             ->attach($xmlPath, ['as' => 'Factura.xml']);

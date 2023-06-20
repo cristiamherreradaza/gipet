@@ -6,21 +6,160 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>  --}}
     <style type="text/css">
-        body {
-            font-family: 'Verdana';
-            font-size: 15px;
-        }
-        h1{
-            font-size:20px;
+          body{
+            background-color: #ff953f; /* Color plomo */
+          }
+
+          .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+          }
+
+          .line {
+            margin-bottom: 10px; /* Espacio entre las líneas */
+            padding: 10px;
+            text-align: justify;
             font-weight: bold;
-            text-decoration: underline;
-        }
+          }
+          .titulo{
+            font-size: 25px;
+            color: #09366f;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+
+          }
+
+          .hijo{
+            width: 500px;
+            background-color: #ffffff;
+            padding: 25px;
+            border: 10px solid #09366f; /* Borde azul */
+            box-shadow: 0 0 0 10px #d7d7d7; /* Borde plomo (sombra) */
+          }
+          .tituloFooter{
+            font-size: 25px;
+            color: white;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+            text-align: center
+          }
     </style>
 </head>
 <body>
-    <h1>Saludos {{ $name }}</h1>
-    <p>
-        Este es una prube a de envio de correo de GIPET
-    </p>
+    <div class="container">
+        <div class="hijo">
+            <div class="line">
+                <center>
+                    <img src="https://gipet.net/wp-content/uploads/2020/10/nuevo_logoV2.png" alt="aqui va el Logo de KENNEL">
+                </center>
+            </div>
+            <div class="titulo">
+                ESCUELA FINANCIERA GIPET SRL.
+            </div>
+            <hr>
+            <div class="line">
+                Hola {{ $name }}
+            </div>
+            <div class="line">
+                ¡Gracias por confiar en nosotros!
+                Adjunto a este correo, encontrarás tu
+                Factura Computarizada en Línea (Representación Gráfica)
+                con N° {{ $number }} emitida en {{ $date }} y la información de
+                la transacción en formato XML.
+            </div>
+            <div class="line">
+                Cualquier consulta respecto a la factura, no dudes
+                realizarla dentro del mes de su emisión y a través
+                de nuestros canales de contacto.
+            </div>
+            <div class="line">
+                ¡Que tengas un gran día!
+            </div>
+        </div>
+        <br>
+        <hr>
+        <br>
+        <div class="tituloFooter">
+            SOMOS ESPECIALISTAS EN LA FORMACION DE CONTADORES GENERALES
+        </div>
+        <div class="line">
+            <a href="https://wa.link/wbeou8">WhatsApp</a> | <a href="https://www.facebook.com/EFGIPET">Facebook</a> | <a href="https://ef-gipet.edu.bo/">ef-gipet.edu.bo</a>
+        </div>
+    </div>
+
+    {{--  <div class="center-div">
+        <div id="logo">
+            <img src="https://gipet.net/wp-content/uploads/2020/10/nuevo_logoV2.png" alt="aqui va el Logo de KENNEL">
+        </div>
+        <div class="container bg-danger">
+            <p>
+                Este es una prube a de envio de correo de GIPET
+            </p>
+        </div>
+        <div class="container bg-danger">
+            <p>
+                Este es una prube a de envio de correo de GIPET
+            </p>
+        </div>
+        <div class="container bg-danger">
+            <p>
+                Este es una prube a de envio de correo de GIPET
+            </p>
+        </div>
+        <div class="container bg-danger">
+            <p>
+                Este es una prube a de envio de correo de GIPET
+            </p>
+        </div>
+
+         <div class="container bg-danger">
+            <p>
+                Este es una prube a de envio de correo de GIPET
+            </p>
+        </div>
+        <div class="container bg-danger">
+            <p>
+                Este es una prube a de envio de correo de GIPET
+            </p>
+        </div>
+
+         <div class="container bg-danger">
+            <p>
+                Este es una prube a de envio de correo de GIPET
+            </p>
+        </div>
+        <div class="container bg-danger">
+            <p>
+                Este es una prube a de envio de correo de GIPET
+            </p>
+        </div>
+        <div class="container bg-danger">
+            <p>
+                Este es una prube a de envio de correo de GIPET
+            </p>
+        </div>
+        <div class="container bg-danger">
+            <p>
+                Este es una prube a de envio de correo de GIPET
+            </p>
+        </div>
+
+         <div class="container bg-danger">
+            <p>
+                Este es una prube a de envio de correo de GIPET
+            </p>
+        </div>
+        <div class="container bg-danger">
+            <p>
+                Este es una prube a de envio de correo de GIPET
+            </p>
+        </div>
+    </div>  --}}
+
+
+
+
 </body>
 </html>
