@@ -88,5 +88,78 @@
             <a href="https://wa.link/wbeou8">WhatsApp</a> | <a href="https://www.facebook.com/EFGIPET">Facebook</a> | <a href="https://ef-gipet.edu.bo/">ef-gipet.edu.bo</a>
         </div>
     </div>
+
+    {{--  <div class="center-div">
+        <div id="logo">
+            <img src="https://gipet.net/wp-content/uploads/2020/10/nuevo_logoV2.png" alt="aqui va el Logo de KENNEL">
+        </div>
+        <div class="container bg-danger">
+            <p>
+                Este es una prube a de envio de correo de GIPET
+            </p>
+        </div>
+        <div class="container bg-danger">
+            <p>
+                Este es una prube a de envio de correo de GIPET
+            </p>
+        </div>
+        <div class="container bg-danger">
+            <p>
+                Este es una prube a de envio de correo de GIPET
+            </p>
+        </div>
+        <div class="container bg-danger">
+            <p>
+                Este es una prube a de envio de correo de GIPET
+            </p>
+        </div>
+
+         <div class="container bg-danger">
+            <p>
+                Este es una prube a de envio de correo de GIPET
+            </p>
+        </div>
+        <div class="container bg-danger">
+            <p>
+                Este es una prube a de envio de correo de GIPET
+            </p>
+        </div>
+
+         <div class="container bg-danger">
+            <p>
+                Este es una prube a de envio de correo de GIPET
+            </p>
+        </div>
+        <div class="container bg-danger">
+            <p>
+                Este es una prube a de envio de correo de GIPET
+            </p>
+        </div>
+        <div class="container bg-danger">
+            <p>
+                Este es una prube a de envio de correo de GIPET
+            </p>
+        </div>
+        <div class="container bg-danger">
+            <p>
+                Este es una prube a de envio de correo de GIPET
+            </p>
+        </div>
+
+         <div class="container bg-danger">
+            <p>
+                Este es una prube a de envio de correo de GIPET
+            </p>
+        </div>
+        <div class="container bg-danger">
+            <p>
+                Este es una prube a de envio de correo de GIPET
+            </p>
+        </div>
+    </div>  --}}
+
+
+
+
 </body>
 </html>
