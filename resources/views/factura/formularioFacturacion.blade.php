@@ -270,6 +270,7 @@
                     codigoSucursal:0,
                     direccion:direccion ,
                     codigoPuntoVenta:0,
+                    //codigoPuntoVenta:{{ Auth::user()->codigo_punto_venta }},
                     fechaEmision:fechaEmision,
                     nombreRazonSocial:nombreRazonSocial,
                     codigoTipoDocumentoIdentidad:codigoTipoDocumentoIdentidad,
@@ -318,9 +319,12 @@
                 type: 'POST',
                 dataType:'json',
                 success: function(data) {
+
+                    console.log(data);
+
                     if(data.estado === "VALIDADA"){
                         Swal.fire({
-                            icon: 'success',
+                            type: 'success',
                             title: 'Excelente!',
                             text: 'LA FACTURA FUE VALIDADA',
                             timer: 3000
@@ -328,13 +332,21 @@
                         window.location.href = "{{ url('Factura/listadoPagos')}}"
                     }else if(data.estado === "error_email"){
                         Swal.fire({
-                            icon: 'error',
+                            type: 'error',
                             title: 'Error!',
                             text: data.msg,
                         })
+                    }else if(data.estado === "OFFLINE"){
+                        Swal.fire({
+                            type: 'warning',
+                            title: 'Exito!',
+                            text: 'LA FACTURA FUERA DE LINEA FUE REGISTRADA',
+                        })
+                        {{--  window.location.href = "{{ url('Factura/listadoPagos')}}"  --}}
+                        location.reload();
                     }else{
                         Swal.fire({
-                            icon: 'error',
+                            type: 'error',
                             title: 'Error!',
                             text: 'LA FACTURA FUE RECHAZADA',
                         })

@@ -78,8 +78,12 @@
                 <a href="https://pilotosiat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf={{ $c->cuf }}&numero={{ $c->numero }}&t=2" target="_blank" class="btn btn-dark btn-icon btn-sm"><i class="fa fa-file"></i></a>
 
                 @if ($c->estado != 'Anulado')
-                    @if ($c->productos_xml != null)
-                        <button class="btn btn-danger btn-icon" onclick="modalAnularFactura('{{ $c->id }}')"><i class="fa fa-trash"></i></button>
+                    @if($c->tipo_factura === "online")
+                        @if ($c->productos_xml != null)
+                            <button class="btn btn-danger btn-icon" onclick="modalAnularFactura('{{ $c->id }}')"><i class="fa fa-trash"></i></button>
+                        @endif
+                    @else
+                        <button class="btn btn-dark btn-icon" onclick="modalRecepcionFacuraContingenciaFueraLinea('{{ $c->id }}')"><i class="fa fa-upload" aria-hidden="true"></i></button>
                     @endif
                 @endif
 

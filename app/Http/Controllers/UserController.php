@@ -129,7 +129,7 @@ class UserController extends Controller
         $user->persona_referencia = $request->persona_referencia_edicion;
         $user->numero_referencia = $request->numero_referencia_edicion;
         $user->name = $request->username_edicion;
-        $user->codigo_punto_venta = $request->input('codigo_punto_venta');
+        $user->codigo_punto_venta = $request->input('codigo_punto_venta_edicion');
         // if($user->perfil_id != $request->perfil_edicion)
         // {
         //     // Eliminaremos el perfil con sus respectivos menus anteriores en la tabla menusUser

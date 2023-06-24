@@ -493,7 +493,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <label class="control-label">Punto de venta</label>
-                            <select name="codigo_punto_venta" id="codigo_punto_venta" class="form-control">
+                            <select name="codigo_punto_venta_edicion" id="codigo_punto_venta_edicion" class="form-control">
                                 <option value="">Seleccione</option>
                                 @foreach ( $puntos as $p)
                                 <option value="{{ $p['codigoPuntoVenta'] }}">{{ $p['nombrePuntoVenta'] }}</option>
@@ -748,7 +748,7 @@
         $("#nombre_hijo_edicion").val(nombre_hijo);
         $("#persona_referencia_edicion").val(persona_referencia);
         $("#numero_referencia_edicion").val(numero_referencia);
-        $("#codigo_punto_venta").val(codigo_punto_venta)
+        $("#codigo_punto_venta_edicion").val(codigo_punto_venta)
         $("#editar_usuarios").modal('show');
     }
 

@@ -88,7 +88,7 @@
                                 <select name="evento_significativo_contingencia_select" id="evento_significativo_contingencia_select" class="form-control" required>
 
                                 </select>
-                                <input type="text" id="factura_id_contingencia" name="factura_id_contingencia" required>
+                                <input type="hidden" id="factura_id_contingencia" name="factura_id_contingencia" required>
                             </div>
                             <div id="bloque_no_hay_eventos" style="display: none;">
                                 <span class="text-danger text-center" id="mensaje_contingencia"></span>

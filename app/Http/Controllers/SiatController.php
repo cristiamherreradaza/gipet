@@ -15,9 +15,11 @@ class SiatController extends Controller
 {
 
     public function __construct(){
+
+        $this->codigoPuntoVenta = Auth::user()->codigo_punto_venta;
+
         if(!session()->has('scuis')){
             $codigoCuis = json_decode($this->cuis());
-            // dd($codigoCuis, session()->all());
             if($codigoCuis->estado === "success"){
                 // dd("si");
                 session(['scuis'                => $codigoCuis->resultado->RespuestaCuis->codigo]);
@@ -34,16 +36,17 @@ class SiatController extends Controller
         }
     }
 
-    protected $header           = "apikey: TokenApi eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4NDM5ODU2THB6IiwiY29kaWdvU2lzdGVtYSI6Ijc3MkM0QTVENUVBQTQyQjlBNDFCNDM2Iiwibml0IjoiSDRzSUFBQUFBQUFBQURNMHR6QXhOak13c2dRQUYyano4UWtBQUFBPSIsImlkIjo2NTAyNjYsImV4cCI6MTY5MTk3MTIwMCwiaWF0IjoxNjg0MDkxNTc0LCJuaXREZWxlZ2FkbyI6MTc4NDM2MDI5LCJzdWJzaXN0ZW1hIjoiU0ZFIn0.09bh1_ENu-jzmY5kh31AEfmmLY79ucj_XN_nHnmaBDayNYq6_QcwaiwDc87PMHNRj2y5bDvAFBC0g3HXqTgZaA";
-    protected $timeout          = 5;                            // TIEMPO EN ESPERA PARA QUE RESPONDA SITA
-    protected $codigoAmbiente   = 2;                            // si estamos desarrollo o pruebas  1 Produccion --- 2 Desarrollo
-    protected $codigoModalidad  = 2;                            // que modalidad de facturacion es  1 Electronica --- 2 Computarizada
-    protected $codigoPuntoVenta = 0;                            // NUMOER DE QUE PUNTO DE VENTA ES
-    // protected $codigoPuntoVenta = 1;                            // NUMOER DE QUE PUNTO DE VENTA ES
-    // protected $codigoPuntoVenta = 3;                            // NUMOER DE QUE PUNTO DE VENTA ES
-    protected $codigoSistema    = "772C4A5D5EAA42B9A41B436";    // CODIGO DE SISTEMA QUE TE DA SIAT
-    protected $codigoSucursal   = 0;                            // CODIGO DE TU SUCURSAL
-    protected $nit              = "178436029";                  // NIT DE LA EMPRESA
+    protected $header                   = "apikey: TokenApi eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4NDM5ODU2THB6IiwiY29kaWdvU2lzdGVtYSI6Ijc3MkM0QTVENUVBQTQyQjlBNDFCNDM2Iiwibml0IjoiSDRzSUFBQUFBQUFBQURNMHR6QXhOak13c2dRQUYyano4UWtBQUFBPSIsImlkIjo2NTAyNjYsImV4cCI6MTY5MTk3MTIwMCwiaWF0IjoxNjg0MDkxNTc0LCJuaXREZWxlZ2FkbyI6MTc4NDM2MDI5LCJzdWJzaXN0ZW1hIjoiU0ZFIn0.09bh1_ENu-jzmY5kh31AEfmmLY79ucj_XN_nHnmaBDayNYq6_QcwaiwDc87PMHNRj2y5bDvAFBC0g3HXqTgZaA";
+    protected $timeout                  = 5;                            // TIEMPO EN ESPERA PARA QUE RESPONDA SITA
+    protected $codigoAmbiente           = 2;                            // si estamos desarrollo o pruebas  1 Produccion --- 2 Desarrollo
+    protected $codigoModalidad          = 2;                            // que modalidad de facturacion es  1 Electronica --- 2 Computarizada
+    protected $codigoPuntoVenta         = 0;                            // NUMOER DE QUE PUNTO DE VENTA ES
+    // protected $codigoPuntoVenta      = 1;                            // NUMOER DE QUE PUNTO DE VENTA ES
+    // protected $codigoPuntoVenta      = 3;                            // NUMOER DE QUE PUNTO DE VENTA ES
+    protected $codigoSistema            = "772C4A5D5EAA42B9A41B436";    // CODIGO DE SISTEMA QUE TE DA SIAT
+    protected $codigoSucursal           = 0;                            // CODIGO DE TU SUCURSAL
+    protected $nit                      = "178436029";                  // NIT DE LA EMPRESA
+    protected $codigoDocumentoSector    = 11;                           // SECTOR EDUCATIIVO
 
     public function verificarComunicacion(){
         $wsdl = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionCodigos?wsdl";
@@ -74,13 +77,11 @@ class SiatController extends Controller
             $data['resultado'] = $resultado;
         }
 
-        // return $resultado;
-        // return json_encode($resultado, JSON_UNESCAPED_UNICODE);
         return json_encode($data, JSON_UNESCAPED_UNICODE);
     }
 
     public function cuis(){
-        // $this->verificarConeccion();
+
         $wsdl               = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionCodigos?wsdl";
         $codigoAmbiente     = $this->codigoAmbiente;
         $codigoModalidad    = $this->codigoModalidad;
@@ -88,6 +89,15 @@ class SiatController extends Controller
         $codigoSistema      = $this->codigoSistema;
         $codigoSucursal     = $this->codigoSucursal;
         $nit                = $this->nit;
+
+        // dd(
+        //     $codigoAmbiente,
+        //     $codigoModalidad,
+        //     $codigoPuntoVenta,
+        //     $codigoSistema,
+        //     $codigoSucursal,
+        //     $nit
+        // );
 
         $parametros         =  array(
             'SolicitudCuis' => array(
@@ -300,8 +310,8 @@ class SiatController extends Controller
         $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/ServicioFacturacionComputarizada?wsdl";
         $codigoAmbiente         = $this->codigoAmbiente;
 
-        $codigoDocumentoSector  = 11;                       //NUEVO SECTOR EDUCATIIVO
-        $codigoEmision          = 1;                        //NUEVO LINENA
+        $codigoDocumentoSector  = $this->codigoDocumentoSector;     //NUEVO SECTOR EDUCATIIVO
+        $codigoEmision          = 1;                                //NUEVO LINENA
 
         $codigoModalidad        = $this->codigoModalidad;
         $codigoPuntoVenta       = $this->codigoPuntoVenta;
@@ -373,8 +383,8 @@ class SiatController extends Controller
         $this->verificarConeccion();
         $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/ServicioFacturacionComputarizada?wsdl";
         $codigoAmbiente         = $this->codigoAmbiente;
-        $codigoDocumentoSector  = 11;                       // SECTOR EDUCATIVO
-        $codigoEmision          = 2;                        // FUERA DE  LINEA (LINEA = 1 | FUERA DE LINEA = 2)
+        $codigoDocumentoSector  = $this->codigoDocumentoSector;     // SECTOR EDUCATIVO
+        $codigoEmision          = 2;                                // FUERA DE  LINEA (LINEA = 1 | FUERA DE LINEA = 2)
         $codigoModalidad        = $this->codigoModalidad;
         $codigoPuntoVenta       = $this->codigoPuntoVenta;
         $codigoSistema          = $this->codigoSistema;
@@ -450,7 +460,7 @@ class SiatController extends Controller
         $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/ServicioFacturacionComputarizada?wsdl";
 
         $codigoAmbiente         = $this->codigoAmbiente;
-        $codigoDocumentoSector  = 11; //NUEVO SECTOR EDUCATIIVO
+        $codigoDocumentoSector  = $this->codigoDocumentoSector; //NUEVO SECTOR EDUCATIIVO
         $codigoEmision          = 1; //NUEVO LINENA
         $codigoModalidad        = $this->codigoModalidad;
 
@@ -1294,7 +1304,7 @@ class SiatController extends Controller
         $this->verificarConeccion();
         $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/ServicioFacturacionComputarizada?wsdl";
         $codigoAmbiente         = $this->codigoAmbiente;
-        $codigoDocumentoSector  = 11;                           //SECTOR EDUCATIVO
+        $codigoDocumentoSector  = $this->codigoDocumentoSector;                           //SECTOR EDUCATIVO
         $codigoEmision          = $codEmision;                  //NUEVO LINENA 1 LINEA | 2 FUENRA DE LINEA
         $codigoModalidad        = $this->codigoModalidad;
         $codigoPuntoVenta       = $this->codigoPuntoVenta;

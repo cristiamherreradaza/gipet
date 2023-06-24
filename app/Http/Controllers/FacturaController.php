@@ -753,11 +753,17 @@ class FacturaController extends Controller
     // FACTURACION EN LINEA
     public function emitirFactura(Request $request){
 
-        // dd("este chee");
+        // dd(
+        //     "este chee",
+        //     $request->all(),
+        //     $request->input('datos')['factura'][0]['cabecera']['numeroDocumento'],
+        //     $request->input('datos')['factura'][0]['cabecera']['nombreRazonSocial'],
+        // );
 
         $datos              = $request->input('datos');
         $datosPersona       = $request->input('datosPersona');
         $valoresCabecera    = $datos['factura'][0]['cabecera'];
+        $puntoVenta         = Auth::user()->codigo_punto_venta;
 
         $nitEmisor          = str_pad($valoresCabecera['nitEmisor'],13,"0",STR_PAD_LEFT);
         $fechaEmision       = str_replace(".","",str_replace(":","",str_replace("-","",str_replace("T", "",$valoresCabecera['fechaEmision']))));
@@ -767,7 +773,8 @@ class FacturaController extends Controller
         $tipoFactura        = 1;
         $tipoFacturaSector  = 11;
         $numeroFactura      = str_pad($valoresCabecera['numeroFactura'],10,"0",STR_PAD_LEFT);
-        $puntoVenta         = str_pad(0,4,"0",STR_PAD_LEFT);
+        $puntoVenta         = str_pad($puntoVenta,4,"0",STR_PAD_LEFT);
+        // $puntoVenta         = str_pad(0,4,"0",STR_PAD_LEFT);
         // $puntoVenta         = str_pad(1,4,"0",STR_PAD_LEFT);
         // $puntoVenta         = str_pad(3,4,"0",STR_PAD_LEFT);
 
@@ -784,6 +791,10 @@ class FacturaController extends Controller
             $data['msg']    = "La persona no tiene correo";
             return $data;
         }
+
+        $persona->nit                   = $request->input('datos')['factura'][0]['cabecera']['numeroDocumento'];
+        $persona->razon_social_cliente  = $request->input('datos')['factura'][0]['cabecera']['nombreRazonSocial'];
+        $persona->save();
 
         // CODIGO DEL VIDEO PARACE QUE SIRVE NOMAS
         // ini_set('soap.wsdl_cache_enable',0);
@@ -827,9 +838,12 @@ class FacturaController extends Controller
 
         // dd($cufPro, $scodigoControl, $this->generarBase16($cadenaConM11), $cadenaConM11);
 
-        $datos['factura'][0]['cabecera']['cuf']         = $cufPro;
-        $datos['factura'][0]['cabecera']['cufd']        = $scufd;
-        $datos['factura'][0]['cabecera']['direccion']   = $sdireccion;
+        // dd($datos['factura'][0]['cabecera']['codigoPuntoVenta']);
+
+        $datos['factura'][0]['cabecera']['cuf']                 = $cufPro;
+        $datos['factura'][0]['cabecera']['cufd']                = $scufd;
+        $datos['factura'][0]['cabecera']['direccion']           = $sdireccion;
+        $datos['factura'][0]['cabecera']['codigoPuntoVenta']    = $puntoVenta;
 
         // $datos['factura'][0]['cabecera']['codigoPuntoVenta']    = 3;
         // $datos['factura'][0]['cabecera']['codigoPuntoVenta']    = 1;
@@ -896,6 +910,8 @@ class FacturaController extends Controller
             $siat = app(SiatController::class);
             $for = json_decode($siat->recepcionFactura($archivoZip, $valoresCabecera['fechaEmision'],$hashArchivo));
 
+            // dd($for);
+
             if($for->estado === "error"){
                 $codigo_descripcion = null;
                 $codigo_trancaccion = null;
@@ -912,11 +928,17 @@ class FacturaController extends Controller
                 $codigo_descripcion     = $for->resultado->RespuestaServicioFacturacion->codigoDescripcion;
                 $codigo_trancaccion     = $for->resultado->RespuestaServicioFacturacion->transaccion;
             }
+
+            $data['estado'] = $codigo_descripcion;
+
         }else{
             $codigo_descripcion = null;
             $codigo_recepcion   = null;
             $codigo_trancaccion = null;
             $descripcion        = null;
+
+            $data['estado']     = 'OFFLINE';
+
         }
 
         // $siat = app(SiatController::class);
@@ -952,7 +974,8 @@ class FacturaController extends Controller
         $facturaNew->fechaVigencia      = $sfechaVigenciaCufd;
         $facturaNew->save();
 
-        $data['estado'] = $facturaNew->codigo_descripcion;
+
+        // $data['estado'] = $facturaNew->codigo_descripcion;
 
         for ($i=1; $i < count($datos['factura']) ; $i++) {
 
@@ -1037,6 +1060,13 @@ class FacturaController extends Controller
             $fechaEmicion = $fechaActual;
             $archivoXML = new SimpleXMLElement($xml);
 
+            if($codigo_cafc_contingencia != null){
+                $archivoXML->cabecera->cafc             = $codigo_cafc_contingencia;
+                $archivoXML->cabecera->numeroFactura    = 1;
+                if ($archivoXML->cabecera->cafc->attributes('xsi', true)->nil)
+                    unset($archivoXML->cabecera->cafc->attributes('xsi', true)->nil);
+            }
+
             // GUARDAMOS EN LA CARPETA EL XML
             $archivoXML->asXML("assets/docs/paquete/facturaxmlContingencia.xml");
 
@@ -1066,8 +1096,7 @@ class FacturaController extends Controller
             $res = json_decode($siat->recepcionPaqueteFactura($contenidoArchivo, $fechaEmicion, $hashArchivo, $codigo_cafc_contingencia, 1, $codigo_evento_significativo));
             // $res = json_decode($siat->recepcionPaqueteFactura($contenidoArchivo, $fechaEmicion, $hashArchivo, NULL, 1, $codigo_evento_significativo));
             $data['estado'] = "success";
-            // dd($res);
-            // if($res->estado === "success"){
+
             if($res->resultado->RespuestaServicioFacturacion->transaccion){
                 $data['descripcion']                = $res->resultado->RespuestaServicioFacturacion->codigoDescripcion;
                 $data['codRecepcion']               = $res->resultado->RespuestaServicioFacturacion->codigoRecepcion;
@@ -1075,24 +1104,29 @@ class FacturaController extends Controller
                     $factura->codigo_descripcion    = $res->resultado->RespuestaServicioFacturacion->codigoDescripcion;
                     $factura->codigo_recepcion      = $res->resultado->RespuestaServicioFacturacion->codigoRecepcion;
                     $factura->codigo_trancaccion    = $res->resultado->RespuestaServicioFacturacion->transaccion;
-                    $factura->save();
+                    // $factura->save();
                     $respVali = json_decode($siat->validacionRecepcionPaqueteFactura(2,$factura->codigo_recepcion));
                     if($respVali->estado === "success"){
                         if($respVali->resultado->RespuestaServicioFacturacion->transaccion){
                             $factura->codigo_descripcion    = $respVali->resultado->RespuestaServicioFacturacion->codigoDescripcion;
-                            if($respVali->resultado->RespuestaServicioFacturacion->codigoDescripcion != 'VALIDADA')
+                            if($respVali->resultado->RespuestaServicioFacturacion->codigoDescripcion === 'PENDIENTE'){
+                                $factura->codigo_descripcion    = $respVali->resultado->RespuestaServicioFacturacion->codigoDescripcion;
+                            }else if($respVali->resultado->RespuestaServicioFacturacion->codigoDescripcion != 'VALIDADA'){
                                 $factura->descripcion       = json_encode($respVali->resultado->RespuestaServicioFacturacion->mensajesList);
+                            }
                         }else{
 
                         }
-                        $factura->save();
+                        // $factura->save();
                     }else{
 
                     }
                 }
             }else{
                 $data['estado'] = "error";
+                $factura->descripcion = json_encode($res->resultado->RespuestaServicioFacturacion->mensajesList);
             }
+            $factura->save();
         }else{
             $data['estado'] = "error";
         }
@@ -1485,7 +1519,10 @@ class FacturaController extends Controller
 
         // $res = $siat->recepcionPaqueteFactura($archivoZip, $fechaEmicion, $hashArchivo, NULL, 1, 5112428);
         // $res = $siat->recepcionPaqueteFactura($archivoZip, $fechaEmicion, $hashArchivo, NULL, 1, 5112428);
+
         $res = $siat->recepcionPaqueteFactura($contenidoArchivo, $fechaEmicion, $hashArchivo, NULL, 1, 5123269);
+        // $res = $siat->recepcionPaqueteFactura(NULL, NULL, NULL, NULL, NULL, NULL);
+
         // $res = $siat->recepcionPaqueteFactura("1", "2", "3", "4", "5");
         // dd($res, $archivoZip, $fechaEmicion, $archivoZip);
         dd($res);
