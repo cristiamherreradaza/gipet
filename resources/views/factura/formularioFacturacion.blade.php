@@ -309,12 +309,18 @@
                 'carnet':$('#cedulaPersona').val()
             };
 
+            var datosRecepcion = {
+                'uso_cafc'                  :$('input[name="uso_cafc"]:checked').val(),
+                'codigo_cafc_contingencia'  :$('#codigo_cafc_contingencia').val()
+            };
+
             $.ajax({
                 url: "{{ url('Factura/emitirFactura') }}",
                 data: {
-                    datos: datos,
-                    datosPersona:datosPersona,
-                    modalidad: $('#tipo_facturacion').val()
+                    datos           : datos,
+                    datosPersona    :datosPersona,
+                    datosRecepcion  :datosRecepcion,
+                    modalidad       : $('#tipo_facturacion').val()
                 },
                 type: 'POST',
                 dataType:'json',
@@ -388,6 +394,56 @@
                 $('#motoTotalFac').val((data.valor)-$('#descuento_adicional').val())
             }
         });
+    }
+
+    function preguntaUsoCafc(valor){
+        console.log(valor.value)
+        if(valor.value === "offline"){
+            $("#bloque_uso_cafc").show('toggle');
+        }else{
+            $("#bloque_uso_cafc").hide('toggle');
+        }
+    }
+
+    function usoCafcFactura(radio){
+        if(radio.value === "si"){
+            $.ajax({
+                url: "{{ url('Factura/sacaNumeroCafcUltimo') }}",
+                method: "POST",
+                dataType: 'json',
+                success: function (data) {
+                    if(data.estado === "success"){
+                        {{--  $("#numero_factura_cafc").val(data.numero);  --}}
+                        $("#numero_factura").val(data.numero);
+                        $("#codigo_cafc_contingencia").val("111DE8BD3981C");
+                    }else{
+                        Swal.fire({
+                            icon:   'error',
+                            title:  'Error!',
+                            text:   "Algo fallo"
+                        })
+                    }
+                }
+            })
+        }else{
+            $.ajax({
+                url: "{{ url('Factura/sacaNumeroFactura') }}",
+                method: "POST",
+                dataType: 'json',
+                success: function (data) {
+                    if(data.estado === "success"){
+                        $("#numero_factura").val(data.numero);
+                        $("#codigo_cafc_contingencia").val("");
+                    }else{
+                        Swal.fire({
+                            icon:   'error',
+                            title:  'Error!',
+                            text:   "Algo fallo"
+                        })
+                    }
+                }
+            })
+        }
     }
 
 </script>

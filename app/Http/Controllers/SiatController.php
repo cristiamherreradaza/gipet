@@ -17,6 +17,7 @@ class SiatController extends Controller
     public function __construct(){
 
         $this->codigoPuntoVenta = Auth::user()->codigo_punto_venta;
+        // $this->codigoPuntoVenta = 0;
 
         if(!session()->has('scuis')){
             $codigoCuis = json_decode($this->cuis());
@@ -40,7 +41,8 @@ class SiatController extends Controller
     protected $timeout                  = 5;                            // TIEMPO EN ESPERA PARA QUE RESPONDA SITA
     protected $codigoAmbiente           = 2;                            // si estamos desarrollo o pruebas  1 Produccion --- 2 Desarrollo
     protected $codigoModalidad          = 2;                            // que modalidad de facturacion es  1 Electronica --- 2 Computarizada
-    protected $codigoPuntoVenta         = 0;                            // NUMOER DE QUE PUNTO DE VENTA ES
+    // protected $codigoPuntoVenta         = 0;                            // NUMOER DE QUE PUNTO DE VENTA ES
+    protected $codigoPuntoVenta;                                        // NUMOER DE QUE PUNTO DE VENTA ES
     // protected $codigoPuntoVenta      = 1;                            // NUMOER DE QUE PUNTO DE VENTA ES
     // protected $codigoPuntoVenta      = 3;                            // NUMOER DE QUE PUNTO DE VENTA ES
     protected $codigoSistema            = "772C4A5D5EAA42B9A41B436";    // CODIGO DE SISTEMA QUE TE DA SIAT
@@ -85,6 +87,7 @@ class SiatController extends Controller
         $wsdl               = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionCodigos?wsdl";
         $codigoAmbiente     = $this->codigoAmbiente;
         $codigoModalidad    = $this->codigoModalidad;
+        // $codigoPuntoVenta   = 0; //
         $codigoPuntoVenta   = $this->codigoPuntoVenta; //
         $codigoSistema      = $this->codigoSistema;
         $codigoSucursal     = $this->codigoSucursal;
@@ -400,6 +403,27 @@ class SiatController extends Controller
         $cantidadFacturas       = $canFact;
         $codigoEvento           = $codEvent;
 
+        // dd(
+        //     "wsdl => ".$wsdl,
+        //     "codigoAmbiente => ".$codigoAmbiente,
+        //     "codigoDocumentoSector => ".$codigoDocumentoSector,
+        //     "codigoEmision => ".$codigoEmision,
+        //     "codigoModalidad => ".$codigoModalidad,
+        //     "codigoPuntoVenta => ".$codigoPuntoVenta,
+        //     "codigoSistema => ".$codigoSistema,
+        //     "codigoSucursal => ".$codigoSucursal,
+        //     "cufd => ".$cufd,
+        //     "cuis => ".$cuis,
+        //     "nit => ".$nit,
+        //     "tipoFacturaDocumento => ".$tipoFacturaDocumento,
+        //     "archivo => ".$archivo,
+        //     "fechaEnvio => ".$fechaEnvio,
+        //     "hashArchivo => ".$hashArchivo,
+        //     "cafc => ".$cafc,
+        //     "cantidadFacturas => ".$cantidadFacturas,
+        //     "codigoEvento => ".$codigoEvento
+        // );
+
         $parametros         =  array(
             'SolicitudServicioRecepcionPaquete' => array(
                 'codigoAmbiente'            => $codigoAmbiente,
@@ -581,7 +605,7 @@ class SiatController extends Controller
         $codigoModalidad        = $this->codigoModalidad;
         $codigoSistema          = $this->codigoSistema;
         $codigoSucursal         = $this->codigoSucursal;
-        $codigoTipoPuntoVenta   = 2;  //PUNTO VENTA VENTANILLA DE COBRANZA
+        $codigoTipoPuntoVenta   = 2;                        //PUNTO VENTA VENTANILLA DE COBRANZA
         $cuis                   = session('scuis');
         $descripcion            = $des;
         $nit                    = $this->nit;

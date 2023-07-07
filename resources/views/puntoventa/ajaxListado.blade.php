@@ -10,14 +10,26 @@
         </thead>
         <tbody>
             @foreach ( $puntos as $p)
-                <tr>
-                    <td>{{ $p['codigoPuntoVenta'] }}</td>
-                    <td>{{ $p['nombrePuntoVenta'] }}</td>
-                    <td>{{ $p['tipoPuntoVenta'] }}</td>
-                    <td>
-                        <button class="btn btn-danger btn-icon btn-sm" onclick="eliminaPuntoVenta('{{ $p['codigoPuntoVenta'] }}')"><i class="fa fa-trash"></i></button>
-                    </td>
-                </tr>
+                @if (is_array($p))
+                    <tr>
+                        <td>{{ $p['codigoPuntoVenta'] }}</td>
+                        <td>{{ $p['nombrePuntoVenta'] }}</td>
+                        <td>{{ $p['tipoPuntoVenta'] }}</td>
+                        <td>
+                            <button class="btn btn-danger btn-icon btn-sm" onclick="eliminaPuntoVenta('{{ $p['codigoPuntoVenta'] }}')"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                @else
+                    <tr>
+                        <td>{{ $puntos['codigoPuntoVenta'] }}</td>
+                        <td>{{ $puntos['nombrePuntoVenta'] }}</td>
+                        <td>{{ $puntos['tipoPuntoVenta'] }}</td>
+                        <td>
+                            <button class="btn btn-danger btn-icon btn-sm" onclick="eliminaPuntoVenta('{{ $puntos['codigoPuntoVenta'] }}')"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    @break
+                @endif
             @endforeach
         </tbody>
     </table>

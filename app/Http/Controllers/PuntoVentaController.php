@@ -31,6 +31,8 @@ class PuntoVentaController extends Controller
             $siat = app(SiatController::class);
             $res = json_decode($siat->registroPuntoVenta($descripcion,$nombre), true);
             $data['estado'] = $res['estado'];
+            $data['mgs'] = $res;
+
             return $data;
         }
     }
@@ -41,6 +43,7 @@ class PuntoVentaController extends Controller
             $siat = app(SiatController::class);
             $res = json_decode($siat->cierrePuntoVenta($cod), true);
             $data['estado'] = $res['estado'];
+            $data['mgs'] = $res;
             return $data;
         }
     }

@@ -133,6 +133,7 @@
             type: 'POST',
             dateType: 'json',
             success: function(data) {
+                console.log(data)
                 if(data.estado){
                     Swal.fire(
                         'Excelente!',
@@ -166,6 +167,7 @@
                     cache: false,
                     type: 'post',
                     success: function(data) {
+                        console.log(data)
                         if(data.estado === 'success'){
                             Swal.fire(
                                 'Excelente!',

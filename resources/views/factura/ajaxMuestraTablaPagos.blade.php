@@ -76,7 +76,7 @@
 
 <div class="row">
     <div class="col-md-6">
-        <a href='{{ url("Factura/generaRecibo")."/".$persona_id }}/recibo' class="btn btn-block btn-success">RECIBO</a>
+        {{--  <a href='{{ url("Factura/generaRecibo")."/".$persona_id }}/recibo' class="btn btn-block btn-success">RECIBO</a>  --}}
     </div>
 
     <div class="col-md-6">
@@ -95,7 +95,8 @@
                 <div class="form-group">
                     <label class="control-label">NUMERO DE FACTURA</label>
                     <input type="text" name="numero_factura" id="numero_factura" class="form-control"
-                        value="{{ ($ultimaFactura->numero)+1 }}" required>
+                        {{--  value="{{ ($ultimaFactura->numero)+1 }}" required>  --}}
+                        value="{{ ($ultimaFactura)+1 }}" required>
                 </div>
             </div>
 
@@ -129,13 +130,38 @@
             <div class="col-md-2">
                 <div class="form-group">
                     <label class="control-label">TIPO DE FACTURACION</label>
-                    <select name="tipo_facturacion" id="tipo_facturacion" class="form-control" required>
+                    <select name="tipo_facturacion" id="tipo_facturacion" class="form-control" required onchange="preguntaUsoCafc(this)">
                     <option value="online">EN LINEA</option>
-                    <option value="offline">FUERA DE LINEA</option>
+                    <option value="offline" selected>FUERA DE LINEA</option>
                 </select>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3" id="bloque_uso_cafc" style="display: none;">
+                <label class="control-label">USO DEL CAFC?</label>
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label ml-10" for="usocafc_no">No</label>
+                            <input type="radio" name="uso_cafc" id="usocafc_no" checked value="no"  onclick="usoCafcFactura(this)">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-group">
+                            <label class="control-label" for="usocafc_si">Si</label>
+                            <input type="radio" name="uso_cafc" id="usocafc_si"  value="si" onclick="usoCafcFactura(this)">
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label class="control-label" for="usocafc_si">CAFC</label>
+                            <input type="text" class="form-control" name="codigo_cafc_contingencia" id="codigo_cafc_contingencia">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
                 <div class="form-group">
                     <label class="control-label">&nbsp;</label>
                     {{--  <input type="submit" class="btn btn-block btn-success" value="ACEPTAR">  --}}

@@ -51,9 +51,9 @@
 <!-- fin modal anula factua -->
 
 
-<!-- inicio modal anula factua -->
+<!-- inicio modal factura contingencia -->
 <div id="modmodalContingenciaFueraLinea" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="myModalLabel">FORMULARIO DE CONTINGENCIA</h4>
@@ -62,7 +62,7 @@
             <div class="modal-body">
                 <form id="formularioRecepcionFacuraContingenciaFueraLineaEentoSignificativo" >
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">FECHA</label>
                                 <span class="text-danger">
@@ -71,45 +71,79 @@
                                 <input type="date" class="form-control" id="fecha_contingencia" name="fecha_contingencia" required>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <button class="btn btn-success btn-block mt-4" onclick="buscarEventosSignificativos()" type="button"><i class="fa fa-search"></i>Buscar</button>
                         </div>
-                    </div>
-                </form>
-
-                <form id="formularioRecepcionFacuraContingenciaFueraLinea" >
-                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">EVENTO SIGNIFICATIVO</label>
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <select name="evento_significativo_contingencia_select" id="evento_significativo_contingencia_select" class="form-control" required>
+                                <select name="evento_significativo_contingencia_select" id="evento_significativo_contingencia_select" class="form-control" onchange="muestraTableFacturaPaquete()">
 
                                 </select>
-                                <input type="hidden" id="factura_id_contingencia" name="factura_id_contingencia" required>
+                                <input type="text" id="factura_id_contingencia" name="factura_id_contingencia" required>
                             </div>
                             <div id="bloque_no_hay_eventos" style="display: none;">
                                 <span class="text-danger text-center" id="mensaje_contingencia"></span>
                             </div>
                         </div>
+                    </div>
+                </form>
+                <hr>
+
+                <div id="tablas_facturas_offline" style="display: none">
+
+                </div>
+
+                {{--  <form id="formularioRecepcionFacuraContingenciaFueraLinea" >
+                    <div class="row">
+                        <div class="col-md-6">
+
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">USO DEL CAFC?</label>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label ml-10" for="usocafc_no">No</label>
+                                        <input type="radio" name="uso_cafc" id="usocafc_no" checked value="no"  onclick="usoCafcFactura(this)">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label" for="usocafc_si">Si</label>
+                                        <input type="radio" name="uso_cafc" id="usocafc_si"  value="si" onclick="usoCafcFactura(this)">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row" style="display: none" id="bloque_cafc">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">NUMERO CAFC</label>
+                                <input type="text" class="form-control" name="numero_factura_cafc" id="numero_factura_cafc" readonly>
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">CODIGO CAFC</label>
-                                <input type="text" class="form-control" name="codigo_cafc_contingencia">
+                                <input type="text" class="form-control" name="codigo_cafc_contingencia" id="codigo_cafc_contingencia" readonly>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-block btn-success" onclick="enviarFacturaContingenica()">ENVIAR FACTURA</button>
                     </div>
-                </form>
+                </form>  --}}
             </div>
         </div>
     </div>
 </div>
-<!-- fin modal anula factua -->
+<!-- fin modal factura contingencia -->
 
 <div class="card border-info">
     <div class="card-header bg-info">
@@ -473,6 +507,10 @@
                     $('#evento_significativo_contingencia_select').empty();
                     if(data.estado === "success"){
                         $('#bloque_no_hay_eventos').hide('toggle');
+
+                        var newOption = $('<option>').text("SELECCIONE").val(null);
+                        $('#evento_significativo_contingencia_select').append(newOption);
+
                         $(data.eventos).each(function(index, element) {
                             var optionText = element.descripcion;
                             var optionValue = element.codigoRecepcionEventoSignificativo;
@@ -488,6 +526,77 @@
         }else{
             $("#formularioRecepcionFacuraContingenciaFueraLineaEentoSignificativo")[0].reportValidity();
         }
+    }
+
+    function usoCafcFactura(radio){
+        if(radio.value === "si"){
+            $.ajax({
+                url: "{{ url('Factura/sacaNumeroCafcUltimo') }}",
+                method: "POST",
+                dataType: 'json',
+                success: function (data) {
+                    if(data.estado === "success"){
+                        $("#numero_factura_cafc").val(data.numero);
+                        $("#codigo_cafc_contingencia").val("111DE8BD3981C");
+                    }else{
+                        Swal.fire({
+                            icon:   'error',
+                            title:  'Error!',
+                            text:   "Algo fallo"
+                        })
+                    }
+                }
+            })
+            $('#bloque_cafc').show('toggle');
+        }else{
+            $('#bloque_cafc').hide('toggle');
+        }
+    }
+
+    function muestraTableFacturaPaquete(){
+        let valor = $('#evento_significativo_contingencia_select').val();
+        $.ajax({
+            url: "{{ url('Factura/muestraTableFacturaPaquete') }}",
+            method: "POST",
+            dataType: 'json',
+            success: function (data) {
+                if(data.estado === "success"){
+
+
+                    $('#tablas_facturas_offline').html(data.listado);
+                    $('#tablas_facturas_offline').show('toggle');
+
+                    {{--  $("#numero_factura_cafc").val(data.numero);
+                    $("#codigo_cafc_contingencia").val("111DE8BD3981C");  --}}
+                }else{
+                    {{--  Swal.fire({
+                        icon:   'error',
+                        title:  'Error!',
+                        text:   "Algo fallo"
+                    })  --}}
+                }
+            }
+        })
+        console.log(valor);
+    }
+
+    function mandarFacturasPaquete(){
+        let arraye = $('#formularioEnvioPaquete').serializeArray();
+        // Agregar un nuevo elemento al array
+        arraye.push({ name: 'contingencia', value: $('#evento_significativo_contingencia_select').val() });
+        $.ajax({
+            url: "{{ url('Factura/mandarFacturasPaquete') }}",
+            method: "POST",
+            data:arraye,
+            dataType: 'json',
+            success: function (data) {
+                console.log(data)
+                if(data.estado === "success"){
+                }else{
+                }
+            }
+        })
+        {{--  console.log($('#formularioEnvioPaquete').serializeArray());  --}}
     }
 </script>
 @endsection

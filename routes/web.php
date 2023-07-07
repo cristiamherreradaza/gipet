@@ -468,6 +468,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('Factura/generaPdfFacturaNew/{factura_id}','FacturaController@generaPdfFacturaNew');
     Route::post('Factura/anularFacturaNew','FacturaController@anularFacturaNew');
     Route::get('Factura/pruebaSiat','FacturaController@pruebaSiat');
+    Route::post('Factura/sacaNumeroCafcUltimo','FacturaController@sacaNumeroCafcUltimo');
+    Route::post('Factura/sacaNumeroFactura','FacturaController@sacaNumeroFactura');
+    Route::post('Factura/muestraTableFacturaPaquete','FacturaController@muestraTableFacturaPaquete');
+    Route::post('Factura/mandarFacturasPaquete','FacturaController@mandarFacturasPaquete');
+    Route::get('Factura/emiteFacturaMasa','FacturaController@emiteFacturaMasa');
 
     Route::get('PuntoVenta/listado','PuntoVentaController@listado');
     Route::get('PuntoVenta/ajaxListado','PuntoVentaController@ajaxListado');
