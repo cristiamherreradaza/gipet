@@ -1069,14 +1069,14 @@ class FacturaController extends Controller
 
 
         // ENVIAMOS EL CORREO DE LA FACTURA
-        // $nombre = $persona->nombres." ".$persona->apellido_paterno." ".$persona->apellido_materno;
-        // $this->enviaCorreo(
-        //     $persona->email,
-        //     $nombre,
-        //     $factura->numero,
-        //     $factura->fecha,
-        //     $factura->id
-        // );
+        $nombre = $persona->nombres." ".$persona->apellido_paterno." ".$persona->apellido_materno;
+        $this->enviaCorreo(
+            $persona->email,
+            $nombre,
+            $factura->numero,
+            $factura->fecha,
+            $factura->id
+        );
 
         // PARA VALIDAR EL XML
         // $this->validar();
