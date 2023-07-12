@@ -365,20 +365,34 @@
     }
 
     function funcionNueva(input, pago){
-        $.ajax({
-            url: "{{ url('Factura/actualizaDescuento') }}",
-            data: {
-                pago_id: pago,
-                valor: input.value,
-                },
-            type: 'POST',
-            dataType:'json',
-            success: function(data) {
-                if(data.estado === 'success'){
-                    $('#motoTotalFac').val((data.valor)-$('#descuento_adicional').val())
+        console.log(input.value)
+        let h = 350;
+        if( (h-input.value) > 0  ){
+            $.ajax({
+                url: "{{ url('Factura/actualizaDescuento') }}",
+                data: {
+                    pago_id: pago,
+                    valor: input.value,
+                    },
+                type: 'POST',
+                dataType:'json',
+                success: function(data) {
+                    if(data.estado === 'success'){
+                        $('#motoTotalFac').val((data.valor)-$('#descuento_adicional').val())
+                    }
                 }
-            }
-        });
+            });
+            $("#btn_concluir").prop("disabled", false);
+
+        }else{
+            Swal.fire({
+                type: 'error',
+                title: 'Error!',
+                text: 'LE VALOR DEL DESCUENTO DEBE SER MAYOR A 0',
+            })
+            $("#btn_concluir").prop("disabled", true);
+
+        }
     }
 
     function caluculaTotal(event){

@@ -39,7 +39,7 @@
                         else
                             $valoInput = 0;
                     @endphp
-                    <input type="number" class="form-control" id="pago_listado_{{ $cpp->id }}" onchange="funcionNueva(this,{{ $cpp->id }})" value="{{ $valoInput }}">
+                    <input type="number" class="form-control" id="pago_listado_{{ $cpp->id }}" onchange="funcionNueva(this,{{ $cpp->id }})" value="{{ $valoInput }}" min="0.1">
                     {{--  @if ($cpp->descuento_persona_id == null || $cpp->descuento_persona->descuento_id == null)
                         NINGUNO
                     @else
@@ -81,7 +81,7 @@
 
     <div class="col-md-12">
         {{-- <a href='{{ url("Factura/ajaxFacturar")."/".$persona_id }}/factura' class="btn btn-block btn-dark" onclick="muestraNit()">FACTURA</a> --}}
-        <button class="btn btn-block btn-dark" onclick="muestraNit()">CONCLUIR</button>
+        <button class="btn btn-block btn-dark" onclick="muestraNit()" id="btn_concluir">CONCLUIR</button>
     </div>
 </div>
 <br />
@@ -180,6 +180,10 @@
     @endphp
 
     var arrayProductos = JSON.parse(@json($jsonArray))
+
+    function validaCeros(ele){
+        console.log(ele)
+    }
 
     function muestraNit(){
         let persona_id = {{ $persona_id }};
