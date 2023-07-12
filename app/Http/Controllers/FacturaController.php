@@ -1169,7 +1169,7 @@ class FacturaController extends Controller
                     // $factura->save();
                     $respVali = json_decode($siat->validacionRecepcionPaqueteFactura(2,$factura->codigo_recepcion));
 
-                    // dd($respVali);
+                    dd($respVali);
 
                     if($respVali->estado === "success"){
                         if($respVali->resultado->RespuestaServicioFacturacion->transaccion){
@@ -1250,6 +1250,7 @@ class FacturaController extends Controller
 
         if($request->ajax()){
             $persona_id = $request->input('persona');
+
             $cuotasParaPagar = Pago::select('pagos.*', 'servicios.codigoActividad', 'servicios.codigoProducto', 'servicios.unidadMedida', 'servicios.nombre')
                                     ->join('servicios', 'pagos.servicio_id', '=','servicios.id')
                                     ->where('pagos.persona_id', $persona_id)
@@ -1257,6 +1258,9 @@ class FacturaController extends Controller
                                     ->orWhere('pagos.estado', 'Parcial')
                                     ->orderBy('pagos.carrera_id', 'asc')
                                     ->get();
+                                    // ->toSql();
+
+                                    // dd($cuotasParaPagar, $request->all());
 
             $data['estado'] = 'success';
             $data['lista'] = json_encode($cuotasParaPagar);
@@ -1791,12 +1795,26 @@ class FacturaController extends Controller
             $res = json_decode($siat->recepcionPaqueteFactura($contenidoArchivo, $fechaEmicion, $hashArchivo, $codigo_cafc_contingencia, $contado, $codigo_evento_significativo));
             if($res->resultado->RespuestaServicioFacturacion->transaccion){
                 $validad = json_decode($siat->validacionRecepcionPaqueteFactura(2,$res->resultado->RespuestaServicioFacturacion->codigoRecepcion));
-                if($validad){
+                if($validad->resultado->RespuestaServicioFacturacion->transaccion){
+                    foreach($checkboxes as $key => $chek){
+                        $data['estado'] = "success";
+                        $ar = explode("_",$key);
+                        $factura = Factura::find($ar[1]);
+                        $factura->codigo_descripcion = $validad->resultado->RespuestaServicioFacturacion->codigoDescripcion;
+                        $factura->codigo_recepcion  = $validad->resultado->RespuestaServicioFacturacion->codigoRecepcion;
+                        $factura->save();
 
+                        // $xml                            = $factura->productos_xml;
+                        // // $uso_cafc                       = $request->input("uso_cafc");
+                        // $archivoXML                     = new SimpleXMLElement($xml);
+
+                        // // GUARDAMOS EN LA CARPETA EL XML
+                        // $archivoXML->asXML("assets/docs/paquete/facturaxmlContingencia$ar[1].xml");
+                        // $contado++;
+                    }
                 }else{
-
+                    $data['estado'] = "error";
                 }
-                dd($res, $validad);
             }
 
 
@@ -1838,7 +1856,7 @@ class FacturaController extends Controller
             // $factura->save();
             // return $data;
 
-            dd($res);
+            // dd($res);
 
             // dd($checkboxes);
             $data['estado'] = "success";
@@ -1846,7 +1864,7 @@ class FacturaController extends Controller
             $data['estado'] = "error";
         }
 
-        // return $data;
+        return $data;
 
     }
 

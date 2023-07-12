@@ -429,7 +429,11 @@
                 <td colspan="5" style="background: white; border: none">{{ $archivoXML->cabecera->leyenda }}</td>
             </tr>
             <tr style="text-align: center">
-                <td colspan="5" style="background: white; border: none">“Este documento es la Representación Gráfica de un Documento Fiscal Digital emitido en una modalidad de facturación en línea”</td>
+                @if ($factura->tipo_factura === 'online')
+                    <td colspan="5" style="background: white; border: none">“Este documento es la Representación Gráfica de un Documento Fiscal Digital emitido en una modalidad de facturación en línea”</td>
+                @else
+                    <td colspan="5" style="background: white; border: none">“Este documento es la Representación Gráfica de un Documento Fiscal Digital emitido en una modalidad de facturación fuera de línea”</td>
+                @endif
             </tr>
         </tbody>
     </table>

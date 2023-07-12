@@ -36,7 +36,7 @@
                                     <option value="3">DATOS DE EMISION INCORRECTOS</option>
                                     <option value="4">FACTURA O NOTA DE CREDITO-DEBITO DEVUELTA</option>
                                 </select>
-                                <input type="text" id="factura_id">
+                                <input type="hidden" id="factura_id">
                             </div>
                         </div>
                     </div>
@@ -592,6 +592,7 @@
             success: function (data) {
                 console.log(data)
                 if(data.estado === "success"){
+                    location.reload()
                 }else{
                 }
             }

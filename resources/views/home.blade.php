@@ -61,16 +61,6 @@
             </div>
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-md-12">
-            <form action="{{ url('EventoSignificativo/correo') }}" method="post">
-                @csrf
-                <button type="submit" class="btn btn-primary btn-block">Enviar</button>
-            </form>
-        </div>
-    </div>
-
     <div class="row">
         <!-- Column -->
         <div class="col-12">

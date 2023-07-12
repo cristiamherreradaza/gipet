@@ -75,11 +75,11 @@
 </table>
 
 <div class="row">
-    <div class="col-md-6">
-        {{--  <a href='{{ url("Factura/generaRecibo")."/".$persona_id }}/recibo' class="btn btn-block btn-success">RECIBO</a>  --}}
-    </div>
+    {{--  <div class="col-md-6">
+        <a href='{{ url("Factura/generaRecibo")."/".$persona_id }}/recibo' class="btn btn-block btn-success">RECIBO</a>
+    </div>  --}}
 
-    <div class="col-md-6">
+    <div class="col-md-12">
         {{-- <a href='{{ url("Factura/ajaxFacturar")."/".$persona_id }}/factura' class="btn btn-block btn-dark" onclick="muestraNit()">FACTURA</a> --}}
         <button class="btn btn-block btn-dark" onclick="muestraNit()">CONCLUIR</button>
     </div>
@@ -132,7 +132,7 @@
                     <label class="control-label">TIPO DE FACTURACION</label>
                     <select name="tipo_facturacion" id="tipo_facturacion" class="form-control" required onchange="preguntaUsoCafc(this)">
                     <option value="online">EN LINEA</option>
-                    <option value="offline" selected>FUERA DE LINEA</option>
+                    <option value="offline">FUERA DE LINEA</option>
                 </select>
                 </div>
             </div>
@@ -165,7 +165,7 @@
                 <div class="form-group">
                     <label class="control-label">&nbsp;</label>
                     {{--  <input type="submit" class="btn btn-block btn-success" value="ACEPTAR">  --}}
-                    <input type="button" class="btn btn-block btn-success" onclick="generaFacturaLinea()" value="ACEPTAR">
+                    <input type="button" class="btn btn-block btn-success" onclick="generaFacturaLinea()" value="ENVIAR FACTURA">
                 </div>
             </div>
         </div>
@@ -194,6 +194,8 @@
                 if(data.estado === 'success'){
                     $("#bloqueNit").show('slow');
                     arrayProductos = JSON.parse(data.lista)
+
+                    console.log(arrayProductos)
                 }
             }
         });
