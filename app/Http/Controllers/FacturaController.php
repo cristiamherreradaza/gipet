@@ -1433,7 +1433,7 @@ class FacturaController extends Controller
 
             $respuesta = json_decode($siat->anulacionFactura($moivo, $fatura->cuf));
 
-            // dd($respuesta, session()->all());
+            dd($respuesta, session()->all());
 
             if($respuesta->resultado->RespuestaServicioFacturacion->transaccion){
                 $fatura->estado = 'Anulado';
