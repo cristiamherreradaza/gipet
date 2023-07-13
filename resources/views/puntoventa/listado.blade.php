@@ -10,7 +10,6 @@
 
 @section('content')
 
-
 <!-- inicio modal cambiar contrasena -->
 <div id="modaNewPuntoVeta" class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -103,12 +102,12 @@
             dateType: 'json',
             success: function(data) {
                 $('#tabla_puntos').html(data.listado);
-                {{--  Swal.fire(
-                    'Excelente!',
-                    'El estudiante fue eliminado',
-                    'success'
-                )
-                window.location.href = "{{ url('Persona/listado') }}/";  --}}
+                // Swal.fire(
+                //     'Excelente!',
+                //     'El estudiante fue eliminado',
+                //     'success'
+                // )
+                // window.location.href = "{{ url('Persona/listado') }}/";
             }
         });
     }

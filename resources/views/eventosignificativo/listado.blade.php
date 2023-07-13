@@ -52,7 +52,8 @@
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input  type="datetime-local" name="fechainicio" id="fechainicio" class="form-control" required>
+                                {{-- <input  type="datetime-local" name="fechainicio" id="fechainicio" class="form-control" required> --}}
+                                <input type="text" id="fechainicio" name="fechainicio" class="form-control">
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -61,7 +62,8 @@
                                 <span class="text-danger">
                                     <i class="mr-2 mdi mdi-alert-circle"></i>
                                 </span>
-                                <input type="datetime-local" name="fechafin" id="fechafin" class="form-control" required>
+                                {{-- <input type="datetime-local" name="fechafin" id="fechafin" class="form-control" required> --}}
+                                <input type="text" id="fechafin" name="fechafin" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -109,6 +111,7 @@
 @section('js')
 <script src="{{ asset('assets/libs/datatables/media/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/datatable/custom-datatable.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js"></script>
 <script>
     // Funcion para usar ajax
     $.ajaxSetup({
@@ -118,88 +121,90 @@
         }
     });
 
-    $(document).ready(function() {
-        {{--  ajaxListado()  --}}
-    } );
-
-    {{--  function ajaxListado(){
-        $.ajax({
-            url: "{{ url('EventoSignificativo/ajaxListado') }}",
-            cache: false,
-            type: 'GET',
-            dateType: 'json',
-            success: function(data) {
-                $('#tabla_puntos').html(data.listado);
-            }
+    $(function() {
+        $('#fechainicio, #fechafin').datetimepicker({
+            format: 'Y-m-d H:i:s',
         });
-    }  --}}
-{{--
-    function modalNewPuntoVenta(){
-        $('#nombre').val('')
-        $('#descripcion').val('')
+    });
 
-        $('#modaNewPuntoVeta').modal('show');
-    }  --}}
+    // function ajaxListado(){
+    //     $.ajax({
+    //         url: "{{ url('EventoSignificativo/ajaxListado') }}",
+    //         cache: false,
+    //         type: 'GET',
+    //         dateType: 'json',
+    //         success: function(data) {
+    //             $('#tabla_puntos').html(data.listado);
+    //         }
+    //     });
+    // } 
 
-    {{--  function guardarNew(){
-        let nombre = $('#nombre').val()
-        let descripcion = $('#descripcion').val()
-        $.ajax({
-            url: "{{ url('PuntoVenta/guarda') }}",
-            data:{
-                nombre:nombre,
-                descripcion:descripcion
-            },
-            cache: false,
-            type: 'POST',
-            dateType: 'json',
-            success: function(data) {
-                if(data.estado){
-                    Swal.fire(
-                        'Excelente!',
-                        'Se creo el punto de venta',
-                        'success'
-                    )
-                    ajaxListado()
-                    $('#modaNewPuntoVeta').modal('hide');
-                }
-            }
-        });
-    }  --}}
+    // function modalNewPuntoVenta(){
+    //     $('#nombre').val('')
+    //     $('#descripcion').val('')
 
-    {{--  function eliminaPuntoVenta(puntoventa){
-        Swal.fire({
-            title: 'Esta seguro de eliminar el punto de venta?',
-            text: "Luego no podras recuperarlo!",
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Si, estoy seguro!',
-            cancelButtonText: "Cancelar",
-        }).then((result) => {
-            if (result.value) {
-                $.ajax({
-                    url: "{{ url('PuntoVenta/eliminaPuntoVenta') }}",
-                    data: {
-                        cod: puntoventa
-                        },
-                    cache: false,
-                    type: 'post',
-                    success: function(data) {
-                        if(data.estado === 'success'){
-                            Swal.fire(
-                                'Excelente!',
-                                'El estudiante fue eliminado',
-                                'success'
-                            )
-                            ajaxListado()
-                        }
-                    }
-                });
-            }
-        })
-    }  --}}
+    //     $('#modaNewPuntoVeta').modal('show');
+    // } 
+
+    // function guardarNew(){
+    //     let nombre = $('#nombre').val()
+    //     let descripcion = $('#descripcion').val()
+    //     $.ajax({
+    //         url: "{{ url('PuntoVenta/guarda') }}",
+    //         data:{
+    //             nombre:nombre,
+    //             descripcion:descripcion
+    //         },
+    //         cache: false,
+    //         type: 'POST',
+    //         dateType: 'json',
+    //         success: function(data) {
+    //             if(data.estado){
+    //                 Swal.fire(
+    //                     'Excelente!',
+    //                     'Se creo el punto de venta',
+    //                     'success'
+    //                 )
+    //                 ajaxListado()
+    //                 $('#modaNewPuntoVeta').modal('hide');
+    //             }
+    //         }
+    //     });
+    // } 
+
+    // function eliminaPuntoVenta(puntoventa){
+    //     Swal.fire({
+    //         title: 'Esta seguro de eliminar el punto de venta?',
+    //         text: "Luego no podras recuperarlo!",
+    //         type: 'warning',
+    //         showCancelButton: true,
+    //         confirmButtonColor: '#3085d6',
+    //         cancelButtonColor: '#d33',
+    //         confirmButtonText: 'Si, estoy seguro!',
+    //         cancelButtonText: "Cancelar",
+    //     }).then((result) => {
+    //         if (result.value) {
+    //             $.ajax({
+    //                 url: "{{ url('PuntoVenta/eliminaPuntoVenta') }}",
+    //                 data: {
+    //                     cod: puntoventa
+    //                     },
+    //                 cache: false,
+    //                 type: 'post',
+    //                 success: function(data) {
+    //                     if(data.estado === 'success'){
+    //                         Swal.fire(
+    //                             'Excelente!',
+    //                             'El estudiante fue eliminado',
+    //                             'success'
+    //                         )
+    //                         ajaxListado()
+    //                     }
+    //                 }
+    //             });
+    //         }
+    //     })
+    // }
 
     function consultar(){
         if($("#formularioEventosConuslta")[0].checkValidity()){

@@ -12,6 +12,24 @@ class PuntoVentaController extends Controller
 
     public function ajaxListado(Request $request){
         if($request->ajax()){
+
+            $cufdController             = app(CufdController::class);
+            $datosCufdOffLine           = $cufdController->sacarCufdVigenteFueraLinea();
+            if($datosCufdOffLine['estado'] === "success"){
+                // $scufd                  = $datosCufdOffLine['scufd'];
+                // $scodigoControl         = $datosCufdOffLine['scodigoControl'];
+                // $sdireccion             = $datosCufdOffLine['sdireccion'];
+                // $sfechaVigenciaCufd     = $datosCufdOffLine['sfechaVigenciaCufd'];
+
+                session(['scufd'                => $datosCufdOffLine['scufd'] ]);
+                session(['scodigoControl'       => $datosCufdOffLine['scodigoControl'] ]);
+                session(['sdireccion'           => $datosCufdOffLine['sdireccion'] ]);
+                session(['sfechaVigenciaCufd'   => $datosCufdOffLine['sfechaVigenciaCufd'] ]);
+                
+            }else{
+
+            }
+
             $siat = app(SiatController::class);
             $respuesta = json_decode($siat->consultaPuntoVenta());
             if($respuesta->estado === "success"){

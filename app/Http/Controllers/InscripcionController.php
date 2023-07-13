@@ -57,6 +57,7 @@ class InscripcionController extends Controller
         $persona->apellido_materno  = $request->apellido_materno;
         $persona->nombres           = $request->nombres;
         $persona->cedula            = $request->carnet;
+        $persona->complemento       = $request->complemento;
         $persona->expedido          = $request->expedido;
         $persona->fecha_nacimiento  = $request->fecha_nacimiento;
         $persona->sexo              = $request->sexo;

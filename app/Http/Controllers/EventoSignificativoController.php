@@ -62,8 +62,10 @@ class EventoSignificativoController extends Controller
             $codMotEvent    = $request->input('codigoEvento');
             $cufdEvent      = $datosCufdOffLine['scufd'];
             $desc           = $request->input('descripcion');
-            $fechaIni       = $request->input('fechainicio').":00";
-            $fechaFin       = $request->input('fechafin').":00";
+            // $fechaIni       = $request->input('fechainicio').":00";
+            // $fechaFin       = $request->input('fechafin').":00";
+            $fechaIni       = str_replace(' ', 'T', trim($request->input('fechainicio')));
+            $fechaFin       = str_replace(' ', 'T', trim($request->input('fechafin')));
 
             $siat = app(SiatController::class);
             $respuesta = json_decode($siat->registroEventoSignificativo($codMotEvent, $cufdEvent, $desc, $fechaIni, $fechaFin));

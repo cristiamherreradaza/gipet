@@ -79,6 +79,16 @@
                                                             <input type="text" class="form-control" name="carnet" id="carnet" required>
                                                         </div>
                                                     </div>
+                                                    <div class="col">
+                                                        <div class="form-group">
+                                                            <label>Complemento
+                                                                <span class="text-danger">
+                                                                    <i class="mr-2 mdi mdi-alert-circle"></i>
+                                                                </span>
+                                                            </label>
+                                                            <input type="text" class="form-control" name="complemento" id="complemento" required>
+                                                        </div>
+                                                    </div>
                                                     <input type="text" class="form-control" hidden name="persona_id" id="persona_id">
                                                     <div class="col">
                                                         <div class="form-group">
