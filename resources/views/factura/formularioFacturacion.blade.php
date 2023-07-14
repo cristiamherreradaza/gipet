@@ -110,6 +110,8 @@
 <script src="{{ asset('assets/libs/select2/dist/js/select2.min.js') }}"></script>
 <script src="{{ asset('dist/js/pages/forms/select2/select2.init.js') }}"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/jquery-datetimepicker/build/jquery.datetimepicker.full.min.js"></script>
+
 <script>
 
     $.ajaxSetup({
@@ -242,10 +244,21 @@
             let cuf = "123456789";//cambiar
             let cufd = "{{ session('scufd') }}";  //solo despues de que aga
             let direccion = "{{ session('sdireccion') }}";//solo despues de que aga
+            let fechaEmision;
+            let cafc = null;
 
-            var tzoffset = ((new Date()).getTimezoneOffset()*60000);
+            if($('input[name="uso_cafc"]:checked').val() === "si"){
+                //var tzoffset = ((new Date()).getTimezoneOffset()*60000);
+                //let fechaEmision = ((new Date(Date.now()-tzoffset)).toISOString()).slice(0,-1);
+                var fecha = new Date($('#fecha_uso_cafc').val());
+                var tzoffset = ((new Date()).getTimezoneOffset()*60000);
+                fechaEmision = ((new Date(fecha-tzoffset)).toISOString()).slice(0,-1);
+                cafc = $('#codigo_cafc_contingencia').val();
+            }else{
+                var tzoffset = ((new Date()).getTimezoneOffset()*60000);
+                fechaEmision = ((new Date(Date.now()-tzoffset)).toISOString()).slice(0,-1);
+            }
 
-            let fechaEmision = ((new Date(Date.now()-tzoffset)).toISOString()).slice(0,-1);
             let nombreRazonSocial = $('#razon_factura').val();
             let codigoTipoDocumentoIdentidad = $('#tipo_documento').val()
             let numeroDocumento = $('#nit_factura').val();
@@ -289,7 +302,7 @@
                     montoGiftCard:null,
                     descuentoAdicional:descuentoAdicional,//ver llenado
                     codigoExcepcion:0,
-                    cafc:null,
+                    cafc:cafc,
                     leyenda:leyenda,
                     usuario:usuario,
                     codigoDocumentoSector:11
@@ -348,7 +361,7 @@
                             title: 'Exito!',
                             text: 'LA FACTURA FUERA DE LINEA FUE REGISTRADA',
                         })
-                        {{--  window.location.href = "{{ url('Factura/listadoPagos')}}"  --}}
+                        //window.location.href = "{{ url('Factura/listadoPagos')}}"
                         location.reload();
                     }else{
                         Swal.fire({

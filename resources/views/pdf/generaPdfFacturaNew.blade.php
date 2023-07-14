@@ -255,7 +255,22 @@
                 <td style="text-align: right">
                    <b>NIT/CI/CEX:</b>
                 </td>
-                <td>{{ $archivoXML->cabecera->numeroDocumento }}</td>
+                <td>
+                    {{ $archivoXML->cabecera->numeroDocumento }}
+                    @if (!empty($archivoXML->cabecera->complemento))
+                        - {{ $archivoXML->cabecera->complemento }}
+                    @endif
+
+                    {{--  @dd(
+                        $archivoXML->cabecera->complemento,
+                        isset($archivoXML->cabecera->complemento) ,
+                        count($archivoXML->cabecera->complemento->children()) > 0,
+                        count($archivoXML->cabecera->complemento->children()),
+                        $archivoXML->cabecera->complemento->count(),
+                        !empty($archivoXML->cabecera->complemento)
+                    );  --}}
+
+                </td>
             </tr>
         </thead>
         <tbody>
@@ -432,7 +447,8 @@
                 @if ($factura->tipo_factura === 'online')
                     <td colspan="5" style="background: white; border: none">“Este documento es la Representación Gráfica de un Documento Fiscal Digital emitido en una modalidad de facturación en línea”</td>
                 @else
-                    <td colspan="5" style="background: white; border: none">“Este documento es la Representación Gráfica de un Documento Fiscal Digital emitido en una modalidad de facturación fuera de línea”</td>
+                    <td colspan="5" style="background: white; border: none">“Este documento es la Representación Gráfica de un Documento Fiscal Digital emitido fuera de línea, verifique su envío con su proveedor o en la página web www.impuestos.gob.bo”</td>
+
                 @endif
             </tr>
         </tbody>

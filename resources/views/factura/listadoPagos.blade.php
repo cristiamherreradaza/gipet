@@ -83,7 +83,6 @@
                                 <select name="evento_significativo_contingencia_select" id="evento_significativo_contingencia_select" class="form-control" onchange="muestraTableFacturaPaquete()">
 
                                 </select>
-                                <input type="text" id="factura_id_contingencia" name="factura_id_contingencia" required>
                             </div>
                             <div id="bloque_no_hay_eventos" style="display: none;">
                                 <span class="text-danger text-center" id="mensaje_contingencia"></span>
@@ -311,7 +310,11 @@
 
                                             @endif
                                         @else
-                                            <button class="btn btn-dark btn-icon" onclick="modalRecepcionFacuraContingenciaFueraLinea('{{ $f->id }}')"><i class="fa fa-upload" aria-hidden="true"></i></button>
+                                            @if ($f->codigo_descripcion != 'VALIDADA' && $f->codigo_descripcion != 'PENDIENTE')
+                                                <button class="btn btn-dark btn-icon" onclick="modalRecepcionFacuraContingenciaFueraLinea('{{ $f->id }}')"><i class="fa fa-upload" aria-hidden="true"></i></button>
+                                            @else
+                                                <button class="btn btn-danger btn-icon" onclick="modalAnularFactura('{{ $f->id }}')"><i class="fa fa-trash"></i></button>
+                                            @endif
                                         @endif
                                     @endif
 
@@ -592,7 +595,7 @@
             success: function (data) {
                 console.log(data)
                 if(data.estado === "success"){
-                    location.reload()
+                    {{--  location.reload()  --}}
                 }else{
                 }
             }

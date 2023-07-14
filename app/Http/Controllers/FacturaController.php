@@ -795,7 +795,8 @@ class FacturaController extends Controller
         else{
             $datosRecepcion       = $request->input('datosRecepcion');
             if($datosRecepcion['uso_cafc'] === "si"){
-                $datos['factura'][0]['cafc'] = $datosRecepcion['codigo_cafc_contingencia'];
+                // dd($datos['factura'][0]['cabecera']['cafc']);
+                $datos['factura'][0]['cabecera']['cafc'] = $datosRecepcion['codigo_cafc_contingencia'];
             }
             $tipoEmision        = 2;
             // $numeroFactura      = str_pad(1,10,"0",STR_PAD_LEFT);
@@ -1065,7 +1066,7 @@ class FacturaController extends Controller
                 }
             }
         }
-        
+
         // ENVIAMOS EL CORREO DE LA FACTURA
         // $nombre = $persona->nombres." ".$persona->apellido_paterno." ".$persona->apellido_materno;
         // $this->enviaCorreo(
@@ -1431,7 +1432,7 @@ class FacturaController extends Controller
 
             $respuesta = json_decode($siat->anulacionFactura($moivo, $fatura->cuf));
 
-            dd($respuesta, session()->all());
+            // dd($respuesta, session()->all());
 
             if($respuesta->resultado->RespuestaServicioFacturacion->transaccion){
                 $fatura->estado = 'Anulado';
@@ -1791,6 +1792,7 @@ class FacturaController extends Controller
             $hashArchivo = hash('sha256', $contenidoArchivo);
 
             $res = json_decode($siat->recepcionPaqueteFactura($contenidoArchivo, $fechaEmicion, $hashArchivo, $codigo_cafc_contingencia, $contado, $codigo_evento_significativo));
+            // dd($res);
             if($res->resultado->RespuestaServicioFacturacion->transaccion){
                 $validad = json_decode($siat->validacionRecepcionPaqueteFactura(2,$res->resultado->RespuestaServicioFacturacion->codigoRecepcion));
                 if($validad->resultado->RespuestaServicioFacturacion->transaccion){
@@ -1810,12 +1812,14 @@ class FacturaController extends Controller
                         // $archivoXML->asXML("assets/docs/paquete/facturaxmlContingencia$ar[1].xml");
                         // $contado++;
                     }
+                    // dd($validad, $res);
+
                 }else{
                     $data['estado'] = "error";
                 }
+            }else{
+                // dd($res);
             }
-
-
 
             // $data['estado'] = "success";
 

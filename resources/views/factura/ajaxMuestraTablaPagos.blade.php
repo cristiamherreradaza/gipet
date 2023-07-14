@@ -155,6 +155,8 @@
                         <div class="form-group">
                             <label class="control-label" for="usocafc_si">CAFC</label>
                             <input type="text" class="form-control" name="codigo_cafc_contingencia" id="codigo_cafc_contingencia">
+                            {{--  <input type="datetime-local" class="form-control" name="fecha_uso_cafc" id="fecha_uso_cafc">  --}}
+                            <input type="text" class="form-control" name="fecha_uso_cafc" id="fecha_uso_cafc">
                         </div>
                     </div>
                 </div>
@@ -171,9 +173,13 @@
         </div>
     </form>
 </div>
-
-
 <script type="text/javascript">
+
+    $(function () {
+        $('#fecha_uso_cafc').datetimepicker({
+            format: 'Y-m-d H:i:s',
+        });
+    });
 
     @php
         $jsonArray = json_encode($cuotasParaPagar);
