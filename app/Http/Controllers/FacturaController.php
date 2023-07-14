@@ -766,16 +766,6 @@ class FacturaController extends Controller
     // FACTURACION EN LINEA
     public function emitirFactura(Request $request){
 
-        // dd($request->all());
-
-        // dd(
-        //     "este chee",
-        //     $request->all(),
-        //     $request->input('datos')['factura'][0]['cabecera']['numeroDocumento'],
-        //     $request->input('datos')['factura'][0]['cabecera']['nombreRazonSocial'],
-        //     $request->input('modalidad')
-        // );
-
         $datos              = $request->input('datos');
         $datosPersona       = $request->input('datosPersona');
         $valoresCabecera    = $datos['factura'][0]['cabecera'];
@@ -1068,14 +1058,14 @@ class FacturaController extends Controller
         }
 
         // ENVIAMOS EL CORREO DE LA FACTURA
-        // $nombre = $persona->nombres." ".$persona->apellido_paterno." ".$persona->apellido_materno;
-        // $this->enviaCorreo(
-        //     $persona->email,
-        //     $nombre,
-        //     $factura->numero,
-        //     $factura->fecha,
-        //     $factura->id
-        // );
+        $nombre = $persona->nombres." ".$persona->apellido_paterno." ".$persona->apellido_materno;
+        $this->enviaCorreo(
+            $persona->email,
+            $nombre,
+            $factura->numero,
+            $factura->fecha,
+            $factura->id
+        );
 
         // PARA VALIDAR EL XML
         // $this->validar();
