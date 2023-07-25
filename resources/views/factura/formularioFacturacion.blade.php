@@ -250,14 +250,17 @@
             if($('input[name="uso_cafc"]:checked').val() === "si"){
                 //var tzoffset = ((new Date()).getTimezoneOffset()*60000);
                 //let fechaEmision = ((new Date(Date.now()-tzoffset)).toISOString()).slice(0,-1);
-                var fecha = new Date($('#fecha_uso_cafc').val());
+                {{--  var fecha = new Date($('#fecha_uso_cafc').val());
                 var tzoffset = ((new Date()).getTimezoneOffset()*60000);
-                fechaEmision = ((new Date(fecha-tzoffset)).toISOString()).slice(0,-1);
+                fechaEmision = ((new Date(fecha-tzoffset)).toISOString()).slice(0,-1);  --}}
                 cafc = $('#codigo_cafc_contingencia').val();
             }else{
-                var tzoffset = ((new Date()).getTimezoneOffset()*60000);
-                fechaEmision = ((new Date(Date.now()-tzoffset)).toISOString()).slice(0,-1);
+                {{--  var tzoffset = ((new Date()).getTimezoneOffset()*60000);
+                fechaEmision = ((new Date(Date.now()-tzoffset)).toISOString()).slice(0,-1);  --}}
             }
+
+            var tzoffset = ((new Date()).getTimezoneOffset()*60000);
+            fechaEmision = ((new Date(Date.now()-tzoffset)).toISOString()).slice(0,-1);
 
             let nombreRazonSocial = $('#razon_factura').val();
             let codigoTipoDocumentoIdentidad = $('#tipo_documento').val()
@@ -433,6 +436,8 @@
     }
 
     function usoCafcFactura(radio){
+
+        console.log(radio)
         if(radio.value === "si"){
             $.ajax({
                 url: "{{ url('Factura/sacaNumeroCafcUltimo') }}",

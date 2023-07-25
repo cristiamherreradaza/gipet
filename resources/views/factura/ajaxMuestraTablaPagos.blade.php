@@ -143,12 +143,14 @@
                         <div class="form-group">
                             <label class="control-label ml-10" for="usocafc_no">No</label>
                             <input type="radio" name="uso_cafc" id="usocafc_no" checked value="no"  onclick="usoCafcFactura(this)">
+                            {{--  <input type="radio" name="uso_cafc" id="usocafc_no" checked value="no">  --}}
                         </div>
                     </div>
                     <div class="col-md-2">
                         <div class="form-group">
                             <label class="control-label" for="usocafc_si">Si</label>
                             <input type="radio" name="uso_cafc" id="usocafc_si"  value="si" onclick="usoCafcFactura(this)">
+                            {{--  <input type="radio" name="uso_cafc" id="usocafc_si"  value="si">  --}}
                         </div>
                     </div>
                     <div class="col-md-8">

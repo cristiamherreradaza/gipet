@@ -766,6 +766,8 @@ class FacturaController extends Controller
     // FACTURACION EN LINEA
     public function emitirFactura(Request $request){
 
+        // dd($request->all());
+
         $datos              = $request->input('datos');
         $datosPersona       = $request->input('datosPersona');
         $valoresCabecera    = $datos['factura'][0]['cabecera'];
@@ -926,6 +928,7 @@ class FacturaController extends Controller
             else{
                 $factura->numero                = $datos['factura'][0]['cabecera']['numeroFactura'];
             }
+            // $factura->numero                = $datos['factura'][0]['cabecera']['numeroFactura'];
         }
         $factura->anio_vigente              = date('Y');
         $factura->cuf                       = $datos['factura'][0]['cabecera']['cuf'];
@@ -1802,13 +1805,13 @@ class FacturaController extends Controller
                         // $archivoXML->asXML("assets/docs/paquete/facturaxmlContingencia$ar[1].xml");
                         // $contado++;
                     }
-                    // dd($validad, $res);
+                    dd($validad, $res);
 
                 }else{
                     $data['estado'] = "error";
                 }
             }else{
-                // dd($res);
+                dd($res);
             }
 
             // $data['estado'] = "success";

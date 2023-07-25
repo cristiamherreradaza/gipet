@@ -70,6 +70,8 @@ class EventoSignificativoController extends Controller
             $siat = app(SiatController::class);
             $respuesta = json_decode($siat->registroEventoSignificativo($codMotEvent, $cufdEvent, $desc, $fechaIni, $fechaFin));
 
+            // dd($respuesta);
+
             if($respuesta->estado === "success" && $respuesta->resultado->RespuestaListaEventos->transaccion){
                 $data['estado']     = "success";
                 $data['msg']        = $respuesta->resultado->RespuestaListaEventos->codigoRecepcionEventoSignificativo;
