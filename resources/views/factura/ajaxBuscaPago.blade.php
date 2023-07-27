@@ -75,7 +75,11 @@
                     <a class="btn btn-info" href="{{ url('Factura/generaPdfFacturaNew', [$c->id]) }}" target="_blank"><i class="fa fa-file-pdf"></i></a>
                 @endif
 
-                <a href="https://pilotosiat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf={{ $c->cuf }}&numero={{ $c->numero }}&t=2" target="_blank" class="btn btn-dark btn-icon btn-sm"><i class="fa fa-file"></i></a>
+                @if ($c->uso_cafc === "si")
+                    <a href="https://pilotosiat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf={{ $c->cuf }}&numero={{ $c->numero_cafc }}&t=2" target="_blank" class="btn btn-dark btn-icon btn-sm"><i class="fa fa-file"></i></a>
+                @else
+                    <a href="https://pilotosiat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf={{ $c->cuf }}&numero={{ $c->numero }}&t=2" target="_blank" class="btn btn-dark btn-icon btn-sm"><i class="fa fa-file"></i></a>
+                @endif
 
                 @if ($c->estado != 'Anulado')
                     @if($c->tipo_factura === "online")
@@ -83,7 +87,11 @@
                             <button class="btn btn-danger btn-icon" onclick="modalAnularFactura('{{ $c->id }}')"><i class="fa fa-trash"></i></button>
                         @endif
                     @else
-                        <button class="btn btn-dark btn-icon" onclick="modalRecepcionFacuraContingenciaFueraLinea('{{ $c->id }}')"><i class="fa fa-upload" aria-hidden="true"></i></button>
+                        @if($c->codigo_descripcion != 'VALIDADA' && $c->codigo_descripcion != 'PENDIENTE')
+                            <button class="btn btn-dark btn-icon" onclick="modalRecepcionFacuraContingenciaFueraLinea('{{ $c->id }}')"><i class="fa fa-upload" aria-hidden="true"></i></button>
+                        @else
+                            <button class="btn btn-danger btn-icon" onclick="modalAnularFactura('{{ $c->id }}')"><i class="fa fa-trash"></i></button>
+                        @endif
                     @endif
                 @endif
 

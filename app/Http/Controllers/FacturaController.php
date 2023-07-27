@@ -25,6 +25,7 @@ use PharData;
 // use Maatwebsite\Excel\Writer;
 use SimpleXMLElement;
 use SoapClient;
+use ZipArchive;
 
 use Illuminate\Support\Str;
 
@@ -1775,8 +1776,23 @@ class FacturaController extends Controller
             $archivoGzip = "assets/docs/paquete.tar.gz";
 
             // Comprimir el archivo TAR en formato Gzip
-            $comandoGzip = "gzip -c $archivoTar > $archivoGzip";
-            exec($comandoGzip);
+            // ESTE CODIGO FUNCIONO SOLO EN LA PODEROSA JOEL
+            // $comandoGzip = "gzip -c $archivoTar > $archivoGzip";
+            // exec($comandoGzip);
+            // ESTE CODIGO FUNCIONO SOLO EN LA PODEROSA JOEL
+
+            // ESTE ES OTRO CHEEE
+            // Abre el archivo .gz en modo de escritura
+            $gz = gzopen($archivoGzip, 'wb');
+            // Abre el archivo .tar en modo de lectura
+            $archivo = fopen($archivoTar, 'rb');
+            // Lee el contenido del archivo .tar y escribe en el archivo .gz
+            while (!feof($archivo)) {
+                gzwrite($gz, fread($archivo, 8192));
+            }
+            // Cierra los archivos
+            fclose($archivo);
+            gzclose($gz);
 
             // Leer el contenido del archivo comprimido
             $contenidoArchivo = file_get_contents($archivoGzip);
@@ -1805,13 +1821,13 @@ class FacturaController extends Controller
                         // $archivoXML->asXML("assets/docs/paquete/facturaxmlContingencia$ar[1].xml");
                         // $contado++;
                     }
-                    dd($validad, $res);
+                    // dd($validad, $res);
 
                 }else{
                     $data['estado'] = "error";
                 }
             }else{
-                dd($res);
+                // dd($res);
             }
 
             // $data['estado'] = "success";
