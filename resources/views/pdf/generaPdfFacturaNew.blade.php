@@ -383,6 +383,8 @@
             <tr style="align: right">
                 <td  style="background: white; border: none;" colspan="4" rowspan="6">
                     @php
+
+                    /*
                         //$to = ((int) $archivoXML->cabecera->montoTotal) - ((int) $archivoXML->cabecera->descuentoAdicional);
                         $to = ((float) $archivoXML->cabecera->montoTotal);
                         $number = $to;
@@ -390,9 +392,21 @@
                         $formatter = new NumberFormatter('es', NumberFormatter::SPELLOUT);
                         // Convertir el número en su forma literal
                         $literal = $formatter->format($number);
+                    */
+
+
+                        //$to = ((int) $archivoXML->cabecera->montoTotal) - ((int) $archivoXML->cabecera->descuentoAdicional);
+                        $to = ((float) $archivoXML->cabecera->montoTotal);
+                        $bolivianos = floor($to); // Parte entera del monto
+                        $centavos = ($to - $bolivianos) * 100; // Convertir los decimales a centavos
+                        $literal = ucfirst((new NumberFormatter('es', NumberFormatter::SPELLOUT))->format($bolivianos));
+
+                        //dd($centavos);
+
 
                     @endphp
-                    <b>Son: {{ ucfirst($literal) }} 00/100 Bolivianos</b>
+                    {{--  <b>Son: {{ ucfirst($literal) }} 00/100 Bolivianos</b>  --}}
+                    <b>Son: {{ $literal }} @if ($centavos > 0){{ $centavos }}@else{{ '00' }}@endif/100 Bolivianos</b>
                 </td>
                 <td colspan="2" style="text-align: right; padding-right: 10px;">SUBTOTAL Bs</td>
                 {{--  <td  style="text-align: right;"> {{  number_format( (int) $archivoXML->cabecera->montoTotal, 2) }}</td>  --}}
