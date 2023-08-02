@@ -473,6 +473,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('Factura/muestraTableFacturaPaquete','FacturaController@muestraTableFacturaPaquete');
     Route::post('Factura/mandarFacturasPaquete','FacturaController@mandarFacturasPaquete');
     Route::get('Factura/emiteFacturaMasa','FacturaController@emiteFacturaMasa');
+    Route::post('Factura/verificaNit','FacturaController@verificaNit');
 
     Route::get('PuntoVenta/listado','PuntoVentaController@listado');
     Route::get('PuntoVenta/ajaxListado','PuntoVentaController@ajaxListado');

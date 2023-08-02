@@ -90,19 +90,19 @@
     <form method="POST" id="formularioGeneraFactura">
         @csrf
         <div class="row">
-
             <div class="col-md-1">
                 <div class="form-group">
-                    <label class="control-label">NUMERO DE FACTURA</label>
+                    <label class="control-label">No DE FACTURA</label>
                     <input type="text" name="numero_factura" id="numero_factura" class="form-control"
                         {{--  value="{{ ($ultimaFactura->numero)+1 }}" required>  --}}
-                        value="{{ ($ultimaFactura)+1 }}" required>
+                        value="{{ ($ultimaFactura)+1 }}" required readonly>
                 </div>
             </div>
 
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <label class="control-label">TIPO DE DOCUMENTO</label>
-                <select name="tipo_documento" id="tipo_documento" class="form-control" required>
+                <select name="tipo_documento" id="tipo_documento" class="form-control" required onchange="verificaNit()">
+                    <option value="">SELECCIONE</option>
                     <option value="1">CEDULA DE IDENTIDAD</option>
                     <option value="2">CEDULA DE IDENTIDAD DE EXTRANJERO</option>
                     <option value="3">PASAPORTE</option>
@@ -115,8 +115,9 @@
                 <div class="form-group">
                     <label class="control-label">NIT/CEDULA</label>
                     {{--  <input type="text" name="persona_id" value="{{ $persona->id }}">  --}}
-                    <input type="number" name="nit_factura" id="nit_factura" class="form-control"
-                        value="{{ $persona->nit }}" required>
+                    <input type="number" name="nit_factura" id="nit_factura" class="form-control" value="{{ $persona->nit }}" required onchange="verificaNit()">
+                    <small style="display: none;" class="text-danger" id="nitnoexiste">NIT INVALIDO</small>
+                    <small style="display: none;" class="text-success" id="nitsiexiste">NIT VALIDO</small>
                 </div>
             </div>
 
@@ -136,31 +137,30 @@
                 </select>
                 </div>
             </div>
-            <div class="col-md-3" id="bloque_uso_cafc" style="display: none;">
+            <div class="col-md-2" id="bloque_uso_cafc" style="display: none;">
                 <label class="control-label">USO DEL CAFC?</label>
                 <div class="row">
-                    <div class="col-md-2">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label ml-10" for="usocafc_no">No</label>
                             <input type="radio" name="uso_cafc" id="usocafc_no" checked value="no"  onclick="usoCafcFactura(this)">
-                            {{--  <input type="radio" name="uso_cafc" id="usocafc_no" checked value="no">  --}}
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label class="control-label" for="usocafc_si">Si</label>
                             <input type="radio" name="uso_cafc" id="usocafc_si"  value="si" onclick="usoCafcFactura(this)">
-                            {{--  <input type="radio" name="uso_cafc" id="usocafc_si"  value="si">  --}}
+                            <input type="hidden" class="form-control" name="codigo_cafc_contingencia" id="codigo_cafc_contingencia">
                         </div>
                     </div>
-                    <div class="col-md-8">
-                        <div class="form-group">
-                            <label class="control-label" for="usocafc_si">CAFC</label>
-                            <input type="text" class="form-control" name="codigo_cafc_contingencia" id="codigo_cafc_contingencia">
-                            {{--  <input type="datetime-local" class="form-control" name="fecha_uso_cafc" id="fecha_uso_cafc">  --}}
-                            <input type="text" class="form-control" name="fecha_uso_cafc" id="fecha_uso_cafc">
-                        </div>
-                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="display: none" id="bloque_exepcion">
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="control-label">Enviar con execpcion?</label>
+                    <input type="checkbox" name="execpcion" id="execpcion" class="form-control" required readonly>
                 </div>
             </div>
         </div>
@@ -168,7 +168,6 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label class="control-label">&nbsp;</label>
-                    {{--  <input type="submit" class="btn btn-block btn-success" value="ACEPTAR">  --}}
                     <input type="button" class="btn btn-block btn-success" onclick="generaFacturaLinea()" value="ENVIAR FACTURA">
                 </div>
             </div>

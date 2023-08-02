@@ -50,8 +50,14 @@ class SiatController extends Controller
     protected $nit                      = "178436029";                  // NIT DE LA EMPRESA
     protected $codigoDocumentoSector    = 11;                           // SECTOR EDUCATIIVO
 
+
+    protected $FacturacionCodigos                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionCodigos?wsdl";
+    protected $FacturacionSincronizacion            = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionSincronizacion?wsdl";
+    protected $ServicioFacturacionComputarizada     = "https://pilotosiatservicios.impuestos.gob.bo/v2/ServicioFacturacionComputarizada?wsdl";
+    protected $FacturacionOperaciones               = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionOperaciones?wsdl";
+
     public function verificarComunicacion(){
-        $wsdl = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionCodigos?wsdl";
+        $wsdl = $this->FacturacionCodigos;
         $aoptions = array(
             'http' => array(
                 // 'header' => "apikey: TokenApi eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4NDM5ODU2THB6IiwiY29kaWdvU2lzdGVtYSI6Ijc3MkM0QTVENUVBQTQyQjlBNDFCNDM2Iiwibml0IjoiSDRzSUFBQUFBQUFBQURNMHR6QXhOak13c2dRQUYyano4UWtBQUFBPSIsImlkIjo2NTAyNjYsImV4cCI6MTY5MTk3MTIwMCwiaWF0IjoxNjg0MDkxNTc0LCJuaXREZWxlZ2FkbyI6MTc4NDM2MDI5LCJzdWJzaXN0ZW1hIjoiU0ZFIn0.09bh1_ENu-jzmY5kh31AEfmmLY79ucj_XN_nHnmaBDayNYq6_QcwaiwDc87PMHNRj2y5bDvAFBC0g3HXqTgZaA",
@@ -84,23 +90,13 @@ class SiatController extends Controller
 
     public function cuis(){
 
-        $wsdl               = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionCodigos?wsdl";
+        $wsdl               = $this->FacturacionCodigos;
         $codigoAmbiente     = $this->codigoAmbiente;
         $codigoModalidad    = $this->codigoModalidad;
-        // $codigoPuntoVenta   = 0; //
         $codigoPuntoVenta   = $this->codigoPuntoVenta; //
         $codigoSistema      = $this->codigoSistema;
         $codigoSucursal     = $this->codigoSucursal;
         $nit                = $this->nit;
-
-        // dd(
-        //     $codigoAmbiente,
-        //     $codigoModalidad,
-        //     $codigoPuntoVenta,
-        //     $codigoSistema,
-        //     $codigoSucursal,
-        //     $nit
-        // );
 
         $parametros         =  array(
             'SolicitudCuis' => array(
@@ -142,11 +138,9 @@ class SiatController extends Controller
     }
 
     public function cufd(){
-        // $this->verificarConeccion();
-        // dd(session()->all());
         $this->verificarComunicacion();
 
-        $wsdl               = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionCodigos?wsdl";
+        $wsdl               = $this->FacturacionCodigos;
         $codigoAmbiente     = $this->codigoAmbiente;
         $codigoModalidad    = $this->codigoModalidad;
         $codigoPuntoVenta   = $this->codigoPuntoVenta;
@@ -154,8 +148,6 @@ class SiatController extends Controller
         $codigoSucursal     = $this->codigoSucursal;
         $cuis               = session('scuis');
         $nit                = $this->nit;
-
-        // dd(session()->all());
 
         $parametros         =  array(
             'SolicitudCufd' => array(
@@ -206,7 +198,7 @@ class SiatController extends Controller
 
     public function sincronizarListaProductosServicios(){
         $this->verificarConeccion();
-        $wsdl               = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionSincronizacion?wsdl";
+        $wsdl               = $this->FacturacionSincronizacion;
         $codigoAmbiente     = $this->codigoAmbiente;
         $codigoPuntoVenta   = $this->codigoPuntoVenta;
         $codigoSistema      = $this->codigoSistema;
@@ -258,7 +250,7 @@ class SiatController extends Controller
 
     public function sincronizarListaLeyendasFactura(){
         $this->verificarConeccion();
-        $wsdl               = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionSincronizacion?wsdl";
+        $wsdl               = $this->FacturacionSincronizacion;
         $codigoAmbiente     = $this->codigoAmbiente;
         $codigoPuntoVenta   = $this->codigoPuntoVenta;
         $codigoSistema      = $this->codigoSistema;
@@ -310,7 +302,7 @@ class SiatController extends Controller
 
     public function recepcionFactura($arch, $fecEnv, $hasArch){
         $this->verificarConeccion();
-        $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/ServicioFacturacionComputarizada?wsdl";
+        $wsdl                   = $this->ServicioFacturacionComputarizada;
         $codigoAmbiente         = $this->codigoAmbiente;
 
         $codigoDocumentoSector  = $this->codigoDocumentoSector;     //NUEVO SECTOR EDUCATIIVO
@@ -382,9 +374,8 @@ class SiatController extends Controller
     }
 
     public function recepcionPaqueteFactura($arch, $fechaenv,$hasarch, $cafcC, $canFact, $codEvent){
-        // dd($arch, $fechaenv,$hasarch, $cafcC, $canFact, $codEvent);
         $this->verificarConeccion();
-        $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/ServicioFacturacionComputarizada?wsdl";
+        $wsdl                   = $this->ServicioFacturacionComputarizada;
         $codigoAmbiente         = $this->codigoAmbiente;
         $codigoDocumentoSector  = $this->codigoDocumentoSector;     // SECTOR EDUCATIVO
         $codigoEmision          = 2;                                // FUERA DE  LINEA (LINEA = 1 | FUERA DE LINEA = 2)
@@ -475,30 +466,18 @@ class SiatController extends Controller
         return json_encode($data, JSON_UNESCAPED_UNICODE);
     }
 
-    // public function anulacionFactura($arch, $fecEnv, $hasArch){
     public function anulacionFactura($codMot, $cuf1){
         $this->verificarConeccion();
-
-        // dd(session()->all(), "haber");
-
-        $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/ServicioFacturacionComputarizada?wsdl";
-
+        $wsdl                   = $this->ServicioFacturacionComputarizada;
         $codigoAmbiente         = $this->codigoAmbiente;
         $codigoDocumentoSector  = $this->codigoDocumentoSector; //NUEVO SECTOR EDUCATIIVO
         $codigoEmision          = 1; //NUEVO LINENA
         $codigoModalidad        = $this->codigoModalidad;
-
         $codigoPuntoVenta       = $this->codigoPuntoVenta;
         $codigoSistema          = $this->codigoSistema;
         $codigoSucursal         = $this->codigoSucursal;
-
         $cufd                   = session('scufd'); //NUEVO
         $cuis                   = session('scuis');
-
-        // dd($cufd,$cuis);
-
-        // dd($cufd,$cuis);
-
         $nit                    = $this->nit;
         $tipoFacturaDocumento   = 1; //NUEVO FACTURA CON DERECHO A CREDITO FISCAL
         $codigoMotivo           = $codMot;
@@ -552,7 +531,7 @@ class SiatController extends Controller
 
     public function consultaPuntoVenta(){
         $this->verificarConeccion();
-        $wsdl               = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionOperaciones?wsdl";
+        $wsdl               = $this->FacturacionOperaciones;
         $codigoAmbiente     = $this->codigoAmbiente;
         $codigoSistema      = $this->codigoSistema;
         $codigoSucursal     = $this->codigoSucursal;
@@ -599,7 +578,7 @@ class SiatController extends Controller
 
     public function registroPuntoVenta($des, $nom){
         $this->verificarConeccion();
-        $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionOperaciones?wsdl";
+        $wsdl                   = $this->FacturacionOperaciones;
         $codigoAmbiente         = $this->codigoAmbiente;
         $codigoModalidad        = $this->codigoModalidad;
         $codigoSistema          = $this->codigoSistema;
@@ -655,7 +634,7 @@ class SiatController extends Controller
 
     public function cierrePuntoVenta($cod){
         $this->verificarConeccion();
-        $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionOperaciones?wsdl";
+        $wsdl                   = $this->FacturacionOperaciones;
         $codigoAmbiente         = $this->codigoAmbiente;
         $codigoPuntoVenta       = $cod;
         $codigoSistema          = $this->codigoSistema;
@@ -705,7 +684,7 @@ class SiatController extends Controller
 
     public function sincronizarParametricaPaisOrigen(){
         $this->verificarConeccion();
-        $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionSincronizacion?wsdl";
+        $wsdl                   = $this->FacturacionSincronizacion;
         $codigoAmbiente         = $this->codigoAmbiente;
         $codigoPuntoVenta       = $this->codigoPuntoVenta;
         $codigoSistema          = $this->codigoSistema;
@@ -755,7 +734,7 @@ class SiatController extends Controller
 
     public function sincronizarParametricaTipoDocumentoIdentidad(){
         $this->verificarConeccion();
-        $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionSincronizacion?wsdl";
+        $wsdl                   = $this->FacturacionSincronizacion;
         $codigoAmbiente         = $this->codigoAmbiente;
         $codigoPuntoVenta       = $this->codigoPuntoVenta;
         $codigoSistema          = $this->codigoSistema;
@@ -804,7 +783,7 @@ class SiatController extends Controller
 
     public function sincronizarParametricaTipoEmision(){
         $this->verificarConeccion();
-        $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionSincronizacion?wsdl";
+        $wsdl                   = $this->FacturacionSincronizacion;
         $codigoAmbiente         = $this->codigoAmbiente;
         $codigoPuntoVenta       = $this->codigoPuntoVenta;
         $codigoSistema          = $this->codigoSistema;
@@ -853,7 +832,7 @@ class SiatController extends Controller
 
     public function sincronizarParametricaTipoHabitacion(){
         $this->verificarConeccion();
-        $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionSincronizacion?wsdl";
+        $wsdl                   = $this->FacturacionSincronizacion;
         $codigoAmbiente         = $this->codigoAmbiente;
         $codigoPuntoVenta       = $this->codigoPuntoVenta;
         $codigoSistema          = $this->codigoSistema;
@@ -902,7 +881,7 @@ class SiatController extends Controller
 
     public function sincronizarParametricaTipoMetodoPago(){
         $this->verificarConeccion();
-        $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionSincronizacion?wsdl";
+        $wsdl                   = $this->FacturacionSincronizacion;
         $codigoAmbiente         = $this->codigoAmbiente;
         $codigoPuntoVenta       = $this->codigoPuntoVenta;
         $codigoSistema          = $this->codigoSistema;
@@ -951,7 +930,7 @@ class SiatController extends Controller
 
     public function sincronizarParametricaTipoMoneda(){
         $this->verificarConeccion();
-        $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionSincronizacion?wsdl";
+        $wsdl                   = $this->FacturacionSincronizacion;
         $codigoAmbiente         = $this->codigoAmbiente;
         $codigoPuntoVenta       = $this->codigoPuntoVenta;
         $codigoSistema          = $this->codigoSistema;
@@ -1000,7 +979,7 @@ class SiatController extends Controller
 
     public function sincronizarParametricaTipoPuntoVenta(){
         $this->verificarConeccion();
-        $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionSincronizacion?wsdl";
+        $wsdl                   = $this->FacturacionSincronizacion;
         $codigoAmbiente         = $this->codigoAmbiente;
         $codigoPuntoVenta       = $this->codigoPuntoVenta;
         $codigoSistema          = $this->codigoSistema;
@@ -1049,7 +1028,7 @@ class SiatController extends Controller
 
     public function sincronizarParametricaTiposFactura(){
         $this->verificarConeccion();
-        $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionSincronizacion?wsdl";
+        $wsdl                   = $this->FacturacionSincronizacion;
         $codigoAmbiente         = $this->codigoAmbiente;
         $codigoPuntoVenta       = $this->codigoPuntoVenta;
         $codigoSistema          = $this->codigoSistema;
@@ -1098,7 +1077,7 @@ class SiatController extends Controller
 
     public function sincronizarParametricaUnidadMedida(){
         $this->verificarConeccion();
-        $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionSincronizacion?wsdl";
+        $wsdl                   = $this->FacturacionSincronizacion;
         $codigoAmbiente         = $this->codigoAmbiente;
         $codigoPuntoVenta       = $this->codigoPuntoVenta;
         $codigoSistema          = $this->codigoSistema;
@@ -1147,7 +1126,7 @@ class SiatController extends Controller
 
     public function sincronizarParametricaEventosSignificativos(){
         $this->verificarConeccion();
-        $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionSincronizacion?wsdl";
+        $wsdl                   = $this->FacturacionSincronizacion;
         $codigoAmbiente         = $this->codigoAmbiente;
         $codigoPuntoVenta       = $this->codigoPuntoVenta;
         $codigoSistema          = $this->codigoSistema;
@@ -1196,28 +1175,15 @@ class SiatController extends Controller
 
     public function consultaEventoSignificativo($fecha){
         $this->verificarConeccion();
-        $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionOperaciones?wsdl";
+        $wsdl                   = $this->FacturacionOperaciones;
         $codigoAmbiente         = $this->codigoAmbiente;
         $codigoPuntoVenta       = $this->codigoPuntoVenta;
         $codigoSistema          = $this->codigoSistema;
         $codigoSucursal         = $this->codigoSucursal;
         $cufd                   = session('scufd');
         $cuis                   = session('scuis');
-        // $fechaEvento            = (new DateTime())->setTimeZone(new DateTimeZone('UTC'));
-        // $fechaEvento            = Carbon::now()->format('Y-m-d\TH:i:s');
         $fechaEvento            = $fecha;
         $nit                    = $this->nit;
-
-        // dd(
-        //     "codigoPuntoVenta ".$codigoPuntoVenta,
-        //     "codigoAmbiente ".$codigoAmbiente,
-        //     "codigoSistema ".$codigoSistema,
-        //     "codigoSucursal ".$codigoSucursal,
-        //     "cufd ".$cufd,
-        //     "cuis ".$cuis,
-        //     "fechaEvento ".$fechaEvento,
-        //     "nit ".$nit
-        // );
 
         $parametros         =  array(
             'SolicitudConsultaEvento' => array(
@@ -1262,7 +1228,7 @@ class SiatController extends Controller
 
     public function registroEventoSignificativo($codMotEvent, $cufdEvent, $desc, $fechaIni, $fechaFin){
         $this->verificarConeccion();
-        $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionOperaciones?wsdl";
+        $wsdl                   = $this->FacturacionOperaciones;
         $codigoAmbiente         = $this->codigoAmbiente;
         $codigoMotivoEvento     = $codMotEvent;
         $codigoPuntoVenta       = $this->codigoPuntoVenta;
@@ -1322,10 +1288,9 @@ class SiatController extends Controller
         return json_encode($data, JSON_UNESCAPED_UNICODE);
     }
 
-    // public function validacionRecepcionPaqueteFactura($codMotEvent, $cufdEvent, $desc, $fechaIni, $fechaFin){
     public function validacionRecepcionPaqueteFactura($codEmision, $codRecepcion){
         $this->verificarConeccion();
-        $wsdl                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/ServicioFacturacionComputarizada?wsdl";
+        $wsdl                   = $this->ServicioFacturacionComputarizada;
         $codigoAmbiente         = $this->codigoAmbiente;
         $codigoDocumentoSector  = $this->codigoDocumentoSector;                           //SECTOR EDUCATIVO
         $codigoEmision          = $codEmision;                  //NUEVO LINENA 1 LINEA | 2 FUENRA DE LINEA
@@ -1386,17 +1351,7 @@ class SiatController extends Controller
     }
 
     public function verificarConeccion(){
-        // dd(session()->all(), session()->has('scufd'));
         if(!session()->has('scufd')){
-
-            // $cufdController             = app(CufdController::class);
-            // $datosCufdOffLine           = $cufdController->sacarCufdVigenteFueraLinea();
-            // if($datosCufdOffLine['estado'] === "success"){
-            //     session(['scufd'                => $datosCufdOffLine['scufd']]);
-            //     session(['scodigoControl'       => $datosCufdOffLine['scodigoControl']]);
-            //     session(['sdireccion'           => $datosCufdOffLine['sdireccion']]);
-            //     session(['sfechaVigenciaCufd'   => $datosCufdOffLine['sfechaVigenciaCufd']]);
-            // }else{
                 $cufd = json_decode($this->cufd());
                 if($cufd->estado === "success"){
                     if($cufd->resultado->RespuestaCufd->transaccion){
@@ -1404,7 +1359,7 @@ class SiatController extends Controller
                         session(['scodigoControl'       => $cufd->resultado->RespuestaCufd->codigoControl]);
                         session(['sdireccion'           => $cufd->resultado->RespuestaCufd->direccion]);
                         session(['sfechaVigenciaCufd'   => $cufd->resultado->RespuestaCufd->fechaVigencia]);
-    
+
                         $cufdNew = app(CufdController::class);
                         $cufdNew->create(
                                         $cufd->resultado->RespuestaCufd->codigo,
@@ -1412,7 +1367,7 @@ class SiatController extends Controller
                                         $cufd->resultado->RespuestaCufd->direccion,
                                         $cufd->resultado->RespuestaCufd->fechaVigencia
                                     );
-    
+
                         $data['$cufd->resultado->RespuestaCufd->transaccion'] = 'si';
                     }else{
                         $data['$cufd->resultado->RespuestaCufd->transaccion'] = 'no';
@@ -1461,5 +1416,56 @@ class SiatController extends Controller
 
         // dd(session('scufd'), session()->has('scufd'), session()->has('scuis'), session()->all(), $data);
 
+    }
+
+    public function verificarNit($nitVeri){
+        $this->verificarConeccion();
+        $wsdl                   = $this->FacturacionCodigos;
+        $codigoAmbiente         = $this->codigoAmbiente;
+        $codigoModalidad        = $this->codigoPuntoVenta;
+        $codigoSistema          = $this->codigoSistema;
+        $codigoSucursal         = $this->codigoSucursal;
+        $cuis                   = session('scuis');
+        $nit                    = $this->nit;
+        $nitParaVerificacion    = $nitVeri;
+
+        $parametros         =  array(
+            'SolicitudVerificarNit' => array(
+                'codigoAmbiente'        => $codigoAmbiente,
+                'codigoModalidad'       => $codigoModalidad,
+                'codigoSistema'         => $codigoSistema,
+                'codigoSucursal'        => $codigoSucursal,
+                'cuis'                  => $cuis,
+                'nit'                   => $nit,
+                'nitParaVerificacion'   => $nitParaVerificacion
+            )
+        );
+
+        $aoptions = array(
+            'http' => array(
+                'header' => $this->header,
+                'timeout' => $this->timeout
+            ),
+        );
+
+        $context = stream_context_create($aoptions);
+
+        try {
+            $client = new \SoapClient($wsdl,[
+                'stream_context'    => $context,
+                'cache_wsdl'        => WSDL_CACHE_NONE,
+                'compression'       => SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP | SOAP_COMPRESSION_DEFLATE
+            ]);
+
+            $resultado = $client->verificarNit($parametros);
+
+            $data['estado'] = 'success';
+            $data['resultado'] = $resultado;
+        } catch (SoapFault $fault) {
+            $resultado = false;
+            $data['estado'] = 'error';
+            $data['resultado'] = $resultado;
+        }
+        return json_encode($data, JSON_UNESCAPED_UNICODE);
     }
 }

@@ -262,53 +262,60 @@
             var tzoffset = ((new Date()).getTimezoneOffset()*60000);
             fechaEmision = ((new Date(Date.now()-tzoffset)).toISOString()).slice(0,-1);
 
-            let nombreRazonSocial = $('#razon_factura').val();
-            let codigoTipoDocumentoIdentidad = $('#tipo_documento').val()
-            let numeroDocumento = $('#nit_factura').val();
-            let complemento = $('#complementoPersonaFac').val();
-            let montoTotal = $('#motoTotalFac').val();
-            let descuentoAdicional = $('#descuento_adicional').val();
-            let leyenda = "Ley N° 453: El proveedor deberá suministrar el servicio en las modalidades y términos ofertados o convenidos.";
-            let usuario = "{{ Auth::user()->nombre_usuario }}";
-            let nombreEstudiante = $('#nombreCompletoEstudiante').val();
-            let periodoFacturado = detalle[(detalle.length)-1].descripcion+" / "+$('#anio_vigente_cuota_pago').val();
+            let nombreRazonSocial               = $('#razon_factura').val();
+            let codigoTipoDocumentoIdentidad    = $('#tipo_documento').val()
+            let numeroDocumento                 = $('#nit_factura').val();
+            let complemento                     = $('#complementoPersonaFac').val();
+            let montoTotal                      = $('#motoTotalFac').val();
+            let descuentoAdicional              = $('#descuento_adicional').val();
+            let leyenda                         = "Ley N° 453: El proveedor deberá suministrar el servicio en las modalidades y términos ofertados o convenidos.";
+            let usuario                         = "{{ Auth::user()->nombre_usuario }}";
+            let nombreEstudiante                = $('#nombreCompletoEstudiante').val();
+            let periodoFacturado                = detalle[(detalle.length)-1].descripcion+" / "+$('#anio_vigente_cuota_pago').val();
+            let codigoExcepcion;
+
+            if ($('#execpcion').is(':checked'))
+                codigoExcepcion                 = 1;
+            else
+                codigoExcepcion                 = 0;
+
 
             var factura = [];
             factura.push({
                 cabecera: {
-                    nitEmisor:"178436029",
-                    razonSocialEmisor:'INSTITUTO TECNICO "EF-GIPET" S.R.L.',
-                    municipio:"La Paz",
-                    telefono:"73717199",
-                    numeroFactura:numero_factura,
-                    cuf:cuf,
-                    cufd:cufd,
-                    codigoSucursal:0,
-                    direccion:direccion ,
-                    codigoPuntoVenta:0,
+                    nitEmisor                           :"178436029",
+                    razonSocialEmisor                   :'INSTITUTO TECNICO "EF-GIPET" S.R.L.',
+                    municipio                           :"La Paz",
+                    telefono                            :"73717199",
+                    numeroFactura                       :numero_factura,
+                    cuf                                 :cuf,
+                    cufd                                :cufd,
+                    codigoSucursal                      :0,
+                    direccion                           :direccion ,
+                    codigoPuntoVenta                    :0,
                     //codigoPuntoVenta:{{ Auth::user()->codigo_punto_venta }},
-                    fechaEmision:fechaEmision,
-                    nombreRazonSocial:nombreRazonSocial,
-                    codigoTipoDocumentoIdentidad:codigoTipoDocumentoIdentidad,
-                    numeroDocumento:numeroDocumento,
-                    complemento:complemento,
-                    codigoCliente:numeroDocumento,
-                    nombreEstudiante:nombreEstudiante,
-                    periodoFacturado:periodoFacturado,
-                    codigoMetodoPago:1,
-                    numeroTarjeta:null,
-                    montoTotal:montoTotal,
-                    montoTotalSujetoIva:montoTotal,
-                    codigoMoneda:1,
-                    tipoCambio:1,
-                    montoTotalMoneda:montoTotal,
-                    montoGiftCard:null,
-                    descuentoAdicional:descuentoAdicional,//ver llenado
-                    codigoExcepcion:0,
-                    cafc:cafc,
-                    leyenda:leyenda,
-                    usuario:usuario,
-                    codigoDocumentoSector:11
+                    fechaEmision                        :fechaEmision,
+                    nombreRazonSocial                   :nombreRazonSocial,
+                    codigoTipoDocumentoIdentidad        :codigoTipoDocumentoIdentidad,
+                    numeroDocumento                     :numeroDocumento,
+                    complemento                         :complemento,
+                    codigoCliente                       :numeroDocumento,
+                    nombreEstudiante                    :nombreEstudiante,
+                    periodoFacturado                    :periodoFacturado,
+                    codigoMetodoPago                    :1,
+                    numeroTarjeta                       :null,
+                    montoTotal                          :montoTotal,
+                    montoTotalSujetoIva                 :montoTotal,
+                    codigoMoneda                        :1,
+                    tipoCambio                          :1,
+                    montoTotalMoneda                    :montoTotal,
+                    montoGiftCard                       :null,
+                    descuentoAdicional                  :descuentoAdicional,//ver llenado
+                    codigoExcepcion                     :codigoExcepcion,   // si hay alguna exepcion
+                    cafc                                :cafc,
+                    leyenda                             :leyenda,
+                    usuario                             :usuario,
+                    codigoDocumentoSector               :11
                 }
             })
 
@@ -476,6 +483,43 @@
                 }
             })
         }
+    }
+
+    function verificaNit(){
+        console.log($('#tipo_documento').val())
+        let tipoDocumento = $('#tipo_documento').val();
+        if(tipoDocumento === "5"){
+            let nit = $('#nit_factura').val();
+            $.ajax({
+                url: "{{ url('Factura/verificaNit') }}",
+                method: "POST",
+                data:{nit:nit},
+                dataType: 'json',
+                success: function (data) {
+                    if(data.estado === "success"){
+                        if(!data.verificacion){
+                            // Marcar el checkbox con jQuery
+                            $('#execpcion').prop('checked', true);
+                            $('#nitnoexiste').show('toggle');
+                            $('#nitsiexiste').hide('toggle');
+                            $('#bloque_exepcion').show('toggle');
+                        }else{
+                            $('#execpcion').prop('checked', false);
+                            $('#nitsiexiste').show('toggle');
+                            $('#nitnoexiste').hide('toggle');
+                            $('#bloque_exepcion').hide('toggle');
+                        }
+                    }else{
+
+                    }
+
+                }
+            })
+        }else{
+            console.log("nada che", (tipoDocumento === "5"), tipoDocumento)
+            $('#bloque_exepcion').hide('toggle');
+        }
+
     }
 
 </script>

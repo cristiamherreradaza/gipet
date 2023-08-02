@@ -2,9 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    {{--  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>  --}}
     <style type="text/css">
           body{
             background-color: #ff953f; /* Color plomo */
@@ -64,10 +61,8 @@
             </div>
             <div class="line">
                 ¡Gracias por confiar en nosotros!
-                Adjunto a este correo, encontrarás tu
-                Factura Computarizada en Línea (Representación Gráfica)
-                con N° {{ $number }} emitida en {{ $date }} y la información de
-                la transacción en formato XML.
+                Este correo es para informarle que la factura que emitio en la fecha {{ $date }} con numero
+                N° {{ $number }} fue <b>ANULADA</b>
             </div>
             <div class="line">
                 Cualquier consulta respecto a la factura, no dudes
