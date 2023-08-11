@@ -19,6 +19,7 @@ class CreateCufdTable extends Migration
             $table->string('codigoControl')->nullable();
             $table->string('direccion')->nullable();
             $table->timestamp('fechaVigencia')->nullable();
+            $table->string('punto_venta')->nullable();
             $table->string('estado')->nullable();
             $table->datetime('deleted_at')->nullable();
             $table->timestamps();
