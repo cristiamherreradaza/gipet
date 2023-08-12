@@ -1202,10 +1202,10 @@ class FacturaController extends Controller
         $numeroFactura  = (string)$cabeza['cabecera']->numeroFactura;
 
         // Genera el texto para el código QR
-        // $textoQR = 'https://pilotosiat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf='.$cuf.'&numero='.$numeroFactura.'&t=2';
-
-        
-        $textoQR = 'https://siat.impuestos.gob.bo/consulta/QR?nit=valorNit&cuf='.$cuf.'&numero='.$numeroFactura.'&t=2';
+        // DESARROLLO
+        $textoQR = 'https://pilotosiat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf='.$cuf.'&numero='.$numeroFactura.'&t=2';
+        // PRODUCCION
+        // $textoQR = 'https://siat.impuestos.gob.bo/consulta/QR?nit=valorNit&cuf='.$cuf.'&numero='.$numeroFactura.'&t=2';
 
         // Genera la ruta temporal para guardar la imagen del código QR
         $rutaImagenQR = storage_path('app/public/qr_code.png');
