@@ -75,11 +75,11 @@
 </table>
 
 <div class="row">
-    {{--  <div class="col-md-6">
+     <div class="col-md-6">
         <a href='{{ url("Factura/generaRecibo")."/".$persona_id }}/recibo' class="btn btn-block btn-success">RECIBO</a>
-    </div>  --}}
-
-    <div class="col-md-12">
+    </div> 
+    <div class="col-md-6">
+    {{-- <div class="col-md-12"> --}}
         {{-- <a href='{{ url("Factura/ajaxFacturar")."/".$persona_id }}/factura' class="btn btn-block btn-dark" onclick="muestraNit()">FACTURA</a> --}}
         <button class="btn btn-block btn-dark" onclick="muestraNit()" id="btn_concluir">CONCLUIR</button>
     </div>
