@@ -77,7 +77,7 @@
 <div class="row">
      <div class="col-md-6">
         <a href='{{ url("Factura/generaRecibo")."/".$persona_id }}/recibo' class="btn btn-block btn-success">RECIBO</a>
-    </div> 
+    </div>
     <div class="col-md-6">
     {{-- <div class="col-md-12"> --}}
         {{-- <a href='{{ url("Factura/ajaxFacturar")."/".$persona_id }}/factura' class="btn btn-block btn-dark" onclick="muestraNit()">FACTURA</a> --}}
@@ -168,7 +168,8 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label class="control-label">&nbsp;</label>
-                    <input type="button" class="btn btn-block btn-success" onclick="generaFacturaLinea()" value="ENVIAR FACTURA">
+                    {{--  <input type="button" class="btn btn-block btn-success" onclick="generaFacturaLinea()" value="ENVIAR FACTURA">  --}}
+                    <button type="button" class="btn btn-block btn-success" onclick="generaFacturaLinea()" id="botonEmitirFactura">ENVIAR FACTURA</button>
                 </div>
             </div>
         </div>
