@@ -1374,7 +1374,7 @@ class SiatController extends Controller
                             session(['scodigoControl'       => $cufd->resultado->RespuestaCufd->codigoControl]);
                             session(['sdireccion'           => $cufd->resultado->RespuestaCufd->direccion]);
                             session(['sfechaVigenciaCufd'   => $cufd->resultado->RespuestaCufd->fechaVigencia]);
-    
+
                             $cufdNew = app(CufdController::class);
                             $cufdNew->create(
                                             $cufd->resultado->RespuestaCufd->codigo,

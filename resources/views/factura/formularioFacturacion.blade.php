@@ -224,6 +224,10 @@
     function generaFacturaLinea(){
 
         if($("#formularioGeneraFactura")[0].checkValidity()){
+            var boton = $("#botonEmitirFactura");
+            var originalText = boton.val();
+            // Deshabilitar el botón y cambiar el contenido con el icono giratorio
+            boton.prop("disabled", true).val("").append('<i class="fas fa-spinner fa-spin"></i>');
             //PONEMOS TODO AL MODELO DEL SIAT EL DETALLE
             detalle = [];
             arrayProductos.forEach(function (prod){
@@ -252,7 +256,7 @@
                 //let fechaEmision = ((new Date(Date.now()-tzoffset)).toISOString()).slice(0,-1);
                 //  var fecha = new Date($('#fecha_uso_cafc').val());
                 // var tzoffset = ((new Date()).getTimezoneOffset()*60000);
-                // fechaEmision = ((new Date(fecha-tzoffset)).toISOString()).slice(0,-1); 
+                // fechaEmision = ((new Date(fecha-tzoffset)).toISOString()).slice(0,-1);
                 cafc = $('#codigo_cafc_contingencia').val();
             }else{
                 // var tzoffset = ((new Date()).getTimezoneOffset()*60000);
@@ -271,7 +275,7 @@
             let usuario                             = "{{ Auth::user()->nombre_usuario }}";
             let nombreEstudiante                    = $('#nombreCompletoEstudiante').val();
             let periodoFacturado                    = detalle[(detalle.length)-1].descripcion+" / "+$('#anio_vigente_cuota_pago').val();
-            
+
             let complemento;
             var complementoValue                    = $('#complementoPersonaFac').val();
             if (complementoValue === null || complementoValue.trim() === ""){
