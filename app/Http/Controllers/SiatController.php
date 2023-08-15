@@ -1406,18 +1406,7 @@ class SiatController extends Controller
                         session(['sdireccion'           => $cufd->resultado->RespuestaCufd->direccion]);
                         session(['sfechaVigenciaCufd'   => $cufd->resultado->RespuestaCufd->fechaVigencia]);
 
-                        $cufdNew = app(CufdController::class);
-                        $cufdNew->create(
-                                        $cufd->resultado->RespuestaCufd->codigo,
-                                        $cufd->resultado->RespuestaCufd->codigoControl,
-                                        $cufd->resultado->RespuestaCufd->direccion,
-                                        $cufd->resultado->RespuestaCufd->fechaVigencia,
-                                        $this->codigoPuntoVenta
-                                    );
-                        $data['$cufd->resultado->RespuestaCufd->transaccion'] = 'si';
-                    }else{
-                        $data['$cufd->resultado->RespuestaCufd->transaccion'] = 'no';
-                    }
+         }
                     $data['!session()->has("scufd")'] = 'si';
                 }else{
                     // dd("chw");
