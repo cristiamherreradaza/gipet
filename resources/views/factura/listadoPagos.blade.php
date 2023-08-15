@@ -303,7 +303,7 @@
                                     @if($f->facturado === "Si")
                                         @if ($f->uso_cafc === "si")
                                             {{-- <a href="https://pilotosiat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf={{ $f->cuf }}&numero={{ $f->numero_cafc }}&t=2" target="_blank" class="btn btn-dark btn-icon btn-sm"><i class="fa fa-file"></i></a> --}}
-                                            <a href="https://pilotosiat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf={{ $f->cuf }}&numero={{ $f->numero_cafc }}&t=2" target="_blank" class="btn btn-dark btn-icon btn-sm"><i class="fa fa-file"></i></a>
+                                            <a href="https://siat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf={{ $f->cuf }}&numero={{ $f->numero_cafc }}&t=2" target="_blank" class="btn btn-dark btn-icon btn-sm"><i class="fa fa-file"></i></a>
                                         @else
                                             {{-- <a href="https://pilotosiat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf={{ $f->cuf }}&numero={{ $f->numero }}&t=2" target="_blank" class="btn btn-dark btn-icon btn-sm"><i class="fa fa-file"></i></a> --}}
                                             <a href="https://siat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf={{ $f->cuf }}&numero={{ $f->numero }}&t=2" target="_blank" class="btn btn-dark btn-icon btn-sm"><i class="fa fa-file"></i></a>
