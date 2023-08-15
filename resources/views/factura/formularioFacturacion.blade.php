@@ -240,40 +240,52 @@
                 })
             })
 
-            let numero_factura = $('#numero_factura').val();
-            let cuf = "123456789";//cambiar
-            let cufd = "{{ session('scufd') }}";  //solo despues de que aga
-            let direccion = "{{ session('sdireccion') }}";//solo despues de que aga
+            let numero_factura  = $('#numero_factura').val();
+            let cuf             = "123456789";//cambiar
+            let cufd            = "{{ session('scufd') }}";  //solo despues de que aga
+            let direccion       = "{{ session('sdireccion') }}";//solo despues de que aga
             let fechaEmision;
-            let cafc = null;
+            let cafc            = null;
 
             if($('input[name="uso_cafc"]:checked').val() === "si"){
                 //var tzoffset = ((new Date()).getTimezoneOffset()*60000);
                 //let fechaEmision = ((new Date(Date.now()-tzoffset)).toISOString()).slice(0,-1);
-                {{--  var fecha = new Date($('#fecha_uso_cafc').val());
-                var tzoffset = ((new Date()).getTimezoneOffset()*60000);
-                fechaEmision = ((new Date(fecha-tzoffset)).toISOString()).slice(0,-1);  --}}
+                //  var fecha = new Date($('#fecha_uso_cafc').val());
+                // var tzoffset = ((new Date()).getTimezoneOffset()*60000);
+                // fechaEmision = ((new Date(fecha-tzoffset)).toISOString()).slice(0,-1); 
                 cafc = $('#codigo_cafc_contingencia').val();
             }else{
-                {{--  var tzoffset = ((new Date()).getTimezoneOffset()*60000);
-                fechaEmision = ((new Date(Date.now()-tzoffset)).toISOString()).slice(0,-1);  --}}
+                // var tzoffset = ((new Date()).getTimezoneOffset()*60000);
+                // fechaEmision = ((new Date(Date.now()-tzoffset)).toISOString()).slice(0,-1);
             }
 
             var tzoffset = ((new Date()).getTimezoneOffset()*60000);
             fechaEmision = ((new Date(Date.now()-tzoffset)).toISOString()).slice(0,-1);
 
-            let nombreRazonSocial               = $('#razon_factura').val();
-            let codigoTipoDocumentoIdentidad    = $('#tipo_documento').val()
-            let numeroDocumento                 = $('#nit_factura').val();
-            let complemento                     = $('#complementoPersonaFac').val();
-            let montoTotal                      = $('#motoTotalFac').val();
-            let descuentoAdicional              = $('#descuento_adicional').val();
-            let leyenda                         = "Ley N° 453: El proveedor deberá suministrar el servicio en las modalidades y términos ofertados o convenidos.";
-            let usuario                         = "{{ Auth::user()->nombre_usuario }}";
-            let nombreEstudiante                = $('#nombreCompletoEstudiante').val();
-            let periodoFacturado                = detalle[(detalle.length)-1].descripcion+" / "+$('#anio_vigente_cuota_pago').val();
-            let codigoExcepcion;
+            let nombreRazonSocial                   = $('#razon_factura').val();
+            let codigoTipoDocumentoIdentidad        = $('#tipo_documento').val()
+            let numeroDocumento                     = $('#nit_factura').val();
+            let montoTotal                          = $('#motoTotalFac').val();
+            let descuentoAdicional                  = $('#descuento_adicional').val();
+            let leyenda                             = "Ley N° 453: El proveedor deberá suministrar el servicio en las modalidades y términos ofertados o convenidos.";
+            let usuario                             = "{{ Auth::user()->nombre_usuario }}";
+            let nombreEstudiante                    = $('#nombreCompletoEstudiante').val();
+            let periodoFacturado                    = detalle[(detalle.length)-1].descripcion+" / "+$('#anio_vigente_cuota_pago').val();
+            
+            let complemento;
+            var complementoValue                    = $('#complementoPersonaFac').val();
+            if (complementoValue === null || complementoValue.trim() === ""){
+                complemento                         = null;
+            }else{
+                if($('#tipo_documento').val()==5){
+                    complemento                     = null;
+                }else{
+                    complemento                     = $('#complementoPersonaFac').val();
+                }
+            }
 
+
+            let codigoExcepcion;
             if ($('#execpcion').is(':checked'))
                 codigoExcepcion                 = 1;
             else

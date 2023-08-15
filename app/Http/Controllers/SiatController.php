@@ -1360,6 +1360,45 @@ class SiatController extends Controller
 
     public function verificarConeccion(){
         if(!session()->has('scufd')){
+
+            $cufdDelDia = Cufd::where('punto_venta', $this->codigoPuntoVenta)
+                                ->latest()
+                                ->first();
+            if($cufdDelDia){
+                $fechaVigencia = $cufdDelDia->fechaVigencia;
+
+                if($fechaVigencia < date('Y-m-d H:i')){
+                    $cufd = json_decode($this->cufd());
+                    if($cufd->estado === "success"){
+                        if($cufd->resultado->RespuestaCufd->transaccion){
+                            session(['scufd'                => $cufd->resultado->RespuestaCufd->codigo]);
+                            session(['scodigoControl'       => $cufd->resultado->RespuestaCufd->codigoControl]);
+                            session(['sdireccion'           => $cufd->resultado->RespuestaCufd->direccion]);
+                            session(['sfechaVigenciaCufd'   => $cufd->resultado->RespuestaCufd->fechaVigencia]);
+    
+                            $cufdNew = app(CufdController::class);
+                            $cufdNew->create(
+                                            $cufd->resultado->RespuestaCufd->codigo,
+                                            $cufd->resultado->RespuestaCufd->codigoControl,
+                                            $cufd->resultado->RespuestaCufd->direccion,
+                                            $cufd->resultado->RespuestaCufd->fechaVigencia,
+                                            $this->codigoPuntoVenta
+                                        );
+                            $data['$cufd->resultado->RespuestaCufd->transaccion'] = 'si';
+                        }else{
+                            $data['$cufd->resultado->RespuestaCufd->transaccion'] = 'no';
+                        }
+                        $data['!session()->has("scufd")'] = 'si';
+                    }else{
+                        // dd("chw");
+                    }
+                }else{
+                    session(['scufd'                => $cufdDelDia->codigo]);
+                    session(['scodigoControl'       => $cufdDelDia->codigoControl]);
+                    session(['sdireccion'           => $cufdDelDia->direccion]);
+                    session(['sfechaVigenciaCufd'   => $cufdDelDia->fechaVigencia]);
+                }
+            }else{
                 $cufd = json_decode($this->cufd());
                 if($cufd->estado === "success"){
                     if($cufd->resultado->RespuestaCufd->transaccion){
@@ -1373,9 +1412,9 @@ class SiatController extends Controller
                                         $cufd->resultado->RespuestaCufd->codigo,
                                         $cufd->resultado->RespuestaCufd->codigoControl,
                                         $cufd->resultado->RespuestaCufd->direccion,
-                                        $cufd->resultado->RespuestaCufd->fechaVigencia
+                                        $cufd->resultado->RespuestaCufd->fechaVigencia,
+                                        $this->codigoPuntoVenta
                                     );
-
                         $data['$cufd->resultado->RespuestaCufd->transaccion'] = 'si';
                     }else{
                         $data['$cufd->resultado->RespuestaCufd->transaccion'] = 'no';
@@ -1384,7 +1423,7 @@ class SiatController extends Controller
                 }else{
                     // dd("chw");
                 }
-            // }
+            }
         }else{
             // dd("no");
             // dd(session()->all());

@@ -300,10 +300,12 @@
                                         <a class="btn btn-info" href="{{ url('Factura/generaPdfFacturaNew', [$f->id]) }}" target="_blank"><i class="fa fa-file-pdf"></i></a>
                                     @endif
 
-                                    @if ($f->uso_cafc === "si")
-                                        <a href="https://pilotosiat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf={{ $f->cuf }}&numero={{ $f->numero_cafc }}&t=2" target="_blank" class="btn btn-dark btn-icon btn-sm"><i class="fa fa-file"></i></a>
-                                    @else
-                                        <a href="https://pilotosiat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf={{ $f->cuf }}&numero={{ $f->numero }}&t=2" target="_blank" class="btn btn-dark btn-icon btn-sm"><i class="fa fa-file"></i></a>
+                                    @if($f->facturado === "Si")
+                                        @if ($f->uso_cafc === "si")
+                                            <a href="https://pilotosiat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf={{ $f->cuf }}&numero={{ $f->numero_cafc }}&t=2" target="_blank" class="btn btn-dark btn-icon btn-sm"><i class="fa fa-file"></i></a>
+                                        @else
+                                            <a href="https://pilotosiat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf={{ $f->cuf }}&numero={{ $f->numero }}&t=2" target="_blank" class="btn btn-dark btn-icon btn-sm"><i class="fa fa-file"></i></a>
+                                        @endif
                                     @endif
 
 
@@ -315,10 +317,12 @@
 
                                             @endif
                                         @else
-                                            @if ($f->codigo_descripcion != 'VALIDADA' && $f->codigo_descripcion != 'PENDIENTE')
-                                                <button class="btn btn-dark btn-icon" onclick="modalRecepcionFacuraContingenciaFueraLinea('{{ $f->id }}')"><i class="fa fa-upload" aria-hidden="true"></i></button>
-                                            @else
-                                                <button class="btn btn-danger btn-icon" onclick="modalAnularFactura('{{ $f->id }}')"><i class="fa fa-trash"></i></button>
+                                            @if($f->facturado === "Si")
+                                                @if ($f->codigo_descripcion != 'VALIDADA' && $f->codigo_descripcion != 'PENDIENTE')
+                                                    <button class="btn btn-dark btn-icon" onclick="modalRecepcionFacuraContingenciaFueraLinea('{{ $f->id }}')"><i class="fa fa-upload" aria-hidden="true"></i></button>
+                                                @else
+                                                    <button class="btn btn-danger btn-icon" onclick="modalAnularFactura('{{ $f->id }}')"><i class="fa fa-trash"></i></button>
+                                                @endif
                                             @endif
                                         @endif
                                     @endif
