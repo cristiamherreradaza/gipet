@@ -36,10 +36,9 @@ class SiatController extends Controller
         }
     }
 
-    protected $header                   = "apikey: TokenApi eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4NDM5ODU2THB6IiwiY29kaWdvU2lzdGVtYSI6Ijc3MkM0QTVENUVBQTQyQjlBNDFCNDM2Iiwibml0IjoiSDRzSUFBQUFBQUFBQURNMHR6QXhOak13c2dRQUYyano4UWtBQUFBPSIsImlkIjo2NTAyNjYsImV4cCI6MTcyMzUwNzIwMCwiaWF0IjoxNjkyMDYwODU0LCJuaXREZWxlZ2FkbyI6MTc4NDM2MDI5LCJzdWJzaXN0ZW1hIjoiU0ZFIn0.MQ3eG3LB768kAtjreLAP7JnkkA4DuQvbl7XHoLTo-5KvGoPToam-vmg4s128FCtVV_aLMP6XXryhEMAF2d1-kg";
     protected $timeout                  = 5;                            // TIEMPO EN ESPERA PARA QUE RESPONDA SITA
-    // protected $codigoAmbiente           = 2;                            // si estamos desarrollo o pruebas  1 Produccion --- 2 Desarrollo
-    protected $codigoAmbiente           = 1;                            // si estamos desarrollo o pruebas  1 Produccion --- 2 Desarrollo
+    protected $codigoAmbiente           = 2;                            // si estamos desarrollo o pruebas  1 Produccion --- 2 Desarrollo
+    // protected $codigoAmbiente           = 1;                            // si estamos desarrollo o pruebas  1 Produccion --- 2 Desarrollo
     protected $codigoModalidad          = 2;                            // que modalidad de facturacion es  1 Electronica --- 2 Computarizada
     // protected $codigoPuntoVenta         = 0;                            // NUMOER DE QUE PUNTO DE VENTA ES
     protected $codigoPuntoVenta;                                        // NUMOER DE QUE PUNTO DE VENTA ES
@@ -52,16 +51,23 @@ class SiatController extends Controller
 
 
     // LINK PARA DESARRROLLO
+    // protected $header                               = "apikey: TokenApi eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4NDM5ODU2THB6IiwiY29kaWdvU2lzdGVtYSI6Ijc3MkM0QTVENUVBQTQyQjlBNDFCNDM2Iiwibml0IjoiSDRzSUFBQUFBQUFBQURNMHR6QXhOak13c2dRQUYyano4UWtBQUFBPSIsImlkIjo2NTAyNjYsImV4cCI6MTcyMzI0ODAwMCwiaWF0IjoxNjkxNzkyODQ1LCJuaXREZWxlZ2FkbyI6MTc4NDM2MDI5LCJzdWJzaXN0ZW1hIjoiU0ZFIn0.pMH1ZP4LYsr7Ht0EGRzwT_Fa8-adU4PonfqmpgRiDaAzh9D8V79rwfB-UhvpL8UvMxFTy8L7DlacgNoizrub3A";
     // protected $FacturacionCodigos                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionCodigos?wsdl";
     // protected $FacturacionSincronizacion            = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionSincronizacion?wsdl";
     // protected $ServicioFacturacionComputarizada     = "https://pilotosiatservicios.impuestos.gob.bo/v2/ServicioFacturacionComputarizada?wsdl";
     // protected $FacturacionOperaciones               = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionOperaciones?wsdl";
 
     // LINK PARA PRODUCCION
+    protected $header                               = "apikey: TokenApi eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4NDM5ODU2THB6IiwiY29kaWdvU2lzdGVtYSI6Ijc3MkM0QTVENUVBQTQyQjlBNDFCNDM2Iiwibml0IjoiSDRzSUFBQUFBQUFBQURNMHR6QXhOak13c2dRQUYyano4UWtBQUFBPSIsImlkIjo2NTAyNjYsImV4cCI6MTcyMzUwNzIwMCwiaWF0IjoxNjkyMDYwODU0LCJuaXREZWxlZ2FkbyI6MTc4NDM2MDI5LCJzdWJzaXN0ZW1hIjoiU0ZFIn0.MQ3eG3LB768kAtjreLAP7JnkkA4DuQvbl7XHoLTo-5KvGoPToam-vmg4s128FCtVV_aLMP6XXryhEMAF2d1-kg";
     protected $FacturacionCodigos                   = "https://siatrest.impuestos.gob.bo/v2/FacturacionCodigos?wsdl";
     protected $FacturacionSincronizacion            = "https://siatrest.impuestos.gob.bo/v2/FacturacionSincronizacion?wsdl";
     protected $ServicioFacturacionComputarizada     = "https://siatrest.impuestos.gob.bo/v2/ServicioFacturacionComputarizada?wsdl";
     protected $FacturacionOperaciones               = "https://siatrest.impuestos.gob.bo/v2/FacturacionOperaciones?wsdl";
+
+    public function linkQRVerificacion($cuf, $numero){
+        return 'https://siat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf='.$cuf.'&numero='.$numero.'&t=2';
+        // return 'https://pilotosiat.impuestos.gob.bo/consulta/QR?nit=178436029&cuf='.$cuf.'&numero='.$numero.'&t=2';
+    }
 
     public function verificarComunicacion(){
         $wsdl = $this->FacturacionCodigos;
