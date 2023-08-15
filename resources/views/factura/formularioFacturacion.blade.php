@@ -201,7 +201,6 @@
                             'El estudiante fue eliminado',
                             'success'
                         )
-                        // window.location.href = "{{ url('Factura/formularioFacturacion') }}/";
                     }
                 });
             }
