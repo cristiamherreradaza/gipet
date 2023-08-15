@@ -417,7 +417,7 @@ class FacturaController extends Controller
                                 // ->orderBy('pagos.carrera_id', 'asc')
                                 ->orderBy('pagos.mensualidad', 'asc')
                                 ->get();
-                                
+
         // extraemos la ultima cuota para eliminar de la tabla
         $ultimaCuota = Pago::where('persona_id', $request->persona_id)
                         ->where('estado', 'paraPagar')
@@ -1076,7 +1076,8 @@ class FacturaController extends Controller
                                     ->where('pagos.persona_id', $persona_id)
                                     ->where('pagos.estado', 'paraPagar')
                                     ->orWhere('pagos.estado', 'Parcial')
-                                    ->orderBy('pagos.carrera_id', 'asc')
+                                    // ->orderBy('pagos.carrera_id', 'asc')
+                                    ->orderBy('pagos.mensualidad', 'asc')
                                     ->get();
 
             $data['estado'] = 'success';
