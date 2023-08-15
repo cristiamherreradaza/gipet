@@ -53,16 +53,16 @@ class SiatController extends Controller
 
 
     // LINK PARA DESARRROLLO
-    protected $FacturacionCodigos                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionCodigos?wsdl";
-    protected $FacturacionSincronizacion            = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionSincronizacion?wsdl";
-    protected $ServicioFacturacionComputarizada     = "https://pilotosiatservicios.impuestos.gob.bo/v2/ServicioFacturacionComputarizada?wsdl";
-    protected $FacturacionOperaciones               = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionOperaciones?wsdl";
+    // protected $FacturacionCodigos                   = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionCodigos?wsdl";
+    // protected $FacturacionSincronizacion            = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionSincronizacion?wsdl";
+    // protected $ServicioFacturacionComputarizada     = "https://pilotosiatservicios.impuestos.gob.bo/v2/ServicioFacturacionComputarizada?wsdl";
+    // protected $FacturacionOperaciones               = "https://pilotosiatservicios.impuestos.gob.bo/v2/FacturacionOperaciones?wsdl";
 
     // LINK PARA PRODUCCION
-    // protected $FacturacionCodigos                   = "https://siatrest.impuestos.gob.bo/v2/FacturacionCodigos?wsdl";
-    // protected $FacturacionSincronizacion            = "https://siatrest.impuestos.gob.bo/v2/FacturacionSincronizacion?wsdl";
-    // protected $ServicioFacturacionComputarizada     = "https://siatrest.impuestos.gob.bo/v2/ServicioFacturacionComputarizada?wsdl";
-    // protected $FacturacionOperaciones               = "https://siatrest.impuestos.gob.bo/v2/FacturacionOperaciones?wsdl";
+    protected $FacturacionCodigos                   = "https://siatrest.impuestos.gob.bo/v2/FacturacionCodigos?wsdl";
+    protected $FacturacionSincronizacion            = "https://siatrest.impuestos.gob.bo/v2/FacturacionSincronizacion?wsdl";
+    protected $ServicioFacturacionComputarizada     = "https://siatrest.impuestos.gob.bo/v2/ServicioFacturacionComputarizada?wsdl";
+    protected $FacturacionOperaciones               = "https://siatrest.impuestos.gob.bo/v2/FacturacionOperaciones?wsdl";
 
     public function verificarComunicacion(){
         $wsdl = $this->FacturacionCodigos;
