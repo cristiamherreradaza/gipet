@@ -278,7 +278,12 @@
                             <select name="codigo_punto_venta" id="codigo_punto_venta" class="form-control">
                                 <option value="">Seleccione</option>
                                 @foreach ( $puntos as $p)
-                                <option value="{{ $p['codigoPuntoVenta'] }}">{{ $p['nombrePuntoVenta'] }}</option>
+                                    @if(is_array($p))
+                                        <option value="{{ $p['codigoPuntoVenta'] }}">{{ $p['nombrePuntoVenta'] }}</option>
+                                    @else
+                                        <option value="{{ $puntos['codigoPuntoVenta'] }}">{{ $puntos['nombrePuntoVenta'] }}</option>
+                                        @break
+                                    @endif
                                 @endforeach
                             </select>
                         </div>
@@ -496,7 +501,12 @@
                             <select name="codigo_punto_venta_edicion" id="codigo_punto_venta_edicion" class="form-control">
                                 <option value="">Seleccione</option>
                                 @foreach ( $puntos as $p)
-                                <option value="{{ $p['codigoPuntoVenta'] }}">{{ $p['nombrePuntoVenta'] }}</option>
+                                    @if(is_array($p))
+                                        <option value="{{ $p['codigoPuntoVenta'] }}">{{ $p['nombrePuntoVenta'] }}</option>
+                                    @else
+                                        <option value="{{ $puntos['codigoPuntoVenta'] }}">{{ $puntos['nombrePuntoVenta'] }}</option>
+                                        @break
+                                    @endif
                                 @endforeach
                             </select>
                         </div>
