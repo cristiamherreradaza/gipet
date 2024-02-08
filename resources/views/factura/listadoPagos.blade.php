@@ -259,10 +259,22 @@
                                         <span class="text-info">{{ $f->numero }}</span>
                                     @else
                                         <span class="text-primary">{{ $f->numero_recibo }}</span>
-
                                     @endif
                                 </td>
-                                <td>{{ $f->persona->cedula }}</td>
+                                <td>
+                                    @php
+
+                                        if($f->persona){
+
+                                        }else{
+                                            dd($f->persona, $f);
+                                        }
+
+                                    @endphp
+
+
+                                    {{ $f->persona->cedula }}
+                                </td>
                                 <td>{{ $f->persona->nombres }}</td>
                                 <td>{{ $f->razon_social }}</td>
                                 <td>{{ $f->nit }}</td>

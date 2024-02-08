@@ -1278,7 +1278,7 @@ class FacturaController extends Controller
             }
 
             $data['estado'] = $respuesta->resultado->RespuestaServicioFacturacion->transaccion;
-            $data['descripcion'] = $respuesta->resultado->RespuestaServicioFacturacion->codigoDescripcion;
+            $data['descripcion'] = $respuesta->resultado;
 
             $fatura->save();
 
