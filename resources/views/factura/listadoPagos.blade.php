@@ -470,9 +470,9 @@
                                 $('#modmodalAnularal').modal('hide');
                             }else{
                                 Swal.fire({
-                                    icon:'error',
+                                    icon : 'error',
                                     title: 'Error!',
-                                    text:data.descripcion
+                                    text : JSON.stringify(data.descripcion)
                                 })
                             }
                         }
