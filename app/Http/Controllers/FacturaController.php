@@ -119,9 +119,9 @@ class FacturaController extends Controller
                                     ->where('anio_vigente', $gestionActual)
                                     ->get();
 
-        $pagos = Pago::where('persona_id', $request->personaId)
-                        // ->where('anio_vigente', $gestionActual)
-                        ->get();
+        // $pagos = Pago::where('persona_id', $request->personaId)
+        //                 // ->where('anio_vigente', $gestionActual)
+        //                 ->get();
 
         $siguienteCuota = Pago::where('persona_id', $request->personaId)
                             ->where('anio_vigente', $gestionActual)
@@ -129,11 +129,13 @@ class FacturaController extends Controller
                             ->orderBy('mensualidad', 'asc')
                             ->first();
 
+        $gestionesPagos = Pago::select('anio_vigente')->distinct()->orderBy('id', 'desc')->get();
+
         // para el siat LA CONECCION
         $siat = app(SiatController::class);
         $verificacionSiat = json_decode($siat->verificarComunicacion());
 
-        return view('factura.ajaxPersona')->with(compact('datosPersona', 'inscripciones', 'descuentos', 'servicios', 'siguienteCuota', 'verificacionSiat'));
+        return view('factura.ajaxPersona')->with(compact('datosPersona', 'inscripciones', 'descuentos', 'servicios', 'siguienteCuota', 'verificacionSiat', 'gestionesPagos'));
     }
 
     public function ajaxMuestraCuotasPagar(Request $request)
@@ -191,9 +193,13 @@ class FacturaController extends Controller
 
     public function ajaxMuestraCuotaAPagar(Request $request)
     {
+
+        $gestion_actual = $request->input('gestion_actual');
+
         $siguienteCuota = Pago::where('persona_id', $request->persona_id)
                         ->where('carrera_id', 1)
                         ->whereNull('estado')
+                        ->where('anio_vigente', $gestion_actual)
                         ->orderBy('mensualidad', 'asc')
                         ->first();
 

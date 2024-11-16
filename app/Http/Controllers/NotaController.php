@@ -606,11 +606,16 @@ class NotaController extends Controller
                                             ->where('paralelo', $request->paralelo)
                                             ->where('anio_vigente', $request->anio_vigente)
                                             ->first();
-                $inscripcion->nota = round($nota->total/2, 0);
+                if($inscripcion){
+                    $inscripcion->nota = round($nota->total/2, 0);
 
-                if($inscripcion->convalidado != 'Si'){
-                    $inscripcion->save();
+                    if($inscripcion->convalidado != 'Si'){
+                        $inscripcion->save();
+                    }
+                }else{
+
                 }
+
             }
 
             return response()->json([
@@ -880,6 +885,9 @@ class NotaController extends Controller
 
     public function ajaxRegistraNota(Request $request)
     {
+
+        // dd($request->all());
+
         $nota = Nota::where('inscripcion_id', $request->id)
                     ->where('trimestre', $request->numero)
                     ->first();
@@ -888,10 +896,10 @@ class NotaController extends Controller
 
         $datosAsignatura = Asignatura::find($nota->asignatura_id);
 
-
         switch ($request->tipo) {
             case 'asistencia':
                 $registro->nota_asistencia = $request->nota;
+                // $this->actualizaNotaTotal($request->id);
                 break;
 
             case 'practica':
@@ -913,52 +921,52 @@ class NotaController extends Controller
             case 'total':
                 $registro->nota_total = $request->nota;
 
-                if($request->numero == 2){
+                // if($request->numero == 2){
 
-                    $notaPrimerBimestre = Nota::where('inscripcion_id', $request->id)
-                                        ->where('trimestre', 1)
-                                        ->first();
+                //     $notaPrimerBimestre = Nota::where('inscripcion_id', $request->id)
+                //                         ->where('trimestre', 1)
+                //                         ->first();
 
-                    $promedio = ($notaPrimerBimestre->nota_total+$registro->nota_total)/2;
+                //     $promedio = ($notaPrimerBimestre->nota_total+$registro->nota_total)/2;
 
-                    if ($promedio >= $datosAsignatura->resolucion->nota_aprobacion) {
+                //     if ($promedio >= $datosAsignatura->resolucion->nota_aprobacion) {
 
-                        $aprobo = 'Si';
+                //         $aprobo = 'Si';
 
-                        $carrerasPersona = CarrerasPersona::where('persona_id', $nota->persona_id)
-                            ->where('carrera_id', $nota->carrera_id)
-                            ->where('turno_id', $nota->turno_id)
-                            ->where('gestion', $nota->gestion)
-                            ->where('paralelo', $nota->paralelo)
-                            ->where('anio_vigente', $nota->anio_vigente)
-                            ->first();
+                //         $carrerasPersona = CarrerasPersona::where('persona_id', $nota->persona_id)
+                //             ->where('carrera_id', $nota->carrera_id)
+                //             ->where('turno_id', $nota->turno_id)
+                //             ->where('gestion', $nota->gestion)
+                //             ->where('paralelo', $nota->paralelo)
+                //             ->where('anio_vigente', $nota->anio_vigente)
+                //             ->first();
 
-                        if ($carrerasPersona->estado == null) {
+                //         if ($carrerasPersona->estado == null) {
 
-                            $modificaEstado = CarrerasPersona::find($carrerasPersona->id);
-                            $modificaEstado->estado = 'APROBO';
-                            $modificaEstado->save();
-                        }
+                //             $modificaEstado = CarrerasPersona::find($carrerasPersona->id);
+                //             $modificaEstado->estado = 'APROBO';
+                //             $modificaEstado->save();
+                //         }
 
-                    } else {
-                        $aprobo = null;
-                        $carrerasPersona = CarrerasPersona::where('persona_id', $nota->persona_id)
-                            ->where('carrera_id', $nota->carrera_id)
-                            ->where('turno_id', $nota->turno_id)
-                            ->where('gestion', $nota->gestion)
-                            ->where('paralelo', $nota->paralelo)
-                            ->where('anio_vigente', $nota->anio_vigente)
-                            ->first();
+                //     } else {
+                //         $aprobo = null;
+                //         $carrerasPersona = CarrerasPersona::where('persona_id', $nota->persona_id)
+                //             ->where('carrera_id', $nota->carrera_id)
+                //             ->where('turno_id', $nota->turno_id)
+                //             ->where('gestion', $nota->gestion)
+                //             ->where('paralelo', $nota->paralelo)
+                //             ->where('anio_vigente', $nota->anio_vigente)
+                //             ->first();
 
-                        $modificaEstado = CarrerasPersona::find($carrerasPersona->id);
-                        $modificaEstado->estado = 'REPROBO';
-                        $modificaEstado->save();
-                    }
+                //         $modificaEstado = CarrerasPersona::find($carrerasPersona->id);
+                //         $modificaEstado->estado = 'REPROBO';
+                //         $modificaEstado->save();
+                //     }
 
-                    $inscripcion = Inscripcione::find($request->id);
-                    $inscripcion->nota = $promedio;
-                    $inscripcion->save();
-                }
+                //     $inscripcion = Inscripcione::find($request->id);
+                //     $inscripcion->nota = $promedio;
+                //     $inscripcion->save();
+                // }
 
                 break;
 
@@ -970,7 +978,76 @@ class NotaController extends Controller
         $registro->docente_id = Auth::user()->id;
         $registro->save();
 
-        $this->registraInscripcionTotal($request->id);
+        $this->actualizaNotaTotal($request->id);
+        // $this->registraInscripcionTotal($request->id);
+
+    }
+
+    private function actualizaNotaTotal($inscripcionId){
+
+        // SACAMOS LA NOTA DEL PRIMER PARCIAL
+        $notaPrimerBimestre = Nota::where('inscripcion_id', $inscripcionId)
+                                        ->where('trimestre', 1)
+                                        ->first();
+
+        // SACAMOS LA NOTA DEL SEGUNDO PARCIAL
+        $notaSegundoBimestre = Nota::where('inscripcion_id', $inscripcionId)
+                                        ->where('trimestre', 2)
+                                        ->first();
+
+        $nota_final_valor_primer_parcial  = $notaPrimerBimestre->nota_total != null ? $notaPrimerBimestre->nota_total : 0;
+        $nota_final_valor_segundo_parcial = $notaSegundoBimestre->nota_total != null ? $notaSegundoBimestre->nota_total : 0;
+
+        $persona_id   = $notaPrimerBimestre->persona_id;
+        $carrera_id   = $notaPrimerBimestre->carrera_id;
+        $turno_id     = $notaPrimerBimestre->turno_id;
+        $paralelo     = $notaPrimerBimestre->paralelo;
+        $anio_vigente = $notaPrimerBimestre->anio_vigente;
+        $gestion      = $notaPrimerBimestre->gestion;
+
+        // SACAMOS LA ASIGNATURA
+        $datosAsignatura = Asignatura::find($notaSegundoBimestre->asignatura_id);
+
+        // SACAMOS EL PROMEDIO
+        $promedio = ($nota_final_valor_primer_parcial + $nota_final_valor_segundo_parcial) / 2;
+
+        if ($promedio >= $datosAsignatura->resolucion->nota_aprobacion) {
+
+            $carrerasPersona = CarrerasPersona::where('persona_id', $persona_id)
+                            ->where('carrera_id', $carrera_id)
+                            ->where('turno_id', $turno_id)
+                            ->where('gestion', $gestion)
+                            ->where('paralelo', $paralelo)
+                            ->where('anio_vigente', $anio_vigente)
+                            ->first();
+
+            if ($carrerasPersona->estado == null) {
+
+                $modificaEstado = CarrerasPersona::find($carrerasPersona->id);
+                $modificaEstado->estado = 'APROBO';
+                $modificaEstado->save();
+            }
+
+        }else{
+
+            $carrerasPersona = CarrerasPersona::where('persona_id', $persona_id)
+                                                ->where('carrera_id', $carrera_id)
+                                                ->where('turno_id', $turno_id)
+                                                ->where('gestion', $gestion)
+                                                ->where('paralelo', $paralelo)
+                                                ->where('anio_vigente', $anio_vigente)
+                                                ->first();
+
+            $modificaEstado = CarrerasPersona::find($carrerasPersona->id);
+            $modificaEstado->estado = 'REPROBO';
+            $modificaEstado->save();
+
+        }
+
+        // ACTUALIZAMOS LA NOTA EN INSCRIPCIONES
+        $inscripcion = Inscripcione::find($inscripcionId);
+        $inscripcion->nota = $promedio;
+        $inscripcion->save();
 
     }
 

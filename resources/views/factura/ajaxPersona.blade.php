@@ -47,7 +47,7 @@
         <div class="row">
             <div class="col-md-6">
                 <span class="badge bg-success text-white w-100">{{ $verificacionSiat->resultado->RespuestaComunicacion->mensajesList->descripcion }}</span>
-            
+
             </div>
             <div class="col-md-3">
                 CUIS: {{ (session()->has('scuis'))?  session('scuis') : '<span class="text-danger">NO existe la Cuis Vigente</span>'}}
@@ -66,18 +66,26 @@
 
     <div class="col-md-3">
         <div class="form-group">
-            <label>Servicio
-                <span class="text-danger">
-                    <i class="mr-2 mdi mdi-alert-circle"></i>
-                </span>
-            </label>
-            {{--  <select name="servicio_id" id="servicio_id" class="form-control" onchange="cambiaServicio()" required {{ ($verificacionSiat->estado === "success")? '' : 'disabled'  }}>  --}}
-            <select name="servicio_id" id="servicio_id" class="form-control" onchange="cambiaServicio()" required>
-                <option value="">SELECCIONE</option>
-                @foreach ($servicios as $s)
-                <option value="{{ $s->id }}">{{ $s->nombre }}</option>
-                @endforeach
-            </select>
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Servicio<span class="text-danger"><i class="mr-2 mdi mdi-alert-circle"></i></span></label>
+                    <select name="servicio_id" id="servicio_id" class="form-control" onchange="cambiaServicio()" required>
+                        <option value="">SELECCIONE</option>
+                        @foreach ($servicios as $s)
+                        <option value="{{ $s->id }}">{{ $s->nombre }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label>Gestion<span class="text-danger"><i class="mr-2 mdi mdi-alert-circle"></i></span></label>
+                    <select name="gestion_buscar" id="gestion_buscar" class="form-control" onchange="cambiaServicio()" required>
+                        @foreach ($gestionesPagos as $gp)
+                            <option {{ (date('Y') == $gp->anio_vigente)? 'selected' : ''  }} value="{{ $gp->anio_vigente }}">{{ $gp->anio_vigente }}</option>
+                        @endforeach
+                    </select>
+                    {{-- <input type="number" class="form-control" name="gestion_buscar" id="gestion_buscar" value="{{ date('Y') }}"> --}}
+                </div>
+            </div>
         </div>
     </div>
 
@@ -106,8 +114,9 @@
 
     function cambiaServicio()
     {
-        let servicio = $('#servicio_id').val();
-        let persona_id = {{ $datosPersona->id }};
+        let servicio       = $('#servicio_id').val();
+        let persona_id     = {{ $datosPersona->id }};
+        let gestion_actual = $('#gestion_buscar').val();
 
         // en el caso que el servicio sea mensualidad
         // mostramos las cuotas a pagar
@@ -117,7 +126,8 @@
                 url: "{{ url('Factura/ajaxMuestraCuotaAPagar') }}",
                 data: {
                     // carrera_id: carrera,
-                    persona_id: persona_id
+                    persona_id    : persona_id,
+                    gestion_actual: gestion_actual
                 },
                 type: 'GET',
                 success: function(data) {
