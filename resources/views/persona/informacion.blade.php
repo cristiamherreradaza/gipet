@@ -814,7 +814,7 @@
                     </div>
 
                     <div class="col-md-4">
-                        <a href="{{ url('Persona/listado') }}" type="button" class="btn waves-effect waves-light btn-block btn-inverse">VOLVER</a>
+                        <a href="{{ url('Factura/formularioFacturacion') }}" type="button" class="btn waves-effect waves-light btn-block btn-inverse">VOLVER</a>
                     </div>
                 </div>
                 {{-- bloque de nueva inscripcion --}}
