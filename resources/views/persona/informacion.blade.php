@@ -724,6 +724,7 @@
                         <table class="table table-striped table-bordered no-wrap table-hover" id="tabla-pagos">
                             <thead>
                                 <tr>
+                                    <th class="text-center">Carrera</th>
                                     <th class="text-center">Gestion</th>
                                     <th class="text-center">Descripcion</th>
                                     <th class="text-center">A Pagar</th>
@@ -737,6 +738,7 @@
                             <tbody>
                                 @foreach($pagos as $key => $p)
                                 <tr>
+                                    <td class="text-center">{{ $p->carrera->nombre }}</td>
                                     <td class="text-center">{{ $p->anio_vigente }}</td>
                                     <td class="text-center">
                                         @if ($p->servicio_id == 2)

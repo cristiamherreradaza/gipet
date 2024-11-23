@@ -64,10 +64,10 @@
 
 <div class="row">
 
-    <div class="col-md-3">
+    <div class="col-md-5">
         <div class="form-group">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <label>Servicio<span class="text-danger"><i class="mr-2 mdi mdi-alert-circle"></i></span></label>
                     <select name="servicio_id" id="servicio_id" class="form-control" onchange="cambiaServicio()" required>
                         <option value="">SELECCIONE</option>
@@ -76,20 +76,27 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
+                    <label>Carrera<span class="text-danger"><i class="mr-2 mdi mdi-alert-circle"></i></span></label>
+                    <select name="carrera_buscar" id="carrera_buscar" class="form-control" onchange="cambiaServicio()" required>
+                        @foreach ($carreras as $ca)
+                            <option value="{{ $ca->id }}">{{ $ca->nombre }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-4">
                     <label>Gestion<span class="text-danger"><i class="mr-2 mdi mdi-alert-circle"></i></span></label>
                     <select name="gestion_buscar" id="gestion_buscar" class="form-control" onchange="cambiaServicio()" required>
                         @foreach ($gestionesPagos as $gp)
                             <option {{ (date('Y') == $gp->anio_vigente)? 'selected' : ''  }} value="{{ $gp->anio_vigente }}">{{ $gp->anio_vigente }}</option>
                         @endforeach
                     </select>
-                    {{-- <input type="number" class="form-control" name="gestion_buscar" id="gestion_buscar" value="{{ date('Y') }}"> --}}
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="col-md-9">
+    <div class="col-md-7">
         <div class="row" id="ajaxNumeroCuota"></div>
 
     </div>
@@ -117,6 +124,7 @@
         let servicio       = $('#servicio_id').val();
         let persona_id     = {{ $datosPersona->id }};
         let gestion_actual = $('#gestion_buscar').val();
+        let carrera_actual = $('#carrera_buscar').val();
 
         // en el caso que el servicio sea mensualidad
         // mostramos las cuotas a pagar
@@ -125,7 +133,7 @@
             $.ajax({
                 url: "{{ url('Factura/ajaxMuestraCuotaAPagar') }}",
                 data: {
-                    // carrera_id: carrera,
+                    carrera_actual: carrera_actual,
                     persona_id    : persona_id,
                     gestion_actual: gestion_actual
                 },

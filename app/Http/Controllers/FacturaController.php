@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Carrera;
 use App\Pago;
 use App\User;
 use DataTables;
@@ -131,11 +132,13 @@ class FacturaController extends Controller
 
         $gestionesPagos = Pago::select('anio_vigente')->distinct()->orderBy('id', 'desc')->get();
 
+        $carreras = Carrera::select('id', 'nombre')->get();
+
         // para el siat LA CONECCION
         $siat = app(SiatController::class);
         $verificacionSiat = json_decode($siat->verificarComunicacion());
 
-        return view('factura.ajaxPersona')->with(compact('datosPersona', 'inscripciones', 'descuentos', 'servicios', 'siguienteCuota', 'verificacionSiat', 'gestionesPagos'));
+        return view('factura.ajaxPersona')->with(compact('datosPersona', 'inscripciones', 'descuentos', 'servicios', 'siguienteCuota', 'verificacionSiat', 'gestionesPagos', 'carreras'));
     }
 
     public function ajaxMuestraCuotasPagar(Request $request)
@@ -195,11 +198,13 @@ class FacturaController extends Controller
     {
 
         $gestion_actual = $request->input('gestion_actual');
+        $carrera_actual = $request->input('carrera_actual');
 
         $siguienteCuota = Pago::where('persona_id', $request->persona_id)
-                        ->where('carrera_id', 1)
+                        // ->where('carrera_id', 1)
                         ->whereNull('estado')
                         ->where('anio_vigente', $gestion_actual)
+                        ->where('carrera_id', $carrera_actual)
                         ->orderBy('mensualidad', 'asc')
                         ->first();
 
