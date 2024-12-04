@@ -86,7 +86,7 @@ class NotaController extends Controller
                                 ->whereNull('convalidado')
                                 ->get();
 
-        return view('nota.detalle')->with(compact('asignatura', 'inscritos', 'comboTurnos', 'bimestreActual', 'datosMateria'));
+        return view('nota.detalle')->with(compact('asignatura', 'inscritos', 'comboTurnos', 'bimestreActual', 'datosMateria', 'asignatura'));
     }
 
     public function ajaxMuestraNota(Request $request)

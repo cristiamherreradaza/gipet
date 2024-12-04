@@ -7,7 +7,7 @@
 @section('css')
 <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css') }}" rel="stylesheet">
 <style>
-    input { 
+    input {
         text-align: center;
         width: 130px;
     }
@@ -36,7 +36,7 @@
                 </h3>
             </div>
         </div>
-        
+
 
         <div class="row">
             <div class="col-md-3"><h4 class="text-bold">TURNO: <span class="text-info">{{ $asignatura->turno->descripcion }}</span></h4></div>
@@ -55,7 +55,7 @@
                         <select name="turno_id" id="turno_id" class="form-control" onchange="ajaxBuscaParalelo()" required>
                             <option value="">Seleccione Turno</option>
                             @foreach($comboTurnos as $ct)
-                            <option value="{{ $ct->turno_id }}" 
+                            <option value="{{ $ct->turno_id }}"
                                     data-asignatura="{{ $ct->asignatura_id }}"
                                     data-docente="{{ $ct->user_id }}"
                                     data-anio="{{ $ct->anio_vigente }}"
@@ -72,13 +72,13 @@
                 <div class="col-md-2">
                     <button type="button" class="btn btn-block btn-info" onclick="enviaDatosCambiaCurso()">Cambia Curso</button>
                 </div>
-                
+
             </div>
         </form>
-            
+
         {{-- <h6 class="card-subtitle text-dark">DOCENTE: {{ auth()->user()->nombres }} {{ auth()->user()->apellido_paterno }} {{ auth()->user()->apellido_materno }}</h6> --}}
-        
-        
+
+
         <div class="table-responsive m-t-40">
             <table id="tablaAlumnos" class="table table-bordered table-striped text-center">
                 <thead class="text-info">
@@ -101,61 +101,82 @@
                             @php
                                 $nota = App\Nota::where('inscripcion_id', $inscrito->id)
                                                 ->where('trimestre', $bimestreActual)
+                                                ->where('asignatura_id', $asignatura->asignatura_id)
                                                 ->first();
 
-                                if($nota->finalizado != null){
-                                    $estado = 'readonly';
-                                }else{
-                                    $estado = '';
+                                // if($nota->finalizado != null){
+                                //     $estado = 'readonly';
+                                // }else{
+                                //     $estado = '';
+                                // }
+
+                                if($nota){
+                                    $estado = ($nota->finalizado != null)? 'readonly' : '' ;
                                 }
 
                                 $sw = true;
                                 $estado_alumno = App\CarrerasPersona::where('carrera_id', $inscrito->carrera_id)
                                         ->where('persona_id', $inscrito->persona_id)
                                         ->where('anio_vigente', $inscrito->anio_vigente)
-                                        ->where('paralelo', $inscrito->paralelo)    
+                                        ->where('paralelo', $inscrito->paralelo)
                                         ->first();
                                 if( $estado_alumno->estado == 'ABANDONO' || $estado_alumno->estado == 'ABANDONO TEMPORAL' || $estado_alumno->estado == 'CONGELADO'){
                                     $sw = false;
                                 }
-                            @endphp 
+                            @endphp
                             @if ($sw)
-                                <tr>
-                                    <td class="text-left">{{ $inscrito->persona->apellido_paterno }}</td>
-                                    <td class="text-left">{{ $inscrito->persona->apellido_materno }}</td>
-                                    <td class="text-left">{{ $inscrito->persona->nombres }}</td>
-                                    <td class="text-left">{{ $inscrito->persona->cedula }}</td>
+                                @if ($nota)
+                                    <tr>
+                                        <td class="text-left">{{ $inscrito->persona->apellido_paterno }}</td>
+                                        <td class="text-left">{{ $inscrito->persona->apellido_materno }}</td>
+                                        <td class="text-left">{{ $inscrito->persona->nombres }}</td>
+                                        <td class="text-left">{{ $inscrito->persona->cedula }}</td>
 
-                                    <td>
-                                        <input type="number" name="asistencia_{{ $inscrito->id }}" id="asistencia_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_asistencia, 0) }}" onchange="ajaxRegistraNotaAsistencia('{{ $inscrito->id }}', '{{ $bimestreActual }}', 'asistencia')" {{ $estado }} />
-                                        <small id="msgAsistencia_{{ $inscrito->id }}" class="form-control-feedback text-success" style="display: none;">Guardado</small>
-                                        <small class="form-control-feedback text-warning msgAlumno_{{ $inscrito->id }}" style="display: none;">Alerta</small>
-                                    </td>
-                                    <td>
-                                        <input type="number" name="practicas_{{ $inscrito->id }}" id="practicas_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_practicas, 0) }}" onchange="ajaxRegistraNotaPractica('{{ $inscrito->id }}', '{{ $bimestreActual }}', 'practica')" {{ $estado }} />
-                                        <small id="msgPractica_{{ $inscrito->id }}" class="form-control-feedback text-success" style="display: none;">Guardado</small>
-                                        <small class="form-control-feedback text-warning msgAlumno_{{ $inscrito->id }}" style="display: none;">Alerta</small>
-                                    </td>
-                                    <td>
-                                        <input type="number" name="parcial_{{ $inscrito->id }}" id="parcial_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_primer_parcial, 0) }}" onchange="ajaxRegistraNotaParcial('{{ $inscrito->id }}', '{{ $bimestreActual }}', 'parcial')" {{ $estado }} />
-                                        <small id="msgParcial_{{ $inscrito->id }}" class="form-control-feedback text-success" style="display: none;">Guardado</small>
-                                        <small class="form-control-feedback text-warning msgAlumno_{{ $inscrito->id }}" style="display: none;">Alerta</small>
-                                    </td>
-                                    <td>
-                                        <input type="number" name="examen_{{ $inscrito->id }}" id="examen_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_examen_final, 0) }}" onchange="ajaxRegistraNotaExamen('{{ $inscrito->id }}', '{{ $bimestreActual }}', 'examen')" {{ $estado }} />
-                                        <small id="msgExamen_{{ $inscrito->id }}" class="form-control-feedback text-success" style="display: none;">Guardado</small>
-                                        <small class="form-control-feedback text-warning msgAlumno_{{ $inscrito->id }}" style="display: none;">Alerta</small>
-                                    </td>
-                                    <td>
-                                        <input type="number" name="extras_{{ $inscrito->id }}" id="extras_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_puntos_ganados, 0) }}" onchange="ajaxRegistraNotaExtras('{{ $inscrito->id }}', '{{ $bimestreActual }}', 'extras')" {{ $estado }} />
-                                        <small id="msgExtras_{{ $inscrito->id }}" class="form-control-feedback text-success" style="display: none;">Guardado</small>
-                                        <small class="form-control-feedback text-warning msgAlumno_{{ $inscrito->id }}" style="display: none;">Alerta</small>
-                                    </td>
+                                        <td>
+                                            <input type="number" name="asistencia_{{ $inscrito->id }}" id="asistencia_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_asistencia, 0) }}" onchange="ajaxRegistraNotaAsistencia('{{ $inscrito->id }}', '{{ $bimestreActual }}', 'asistencia')" {{ $estado }} />
+                                            <small id="msgAsistencia_{{ $inscrito->id }}" class="form-control-feedback text-success" style="display: none;">Guardado</small>
+                                            <small class="form-control-feedback text-warning msgAlumno_{{ $inscrito->id }}" style="display: none;">Alerta</small>
+                                        </td>
+                                        <td>
+                                            <input type="number" name="practicas_{{ $inscrito->id }}" id="practicas_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_practicas, 0) }}" onchange="ajaxRegistraNotaPractica('{{ $inscrito->id }}', '{{ $bimestreActual }}', 'practica')" {{ $estado }} />
+                                            <small id="msgPractica_{{ $inscrito->id }}" class="form-control-feedback text-success" style="display: none;">Guardado</small>
+                                            <small class="form-control-feedback text-warning msgAlumno_{{ $inscrito->id }}" style="display: none;">Alerta</small>
+                                        </td>
+                                        <td>
+                                            <input type="number" name="parcial_{{ $inscrito->id }}" id="parcial_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_primer_parcial, 0) }}" onchange="ajaxRegistraNotaParcial('{{ $inscrito->id }}', '{{ $bimestreActual }}', 'parcial')" {{ $estado }} />
+                                            <small id="msgParcial_{{ $inscrito->id }}" class="form-control-feedback text-success" style="display: none;">Guardado</small>
+                                            <small class="form-control-feedback text-warning msgAlumno_{{ $inscrito->id }}" style="display: none;">Alerta</small>
+                                        </td>
+                                        <td>
+                                            <input type="number" name="examen_{{ $inscrito->id }}" id="examen_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_examen_final, 0) }}" onchange="ajaxRegistraNotaExamen('{{ $inscrito->id }}', '{{ $bimestreActual }}', 'examen')" {{ $estado }} />
+                                            <small id="msgExamen_{{ $inscrito->id }}" class="form-control-feedback text-success" style="display: none;">Guardado</small>
+                                            <small class="form-control-feedback text-warning msgAlumno_{{ $inscrito->id }}" style="display: none;">Alerta</small>
+                                        </td>
+                                        <td>
+                                            <input type="number" name="extras_{{ $inscrito->id }}" id="extras_{{ $inscrito->id }}" class="form-control" style="width: 100px;" value="{{ round($nota->nota_puntos_ganados, 0) }}" onchange="ajaxRegistraNotaExtras('{{ $inscrito->id }}', '{{ $bimestreActual }}', 'extras')" {{ $estado }} />
+                                            <small id="msgExtras_{{ $inscrito->id }}" class="form-control-feedback text-success" style="display: none;">Guardado</small>
+                                            <small class="form-control-feedback text-warning msgAlumno_{{ $inscrito->id }}" style="display: none;">Alerta</small>
+                                        </td>
 
-                                    <td>
-                                        <input type="text" id="total_{{ $inscrito->id }}" class="form-control" style="width: 80px;" value="{{ round($nota->nota_total, 0) }}" onfocus="ajaxRegistraTotal('{{ $inscrito->id }}', '1', 'total')" readonly>
-                                    </td>
-                                </tr>
+                                        <td>
+                                            <input type="text" id="total_{{ $inscrito->id }}" class="form-control" style="width: 80px;" value="{{ round($nota->nota_total, 0) }}" onfocus="ajaxRegistraTotal('{{ $inscrito->id }}', '1', 'total')" readonly>
+                                        </td>
+                                    </tr>
+
+                                @else
+                                    <tr>
+                                        <td class="text-left">{{ $inscrito->persona->apellido_paterno }}</td>
+                                        <td class="text-left">{{ $inscrito->persona->apellido_materno }}</td>
+                                        <td class="text-left">{{ $inscrito->persona->nombres }}</td>
+                                        <td class="text-left">{{ $inscrito->persona->cedula }}</td>
+                                        <td><small class="text-danger">Sin asignacion</small></td>
+                                        <td><small class="text-danger">Sin asignacion</small></td>
+                                        <td><small class="text-danger">Sin asignacion</small></td>
+                                        <td><small class="text-danger">Sin asignacion</small></td>
+                                        <td><small class="text-danger">Sin asignacion</small></td>
+                                        <td><small class="text-danger">Sin asignacion</small></td>
+                                    </tr>
+                                @endif
                             @endif
                         @endif
                     @endforeach
@@ -177,7 +198,7 @@
                     $nota = App\Nota::where('inscripcion_id', $inscritos[0]->id)
                                     ->where('trimestre', $bimestreActual)
                                     ->first();
-                @endphp 
+                @endphp
                 <div class="col-md-8">
                     <input type="hidden" name="nota_propuesta" id="nota_propuesta" value="{{ $asignatura->id }}">
                     <input type="hidden" name="asignatura_id" id="asignatura_id" value="{{ $asignatura->asignatura_id }}">
@@ -205,19 +226,19 @@
                 </div>
 
             </div>
-        </form>    
+        </form>
         <div class="row">
             <div class="col-md-12">
                 <a target="_target" href="{{ url('nota/listaAsistenciaPdf/'.$asignatura->id.'/'.$bimestreActual) }}" class="btn btn-danger btn-block text-white"type="button"><i class="fa fa-file-pdf"></i> Lista de asistencia</a>
             </div>
-        </div>    
+        </div>
     </div>
 </div>
 
 <!-- Inicio modal registro de notas de estudiante -->
 <div id="modal_notas" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" id="muestraNotaAjax">
-        
+
     </div>
 </div>
 <!-- Fin modal registro de notas de estudiante -->
@@ -357,7 +378,7 @@ $(document).ready(function() {
             success: function(data) {
                 $("#msgExtras_"+id).show();
             }
-        }); 
+        });
     }
 
     function ajaxRegistraNotaExamen(id, numero, tipo)
@@ -377,7 +398,7 @@ $(document).ready(function() {
             success: function(data) {
                 $("#msgExamen_"+id).show();
             }
-        }); 
+        });
     }
 
     function ajaxRegistraNotaParcial(id, numero, tipo)
@@ -397,7 +418,7 @@ $(document).ready(function() {
             success: function(data) {
                 $("#msgParcial_"+id).show();
             }
-        }); 
+        });
     }
 
     function ajaxRegistraNotaAsistencia(id, numero, tipo, contador)
@@ -417,7 +438,7 @@ $(document).ready(function() {
             success: function(data) {
                 $("#msgAsistencia_"+id).show();
             }
-        }); 
+        });
     }
 
     function ajaxRegistraNotaPractica(id, numero, tipo)
@@ -437,7 +458,7 @@ $(document).ready(function() {
             success: function(data) {
                 $("#msgPractica_"+id).show();
             }
-        }); 
+        });
     }
 
     function sumaNotas(id, numero, tipo)
@@ -471,7 +492,7 @@ $(document).ready(function() {
                 type: 'POST',
                 success: function(data) {
                 }
-            }); 
+            });
 
         }
 
@@ -486,7 +507,7 @@ $(document).ready(function() {
     }
 
     function registra_notas(inscripcion_id, bimestre, asignatura_id, turno_id, persona_id, paralelo, anio_vigente)
-    {           
+    {
         $.ajax({
             url: "{{ url('Nota/ajaxMuestraNota') }}",
             data: {
@@ -502,8 +523,8 @@ $(document).ready(function() {
                 $("#muestraNotaAjax").html(data);
                 $("#modal_notas").modal('show');
             }
-        }); 
-        
+        });
+
     }
 
     function checkCampos(numero) {
@@ -629,7 +650,7 @@ $(document).ready(function() {
                 $("#ajaxMuestraComboParalelo").html(data);
             }
         });
-        // alert(anio);   
+        // alert(anio);
     }
 
     function generaCentralizadorAsistencia()
