@@ -738,7 +738,7 @@
                             <tbody>
                                 @foreach($pagos as $key => $p)
                                 <tr>
-                                    <td class="text-center">{{ $p->carrera->nombre }}</td>
+                                    <td class="text-center">{{ $p->carrera? $p->carrera->nombre : ''  }}</td>
                                     <td class="text-center">{{ $p->anio_vigente }}</td>
                                     <td class="text-center">
                                         @if ($p->servicio_id == 2)
