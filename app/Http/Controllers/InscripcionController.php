@@ -2746,9 +2746,9 @@ class InscripcionController extends Controller
         
 
         $hoja->setCellValue('A8', 'No');
-        $hoja->setCellValue('B8', 'GESTION');
+        $hoja->setCellValue('B8', 'GESTIÓN');
         $hoja->setCellValue('C8', 'AÑO');
-        $hoja->setCellValue('D8', 'CODIGO');
+        $hoja->setCellValue('D8', 'CÓDIGO');
         $hoja->setCellValue('E8', 'ASIGNATURA');
         $hoja->setCellValue('F8', 'REQUISITOS');
         $hoja->setCellValue('G8', 'NOTA');
@@ -2770,26 +2770,26 @@ class InscripcionController extends Controller
         $libro->getActiveSheet()->getStyle("K8")->getAlignment()->setWrapText(true);
 
         
-        $hoja->setCellValue('E1', 'HISTORIAL ACADEMICO');
+        $hoja->setCellValue('E1', 'HISTORIAL ACADÉMICO');
         $hoja->setCellValue('A2', 'INSTITUTO');
         $hoja->setCellValue('A3', 'CARRERA');
-        $hoja->setCellValue('A4', 'NIVEL DE FORMACION');
-        $hoja->setCellValue('A5', 'REGIMEN');
+        $hoja->setCellValue('A4', 'NIVEL DE FORMACIÓN');
+        $hoja->setCellValue('A5', 'RÉGIMEN');
         $hoja->setCellValue('A6', 'ESTUDIANTE');
 
-        $hoja->setCellValue('D2', 'INSTITUTO TECNICO EF-GIPET S.R.L.');
+        $hoja->setCellValue('D2', 'INSTITUTO TÉCNICO "EF-GIPET" S.R.L.');
         $hoja->setCellValue('D3',  strtoupper($carrera->nombre));
         $hoja->setCellValue('D4', strtoupper($carrera->nivel));
         $hoja->setCellValue('D5', 'ANUAL');
         $hoja->setCellValue('D6', $persona->apellido_paterno.' '.$persona->apellido_materno.' '.$persona->nombres);
 
-        $hoja->setCellValue('F3', 'FECHA ADMISION');
-        $hoja->setCellValue('F4', 'FECHA CONCLUSION');
-        $hoja->setCellValue('F5', 'MATRICULA');
-        $hoja->setCellValue('F6', 'CEDULA IDENTIDAD');
+        $hoja->setCellValue('F3', 'FECHA ADMISIÓN');
+        $hoja->setCellValue('F4', 'FECHA CONCLUSIÓN');
+        $hoja->setCellValue('F5', 'MATRÍCULA');
+        $hoja->setCellValue('F6', 'CÉDULA IDENTIDAD');
 
-        $hoja->setCellValue('H3', date('d/m/Y', strtotime($fechaInicioGestion)));
-        $hoja->setCellValue('H4', date('d/m/Y', strtotime($fechaFinalGestion)));
+        $hoja->setCellValue('H3', date('Y', strtotime($fechaInicioGestion)));
+        $hoja->setCellValue('H4', date('Y', strtotime($fechaFinalGestion)));
         $hoja->setCellValue('H5', '');
 
             $utilidades = new Utilidades();

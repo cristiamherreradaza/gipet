@@ -1,0 +1,72 @@
+[07-Dec-2023 03:42:14 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Database\Seeder' not found in /home/gipetnet/public_html/sistema/database/seeds/MenuSeeder.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/database/seeds/MenuSeeder.php on line 6
+[16-May-2024 03:01:46 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Database\Seeder' not found in /home/gipetnet/public_html/sistema/database/seeds/DatabaseSeeder.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/database/seeds/DatabaseSeeder.php on line 5
+[16-May-2024 03:02:24 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Database\Seeder' not found in /home/gipetnet/public_html/sistema/database/seeds/MenuSeeder.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/database/seeds/MenuSeeder.php on line 6
+[16-May-2024 03:48:53 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Database\Seeder' not found in /home/gipetnet/public_html/sistema/database/seeds/MenuPerfilSeeder.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/database/seeds/MenuPerfilSeeder.php on line 6
+[16-May-2024 06:09:53 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Database\Seeder' not found in /home/gipetnet/public_html/sistema/database/seeds/MenuSeeder.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/database/seeds/MenuSeeder.php on line 6
+[16-May-2024 11:10:08 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Database\Seeder' not found in /home/gipetnet/public_html/sistema/database/seeds/MenuUserSeeder.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/database/seeds/MenuUserSeeder.php on line 6
+[16-May-2024 15:02:56 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Database\Seeder' not found in /home/gipetnet/public_html/sistema/database/seeds/PerfilSeeder.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/database/seeds/PerfilSeeder.php on line 6
+[20-May-2024 20:55:56 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Database\Seeder' not found in /home/gipetnet/public_html/sistema/database/seeds/DatabaseSeeder.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/database/seeds/DatabaseSeeder.php on line 5
+[20-May-2024 23:22:52 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Database\Seeder' not found in /home/gipetnet/public_html/sistema/database/seeds/MenuPerfilSeeder.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/database/seeds/MenuPerfilSeeder.php on line 6
+[08-Oct-2024 16:42:20 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Database\Seeder' not found in /home/gipetnet/public_html/sistema/database/seeds/PerfilSeeder.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/database/seeds/PerfilSeeder.php on line 6
+[05-Nov-2024 18:36:48 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Database\Seeder' not found in /home/gipetnet/public_html/sistema/database/seeds/PerfilSeeder.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/database/seeds/PerfilSeeder.php on line 6
+[07-Nov-2024 15:20:42 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Database\Seeder' not found in /home/gipetnet/public_html/sistema/database/seeds/PerfilSeeder.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/database/seeds/PerfilSeeder.php on line 6
+[08-Nov-2024 15:20:22 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Database\Seeder' not found in /home/gipetnet/public_html/sistema/database/seeds/PerfilSeeder.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/database/seeds/PerfilSeeder.php on line 6
+[30-Mar-2025 11:54:02 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Database\Seeder' not found in /home/gipetnet/public_html/sistema/database/seeds/MenuPerfilSeeder.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/database/seeds/MenuPerfilSeeder.php on line 6
+[31-Mar-2025 00:01:41 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Database\Seeder' not found in /home/gipetnet/public_html/sistema/database/seeds/DatabaseSeeder.php:5
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/database/seeds/DatabaseSeeder.php on line 5
+[11-Apr-2025 02:28:49 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Database\Seeder' not found in /home/gipetnet/public_html/sistema/database/seeds/MenuUserSeeder.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/database/seeds/MenuUserSeeder.php on line 6
+[13-May-2025 21:16:00 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Database\Seeder' not found in /home/gipetnet/public_html/sistema/database/seeds/MenuSeeder.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/database/seeds/MenuSeeder.php on line 6
+[08-Sep-2025 05:42:17 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Database\Seeder' not found in /home/gipetnet/public_html/sistema/database/seeds/PerfilSeeder.php:6
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/database/seeds/PerfilSeeder.php on line 6

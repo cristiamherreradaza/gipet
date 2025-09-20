@@ -1,0 +1,176 @@
+[17-May-2024 04:50:16 UTC] PHP Fatal error:  Uncaught Error: Class 'Route' not found in /home/gipetnet/public_html/sistema/routes/web.php:22
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/web.php on line 22
+[19-May-2024 08:19:31 UTC] PHP Fatal error:  Uncaught Error: Class 'Route' not found in /home/gipetnet/public_html/sistema/routes/web.php:22
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/web.php on line 22
+[26-May-2024 01:03:55 UTC] PHP Fatal error:  Uncaught Error: Class 'Broadcast' not found in /home/gipetnet/public_html/sistema/routes/channels.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/channels.php on line 14
+[27-May-2024 07:25:39 UTC] PHP Fatal error:  Uncaught Error: Class 'Broadcast' not found in /home/gipetnet/public_html/sistema/routes/channels.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/channels.php on line 14
+[28-May-2024 07:25:52 UTC] PHP Fatal error:  Uncaught Error: Class 'Broadcast' not found in /home/gipetnet/public_html/sistema/routes/channels.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/channels.php on line 14
+[29-May-2024 07:34:27 UTC] PHP Fatal error:  Uncaught Error: Class 'Broadcast' not found in /home/gipetnet/public_html/sistema/routes/channels.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/channels.php on line 14
+[30-May-2024 08:13:25 UTC] PHP Fatal error:  Uncaught Error: Class 'Broadcast' not found in /home/gipetnet/public_html/sistema/routes/channels.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/channels.php on line 14
+[01-Jun-2024 17:06:43 UTC] PHP Fatal error:  Uncaught Error: Class 'Broadcast' not found in /home/gipetnet/public_html/sistema/routes/channels.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/channels.php on line 14
+[01-Jun-2024 19:33:32 UTC] PHP Fatal error:  Uncaught Error: Class 'Broadcast' not found in /home/gipetnet/public_html/sistema/routes/channels.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/channels.php on line 14
+[04-Jun-2024 02:01:48 UTC] PHP Fatal error:  Uncaught Error: Class 'Broadcast' not found in /home/gipetnet/public_html/sistema/routes/channels.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/channels.php on line 14
+[05-Jun-2024 02:25:57 UTC] PHP Fatal error:  Uncaught Error: Class 'Broadcast' not found in /home/gipetnet/public_html/sistema/routes/channels.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/channels.php on line 14
+[07-Jul-2024 20:58:23 UTC] PHP Fatal error:  Uncaught Error: Class 'Route' not found in /home/gipetnet/public_html/sistema/routes/web.php:22
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/web.php on line 22
+[09-Jul-2024 12:16:06 UTC] PHP Fatal error:  Uncaught Error: Class 'Route' not found in /home/gipetnet/public_html/sistema/routes/web.php:22
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/web.php on line 22
+[10-Jul-2024 12:17:48 UTC] PHP Fatal error:  Uncaught Error: Class 'Route' not found in /home/gipetnet/public_html/sistema/routes/web.php:22
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/web.php on line 22
+[10-Jul-2024 12:25:25 UTC] PHP Fatal error:  Uncaught Error: Class 'Route' not found in /home/gipetnet/public_html/sistema/routes/web.php:22
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/web.php on line 22
+[10-Jul-2024 13:17:20 UTC] PHP Fatal error:  Uncaught Error: Class 'Route' not found in /home/gipetnet/public_html/sistema/routes/web.php:22
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/web.php on line 22
+[11-Jul-2024 12:17:57 UTC] PHP Fatal error:  Uncaught Error: Class 'Route' not found in /home/gipetnet/public_html/sistema/routes/web.php:22
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/web.php on line 22
+[16-Jul-2024 04:50:58 UTC] PHP Fatal error:  Uncaught Error: Class 'Artisan' not found in /home/gipetnet/public_html/sistema/routes/console.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/console.php on line 16
+[17-Jul-2024 06:09:11 UTC] PHP Fatal error:  Uncaught Error: Class 'Artisan' not found in /home/gipetnet/public_html/sistema/routes/console.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/console.php on line 16
+[18-Jul-2024 06:14:23 UTC] PHP Fatal error:  Uncaught Error: Class 'Artisan' not found in /home/gipetnet/public_html/sistema/routes/console.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/console.php on line 16
+[19-Jul-2024 06:14:27 UTC] PHP Fatal error:  Uncaught Error: Class 'Artisan' not found in /home/gipetnet/public_html/sistema/routes/console.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/console.php on line 16
+[20-Jul-2024 06:19:14 UTC] PHP Fatal error:  Uncaught Error: Class 'Artisan' not found in /home/gipetnet/public_html/sistema/routes/console.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/console.php on line 16
+[23-Jul-2024 21:40:29 UTC] PHP Fatal error:  Uncaught Error: Class 'Artisan' not found in /home/gipetnet/public_html/sistema/routes/console.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/console.php on line 16
+[06-Dec-2024 09:12:08 UTC] PHP Fatal error:  Uncaught Error: Class 'Route' not found in /home/gipetnet/public_html/sistema/routes/api.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/api.php on line 17
+[07-Dec-2024 12:10:17 UTC] PHP Fatal error:  Uncaught Error: Class 'Route' not found in /home/gipetnet/public_html/sistema/routes/api.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/api.php on line 17
+[08-Dec-2024 12:19:23 UTC] PHP Fatal error:  Uncaught Error: Class 'Route' not found in /home/gipetnet/public_html/sistema/routes/api.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/api.php on line 17
+[09-Dec-2024 01:17:17 UTC] PHP Fatal error:  Uncaught Error: Class 'Broadcast' not found in /home/gipetnet/public_html/sistema/routes/channels.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/channels.php on line 14
+[09-Dec-2024 12:21:18 UTC] PHP Fatal error:  Uncaught Error: Class 'Route' not found in /home/gipetnet/public_html/sistema/routes/api.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/api.php on line 17
+[10-Dec-2024 12:49:43 UTC] PHP Fatal error:  Uncaught Error: Class 'Route' not found in /home/gipetnet/public_html/sistema/routes/api.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/api.php on line 17
+[10-Dec-2024 15:29:41 UTC] PHP Fatal error:  Uncaught Error: Class 'Broadcast' not found in /home/gipetnet/public_html/sistema/routes/channels.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/channels.php on line 14
+[11-Dec-2024 12:54:14 UTC] PHP Fatal error:  Uncaught Error: Class 'Route' not found in /home/gipetnet/public_html/sistema/routes/api.php:17
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/api.php on line 17
+[12-Dec-2024 15:23:07 UTC] PHP Fatal error:  Uncaught Error: Class 'Broadcast' not found in /home/gipetnet/public_html/sistema/routes/channels.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/channels.php on line 14
+[13-Dec-2024 15:25:43 UTC] PHP Fatal error:  Uncaught Error: Class 'Broadcast' not found in /home/gipetnet/public_html/sistema/routes/channels.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/channels.php on line 14
+[14-Dec-2024 15:26:58 UTC] PHP Fatal error:  Uncaught Error: Class 'Broadcast' not found in /home/gipetnet/public_html/sistema/routes/channels.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/channels.php on line 14
+[06-Apr-2025 07:27:25 UTC] PHP Fatal error:  Uncaught Error: Class 'Artisan' not found in /home/gipetnet/public_html/sistema/routes/console.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/console.php on line 16
+[08-Apr-2025 20:19:29 UTC] PHP Fatal error:  Uncaught Error: Class 'Artisan' not found in /home/gipetnet/public_html/sistema/routes/console.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/console.php on line 16
+[09-Apr-2025 20:23:13 UTC] PHP Fatal error:  Uncaught Error: Class 'Artisan' not found in /home/gipetnet/public_html/sistema/routes/console.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/console.php on line 16
+[12-Apr-2025 20:20:21 UTC] PHP Fatal error:  Uncaught Error: Class 'Artisan' not found in /home/gipetnet/public_html/sistema/routes/console.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/console.php on line 16
+[16-Apr-2025 20:17:21 UTC] PHP Fatal error:  Uncaught Error: Class 'Artisan' not found in /home/gipetnet/public_html/sistema/routes/console.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/console.php on line 16
+[25-May-2025 04:57:44 UTC] PHP Fatal error:  Uncaught Error: Class 'Route' not found in /home/gipetnet/public_html/sistema/routes/web.php:22
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/web.php on line 22
+[28-May-2025 11:49:09 UTC] PHP Fatal error:  Uncaught Error: Class 'Route' not found in /home/gipetnet/public_html/sistema/routes/web.php:22
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/web.php on line 22
+[31-May-2025 12:09:50 UTC] PHP Fatal error:  Uncaught Error: Class 'Route' not found in /home/gipetnet/public_html/sistema/routes/web.php:22
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/web.php on line 22
+[01-Jun-2025 12:08:22 UTC] PHP Fatal error:  Uncaught Error: Class 'Route' not found in /home/gipetnet/public_html/sistema/routes/web.php:22
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/web.php on line 22
+[02-Jun-2025 12:09:03 UTC] PHP Fatal error:  Uncaught Error: Class 'Route' not found in /home/gipetnet/public_html/sistema/routes/web.php:22
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/routes/web.php on line 22

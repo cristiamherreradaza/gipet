@@ -1,0 +1,60 @@
+[19-Jul-2024 06:10:44 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/gipetnet/public_html/sistema/bootstrap/app.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/bootstrap/app.php on line 14
+[21-Jul-2024 14:58:24 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/gipetnet/public_html/sistema/bootstrap/app.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/bootstrap/app.php on line 14
+[22-Jul-2024 14:56:59 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/gipetnet/public_html/sistema/bootstrap/app.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/bootstrap/app.php on line 14
+[23-Jul-2024 14:56:48 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/gipetnet/public_html/sistema/bootstrap/app.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/bootstrap/app.php on line 14
+[23-Jul-2024 23:28:31 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/gipetnet/public_html/sistema/bootstrap/app.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/bootstrap/app.php on line 14
+[24-Jul-2024 14:56:38 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/gipetnet/public_html/sistema/bootstrap/app.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/bootstrap/app.php on line 14
+[27-Jul-2024 18:45:41 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/gipetnet/public_html/sistema/bootstrap/app.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/bootstrap/app.php on line 14
+[29-Jul-2024 05:10:01 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/gipetnet/public_html/sistema/bootstrap/app.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/bootstrap/app.php on line 14
+[11-Apr-2025 04:15:46 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/gipetnet/public_html/sistema/bootstrap/app.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/bootstrap/app.php on line 14
+[13-Apr-2025 14:04:56 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/gipetnet/public_html/sistema/bootstrap/app.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/bootstrap/app.php on line 14
+[16-Apr-2025 14:03:41 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/gipetnet/public_html/sistema/bootstrap/app.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/bootstrap/app.php on line 14
+[18-Apr-2025 14:03:06 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/gipetnet/public_html/sistema/bootstrap/app.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/bootstrap/app.php on line 14
+[20-Apr-2025 14:02:59 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/gipetnet/public_html/sistema/bootstrap/app.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/bootstrap/app.php on line 14
+[03-Sep-2025 16:51:44 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/gipetnet/public_html/sistema/bootstrap/app.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/bootstrap/app.php on line 14
+[14-Sep-2025 08:05:34 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Application' not found in /home/gipetnet/public_html/sistema/bootstrap/app.php:14
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/bootstrap/app.php on line 14

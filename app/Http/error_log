@@ -1,0 +1,28 @@
+[12-Jul-2024 19:10:16 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Http\Kernel' not found in /home/gipetnet/public_html/sistema/app/Http/Kernel.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/app/Http/Kernel.php on line 7
+[14-Jul-2024 00:39:29 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Http\Kernel' not found in /home/gipetnet/public_html/sistema/app/Http/Kernel.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/app/Http/Kernel.php on line 7
+[15-Jul-2024 00:38:16 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Http\Kernel' not found in /home/gipetnet/public_html/sistema/app/Http/Kernel.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/app/Http/Kernel.php on line 7
+[16-Jul-2024 00:37:37 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Http\Kernel' not found in /home/gipetnet/public_html/sistema/app/Http/Kernel.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/app/Http/Kernel.php on line 7
+[17-Jul-2024 00:35:36 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Http\Kernel' not found in /home/gipetnet/public_html/sistema/app/Http/Kernel.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/app/Http/Kernel.php on line 7
+[18-Jul-2024 00:40:24 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Http\Kernel' not found in /home/gipetnet/public_html/sistema/app/Http/Kernel.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/app/Http/Kernel.php on line 7
+[20-Jul-2024 14:16:10 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Http\Kernel' not found in /home/gipetnet/public_html/sistema/app/Http/Kernel.php:7
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/app/Http/Kernel.php on line 7

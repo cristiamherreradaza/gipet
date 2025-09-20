@@ -1,0 +1,24 @@
+[12-Jul-2024 11:14:27 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Exceptions\Handler' not found in /home/gipetnet/public_html/sistema/app/Exceptions/Handler.php:8
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/app/Exceptions/Handler.php on line 8
+[14-Jul-2024 03:10:48 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Exceptions\Handler' not found in /home/gipetnet/public_html/sistema/app/Exceptions/Handler.php:8
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/app/Exceptions/Handler.php on line 8
+[15-Jul-2024 03:10:34 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Exceptions\Handler' not found in /home/gipetnet/public_html/sistema/app/Exceptions/Handler.php:8
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/app/Exceptions/Handler.php on line 8
+[16-Jul-2024 03:11:03 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Exceptions\Handler' not found in /home/gipetnet/public_html/sistema/app/Exceptions/Handler.php:8
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/app/Exceptions/Handler.php on line 8
+[17-Jul-2024 03:10:56 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Exceptions\Handler' not found in /home/gipetnet/public_html/sistema/app/Exceptions/Handler.php:8
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/app/Exceptions/Handler.php on line 8
+[20-Jul-2024 20:47:47 UTC] PHP Fatal error:  Uncaught Error: Class 'Illuminate\Foundation\Exceptions\Handler' not found in /home/gipetnet/public_html/sistema/app/Exceptions/Handler.php:8
+Stack trace:
+#0 {main}
+  thrown in /home/gipetnet/public_html/sistema/app/Exceptions/Handler.php on line 8
